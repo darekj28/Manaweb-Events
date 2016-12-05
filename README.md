@@ -1,1 +1,0 @@
-# manaweb_events

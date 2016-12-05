@@ -1,0 +1,5 @@
+make sure your working directory is where the java file is
+then run the following two lines in command prompt
+
+javac Users.java
+java -classpath ".;sqlite-jdbc-3.15.1.jar" Users

@@ -1,0 +1,38 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>
+    Manaweb!
+  </title>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+  <link rel = "stylesheet" type = "text/css" href="{{ url_for('static', filename='style.css') }}">
+  
+  <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='select/dist/css/bootstrap-select.css') }}"> -->
+  <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-slider/dist/css/bootstrap-slider.css') }}"> -->
+</head>
+<body>
+  <script type = "text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>  
+  <!-- <script type="text/javascript" src="{{ url_for('static', filename='select/dist/js/bootstrap-select.js') }}"></script> -->
+  <!-- <script type="text/javascript" src="{{ url_for('static', filename='bootstrap-slider/dist/bootstrap-slider.min.js') }}"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.0/react.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.0/react-dom.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.18.1/babel.min.js"></script>
+  <script src="https://unpkg.com/react-router/umd/ReactRouter.min.js"></script>
+  
+    <!-- add more stuff each individual page -->
+  {% block content %}
+  {% endblock %}
+
+  {% if error %}
+  <p class = "error"> <strong> Error: </strong> {{ error}} </p>
+  {% endif %}
+
+
+  </body>
+
+</html>

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="app"></div>
+
+<!-- figure out how to get comment_id here -->
+
+<script type="text/babel" src={{ url_for('static', filename='components/comments/OriginalPost.jsx') }}></script>
+<script type="text/babel" src={{ url_for('static', filename='components/FilterButton.jsx') }}></script>
+<script type="text/babel" src={{ url_for('static', filename='components/Notifications.jsx') }}></script>
+<script type="text/babel" src={{ url_for('static', filename='components/AccountDropdown.jsx') }}></script>
+<script type="text/babel" src={{ url_for('static', filename='components/comments/CommentNavBar.jsx') }}></script>
+<script type="text/babel" src={{ url_for('static', filename='components/comments/MakeComment.jsx') }}></script>
+<script type="text/babel" src={{ url_for('static', filename='components/Avatar.jsx') }}></script>
+<script type="text/babel" src={{ url_for('static', filename='components/comments/EditCommentModal.jsx') }}></script>
+<script type="text/babel" src={{ url_for('static', filename='components/comments/DeleteCommentModal.jsx') }}></script>
+<script type="text/babel" src={{ url_for('static', filename='components/comments/ReportCommentModal.jsx') }}></script>
+<script type="text/babel" src={{ url_for('static', filename='components/comments/CommentFeedPostHeader.jsx') }}></script>
+<script type="text/babel" src={{ url_for('static', filename='components/comments/CommentFeedPostBody.jsx') }}></script>
+<script type="text/babel" src={{ url_for('static', filename='components/comments/CommentFeedPost.jsx') }}></script>
+<script type="text/babel" src={{ url_for('static', filename='components/comments/CommentFeed.jsx') }}></script>
+<script type="text/babel" src={{ url_for('static', filename='components/comments/CommentApp.jsx') }}></script>
+
+{% endblock %}

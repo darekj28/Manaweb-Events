@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% include "homeBanner.html" %}
+{% block content %}
+
+
+<script type = 'text/javascript'>
+function showSent(){
+	var element = document.getElementById('emailSent');
+	element.style.display = "block"
+}
+</script>
+
+<h1> It seems you have not confirmed your account yet, please check your email to confirm your account </h1>
+
+<h1> If you would like us to resend your confirmation email, please click below </h1>
+
+<form name = "sendConfirmation" method = "post" action = "{{url_for('sendConfirmation')}}">
+ <button type="submit" name ="sendConfirmation" onclick = "showSent();"> Send Confirmation Email </button>
+</form>
+
+<div id = "emailSent">
+Click <a href = "/logout">  here  </a> to return to home page
+</div>
+
+
+ {% endblock %}
