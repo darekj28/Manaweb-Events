@@ -1,0 +1,1 @@
+web: python event_main.py runserver 0.0.0.0:$PORT
