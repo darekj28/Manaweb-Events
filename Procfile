@@ -1,1 +1,1 @@
-web: python event_main.py 
+web: python event_main.py ${PORT}
