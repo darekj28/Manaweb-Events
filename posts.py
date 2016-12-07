@@ -40,9 +40,9 @@ def deleteTable(table_name):
 def resetDatabase():
 	global db
 	global post_db
-	db.execute("SELECT name FROM sqlite_master WHERE type='table';")
-	for table in db.fetchall():
-		deleteTable(table[0])
+	# db.execute("SELECT name FROM sqlite_master WHERE type='table';")
+	# for table in db.fetchall():
+	# 	deleteTable(table[0])
 	createHashTable()
 
 
