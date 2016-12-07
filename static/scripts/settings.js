@@ -1,6 +1,6 @@
 $(document).ready(function() {
-	var requiredFields = ["#firstName",
-						"#lastName",
+	var requiredFields = ["#first_name",
+						"#last_name",
 						"#birthMonth",
 						"#birthDay",
 						"#birthYear",
@@ -60,14 +60,14 @@ $(document).ready(function() {
 			type: 'GET',
 			url: '/getPreviousSettings',
 			success: function(user) {
-				$('#first_name').val(user.firstName);
-				$('#last_name').val(user.lastName);
+				$('#first_name').val(user.first_name);
+				$('#last_name').val(user.last_name);
 				$('#password').val(user.password);
 				$('#password_confirm').val(user.password);
 				$('select[name=birthDay]').val(user.birthDay);
 				$('select[name=birthYear]').val(user.birthYear);
 				$('select[name=birthMonth]').val(user.birthMonth);
-				$('select[name=avatar').val(user.avatar_name);
+				$('select[name=avatar]').val(user.avatar_name);
 				$('#phone_number').val(user.phone_number);
 			}
 		});
@@ -80,8 +80,6 @@ $(document).ready(function() {
 		}
 		autopopulateSettings();
 	};
-
-	initialize();
 
 	var enableSubmit = function() {
 		var disabled = false;
@@ -99,6 +97,7 @@ $(document).ready(function() {
 			$('#updateSettingsButton').prop("disabled", true);
 		}
 	};
+	initialize();
 	enableSubmit();
 
 	var errorMaker = function(string) {
@@ -129,7 +128,7 @@ $(document).ready(function() {
 	};
 
 
-	$('#firstName').on('blur', function(event) {
+	$('#first_name').on('blur', function(event) {
 		event.preventDefault();
 		var name = $(this).val();
 		var condition = /^[a-z ,.'-]+$/i;
@@ -150,7 +149,7 @@ $(document).ready(function() {
 		}
 		enableSubmit();
 	});
-	$('#lastName').on('blur', function(event) {
+	$('#last_name').on('blur', function(event) {
 		event.preventDefault();
 		var name = $(this).val();
 		var condition = /^[a-z ,.'-]+$/i;
@@ -236,11 +235,6 @@ $(document).ready(function() {
 		var month = $('#birthMonth').val();
 		var day = $('#birthDay').val();
 
-		// console.log(month)
-		// console.log(parseInt(month))
-		// console.log(months[2].index)
-		// console.log(day)
-
 		var max_days = 31;
 		if (parseInt(month) >= 1 && parseInt(month) <= 12) {
 			for (var i = 0; i < months.length; i++) {
@@ -323,7 +317,7 @@ $(document).ready(function() {
 		var newBackground = $('#avatar').val();
 		// console.log(newBackground);
 		var container = document.getElementById('avatar_container');
-		create_profile.style.backgroundImage = 'url(' + newBackground  + ')';
+		// create_profile.style.backgroundImage = 'url(' + newBackground  + ')';
 		enableSubmit();
 	})
 

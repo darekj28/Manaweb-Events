@@ -59,19 +59,19 @@
 			<div class="form-group warning" id="year_warning"></div>
 		</div>
 
-		<label class="control-label" for = "gender">Select an avatar</label>
+		<label class="control-label" for = "avatar">Select an avatar</label>
 		<div class="form-group">
 			<select class="setting" data-width="fit" id="avatar" name = "avatar" multiple data-max-options="1" title="Select an avatar!" value=""> 
-				{% for item in avatar_list %}
-					<option value="{{item[1]}}"> {{item[0]}}</option>
-				{% endfor %}
+			{% for item in avatar_list %}
+				<option value="{{item[1]}}"> {{item[0]}}</option>
+			{% endfor %}
 			</select>	
 		</div>
 
 		<div id = "avatar_container" class = "avatar_container centered-text" style = "width:60px;height:60px;background-size: contain;">  </div>
 		<div class="form-group">
 			<div>
-				<button type = "submit" id="updateSettingsButton" class="btn btn-default form-control"> Update! </button>
+				<button type = "submit" id="updateSettingsButton"> Update! </button>
 			</div>
 		</div>
 	</form>
