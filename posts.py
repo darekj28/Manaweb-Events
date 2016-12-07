@@ -408,20 +408,20 @@ def makeTestList(start, size):
 		x = 2 * x
 	return test_list
 
-# test_sizes = makeTestList(800, 1)
-# print(test_sizes)
-# times = list()
-# for x in test_sizes:
-# 	time_0 = time.time()
-# 	test(x)
-# 	time_1 = time.time()
-# 	total_time = time_1 - time_0
-# 	times.append(total_time)
-# 	print("size " + str(x) + " took " + str(total_time))
-# 	sys.stdout.flush()
+test_sizes = makeTestList(800, 1)
+print(test_sizes)
+times = list()
+for x in test_sizes:
+	time_0 = time.time()
+	test(x)
+	time_1 = time.time()
+	total_time = time_1 - time_0
+	times.append(total_time)
+	print("size " + str(x) + " took " + str(total_time))
+	sys.stdout.flush()
 
-# for i in range(0,len(test_sizes)):
-# 	print("size " + str(test_sizes[i]) + " took " + str(times[i]))
+for i in range(0,len(test_sizes)):
+	print("size " + str(test_sizes[i]) + " took " + str(times[i]))
 
 
 
