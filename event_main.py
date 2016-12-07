@@ -550,7 +550,7 @@ def comment():
 
 		comment_list = posts.getComments(feed_name, comment_id)
 
-		return render_template('comment.html', thisUser = thisUser, comment_list = comment_list)
+		return render_template('index.html', thisUser = thisUser, comment_list = comment_list)
 
 
 	# hardcoded to just return index for now
