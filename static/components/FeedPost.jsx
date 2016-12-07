@@ -1,4 +1,9 @@
-class FeedPost extends React.Component {	
+var React = require('react');
+import Avatar from "Avatar.jsx";
+import FeedPostHeader from "FeedPostHeader.jsx";
+import FeedPostBody from "FeedPostBody.jsx";
+
+export default class FeedPost extends React.Component {	
 	constructor(props) {
 		super(props);
 		this.state = {comment_id : this.props.post.comment_id};

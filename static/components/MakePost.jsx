@@ -1,4 +1,7 @@
-class MakePost extends React.Component {
+var React = require('react');
+import FilterButton from "FilterButton.jsx";
+
+export default class MakePost extends React.Component {
 	constructor(props) {
 		super(props);
 		this.handlePostChange = this.handlePostChange.bind(this);

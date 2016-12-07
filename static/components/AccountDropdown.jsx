@@ -1,4 +1,6 @@
-class AccountDropdown extends React.Component {
+var React = require('react');
+
+export default class AccountDropdown extends React.Component {
 	render() {
 		return (
 			<li className="dropdown">

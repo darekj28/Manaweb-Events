@@ -2,21 +2,5 @@
 
 {% block content %}
 <div id="app"></div>
-
-<script type="text/babel" src={{ url_for('static', filename='components/EventName.jsx') }}></script>
-<script type="text/babel" src={{ url_for('static', filename='components/FilterButton.jsx') }}></script>
-<script type="text/babel" src={{ url_for('static', filename='components/Notifications.jsx') }}></script>
-<script type="text/babel" src={{ url_for('static', filename='components/AccountDropdown.jsx') }}></script>
-<script type="text/babel" src={{ url_for('static', filename='components/SearchNavBar.jsx') }}></script>
-<script type="text/babel" src={{ url_for('static', filename='components/MakePost.jsx') }}></script>
-<script type="text/babel" src={{ url_for('static', filename='components/Avatar.jsx') }}></script>
-<script type="text/babel" src={{ url_for('static', filename='components/EditPostModal.jsx') }}></script>
-<script type="text/babel" src={{ url_for('static', filename='components/DeletePostModal.jsx') }}></script>
-<script type="text/babel" src={{ url_for('static', filename='components/ReportPostModal.jsx') }}></script>
-<script type="text/babel" src={{ url_for('static', filename='components/FeedPostHeader.jsx') }}></script>
-<script type="text/babel" src={{ url_for('static', filename='components/FeedPostBody.jsx') }}></script>
-<script type="text/babel" src={{ url_for('static', filename='components/FeedPost.jsx') }}></script>
-<script type="text/babel" src={{ url_for('static', filename='components/Feed.jsx') }}></script>
-<script type="text/babel" src={{ url_for('static', filename='components/App.jsx') }}></script>
-
+<script src={{ url_for('static', filename='bundle.js') }}></script>
 {% endblock %}

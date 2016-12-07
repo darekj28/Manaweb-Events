@@ -1,14 +1,14 @@
 var React = require('react');
-export default class DeletePostModal extends React.Component {
+export default class DeleteCommentModal extends React.Component {
 	constructor(props) {
 		super(props);
-		this.handlePostDelete = this.handlePostDelete.bind(this);
+		this.handleCommentDelete = this.handleCommentDelete.bind(this);
 	}
-	handlePostDelete() {
-		var obj = {unique_id : this.props.post.unique_id};
+	handleCommentDelete() {
+		var obj = {feed_name : "BALT", unique_id : this.props.comment.unique_id};
 		$.ajax({
 			type : 'POST',
-			url  : '/deletePost',
+			url  : '/deleteComment',
 			data : JSON.stringify(obj, null, '\t'),
 			contentType: 'application/json;charset=UTF-8'
 		});
@@ -16,7 +16,7 @@ export default class DeletePostModal extends React.Component {
 	}
 	render() {
 		return(
-			<div className="modal fade" id="DeletePostModal" aria-hidden="true">
+			<div className="modal fade" id="DeleteCommentModal" aria-hidden="true">
 				<div className="modal-dialog" role="document">
 					<div className="modal-content">
 						<div className="modal-header">
@@ -25,9 +25,9 @@ export default class DeletePostModal extends React.Component {
 							</button>
 							<h4 className="modal-title">Are you sure you want to delete?</h4>
 						</div>
-						<div className="modal-body" id="DeletePostModalBody">
+						<div className="modal-body" id="DeleteCommentModalBody">
 							<button type="button" className="btn btn-default" data-dismiss="modal" 
-									onClick={this.handlePostDelete}>Yes</button>
+									onClick={this.handleCommentDelete}>Yes</button>
 							<button type="button" className="btn btn-default" data-dismiss="modal">No</button>
 						</div>
 					</div>

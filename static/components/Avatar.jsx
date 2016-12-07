@@ -1,4 +1,6 @@
-class Avatar extends React.Component {
+var React = require('react');
+
+export default class Avatar extends React.Component {
 	constructor(props) {
 		super(props);
 	}

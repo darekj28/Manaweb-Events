@@ -1,4 +1,10 @@
-class Feed extends React.Component {
+var React = require('react');
+import FeedPost from "FeedPost.jsx";
+import EditPostModal from "EditPostModal.jsx";
+import DeletePostModal from "DeletePostModal.jsx";
+import ReportPostModal from "ReportPostModal.jsx";
+
+export default class Feed extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = { postInModal : '', userIdToFilterPosts : ''};

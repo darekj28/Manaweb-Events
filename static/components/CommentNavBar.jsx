@@ -1,7 +1,6 @@
 var React = require('react');
 import Notifications from "Notifications.jsx";
 import AccountDropdown from "AccountDropdown.jsx";
-import FilterButton from "FilterButton.jsx";
 
 export default class SearchNavBar extends React.Component {
 	constructor(props) {
@@ -53,12 +52,12 @@ export default class SearchNavBar extends React.Component {
 				            <span className="icon-bar"></span>
 				          </button>
 				          <a id="home" className="navbar-brand navbar-brand-logo" href="/">
-				                <span className="glyphicon glyphicon-home"></span>
+				                <span className="glyphicon glyphicon-chevron-left"></span>
 				              </a>
 				        </div>
 				        <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				          <ul className="nav navbar-nav navbar-right">
-		                    <li>
+		                    <li className="">
 		                        <a href="javascript:void(0)" data-toggle="search">
 		 							<span className="glyphicon glyphicon-search"></span>
 		                        </a>
@@ -73,10 +72,6 @@ export default class SearchNavBar extends React.Component {
 				                      			id="searchInput" className="form-control" placeholder="Search..." 
 				                      			onChange={this.handleSearch}/>
 				                      <div className = "input-group-addon"></div>
-								  	  {this.props.actions.map(function(action) {
-											var button = !that.props.isComment ? <FilterButton onClick={that.props.onClick} active={true} isSearch={true} name={action}/> : '';
-											return button;
-										})}
 								  </div>
 								  
 			                 </div> 

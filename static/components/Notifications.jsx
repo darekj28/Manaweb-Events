@@ -1,4 +1,5 @@
-class Notifications extends React.Component {
+var React = require('react');
+export default class Notifications extends React.Component {
 	render() {
 		return (
 			<li className="dropdown">

@@ -1,4 +1,5 @@
-class FilterButton extends React.Component {
+var React = require('react');
+export default class FilterButton extends React.Component {
 	constructor(props) {
 		super(props);
 		this.handleClick = this.handleClick.bind(this);

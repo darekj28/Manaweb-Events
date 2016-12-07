@@ -1,4 +1,5 @@
-class EditPostModal extends React.Component {
+var React = require('react');
+export default class EditPostModal extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {postContent : this.props.post.postContent};

@@ -1,3 +1,16 @@
+var React = require('react');
+var ReactDOM = require('react-dom');
+var Router = require('react-router').Router;
+var Route = require('react-router').Route;
+var Link = require('react-router').Link;
+var browserHistory = require('react-router').browserHistory;
+
+import SearchNavBar from 'SearchNavBar.jsx';
+import EventName from 'EventName.jsx';
+import MakePost from 'MakePost.jsx';
+import Feed from 'Feed.jsx';
+import CommentApp from 'CommentApp.jsx';
+
 function toggle(collection, item) {
 	var idx = collection.indexOf(item);
 	if(idx !== -1) collection.splice(idx, 1);
@@ -144,6 +157,11 @@ class App extends React.Component {
 		</div>);
 	}
 }
-
-ReactDOM.render(<App/>, document.getElementById('app'));
+var router = 
+	<Router history={browserHistory}>
+    <Route path="/" component={App}>
+      <Route path="comment?id=" component={CommentApp}/>
+    </Route>
+  	</Router>;
+ReactDOM.render(router, document.getElementById('app'));
 

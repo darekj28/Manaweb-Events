@@ -1,4 +1,5 @@
-class FeedPostHeader extends React.Component {
+var React = require('react');
+export default class FeedPostHeader extends React.Component {
 	constructor(props) {
 		super(props);
 		this.handleFilterUser = this.handleFilterUser.bind(this);

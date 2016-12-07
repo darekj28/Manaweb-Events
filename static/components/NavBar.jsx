@@ -1,4 +1,8 @@
-class NavBar extends React.Component {
+var React = require('react');
+import Notifications from "Notifications.jsx";
+import AccountDropdown from "AccountDropdown.jsx";
+
+export default class NavBar extends React.Component {
 	render() {
 		return(<nav className="navbar navbar-default" role="navigation">
 				<div className="container">
