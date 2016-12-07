@@ -3,7 +3,7 @@ var Link = require('react-router').Link;
 import Notifications from "Notifications.jsx";
 import AccountDropdown from "AccountDropdown.jsx";
 
-export default class SearchNavBar extends React.Component {
+export default class CommentNavBar extends React.Component {
 	constructor(props) {
 		super(props);
 		this.handleSearch = this.handleSearch.bind(this);

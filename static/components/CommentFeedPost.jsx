@@ -1,6 +1,7 @@
 var React = require('react');
 import CommentFeedPostHeader from "CommentFeedPostHeader.jsx";
 import CommentFeedPostBody from "CommentFeedPostBody.jsx";
+import Avatar from "Avatar.jsx";
 
 export default class CommentFeedPost extends React.Component {
 	constructor(props) {

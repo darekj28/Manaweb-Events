@@ -1,7 +1,11 @@
 var React = require('react');
+import CommentNavBar from "CommentNavBar.jsx";
+import CommentFeedPost from "CommentFeedPost.jsx";
+import CommentFeed from "CommentFeed.jsx";
+import MakeComment from "MakeComment.jsx";
 
 function getParameterByName(name, url) {
-  	 if (!url) {
+  	if (!url) {
       url = window.location.href;
     }
     name = name.replace(/[\[\]]/g, "\\$&");
@@ -11,11 +15,6 @@ function getParameterByName(name, url) {
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
-
-import SearchNavBar from "SearchNavBar.jsx";
-import CommentFeedPost from "CommentFeedPost.jsx";
-import CommentFeed from "CommentFeed.jsx";
-import MakeComment from "MakeComment.jsx";
 
 export default class CommentApp extends React.Component {
 	constructor(props) {
@@ -122,7 +121,7 @@ export default class CommentApp extends React.Component {
 	}
 	render() {
 		return (<div id="CommentApp">
-			<SearchNavBar searchText={this.state.search} onSearch={this.handleSearch} />
+			<CommentNavBar searchText={this.state.search} onSearch={this.handleSearch} />
 			<div className="container">
 				<CommentFeedPost comment={this.state.original_post} isOriginalPost={true}/>
 				<CommentFeed currentUser={this.state.currentUser} searchText={this.state.search} filters={this.state.filters} 
