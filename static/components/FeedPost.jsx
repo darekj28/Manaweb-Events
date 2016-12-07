@@ -1,4 +1,5 @@
 var React = require('react');
+var Link = require('react-router').Link;
 import Avatar from "Avatar.jsx";
 import FeedPostHeader from "FeedPostHeader.jsx";
 import FeedPostBody from "FeedPostBody.jsx";
@@ -26,12 +27,12 @@ export default class FeedPost extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		this.setState({ comment_id : nextProps.post.comment_id });
 	}
-	componentDidMount() {
-		var post = this.props.post;
-		$('#viewComment_' + post.comment_id).click(function() {
-			window.location.href = "/comment?id=" + this.state.comment_id;
-		}.bind(this));
-	}
+	// componentDidMount() {
+	// 	var post = this.props.post;
+	// 	$('#viewComment_' + post.comment_id).click(function() {
+	// 		window.location.href = "/comment?id=" + this.state.comment_id;
+	// 	}.bind(this));
+	// }
 	render() {
 		var post = this.props.post;
 		return (
@@ -42,8 +43,10 @@ export default class FeedPost extends React.Component {
 						isTrade={post.isTrade} isPlay={post.isPlay} isChill={post.isChill} time={post.time}/></div>
 					<div className="row"><FeedPostBody content={post.postContent}/></div>
 					<div className="PostFooter row">
+						<Link to={'/comment?id=' + this.state.comment_id}>
 						<span className="glyphicon glyphicon-comment pull-left PostBottomIcon AppGlyphicon" 
-								id={"viewComment_" + this.state.comment_id}></span>
+								id={"viewComment_" + this.state.comment_id}>
+								</span></Link>
 						<div className="dropdown">
 							<a href="#" className="dropdown-toggle" data-toggle="dropdown">
 				                <span className="glyphicon glyphicon-option-horizontal 

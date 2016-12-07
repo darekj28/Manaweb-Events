@@ -1,15 +1,9 @@
 var React = require('react');
-var ReactDOM = require('react-dom');
-var Router = require('react-router').Router;
-var Route = require('react-router').Route;
-var Link = require('react-router').Link;
-var browserHistory = require('react-router').browserHistory;
 
 import SearchNavBar from 'SearchNavBar.jsx';
 import EventName from 'EventName.jsx';
 import MakePost from 'MakePost.jsx';
 import Feed from 'Feed.jsx';
-import CommentApp from 'CommentApp.jsx';
 
 function toggle(collection, item) {
 	var idx = collection.indexOf(item);
@@ -23,7 +17,7 @@ function contains(collection, item) {
 	else return false;
 }
 
-class App extends React.Component {
+export default class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -141,27 +135,27 @@ class App extends React.Component {
 					</div>;
 		}
 		return (<div>
-			<SearchNavBar searchText={this.state.search} onSearch={this.handleSearch} onClick={this.handleFilterClick} actions={actions}/>
+			<SearchNavBar searchText={this.state.search} 
+							onSearch={this.handleSearch} 
+							onClick={this.handleFilterClick} 
+							actions={actions}/>
 			<div className="container">
 				<div className="app row">
 					<EventName name="Name of Event"/>
 				</div>
 				<div className="app row">
-					<MakePost placeholder="What's happening?" postText={this.state.post} onClick={this.handleFilterClick}
-							onPostChange={this.handlePostChange} onPostSubmit={this.handlePostSubmit} actions={actions}/>
+					<MakePost placeholder="What's happening?" postText={this.state.post} 
+							onClick={this.handleFilterClick}
+							onPostChange={this.handlePostChange} 
+							onPostSubmit={this.handlePostSubmit} 
+							actions={actions}/>
 				</div>
 				{alert}
-					<Feed currentUser={this.state.currentUser} searchText={this.state.search} filters={this.state.filters} posts={this.state.feed} actions={actions}
-							refreshFeed={this.refreshFeed} /> 
-				</div>
+				<Feed currentUser={this.state.currentUser} 
+						searchText={this.state.search} 
+						filters={this.state.filters} posts={this.state.feed} actions={actions}
+						refreshFeed={this.refreshFeed} /> 
+			</div>
 		</div>);
 	}
 }
-var router = 
-	<Router history={browserHistory}>
-    <Route path="/" component={App}>
-      <Route path="comment?id=" component={CommentApp}/>
-    </Route>
-  	</Router>;
-ReactDOM.render(router, document.getElementById('app'));
-
