@@ -1,4 +1,7 @@
 
+
+
+
 import sqlite3
 
 # used for time stamps 
@@ -15,9 +18,19 @@ import os
 import sys
 
 
+import psycopg2
+import urlparse
 
+urlparse.uses_netloc.append("postgres")
+url = urlparse.urlparse(os.environ["DATABASE_URL"])
+user_db = conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+)
 
-user_db = sqlite3.connect('users/user_table.db', check_same_thread = False)
 udb = user_db.cursor()
 
 
@@ -220,6 +233,7 @@ def test():
 	print(getInfo('mrt'))
 	
 # test()
+
 
 
 
