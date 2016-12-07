@@ -1,0 +1,2 @@
+webpack -d
+python3 event_main.py
