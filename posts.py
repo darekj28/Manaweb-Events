@@ -128,7 +128,7 @@ def postComment(comment_id, body, poster_id, isTrade = None, isPlay = None, isCh
 
 	comment_id = 0
 	#createThread(thread_name = comment_id, thread_id = comment_id)
-	db.execute('INSERT INTO ' + thread_id + ' (body, poster_id, thread_id, timeString, timeStamp, isTrade, isPlay, isChill, comment_id) VALUES (?,?,?,?,?,?,?,?,?)', (body, poster_id, thread_id, timeString, timeStamp, isTrade, isPlay, isChill, comment_id))
+	db.execute('INSERT INTO ' + thread_id + ' (body, poster_id, thread_id, timeString, timeStamp, isTrade, isPlay, isChill, comment_id) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)', (body, poster_id, thread_id, timeString, timeStamp, isTrade, isPlay, isChill, comment_id))
 	post_db.commit()
 
 
@@ -178,7 +178,7 @@ def addToHashTable(thread_name = None, thread_id = None):
 	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 
 	
-	db.execute('INSERT INTO ' + hash_table_name + ' (thread_id, thread_name, timeString, timeStamp) VALUES (?,?,?,?)', (thread_id, thread_name, timeString, timeStamp))
+	db.execute('INSERT INTO ' + hash_table_name + ' (thread_id, thread_name, timeString, timeStamp) VALUES (%s,%s,%s,%s)', (thread_id, thread_name, timeString, timeStamp))
 	post_db.commit()
 
 
@@ -282,15 +282,15 @@ def getPosts(thread_id, tradeFilter = None, playFilter = None, chillFilter = Non
 	return postDict
 
 
-def getAllPosts(tradeFilter = None, playFilter = None, chillFilter = None):
-	db.execute("SELECT name FROM sqlite_master WHERE type='table';")
-	all_list = list()
-	for table in db.fetchall():
-		this_table_posts = getPosts(table[0], tradeFilter = tradeFilter, playFilter = playFilter, chillFilter = chillFilter)
-		for post in this_table_posts:
-			all_list.append(post)
+# def getAllPosts(tradeFilter = None, playFilter = None, chillFilter = None):
+# 	db.execute("SELECT name FROM sqlite_master WHERE type='table';")
+# 	all_list = list()
+# 	for table in db.fetchall():
+# 		this_table_posts = getPosts(table[0], tradeFilter = tradeFilter, playFilter = playFilter, chillFilter = chillFilter)
+# 		for post in this_table_posts:
+# 			all_list.append(post)
 
-	return all_list
+# 	return all_list
 
 
 
