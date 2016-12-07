@@ -99,7 +99,7 @@ def addUser(userID, first_name, last_name, password, email, isActive, avatar_url
 
 	udb.execute("INSERT INTO " + table_name + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
 			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed) \
-			  VALUES (?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+			  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
 			(userID.lower(), first_name, last_name, password, email, isActive, avatar_url,
 			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isActive, phone_number, birthMonth, birthDay, birthYear, gender, confirmed))
 
@@ -109,16 +109,15 @@ def addUser(userID, first_name, last_name, password, email, isActive, avatar_url
 def updateInfo(userID, field_name, field_data):
 	table_name  = "user_info"
 
-	update_code = "UPDATE " + table_name  + " SET " + field_name + " = ? WHERE userID = '" + userID + "'"
 	print(update_code)
-	udb.execute(update_code, (field_data,))
+	udb.execute("UPDATE " + table_name  + " SET " + field_name + " = %s WHERE userID = '" + userID + "'", (field_data,))
 	user_db.commit()
 
 
 def getInfo(userID):
 	search_id = userID.lower()
 	table_name = "user_info"
-	udb.execute("SELECT * FROM " + table_name + " WHERE userID = ?", (search_id,))
+	udb.execute("SELECT * FROM " + table_name + " WHERE userID = %s", (search_id,))
 	size_test = udb.fetchall()
 	if len(size_test) == 0:
 		return None
@@ -127,8 +126,7 @@ def getInfo(userID):
 
 def deleteUser(userID):
 	table_name = "user_info"
-	sql = "DELETE FROM " + table_name + " WHERE userID = ?"
-	udb.execute(sql, (userID,))
+	udb.execute("DELETE FROM " + table_name + " WHERE userID = %s", (userID,))
 	user_db.commit()
 
 
@@ -157,7 +155,7 @@ def queryToDict(query):
 
 def getInfoFromEmail(email):
 	table_name = "user_info"
-	udb.execute("SELECT * FROM " + table_name + " WHERE email = ?", (email,))
+	udb.execute("SELECT * FROM " + table_name + " WHERE email = %s", (email,))
 	size_test = udb.fetchall()
 	if len(size_test) == 0:
 		return None	
