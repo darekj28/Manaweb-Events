@@ -14,27 +14,27 @@
 			<input class="setting" id="first_name" name = "first_name" type = "text" placeholder="First" />
 			<input class="setting" id="last_name" name = "last_name" type = "text" placeholder="Last"/>
 		</div>
-		<div class="form-group" id="name_warning"></div>
+		<div class="form-group warning" id="name_warning"></div>
 		<label class="control-label" for = "email"> Email Address </label>
 		<div class="form-group">
 			<input class="setting" id="email" name = "email" type = "text"/>
 		</div>
-		<div class="form-group" id="email_warning"></div>
+		<div class="form-group warning" id="email_warning"></div>
 		<label class="control-label" for = "userID"> Choose your username</label>
 		<div class="form-group"> 
 			<input class="setting" id="userID" name = "userID" type = "text" />
 		</div>
-		<div class="form-group" id="userID_warning"></div>
+		<div class="form-group warning" id="userID_warning"></div>
 		<label class="control-label" for = "password"> Create a password </label>
 		<div class="form-group">
 			<input class="setting" href="#" id = "password" onclick="focus()" name = "password" type = "password" data-toggle="popover" data-trigger="focus" data-content="Your password must contain at least one letter and one number."/>
 		</div>
-		<div class="form-group" id="password_warning"></div>
+		<div class="form-group warning" id="password_warning"></div>
 		<label class="control-label" for = "password_confirm"> Confirm your password </label>
 		<div class="form-group">
 			<input class="setting" id = "password_confirm" name = "password_confirm" type = "password" />
 		</div>
-		<div class="form-group" id="password_confirm_warning"></div>
+		<div class="form-group warning" id="password_confirm_warning"></div>
 		<label class="control-label" for = "gender">Gender</label>
 		<div class="form-group">
 			<select class="setting" data-width="fit" id="gender" name = "gender" multiple data-max-options="1" title="I am..." value=""> 
@@ -49,7 +49,7 @@
 		</div> 
 		<label class="control-label" for="birthMonth">Birthday</label>
 		<div class="form-group">
-    		<select class="setting" data-width="fit" id="birthMonth" name = "birthMonth" multiple data-max-options="1" title="Month" value=""=> 
+    		<select class="setting" data-width="fit" id="birthMonth" name = "birthMonth" multiple data-max-options="1" title="Month" value=""> 
     			<option value = 1> January </option>	
     			<option value = 2> February </option>	
     			<option value = 3> March </option>	
@@ -70,23 +70,23 @@
 			<select class="setting"  data-width = "fit" id="birthYear" name = "birthYear" multiple data-max-options="1" title="Year" value=""> 
 			</select>
 	
-			<div class="form-group" id="month_warning"></div>
-			<div class="form-group" id="day_warning"></div>
-			<div class="form-group" id="year_warning"></div>
+			<div class="form-group warning" id="month_warning"></div>
+			<div class="form-group warning" id="day_warning"></div>
+			<div class="form-group warning" id="year_warning"></div>
 		</div>		
 
 		<label class="control-label" for = "avatar">Select an avatar</label>
 		<div class="form-group">
 			<select class="setting" data-width="fit" id="avatar" name = "avatar" multiple data-max-options="1" title="Select an avatar!" value=""> 
-					{% for item in avatar_list %}
-						<option value="{{item[1]}}"> {{item[0]}}</option>
-					{% endfor %}
+			{% for item in avatar_list %}
+				<option value="{{item[1]}}"> {{item[0]}}</option>
+			{% endfor %}
 			</select>	
 		</div>
-
-	<div id = "avatar_container" class = "col-md-8 col-md-offset-2" style = "width:60px;height:60px;background-size: cover;">  </div>
+		<div id = "avatar_container" class="img-rounded" style = "width:192px;height:192px;background-size: cover;">  </div>
+		<br/>
 		<div class="form-group">
-			<button id="createProfile" class="btn btn-default form-control" type = "submit" onclick = "this.disabled=true; this.form.submit()"> Submit </button>
+			<button id="createProfile" type = "submit" onclick = "this.disabled=true; this.form.submit()"> Submit </button>
 		</div>
 	</form>
 </div>

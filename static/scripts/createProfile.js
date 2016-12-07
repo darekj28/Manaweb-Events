@@ -8,7 +8,8 @@ $(document).ready(function() {
 						"#userID",
 						"#gender",
 						"#password",
-						"#password_confirm"];
+						"#password_confirm",
+						"avatar"];
 	var months=[{month : "January",  index: 1,  days : 31},
 				{month : "February", index: 2,  days : 29},
 				{month : "March", 	 index: 3,  days : 31},
@@ -400,15 +401,14 @@ $(document).ready(function() {
 				}
 			}
 		})
-	})
+	});
 
 	$('#avatar').on('change', function(event) {
 		event.preventDefault();
 		var newBackground = $('#avatar').val();
-		console.log(newBackground);
 		var container = document.getElementById('avatar_container');
 		container.style.backgroundImage = 'url(' + newBackground  + ')';
 		enableSubmit();
-	})
+	});
 
 });

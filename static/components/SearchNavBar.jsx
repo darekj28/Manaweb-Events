@@ -53,7 +53,7 @@ export default class SearchNavBar extends React.Component {
 				            <span className="icon-bar"></span>
 				            <span className="icon-bar"></span>
 				          </button>
-				          <Link to="home" className="navbar-brand navbar-brand-logo">
+				          <Link to="/" className="navbar-brand navbar-brand-logo">
 				                <span className="glyphicon glyphicon-home"></span>
 				              </Link>
 				        </div>
