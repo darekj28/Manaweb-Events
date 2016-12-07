@@ -1,7 +1,4 @@
 
-
-
-
 import sqlite3
 
 # used for time stamps 
@@ -18,20 +15,9 @@ import os
 import sys
 
 
-import psycopg2
-import urllib
 
-urllib.parse.uses_netloc.append("postgres")
-url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
 
-user_db = conn = psycopg2.connect(
-    database=url.path[1:],
-    user=url.username,
-    password=url.password,
-    host=url.hostname,
-    port=url.port
-)
-
+user_db = sqlite3.connect('users/user_table.db', check_same_thread = False)
 udb = user_db.cursor()
 
 
@@ -52,9 +38,9 @@ def createUserInfoTable():
 def resetDatabase():
 	global udb
 	global user_db
-	# udb.execute("SELECT name FROM sqlite_master WHERE type='table';")
-	# for table in udb.fetchall():
-	# 	deleteTable(table[0])
+	udb.execute("SELECT name FROM sqlite_master WHERE type='table';")
+	for table in udb.fetchall():
+		deleteTable(table[0])
 
 	createUserInfoTable()
 
@@ -99,7 +85,7 @@ def addUser(userID, first_name, last_name, password, email, isActive, avatar_url
 
 	udb.execute("INSERT INTO " + table_name + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
 			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed) \
-			  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
+			  VALUES (?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
 			(userID.lower(), first_name, last_name, password, email, isActive, avatar_url,
 			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isActive, phone_number, birthMonth, birthDay, birthYear, gender, confirmed))
 
@@ -109,15 +95,16 @@ def addUser(userID, first_name, last_name, password, email, isActive, avatar_url
 def updateInfo(userID, field_name, field_data):
 	table_name  = "user_info"
 
+	update_code = "UPDATE " + table_name  + " SET " + field_name + " = ? WHERE userID = '" + userID + "'"
 	print(update_code)
-	udb.execute("UPDATE " + table_name  + " SET " + field_name + " = %s WHERE userID = '" + userID + "'", (field_data,))
+	udb.execute(update_code, (field_data,))
 	user_db.commit()
 
 
 def getInfo(userID):
 	search_id = userID.lower()
 	table_name = "user_info"
-	udb.execute("SELECT * FROM " + table_name + " WHERE userID = %s", (search_id,))
+	udb.execute("SELECT * FROM " + table_name + " WHERE userID = ?", (search_id,))
 	size_test = udb.fetchall()
 	if len(size_test) == 0:
 		return None
@@ -126,7 +113,8 @@ def getInfo(userID):
 
 def deleteUser(userID):
 	table_name = "user_info"
-	udb.execute("DELETE FROM " + table_name + " WHERE userID = %s", (userID,))
+	sql = "DELETE FROM " + table_name + " WHERE userID = ?"
+	udb.execute(sql, (userID,))
 	user_db.commit()
 
 
@@ -155,7 +143,7 @@ def queryToDict(query):
 
 def getInfoFromEmail(email):
 	table_name = "user_info"
-	udb.execute("SELECT * FROM " + table_name + " WHERE email = %s", (email,))
+	udb.execute("SELECT * FROM " + table_name + " WHERE email = ?", (email,))
 	size_test = udb.fetchall()
 	if len(size_test) == 0:
 		return None	
@@ -231,8 +219,4 @@ def test():
 
 	print(getInfo('mrt'))
 	
-test()
-
-
-
-
+# test()
