@@ -18,6 +18,9 @@ import users
 import psycopg2
 import urllib
 
+
+# for when we upload to heroku
+# comment out if testing locally
 urllib.parse.uses_netloc.append("postgres")
 url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
 post_db = psycopg2.connect(
@@ -28,6 +31,9 @@ post_db = psycopg2.connect(
     port=url.port
 )
 
+# for when we test locally
+# comment out if uploading to heroku
+post_db = sqlite3.connect('posts/posts.db', check_same_thread = False)
 db = post_db.cursor()
 
 
@@ -221,9 +227,6 @@ def addCommentIdToList(comment_id):
 
 # posts on a thread
 def postInThread(feed_name, body, poster_id, isTrade = None, isPlay = None, isChill = None, comment_id = None):
-	
-
-
 	timeStamp = time.time()
 	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 
@@ -238,8 +241,6 @@ def postInThread(feed_name, body, poster_id, isTrade = None, isPlay = None, isCh
 	if comment_id == None:
 		comment_id = hash_comment_id(str(timeStamp))
 
-
-	
 	addCommentIdToList(comment_id)
 	unique_id = comment_id
 	db.execute("INSERT INTO " + feed_name + " (body, poster_id, feed_name, comment_id, timeString, timeStamp, isTrade, isPlay, isChill, unique_id) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (body, poster_id, feed_name, comment_id, timeString, timeStamp, isTrade, isPlay, isChill, unique_id))

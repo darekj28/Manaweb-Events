@@ -1,7 +1,3 @@
-
-
-
-
 import sqlite3
 
 # used for time stamps 
@@ -21,6 +17,8 @@ import sys
 import psycopg2
 import urllib
 
+# this is for when we load to heroku
+# comment this out when testing locally
 urllib.parse.uses_netloc.append("postgres")
 url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
 
@@ -31,6 +29,10 @@ user_db =  psycopg2.connect(
     host=url.hostname,
     port=url.port
 )
+
+# this is for when we test locally 
+user_db = sqlite3.connect('users/users.db', check_same_thread = False)
+
 
 udb = user_db.cursor()
 
@@ -51,7 +53,7 @@ def createUserInfoTable():
 # resets db
 def resetDatabase():
 	
-	#  udb.execute("DROP SCHEMA PUBLIC CASCADE; CREATE SCHEMA PUBLIC;")
+	udb.execute("DROP TABLE IF EXISTS " + "user_info")
 
 
 	createUserInfoTable()
