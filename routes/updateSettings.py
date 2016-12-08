@@ -38,7 +38,7 @@ def updateSettings():
 	users.updateInfo(session['userID'], 'birthYear', request.form['birthYear'])
 	users.updateInfo(session['userID'], 'phone_number', request.form['phone_number'])
 	users.updateInfo(session['userID'], 'avatar_name', request.form['avatar'] )
-	avatar_url = './static/avatars/' + request.form['avatar'] + '.png'
+	avatar_url = './static/avatars/' + request.form['avatar']
 	users.updateInfo(session['userID'], 'avatar_url', avatar_url)
 
 	return render_template('settingsChanged.html')
