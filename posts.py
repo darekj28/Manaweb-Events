@@ -43,8 +43,7 @@ def deleteTable(table_name):
 
 # resets db
 def resetDatabase():
-	global db
-	global post_db
+	
 	db.execute("DROP SCHEMA PUBLIC CASCADE; CREATE SCHEMA PUBLIC;")
 
 
