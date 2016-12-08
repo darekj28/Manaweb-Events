@@ -44,7 +44,7 @@ def deleteTable(table_name):
 # resets db
 def resetDatabase():
 	
-	db.execute("DROP SCHEMA PUBLIC CASCADE; CREATE SCHEMA PUBLIC;")
+	#  db.execute("DROP SCHEMA PUBLIC CASCADE; CREATE SCHEMA PUBLIC;")
 
 
 	initializePosts()
@@ -54,7 +54,7 @@ def initializePosts():
 	createReportTable()
 	createFeedNameTable()
 	createCommentIdTable()
-
+	user
 
 
 def createAdminTable():
@@ -580,6 +580,7 @@ def test(test_size):
 	createCommentIdTable()
 	createFeedNameTable()
 	createReportTable()
+
 	testUsers = ['darekj', 'elic', 'briank', 'luisv', 'paulc', 'mashis', 'yuuyaw', 'shoutay', 'gabbys']
 	times = {}
 	times['size'] = test_size

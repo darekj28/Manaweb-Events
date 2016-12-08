@@ -51,7 +51,7 @@ def createUserInfoTable():
 # resets db
 def resetDatabase():
 	
-	udb.execute("DROP SCHEMA PUBLIC CASCADE; CREATE SCHEMA PUBLIC;")
+	#  udb.execute("DROP SCHEMA PUBLIC CASCADE; CREATE SCHEMA PUBLIC;")
 
 
 	createUserInfoTable()
