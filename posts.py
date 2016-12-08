@@ -408,7 +408,7 @@ def makeTestList(start, size):
 		x = 2 * x
 	return test_list
 
-test_sizes = makeTestList(800, 1)
+test_sizes = makeTestList(100, 1)
 print(test_sizes)
 times = list()
 for x in test_sizes:

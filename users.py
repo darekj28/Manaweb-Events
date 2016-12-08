@@ -210,26 +210,26 @@ def test():
 
 
 
-		userFileDir = './static/img/' + userID[i]
-		# if directory exists, clear it
-		if os.path.isdir(userFileDir):
-			fileList = os.listdir(userFileDir)
-			for fileName in fileList:
-				os.remove(userFileDir + "/" + fileName)		
-		# otherwise create e new one	
-		else: 
-			os.mkdir(userFileDir)
+		# userFileDir = './static/img/' + userID[i]
+		# # if directory exists, clear it
+		# if os.path.isdir(userFileDir):
+		# 	fileList = os.listdir(userFileDir)
+		# 	for fileName in fileList:
+		# 		os.remove(userFileDir + "/" + fileName)		
+		# # otherwise create e new one	
+		# else: 
+		# 	os.mkdir(userFileDir)
 
 		
-	for user in userID:
-		print(getInfo(user))
+	# for user in userID:
+	# 	print(getInfo(user))
 
-	feed_name = "BALT"
+	# feed_name = "BALT"
 
-	updateInfo('darekj', 'last_name', 'jeter')
-	updateInfo('darekj', 'chillFilter', True)
+	# updateInfo('darekj', 'last_name', 'jeter')
+	# updateInfo('darekj', 'chillFilter', True)
 
-	print(getInfo('mrt'))
+	# print(getInfo('mrt'))
 	
 test()
 
