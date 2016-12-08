@@ -107,7 +107,7 @@ def postInThread(thread_id, body, poster_id, isTrade = None, isPlay = None, isCh
 
 	comment_id = hash_name(str(timeStamp))
 	#createThread(thread_name = comment_id, thread_id = comment_id)
-	db.execute('INSERT INTO ' + thread_id + ' (body, poster_id, thread_id, timeString, timeStamp, isTrade, isPlay, isChill, comment_id) VALUES (?,?,?,?,?,?,?,?,?)', (body, poster_id, thread_id, timeString, timeStamp, isTrade, isPlay, isChill, comment_id))
+	db.execute('INSERT INTO ' + thread_id + ' (body, poster_id, thread_id, timeString, timeStamp, isTrade, isPlay, isChill, comment_id) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)', (body, poster_id, thread_id, timeString, timeStamp, isTrade, isPlay, isChill, comment_id))
 	post_db.commit()
 
 

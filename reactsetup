@@ -1,4 +1,4 @@
 npm install --save react react-dom react-router
 npm install --save-dev babel-loader babel-preset-es2015 babel-preset-react webpack
-npm install --save-dev babel-jest jest react-test-renderer
+npm install --save-dev babel-jest jest react-test-renderer jest-cli
 node_modules/.bin/webpack -d
