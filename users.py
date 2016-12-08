@@ -229,7 +229,7 @@ def test():
 
 	# print(getInfo('mrt'))
 	
-test()
+# test()
 
 
 

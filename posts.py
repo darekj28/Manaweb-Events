@@ -691,26 +691,26 @@ def makeTestList(start, size):
 	return test_list
 
 
-initial = 50
-n = 1
-test_sizes = makeTestList(initial, n)
-all_times = list()
-print(test_sizes)
-for x in test_sizes:
-	time_0 = time.time()
-	times = test(x)
-	time_1 = time.time()
-	total_time = time_1 - time_0
-	times['total'] = total_time
-	all_times.append(times)
+# initial = 50
+# n = 1
+# test_sizes = makeTestList(initial, n)
+# all_times = list()
+# print(test_sizes)
+# for x in test_sizes:
+# 	time_0 = time.time()
+# 	times = test(x)
+# 	time_1 = time.time()
+# 	total_time = time_1 - time_0
+# 	times['total'] = total_time
+# 	all_times.append(times)
 	
 
-for key in all_times[0]:
-	s = key + " : "
-	for i in range(0, n):
-		s = s + str(all_times[i][key]) + ", "
+# for key in all_times[0]:
+# 	s = key + " : "
+# 	for i in range(0, n):
+# 		s = s + str(all_times[i][key]) + ", "
 
-	print(s)
+# 	print(s)
 
 
 
