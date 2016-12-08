@@ -158,7 +158,7 @@ def index():
 		# this is currently hard coded
 		feed_name = "BALT"
 
-		posts.createThread(thread_name = feed_name)
+		posts.createThread(feed_name = feed_name)
 		postList = posts.getPosts(feed_name, tradeFilter = thisUser['tradeFilter'], playFilter = thisUser['playFilter'] , chillFilter = thisUser['chillFilter'])
 
 		commentDict = {}
@@ -277,7 +277,7 @@ def makePost():
 @ app.route('/generateUniqueId' , methods = ['POST'])
 def generateUniqueId():
 	timeStamp = time.time() 
-	unique_id = posts.hash_name(str(timeStamp))
+	unique_id = posts.hash_comment_id(str(timeStamp))
 	return jsonify ({ 'unique_id' : unique_id})	
 
 @app.route("/makeComment", methods = ['POST'])

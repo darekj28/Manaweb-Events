@@ -52,9 +52,8 @@ def createUserInfoTable():
 def resetDatabase():
 	global udb
 	global user_db
-	# udb.execute("SELECT name FROM sqlite_master WHERE type='table';")
-	# for table in udb.fetchall():
-	# 	deleteTable(table[0])
+	db.execute("DROP SCHEMA PUBLIC CASCADE; CREATE SCHEMA PUBLIC;")
+
 
 	createUserInfoTable()
 
