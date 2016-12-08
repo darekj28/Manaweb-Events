@@ -24,7 +24,7 @@ import urllib
 urllib.parse.uses_netloc.append("postgres")
 url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
 
-user_db = conn = psycopg2.connect(
+user_db =  psycopg2.connect(
     database=url.path[1:],
     user=url.username,
     password=url.password,
