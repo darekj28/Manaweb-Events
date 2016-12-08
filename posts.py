@@ -20,9 +20,11 @@ import urllib
 
 
 # for when we upload to heroku
-# comment out if testing locally
+# comment out if testing
 urllib.parse.uses_netloc.append("postgres")
 url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
+print(os.environ["DATABASE_URL"])
+
 post_db = psycopg2.connect(
     database=url.path[1:],
     user=url.username,
@@ -31,9 +33,6 @@ post_db = psycopg2.connect(
     port=url.port
 )
 
-# for when we test locally
-# comment out if uploading to heroku
-post_db = sqlite3.connect('posts/posts.db', check_same_thread = False)
 db = post_db.cursor()
 
 
