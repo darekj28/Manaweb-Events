@@ -158,7 +158,7 @@ def index():
 		# this is currently hard coded
 		feed_name = "BALT"
 
-		posts.createThread(feed_name = feed_name)
+		posts.createThread(thread_name = feed_name)
 		postList = posts.getPosts(feed_name, tradeFilter = thisUser['tradeFilter'], playFilter = thisUser['playFilter'] , chillFilter = thisUser['chillFilter'])
 
 		commentDict = {}
