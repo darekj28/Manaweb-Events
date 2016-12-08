@@ -37,7 +37,7 @@ udb = user_db.cursor()
 
 # initializes user info table
 def createUserInfoTable():
-	table_name = "userinfo"
+	table_name = "user_info"
 	createTableCode = 'CREATE TABLE IF NOT EXISTS ' + table_name + ' (userID TEXT, first_name TEXT, last_name TEXT, password TEXT, email TEXT,  \
 			isActive BOOLEAN, avatar_url TEXT, avatar_name TEXT, confirmationPin TEXT, playFilter BOOLEAN, \
 			 tradeFilter BOOLEAN, chillFilter BOOLEAN, isAdmin BOOLEAN, phone_number TEXT, birthMonth TEXT, birthDay TEXT, birthYear TEXT, gender TEXT, confirmed BOOLEAN)'
@@ -69,7 +69,7 @@ def addUser(userID, first_name, last_name, password, email, isActive, avatar_url
 			 avatar_name, confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
 			  isAdmin = None, phone_number = None, birthMonth = None
 			 ,birthDay = None, birthYear = None, gender = None, confirmed = None):
-	table_name = "userinfo"
+	table_name = "user_info"
 
 	if tradeFilter == None:
 		tradeFilter = False
@@ -105,7 +105,7 @@ def addUser(userID, first_name, last_name, password, email, isActive, avatar_url
 
 	
 def updateInfo(userID, field_name, field_data):
-	table_name  = "userinfo"
+	table_name  = "user_info"
 
 	print(update_code)
 	udb.execute("UPDATE " + table_name  + " SET " + field_name + " = %s WHERE userID = '" + userID + "'", (field_data,))
@@ -114,7 +114,7 @@ def updateInfo(userID, field_name, field_data):
 
 def getInfo(userID):
 	search_id = userID.lower()
-	table_name = "userinfo"
+	table_name = "user_info"
 	udb.execute("SELECT * FROM " + table_name + " WHERE userID = %s", (search_id,))
 	size_test = udb.fetchall()
 	if len(size_test) == 0:
@@ -123,7 +123,7 @@ def getInfo(userID):
 	return queryToDict(query)
 
 def deleteUser(userID):
-	table_name = "userinfo"
+	table_name = "user_info"
 	udb.execute("DELETE FROM " + table_name + " WHERE userID = %s", (userID,))
 	user_db.commit()
 
@@ -152,7 +152,7 @@ def queryToDict(query):
 	return user_info
 
 def getInfoFromEmail(email):
-	table_name = "userinfo"
+	table_name = "user_info"
 	udb.execute("SELECT * FROM " + table_name + " WHERE email = %s", (email,))
 	size_test = udb.fetchall()
 	if len(size_test) == 0:
@@ -191,6 +191,7 @@ def test():
 
 	resetDatabase()
 	createUserInfoTable()
+	print("all done!")
 
 	for i in range(0,9):
 		email = userID[i] + '@gmail.com'

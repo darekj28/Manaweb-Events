@@ -33,8 +33,10 @@ import sqlite3
 
 import sys
 import re
-import posts
+
 import users
+import posts
+
 
 from routes.createProfile import create_profile
 from routes.settings import original_settings
