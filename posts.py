@@ -54,7 +54,7 @@ def initializePosts():
 	createReportTable()
 	createFeedNameTable()
 	createCommentIdTable()
-	user
+	
 
 
 def createAdminTable():
