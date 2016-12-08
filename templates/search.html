@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+{% include "menuBanner.html" %}
+
+
+
+{% block content %}
+
+
+
+<script type = 'text/javascript'>
+$(document).ready(function(){
+	
+	$('.toggle').click(function(){
+		var comment_id = "#comment_" + $(this).attr('id').split("_")[1];
+		console.log(comment_id);
+		$(comment_id).toggle();
+	});
+	$('.toggle_show_feed').click(function(){
+		var comment_id = "#show_all_comment_" + $(this).attr('id').split("_")[1];
+		console.log(comment_id);
+		$(comment_id).toggle();
+	});
+	$('.pop_up_toggle').click(function(){
+		var comment_id = "#pop_up_comment_" + $(this).attr('id').split("_")[3];
+		console.log(comment_id);
+		$(comment_id).toggle();
+	});
+	$('#main_post').click(function(event){
+		
+		
+		var isValid = $('#isTrade').prop('checked') ||  $('#isPlay').prop('checked') ||  $('#isChill').prop('checked');
+		if (isValid == false){
+			event.preventDefault();
+			alert("You must select a category before posting");
+		}
+			
+	})
+});
+</script>
+
+<h1> Today's Event is SCG Baltimore </h1>
+
+<div class = "feed_filter">
+	<form method = 'POST' id = "feed_filter" action = "{{url_for('setFeedFilter')}}">
+		<input type="checkbox" id = "tradeFilter" name = "tradeFilter" value="1"
+		{% if thisUser['tradeFilter'] %} checked {% endif %}
+		> Trade <br>
+  		<input type="checkbox" id = "playFilter" name= "playFilter" value="1"
+		{% if thisUser['playFilter'] %} checked {% endif %}
+  		 > Play <br>
+  		<input type="checkbox" id = "chillFilter" name= "chillFilter" value="1"
+  		{% if thisUser['chillFilter'] %} checked {% endif %}
+  		> Chill <br>
+  		<span class="input-group-btn">
+			<button type="submit" id = "set_filters" class="btn btn-default">Set Filters</button>
+		</span>
+	</form>
+</div>
+
+<div class="answer-add">
+	<form method = 'POST' id = "post" action = "{{url_for('makePost')}}">
+		<div class="input-group">
+			<input name="body" id="writeMessageInput" placeholder="Write a message" onfocus="this.placeholder = ''" onblur="this.placeholder='Write a message'">
+			<br>
+			<input type="checkbox" id = "isTrade" name = "isTrade" value="1"> Trade <br>
+  			<input type="checkbox" id = "isPlay" name= "isPlay" value="1"> Play <br>
+  			<input type="checkbox" id = "isChill" name= "isChill" value="1"> Chill <br>
+  			<input type= "hidden" id name= "feed_name" value= "{{feed_name}}">
+			<span class="input-group-btn pull-right">
+				<button type="submit" id = "main_post" class="btn btn-default">Post!</button>
+			</span>
+		</div>
+	</form>
+</div>
+<div class="col-sm-9 col-xs-12 chat pre-scrollable"  tabindex="5001">
+	<div class="col-inside-lg decor-default">
+		<div class="chat-body">
+			<h6>
+
+			{% for post in full_list %}
+				{% if post['isComment'] == False %}
+				This is a post!
+				<div class="answer left">
+					<div class="avatar">
+						 <img src="{{getAvatarUrl(post['poster_id'])}}" style = "width:60px;height:60px"> 
+					</div>
+					<div class="name"> <a href = "{{getIdUrl(post['poster_id'])}}"> {{getFirstName(post['poster_id'])}} </a> 
+						<form method = "POST" class = "report_post" action = "{{url_for('reportPost')}}">
+							<div class="input-group">
+								<input name="description" id="writeMessageInput" placeholder="Reported for..." onfocus="this.placeholder = ''" onblur="this.placeholder='Report for...'">
+								<input type= "hidden" name= "unique_id" value= "{{post['comment_id']}}">
+						  		<input type= "hidden" id name= "feed_name" value= "{{feed_name}}">
+						  		<input type= "hidden" id name= "poster_id" value= "{{post['poster_id']}}">
+						  		<span class="input-group-btn">
+										<button type="submit" class="btn btn-default pull-left">Report!</button>
+								</span>
+							</div>
+						</form>
+					</div>
+					<div class="text"> {{post['body'] }} </div>
+					<div class="time">{{post['timeString']}}</div>
+					<div> 
+						isTrade :  {{post['isTrade']}}
+						isPlay :  {{post['isPlay']}}
+						isChill :  {{post['isChill']}}
+					</div>
+					<button id = "toggle_{{post['comment_id']}}" class = "toggle"> Show/Hide Comments </button>
+					<div id = "comment_{{post['comment_id']}}" style = "display:none">
+						<b> Comments </b>
+						{% for comment in commentDict[post['comment_id']] %}
+						<div class = "comment_thread">
+								<div class="name"> <a href = "{{getIdUrl(comment['poster_id'])}}"> {{getFirstName(comment['poster_id'])}} </a>
+									<form method = "POST" class = "report_comment" action = "{{url_for('reportComment')}}">
+											<div class="input-group">
+												<input name="description" id="writeMessageInput" placeholder="Reported for..." onfocus="this.placeholder = ''" onblur="this.placeholder='Report for...'">
+												<input type= "hidden" name= "unique_id" value= "{{comment['unique_id']}}">
+										  		<input type= "hidden" id name= "feed_name" value= "{{feed_name}}">
+										  		<input type= "hidden" id name= "poster_id" value= "{{comment['poster_id']}}">
+										  		<span class="input-group-btn">
+														<button type="submit" class="btn btn-default pull-left">Report!</button>
+												</span>
+											</div>
+									</form>
+								</div>
+								<div class="text">
+									{{comment['body']}}
+								</div>
+								<div class="time">{{comment['timeString']}}</div>
+						</div>		
+						{% endfor %}	
+						<div class="answer-add">
+							<form method = 'POST' id = "comment" action = "{{url_for('makeComment')}}">
+								<div class="input-group">
+									<input name="body" id="writeMessageInput" placeholder="Write a message" onfocus="this.placeholder = ''" onblur="this.placeholder='Write a message'">
+						  			<input type= "hidden" name= "comment_id" value= "{{post['comment_id']}}">
+
+									<span class="input-group-btn">
+										<button type="submit" class="btn btn-default pull-left">Comment!</button>
+									</span>
+								</div>
+						</form>
+						</div>
+					</div>
+				</div>
+				<!-- is a comment -->
+				{% else %}
+				This is a comment!
+				<div class="answer left">
+					<div class="avatar">
+						 <img src="{{getAvatarUrl(post['poster_id'])}}" style = "width:60px;height:60px"> 
+					</div>
+					<div class="name"> <a href = "{{getIdUrl(post['poster_id'])}}"> {{getFirstName(post['poster_id'])}} </a> </div>
+					<div class="text"> {{post['body'] }} </div>
+					<div class="time">{{post['timeString']}}</div>
+					<button id = "toggle_{{post['comment_id']}}" class = "toggle_show_feed"> Show/Hide Entire Feed </button>
+					{% set x = postDict.get(post['comment_id']) %}
+
+					{% if x %}
+
+					<div id = "show_all_comment_{{x['comment_id']}}" style = "display:none">
+						<div class="answer left">
+					<div class="avatar">
+						 <img src="{{getAvatarUrl(x['poster_id'])}}" style = "width:60px;height:60px"> 
+					</div>
+					<div class="name"> <a href = "{{getIdUrl(post['poster_id'])}}"> {{getFirstName(x['poster_id'])}} </a>
+									<form method = "POST" class = "report_comment" action = "{{url_for('reportComment')}}">
+											<div class="input-group">
+												<input name="description" id="writeMessageInput" placeholder="Reported for..." onfocus="this.placeholder = ''" onblur="this.placeholder='Report for...'">
+												<input type= "hidden" name= "unique_id" value= "{{x['unique_id']}}">
+										  		<input type= "hidden" id name= "feed_name" value= "{{feed_name}}">
+										  		<input type= "hidden" id name= "poster_id" value= "{{x['poster_id']}}">
+										  		<span class="input-group-btn">
+														<button type="submit" class="btn btn-default pull-left">Report!</button>
+												</span>
+											</div>
+									</form>
+
+					 </div>
+					<div class="text"> {{x['body'] }} </div>
+					<div class="time">{{x['timeString']}}</div>
+					<div> 
+						isTrade :  {{x['isTrade']}}
+						isPlay :  {{x['isPlay']}}
+						isChill :  {{x['isChill']}}
+					</div>
+					<button id = "pop_up_toggle_{{x['comment_id']}}" class = "pop_up_toggle"> Show/Hide Comments </button>
+					<div id = "pop_up_comment_{{x['comment_id']}}" style = "display:none">
+						{{post['feed_name']}}
+						{{x['comment_id']}}
+						<b> Comments </b>
+						{% for comment in commentDict[x['comment_id']] %}
+						<div class = "comment_thread">
+								<div class="name"> <a href = "{{getIdUrl(comment['poster_id'])}}"> {{getFirstName(comment['poster_id'])}} </a>
+									<form method = "POST" class = "report_comment" action = "{{url_for('reportComment')}}">
+											<div class="input-group">
+												<input name="description" id="writeMessageInput" placeholder="Reported for..." onfocus="this.placeholder = ''" onblur="this.placeholder='Report for...'">
+												<input type= "hidden" name= "unique_id" value= "{{comment['comment_id']}}">
+										  		<input type= "hidden" id name= "feed_name" value= "{{feed_name}}">
+										  		<input type= "hidden" id name= "poster_id" value= "{{comment['poster_id']}}">
+										  		<span class="input-group-btn">
+														<button type="submit" class="btn btn-default pull-left">Report!</button>
+												</span>
+											</div>
+									</form>
+
+
+								</div>
+								<div class="text">
+									{{comment['body']}}
+								</div>
+								<div class="time">{{comment['timeString']}}</div>
+						</div>		
+						{% endfor %}
+						<div class="answer-add">
+							<form method = 'POST' id = "comment" action = "{{url_for('makeComment')}}">
+								<div class="input-group">
+									<input name="body" id="writeMessageInput" placeholder="Write a message" onfocus="this.placeholder = ''" onblur="this.placeholder='Write a message'">
+									
+									<input type= "hidden" name= "feed_name" value= "{{post['feed_name']}}">
+						  			<input type= "hidden" name= "comment_id" value= "{{x['comment_id']}}">
+									<span class="input-group-btn">
+										<button type="submit" class="btn btn-default pull-left">Comment!</button>
+									</span>
+								</div>
+							</form>
+						</div>
+
+					</div>
+				</div>	
+					</div>
+				</div>
+				{% endif %}
+				{% endif %}
+
+
+
+			</br>
+			{% endfor %}
+									
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
