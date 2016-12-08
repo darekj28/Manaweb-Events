@@ -52,7 +52,7 @@ def createUserInfoTable():
 def resetDatabase():
 	global udb
 	global user_db
-	db.execute("DROP SCHEMA PUBLIC CASCADE; CREATE SCHEMA PUBLIC;")
+	udb.execute("DROP SCHEMA PUBLIC CASCADE; CREATE SCHEMA PUBLIC;")
 
 
 	createUserInfoTable()
