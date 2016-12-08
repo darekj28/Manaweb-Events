@@ -110,7 +110,7 @@ def createFeedNameTable():
 
 def createReportTable():
 	report_table = "report_table"
-	createTableCode = 'CREATE TABLE IF NOT EXISTS ' + report_table + ' (feed_name TEXT, id TEXT, body TEXT, reason TEXT ,isComment BOOLEAN, description TEXT, timeString TEXT, timeStamp REAL, reporting_user, reported_user)'
+	createTableCode = 'CREATE TABLE IF NOT EXISTS ' + report_table + ' (feed_name TEXT, id TEXT, body TEXT, reason TEXT ,isComment BOOLEAN, description TEXT, timeString TEXT, timeStamp REAL, reporting_user TEXT, reported_user TEXT)'
 	db.execute(createTableCode)
 	addIndexCode = 'CREATE INDEX IF NOT EXISTS id ON ' + report_table + ' (id)'
 	db.execute(addIndexCode)
