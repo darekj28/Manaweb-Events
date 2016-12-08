@@ -1,4 +1,6 @@
 var React = require('react');
+var $ = require('jquery');
+
 export default class DeleteCommentModal extends React.Component {
 	constructor(props) {
 		super(props);

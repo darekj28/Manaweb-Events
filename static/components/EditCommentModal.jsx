@@ -1,4 +1,5 @@
 var React = require('react');
+var $ = require('jquery');
 export default class EditCommentModal extends React.Component {
 	constructor(props) {
 		super(props);

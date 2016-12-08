@@ -1,5 +1,6 @@
 var React = require('react');
 var Link = require('react-router').Link;
+var $ = require('jquery');
 import Avatar from "Avatar.jsx";
 import FeedPostHeader from "FeedPostHeader.jsx";
 import FeedPostBody from "FeedPostBody.jsx";
@@ -27,12 +28,6 @@ export default class FeedPost extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		this.setState({ comment_id : nextProps.post.comment_id });
 	}
-	// componentDidMount() {
-	// 	var post = this.props.post;
-	// 	$('#viewComment_' + post.comment_id).click(function() {
-	// 		window.location.href = "/comment?id=" + this.state.comment_id;
-	// 	}.bind(this));
-	// }
 	render() {
 		var post = this.props.post;
 		return (

@@ -1,5 +1,6 @@
 var React = require('react');
 var Link = require('react-router').Link;
+var $ = require('jquery');
 import Notifications from "Notifications.jsx";
 import AccountDropdown from "AccountDropdown.jsx";
 
