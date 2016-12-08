@@ -1,5 +1,6 @@
 npm install --save react react-dom react-router jquery
 npm install --save-dev babel-core babel-loader babel-preset-es2015 babel-preset-react webpack
-npm install --save-dev karma karma-cli karma-chrome-launcher karma-mocha karma-sourcemap-loader karma-webpack expect mocha react-addons-test-utils karma-spec-reporter
+npm install --save-dev karma karma-cli karma-chrome-launcher karma-mocha karma-sourcemap-loader 
+npm install --save-dev karma-webpack expect mocha react-addons-test-utils karma-spec-reporter
 sudo npm install -g karma-cli
 node_modules/.bin/webpack -d
