@@ -216,7 +216,7 @@ def cIdTaken(comment_id):
 		return False
 
 def addCommentIdToList(comment_id):
-	db.execute("INSERT INTO c_id (comment_id) VALUES (?)", (comment_id,))
+	db.execute("INSERT INTO c_id (comment_id) VALUES (%s)", (comment_id,))
 	post_db.commit()
 
 # posts on a thread
