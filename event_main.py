@@ -277,7 +277,7 @@ def makePost():
 @ app.route('/generateUniqueId' , methods = ['POST'])
 def generateUniqueId():
 	timeStamp = time.time() 
-	unique_id = posts.hash_comment_id(str(timeStamp))
+	unique_id = posts.hash_name(str(timeStamp))
 	return jsonify ({ 'unique_id' : unique_id})	
 
 @app.route("/makeComment", methods = ['POST'])
