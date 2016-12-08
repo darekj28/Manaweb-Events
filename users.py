@@ -20,7 +20,16 @@ import urllib
 # this is for when we load to heroku
 # comment this out when testing locally
 urllib.parse.uses_netloc.append("postgres")
+os.environ["DATABASE_URL"] = "postgres://spkgochzoicojm:y0MABz523D1H-zMqeZVvplCuC2@ec2-54-163-252-55.compute-1.amazonaws.com:5432/d15b0teu2kkhek"
+print(os.environ["DATABASE_URL"])
+
 url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
+print(url)
+print(url.path[1:])
+print(url.username)
+print(url.password)
+print(url.hostname)
+print(url.port)
 
 user_db =  psycopg2.connect(
     database=url.path[1:],
@@ -30,8 +39,7 @@ user_db =  psycopg2.connect(
     port=url.port
 )
 
-# this is for when we test locally 
-user_db = sqlite3.connect('users/users.db', check_same_thread = False)
+
 
 
 udb = user_db.cursor()
