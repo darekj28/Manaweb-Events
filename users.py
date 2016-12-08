@@ -106,8 +106,6 @@ def addUser(userID, first_name, last_name, password, email, isActive, avatar_url
 	
 def updateInfo(userID, field_name, field_data):
 	table_name  = "user_info"
-
-	print(update_code)
 	udb.execute("UPDATE " + table_name  + " SET " + field_name + " = %s WHERE userID = '" + userID + "'", (field_data,))
 	user_db.commit()
 
