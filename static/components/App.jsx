@@ -27,7 +27,7 @@ export default class App extends React.Component {
 			search : '',
 			post : '',
 			feed : [],
-			currentUser : '',
+			currentUser : {},
 			alert : false,
 			unique_id : ''
 		};
