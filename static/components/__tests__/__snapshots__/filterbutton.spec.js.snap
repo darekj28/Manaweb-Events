@@ -1,0 +1,40 @@
+exports[`FilterButton renders correctly for active 1`] = `
+<a
+  className="input-group-addon">
+  <span
+    className="glyphicon glyphicon-transfer icon-success filterButton"
+    onClick={[Function]} />
+</a>
+`;
+
+exports[`FilterButton renders correctly for all actions 1`] = `
+<div>
+  <a
+    className="input-group-addon">
+    <span
+      className="glyphicon glyphicon-transfer icon-danger filterButton"
+      onClick={[Function]} />
+  </a>
+  <a
+    className="input-group-addon">
+    <span
+      className="glyphicon glyphicon-play icon-danger filterButton"
+      onClick={[Function]} />
+  </a>
+  <a
+    className="input-group-addon">
+    <span
+      className="glyphicon glyphicon-time icon-danger filterButton"
+      onClick={[Function]} />
+  </a>
+</div>
+`;
+
+exports[`FilterButton renders correctly for inactive 1`] = `
+<a
+  className="input-group-addon">
+  <span
+    className="glyphicon glyphicon-transfer icon-danger filterButton"
+    onClick={[Function]} />
+</a>
+`;

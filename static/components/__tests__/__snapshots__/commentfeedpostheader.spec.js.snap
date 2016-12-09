@@ -33,6 +33,7 @@ exports[`CommentFeedPostHeader renders correctly for isAdmin 1`] = `
         <li>
           <a
             href="#"
+            id="hce"
             onClick={[Function]}>
             Edit comment
           </a>
@@ -40,6 +41,7 @@ exports[`CommentFeedPostHeader renders correctly for isAdmin 1`] = `
         <li>
           <a
             href="#"
+            id="hcd"
             onClick={[Function]}>
             Delete comment
           </a>
@@ -85,6 +87,7 @@ exports[`CommentFeedPostHeader renders correctly for isOP 1`] = `
         <li>
           <a
             href="#"
+            id="hce"
             onClick={[Function]}>
             Edit comment
           </a>
@@ -92,6 +95,7 @@ exports[`CommentFeedPostHeader renders correctly for isOP 1`] = `
         <li>
           <a
             href="#"
+            id="hcd"
             onClick={[Function]}>
             Delete comment
           </a>
@@ -137,6 +141,7 @@ exports[`CommentFeedPostHeader renders correctly for not isOP or isAdmin 1`] = `
         <li>
           <a
             href="#"
+            id="hcr"
             onClick={[Function]}>
             Report comment
           </a>

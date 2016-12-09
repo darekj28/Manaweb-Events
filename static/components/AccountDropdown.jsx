@@ -8,9 +8,10 @@ export default class AccountDropdown extends React.Component {
                 <span className="glyphicon glyphicon-user"></span>
               </a>
               <ul className="dropdown-menu">
+              <li><a href="#">{this.props.name}</a></li>
+              <li className="divider"></li>
                 <li><a href="/settings">Settings</a></li>
                 <li><a href="#">Your Posts</a></li>
-                <li className="divider"></li>
 				<li><a href="/logout">Logout</a></li>
               </ul>
             </li>

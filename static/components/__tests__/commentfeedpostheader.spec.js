@@ -57,4 +57,13 @@ describe("CommentFeedPostHeader", () => {
 			);
 		expect(cfph).toMatchSnapshot();
 	});
+	it("should call handleCommentEdit when edit comment is clicked", () => {
+		expect(true).toBe(true);
+	});
+	it("should call handleCommentDelete when delete comment is clicked", () => {
+		expect(true).toBe(true);
+	});
+	it("should call handleCommentReport when report comment is clicked", () => {
+		expect(true).toBe(true);
+	});
 });

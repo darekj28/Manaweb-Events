@@ -1,9 +1,9 @@
 var React = require('react');
 var Link = require('react-router').Link;
 var $ = require('jquery');
-import Avatar from "Avatar.jsx";
-import FeedPostHeader from "FeedPostHeader.jsx";
-import FeedPostBody from "FeedPostBody.jsx";
+import Avatar from "./Avatar.jsx";
+import FeedPostHeader from "./FeedPostHeader.jsx";
+import FeedPostBody from "./FeedPostBody.jsx";
 
 export default class FeedPost extends React.Component {	
 	constructor(props) {
@@ -48,9 +48,9 @@ export default class FeedPost extends React.Component {
 				                				pull-left PostBottomIcon AppGlyphicon"></span>
 				            </a>
 				            <ul className="PostDropdown pull-left dropdown-menu">
-				              	{(this.props.isOP || this.props.isAdmin) && <li><a href="#" onClick={this.handlePostEdit}>Edit post</a></li> }
-			              		{(this.props.isOP || this.props.isAdmin) && <li><a href="#" onClick={this.handlePostDelete}>Delete post</a></li> }
-			              		{!(this.props.isOP || this.props.isAdmin) && <li><a href="#" onClick={this.handlePostReport}>Report post</a></li> }
+				              	{(this.props.isOP || this.props.isAdmin) && <li><a id="hpe" href="#" onClick={this.handlePostEdit}>Edit post</a></li> }
+			              		{(this.props.isOP || this.props.isAdmin) && <li><a id="hpd" href="#" onClick={this.handlePostDelete}>Delete post</a></li> }
+			              		{!(this.props.isOP || this.props.isAdmin) && <li><a id="hpr" href="#" onClick={this.handlePostReport}>Report post</a></li> }
 				            </ul>
 				        </div>
 					</div>

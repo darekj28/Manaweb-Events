@@ -37,7 +37,12 @@
     ],
     "snapshotSerializers": [
       "./node_modules/enzyme-to-json/serializer"
-    ]
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "jsx"
+    ],
+    "unmockedModulePathPatterns": ["react"]  
   },
   "repository": {
     "type": "git",

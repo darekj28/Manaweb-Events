@@ -1,0 +1,91 @@
+exports[`FeedPost renders correctly 1`] = `
+<li
+  className="Post">
+  <a
+    className="pull-left AvatarSpace"
+    href="#">
+    <img
+      className="Avatar img-rounded"
+      src="a" />
+  </a>
+  <div
+    className="PostSpace">
+    <div
+      className="row">
+      <div
+        className="FeedPostHeader">
+        <div
+          className="tpc pull-right">
+          <kbd>
+             Trade  Play  Chill 
+          </kbd>
+        </div>
+        <div
+          className="headerpart name"
+          onClick={[Function]}>
+          <b>
+            a
+          </b>
+        </div>
+        <div
+          className="headerpart username text-muted"
+          onClick={[Function]}>
+          @
+          a
+        </div>
+        <div
+          className="headerpart time text-muted">
+          • 
+          a
+        </div>
+      </div>
+    </div>
+    <div
+      className="row">
+      <div
+        className="FeedPostBody">
+        a
+      </div>
+    </div>
+    <div
+      className="PostFooter row">
+      <a
+        onClick={[Function]}
+        style={Object {}}>
+        <span
+          className="glyphicon glyphicon-comment pull-left PostBottomIcon AppGlyphicon"
+          id="viewComment_a" />
+      </a>
+      <div
+        className="dropdown">
+        <a
+          className="dropdown-toggle"
+          data-toggle="dropdown"
+          href="#">
+          <span
+            className="glyphicon glyphicon-option-horizontal  pull-left PostBottomIcon AppGlyphicon" />
+        </a>
+        <ul
+          className="PostDropdown pull-left dropdown-menu">
+          <li>
+            <a
+              href="#"
+              id="hpe"
+              onClick={[Function]}>
+              Edit post
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              id="hpd"
+              onClick={[Function]}>
+              Delete post
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</li>
+`;

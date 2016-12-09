@@ -43,7 +43,7 @@ export default class EditCommentModal extends React.Component {
 									onChange={this.handleCommentEditChange}></textarea>
 						</div>
 						<div className="modal-footer">
-							<button type="button" className="btn btn-default" data-dismiss="modal" 
+							<button id="ecm_submit" type="button" className="btn btn-default" data-dismiss="modal" 
 									onClick={this.handleCommentEditSubmit}>Submit</button>
 						</div>
 					</div>

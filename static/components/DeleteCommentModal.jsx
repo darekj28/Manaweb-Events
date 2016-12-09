@@ -28,9 +28,9 @@ export default class DeleteCommentModal extends React.Component {
 							<h4 className="modal-title">Are you sure you want to delete?</h4>
 						</div>
 						<div className="modal-body" id="DeleteCommentModalBody">
-							<button type="button" className="btn btn-default" data-dismiss="modal" 
+							<button id='dcm_yes' type="button" className="btn btn-default" data-dismiss="modal" 
 									onClick={this.handleCommentDelete}>Yes</button>
-							<button type="button" className="btn btn-default" data-dismiss="modal">No</button>
+							<button id="dcm_no" type="button" className="btn btn-default" data-dismiss="modal">No</button>
 						</div>
 					</div>
 				</div>

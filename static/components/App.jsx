@@ -139,7 +139,8 @@ export default class App extends React.Component {
 			<SearchNavBar searchText={this.state.search} 
 							onSearch={this.handleSearch} 
 							onClick={this.handleFilterClick} 
-							actions={actions}/>
+							actions={actions}
+							name={this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name']}/>
 			<div className="container">
 				<div className="app row">
 					<EventName name="Name of Event"/>

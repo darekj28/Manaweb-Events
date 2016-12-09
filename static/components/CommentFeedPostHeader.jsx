@@ -16,9 +16,9 @@ export default class CommentFeedPostHeader extends React.Component {
 			                				pull-left CommentBottomIcon AppGlyphicon"></span>
 			            </a>
 			            <ul className="CommentDropdown pull-right dropdown-menu">
-			              	{(this.props.isOP || this.props.isAdmin) && <li><a href="#" onClick={this.props.handleCommentEdit}>Edit comment</a></li> }
-			              	{(this.props.isOP || this.props.isAdmin) && <li><a href="#" onClick={this.props.handleCommentDelete}>Delete comment</a></li> }
-			              	{!(this.props.isOP || this.props.isAdmin) && <li><a href="#" onClick={this.props.handleCommentReport}>Report comment</a></li> }
+			              	{(this.props.isOP || this.props.isAdmin) && <li><a id="hce" href="#" onClick={this.props.handleCommentEdit}>Edit comment</a></li> }
+			              	{(this.props.isOP || this.props.isAdmin) && <li><a id="hcd" href="#" onClick={this.props.handleCommentDelete}>Delete comment</a></li> }
+			              	{!(this.props.isOP || this.props.isAdmin) && <li><a id="hcr" href="#" onClick={this.props.handleCommentReport}>Report comment</a></li> }
 			            </ul>
 		        	</div>}
 				</div>
