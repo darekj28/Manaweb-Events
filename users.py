@@ -46,7 +46,7 @@ def createUserInfoTable():
 	table_name = "user_info"
 	createTableCode = 'CREATE TABLE IF NOT EXISTS ' + table_name + ' (userID TEXT, first_name TEXT, last_name TEXT, password TEXT, email TEXT,  \
 			isActive BOOLEAN, avatar_url TEXT, avatar_name TEXT, confirmationPin TEXT, playFilter BOOLEAN, \
-			 tradeFilter BOOLEAN, chillFilter BOOLEAN, isAdmin BOOLEAN, phone_number TEXT, birthMonth TEXT, birthDay TEXT, birthYear TEXT, gender TEXT, confirmed BOOLEAN, timeString TEXT, timeStamp REAL )'
+			 tradeFilter BOOLEAN, chillFilter BOOLEAN, isAdmin BOOLEAN, phone_number TEXT, birthMonth TEXT, birthDay TEXT, birthYear TEXT, gender TEXT, confirmed BOOLEAN, timeString TEXT, timeStamp TEXT )'
 	udb.execute(createTableCode)
 	addIndexCode = 'CREATE INDEX IF NOT EXISTS userID ON ' + table_name + ' (userID)'
 	udb.execute(addIndexCode)
@@ -56,7 +56,7 @@ def createUserInfoTable():
 	action_table_name = "user_actions"
 	createActionTableCode = 'CREATE TABLE IF NOT EXISTS ' + action_table_name + ' (userID TEXT, first_name TEXT, last_name TEXT, password TEXT, email TEXT,  \
 			isActive BOOLEAN, avatar_url TEXT, avatar_name TEXT, confirmationPin TEXT, playFilter BOOLEAN, \
-			 tradeFilter BOOLEAN, chillFilter BOOLEAN, isAdmin BOOLEAN, phone_number TEXT, birthMonth TEXT, birthDay TEXT, birthYear TEXT, gender TEXT, confirmed BOOLEAN, timeString TEXT, timeStamp REAL, action TEXT)'
+			 tradeFilter BOOLEAN, chillFilter BOOLEAN, isAdmin BOOLEAN, phone_number TEXT, birthMonth TEXT, birthDay TEXT, birthYear TEXT, gender TEXT, confirmed BOOLEAN, timeString TEXT, timeStamp TEXT, action TEXT)'
 	udb.execute(createActionTableCode)
 	addIndexCode = 'CREATE INDEX IF NOT EXISTS userID ON ' + action_table_name + ' (userID)'
 	udb.execute(addIndexCode)
@@ -113,9 +113,12 @@ def addUser(userID, first_name, last_name, password, email, isActive, avatar_url
 		confirmed = True
 
 
-	timeStamp = time.time()
-	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+	timeStamp = str(time.time())
+	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	print(timeStamp)
+	print(type(timeStamp))
+	print(timeString)
+	print(type(timeString))
 	sys.stdout.flush()
 
 	input_properties = {}
@@ -177,8 +180,10 @@ def updateInfo(userID, field_name, field_data):
 	table_name  = "user_info"
 	udb.execute("UPDATE " + table_name  + " SET " + field_name + " = %s WHERE userID = '" + userID + "'", (field_data,))
 	action = "ACCOUNT " + field_name + " UPDATED"
+	timeStamp = str(time.time())
+	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-	udb.execute("INSERT INTO " + "user_actions" + " (userID, " + field_name + ", action) VALUES (%s, %s, %s)", (userID.lower(), field_data, action))
+	udb.execute("INSERT INTO " + "user_actions" + " (userID, " + field_name + ", timeString, timeStamp, action) VALUES (%s, %s, %s, %s, %s)", (userID.lower(), field_data, timeString, timeStamp, action))
 	user_db.commit()
 
 
@@ -196,7 +201,9 @@ def deleteUser(userID):
 	table_name = "user_info"
 	udb.execute("DELETE FROM " + table_name + " WHERE userID = %s", (userID,))
 	action = "USER " + userID + " DELETED"
-	udb.execute("INSERT INTO " + "user_actions" + " (userID, action) VALUES (%s, %s)", (userID, action))
+	timeStamp = str(time.time())
+	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+	udb.execute("INSERT INTO " + "user_actions" + " (userID, timeString, timeStamp, action) VALUES (%s, %s, %s, %s)", (userID, timeString, timeStamp, action))
 
 	user_db.commit()
 
