@@ -67,6 +67,7 @@ export default class Feed extends React.Component {
 		var rows = this.filter();
 		return (
 				<div>
+					<p> BRO {this.props.currentUser['isAdmin']}  </p>
 					<ul id="Feed"> {rows} </ul>
 					<EditPostModal post={this.state.postInModal} refreshFeed={this.props.refreshFeed}/>
 					<DeletePostModal post={this.state.postInModal} refreshFeed={this.props.refreshFeed}/>
