@@ -1,0 +1,172 @@
+exports[`CommentFeedPostHeader renders correctly for isAdmin 1`] = `
+<div
+  className="FeedPostHeader">
+  <div
+    className="pull-left name">
+    <b>
+      a
+    </b>
+  </div>
+  <div
+    className="pull-left username text-muted">
+    @
+    a
+  </div>
+  <div
+    className="time pull-left text-muted">
+    • 
+    a
+  </div>
+  <div
+    className="pull-right">
+    <div
+      className="dropdown">
+      <a
+        className="dropdown-toggle"
+        data-toggle="dropdown"
+        href="#">
+        <span
+          className="glyphicon glyphicon-option-horizontal  pull-left CommentBottomIcon AppGlyphicon" />
+      </a>
+      <ul
+        className="CommentDropdown pull-right dropdown-menu">
+        <li>
+          <a
+            href="#"
+            onClick={[Function]}>
+            Edit comment
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            onClick={[Function]}>
+            Delete comment
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`CommentFeedPostHeader renders correctly for isOP 1`] = `
+<div
+  className="FeedPostHeader">
+  <div
+    className="pull-left name">
+    <b>
+      a
+    </b>
+  </div>
+  <div
+    className="pull-left username text-muted">
+    @
+    a
+  </div>
+  <div
+    className="time pull-left text-muted">
+    • 
+    a
+  </div>
+  <div
+    className="pull-right">
+    <div
+      className="dropdown">
+      <a
+        className="dropdown-toggle"
+        data-toggle="dropdown"
+        href="#">
+        <span
+          className="glyphicon glyphicon-option-horizontal  pull-left CommentBottomIcon AppGlyphicon" />
+      </a>
+      <ul
+        className="CommentDropdown pull-right dropdown-menu">
+        <li>
+          <a
+            href="#"
+            onClick={[Function]}>
+            Edit comment
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            onClick={[Function]}>
+            Delete comment
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`CommentFeedPostHeader renders correctly for not isOP or isAdmin 1`] = `
+<div
+  className="FeedPostHeader">
+  <div
+    className="pull-left name">
+    <b>
+      a
+    </b>
+  </div>
+  <div
+    className="pull-left username text-muted">
+    @
+    a
+  </div>
+  <div
+    className="time pull-left text-muted">
+    • 
+    a
+  </div>
+  <div
+    className="pull-right">
+    <div
+      className="dropdown">
+      <a
+        className="dropdown-toggle"
+        data-toggle="dropdown"
+        href="#">
+        <span
+          className="glyphicon glyphicon-option-horizontal  pull-left CommentBottomIcon AppGlyphicon" />
+      </a>
+      <ul
+        className="CommentDropdown pull-right dropdown-menu">
+        <li>
+          <a
+            href="#"
+            onClick={[Function]}>
+            Report comment
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`CommentFeedPostHeader renders correctly for original post 1`] = `
+<div
+  className="FeedPostHeader">
+  <div
+    className="pull-left name">
+    <b>
+      a
+    </b>
+  </div>
+  <div
+    className="pull-left username text-muted">
+    @
+    a
+  </div>
+  <div
+    className="time pull-left text-muted">
+    • 
+    a
+  </div>
+  <div
+    className="pull-right" />
+</div>
+`;

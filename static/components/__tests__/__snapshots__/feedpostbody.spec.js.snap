@@ -1,0 +1,6 @@
+exports[`FeedPostBody renders correctly 1`] = `
+<div
+  className="FeedPostBody">
+  a
+</div>
+`;
