@@ -7,7 +7,9 @@ export default class DeleteCommentModal extends React.Component {
 		this.handleCommentDelete = this.handleCommentDelete.bind(this);
 	}
 	handleCommentDelete() {
-		var obj = {feed_name : "BALT", unique_id : this.props.comment.unique_id};
+		var obj = {feed_name : "BALT", 
+					comment_id : this.props.comment.comment_id,
+					unique_id : this.props.comment.unique_id};
 		$.ajax({
 			type : 'POST',
 			url  : '/deleteComment',
