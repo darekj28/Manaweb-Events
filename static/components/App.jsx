@@ -63,7 +63,8 @@ export default class App extends React.Component {
 					isPlay 		: obj['isPlay'],
 					isChill 	: obj['isChill'],
 					comment_id  : obj['comment_id'],
-					unique_id   : obj['unique_id']
+					unique_id   : obj['unique_id'],
+					// numberOfComments : obj['numberOfComments']
 				});
 			});
 			this.setState({feed : feed});
@@ -97,13 +98,16 @@ export default class App extends React.Component {
 						isTrade : contains(this.state.actions, "Trade"),
 						isPlay  : contains(this.state.actions, "Play"), 
 						isChill : contains(this.state.actions, "Chill"),
-						comment_id : this.state.unique_id
+						comment_id : this.state.unique_id,
+						numberOfComments : 0,
 					});
 			var obj = {postContent : postText, 
 						isTrade : contains(this.state.actions, "Trade"),
 						isPlay  : contains(this.state.actions, "Play"), 
 						isChill : contains(this.state.actions, "Chill"),
-						comment_id : this.state.unique_id};
+						comment_id : this.state.unique_id,
+						numberOfComments : 0
+					};
 			$.ajax({
 				type : 'POST',
 				url  : '/makePost',

@@ -74,6 +74,7 @@ export default class CommentApp extends React.Component {
 					name 		: obj['first_name'] + ' ' + obj['last_name'],
 					userID 		: obj['poster_id'],
 					time  		: obj['time'],
+					comment_id  : obj['comment_id'],
 					unique_id	: obj['unique_id']
 				});
 			});
@@ -89,6 +90,7 @@ export default class CommentApp extends React.Component {
 					name    : this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
 					userID  : this.state.currentUser['userID'], 
 					time	: "just now", 
+					comment_id : this.state.comment_id,
 					unique_id : this.state.unique_id
 				});
 
