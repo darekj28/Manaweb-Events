@@ -44,14 +44,14 @@ export default class FeedPost extends React.Component {
 								</span></Link>
 						<div>{post.numberOfComments}</div>
 						<div className="dropdown">
-							<a href="#" className="dropdown-toggle" data-toggle="dropdown">
+							<a href="#drop_down_sroll" className="dropdown-toggle" data-toggle="dropdown" >
 				                <span className="glyphicon glyphicon-option-horizontal 
 				                				pull-left PostBottomIcon AppGlyphicon"></span>
 				            </a>
-				            <ul className="PostDropdown pull-left dropdown-menu">
+				            <ul id = "drop_down_sroll" className="PostDropdown pull-left dropdown-menu">
 				              	{(this.props.isOP || this.props.isAdmin) && <li><a id="hpe" href="#" onClick={this.handlePostEdit}>Edit post</a></li> }
-			              		{(this.props.isOP || this.props.isAdmin) && <li><a id="hpd" href="#" onClick={this.handlePostDelete}>Delete post</a></li> }
-			              		{!(this.props.isOP || this.props.isAdmin) && <li><a id="hpr" href="#" onClick={this.handlePostReport}>Report post</a></li> }
+			              		{(this.props.isAdmin) && <li><a id="hpd" href="#" onClick={this.handlePostDelete}>Delete post</a></li> }
+			              		{(!this.props.isOP || this.props.isAdmin) && <li><a id="hpr" href="#" onClick={this.handlePostReport}>Report post</a></li> }
 				            </ul>
 				        </div>
 					</div>

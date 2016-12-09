@@ -68,7 +68,6 @@ def resetDatabase():
 
 	deleteTable("user_info")
 	deleteTable("user_actions")
-	sys.stdout.flush()
 
 	createUserInfoTable()
 
@@ -88,7 +87,8 @@ def addUser(userID, first_name, last_name, password, email, isActive, avatar_url
 			 ,birthDay = None, birthYear = None, gender = None, confirmed = None):
 	table_name = "user_info"
 
-
+	if isAdmin == None:
+		isAdmin = False
 
 	if tradeFilter == None:
 		tradeFilter = False
@@ -145,14 +145,14 @@ def addUser(userID, first_name, last_name, password, email, isActive, avatar_url
 			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp) \
 			  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
 			(userID.lower(), first_name, last_name, password, email, isActive, avatar_url,
-			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isActive, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp)))
+			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp)))
 
 		action = "ACCOUNT CREATED"
 		udb.execute(udb.mogrify("INSERT INTO " + "user_actions" + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
 			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action) \
 			  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
 			(userID.lower(), first_name, last_name, password, email, isActive, avatar_url,
-			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isActive, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action)))
+			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action)))
 
 	# otherwise simply update information
 	else: 
@@ -168,7 +168,7 @@ def addUser(userID, first_name, last_name, password, email, isActive, avatar_url
 			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action) \
 			  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
 			(userID.lower(), first_name, last_name, password, email, isActive, avatar_url,
-			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isActive, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action))
+			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action))
 		sys.stdout.flush()
 		udb.execute(update_code)
 
@@ -284,10 +284,13 @@ def test():
 		slash_splits = avatar_url.split('/')
 		avatar_name = slash_splits[len(slash_splits)-1].split('.')[0]
 
+		isAdmin = False
+		if userID[i] == 'darekj' or userID[i] == 'elic':
+			isAdmin = True
 
 		addUser(userID[i], first_name = first_name[i], last_name = last_name[i], password = password, email = email,  isActive = isActive,
 			avatar_url = avatar_url, avatar_name = avatar_name, confirmationPin = confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
-			isAdmin = False, phone_number = phone_number, birthMonth = birthMonth[i], birthDay = birthDay[i], birthYear = birthYear[i],
+			isAdmin = isAdmin, phone_number = phone_number, birthMonth = birthMonth[i], birthDay = birthDay[i], birthYear = birthYear[i],
 			gender = gender[i]) 
 		
 	

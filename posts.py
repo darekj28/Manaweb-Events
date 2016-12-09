@@ -704,7 +704,7 @@ def makeTestList(start, size):
 	return test_list
 
 
-# initial = 40
+# initial = 20
 # n = 1
 # test_sizes = makeTestList(initial, n)
 # all_times = list()
@@ -726,5 +726,6 @@ def makeTestList(start, size):
 # 	print(s)
 
 
-
+# db.close()
+# post_db.close()
 
