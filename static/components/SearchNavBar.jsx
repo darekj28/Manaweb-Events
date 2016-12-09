@@ -60,7 +60,7 @@ export default class SearchNavBar extends React.Component {
 				                <span className="glyphicon glyphicon-home"></span>
 				              </Link>
 
-				          <span className = "gylphicon glyphicon-home">
+				          <span id = "this_guys_name" className = "gylphicon glyphicon-home">
 				          	 <p style = "color: white"> {this.props.name} </p> 
 				          </span>
 
