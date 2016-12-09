@@ -157,7 +157,11 @@ export default class App extends React.Component {
 							actions={actions}/>
 				</div>
 				{alert}
-
+				<div id = "BRO">  BRO _ {this.state.currentUser['isAdmin']} </div>
+				<Feed currentUser={this.state.currentUser} 
+						searchText={this.state.search} 
+						filters={this.state.filters} posts={this.state.feed} actions={actions}
+						refreshFeed={this.refreshFeed} /> 
 			</div>
 		</div>);
 	}
