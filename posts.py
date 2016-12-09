@@ -79,7 +79,7 @@ def createAdminTable():
 def updateAdminTable(feed_name, body, poster_id, action, unique_id, timeString, timeStamp, isComment):
 	table_name =  'admin_table'
 	updateAdminTableCode = "INSERT INTO " + table_name  + "(feed_name, body, poster_id, action, unique_id, timeString, timeStamp, isComment) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
-	db.execute(updateAdminTableCode, (feed_name, body, poster_id, action, unique_id, timeString, timeStamp, isComment))
+	db.execute(db.mogrify(updateAdminTableCode, (feed_name, body, poster_id, action, unique_id, timeString, timeStamp, isComment)))
 	post_db.commit() 
 
 
@@ -130,7 +130,7 @@ def reportPost(feed_name, comment_id, reason, description, reporting_user, repor
 	timeStamp = time.time()
 	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-	db.execute("INSERT INTO " + report_table + "(feed_name, id, body, reason, isComment, description, timeStamp, timeString, reporting_user, reported_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (feed_name, comment_id, body, reason, False, description, timeStamp, timeString, reporting_user, reported_user))
+	db.execute(db.mogrify("INSERT INTO " + report_table + "(feed_name, id, body, reason, isComment, description, timeStamp, timeString, reporting_user, reported_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (feed_name, comment_id, body, reason, False, description, timeStamp, timeString, reporting_user, reported_user)))
 	post_db.commit()
 
 	action = "REPORTED POST"
@@ -143,7 +143,7 @@ def reportComment(feed_name, unique_id, reason, description, reporting_user, rep
 	body = getCommentById(feed_name, unique_id)['body']
 	timeStamp = time.time()
 	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-	db.execute("INSERT INTO " + report_table + "(feed_name, id, body, reason, isComment, description, timeStamp, timeString, reporting_user, reported_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (feed_name, unique_id, body, reason, True, description, timeStamp, timeString, reporting_user, reported_user))
+	db.execute(db.mogrify("INSERT INTO " + report_table + "(feed_name, id, body, reason, isComment, description, timeStamp, timeString, reporting_user, reported_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (feed_name, unique_id, body, reason, True, description, timeStamp, timeString, reporting_user, reported_user)))
 	post_db.commit()	
 	action = "REPORTED COMMENT"
 	isComment = True
@@ -160,7 +160,7 @@ def hash_feed_name(s):
 	return comment_id
 
 def getPostById(feed_name, comment_id):
-	db.execute("SELECT * FROM " + feed_name + " WHERE comment_id = %s", (comment_id,))
+	db.execute(db.mogrify("SELECT * FROM " + feed_name + " WHERE comment_id = %s", (comment_id,)))
 	this_post = db.fetchall()
 	output = postListToDict(this_post)
 	if len(output) == 0:
@@ -170,7 +170,7 @@ def getPostById(feed_name, comment_id):
 
 def getCommentById(feed_name, unique_id):
 	table_name = "c_" + feed_name
-	db.execute("SELECT * FROM " + table_name + " WHERE unique_id = %s", (unique_id,))
+	db.execute(db.mogrify("SELECT * FROM " + table_name + " WHERE unique_id = %s", (unique_id,)))
 	this_comment = db.fetchall()
 	output = commentListToDict(this_comment)
 
@@ -180,7 +180,7 @@ def getCommentById(feed_name, unique_id):
 
 def addFeedName(feed_name):
 	feed_table = "feed_names"
-	db.execute("INSERT INTO " + feed_table + " (feed_name) VALUES (%s) ", (feed_name,))
+	db.execute(db.mogrify("INSERT INTO " + feed_table + " (feed_name) VALUES (%s) ", (feed_name,)))
 	post_db.commit()
 
 
@@ -205,7 +205,7 @@ def hash_comment_id(s):
 def feedNameTaken(feed_name):
 	feed_table_name = "feed_names"
 	fetchMatchingIdCode = "SELECT * FROM " + comment_table_name + " WHERE feed_name = %s"
-	db.execute(fetchMatchingIdCode, (feed_name,))
+	db.execute(db.mogrify(fetchMatchingIdCode, (feed_name,)))
 	matchList = db.fetchall()
 	if len(matchList) > 0:
 		return True
@@ -216,7 +216,7 @@ def cIdTaken(comment_id):
 	comment_table_name = "c_id"
 	fetchMatchingIdCode = "SELECT * FROM " + comment_table_name + " WHERE comment_id = %s"
 
-	db.execute(fetchMatchingIdCode, (comment_id,))
+	db.execute(db.mogrify(fetchMatchingIdCode, (comment_id,)))
 	matchList = db.fetchall()
 
 	if len(matchList) > 0:
@@ -246,7 +246,7 @@ def postInThread(feed_name, body, poster_id, isTrade = None, isPlay = None, isCh
 
 	addCommentIdToList(comment_id)
 	unique_id = comment_id
-	db.execute("INSERT INTO " + feed_name + " (body, poster_id, feed_name, comment_id, timeString, timeStamp, isTrade, isPlay, isChill, unique_id) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (body, poster_id, feed_name, comment_id, timeString, timeStamp, isTrade, isPlay, isChill, unique_id))
+	db.execute(db.mogrify("INSERT INTO " + feed_name + " (body, poster_id, feed_name, comment_id, timeString, timeStamp, isTrade, isPlay, isChill, unique_id) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (body, poster_id, feed_name, comment_id, timeString, timeStamp, isTrade, isPlay, isChill, unique_id)))
 	post_db.commit()
 
 	action = "MAKE POST"
@@ -263,7 +263,7 @@ def makeComment(feed_name, comment_id, body, poster_id, unique_id = None):
 		unique_id = hash_comment_id(comment_id)
 		
 	addCommentIdToList(unique_id)
-	db.execute('INSERT INTO c_' + feed_name + ' (body, poster_id, feed_name, comment_id, timeString, timeStamp, unique_id) VALUES (%s,%s,%s,%s,%s,%s,%s)', (body, poster_id, feed_name, comment_id, timeString, timeStamp, unique_id))
+	db.execute(db.mogrify('INSERT INTO c_' + feed_name + ' (body, poster_id, feed_name, comment_id, timeString, timeStamp, unique_id) VALUES (%s,%s,%s,%s,%s,%s,%s)', (body, poster_id, feed_name, comment_id, timeString, timeStamp, unique_id)))
 	post_db.commit()
 	action = "MAKE COMMENT"
 	isComment = True
@@ -334,7 +334,7 @@ def getComments(feed_name, comment_id = None):
 	sql_code = "SELECT * FROM " + feed_table_name
 	if comment_id != None:
 		sql_code = sql_code + " WHERE comment_id = (%s)"
-		db.execute(sql_code, (comment_id,))	
+		db.execute(db.mogrify(sql_code, (comment_id,)))
 
 	else:
 		db.execute(sql_code)	
@@ -368,7 +368,7 @@ def updateTime(feed_name, unique_id):
 	timeStamp = time.time()
 	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	update_time_code = "UPDATE " + table_name  + " SET timeString = ?, timeStamp = ? WHERE unique_id = '" + unique_id + "'"
-	db.execute(update_time_code, (timeString, timeStamp))
+	db.execute(db.mogrify(update_time_code, (timeString, timeStamp)))
 	post_db.commit()
 
 # edits post 
@@ -378,7 +378,7 @@ def editPost(feed_name, unique_id, field_name, field_data):
 	timeStamp = time.time()
 	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	update_code = "UPDATE " + table_name  + " SET " + field_name + " = ? WHERE unique_id = '" + unique_id + "'"
-	db.execute(update_code, (field_data,))
+	db.execute(db.mogrify(update_code, (field_data,)))
 	post_db.commit()
 
 	thisPost = getPostById(feed_name, unique_id)
@@ -395,7 +395,7 @@ def editComment(feed_name, unique_id, field_name, field_data):
 	timeStamp = time.time()
 	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	update_code = "UPDATE " + table_name  + " SET " + field_name + " = ? WHERE unique_id = '" + unique_id + "'"
-	db.execute(update_code, (field_data,))
+	db.execute(db.mogrify(update_code, (field_data,)))
 	post_db.commit()
 
 	thisComment= getCommentById(feed_name, unique_id)
@@ -415,11 +415,11 @@ def deletePost(feed_name, unique_id):
 
 	table_name = feed_name
 	sql = "DELETE FROM " + table_name + " WHERE unique_id = ?"
-	db.execute(sql, (unique_id,))
+	db.execute(db.mogrify(sql, (unique_id,)))
 
 	table_name = "c_" + feed_name
 	sql = "DELETE FROM " + table_name + " WHERE comment_id = ?"
-	db.execute(sql, (unique_id,))
+	db.execute(db.mogrify(sql, (unique_id,)))
 	post_db.commit()
 
 
@@ -435,7 +435,7 @@ def deleteComment(feed_name, unique_id):
 
 	table_name = "c_" + feed_name
 	sql = "DELETE FROM " + table_name + " WHERE unique_id = %s"
-	db.execute(sql, (unique_id,))
+	db.execute(db.mogrify(sql, (unique_id,)))
 	post_db.commit()
 
 
