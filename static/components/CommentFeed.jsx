@@ -32,7 +32,7 @@ export default class CommentFeed extends React.Component {
 			if (!doesCommentMatchSearch())
 				return;
 			else 
-				rows.push(<CommentFeedPost comment={comment} isOP={that.props.currentUser['userID']==comment.userID}
+				rows.push(<CommentFeedPost key={i} comment={comment} isOP={that.props.currentUser['userID']==comment.userID}
 						isAdmin={that.props.currentUser['userID']=="admin"} isOriginalPost={false} 
 						refreshFeed={that.props.refreshFeed}
 						refreshCommentDisplayedInModal={that.refreshCommentDisplayedInModal}/>);

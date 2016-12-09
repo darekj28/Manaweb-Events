@@ -1,0 +1,1 @@
+npm install --save-dev jest jest-cli babel-jest react-addons-test-utils react-test-renderer enzyme enzyme-to-json

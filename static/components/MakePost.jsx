@@ -56,9 +56,9 @@ export default class MakePost extends React.Component {
 							onKeyPress={this.handleEnterPress} value={this.props.postText} 
 							placeholder={this.props.placeholder} ref={(input) => this.postText = input} 
 							onSubmit={this.handlePostSubmit} onChange={this.handlePostChange}></input>
-					{this.props.actions.map(function(action) {
-						if (action == "Trade") return <FilterButton onClick={that.props.onClick} active={true} name={action}/>;
-						else return <FilterButton onClick={that.props.onClick} active={false} name={action}/>;
+					{this.props.actions.map(function(action, i) {
+						if (action == "Trade") return <FilterButton key={i} onClick={that.props.onClick} active={true} name={action}/>;
+						else return <FilterButton key={i} onClick={that.props.onClick} active={false} name={action}/>;
 					})}
 					<a className="SubmitButton input-group-addon" id="SubmitButtonPost" 
 							onClick={this.handlePostSubmit}>

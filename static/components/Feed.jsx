@@ -55,7 +55,7 @@ export default class Feed extends React.Component {
 			if ((!doesPostMatchFilter() || !doesPostMatchSearch()) || !doesPostMatchSelectedUser())
 				return;
 			else 
-				rows.push(<FeedPost post={post} isOP={that.props.currentUser['userID']==post.userID}
+				rows.push(<FeedPost key={i} post={post} isOP={that.props.currentUser['userID']==post.userID}
 						isAdmin={that.props.currentUser['userID']=="admin"} 
 						refreshFeed={that.props.refreshFeed} 
 						refreshPostDisplayedInModal={that.refreshPostDisplayedInModal}

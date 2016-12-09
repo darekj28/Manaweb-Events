@@ -4,7 +4,6 @@ var env = process.env.WEBPACK_ENV;
 
 var BUILD_DIR = path.resolve(__dirname, 'static');
 var APP_DIR = path.resolve(__dirname, 'static/components');
-
 var config = {
   entry: APP_DIR + '/Main.jsx',
   output: {
@@ -31,13 +30,12 @@ var config = {
   },
   target : 'node',
   plugins: [
-    //makes jQuery available in every module
     new webpack.DefinePlugin({
-        'process.env.NODE_ENV': '"production"'
+        'process.env.NODE_ENV': '"development"'
     }),
     new webpack.DefinePlugin({
         'process.env': {
-  	    'NODE_ENV': '"production"'
+  	    'NODE_ENV': '"development"'
         }
     })
   ],
