@@ -511,7 +511,7 @@ def date_format(time = False):
 	    return ''
 
 	if day_diff == 0:
-	    if second_diff < 10:
+	    if second_diff < 1:
 	        return "just now"
 	    if second_diff < 60:
 	        return str(second_diff) + "s"
