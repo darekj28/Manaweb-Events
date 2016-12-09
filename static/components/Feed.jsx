@@ -56,7 +56,7 @@ export default class Feed extends React.Component {
 				return;
 			else 
 				rows.push(<FeedPost key={i} post={post} isOP={that.props.currentUser['userID']==post.userID}
-						isAdmin={that.props.currentUser['userID']=="admin"} 
+						isAdmin={that.props.currentUser['isAdmin']} 
 						refreshFeed={that.props.refreshFeed} 
 						refreshPostDisplayedInModal={that.refreshPostDisplayedInModal}
 						handleFilterUser={that.handleFilterUser}/>);
