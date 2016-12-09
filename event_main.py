@@ -486,6 +486,11 @@ def reset():
 def getPosts():
 	feed_name = "BALT"
 	post_list = posts.getPosts(feed_name)
+	index = len(post_list) - 1
+	print(post_list[index]['timeStamp'])
+	print(post_list[index]['timeString'])
+	print(post_list[index]['time'])
+	print("hey hey hey!")
 	return jsonify({ 'post_list' : post_list })	
 
 @app.route('/getPostById', methods = ['POST'])

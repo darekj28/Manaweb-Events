@@ -47,6 +47,15 @@ def output_info(table_name):
 
 
 
+
+
+udb.execute("ALTER TABLE BALT ALTER COLUMN timeStamp SET DATA TYPE FLOAT")
+# udb.execute("ALTER TABLE c_BALT ALTER COLUMN timeStamp FLOAT")
+# udb.execute("ALTER TABLE admin_table ALTER COLUMN timeStamp FLOAT")
+# udb.execute("ALTER TABLE report_table ALTER COLUMN timeStamp FLOAT")
+# udb.execute("ALTER TABLE c_id ALTER COLUMN timeStamp FLOAT")
+# udb.execute("ALTER TABLE feed_names ALTER COLUMN timeStamp FLOAT")
+
 user_info_table = "user_info"
 output_info(user_info_table)
 user_action_table = "user_actions"
@@ -55,6 +64,7 @@ user_action_table = "BALT"
 output_info(user_action_table)
 user_action_table = "c_BALT"
 output_info(user_action_table)
+
 
 
 udb.close()
