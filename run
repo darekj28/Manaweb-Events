@@ -1,2 +1,3 @@
 webpack -d
+npm test
 python3 event_main.py
