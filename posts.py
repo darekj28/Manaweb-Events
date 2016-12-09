@@ -68,7 +68,7 @@ def initializePosts():
 
 def createAdminTable():
 	table_name = 'admin_table' 
-	createAdminTableCode = 'CREATE TABLE IF NOT EXISTS ' + table_name  + '(feed_name TEXT, body TEXT, poster_id TEXT, action TEXT, unique_id TEXT, timeString TEXT, timeStamp REAL, isComment BOOLEAN)'
+	createAdminTableCode = 'CREATE TABLE IF NOT EXISTS ' + table_name  + '(feed_name TEXT, body TEXT, poster_id TEXT, action TEXT, unique_id TEXT, timeString TEXT, timeStamp FLOAT, isComment BOOLEAN)'
 	db.execute(createAdminTableCode)
 	addIndexCode = 'CREATE INDEX IF NOT EXISTS unique_id ON ' + table_name + ' (unique_id)'
 	db.execute(addIndexCode)
@@ -85,7 +85,7 @@ def updateAdminTable(feed_name, body, poster_id, action, unique_id, timeString, 
 
 def createThread(feed_name):
 	posts_id =  feed_name
-	createTableCode = 'CREATE TABLE IF NOT EXISTS ' + posts_id + ' (body TEXT, poster_id TEXT, feed_name TEXT, comment_id TEXT, timeString TEXT, timeStamp REAL, isTrade BOOLEAN, isPlay BOOLEAN, isChill BOOLEAN, unique_id TEXT)'
+	createTableCode = 'CREATE TABLE IF NOT EXISTS ' + posts_id + ' (body TEXT, poster_id TEXT, feed_name TEXT, comment_id TEXT, timeString TEXT, timeStamp FLOAT, isTrade BOOLEAN, isPlay BOOLEAN, isChill BOOLEAN, unique_id TEXT)'
 	db.execute(createTableCode)
 	addIndexCode = 'CREATE INDEX IF NOT EXISTS poster_id ON ' + posts_id + ' (poster_id)'
 	db.execute(addIndexCode)
@@ -97,7 +97,7 @@ def createThread(feed_name):
 	db.execute(addIndexCode)
 
 	comments_id = "c_" + feed_name
-	createTableCode = 'CREATE TABLE IF NOT EXISTS ' + comments_id + ' (body TEXT, poster_id TEXT, feed_name TEXT, comment_id TEXT, timeString TEXT, timeStamp REAL, unique_id TEXT)'
+	createTableCode = 'CREATE TABLE IF NOT EXISTS ' + comments_id + ' (body TEXT, poster_id TEXT, feed_name TEXT, comment_id TEXT, timeString TEXT, timeStamp FLOAT, unique_id TEXT)'
 	db.execute(createTableCode)
 	addIndexCode = 'CREATE INDEX IF NOT EXISTS poster_id ON ' + comments_id + ' (poster_id)'
 	db.execute(addIndexCode)
@@ -119,7 +119,7 @@ def createFeedNameTable():
 
 def createReportTable():
 	report_table = "report_table"
-	createTableCode = 'CREATE TABLE IF NOT EXISTS ' + report_table + ' (feed_name TEXT, id TEXT, body TEXT, reason TEXT ,isComment BOOLEAN, description TEXT, timeString TEXT, timeStamp REAL, reporting_user TEXT, reported_user TEXT)'
+	createTableCode = 'CREATE TABLE IF NOT EXISTS ' + report_table + ' (feed_name TEXT, id TEXT, body TEXT, reason TEXT ,isComment BOOLEAN, description TEXT, timeString TEXT, timeStamp FLOAT, reporting_user TEXT, reported_user TEXT)'
 	db.execute(createTableCode)
 	addIndexCode = 'CREATE INDEX IF NOT EXISTS id ON ' + report_table + ' (id)'
 	db.execute(addIndexCode)
@@ -128,7 +128,7 @@ def reportPost(feed_name, comment_id, reason, description, reporting_user, repor
 	report_table = "report_table"
 	body = getPostById(feed_name, comment_id)['body']
 	timeStamp = time.time()
-	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 	db.execute("INSERT INTO " + report_table + "(feed_name, id, body, reason, isComment, description, timeStamp, timeString, reporting_user, reported_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (feed_name, comment_id, body, reason, False, description, timeStamp, timeString, reporting_user, reported_user))
 	post_db.commit()
@@ -142,7 +142,7 @@ def reportComment(feed_name, unique_id, reason, description, reporting_user, rep
 	report_table = "report_table"
 	body = getCommentById(feed_name, unique_id)['body']
 	timeStamp = time.time()
-	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	db.execute("INSERT INTO " + report_table + "(feed_name, id, body, reason, isComment, description, timeStamp, timeString, reporting_user, reported_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (feed_name, unique_id, body, reason, True, description, timeStamp, timeString, reporting_user, reported_user))
 	post_db.commit()	
 	action = "REPORTED COMMENT"
@@ -231,7 +231,7 @@ def addCommentIdToList(comment_id):
 # posts on a thread
 def postInThread(feed_name, body, poster_id, isTrade = None, isPlay = None, isChill = None, comment_id = None):
 	timeStamp = time.time()
-	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
 	if isTrade == None:
@@ -256,7 +256,7 @@ def postInThread(feed_name, body, poster_id, isTrade = None, isPlay = None, isCh
 
 def makeComment(feed_name, comment_id, body, poster_id, unique_id = None):
 	timeStamp = time.time()
-	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	comment_id = comment_id
 
 	if unique_id == None:
@@ -366,7 +366,7 @@ def getComments(feed_name, comment_id = None):
 def updateTime(feed_name, unique_id):
 	table_name  = feed_name
 	timeStamp = time.time()
-	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	update_time_code = "UPDATE " + table_name  + " SET timeString = ?, timeStamp = ? WHERE unique_id = '" + unique_id + "'"
 	db.execute(update_time_code, (timeString, timeStamp))
 	post_db.commit()
@@ -376,7 +376,7 @@ def updateTime(feed_name, unique_id):
 def editPost(feed_name, unique_id, field_name, field_data):
 	table_name  = feed_name
 	timeStamp = time.time()
-	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	update_code = "UPDATE " + table_name  + " SET " + field_name + " = ? WHERE unique_id = '" + unique_id + "'"
 	db.execute(update_code, (field_data,))
 	post_db.commit()
@@ -393,7 +393,7 @@ def editPost(feed_name, unique_id, field_name, field_data):
 def editComment(feed_name, unique_id, field_name, field_data):
 	table_name  = "c_" + feed_name
 	timeStamp = time.time()
-	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	update_code = "UPDATE " + table_name  + " SET " + field_name + " = ? WHERE unique_id = '" + unique_id + "'"
 	db.execute(update_code, (field_data,))
 	post_db.commit()
@@ -407,7 +407,7 @@ def editComment(feed_name, unique_id, field_name, field_data):
 
 def deletePost(feed_name, unique_id):
 	timeStamp = time.time()
-	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	thisPost = getPostById(feed_name, unique_id)
 	action = "DELETE POST"
 	isComment = False
@@ -426,7 +426,7 @@ def deletePost(feed_name, unique_id):
 
 def deleteComment(feed_name, unique_id):
 	timeStamp = time.time()
-	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	thisComment = getCommentById(feed_name, unique_id)
 	action = "DELETE COMMENT"
 	isComment = True

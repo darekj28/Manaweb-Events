@@ -46,7 +46,7 @@ def createUserInfoTable():
 	table_name = "user_info"
 	createTableCode = 'CREATE TABLE IF NOT EXISTS ' + table_name + ' (userID TEXT, first_name TEXT, last_name TEXT, password TEXT, email TEXT,  \
 			isActive BOOLEAN, avatar_url TEXT, avatar_name TEXT, confirmationPin TEXT, playFilter BOOLEAN, \
-			 tradeFilter BOOLEAN, chillFilter BOOLEAN, isAdmin BOOLEAN, phone_number TEXT, birthMonth TEXT, birthDay TEXT, birthYear TEXT, gender TEXT, confirmed BOOLEAN, timeString TEXT, timeStamp TEXT )'
+			 tradeFilter BOOLEAN, chillFilter BOOLEAN, isAdmin BOOLEAN, phone_number TEXT, birthMonth TEXT, birthDay TEXT, birthYear TEXT, gender TEXT, confirmed BOOLEAN, timeString TEXT, timeStamp FLOAT )'
 	udb.execute(createTableCode)
 	addIndexCode = 'CREATE INDEX IF NOT EXISTS userID ON ' + table_name + ' (userID)'
 	udb.execute(addIndexCode)
@@ -56,7 +56,7 @@ def createUserInfoTable():
 	action_table_name = "user_actions"
 	createActionTableCode = 'CREATE TABLE IF NOT EXISTS ' + action_table_name + ' (userID TEXT, first_name TEXT, last_name TEXT, password TEXT, email TEXT,  \
 			isActive BOOLEAN, avatar_url TEXT, avatar_name TEXT, confirmationPin TEXT, playFilter BOOLEAN, \
-			 tradeFilter BOOLEAN, chillFilter BOOLEAN, isAdmin BOOLEAN, phone_number TEXT, birthMonth TEXT, birthDay TEXT, birthYear TEXT, gender TEXT, confirmed BOOLEAN, timeString TEXT, timeStamp TEXT, action TEXT)'
+			 tradeFilter BOOLEAN, chillFilter BOOLEAN, isAdmin BOOLEAN, phone_number TEXT, birthMonth TEXT, birthDay TEXT, birthYear TEXT, gender TEXT, confirmed BOOLEAN, timeString TEXT, timeStamp FLOAT, action TEXT)'
 	udb.execute(createActionTableCode)
 	addIndexCode = 'CREATE INDEX IF NOT EXISTS userID ON ' + action_table_name + ' (userID)'
 	udb.execute(addIndexCode)
@@ -113,13 +113,9 @@ def addUser(userID, first_name, last_name, password, email, isActive, avatar_url
 		confirmed = True
 
 
-	timeStamp = str(time.time())
+	timeStamp = time.time()
 	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-	print(timeStamp)
-	print(type(timeStamp))
-	print(timeString)
-	print(type(timeString))
-	sys.stdout.flush()
+
 
 	input_properties = {}
 	input_properties['userID'] = userID
@@ -145,52 +141,56 @@ def addUser(userID, first_name, last_name, password, email, isActive, avatar_url
 
 	# if user email or userID doesn't exist create new one
 	if getInfo(userID) == None and getInfoFromEmail(email) == None:
-		udb.execute("INSERT INTO " + table_name + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
+		udb.execute(udb.mogrify("INSERT INTO " + table_name + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
 			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp) \
 			  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
 			(userID.lower(), first_name, last_name, password, email, isActive, avatar_url,
-			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isActive, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp))
+			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isActive, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp)))
 
 		action = "ACCOUNT CREATED"
-		udb.execute("INSERT INTO " + "user_actions" + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
+		udb.execute(udb.mogrify("INSERT INTO " + "user_actions" + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
 			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action) \
 			  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
 			(userID.lower(), first_name, last_name, password, email, isActive, avatar_url,
-			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isActive, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action))
+			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isActive, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action)))
 
 	# otherwise simply update information
 	else: 
 		for prop in properties:
-			updateInfo(userID, prop, input_properties[prop])
+			if prop != 'userID':
+				updateInfo(userID, prop, input_properties[prop])
 
 		updateInfo(userID, 'timeString', timeString)
 		updateInfo(userID, 'timeStamp', timeStamp)
 
 		action = "ACCOUNT SETTINGS CHANGED"
-		udb.execute("INSERT INTO " + "user_actions" + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
+		update_code = udb.mogrify("INSERT INTO " + "user_actions" + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
 			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action) \
 			  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
 			(userID.lower(), first_name, last_name, password, email, isActive, avatar_url,
 			 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isActive, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action))
+		sys.stdout.flush()
+		udb.execute(update_code)
 
 	user_db.commit()
 
 	
 def updateInfo(userID, field_name, field_data):
 	table_name  = "user_info"
-	udb.execute("UPDATE " + table_name  + " SET " + field_name + " = %s WHERE userID = '" + userID + "'", (field_data,))
+	udb.execute(udb.mogrify("UPDATE " + table_name  + " SET " + field_name + " = %s WHERE userID = '" + userID + "'", (field_data,)))
 	action = "ACCOUNT " + field_name + " UPDATED"
-	timeStamp = str(time.time())
+	timeStamp = time.time()
 	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-	udb.execute("INSERT INTO " + "user_actions" + " (userID, " + field_name + ", timeString, timeStamp, action) VALUES (%s, %s, %s, %s, %s)", (userID.lower(), field_data, timeString, timeStamp, action))
+	if field_name.lower() != 'timestring' and field_name.lower() != 'userid' and field_name.lower() != 'timestamp':
+		udb.execute(udb.mogrify("INSERT INTO " + "user_actions" + " (userID, " + field_name + ", timeString, timeStamp, action) VALUES (%s, %s, %s, %s, %s)", (userID.lower(), field_data, timeString, timeStamp, action)))
 	user_db.commit()
 
 
 def getInfo(userID):
 	search_id = userID.lower()
 	table_name = "user_info"
-	udb.execute("SELECT * FROM " + table_name + " WHERE userID = %s", (search_id,))
+	udb.execute(udb.mogrify("SELECT * FROM " + table_name + " WHERE userID = %s", (search_id,)))
 	size_test = udb.fetchall()
 	if len(size_test) == 0:
 		return None
@@ -201,9 +201,9 @@ def deleteUser(userID):
 	table_name = "user_info"
 	udb.execute("DELETE FROM " + table_name + " WHERE userID = %s", (userID,))
 	action = "USER " + userID + " DELETED"
-	timeStamp = str(time.time())
+	timeStamp = time.time()
 	timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-	udb.execute("INSERT INTO " + "user_actions" + " (userID, timeString, timeStamp, action) VALUES (%s, %s, %s, %s)", (userID, timeString, timeStamp, action))
+	udb.execute(udb.mogrify("INSERT INTO " + "user_actions" + " (userID, timeString, timeStamp, action) VALUES (%s, %s, %s, %s)", (userID, timeString, timeStamp, action)))
 
 	user_db.commit()
 
@@ -274,8 +274,7 @@ def test():
 
 	resetDatabase()
 
-	print("all done!")
-	sys.stdout.flush()
+
 
 	for i in range(0,9):
 		email = userID[i] + '@gmail.com'
@@ -313,9 +312,9 @@ def test():
 
 	# print(getInfo('mrt'))
 	
-test()
-udb.close()
-user_db.close()
+# test()
+# udb.close()
+# user_db.close()
 
 
 
