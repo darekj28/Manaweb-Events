@@ -49,7 +49,7 @@ export default class FeedPost extends React.Component {
 				                				pull-left PostBottomIcon AppGlyphicon"></span>
 				            </a>
 				            <ul id = "drop_down_sroll" className="PostDropdown pull-left dropdown-menu">
-				              	{(this.props.isOP || this.props.isAdmin) && <li><a id="hpe" href="#" onClick={this.handlePostEdit}>Edit post</a></li> }
+				              	{(this.props.isAdmin) && <li><a id="hpe" href="#" onClick={this.handlePostEdit}>Edit post</a></li> }
 			              		{(this.props.isAdmin) && <li><a id="hpd" href="#" onClick={this.handlePostDelete}>Delete post</a></li> }
 			              		{(!this.props.isOP || this.props.isAdmin) && <li><a id="hpr" href="#" onClick={this.handlePostReport}>Report post</a></li> }
 				            </ul>

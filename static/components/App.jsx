@@ -27,7 +27,7 @@ export default class App extends React.Component {
 			search : '',
 			post : '',
 			feed : [],
-			currentUser : '',
+			currentUser : {},
 			alert : false,
 			unique_id : ''
 		};
@@ -157,10 +157,7 @@ export default class App extends React.Component {
 							actions={actions}/>
 				</div>
 				{alert}
-				<Feed currentUser={this.state.currentUser} 
-						searchText={this.state.search} 
-						filters={this.state.filters} posts={this.state.feed} actions={actions}
-						refreshFeed={this.refreshFeed} /> 
+
 			</div>
 		</div>);
 	}
