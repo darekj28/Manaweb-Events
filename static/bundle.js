@@ -176,7 +176,7 @@
 				search: '',
 				post: '',
 				feed: [],
-				currentUser: '',
+				currentUser: {},
 				alert: false,
 				unique_id: ''
 			};
@@ -263,13 +263,16 @@
 						isTrade: contains(this.state.actions, "Trade"),
 						isPlay: contains(this.state.actions, "Play"),
 						isChill: contains(this.state.actions, "Chill"),
-						comment_id: this.state.unique_id
+						comment_id: this.state.unique_id,
+						numberOfComments: 0
 					});
 					var obj = { postContent: postText,
 						isTrade: contains(this.state.actions, "Trade"),
 						isPlay: contains(this.state.actions, "Play"),
 						isChill: contains(this.state.actions, "Chill"),
-						comment_id: this.state.unique_id };
+						comment_id: this.state.unique_id,
+						numberOfComments: 0
+					};
 					$.ajax({
 						type: 'POST',
 						url: '/makePost',
@@ -20259,7 +20262,7 @@
 						} else return true;
 					}
 					if (!doesPostMatchFilter() || !doesPostMatchSearch() || !doesPostMatchSelectedUser()) return;else rows.push(React.createElement(_FeedPost2.default, { key: i, post: post, isOP: that.props.currentUser['userID'] == post.userID,
-						isAdmin: that.props.currentUser['userID'] == "admin",
+						isAdmin: that.props.currentUser['isAdmin'],
 						refreshFeed: that.props.refreshFeed,
 						refreshPostDisplayedInModal: that.refreshPostDisplayedInModal,
 						handleFilterUser: that.handleFilterUser }));
@@ -20402,6 +20405,11 @@
 							),
 							React.createElement(
 								'div',
+								null,
+								post.numberOfComments
+							),
+							React.createElement(
+								'div',
 								{ className: 'dropdown' },
 								React.createElement(
 									'a',
@@ -20411,7 +20419,7 @@
 								React.createElement(
 									'ul',
 									{ className: 'PostDropdown pull-left dropdown-menu' },
-									(this.props.isOP || this.props.isAdmin) && React.createElement(
+									this.props.isAdmin && React.createElement(
 										'li',
 										null,
 										React.createElement(
@@ -20420,7 +20428,7 @@
 											'Edit post'
 										)
 									),
-									(this.props.isOP || this.props.isAdmin) && React.createElement(
+									this.props.isAdmin && React.createElement(
 										'li',
 										null,
 										React.createElement(
@@ -20429,7 +20437,7 @@
 											'Delete post'
 										)
 									),
-									!(this.props.isOP || this.props.isAdmin) && React.createElement(
+									(!this.props.isOP || this.props.isAdmin) && React.createElement(
 										'li',
 										null,
 										React.createElement(
@@ -21106,6 +21114,7 @@
 							name: obj['first_name'] + ' ' + obj['last_name'],
 							userID: obj['poster_id'],
 							time: obj['time'],
+							comment_id: obj['comment_id'],
 							unique_id: obj['unique_id']
 						});
 					});
@@ -21131,6 +21140,7 @@
 					name: this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
 					userID: this.state.currentUser['userID'],
 					time: "just now",
+					comment_id: this.state.comment_id,
 					unique_id: this.state.unique_id
 				});
 	
@@ -21886,7 +21896,9 @@
 		_createClass(DeleteCommentModal, [{
 			key: 'handleCommentDelete',
 			value: function handleCommentDelete() {
-				var obj = { feed_name: "BALT", unique_id: this.props.comment.unique_id };
+				var obj = { feed_name: "BALT",
+					comment_id: this.props.comment.comment_id,
+					unique_id: this.props.comment.unique_id };
 				$.ajax({
 					type: 'POST',
 					url: '/deleteComment',
