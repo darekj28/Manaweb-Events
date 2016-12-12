@@ -1,5 +1,5 @@
 var React = require('react');
-var $ = require('jquery');
+// var $ = require('jquery');
 import FilterButton from "./FilterButton.jsx";
 
 export default class MakePost extends React.Component {

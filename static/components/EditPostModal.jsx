@@ -1,5 +1,5 @@
 var React = require('react');
-var $ = require('jquery');
+// var $ = require('jquery');
 export default class EditPostModal extends React.Component {
 	constructor(props) {
 		super(props);
