@@ -20413,7 +20413,7 @@
 								{ className: 'dropdown' },
 								React.createElement(
 									'a',
-									{ href: '#', className: 'dropdown-toggle', 'data-toggle': 'modal' },
+									{ href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown' },
 									React.createElement('span', { className: 'glyphicon glyphicon-option-horizontal  pull-left PostBottomIcon AppGlyphicon' })
 								),
 								React.createElement(
@@ -20712,7 +20712,7 @@
 			value: function render() {
 				return React.createElement(
 					'div',
-					{ className: 'modal fade', id: 'EditPostModal', 'aria-hidden': 'true' },
+					{ className: 'modal', id: 'EditPostModal', 'aria-hidden': 'true' },
 					React.createElement(
 						'div',
 						{ className: 'modal-dialog', role: 'document' },

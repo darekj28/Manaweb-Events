@@ -44,7 +44,7 @@ export default class FeedPost extends React.Component {
 								</span></Link>
 						<div>{post.numberOfComments}</div>
 						<div className="dropdown">
-							<a href="#" className="dropdown-toggle" data-toggle="modal" >
+							<a href="#" className="dropdown-toggle" data-toggle="dropdown" >
 				                <span className="glyphicon glyphicon-option-horizontal 
 				                				pull-left PostBottomIcon AppGlyphicon"></span>
 				            </a>
