@@ -20416,12 +20416,12 @@
 								{ className: 'dropdown' },
 								React.createElement(
 									'a',
-									{ href: '#scroll_to', className: 'dropdown-toggle', 'data-toggle': 'dropdown' },
+									{ href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown' },
 									React.createElement('span', { className: 'glyphicon glyphicon-option-horizontal  pull-left PostBottomIcon AppGlyphicon' })
 								),
 								React.createElement(
 									'ul',
-									{ id: 'scroll_to', className: 'PostDropdown pull-left dropdown-menu' },
+									{ className: 'PostDropdown pull-left dropdown-menu' },
 									this.props.isAdmin && React.createElement(
 										'li',
 										null,
