@@ -31,16 +31,11 @@ export default class FeedPost extends React.Component {
 	}
 
 	scrollToDropdown(){
-		var id_name = "dropdown_menu_" + this.props.post.comment_id
-		var x = document.getElementById(id_name)
-		console.log(x.className)
+
 		console.log("bob");
-
-
-		$('html, #feed').animate({
-      	  scrollTop: $("#"+id_name).offset().top
-    	}, 2000);
-
+		var id_name = "post_" + this.props.post.comment_id
+		var x = document.getElementById(id_name)
+		x.scrollIntoView()
 
 		
 	}
@@ -48,7 +43,7 @@ export default class FeedPost extends React.Component {
 	render() {
 		var post = this.props.post;
 		return (
-			<li className="Post">
+			<li className="Post" id = {"post_" + post.comment_id}>
 				<Avatar source={post.avatar}/>
 				<div className="PostSpace">
 					<div className="row"><FeedPostHeader name={post.name} userID={post.userID} handleFilterUser = {this.props.handleFilterUser} 
@@ -66,7 +61,7 @@ export default class FeedPost extends React.Component {
 				                <span className="glyphicon glyphicon-option-horizontal 
 				                				pull-left PostBottomIcon AppGlyphicon"></span>
 				            </a>
-				            <ul id = {'dropdown_menu_' + post.comment_id} className="PostDropdown pull-left dropdown-menu">
+				            <ul className="PostDropdown pull-left dropdown-menu">
 				              	{(this.props.isAdmin) && <li><a id="hpe" href="#" onClick={this.handlePostEdit}>Edit post</a></li> }
 			              		{(this.props.isAdmin) && <li><a id="hpd" href="#" onClick={this.handlePostDelete}>Delete post</a></li> }
 			              		{(!this.props.isOP || this.props.isAdmin) && <li><a id="hpr" href="#" onClick={this.handlePostReport}>Report post</a></li> }

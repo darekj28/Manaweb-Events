@@ -10174,14 +10174,11 @@
 		}, {
 			key: 'scrollToDropdown',
 			value: function scrollToDropdown() {
-				var id_name = "dropdown_menu_" + this.props.post.comment_id;
-				var x = document.getElementById(id_name);
-				console.log(x.className);
-				console.log("bob");
 	
-				$('html, #feed').animate({
-					scrollTop: $("#" + id_name).offset().top
-				}, 2000);
+				console.log("bob");
+				var id_name = "post_" + this.props.post.comment_id;
+				var x = document.getElementById(id_name);
+				x.scrollIntoView();
 			}
 		}, {
 			key: 'render',
@@ -10189,7 +10186,7 @@
 				var post = this.props.post;
 				return React.createElement(
 					'li',
-					{ className: 'Post' },
+					{ className: 'Post', id: "post_" + post.comment_id },
 					React.createElement(_Avatar2.default, { source: post.avatar }),
 					React.createElement(
 						'div',
@@ -10231,7 +10228,7 @@
 								),
 								React.createElement(
 									'ul',
-									{ id: 'dropdown_menu_' + post.comment_id, className: 'PostDropdown pull-left dropdown-menu' },
+									{ className: 'PostDropdown pull-left dropdown-menu' },
 									this.props.isAdmin && React.createElement(
 										'li',
 										null,
