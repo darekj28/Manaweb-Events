@@ -275,7 +275,7 @@ def makeComment(feed_name, comment_id, body, poster_id, unique_id = None):
 	addCommentIdToList(unique_id)
 
 	# update number of comments
-	this_post = getPostById(feed,name,comment_id)
+	this_post = getPostById(feed_name,comment_id)
 	updatedNumComments = this_post['numComments'] + 1
 	update_code = "UPDATE " + feed_name  + " SET " + "numComments" + " = %s WHERE unique_id = '" + comment_id + "'"
 	db.execute(db.mogrify(update_code, (updatedNumComments,)))
