@@ -150,7 +150,7 @@
 	
 	var React = __webpack_require__(/*! react */ 4);
 	
-	// var $ = require('jquery');
+	var $ = __webpack_require__(/*! jquery */ 91);
 	
 	function toggle(collection, item) {
 		var idx = collection.indexOf(item);
@@ -220,7 +220,8 @@
 							isPlay: obj['isPlay'],
 							isChill: obj['isChill'],
 							comment_id: obj['comment_id'],
-							unique_id: obj['unique_id']
+							unique_id: obj['unique_id'],
+							numberOfComments: obj['numComments']
 						});
 					});
 					this.setState({ feed: feed });
@@ -20332,7 +20333,7 @@
 	
 	var React = __webpack_require__(/*! react */ 4);
 	var Link = __webpack_require__(/*! react-router */ 36).Link;
-	var $ = __webpack_require__(/*! jquery */ 91);
+	// var $ = require('jquery');
 	
 	var FeedPost = function (_React$Component) {
 		_inherits(FeedPost, _React$Component);
@@ -20415,12 +20416,12 @@
 								{ className: 'dropdown' },
 								React.createElement(
 									'a',
-									{ href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown' },
+									{ href: '#scroll_to', className: 'dropdown-toggle', 'data-toggle': 'dropdown' },
 									React.createElement('span', { className: 'glyphicon glyphicon-option-horizontal  pull-left PostBottomIcon AppGlyphicon' })
 								),
 								React.createElement(
 									'ul',
-									{ className: 'PostDropdown pull-left dropdown-menu' },
+									{ id: 'scroll_to', className: 'PostDropdown pull-left dropdown-menu' },
 									this.props.isAdmin && React.createElement(
 										'li',
 										null,
@@ -21402,7 +21403,7 @@
 	
 	var React = __webpack_require__(/*! react */ 4);
 	
-	var $ = __webpack_require__(/*! jquery */ 91);
+	// var $ = require('jquery');
 	
 	var CommentFeedPost = function (_React$Component) {
 		_inherits(CommentFeedPost, _React$Component);
