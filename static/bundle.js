@@ -10174,8 +10174,6 @@
 		}, {
 			key: 'scrollToDropdown',
 			value: function scrollToDropdown() {
-	
-				console.log("bob");
 				var id_name = "post_" + this.props.post.comment_id;
 				var x = document.getElementById(id_name);
 				x.scrollIntoView();
@@ -10907,7 +10905,8 @@
 						avatar: data.this_post['avatar_url'],
 						name: data.this_post['first_name'] + ' ' + data.this_post['last_name'],
 						userID: data.this_post['poster_id'],
-						time: data.this_post['time']
+						time: data.this_post['time'],
+						timeString: data.this_post['timeString']
 					};
 					this.setState({ original_post: this_post });
 				}.bind(this));
@@ -10925,7 +10924,8 @@
 							userID: obj['poster_id'],
 							time: obj['time'],
 							comment_id: obj['comment_id'],
-							unique_id: obj['unique_id']
+							unique_id: obj['unique_id'],
+							timeString: obj['timeString']
 						});
 					});
 					this.setState({ feed: feed });
@@ -11258,7 +11258,7 @@
 						React.createElement(
 							"div",
 							{ className: "row" },
-							React.createElement(_CommentFeedPostHeader2.default, { name: comment.name, userID: comment.userID, time: comment.time,
+							React.createElement(_CommentFeedPostHeader2.default, { comment: this.props.comment, name: comment.name, userID: comment.userID, time: comment.time,
 								isOP: this.props.isOP, isAdmin: this.props.isAdmin, handleCommentEdit: this.handleCommentEdit,
 								handleCommentDelete: this.handleCommentDelete, handleCommentReport: this.handleCommentReport,
 								isOriginalPost: this.props.isOriginalPost })
@@ -11311,11 +11311,23 @@
 		}
 	
 		_createClass(CommentFeedPostHeader, [{
+			key: "scrollToDropdown",
+			value: function scrollToDropdown() {
+	
+				var id_name = "comment_" + this.props.comment.unique_id;
+				console.log(id_name);
+				var x = document.getElementById(id_name);
+				x.scrollIntoView();
+			}
+		}, {
 			key: "render",
 			value: function render() {
+	
+				console.log("in render : " + this.props.comment.unique_id);
+	
 				return React.createElement(
 					"div",
-					{ className: "FeedPostHeader" },
+					{ id: "comment_" + this.props.comment.unique_id, className: "FeedPostHeader" },
 					React.createElement(
 						"div",
 						{ className: "pull-left name" },
@@ -11335,7 +11347,7 @@
 						"div",
 						{ className: "time pull-left text-muted" },
 						"\u2022 ",
-						this.props.time
+						this.props.comment.timeString
 					),
 					React.createElement(
 						"div",
@@ -11345,7 +11357,7 @@
 							{ className: "dropdown" },
 							React.createElement(
 								"a",
-								{ href: "#", className: "dropdown-toggle", "data-toggle": "dropdown" },
+								{ href: "#", className: "dropdown-toggle", "data-toggle": "dropdown", onClick: this.scrollToDropdown },
 								React.createElement("span", { className: "glyphicon glyphicon-option-horizontal  pull-left CommentBottomIcon AppGlyphicon" })
 							),
 							React.createElement(

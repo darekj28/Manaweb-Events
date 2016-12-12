@@ -58,7 +58,8 @@ export default class CommentApp extends React.Component {
 						avatar 		: data.this_post['avatar_url'],
 						name 		: data.this_post['first_name'] + ' ' + data.this_post['last_name'],
 						userID 		: data.this_post['poster_id'],
-						time  		: data.this_post['time']
+						time  		: data.this_post['time'],
+						timeString  : data.this_post['timeString']
 					}
 				this.setState({original_post : this_post});
 			}.bind(this));
@@ -75,7 +76,8 @@ export default class CommentApp extends React.Component {
 					userID 		: obj['poster_id'],
 					time  		: obj['time'],
 					comment_id  : obj['comment_id'],
-					unique_id	: obj['unique_id']
+					unique_id	: obj['unique_id'],
+					timeString  : obj['timeString']
 				});
 			});
 			this.setState({feed : feed});

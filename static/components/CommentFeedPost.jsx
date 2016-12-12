@@ -30,7 +30,7 @@ export default class CommentFeedPost extends React.Component {
 			<li className="CommentFeedPost">
 				<Avatar source={comment.avatar}/>
 				<div className="PostSpace">
-					<div className="row"><CommentFeedPostHeader name={comment.name} userID={comment.userID} time={comment.time}
+					<div className="row"><CommentFeedPostHeader comment = {this.props.comment} name={comment.name} userID={comment.userID} time={comment.time}
 												isOP={this.props.isOP} isAdmin={this.props.isAdmin} handleCommentEdit={this.handleCommentEdit}
 												handleCommentDelete={this.handleCommentDelete} handleCommentReport={this.handleCommentReport}
 												isOriginalPost={this.props.isOriginalPost}/></div>

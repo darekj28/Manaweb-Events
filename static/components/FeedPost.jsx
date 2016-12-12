@@ -31,13 +31,9 @@ export default class FeedPost extends React.Component {
 	}
 
 	scrollToDropdown(){
-
-		console.log("bob");
 		var id_name = "post_" + this.props.post.comment_id
 		var x = document.getElementById(id_name)
-		x.scrollIntoView()
-
-		
+		x.scrollIntoView()		
 	}
 	
 	render() {

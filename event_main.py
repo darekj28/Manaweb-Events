@@ -483,7 +483,7 @@ def reset():
 def getPosts():
 	feed_name = "BALT"
 	post_list = posts.getPosts(feed_name)
-	posts.sortDescending(post_list)
+	posts.sortAscending(post_list)
 	return jsonify({ 'post_list' : post_list })	
 
 @app.route('/getPostById', methods = ['POST'])
