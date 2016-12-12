@@ -4,7 +4,7 @@ import SearchNavBar from 'SearchNavBar.jsx';
 import EventName from 'EventName.jsx';
 import MakePost from 'MakePost.jsx';
 import Feed from 'Feed.jsx';
-// var $ = require('jquery');
+var $ = require('jquery');
 
 function toggle(collection, item) {
 	var idx = collection.indexOf(item);
@@ -64,7 +64,7 @@ export default class App extends React.Component {
 					isChill 	: obj['isChill'],
 					comment_id  : obj['comment_id'],
 					unique_id   : obj['unique_id'],
-					// numberOfComments : obj['numberOfComments']
+					numberOfComments : obj['numComments']
 				});
 			});
 			this.setState({feed : feed});
