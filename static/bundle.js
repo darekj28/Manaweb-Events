@@ -20413,7 +20413,7 @@
 								{ className: 'dropdown' },
 								React.createElement(
 									'a',
-									{ href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown' },
+									{ href: '#', className: 'dropdown-toggle', 'data-toggle': 'modal' },
 									React.createElement('span', { className: 'glyphicon glyphicon-option-horizontal  pull-left PostBottomIcon AppGlyphicon' })
 								),
 								React.createElement(
