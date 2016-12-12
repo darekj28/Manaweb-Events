@@ -452,7 +452,7 @@ def deleteComment(feed_name, unique_id):
 	updateAdminTable(thisComment['feed_name'], thisComment['body'], thisComment['poster_id'], action , thisComment['unique_id'], timeString, timeStamp, isComment )
 
 	# update number of comments
-	this_post = getPostById(feed,name,thisComment['comment_id'])
+	this_post = getPostById(feed_name,thisComment['comment_id'])
 	updatedNumComments = this_post['numComments'] - 1
 	update_code = "UPDATE " + feed_name  + " SET " + "numComments" + " = %s WHERE unique_id = '" + thisComment['comment_id'] + "'"
 	db.execute(db.mogrify(update_code, (updatedNumComments,)))
