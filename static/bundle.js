@@ -20712,7 +20712,7 @@
 			value: function render() {
 				return React.createElement(
 					'div',
-					{ className: 'modal', id: 'EditPostModal', 'aria-hidden': 'true' },
+					{ className: 'modal fade', id: 'EditPostModal', 'aria-hidden': 'true' },
 					React.createElement(
 						'div',
 						{ className: 'modal-dialog', role: 'document' },
