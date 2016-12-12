@@ -7,17 +7,12 @@ import ReportPostModal from "./ReportPostModal.jsx";
 export default class Feed extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { postInModal : '', userIdToFilterPosts : ''};
+		this.state = { postInModal : '' };
 		this.filter= this.filter.bind(this);
 		this.refreshPostDisplayedInModal = this.refreshPostDisplayedInModal.bind(this);
-		this.handleFilterUser = this.handleFilterUser.bind(this);
 	}
 	refreshPostDisplayedInModal(post) {
 		this.setState({ postInModal : post});
-	}
-	handleFilterUser(user) {
-		if (user != this.state.userIdToFilterPosts) this.setState({ userIdToFilterPosts : user });
-		else this.setState({ userIdToFilterPosts : ''});
 	}
 	filter() {
 		var rows = [];
@@ -46,7 +41,7 @@ export default class Feed extends React.Component {
 			}
 			function doesPostMatchSelectedUser() {
 				if (that.state.userIdToFilterPosts != '') {
-					if (post["userID"].toLowerCase().indexOf(that.state.userIdToFilterPosts.toLowerCase()) === -1)
+					if (post["userID"].toLowerCase().indexOf(that.props.userIdToFilterPosts.toLowerCase()) === -1)
 						return false;
 					else return true;
 				}
@@ -59,7 +54,7 @@ export default class Feed extends React.Component {
 						isAdmin={that.props.currentUser['isAdmin']} 
 						refreshFeed={that.props.refreshFeed} 
 						refreshPostDisplayedInModal={that.refreshPostDisplayedInModal}
-						handleFilterUser={that.handleFilterUser}/>);
+						handleFilterUser={that.props.handleFilterUser}/>);
 		});
 		return rows;
 	}

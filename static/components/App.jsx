@@ -25,6 +25,7 @@ export default class App extends React.Component {
 			filters : ['Trade', 'Play', 'Chill'],
 			actions : ['Trade'],
 			search : '',
+			userIdToFilterPosts : '',
 			post : '',
 			feed : [],
 			currentUser : {},
@@ -32,6 +33,7 @@ export default class App extends React.Component {
 			unique_id : ''
 		};
 		this.handleFilterClick = this.handleFilterClick.bind(this);
+		this.handleFilterUser = this.handleFilterUser.bind(this);
 		this.handleSearch = this.handleSearch.bind(this);
 		this.handlePostChange = this.handlePostChange.bind(this);
 		this.handlePostSubmit = this.handlePostSubmit.bind(this);
@@ -81,6 +83,10 @@ export default class App extends React.Component {
 			if (this.state.actions.length == 0) this.setState({alert : true});
 			else this.setState({alert : false});
 		}
+	}
+	handleFilterUser(user) {
+		if (user != this.state.userIdToFilterPosts) this.setState({ userIdToFilterPosts : user });
+		else this.setState({ userIdToFilterPosts : ''});
 	}
 	handleSearch(searchText) { this.setState({search : searchText});}
 	handlePostChange(postText) {this.setState({post : postText});}
@@ -144,7 +150,11 @@ export default class App extends React.Component {
 							onSearch={this.handleSearch} 
 							onClick={this.handleFilterClick} 
 							actions={actions}
-							name={this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name']}/>
+							name={this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name']}
+							handleFilterClick={this.handleFilterClick}
+							handleFilterUser={this.handleFilterUser}
+							userIdToFilterPosts={this.state.userIdToFilterPosts}
+							filters={this.state.filters}/>
 			<div className="container">
 				<div className="app row">
 					<EventName name="Name of Event"/>
@@ -161,7 +171,9 @@ export default class App extends React.Component {
 				<Feed currentUser={this.state.currentUser} 
 						searchText={this.state.search} 
 						filters={this.state.filters} posts={this.state.feed} actions={actions}
-						refreshFeed={this.refreshFeed} /> 
+						refreshFeed={this.refreshFeed}
+						handleFilterUser={this.handleFilterUser}
+						userIdToFilterPosts={this.state.userIdToFilterPosts} /> 
 			</div>
 		</div>);
 	}

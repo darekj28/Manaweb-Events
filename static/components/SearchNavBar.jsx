@@ -5,10 +5,17 @@ import Notifications from "./Notifications.jsx";
 import AccountDropdown from "./AccountDropdown.jsx";
 import FilterButton from "./FilterButton.jsx";
 
+function contains(collection, item) {
+	if(collection.indexOf(item) !== -1) return true;
+	else return false;
+}
+
 export default class SearchNavBar extends React.Component {
 	constructor(props) {
 		super(props);
 		this.handleSearch = this.handleSearch.bind(this);
+		this.handleResetFilterUser = this.handleResetFilterUser.bind(this);
+		this.handleResetFilterButtons = this.handleResetFilterButtons.bind(this);
 	}
 	componentDidMount() {
 		var searchVisible = 0;
@@ -38,6 +45,14 @@ export default class SearchNavBar extends React.Component {
 	    	$(this).blur();
 	    });
 	}
+	handleResetFilterUser() {
+		this.props.handleFilterUser(this.props.userIdToFilterPosts);
+	}
+	handleResetFilterButtons() {
+		this.props.actions.map(function(action) {
+			if (contains(filters, action)) this.props.handleFilterClick(action, true);
+		});
+	}
 	handleSearch() {
 		this.props.onSearch(this.searchText.value);
 	}
@@ -56,7 +71,7 @@ export default class SearchNavBar extends React.Component {
 				          </button>
 
 
-				          <Link to="/" className="navbar-brand navbar-brand-logo">
+				          <Link to="/" onClick={this.handleResetFilterUser} className="navbar-brand navbar-brand-logo">
 				                <span className="glyphicon glyphicon-home"></span>
 				              </Link>
 
