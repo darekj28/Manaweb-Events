@@ -21,6 +21,7 @@ export default class CommentFeedPostHeader extends React.Component {
 			<div id = {"comment_" + this.props.comment.unique_id} className="FeedPostHeader">
 				<div className="pull-left name"><b>{this.props.name}</b></div>
 				<div className="pull-left username text-muted">@{this.props.userID}</div>
+				<div className="time pull-left text-muted">&#8226; {this.props.comment.time}</div>
 				<div className="time pull-left text-muted">&#8226; {this.props.comment.timeString}</div>
 				<div className="pull-right">
 					{!this.props.isOriginalPost && <div className="dropdown">
