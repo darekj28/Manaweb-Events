@@ -11308,14 +11308,16 @@
 		function CommentFeedPostHeader(props) {
 			_classCallCheck(this, CommentFeedPostHeader);
 	
-			return _possibleConstructorReturn(this, (CommentFeedPostHeader.__proto__ || Object.getPrototypeOf(CommentFeedPostHeader)).call(this, props));
+			var _this = _possibleConstructorReturn(this, (CommentFeedPostHeader.__proto__ || Object.getPrototypeOf(CommentFeedPostHeader)).call(this, props));
+	
+			_this.scrollToDropdown = _this.scrollToDropdown.bind(_this);
+			return _this;
 		}
 	
 		_createClass(CommentFeedPostHeader, [{
 			key: "scrollToDropdown",
 			value: function scrollToDropdown() {
-				console.log(this.props);
-				console.log(this.props.comment.unique_id);
+	
 				var id_name = "comment_" + this.props.comment.unique_id;
 				console.log(id_name);
 				var x = document.getElementById(id_name);

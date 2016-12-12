@@ -26,7 +26,7 @@ export default class CommentFeedPost extends React.Component {
 	}
 	render() {
 		var comment = this.props.comment;
-		
+
 		return (
 			<li className="CommentFeedPost">
 				<Avatar source={comment.avatar}/>
