@@ -42,7 +42,7 @@ export default class FeedPost extends React.Component {
 						<span className="glyphicon glyphicon-comment pull-left PostBottomIcon AppGlyphicon" 
 								id={"viewComment_" + this.state.comment_id}>
 								</span></Link>
-						<div>{post.numberOfComments}</div>
+						<div> {post.numberOfComments} </div>
 						<div className="dropdown">
 							<a href="#" className="dropdown-toggle" data-toggle="dropdown" >
 				                <span className="glyphicon glyphicon-option-horizontal 

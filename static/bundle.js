@@ -150,7 +150,7 @@
 	
 	var React = __webpack_require__(/*! react */ 4);
 	
-	var $ = __webpack_require__(/*! jquery */ 91);
+	// var $ = require('jquery');
 	
 	function toggle(collection, item) {
 		var idx = collection.indexOf(item);
@@ -20406,7 +20406,9 @@
 							React.createElement(
 								'div',
 								null,
-								post.numberOfComments
+								' ',
+								post.numberOfComments,
+								' '
 							),
 							React.createElement(
 								'div',
@@ -21559,7 +21561,7 @@
 										"Delete comment"
 									)
 								),
-								!(this.props.isOP || this.props.isAdmin) && React.createElement(
+								(!this.props.isOP || this.props.isAdmin) && React.createElement(
 									"li",
 									null,
 									React.createElement(
