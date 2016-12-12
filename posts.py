@@ -449,7 +449,7 @@ def deleteComment(feed_name, unique_id):
 	thisComment = getCommentById(feed_name, unique_id)
 	action = "DELETE COMMENT"
 	isComment = True
-	updateAdminTable(thisComment['feed_name'], thisComment['body'], thisComment['poster_id'], action , thisComment['unique_id'], timeString, timeStamp, isComment )
+	updateAdminTable(thisComment['feed_name'], thisComment['body'], thisComment['poster_id'], action , thisComment['unique_id'], timeString, timeStamp, isComment)
 
 	# update number of comments
 	this_post = getPostById(feed_name,thisComment['comment_id'])
@@ -724,7 +724,7 @@ def makeTestList(start, size):
 	return test_list
 
 
-# initial = 20
+# initial = 40
 # n = 1
 # test_sizes = makeTestList(initial, n)
 # all_times = list()
