@@ -12,6 +12,7 @@ export default class FeedPost extends React.Component {
 		this.handlePostEdit = this.handlePostEdit.bind(this);
 		this.handlePostDelete = this.handlePostDelete.bind(this);
 		this.handlePostReport = this.handlePostReport.bind(this);
+		this.scrollToDropdown = this.scrollToDropdown.bind(this);
 	}
 	handlePostEdit() {
 		this.props.refreshPostDisplayedInModal(this.props.post);
@@ -28,6 +29,22 @@ export default class FeedPost extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		this.setState({ comment_id : nextProps.post.comment_id });
 	}
+
+	scrollToDropdown(){
+		var id_name = "dropdown_menu_" + this.props.post.comment_id
+		var x = document.getElementById(id_name)
+		console.log(x.className)
+		console.log("bob");
+
+
+		$('html, #feed').animate({
+      	  scrollTop: $("#"+id_name).offset().top
+    	}, 2000);
+
+
+		
+	}
+	
 	render() {
 		var post = this.props.post;
 		return (
@@ -43,12 +60,13 @@ export default class FeedPost extends React.Component {
 								id={"viewComment_" + this.state.comment_id}>
 								</span></Link>
 						<div> {post.numberOfComments} </div>
-						<div className="dropdown">
-							<a href="#" className="dropdown-toggle" data-toggle="dropdown" >
+
+						<div className="dropdown" >
+							<a href="#" className="dropdown-toggle" data-toggle="dropdown" onClick = {this.scrollToDropdown} >
 				                <span className="glyphicon glyphicon-option-horizontal 
 				                				pull-left PostBottomIcon AppGlyphicon"></span>
 				            </a>
-				            <ul className="PostDropdown pull-left dropdown-menu">
+				            <ul id = {'dropdown_menu_' + post.comment_id} className="PostDropdown pull-left dropdown-menu">
 				              	{(this.props.isAdmin) && <li><a id="hpe" href="#" onClick={this.handlePostEdit}>Edit post</a></li> }
 			              		{(this.props.isAdmin) && <li><a id="hpd" href="#" onClick={this.handlePostDelete}>Delete post</a></li> }
 			              		{(!this.props.isOP || this.props.isAdmin) && <li><a id="hpr" href="#" onClick={this.handlePostReport}>Report post</a></li> }

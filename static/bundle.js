@@ -174,6 +174,7 @@
 				filters: ['Trade', 'Play', 'Chill'],
 				actions: ['Trade'],
 				search: '',
+				userIdToFilterPosts: '',
 				post: '',
 				feed: [],
 				currentUser: {},
@@ -181,6 +182,7 @@
 				unique_id: ''
 			};
 			_this.handleFilterClick = _this.handleFilterClick.bind(_this);
+			_this.handleFilterUser = _this.handleFilterUser.bind(_this);
 			_this.handleSearch = _this.handleSearch.bind(_this);
 			_this.handlePostChange = _this.handlePostChange.bind(_this);
 			_this.handlePostSubmit = _this.handlePostSubmit.bind(_this);
@@ -238,6 +240,11 @@
 					this.setState({ actions: newFilters });
 					if (this.state.actions.length == 0) this.setState({ alert: true });else this.setState({ alert: false });
 				}
+			}
+		}, {
+			key: 'handleFilterUser',
+			value: function handleFilterUser(user) {
+				if (user != this.state.userIdToFilterPosts) this.setState({ userIdToFilterPosts: user });else this.setState({ userIdToFilterPosts: '' });
 			}
 		}, {
 			key: 'handleSearch',
@@ -323,7 +330,11 @@
 						onSearch: this.handleSearch,
 						onClick: this.handleFilterClick,
 						actions: actions,
-						name: this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'] }),
+						name: this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
+						handleFilterClick: this.handleFilterClick,
+						handleFilterUser: this.handleFilterUser,
+						userIdToFilterPosts: this.state.userIdToFilterPosts,
+						filters: this.state.filters }),
 					React.createElement(
 						'div',
 						{ className: 'container' },
@@ -345,7 +356,9 @@
 						React.createElement(_Feed2.default, { currentUser: this.state.currentUser,
 							searchText: this.state.search,
 							filters: this.state.filters, posts: this.state.feed, actions: actions,
-							refreshFeed: this.refreshFeed })
+							refreshFeed: this.refreshFeed,
+							handleFilterUser: this.handleFilterUser,
+							userIdToFilterPosts: this.state.userIdToFilterPosts })
 					)
 				);
 			}
@@ -395,6 +408,11 @@
 	var Link = __webpack_require__(/*! react-router */ 36).Link;
 	// var $ = require('jquery');
 	
+	
+	function contains(collection, item) {
+		if (collection.indexOf(item) !== -1) return true;else return false;
+	}
+	
 	var SearchNavBar = function (_React$Component) {
 		_inherits(SearchNavBar, _React$Component);
 	
@@ -404,6 +422,8 @@
 			var _this = _possibleConstructorReturn(this, (SearchNavBar.__proto__ || Object.getPrototypeOf(SearchNavBar)).call(this, props));
 	
 			_this.handleSearch = _this.handleSearch.bind(_this);
+			_this.handleResetFilterUser = _this.handleResetFilterUser.bind(_this);
+			_this.handleResetFilterButtons = _this.handleResetFilterButtons.bind(_this);
 			return _this;
 		}
 	
@@ -435,6 +455,18 @@
 				});
 				$('#home').focus(function () {
 					$(this).blur();
+				});
+			}
+		}, {
+			key: 'handleResetFilterUser',
+			value: function handleResetFilterUser() {
+				this.props.handleFilterUser(this.props.userIdToFilterPosts);
+			}
+		}, {
+			key: 'handleResetFilterButtons',
+			value: function handleResetFilterButtons() {
+				this.props.actions.map(function (action) {
+					if (contains(filters, action)) this.props.handleFilterClick(action, true);
 				});
 			}
 		}, {
@@ -472,7 +504,7 @@
 							),
 							React.createElement(
 								Link,
-								{ to: '/', className: 'navbar-brand navbar-brand-logo' },
+								{ to: '/', onClick: this.handleResetFilterUser, className: 'navbar-brand navbar-brand-logo' },
 								React.createElement('span', { className: 'glyphicon glyphicon-home' })
 							)
 						),
@@ -9990,10 +10022,9 @@
 	
 			var _this = _possibleConstructorReturn(this, (Feed.__proto__ || Object.getPrototypeOf(Feed)).call(this, props));
 	
-			_this.state = { postInModal: '', userIdToFilterPosts: '' };
+			_this.state = { postInModal: '' };
 			_this.filter = _this.filter.bind(_this);
 			_this.refreshPostDisplayedInModal = _this.refreshPostDisplayedInModal.bind(_this);
-			_this.handleFilterUser = _this.handleFilterUser.bind(_this);
 			return _this;
 		}
 	
@@ -10001,11 +10032,6 @@
 			key: "refreshPostDisplayedInModal",
 			value: function refreshPostDisplayedInModal(post) {
 				this.setState({ postInModal: post });
-			}
-		}, {
-			key: "handleFilterUser",
-			value: function handleFilterUser(user) {
-				if (user != this.state.userIdToFilterPosts) this.setState({ userIdToFilterPosts: user });else this.setState({ userIdToFilterPosts: '' });
 			}
 		}, {
 			key: "filter",
@@ -10030,14 +10056,14 @@
 					}
 					function doesPostMatchSelectedUser() {
 						if (that.state.userIdToFilterPosts != '') {
-							if (post["userID"].toLowerCase().indexOf(that.state.userIdToFilterPosts.toLowerCase()) === -1) return false;else return true;
+							if (post["userID"].toLowerCase().indexOf(that.props.userIdToFilterPosts.toLowerCase()) === -1) return false;else return true;
 						} else return true;
 					}
 					if (!doesPostMatchFilter() || !doesPostMatchSearch() || !doesPostMatchSelectedUser()) return;else rows.push(React.createElement(_FeedPost2.default, { key: i, post: post, isOP: that.props.currentUser['userID'] == post.userID,
 						isAdmin: that.props.currentUser['isAdmin'],
 						refreshFeed: that.props.refreshFeed,
 						refreshPostDisplayedInModal: that.refreshPostDisplayedInModal,
-						handleFilterUser: that.handleFilterUser }));
+						handleFilterUser: that.props.handleFilterUser }));
 				});
 				return rows;
 			}
@@ -10118,6 +10144,7 @@
 			_this.handlePostEdit = _this.handlePostEdit.bind(_this);
 			_this.handlePostDelete = _this.handlePostDelete.bind(_this);
 			_this.handlePostReport = _this.handlePostReport.bind(_this);
+			_this.scrollToDropdown = _this.scrollToDropdown.bind(_this);
 			return _this;
 		}
 	
@@ -10143,6 +10170,18 @@
 			key: 'componentWillReceiveProps',
 			value: function componentWillReceiveProps(nextProps) {
 				this.setState({ comment_id: nextProps.post.comment_id });
+			}
+		}, {
+			key: 'scrollToDropdown',
+			value: function scrollToDropdown() {
+				var id_name = "dropdown_menu_" + this.props.post.comment_id;
+				var x = document.getElementById(id_name);
+				console.log(x.className);
+				console.log("bob");
+	
+				$('html, #feed').animate({
+					scrollTop: $("#" + id_name).offset().top
+				}, 2000);
 			}
 		}, {
 			key: 'render',
@@ -10187,12 +10226,12 @@
 								{ className: 'dropdown' },
 								React.createElement(
 									'a',
-									{ href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown' },
+									{ href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown', onClick: this.scrollToDropdown },
 									React.createElement('span', { className: 'glyphicon glyphicon-option-horizontal  pull-left PostBottomIcon AppGlyphicon' })
 								),
 								React.createElement(
 									'ul',
-									{ className: 'PostDropdown pull-left dropdown-menu' },
+									{ id: 'dropdown_menu_' + post.comment_id, className: 'PostDropdown pull-left dropdown-menu' },
 									this.props.isAdmin && React.createElement(
 										'li',
 										null,
@@ -11315,7 +11354,7 @@
 							React.createElement(
 								"ul",
 								{ className: "CommentDropdown pull-right dropdown-menu" },
-								(this.props.isOP || this.props.isAdmin) && React.createElement(
+								this.props.isAdmin && React.createElement(
 									"li",
 									null,
 									React.createElement(
