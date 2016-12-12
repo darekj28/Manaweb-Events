@@ -91,7 +91,7 @@ def updateAdminTable(feed_name, body, poster_id, action, unique_id, timeString, 
 
 def createThread(feed_name):
 	posts_id =  feed_name
-	createTableCode = 'CREATE TABLE IF NOT EXISTS ' + posts_id + ' (body TEXT, poster_id TEXT, feed_name TEXT, comment_id TEXT, timeString TEXT, timeStamp FLOAT, isTrade BOOLEAN, isPlay BOOLEAN, isChill BOOLEAN, unique_id TEXT)'
+	createTableCode = 'CREATE TABLE IF NOT EXISTS ' + posts_id + ' (body TEXT, poster_id TEXT, feed_name TEXT, comment_id TEXT, timeString TEXT, timeStamp FLOAT, isTrade BOOLEAN, isPlay BOOLEAN, isChill BOOLEAN, unique_id TEXT, numComments INT)'
 	db.execute(createTableCode)
 	addIndexCode = 'CREATE INDEX IF NOT EXISTS poster_id ON ' + posts_id + ' (poster_id)'
 	db.execute(addIndexCode)
@@ -252,7 +252,9 @@ def postInThread(feed_name, body, poster_id, isTrade = None, isPlay = None, isCh
 
 	addCommentIdToList(comment_id)
 	unique_id = comment_id
-	post_code = db.mogrify("INSERT INTO " + feed_name + " (body, poster_id, feed_name, comment_id, timeString, timeStamp, isTrade, isPlay, isChill, unique_id) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (body, poster_id, feed_name, comment_id, timeString, timeStamp, isTrade, isPlay, isChill, unique_id))
+	# start with zero comments
+	numComments = 0 
+	post_code = db.mogrify("INSERT INTO " + feed_name + " (body, poster_id, feed_name, comment_id, timeString, timeStamp, isTrade, isPlay, isChill, unique_id, numComments) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s)", (body, poster_id, feed_name, comment_id, timeString, timeStamp, isTrade, isPlay, isChill, unique_id, numComments))
 	db.execute(post_code)
 	post_db.commit()
 
@@ -268,13 +270,23 @@ def makeComment(feed_name, comment_id, body, poster_id, unique_id = None):
 
 	if unique_id == None:
 		unique_id = hash_comment_id(comment_id)
-		
+	
+
 	addCommentIdToList(unique_id)
+
+	# update number of comments
+	this_post = getPostById(feed,name,comment_id)
+	updatedNumComments = this_post['numComments'] + 1
+	update_code = "UPDATE " + feed_name  + " SET " + "numComments" + " = %s WHERE unique_id = '" + comment_id + "'"
+	db.execute(db.mogrify(update_code, (updatedNumComments,)))
+	post_db.commit()
+
 	db.execute(db.mogrify('INSERT INTO c_' + feed_name + ' (body, poster_id, feed_name, comment_id, timeString, timeStamp, unique_id) VALUES (%s,%s,%s,%s,%s,%s,%s)', (body, poster_id, feed_name, comment_id, timeString, timeStamp, unique_id)))
 	post_db.commit()
 	action = "MAKE COMMENT"
 	isComment = True
 	updateAdminTable(feed_name, body, poster_id, action, unique_id, timeString, timeStamp, isComment)
+
 
 
 
@@ -419,6 +431,7 @@ def deletePost(feed_name, unique_id):
 	isComment = False
 	updateAdminTable(thisPost['feed_name'], thisPost['body'], thisPost['poster_id'], action , thisPost['unique_id'], timeString, timeStamp, isComment)
 
+
 	table_name = feed_name
 	sql = "DELETE FROM " + table_name + " WHERE unique_id = %s"
 	db.execute(db.mogrify(sql, (unique_id,)))
@@ -438,6 +451,12 @@ def deleteComment(feed_name, unique_id):
 	isComment = True
 	updateAdminTable(thisComment['feed_name'], thisComment['body'], thisComment['poster_id'], action , thisComment['unique_id'], timeString, timeStamp, isComment )
 
+	# update number of comments
+	this_post = getPostById(feed,name,thisComment['comment_id'])
+	updatedNumComments = this_post['numComments'] - 1
+	update_code = "UPDATE " + feed_name  + " SET " + "numComments" + " = %s WHERE unique_id = '" + thisComment['comment_id'] + "'"
+	db.execute(db.mogrify(update_code, (updatedNumComments,)))
+	post_db.commit()
 
 	table_name = "c_" + feed_name
 	sql = "DELETE FROM " + table_name + " WHERE unique_id = %s"
@@ -466,6 +485,7 @@ def postListToDict(posts):
 		thisPost['last_name'] = thisUser['last_name']
 		thisPost['avatar_url'] = thisUser['avatar_url']
 		thisPost['unique_id'] = post[9]
+		thisPost['numComments'] = post[10]
 		postList.append(thisPost)
 	return postList	
 
