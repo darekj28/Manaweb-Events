@@ -455,16 +455,13 @@ def reset():
 		# if the password is correct then clear the graph
 		if password == "resetserver":
 			## clear the database
-			# authenticate("localhost:7474", "neo4j", "powerplay")
-			# graph = Graph()
-			# graph.delete_all()
-			users.resetDatabase()
+
 			## clear all the photos 
-			fileDir = './static/img'
-			fileList = os.listdir(fileDir)
-			for fileName in fileList:
-				if os.path.isdir(fileDir + '/' + fileName):
-					shutil.rmtree(fileDir + '/' + fileName)
+			# fileDir = './static/img'
+			# fileList = os.listdir(fileDir)
+			# for fileName in fileList:
+			# 	if os.path.isdir(fileDir + '/' + fileName):
+			# 		shutil.rmtree(fileDir + '/' + fileName)
 			
 			posts.resetDatabase()
 			users.resetDatabase()
@@ -486,11 +483,7 @@ def reset():
 def getPosts():
 	feed_name = "BALT"
 	post_list = posts.getPosts(feed_name)
-	index = len(post_list) - 1
-	print(post_list[index]['timeStamp'])
-	print(post_list[index]['timeString'])
-	print(post_list[index]['time'])
-	print("hey hey hey!")
+	posts.sortDescending(post_list)
 	return jsonify({ 'post_list' : post_list })	
 
 @app.route('/getPostById', methods = ['POST'])
@@ -506,6 +499,7 @@ def getComments():
 	feed_name = "BALT"
 	comment_id = request.form['comment_id']
 	comment_list = posts.getComments(feed_name, comment_id)
+	posts.sortAscending(comment_list)
 	return jsonify({ 'comment_list' : comment_list })	
 
 @app.route('/getInfoFromUserId', methods=['POST'])
