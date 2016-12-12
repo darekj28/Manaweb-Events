@@ -5,8 +5,9 @@ export default class CommentFeedPostHeader extends React.Component {
 	}
 
 	scrollToDropdown(){
-		
-		var id_name = "comment_" + this.props.comment.unique_id
+		console.log(this.props);
+		console.log(this.props.comment.unique_id);
+		var id_name = "comment_" + this.props.comment.unique_id;
 		console.log(id_name);
 		var x = document.getElementById(id_name)
 		x.scrollIntoView()		
@@ -15,7 +16,7 @@ export default class CommentFeedPostHeader extends React.Component {
 	render() {
 
 
-		console.log("in render : " + this.props.comment.unique_id);
+		
 
 		return(
 			<div id = {"comment_" + this.props.comment.unique_id} className="FeedPostHeader">

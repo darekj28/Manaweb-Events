@@ -29,6 +29,7 @@ export default class CommentFeed extends React.Component {
 					return false;
 				else return true;
 			}
+
 			if (!doesCommentMatchSearch())
 				return;
 			else 

@@ -11248,6 +11248,7 @@
 			key: "render",
 			value: function render() {
 				var comment = this.props.comment;
+	
 				return React.createElement(
 					"li",
 					{ className: "CommentFeedPost" },
@@ -11313,7 +11314,8 @@
 		_createClass(CommentFeedPostHeader, [{
 			key: "scrollToDropdown",
 			value: function scrollToDropdown() {
-	
+				console.log(this.props);
+				console.log(this.props.comment.unique_id);
 				var id_name = "comment_" + this.props.comment.unique_id;
 				console.log(id_name);
 				var x = document.getElementById(id_name);
@@ -11322,8 +11324,6 @@
 		}, {
 			key: "render",
 			value: function render() {
-	
-				console.log("in render : " + this.props.comment.unique_id);
 	
 				return React.createElement(
 					"div",
@@ -11342,6 +11342,12 @@
 						{ className: "pull-left username text-muted" },
 						"@",
 						this.props.userID
+					),
+					React.createElement(
+						"div",
+						{ className: "time pull-left text-muted" },
+						"\u2022 ",
+						this.props.comment.time
 					),
 					React.createElement(
 						"div",
@@ -11531,6 +11537,7 @@
 					function doesCommentMatchSearch() {
 						if (comment["commentContent"].toLowerCase().indexOf(that.props.searchText.toLowerCase()) === -1 && comment["userID"].toLowerCase().indexOf(that.props.searchText.toLowerCase()) === -1 && comment["name"].toLowerCase().indexOf(that.props.searchText.toLowerCase()) === -1) return false;else return true;
 					}
+	
 					if (!doesCommentMatchSearch()) return;else rows.push(React.createElement(_CommentFeedPost2.default, { key: i, comment: comment, isOP: that.props.currentUser['userID'] == comment.userID,
 						isAdmin: that.props.currentUser['isAdmin'], isOriginalPost: false,
 						refreshFeed: that.props.refreshFeed,
