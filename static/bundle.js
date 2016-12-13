@@ -10170,8 +10170,8 @@
 			key: 'scrollToDropdown',
 			value: function scrollToDropdown() {
 				var post = document.getElementById('post_' + this.props.post.comment_id);
-				var offset = post.offsetTop - 250;
-				$('#Feed').animate({ scrollTop: offset }, 300);
+				var offset = post.offsetTop - 350;
+				$('#Feed').animate({ scrollTop: offset }, 500);
 			}
 		}, {
 			key: 'render',
@@ -10187,8 +10187,13 @@
 						React.createElement(
 							'div',
 							{ className: 'row' },
-							React.createElement(_FeedPostHeader2.default, { name: post.name, userID: post.userID, handleFilterUser: this.props.handleFilterUser,
-								isTrade: post.isTrade, isPlay: post.isPlay, isChill: post.isChill, time: post.time })
+							React.createElement(_FeedPostHeader2.default, { post: this.props.post,
+								handleFilterUser: this.props.handleFilterUser,
+								isAdmin: this.props.isAdmin, isOP: this.props.isOP,
+								handlePostReport: this.handlePostReport,
+								handlePostDelete: this.handlePostDelete,
+								handlePostEdit: this.handlePostEdit,
+								scrollToDropdown: this.scrollToDropdown })
 						),
 						React.createElement(
 							'div',
@@ -10204,48 +10209,12 @@
 								React.createElement('span', { className: 'glyphicon glyphicon-comment pull-left PostBottomIcon AppGlyphicon',
 									id: "viewComment_" + this.state.comment_id }),
 								React.createElement(
-									'h6',
-									{ className: 'pull-left' },
-									post.numberOfComments
-								)
-							),
-							(this.props.isAdmin || !this.props.isOP) && React.createElement(
-								'div',
-								{ className: 'dropdown pull-left', id: "dropdown_" + post.comment_id, onClick: this.scrollToDropdown },
-								React.createElement(
-									'a',
-									{ href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown' },
-									React.createElement('span', { className: 'glyphicon glyphicon-option-horizontal  pull-left PostBottomIcon AppGlyphicon' })
-								),
-								React.createElement(
-									'ul',
-									{ className: 'PostDropdown pull-left dropdown-menu' },
-									this.props.isAdmin && React.createElement(
-										'li',
+									'span',
+									{ className: 'AppGlyphicon' },
+									React.createElement(
+										'h6',
 										null,
-										React.createElement(
-											'a',
-											{ id: 'hpe', href: '#', onClick: this.handlePostEdit },
-											'Edit post'
-										)
-									),
-									this.props.isAdmin && React.createElement(
-										'li',
-										null,
-										React.createElement(
-											'a',
-											{ id: 'hpd', href: '#', onClick: this.handlePostDelete },
-											'Delete post'
-										)
-									),
-									(!this.props.isOP || this.props.isAdmin) && React.createElement(
-										'li',
-										null,
-										React.createElement(
-											'a',
-											{ id: 'hpr', href: '#', onClick: this.handlePostReport },
-											'Report post'
-										)
+										post.numberOfComments
 									)
 								)
 							)
@@ -10352,9 +10321,9 @@
 			key: 'render',
 			value: function render() {
 				var tpc = "";
-				if (this.props.isTrade) tpc = tpc.concat(' Trade ');
-				if (this.props.isPlay) tpc = tpc.concat(' Play ');
-				if (this.props.isChill) tpc = tpc.concat(' Chill ');
+				if (this.props.post.isTrade) tpc = tpc.concat(' Trade ');
+				if (this.props.post.isPlay) tpc = tpc.concat(' Play ');
+				if (this.props.post.isChill) tpc = tpc.concat(' Chill ');
 				return React.createElement(
 					'div',
 					{ className: 'FeedPostHeader' },
@@ -10373,20 +10342,60 @@
 						React.createElement(
 							'b',
 							null,
-							this.props.name
+							this.props.post.name
 						)
 					),
 					React.createElement(
 						'div',
 						{ className: 'headerpart username text-muted', onClick: this.handleFilterUser },
 						'@',
-						this.props.userID
+						this.props.post.userID
 					),
 					React.createElement(
 						'div',
 						{ className: 'headerpart time text-muted' },
 						'\u2022 ',
-						this.props.time
+						this.props.post.time
+					),
+					(this.props.isAdmin || !this.props.isOP) && React.createElement(
+						'div',
+						{ className: 'dropdown pull-left', id: "dropdown_" + this.props.post.comment_id, onClick: this.props.scrollToDropdown },
+						React.createElement(
+							'a',
+							{ href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown' },
+							React.createElement('span', { className: 'glyphicon glyphicon-option-horizontal  pull-left AppGlyphicon' })
+						),
+						React.createElement(
+							'ul',
+							{ className: 'PostDropdown pull-left dropdown-menu' },
+							this.props.isAdmin && React.createElement(
+								'li',
+								null,
+								React.createElement(
+									'a',
+									{ id: 'hpe', href: '#', onClick: this.props.handlePostEdit },
+									'Edit post'
+								)
+							),
+							this.props.isAdmin && React.createElement(
+								'li',
+								null,
+								React.createElement(
+									'a',
+									{ id: 'hpd', href: '#', onClick: this.props.handlePostDelete },
+									'Delete post'
+								)
+							),
+							(!this.props.isOP || this.props.isAdmin) && React.createElement(
+								'li',
+								null,
+								React.createElement(
+									'a',
+									{ id: 'hpr', href: '#', onClick: this.props.handlePostReport },
+									'Report post'
+								)
+							)
+						)
 					)
 				);
 			}
@@ -11252,7 +11261,7 @@
 						React.createElement(
 							"div",
 							{ className: "row" },
-							React.createElement(_CommentFeedPostHeader2.default, { comment: this.props.comment, name: comment.name, userID: comment.userID, time: comment.time,
+							React.createElement(_CommentFeedPostHeader2.default, { comment: this.props.comment,
 								isOP: this.props.isOP, isAdmin: this.props.isAdmin, handleCommentEdit: this.handleCommentEdit,
 								handleCommentDelete: this.handleCommentDelete, handleCommentReport: this.handleCommentReport,
 								isOriginalPost: this.props.isOriginalPost })
@@ -11312,7 +11321,7 @@
 			value: function scrollToDropdown() {
 				var comment = document.getElementById('comment_' + this.props.comment.unique_id);
 				var offset = comment.offsetTop - 250;
-				$('#CommentFeed').animate({ scrollTop: offset }, 300);
+				$('#CommentFeed').animate({ scrollTop: offset }, 500);
 			}
 		}, {
 			key: 'render',
@@ -11326,14 +11335,14 @@
 						React.createElement(
 							'b',
 							null,
-							this.props.name
+							this.props.comment.name
 						)
 					),
 					React.createElement(
 						'div',
 						{ className: 'pull-left username text-muted' },
 						'@',
-						this.props.userID
+						this.props.comment.userID
 					),
 					!this.props.isOriginalPost && React.createElement(
 						'div',
