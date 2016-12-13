@@ -44,10 +44,11 @@ export default class FeedPost extends React.Component {
 						<Link to={'/comment?id=' + this.state.comment_id}>
 						<span className="glyphicon glyphicon-comment pull-left PostBottomIcon AppGlyphicon" 
 								id={"viewComment_" + this.state.comment_id}>
-								</span></Link>
-						<div> {post.numberOfComments} </div>
+								</span>
+						<h6 className="pull-left">{post.numberOfComments}</h6>
+						</Link>
 						{ (this.props.isAdmin || !this.props.isOP) && 
-						<div className="dropdown" id={"dropdown_" + post.comment_id} onClick={this.scrollToDropdown}>
+						<div className="dropdown pull-left" id={"dropdown_" + post.comment_id} onClick={this.scrollToDropdown}>
 							<a href="#" className="dropdown-toggle" data-toggle="dropdown">
 				                <span className="glyphicon glyphicon-option-horizontal 
 				                				pull-left PostBottomIcon AppGlyphicon"></span>
