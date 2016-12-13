@@ -45,13 +45,29 @@ export default class FeedPost extends React.Component {
 						handlePostEdit={this.handlePostEdit}
 						scrollToDropdown={this.scrollToDropdown}/></div>
 					<div className="row"><FeedPostBody content={post.postContent}/></div>
-					<div className="PostFooter row CommentContainer">
+					<div className="PostFooter row">
+						<div className="CommentContainer">
 						<Link to={'/comment?id=' + this.state.comment_id}>
 						<span className="glyphicon glyphicon-comment pull-left PostBottomIcon AppGlyphicon" 
 								id={"viewComment_" + this.state.comment_id}>
 								</span>
 						<span className="numberOfComments pull-left AppGlyphicon"><h6>{post.numberOfComments}</h6></span>
 						</Link>
+						</div>
+						{ (this.props.isAdmin || !this.props.isOP) && 
+						<div className="dropdown pull-right" id={"dropdown_" + this.props.post.comment_id} onClick={this.scrollToDropdown}>
+							<a href="#" className="dropdown-toggle" data-toggle="dropdown">
+				                <span className="glyphicon glyphicon-option-horizontal 
+				                				pull-right PostBottomIcon AppGlyphicon"></span>
+				            </a>
+				            <ul className="PostDropdown pull-right dropdown-menu">
+				              	{(this.props.isAdmin) && <li><a id="hpe" href="#" onClick={this.handlePostEdit}>Edit post</a></li> }
+			              		{(this.props.isAdmin) && <li><a id="hpd" href="#" onClick={this.handlePostDelete}>Delete post</a></li> }
+			              		{(!this.props.isOP || this.props.isAdmin) && <li><a id="hpr" href="#" onClick={this.handlePostReport}>Report post</a></li> }
+				            </ul>
+				        
+				        </div>
+				  	  }	
 					</div>
 				</div>
 			</li>
