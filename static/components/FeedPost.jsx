@@ -29,13 +29,11 @@ export default class FeedPost extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		this.setState({ comment_id : nextProps.post.comment_id });
 	}
-
 	scrollToDropdown(){
-		var id_name = "post_" + this.props.post.comment_id
-		var x = document.getElementById(id_name)
-		x.scrollIntoView()		
+		var post_id = "post_" + this.props.post.comment_id;
+		var post = document.getElementById(post_id);
+		post.scrollIntoView();		
 	}
-	
 	render() {
 		var post = this.props.post;
 		return (
@@ -51,17 +49,12 @@ export default class FeedPost extends React.Component {
 								id={"viewComment_" + this.state.comment_id}>
 								</span></Link>
 						<div> {post.numberOfComments} </div>
-
-
 						{ (this.props.isAdmin || !this.props.isOP) && 
-
 						<div className="dropdown" >
 							<a href="#" className="dropdown-toggle" data-toggle="dropdown" onClick = {this.scrollToDropdown} >
 				                <span className="glyphicon glyphicon-option-horizontal 
 				                				pull-left PostBottomIcon AppGlyphicon"></span>
 				            </a>
-
-				        
 				            <ul className="PostDropdown pull-left dropdown-menu">
 				              	{(this.props.isAdmin) && <li><a id="hpe" href="#" onClick={this.handlePostEdit}>Edit post</a></li> }
 			              		{(this.props.isAdmin) && <li><a id="hpd" href="#" onClick={this.handlePostDelete}>Delete post</a></li> }
