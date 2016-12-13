@@ -26,13 +26,10 @@ export default class FeedPost extends React.Component {
 		this.props.refreshPostDisplayedInModal(this.props.post);
 		$('#ReportPostModal').modal('show');
 	}
-	componentWillReceiveProps(nextProps) {
-		this.setState({ comment_id : nextProps.post.comment_id });
-	}
-	scrollToDropdown(){
-		var post_id = "post_" + this.props.post.comment_id;
-		var post = document.getElementById(post_id);
-		post.scrollIntoView();		
+	scrollToDropdown() {
+		var post = document.getElementById('post_' + this.props.post.comment_id);
+		var offset = post.offsetTop - 250;
+		$('#Feed').animate({scrollTop : offset}, 300);
 	}
 	render() {
 		var post = this.props.post;
@@ -50,8 +47,8 @@ export default class FeedPost extends React.Component {
 								</span></Link>
 						<div> {post.numberOfComments} </div>
 						{ (this.props.isAdmin || !this.props.isOP) && 
-						<div className="dropdown" >
-							<a href="#" className="dropdown-toggle" data-toggle="dropdown" onClick = {this.scrollToDropdown} >
+						<div className="dropdown" id={"dropdown_" + post.comment_id} onClick={this.scrollToDropdown}>
+							<a href="#" className="dropdown-toggle" data-toggle="dropdown">
 				                <span className="glyphicon glyphicon-option-horizontal 
 				                				pull-left PostBottomIcon AppGlyphicon"></span>
 				            </a>

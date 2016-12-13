@@ -5,9 +5,9 @@ export default class CommentFeedPostHeader extends React.Component {
 		this.scrollToDropdown = this.scrollToDropdown.bind(this);
 	}
 	scrollToDropdown(){
-		var comment_id = "comment_" + this.props.comment.unique_id;
-		var comment = document.getElementById(comment_id);
-		comment.scrollIntoView();
+		var comment = document.getElementById('comment_' + this.props.comment.unique_id);
+		var offset = comment.offsetTop - 250;
+		$('#CommentFeed').animate({scrollTop : offset}, 300);
 	}
 	render() {
 		return(
@@ -19,7 +19,7 @@ export default class CommentFeedPostHeader extends React.Component {
 				<div className="pull-right">
 					{(!this.props.isOriginalPost && (this.props.isAdmin || !this.props.isOP)) && 
 					<div className="dropdown">
-						<a href="#" className="dropdown-toggle" data-toggle="dropdown" onClick = {this.scrollToDropdown}>
+						<a href="#" className="dropdown-toggle" data-toggle="dropdown" onClick={this.scrollToDropdown}>
 			                <span className="glyphicon glyphicon-option-horizontal 
 			                				pull-left CommentBottomIcon AppGlyphicon"></span>
 			            </a>
@@ -28,7 +28,6 @@ export default class CommentFeedPostHeader extends React.Component {
 			              	{(this.props.isOP || this.props.isAdmin) && <li><a id="hcd" href="#" onClick={this.props.handleCommentDelete}>Delete comment</a></li> }
 			              	{(!this.props.isOP || this.props.isAdmin) && <li><a id="hcr" href="#" onClick={this.props.handleCommentReport}>Report comment</a></li> }
 			            </ul>
-			        
 		        	</div>
 		        	}
 				</div>
