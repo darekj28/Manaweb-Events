@@ -10167,16 +10167,11 @@
 				$('#ReportPostModal').modal('show');
 			}
 		}, {
-			key: 'componentWillReceiveProps',
-			value: function componentWillReceiveProps(nextProps) {
-				this.setState({ comment_id: nextProps.post.comment_id });
-			}
-		}, {
 			key: 'scrollToDropdown',
 			value: function scrollToDropdown() {
-				var id_name = "post_" + this.props.post.comment_id;
-				var x = document.getElementById(id_name);
-				x.scrollIntoView();
+				var post = document.getElementById('post_' + this.props.post.comment_id);
+				var offset = post.offsetTop - 250;
+				$('#Feed').animate({ scrollTop: offset }, 300);
 			}
 		}, {
 			key: 'render',
@@ -10207,21 +10202,19 @@
 								Link,
 								{ to: '/comment?id=' + this.state.comment_id },
 								React.createElement('span', { className: 'glyphicon glyphicon-comment pull-left PostBottomIcon AppGlyphicon',
-									id: "viewComment_" + this.state.comment_id })
-							),
-							React.createElement(
-								'div',
-								null,
-								' ',
-								post.numberOfComments,
-								' '
+									id: "viewComment_" + this.state.comment_id }),
+								React.createElement(
+									'h6',
+									{ className: 'pull-left' },
+									post.numberOfComments
+								)
 							),
 							(this.props.isAdmin || !this.props.isOP) && React.createElement(
 								'div',
-								{ className: 'dropdown' },
+								{ className: 'dropdown pull-left', id: "dropdown_" + post.comment_id, onClick: this.scrollToDropdown },
 								React.createElement(
 									'a',
-									{ href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown', onClick: this.scrollToDropdown },
+									{ href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown' },
 									React.createElement('span', { className: 'glyphicon glyphicon-option-horizontal  pull-left PostBottomIcon AppGlyphicon' })
 								),
 								React.createElement(
@@ -11286,7 +11279,7 @@
   \*****************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -11315,85 +11308,84 @@
 		}
 	
 		_createClass(CommentFeedPostHeader, [{
-			key: "scrollToDropdown",
+			key: 'scrollToDropdown',
 			value: function scrollToDropdown() {
-				var id_name = "comment_" + this.props.comment.unique_id;
-				console.log(id_name);
-				var x = document.getElementById(id_name);
-				x.scrollIntoView();
+				var comment = document.getElementById('comment_' + this.props.comment.unique_id);
+				var offset = comment.offsetTop - 250;
+				$('#CommentFeed').animate({ scrollTop: offset }, 300);
 			}
 		}, {
-			key: "render",
+			key: 'render',
 			value: function render() {
 				return React.createElement(
-					"div",
-					{ id: "comment_" + this.props.comment.unique_id, className: "FeedPostHeader" },
+					'div',
+					{ id: "comment_" + this.props.comment.unique_id, className: 'FeedPostHeader' },
 					React.createElement(
-						"div",
-						{ className: "pull-left name" },
+						'div',
+						{ className: 'pull-left name' },
 						React.createElement(
-							"b",
+							'b',
 							null,
 							this.props.name
 						)
 					),
 					React.createElement(
-						"div",
-						{ className: "pull-left username text-muted" },
-						"@",
+						'div',
+						{ className: 'pull-left username text-muted' },
+						'@',
 						this.props.userID
 					),
-					React.createElement(
-						"div",
-						{ className: "time pull-left text-muted" },
-						"\u2022 ",
+					!this.props.isOriginalPost && React.createElement(
+						'div',
+						{ className: 'time pull-left text-muted' },
+						'\u2022 ',
 						this.props.comment.time
 					),
-					React.createElement(
-						"div",
-						{ className: "time pull-left text-muted" },
-						"\u2022 ",
+					this.props.isOriginalPost && React.createElement(
+						'div',
+						{ className: 'time pull-left text-muted' },
+						'\u2022 ',
 						this.props.comment.timeString
 					),
 					React.createElement(
-						"div",
-						{ className: "pull-right" },
+						'div',
+						{ className: 'pull-right' },
 						!this.props.isOriginalPost && (this.props.isAdmin || !this.props.isOP) && React.createElement(
-							"div",
-							{ className: "dropdown" },
+							'div',
+							{ className: 'dropdown' },
 							React.createElement(
-								"a",
-								{ href: "#", className: "dropdown-toggle", "data-toggle": "dropdown", onClick: this.scrollToDropdown },
-								React.createElement("span", { className: "glyphicon glyphicon-option-horizontal  pull-left CommentBottomIcon AppGlyphicon" })
+								'a',
+								{ href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown', onClick: this.scrollToDropdown },
+								React.createElement('span', { className: 'glyphicon glyphicon-option-horizontal  pull-left CommentBottomIcon AppGlyphicon' })
 							),
 							React.createElement(
-								"ul",
-								{ className: "CommentDropdown pull-right dropdown-menu" },
+								'ul',
+								{ className: 'CommentDropdown pull-right dropdown-menu' },
 								(this.props.isOP || this.props.isAdmin) && React.createElement(
-									"li",
+									'li',
 									null,
 									React.createElement(
-										"a",
-										{ id: "hce", href: "#", onClick: this.props.handleCommentEdit },
-										"Edit comment"
+										'a',
+										{ id: 'hce', href: '#', onClick: this.props.handleCommentEdit },
+										'Edit comment'
 									)
 								),
 								(this.props.isOP || this.props.isAdmin) && React.createElement(
-									"li",
+									'li',
 									null,
 									React.createElement(
-										"a",
-										{ id: "hcd", href: "#", onClick: this.props.handleCommentDelete },
-										"Delete comment"
+										'a',
+										{ id: 'hcd', href: '#', onClick: this.props.handleCommentDelete },
+										'Delete comment'
 									)
 								),
 								(!this.props.isOP || this.props.isAdmin) && React.createElement(
-									"li",
+									'li',
 									null,
 									React.createElement(
-										"a",
-										{ id: "hcr", href: "#", onClick: this.props.handleCommentReport },
-										"Report comment"
+										'a',
+										{ id: 'hcr', href: '#', onClick: this.props.handleCommentReport },
+										'Report comment'
 									)
 								)
 							)
