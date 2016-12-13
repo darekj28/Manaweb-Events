@@ -45,12 +45,12 @@ export default class FeedPost extends React.Component {
 						handlePostEdit={this.handlePostEdit}
 						scrollToDropdown={this.scrollToDropdown}/></div>
 					<div className="row"><FeedPostBody content={post.postContent}/></div>
-					<div className="PostFooter row">
+					<div className="PostFooter row CommentContainer">
 						<Link to={'/comment?id=' + this.state.comment_id}>
 						<span className="glyphicon glyphicon-comment pull-left PostBottomIcon AppGlyphicon" 
 								id={"viewComment_" + this.state.comment_id}>
 								</span>
-						<span className="AppGlyphicon"><h6>{post.numberOfComments}</h6></span>
+						<span className="numberOfComments pull-left AppGlyphicon"><h6>{post.numberOfComments}</h6></span>
 						</Link>
 					</div>
 				</div>

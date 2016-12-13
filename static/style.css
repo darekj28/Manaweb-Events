@@ -20,6 +20,17 @@
   list-style-type: none;
   border-bottom: 1px solid #dbdbdb;
 }
+.numberOfComments {
+  text-decoration: none;
+  color:#ad8ed2;
+  cursor:pointer;
+}
+.CommentContainer:hover .numberOfComments{
+  color:#5b1da5;
+}
+.CommentContainer:hover .PostBottomIcon{
+  color:#5b1da5;
+}
 .PostDropdown {
   border-bottom : none;
   margin-top : 8px;
@@ -34,8 +45,8 @@
   max-width: 90%;
 }
 .PostBottomIcon {
-  padding-right : 5px;
-  top : -5px;
+  padding-right : 6px;
+  top : 8px;
 }
 .CommentBottomIcon {
   margin-left: 72px;
