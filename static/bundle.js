@@ -10216,7 +10216,7 @@
 								post.numberOfComments,
 								' '
 							),
-							React.createElement(
+							(this.props.isAdmin || !this.props.isOP) && React.createElement(
 								'div',
 								{ className: 'dropdown' },
 								React.createElement(
@@ -11317,7 +11317,6 @@
 		_createClass(CommentFeedPostHeader, [{
 			key: "scrollToDropdown",
 			value: function scrollToDropdown() {
-	
 				var id_name = "comment_" + this.props.comment.unique_id;
 				console.log(id_name);
 				var x = document.getElementById(id_name);
@@ -11326,7 +11325,6 @@
 		}, {
 			key: "render",
 			value: function render() {
-	
 				return React.createElement(
 					"div",
 					{ id: "comment_" + this.props.comment.unique_id, className: "FeedPostHeader" },
@@ -11360,7 +11358,7 @@
 					React.createElement(
 						"div",
 						{ className: "pull-right" },
-						!this.props.isOriginalPost && React.createElement(
+						!this.props.isOriginalPost && (this.props.isAdmin || !this.props.isOP) && React.createElement(
 							"div",
 							{ className: "dropdown" },
 							React.createElement(
@@ -11371,7 +11369,7 @@
 							React.createElement(
 								"ul",
 								{ className: "CommentDropdown pull-right dropdown-menu" },
-								this.props.isAdmin && React.createElement(
+								(this.props.isOP || this.props.isAdmin) && React.createElement(
 									"li",
 									null,
 									React.createElement(
