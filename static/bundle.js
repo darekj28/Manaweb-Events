@@ -10202,7 +10202,7 @@
 						),
 						React.createElement(
 							'div',
-							{ className: 'PostFooter row' },
+							{ className: 'PostFooter row CommentContainer' },
 							React.createElement(
 								Link,
 								{ to: '/comment?id=' + this.state.comment_id },
@@ -10210,7 +10210,7 @@
 									id: "viewComment_" + this.state.comment_id }),
 								React.createElement(
 									'span',
-									{ className: 'AppGlyphicon' },
+									{ className: 'numberOfComments pull-left AppGlyphicon' },
 									React.createElement(
 										'h6',
 										null,
