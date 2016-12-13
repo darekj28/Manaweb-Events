@@ -7,13 +7,13 @@ export default class CommentFeedPostHeader extends React.Component {
 	scrollToDropdown(){
 		var comment = document.getElementById('comment_' + this.props.comment.unique_id);
 		var offset = comment.offsetTop - 250;
-		$('#CommentFeed').animate({scrollTop : offset}, 300);
+		$('#CommentFeed').animate({scrollTop : offset}, 500);
 	}
 	render() {
 		return(
 			<div id = {"comment_" + this.props.comment.unique_id} className="FeedPostHeader">
-				<div className="pull-left name"><b>{this.props.name}</b></div>
-				<div className="pull-left username text-muted">@{this.props.userID}</div>
+				<div className="pull-left name"><b>{this.props.comment.name}</b></div>
+				<div className="pull-left username text-muted">@{this.props.comment.userID}</div>
 				{!this.props.isOriginalPost && <div className="time pull-left text-muted">&#8226; {this.props.comment.time}</div>}
 				{this.props.isOriginalPost && <div className="time pull-left text-muted">&#8226; {this.props.comment.timeString}</div>}
 				<div className="pull-right">

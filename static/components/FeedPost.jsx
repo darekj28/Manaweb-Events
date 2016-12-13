@@ -28,8 +28,8 @@ export default class FeedPost extends React.Component {
 	}
 	scrollToDropdown() {
 		var post = document.getElementById('post_' + this.props.post.comment_id);
-		var offset = post.offsetTop - 250;
-		$('#Feed').animate({scrollTop : offset}, 300);
+		var offset = post.offsetTop - 350;
+		$('#Feed').animate({scrollTop : offset}, 500);
 	}
 	render() {
 		var post = this.props.post;
@@ -37,30 +37,21 @@ export default class FeedPost extends React.Component {
 			<li className="Post" id = {"post_" + post.comment_id}>
 				<Avatar source={post.avatar}/>
 				<div className="PostSpace">
-					<div className="row"><FeedPostHeader name={post.name} userID={post.userID} handleFilterUser = {this.props.handleFilterUser} 
-						isTrade={post.isTrade} isPlay={post.isPlay} isChill={post.isChill} time={post.time}/></div>
+					<div className="row"><FeedPostHeader post={this.props.post} 
+						handleFilterUser = {this.props.handleFilterUser} 
+						isAdmin={this.props.isAdmin} isOP={this.props.isOP}
+						handlePostReport={this.handlePostReport}
+						handlePostDelete={this.handlePostDelete}
+						handlePostEdit={this.handlePostEdit}
+						scrollToDropdown={this.scrollToDropdown}/></div>
 					<div className="row"><FeedPostBody content={post.postContent}/></div>
 					<div className="PostFooter row">
 						<Link to={'/comment?id=' + this.state.comment_id}>
 						<span className="glyphicon glyphicon-comment pull-left PostBottomIcon AppGlyphicon" 
 								id={"viewComment_" + this.state.comment_id}>
 								</span>
-						<h6 className="pull-left">{post.numberOfComments}</h6>
+						<span className="AppGlyphicon"><h6>{post.numberOfComments}</h6></span>
 						</Link>
-						{ (this.props.isAdmin || !this.props.isOP) && 
-						<div className="dropdown pull-left" id={"dropdown_" + post.comment_id} onClick={this.scrollToDropdown}>
-							<a href="#" className="dropdown-toggle" data-toggle="dropdown">
-				                <span className="glyphicon glyphicon-option-horizontal 
-				                				pull-left PostBottomIcon AppGlyphicon"></span>
-				            </a>
-				            <ul className="PostDropdown pull-left dropdown-menu">
-				              	{(this.props.isAdmin) && <li><a id="hpe" href="#" onClick={this.handlePostEdit}>Edit post</a></li> }
-			              		{(this.props.isAdmin) && <li><a id="hpd" href="#" onClick={this.handlePostDelete}>Delete post</a></li> }
-			              		{(!this.props.isOP || this.props.isAdmin) && <li><a id="hpr" href="#" onClick={this.handlePostReport}>Report post</a></li> }
-				            </ul>
-				        
-				        </div>
-				  	  }	
 					</div>
 				</div>
 			</li>

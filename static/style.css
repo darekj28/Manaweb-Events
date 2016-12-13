@@ -22,7 +22,7 @@
 }
 .PostDropdown {
   border-bottom : none;
-  margin-top : 17px;
+  margin-top : 8px;
   max-width : 20px;
   width: 10px;
 }
@@ -34,7 +34,7 @@
   max-width: 90%;
 }
 .PostBottomIcon {
-  padding-right : 20px;
+  padding-right : 5px;
   top : -5px;
 }
 .CommentBottomIcon {
