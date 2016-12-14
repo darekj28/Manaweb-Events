@@ -6,7 +6,7 @@ export default class CommentFeedPostHeader extends React.Component {
 	}
 	scrollToDropdown(){
 		var comment = document.getElementById('comment_' + this.props.comment.unique_id);
-		var offset = comment.offsetTop - 250;
+		var offset = comment.offsetTop - 350;
 		$('#CommentFeed').animate({scrollTop : offset}, 500);
 	}
 	render() {

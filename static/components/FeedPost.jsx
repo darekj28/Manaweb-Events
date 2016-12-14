@@ -28,7 +28,7 @@ export default class FeedPost extends React.Component {
 	}
 	scrollToDropdown() {
 		var post = document.getElementById('post_' + this.props.post.comment_id);
-		var offset = post.offsetTop - 350;
+		var offset = post.offsetTop - 250;
 		$('#Feed').animate({scrollTop : offset}, 500);
 	}
 	render() {
@@ -39,11 +39,7 @@ export default class FeedPost extends React.Component {
 				<div className="PostSpace">
 					<div className="row"><FeedPostHeader post={this.props.post} 
 						handleFilterUser = {this.props.handleFilterUser} 
-						isAdmin={this.props.isAdmin} isOP={this.props.isOP}
-						handlePostReport={this.handlePostReport}
-						handlePostDelete={this.handlePostDelete}
-						handlePostEdit={this.handlePostEdit}
-						scrollToDropdown={this.scrollToDropdown}/></div>
+						isAdmin={this.props.isAdmin} isOP={this.props.isOP}/></div>
 					<div className="row"><FeedPostBody content={post.postContent}/></div>
 					<div className="PostFooter row">
 						<div className="CommentContainer">
