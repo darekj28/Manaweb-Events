@@ -62,7 +62,7 @@ export default class SearchNavBar extends React.Component {
 			<nav className="navbar navbar-default" role="navigation">
 				<div className="container">
 					<div className="navbar-header">
-						<button type="button" className="navbar-toggle" data-toggle="collapse" 
+						<button type="button" className="SearchNavBarGlyphicon navbar-toggle" data-toggle="collapse" 
 										data-target="#bs-example-navbar-collapse-1">
 				            <span className="sr-only">Toggle navigation</span>
 				            <span className="icon-bar"></span>

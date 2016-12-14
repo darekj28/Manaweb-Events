@@ -33,7 +33,7 @@ export default class CommentNavBar extends React.Component {
 			   event.preventDefault();
 			}
 	    });
-	    $('#home').focus(function() {
+	    $('.SearchNavBarGlyphicon').focus(function() {
 	    	$(this).blur();
 	    });
 	}
@@ -46,14 +46,14 @@ export default class CommentNavBar extends React.Component {
 			<nav className="navbar navbar-default" role="navigation">
 				<div className="container">
 					<div className="navbar-header">
-						<button type="button" className="navbar-toggle" data-toggle="collapse" 
+						<button type="button" className="SearchNavBarGlyphicon navbar-toggle" data-toggle="collapse" 
 										data-target="#bs-example-navbar-collapse-1">
 				            <span className="sr-only">Toggle navigation</span>
 				            <span className="icon-bar"></span>
 				            <span className="icon-bar"></span>
 				            <span className="icon-bar"></span>
 				          </button>
-				          <Link to="/" className="navbar-brand navbar-brand-logo">
+				          <Link to="/" className="SearchNavBarGlyphicon navbar-brand navbar-brand-logo">
 				                <span className="glyphicon glyphicon-chevron-left"></span>
 				              </Link>
 				        </div>
