@@ -14,7 +14,7 @@ export default class FeedPostHeader extends React.Component {
 		if (this.props.post.isChill) tpc = tpc.concat(' Chill ');
 		return(
 			<div className="FeedPostHeader">
-				<div className="tpc pull-right"><kbd>{tpc}</kbd></div> 
+				<div className="tpc pull-right">{tpc}</div> 
 				<div className="headerpart name" onClick={this.handleFilterUser}><b>{this.props.post.name}</b></div>
 				<div className="headerpart username text-muted" onClick={this.handleFilterUser}>@{this.props.post.userID}</div>
 				<div className="headerpart time text-muted">&#8226; {this.props.post.time}</div>

@@ -65,9 +65,7 @@ export default class FeedPost extends React.Component {
 			              		{(this.props.isAdmin) && <li><a id="hpd" href="#" onClick={this.handlePostDelete}>Delete post</a></li> }
 			              		{(!this.props.isOP || this.props.isAdmin) && <li><a id="hpr" href="#" onClick={this.handlePostReport}>Report post</a></li> }
 				            </ul>
-				        
-				        </div>
-				  	  }	
+				        </div>}	
 					</div>
 				</div>
 			</li>

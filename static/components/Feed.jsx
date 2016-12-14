@@ -40,7 +40,6 @@ export default class Feed extends React.Component {
 				else return true;
 			}
 			function doesPostMatchSelectedUser() {
-				console.log(that.props.userIdToFilterPosts);
 				if (that.state.userIdToFilterPosts != '') {
 					if (post["userID"].toLowerCase().indexOf(that.props.userIdToFilterPosts.toLowerCase()) === -1)
 						return false;

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% include "homeBannerNoLogin.html" %}
 {% block content %}
 
 <script type="text/javascript" src="{{ url_for('static', filename='scripts/settings.js') }}"></script>
@@ -68,7 +69,7 @@
 		<div id = "avatar_container" class = "avatar_container centered-text" style = "width:60px;height:60px;background-size: contain;">  </div>
 		<div class="form-group">
 			<div>
-				<button type = "submit" id="updateSettingsButton"> Update! </button>
+				<button type = "submit" class="btn btn-default" id="updateSettingsButton"> Update! </button>
 			</div>
 		</div>
 	</form>

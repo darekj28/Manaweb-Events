@@ -1,14 +1,48 @@
+@font-face {
+  font-family: 'Aqua';
+  src: url('aqua.ttf');
+}
+@font-face {
+  font-family: 'museo_sans500';
+  src: url('MuseoSans_500-webfont.eot');
+  src: url('MuseoSans_500-webfont.eot?#iefix') format('embedded-opentype'),
+       url('MuseoSans_500-webfont.woff2') format('woff2'),
+       url('MuseoSans_500-webfont.woff') format('woff'),
+       url('MuseoSans_500-webfont.ttf') format('truetype'),
+       url('MuseoSans_500-webfont.svg#museo_sans500') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family : "raleway";
+  src : url('Raleway-Regular.ttf');
+}
+body {
+  font-family : "raleway";
+  background-color : #ffffff;
+  color : #0f0f0f;
+}
+.tpc {
+  background-color : #000000;
+  color : #ffffff;
+  border-radius: 4px;
+  padding-left: 5px;
+}
 .valid {
-    border-width: 1.5px;
-    border-color: #090;
-    border-style: solid;
+  border-width: 1.5px;
+  border-color: #090;
+  border-style: solid;
 }
 .invalid {
-    border-width: 1.5px;
-    border-color: #C33;
-    border-style: solid;
+  border-width: 1.5px;
+  border-color: #C33;
+  border-style: solid;
 }
-
+.avatar_container {
+  width :192px;
+  height:192px;
+  background-size:cover;
+}
 .popover-title { 
   display: none; 
 }
@@ -42,7 +76,7 @@
   border-bottom: 1px solid #dbdbdb;
 }
 .form-control.FeedPostBody {
-  max-width: 90%;
+  max-width: 85%;
 }
 .PostBottomIcon {
   padding-right : 6px;
@@ -59,7 +93,6 @@
   max-width : 20px;
   width: 10px;
 }
-
 .alert {
   margin-top : 10px;
 }
@@ -68,20 +101,25 @@
   overflow-y: auto;
 }
 .FeedPostBody {
-  margin-bottom : 10px;
   max-width : 120vh;
   word-wrap: break-word;
+  position : relative;
 }
 .CommentFeedPostBody {
   max-width : 120vh;
   word-wrap: break-word;
   position: relative;
-  top : -21px;
+  top : -26px;
 }
 #Feed {
   margin-top: 10px;
+  padding-left : 10px;
+  padding-right: 20px;
   max-height: 60vh;
   overflow-y: auto;
+  background-color : #ffffff;
+  border : 1px solid #dfdfdf;
+  border-radius : 4px;
 }
 #actionbuttons {
   margin-right: 10px;
@@ -126,7 +164,6 @@
   color: #ad8ed2;
   cursor : pointer;
 }
-
 .FeedPostHeader .time {
   padding-left : 4px;
   padding-right: 20px;
@@ -138,11 +175,6 @@
   position: relative;
   top : -21px;
 }
-#Feed {
-  padding-left: 0px;
-  padding-right: 10px;
-}
-
 .icon-danger {
   color:#d9534f;
   cursor: pointer;

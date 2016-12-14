@@ -74,8 +74,7 @@ export default class CommentNavBar extends React.Component {
 				                      			id="searchInput" className="form-control" placeholder="Search..." 
 				                      			onChange={this.handleSearch}/>
 				                      <div className = "input-group-addon"></div>
-								  </div>
-								  
+								  </div>		  
 			                 </div> 
 			              </form>
 				        </div>
