@@ -85,6 +85,7 @@ export default class App extends React.Component {
 		}
 	}
 	handleFilterUser(user) {
+		console.log(user);
 		if (user != this.state.userIdToFilterPosts) this.setState({ userIdToFilterPosts : user });
 		else this.setState({ userIdToFilterPosts : ''});
 	}

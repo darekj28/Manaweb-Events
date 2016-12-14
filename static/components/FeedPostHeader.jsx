@@ -5,7 +5,7 @@ export default class FeedPostHeader extends React.Component {
 		this.handleFilterUser = this.handleFilterUser.bind(this);
 	}
 	handleFilterUser() {
-		this.props.handleFilterUser(this.props.userID);
+		this.props.handleFilterUser(this.props.post.userID);
 	}
 	render() {
 		var tpc = "";

@@ -69,14 +69,9 @@ export default class SearchNavBar extends React.Component {
 				            <span className="icon-bar"></span>
 				            <span className="icon-bar"></span>
 				          </button>
-
-
-				          <Link to="/" onClick={this.handleResetFilterUser} className="navbar-brand navbar-brand-logo">
+				          <Link to="/" id="home" onClick={this.handleResetFilterUser} className="navbar-brand navbar-brand-logo">
 				                <span className="glyphicon glyphicon-home"></span>
 				              </Link>
-
-
-
 				        </div>
 				        <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				          <ul className="nav navbar-nav navbar-right">
