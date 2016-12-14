@@ -17,13 +17,13 @@ export default class MakeComment extends React.Component {
 			$(this).blur();
 	        if(!messageVisible){
 	            messageVisible = !messageVisible;
-	            $(this).siblings('#CommentComment').fadeIn(function(){
-	                $(this).children('#CommentTextComment').focus();
+	            $(this).siblings('#CommentPost').fadeIn(function(){
+	                $(this).children('#CommentInput').focus();
 	            });
 	        } else {
 	            messageVisible = !messageVisible;
-	            $(this).siblings('#CommentComment').fadeOut(function(){
-	                $(this).children('#CommentTextComment').blur();
+	            $(this).siblings('#CommentPost').fadeOut(function(){
+	                $(this).children('#CommentInput').blur();
 	            });
 	        } 
 	    });  

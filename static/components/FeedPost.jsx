@@ -28,7 +28,7 @@ export default class FeedPost extends React.Component {
 	}
 	scrollToDropdown() {
 		var post = document.getElementById('post_' + this.props.post.comment_id);
-		var offset = post.offsetTop - 250;
+		var offset = post.offsetTop - 300;
 		$('#Feed').animate({scrollTop : offset}, 500);
 	}
 	render() {

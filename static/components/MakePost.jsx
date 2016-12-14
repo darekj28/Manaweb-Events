@@ -21,12 +21,12 @@ export default class MakePost extends React.Component {
 	        if(!messageVisible){
 	            messageVisible = !messageVisible;
 	            $(this).siblings('#MessagePost').fadeIn(function(){
-	                $(this).children('#PostTextPost').focus();
+	                $(this).children('#PostInput').focus();
 	            });
 	        } else {
 	            messageVisible = !messageVisible;
 	            $(this).siblings('#MessagePost').fadeOut(function(){
-	                $(this).children('#PostTextPost').blur();
+	                $(this).children('#PostInput').blur();
 	            });
 	        } 
 	    });
