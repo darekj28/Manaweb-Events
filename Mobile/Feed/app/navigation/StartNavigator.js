@@ -9,6 +9,7 @@ import RegisterId from '../screens/register/RegisterId'
 import RegisterEmail from '../screens/register/RegisterEmail'
 import RegisterPassword from '../screens/register/RegisterPassword'
 import LoginScreen from '../screens/LoginScreen'
+import FeedScreen from '../screens/FeedScreen'
 
 
 
@@ -75,6 +76,14 @@ class StartNavigator extends Component {
           <RegisterPassword first_name = {route.first_name} last_name = {route.last_name} userID = {route.userID} email = {route.email}
              {...globalNavigatorProps} 
              />
+        )
+		
+	case "Feed":
+      return (
+          <FeedScreen
+              {...globalNavigatorProps} 
+             />
+
         )
 
 

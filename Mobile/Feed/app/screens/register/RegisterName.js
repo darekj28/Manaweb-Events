@@ -38,22 +38,22 @@ export default class RegisterName extends Component {
   render() {
     return (
       <View style = {styles.container}>
-              
+
               <TouchableOpacity onPress = {() => this.props.navigator.pop()}>
                 <Icon name = "chevron-left" size = {30} />
               </TouchableOpacity>
 
-              <Text style = {styles.welcome}> 
+              <Text style = {styles.welcome}>
                 Welcome! Please start with your name
               </Text>
 
-               <TextInput 
-              
+               <TextInput
+
               onChangeText = {(val) => this.setState({first_name : val})}
               style = {styles.input} placeholder = "first_name"
               />
-        
-               <TextInput 
+
+               <TextInput
               onChangeText = {(val) => this.setState({last_name : val})}
               style = {styles.input} placeholder = "last_name"
               />
@@ -89,7 +89,6 @@ const styles = StyleSheet.create({
     paddingTop: 40
   },
   button :{
-    color : "white",
     height: 35,
     marginTop: 10,
     padding : 4,

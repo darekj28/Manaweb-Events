@@ -45,11 +45,11 @@ class RegisterEmail extends Component {
                 <Icon name = "chevron-left" size = {30} />
               </TouchableOpacity>
 
-               <TextInput 
+               <TextInput
               onChangeText = {(val) => this.setState({email : val})}
               style = {styles.input} placeholder = "email"
               />
-        
+
               <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToRegisterPassword(this.state.email)}>
                 <Text style = {styles.buttonText}>
                   Next!
@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
     paddingTop: 40
   },
   button :{
-    color : "white",
     height: 35,
     marginTop: 10,
     padding : 4,

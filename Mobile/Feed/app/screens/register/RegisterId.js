@@ -40,17 +40,17 @@ class RegisterId extends Component {
   render() {
     return (
       <View style = {styles.container}>
-              
+
               <TouchableOpacity onPress = {() => this.props.navigator.pop()}>
                 <Icon name = "chevron-left" size = {20} />
               </TouchableOpacity>
 
-               <TextInput 
+               <TextInput
               onChangeText = {(val) => this.setState({userID : val})}
               style = {styles.input} placeholder = "userID"
               />
-        
-  
+
+
 
               <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToRegisterEmail(this.state.userID)}>
                 <Text style = {styles.buttonText}>
@@ -83,7 +83,6 @@ const styles = StyleSheet.create({
     paddingTop: 40
   },
   button :{
-    color : "white",
     height: 35,
     marginTop: 10,
     padding : 4,

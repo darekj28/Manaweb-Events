@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput, Button} from 'react-native';
 
 import ViewContainer from '../components/ViewContainer';
 import HomeStatusBar from '../components/HomeStatusBar';
@@ -37,6 +37,12 @@ class RegisterId extends Component {
     })
   }
 
+  _navigateToFeed() {
+    this.props.navigator.push({
+    href: "Feed",
+    })
+  }
+
   render() {
     return (
       <View style = {styles.container}>
@@ -45,11 +51,17 @@ class RegisterId extends Component {
                   Login!
                 </Text>
               </TouchableHighlight>
-   
+
 
               <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToRegister()}>
                 <Text style = {styles.buttonText}>
                   Register!
+                </Text>
+              </TouchableHighlight>
+
+			        <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToFeed()}>
+                <Text style = {styles.buttonText}>
+                  Testing button. Go to feed page
                 </Text>
               </TouchableHighlight>
 
@@ -79,7 +91,6 @@ const styles = StyleSheet.create({
     paddingTop: 40
   },
   button :{
-    color : "white",
     height: 35,
     marginTop: 10,
     padding : 4,

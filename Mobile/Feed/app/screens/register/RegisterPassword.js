@@ -46,12 +46,12 @@ class RegisterPassword extends Component {
                 <Icon name = "chevron-left" size = {30} />
               </TouchableOpacity>
 
-               <TextInput 
+               <TextInput
               onChangeText = {(val) => this.setState({password : val})}
               style = {styles.input} placeholder = "password"
               secureTextEntry = {true}
               />
-        
+
               <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToRegisterSubmit(this.state.password)}>
                 <Text style = {styles.buttonText}>
                   Next!
@@ -83,7 +83,6 @@ const styles = StyleSheet.create({
     paddingTop: 40
   },
   button :{
-    color : "white",
     height: 35,
     marginTop: 10,
     padding : 4,
