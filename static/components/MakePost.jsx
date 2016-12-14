@@ -52,7 +52,7 @@ export default class MakePost extends React.Component {
 					<span className="glyphicon glyphicon-pencil AppGlyphicon"></span>
 				</a>
 				<div id="MessagePost" className="Message pull-right input-group input-group-unstyled">
-					<input id="PostTextPost" type="text" className="PostText form-control" 
+					<input id="PostInput" type="text" className="PostText form-control" 
 							onKeyPress={this.handleEnterPress} value={this.props.postText} 
 							placeholder={this.props.placeholder} ref={(input) => this.postText = input} 
 							onSubmit={this.handlePostSubmit} onChange={this.handlePostChange}></input>

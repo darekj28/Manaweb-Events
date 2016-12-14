@@ -23,7 +23,7 @@ body {
   color : #0f0f0f;
 }
 .tpc {
-  background-color : #000000;
+  background-color : #5b1da5;
   color : #ffffff;
   border-radius: 4px;
   padding-left: 5px;
@@ -46,7 +46,6 @@ body {
 .popover-title { 
   display: none; 
 }
-
 .warning {
   padding-right : 900px;
 }
@@ -99,6 +98,12 @@ body {
 #CommentFeed {
   max-height: 55vh;
   overflow-y: auto;
+  margin-top: 10px;
+  padding-left : 10px;
+  padding-right: 20px;
+  background-color : #ffffff;
+  border : 1px solid #dfdfdf;
+  border-radius : 4px;
 }
 .FeedPostBody {
   max-width : 120vh;
@@ -201,6 +206,7 @@ body {
 }
 .app.row {
   padding-left:10px;
+  padding-right:10px;
 }
 #EventName {
   display : inline-block;
@@ -216,6 +222,15 @@ body {
   padding-left: 10px;
   padding-right: 10px;
 }
+#PostInput {
+  border : 1px solid #dfdfdf;
+  border-radius : 4px;
+}
+#CommentInput {
+  border : 1px solid #dfdfdf;
+  border-radius : 4px;
+  margin-bottom : 10px;
+}
 .input-group.input-group-unstyled input.form-control {
     -webkit-border-radius: 4px;
        -moz-border-radius: 4px;
@@ -230,7 +245,7 @@ body {
     margin-top : 2px;
 }
 .navbar-default {
-  background-color: #000000;
+  background-color: #0f0f0f;
   border-color: #5b1da5;
 }
 .navbar-default .navbar-brand {

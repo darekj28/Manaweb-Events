@@ -168,13 +168,14 @@ export default class App extends React.Component {
 							actions={actions}/>
 				</div>
 				{alert}
-				
+				<div className="app row">
 				<Feed currentUser={this.state.currentUser} 
 						searchText={this.state.search} 
 						filters={this.state.filters} posts={this.state.feed} actions={actions}
 						refreshFeed={this.refreshFeed}
 						handleFilterUser={this.handleFilterUser}
 						userIdToFilterPosts={this.state.userIdToFilterPosts} /> 
+				</div>
 			</div>
 		</div>);
 	}
