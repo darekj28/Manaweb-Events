@@ -1,4 +1,5 @@
 var React = require('react');
+// var $ = require('jquery');
 export default class EditPostModal extends React.Component {
 	constructor(props) {
 		super(props);
@@ -42,7 +43,7 @@ export default class EditPostModal extends React.Component {
 									onChange={this.handlePostEditChange}></textarea>
 						</div>
 						<div className="modal-footer">
-							<button type="button" className="btn btn-default" data-dismiss="modal" 
+							<button id="epm_submit" type="button" className="btn btn-default" data-dismiss="modal" 
 									onClick={this.handlePostEditSubmit}>Submit</button>
 						</div>
 					</div>

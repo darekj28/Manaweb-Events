@@ -61,7 +61,6 @@ $(document).ready(function() {
 			type: 'GET',
 			url: '/getPreviousSettings',
 			success: function(user) {
-				console.log(user.avatar_name);
 				$('#first_name').val(user.first_name);
 				$('#last_name').val(user.last_name);
 				$('#password').val(user.password);

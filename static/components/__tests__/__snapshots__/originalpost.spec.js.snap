@@ -1,0 +1,11 @@
+exports[`OriginalPost renders correctly 1`] = `
+<div
+  className="pull-left"
+  id="OriginalPost">
+  <h1>
+     
+    a
+     
+  </h1>
+</div>
+`;

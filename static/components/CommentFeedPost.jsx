@@ -1,7 +1,8 @@
 var React = require('react');
-import CommentFeedPostHeader from "CommentFeedPostHeader.jsx";
-import CommentFeedPostBody from "CommentFeedPostBody.jsx";
-import Avatar from "Avatar.jsx";
+import CommentFeedPostHeader from "./CommentFeedPostHeader.jsx";
+import CommentFeedPostBody from "./CommentFeedPostBody.jsx";
+import Avatar from "./Avatar.jsx";
+// var $ = require('jquery');
 
 export default class CommentFeedPost extends React.Component {
 	constructor(props) {
@@ -25,11 +26,12 @@ export default class CommentFeedPost extends React.Component {
 	}
 	render() {
 		var comment = this.props.comment;
+
 		return (
 			<li className="CommentFeedPost">
 				<Avatar source={comment.avatar}/>
 				<div className="PostSpace">
-					<div className="row"><CommentFeedPostHeader name={comment.name} userID={comment.userID} time={comment.time}
+					<div className="row"><CommentFeedPostHeader comment = {this.props.comment}
 												isOP={this.props.isOP} isAdmin={this.props.isAdmin} handleCommentEdit={this.handleCommentEdit}
 												handleCommentDelete={this.handleCommentDelete} handleCommentReport={this.handleCommentReport}
 												isOriginalPost={this.props.isOriginalPost}/></div>

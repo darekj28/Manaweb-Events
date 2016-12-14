@@ -1,7 +1,8 @@
 var React = require('react');
 var Link = require('react-router').Link;
-import Notifications from "Notifications.jsx";
-import AccountDropdown from "AccountDropdown.jsx";
+// var $ = require('jquery');
+import Notifications from "./Notifications.jsx";
+import AccountDropdown from "./AccountDropdown.jsx";
 
 export default class CommentNavBar extends React.Component {
 	constructor(props) {
@@ -64,7 +65,7 @@ export default class CommentNavBar extends React.Component {
 		                        </a>
 		                    </li>
 				          	<Notifications/>
-				          	<AccountDropdown/>
+				          	<AccountDropdown name={this.props.name}/>
 				          </ul>
 				         <form className="navbar-form navbar-right navbar-search-form" role="search">                  
 			                 <div className="form-group">

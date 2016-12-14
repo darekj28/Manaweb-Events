@@ -73,16 +73,16 @@ def createProfile():
 
 		userFileDir = './static/img/' + session['userID']
 		# if directory exists, clear it
-		if os.path.isdir(userFileDir):
-			fileList = os.listdir(userFileDir)
-			for fileName in fileList:
-				os.remove(userFileDir + "/" + fileName)
+		# if os.path.isdir(userFileDir):
+		# 	fileList = os.listdir(userFileDir)
+		# 	for fileName in fileList:
+		# 		os.remove(userFileDir + "/" + fileName)
 
 
 
-		# otherwise create e new one	
-		else: 
-			os.mkdir(userFileDir)
+		# # otherwise create e new one	
+		# else: 
+		# 	os.mkdir(userFileDir)
 		
 		# newUser = graph.find_one("User", "userID", session['userID'])
 

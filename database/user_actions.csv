@@ -1,0 +1,10 @@
+userid,first_name,last_name,password,email,isactive,avatar_url,avatar_name,confirmationpin,playfilter,tradefilter,chillfilter,isadmin,phone_number,birthmonth,birthday,birthyear,gender,confirmed,timestring,timestamp,action
+darekj,Darek,Johnson,pass1,darekj@gmail.com,t,./static/avatars/gideon.png,gideon,confirmationPin,f,f,f,t,555-555-5555,8,28,1994,Male,t,2016-12-12 09:43:22,1481553802.45889,ACCOUNT CREATED
+elic,Eli,Chang,pass1,elic@gmail.com,t,./static/avatars/gideon.png,gideon,confirmationPin,f,f,f,f,555-555-5555,3,13,1994,Male,t,2016-12-12 09:43:22,1481553802.53,ACCOUNT CREATED
+briank,Brian,Kibler,pass1,briank@gmail.com,t,./static/avatars/gideon.png,gideon,confirmationPin,f,f,f,f,555-555-5555,2,11,1984,Male,t,2016-12-12 09:43:22,1481553802.6099,ACCOUNT CREATED
+luisv,Luis,Scott-Vargas,pass1,luisv@gmail.com,t,./static/avatars/gideon.png,gideon,confirmationPin,f,f,f,f,555-555-5555,10,18,1882,Male,t,2016-12-12 09:43:22,1481553802.69034,ACCOUNT CREATED
+paulc,Paul,Cheon,pass1,paulc@gmail.com,t,./static/avatars/gideon.png,gideon,confirmationPin,f,f,f,f,555-555-5555,9,29,1986,Male,t,2016-12-12 09:43:22,1481553802.7736,ACCOUNT CREATED
+mashis,Mashi,Scanlan,pass1,mashis@gmail.com,t,./static/avatars/gideon.png,gideon,confirmationPin,f,f,f,f,555-555-5555,5,8,1984,Male,t,2016-12-12 09:43:22,1481553802.8498,ACCOUNT CREATED
+yuuyaw,Yuuya,Watanabe,pass1,yuuyaw@gmail.com,t,./static/avatars/gideon.png,gideon,confirmationPin,f,f,f,f,555-555-5555,11,4,1990,Male,t,2016-12-12 09:43:22,1481553802.92852,ACCOUNT CREATED
+shoutay,Shouta,Yasooka,pass1,shoutay@gmail.com,t,./static/avatars/gideon.png,gideon,confirmationPin,f,f,f,f,555-555-5555,12, 10,1990,Male,t,2016-12-12 09:43:23,1481553803.02015,ACCOUNT CREATED
+gabbys,Gabby,Spartz,pass1,gabbys@gmail.com,t,./static/avatars/gideon.png,gideon,confirmationPin,f,f,f,f,555-555-5555,2,28,1990,Female,t,2016-12-12 09:43:23,1481553803.10593,ACCOUNT CREATED

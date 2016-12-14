@@ -4,6 +4,7 @@ import SearchNavBar from 'SearchNavBar.jsx';
 import EventName from 'EventName.jsx';
 import MakePost from 'MakePost.jsx';
 import Feed from 'Feed.jsx';
+// var $ = require('jquery');
 
 function toggle(collection, item) {
 	var idx = collection.indexOf(item);
@@ -24,13 +25,15 @@ export default class App extends React.Component {
 			filters : ['Trade', 'Play', 'Chill'],
 			actions : ['Trade'],
 			search : '',
+			userIdToFilterPosts : '',
 			post : '',
 			feed : [],
-			currentUser : '',
+			currentUser : {},
 			alert : false,
 			unique_id : ''
 		};
 		this.handleFilterClick = this.handleFilterClick.bind(this);
+		this.handleFilterUser = this.handleFilterUser.bind(this);
 		this.handleSearch = this.handleSearch.bind(this);
 		this.handlePostChange = this.handlePostChange.bind(this);
 		this.handlePostSubmit = this.handlePostSubmit.bind(this);
@@ -62,7 +65,8 @@ export default class App extends React.Component {
 					isPlay 		: obj['isPlay'],
 					isChill 	: obj['isChill'],
 					comment_id  : obj['comment_id'],
-					unique_id   : obj['unique_id']
+					unique_id   : obj['unique_id'],
+					numberOfComments : obj['numComments']
 				});
 			});
 			this.setState({feed : feed});
@@ -80,6 +84,10 @@ export default class App extends React.Component {
 			else this.setState({alert : false});
 		}
 	}
+	handleFilterUser(user) {
+		if (user != this.state.userIdToFilterPosts) this.setState({ userIdToFilterPosts : user });
+		else this.setState({ userIdToFilterPosts : ''});
+	}
 	handleSearch(searchText) { this.setState({search : searchText});}
 	handlePostChange(postText) {this.setState({post : postText});}
 	handlePostSubmit(postText) {
@@ -96,13 +104,16 @@ export default class App extends React.Component {
 						isTrade : contains(this.state.actions, "Trade"),
 						isPlay  : contains(this.state.actions, "Play"), 
 						isChill : contains(this.state.actions, "Chill"),
-						comment_id : this.state.unique_id
+						comment_id : this.state.unique_id,
+						numberOfComments : 0,
 					});
 			var obj = {postContent : postText, 
 						isTrade : contains(this.state.actions, "Trade"),
 						isPlay  : contains(this.state.actions, "Play"), 
 						isChill : contains(this.state.actions, "Chill"),
-						comment_id : this.state.unique_id};
+						comment_id : this.state.unique_id,
+						numberOfComments : 0
+					};
 			$.ajax({
 				type : 'POST',
 				url  : '/makePost',
@@ -138,7 +149,12 @@ export default class App extends React.Component {
 			<SearchNavBar searchText={this.state.search} 
 							onSearch={this.handleSearch} 
 							onClick={this.handleFilterClick} 
-							actions={actions}/>
+							actions={actions}
+							name={this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name']}
+							handleFilterClick={this.handleFilterClick}
+							handleFilterUser={this.handleFilterUser}
+							userIdToFilterPosts={this.state.userIdToFilterPosts}
+							filters={this.state.filters}/>
 			<div className="container">
 				<div className="app row">
 					<EventName name="Name of Event"/>
@@ -151,10 +167,13 @@ export default class App extends React.Component {
 							actions={actions}/>
 				</div>
 				{alert}
+				
 				<Feed currentUser={this.state.currentUser} 
 						searchText={this.state.search} 
 						filters={this.state.filters} posts={this.state.feed} actions={actions}
-						refreshFeed={this.refreshFeed} /> 
+						refreshFeed={this.refreshFeed}
+						handleFilterUser={this.handleFilterUser}
+						userIdToFilterPosts={this.state.userIdToFilterPosts} /> 
 			</div>
 		</div>);
 	}

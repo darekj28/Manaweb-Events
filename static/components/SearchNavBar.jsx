@@ -1,13 +1,21 @@
 var React = require('react');
 var Link = require('react-router').Link;
-import Notifications from "Notifications.jsx";
-import AccountDropdown from "AccountDropdown.jsx";
-import FilterButton from "FilterButton.jsx";
+// var $ = require('jquery');
+import Notifications from "./Notifications.jsx";
+import AccountDropdown from "./AccountDropdown.jsx";
+import FilterButton from "./FilterButton.jsx";
+
+function contains(collection, item) {
+	if(collection.indexOf(item) !== -1) return true;
+	else return false;
+}
 
 export default class SearchNavBar extends React.Component {
 	constructor(props) {
 		super(props);
 		this.handleSearch = this.handleSearch.bind(this);
+		this.handleResetFilterUser = this.handleResetFilterUser.bind(this);
+		this.handleResetFilterButtons = this.handleResetFilterButtons.bind(this);
 	}
 	componentDidMount() {
 		var searchVisible = 0;
@@ -37,6 +45,14 @@ export default class SearchNavBar extends React.Component {
 	    	$(this).blur();
 	    });
 	}
+	handleResetFilterUser() {
+		this.props.handleFilterUser(this.props.userIdToFilterPosts);
+	}
+	handleResetFilterButtons() {
+		this.props.actions.map(function(action) {
+			if (contains(filters, action)) this.props.handleFilterClick(action, true);
+		});
+	}
 	handleSearch() {
 		this.props.onSearch(this.searchText.value);
 	}
@@ -53,9 +69,14 @@ export default class SearchNavBar extends React.Component {
 				            <span className="icon-bar"></span>
 				            <span className="icon-bar"></span>
 				          </button>
-				          <Link to="/" className="navbar-brand navbar-brand-logo">
+
+
+				          <Link to="/" onClick={this.handleResetFilterUser} className="navbar-brand navbar-brand-logo">
 				                <span className="glyphicon glyphicon-home"></span>
 				              </Link>
+
+
+
 				        </div>
 				        <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				          <ul className="nav navbar-nav navbar-right">
@@ -65,7 +86,7 @@ export default class SearchNavBar extends React.Component {
 		                        </a>
 		                    </li>
 				          	<Notifications/>
-				          	<AccountDropdown/>
+				          	<AccountDropdown name={this.props.name}/>
 				          </ul>
 				         <form className="navbar-form navbar-right navbar-search-form" role="search">                  
 			                 <div className="form-group">
@@ -74,8 +95,8 @@ export default class SearchNavBar extends React.Component {
 				                      			id="searchInput" className="form-control" placeholder="Search..." 
 				                      			onChange={this.handleSearch}/>
 				                      <div className = "input-group-addon"></div>
-								  	  {this.props.actions.map(function(action) {
-											var button = !that.props.isComment ? <FilterButton onClick={that.props.onClick} active={true} isSearch={true} name={action}/> : '';
+								  	  {this.props.actions.map(function(action, i) {
+											var button = !that.props.isComment ? <FilterButton key={i} onClick={that.props.onClick} active={true} isSearch={true} name={action}/> : '';
 											return button;
 										})}
 								  </div>

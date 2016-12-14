@@ -29,11 +29,12 @@ export default class CommentFeed extends React.Component {
 					return false;
 				else return true;
 			}
+
 			if (!doesCommentMatchSearch())
 				return;
 			else 
-				rows.push(<CommentFeedPost comment={comment} isOP={that.props.currentUser['userID']==comment.userID}
-						isAdmin={that.props.currentUser['userID']=="admin"} isOriginalPost={false} 
+				rows.push(<CommentFeedPost key={i} comment={comment} isOP={that.props.currentUser['userID']==comment.userID}
+						isAdmin={that.props.currentUser['isAdmin']} isOriginalPost={false} 
 						refreshFeed={that.props.refreshFeed}
 						refreshCommentDisplayedInModal={that.refreshCommentDisplayedInModal}/>);
 		});

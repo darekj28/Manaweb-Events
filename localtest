@@ -1,0 +1,4 @@
+npm -g webpack
+webpack -d
+npm test
+python3 local_test.py

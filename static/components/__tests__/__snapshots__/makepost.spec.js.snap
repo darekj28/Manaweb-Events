@@ -1,0 +1,48 @@
+exports[`MakePost renders correctly 1`] = `
+<div>
+  <a
+    className="StartButton"
+    id="StartButtonPost">
+    <span
+      className="glyphicon glyphicon-pencil AppGlyphicon" />
+  </a>
+  <div
+    className="Message pull-right input-group input-group-unstyled"
+    id="MessagePost">
+    <input
+      className="PostText form-control"
+      id="PostTextPost"
+      onChange={[Function]}
+      onKeyPress={[Function]}
+      onSubmit={[Function]}
+      placeholder={undefined}
+      type="text"
+      value="a" />
+    <a
+      className="input-group-addon">
+      <span
+        className="glyphicon glyphicon-transfer icon-success filterButton"
+        onClick={[Function]} />
+    </a>
+    <a
+      className="input-group-addon">
+      <span
+        className="glyphicon glyphicon-play icon-danger filterButton"
+        onClick={[Function]} />
+    </a>
+    <a
+      className="input-group-addon">
+      <span
+        className="glyphicon glyphicon-time icon-danger filterButton"
+        onClick={[Function]} />
+    </a>
+    <a
+      className="SubmitButton input-group-addon"
+      id="SubmitButtonPost"
+      onClick={[Function]}>
+      <span
+        className="glyphicon glyphicon-send AppGlyphicon" />
+    </a>
+  </div>
+</div>
+`;

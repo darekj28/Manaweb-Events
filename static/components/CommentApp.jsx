@@ -3,6 +3,7 @@ import CommentNavBar from "CommentNavBar.jsx";
 import CommentFeedPost from "CommentFeedPost.jsx";
 import CommentFeed from "CommentFeed.jsx";
 import MakeComment from "MakeComment.jsx";
+// var $ = require('jquery');
 
 function getParameterByName(name, url) {
   	if (!url) {
@@ -57,7 +58,8 @@ export default class CommentApp extends React.Component {
 						avatar 		: data.this_post['avatar_url'],
 						name 		: data.this_post['first_name'] + ' ' + data.this_post['last_name'],
 						userID 		: data.this_post['poster_id'],
-						time  		: data.this_post['time']
+						time  		: data.this_post['time'],
+						timeString  : data.this_post['timeString']
 					}
 				this.setState({original_post : this_post});
 			}.bind(this));
@@ -73,7 +75,9 @@ export default class CommentApp extends React.Component {
 					name 		: obj['first_name'] + ' ' + obj['last_name'],
 					userID 		: obj['poster_id'],
 					time  		: obj['time'],
-					unique_id	: obj['unique_id']
+					comment_id  : obj['comment_id'],
+					unique_id	: obj['unique_id'],
+					timeString  : obj['timeString']
 				});
 			});
 			this.setState({feed : feed});
@@ -88,6 +92,7 @@ export default class CommentApp extends React.Component {
 					name    : this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
 					userID  : this.state.currentUser['userID'], 
 					time	: "just now", 
+					comment_id : this.state.comment_id,
 					unique_id : this.state.unique_id
 				});
 
@@ -121,7 +126,8 @@ export default class CommentApp extends React.Component {
 	}
 	render() {
 		return (<div id="CommentApp">
-			<CommentNavBar searchText={this.state.search} onSearch={this.handleSearch} />
+			<CommentNavBar searchText={this.state.search} onSearch={this.handleSearch} 
+						name={this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name']}/>
 			<div className="container">
 				<CommentFeedPost comment={this.state.original_post} isOriginalPost={true}/>
 				<CommentFeed currentUser={this.state.currentUser} searchText={this.state.search} filters={this.state.filters} 

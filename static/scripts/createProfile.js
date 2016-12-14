@@ -9,7 +9,7 @@ $(document).ready(function() {
 						"#gender",
 						"#password",
 						"#password_confirm",
-						"avatar"];
+						"#avatar"];
 	var months=[{month : "January",  index: 1,  days : 31},
 				{month : "February", index: 2,  days : 29},
 				{month : "March", 	 index: 3,  days : 31},
@@ -68,6 +68,7 @@ $(document).ready(function() {
 		var disabled = false;
 		for (var i = 0; i < requiredFields.length; i++) {
 			if (!$(requiredFields[i]).hasClass("valid")) {
+				console.log(requiredFields[i]);
 				disabled = true;
 			}
 		}
@@ -287,11 +288,6 @@ $(document).ready(function() {
 		var month = $('#birthMonth').val();
 		var day = $('#birthDay').val();
 
-		// console.log(month)
-		// console.log(parseInt(month))
-		// console.log(months[2].index)
-		// console.log(day)
-
 		var max_days = 31;
 		if (parseInt(month) >= 1 && parseInt(month) <= 12) {
 			for (var i = 0; i < months.length; i++) {
@@ -335,8 +331,6 @@ $(document).ready(function() {
 		
 		if (day != '') {
 			if (parseInt(day) >= 1 && parseInt(day) <= max_days) {
-			
-
 				validate('#birthDay');
 				$('#day_warning').empty();
 			}
@@ -408,6 +402,7 @@ $(document).ready(function() {
 		var newBackground = $('#avatar').val();
 		var container = document.getElementById('avatar_container');
 		container.style.backgroundImage = 'url(' + newBackground  + ')';
+		validate('#avatar');
 		enableSubmit();
 	});
 

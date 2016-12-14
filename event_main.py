@@ -33,8 +33,10 @@ import sqlite3
 
 import sys
 import re
-import posts
+
 import users
+import posts
+
 
 from routes.createProfile import create_profile
 from routes.settings import original_settings
@@ -158,7 +160,7 @@ def index():
 		# this is currently hard coded
 		feed_name = "BALT"
 
-		posts.createThread(thread_name = feed_name)
+		posts.createThread(feed_name = feed_name)
 		postList = posts.getPosts(feed_name, tradeFilter = thisUser['tradeFilter'], playFilter = thisUser['playFilter'] , chillFilter = thisUser['chillFilter'])
 
 		commentDict = {}
@@ -453,16 +455,13 @@ def reset():
 		# if the password is correct then clear the graph
 		if password == "resetserver":
 			## clear the database
-			# authenticate("localhost:7474", "neo4j", "powerplay")
-			# graph = Graph()
-			# graph.delete_all()
-			users.resetDatabase()
+
 			## clear all the photos 
-			fileDir = './static/img'
-			fileList = os.listdir(fileDir)
-			for fileName in fileList:
-				if os.path.isdir(fileDir + '/' + fileName):
-					shutil.rmtree(fileDir + '/' + fileName)
+			# fileDir = './static/img'
+			# fileList = os.listdir(fileDir)
+			# for fileName in fileList:
+			# 	if os.path.isdir(fileDir + '/' + fileName):
+			# 		shutil.rmtree(fileDir + '/' + fileName)
 			
 			posts.resetDatabase()
 			users.resetDatabase()
@@ -484,6 +483,7 @@ def reset():
 def getPosts():
 	feed_name = "BALT"
 	post_list = posts.getPosts(feed_name)
+	posts.sortAscending(post_list)
 	return jsonify({ 'post_list' : post_list })	
 
 @app.route('/getPostById', methods = ['POST'])
@@ -499,6 +499,7 @@ def getComments():
 	feed_name = "BALT"
 	comment_id = request.form['comment_id']
 	comment_list = posts.getComments(feed_name, comment_id)
+	posts.sortAscending(comment_list)
 	return jsonify({ 'comment_list' : comment_list })	
 
 @app.route('/getInfoFromUserId', methods=['POST'])
