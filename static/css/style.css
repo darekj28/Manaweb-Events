@@ -54,6 +54,9 @@ body {
   list-style-type: none;
   border-bottom: 1px solid #dbdbdb;
 }
+.CommentFeedPostOriginal {
+  list-style-type:none;
+}
 .numberOfComments {
   text-decoration: none;
   color:#ad8ed2;
