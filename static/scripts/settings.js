@@ -70,6 +70,9 @@ $(document).ready(function() {
 				$('select[name=birthMonth]').val(user.birthMonth);
 				$('select[name=avatar]').val(user.avatar_name);
 				$('#phone_number').val(user.phone_number);
+				var newBackground = $('#avatar').val();
+				var container = document.getElementById('avatar_container');
+				container.style.backgroundImage = 'url(' + newBackground  + ')';
 			}
 		});
 	};
@@ -315,6 +318,9 @@ $(document).ready(function() {
 
 	$('#avatar').on('change', function(event) {
 		event.preventDefault();
+		var newBackground = $('#avatar').val();
+		var container = document.getElementById('avatar_container');
+		container.style.backgroundImage = 'url(' + newBackground  + ')';
 		enableSubmit();
 	})
 

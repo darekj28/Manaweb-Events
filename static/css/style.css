@@ -37,9 +37,12 @@ body {
   border-style: solid;
 }
 .avatar_container {
-  width :192px;
-  height:192px;
+  width :150px;
+  height:150px;
   background-size:cover;
+  border : 2px solid #000000;
+  border-radius : 10px;
+  margin-bottom : 15px;
 }
 .popover-title { 
   display: none; 
