@@ -83,12 +83,16 @@ export default class App extends React.Component {
 			if (this.state.actions.length == 0) this.setState({alert : true});
 			else this.setState({alert : false});
 		}
+		$('#Feed').animate({scrollTop: 0}, 300);
 	}
 	handleFilterUser(user) {
 		if (user != this.state.userIdToFilterPosts) this.setState({ userIdToFilterPosts : user });
 		else this.setState({ userIdToFilterPosts : ''});
 	}
-	handleSearch(searchText) { this.setState({search : searchText});}
+	handleSearch(searchText) { 
+		$('#Feed').animate({scrollTop: 0}, 300);
+		this.setState({search : searchText});
+	}
 	handlePostChange(postText) {this.setState({post : postText});}
 	handlePostSubmit(postText) {
 		var feed = this.state.feed;

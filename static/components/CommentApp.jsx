@@ -83,7 +83,10 @@ export default class CommentApp extends React.Component {
 			this.setState({feed : feed});
 		}.bind(this));
 	}
-	handleSearch(searchText) { this.setState({search : searchText}); }
+	handleSearch(searchText) { 
+		$('#CommentFeed').animate({scrollTop: $('#CommentFeed').prop("scrollHeight")}, 300);
+		this.setState({search : searchText}); 
+	}
 	handleCommentChange(commentText) { this.setState({comment : commentText}); }
 	handleCommentSubmit(commentText) {
 		var feed = this.state.feed;
