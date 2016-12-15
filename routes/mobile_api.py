@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, session, render_template
+from flask import Blueprint, jsonify, request, session, render_template, redirect, url_for
 from users import Users
 import posts
 import time
@@ -221,6 +221,6 @@ def verifyEmail():
 def getUserInfo(user_id):
 	user_manager = Users()
 	this_user = user_manager.getInfo(user_id)
-	user_manager.closeConnnection()
+	user_manager.closeConnection()
 	return this_user
 

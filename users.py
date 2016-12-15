@@ -27,6 +27,7 @@ class Users:
 		self.properties = ['userID', 'first_name', 'password', 'email', 'isActive', 'avatar_url', 'avatar_name', 'confirmationPin', 'tradeFilter', 'playFilter', 'chillFilter',
 					'isAdmin', 'phone_number', 'birthMonth', 'birthDay', 'birthYear', 'gender', 'confirmed']
 
+		# add test_prexi = "test_" to each for testing 					
 		self.USER_TABLE = "user_info"
 		self.USER_ACTION_TABLE = "user_actions" 
 		# this is for when we load to heroku

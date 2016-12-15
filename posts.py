@@ -120,7 +120,9 @@ def createNotificationTable():
 # defaults to unseens
 # stop from doing something if receiver_id = sender_id
 def createNotification(feed_name, comment_id, receiver_id, sender_id, action):
+
 	if receiver_id != sender_id:	
+		createNotificationTable()
 		timeStamp = time.time()
 		timeString = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 		notification_id = hash_notification_id(timeString)
@@ -436,7 +438,7 @@ def makeComment(feed_name, comment_id, body, poster_id, unique_id = None):
 	# add notificaiton
 	# adjust this later
 	participating_users = getParticipatingUsers(feed_name, comment_id)
-	user_manager = User()
+	user_manager = Users()
 	for userID in participating_users:
 		action = user_manager.getInfo(poster_id)['first_name'] + " commented on " + this_post['body']
 		createNotification(feed_name, comment_id, userID, poster_id, action)
@@ -630,11 +632,9 @@ def getParticipatingUsers(feed_name, unique_id):
 	db.execute(db.mogrify(search_code))
 	user_query = db.fetchall()
 	for user_id in user_query:
-		if user_id[0] not in users:
+		if user_id[0] not in user_list:
 			user_list.append(user_id[0])
-	for user in user_list:
-		print(user)
-	print("###########################################################")
+
 	return user_list
 
 
