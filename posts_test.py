@@ -27,6 +27,7 @@ EVENT_TABLE = "TEST_EVENT"
 COMMENT_TABLE = "c_" + EVENT_TABLE
 NOTIFICATION_TABLE = "test_notification_table"
 NOTIFICAITON_ID_TABLE = "test_n_id"
+USER_NOTIFICATION_PREFIX = "test_n_"
 
 
 # for when we upload to heroku
@@ -35,11 +36,13 @@ urllib.parse.uses_netloc.append("postgres")
 os.environ["DATABASE_URL"] = "postgres://spkgochzoicojm:y0MABz523D1H-zMqeZVvplCuC2@ec2-54-163-252-55.compute-1.amazonaws.com:5432/d15b0teu2kkhek"
 url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
 
-print(url.path[1:])
-print(url.username)
-print(url.password)
-print(url.hostname)
-print(url.port)
+
+# prints db info
+# print(url.path[1:])
+# print(url.username)
+# print(url.password)
+# print(url.hostname)
+# print(url.port)
 
 
 
@@ -63,6 +66,7 @@ def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
 def deleteTable(table_name):	
 	deleteTableCode = "DROP TABLE IF EXISTS " + table_name
 	db.execute(deleteTableCode)
+	post_db.commit()
 
 # resets db
 def resetDatabase():
@@ -74,6 +78,14 @@ def resetDatabase():
 	deleteTable(COMMENT_ID_TABLE)
 	deleteTable(FEED_NAMES)
 
+	user_list = users.getUserList()
+	for userID in user_list:
+
+		notification_table_name = USER_NOTIFICATION_PREFIX + userID
+	
+		deleteTable(notification_table_name)
+
+
 
 
 	initializePosts()
@@ -84,6 +96,7 @@ def initializePosts():
 	createFeedNameTable()
 	createCommentIdTable()
 	createNotificationTable()
+
 
 	
 
@@ -113,7 +126,52 @@ def createNotification(feed_name, comment_id, receiver_id, sender_id, action):
 		db.execute(db.mogrify(addNotificationCode, (feed_name, comment_id, receiver_id, sender_id, action, seen, notification_id, timeStamp, timeString)))
 		post_db.commit()
 
-	
+		addToShortList(feed_name, comment_id, receiver_id, sender_id, action, notification_id, timeStamp, timeString)
+
+
+def addToShortList(feed_name, comment_id, receiver_id, sender_id, action, notification_id, timeStamp, timeString):
+	table_name = USER_NOTIFICATION_PREFIX + receiver_id
+	sql = 'CREATE TABLE IF NOT EXISTS ' + table_name + ' (feed_name TEXT, comment_id TEXT, receiver_id TEXT, sender_id TEXT, action TEXT, seen BOOLEAN, notification_id TEXT, timeStamp FLOAT, timeString TEXT)'
+	db.execute(sql)
+	addIndexCode = 'CREATE INDEX IF NOT EXISTS comment_id ON ' + NOTIFICATION_TABLE + ' (comment_id)'
+	db.execute(addIndexCode)
+	addIndexCode = 'CREATE INDEX IF NOT EXISTS receiver_id ON ' + NOTIFICATION_TABLE + ' (receiver_id)'
+	db.execute(addIndexCode)
+
+
+	threshold = 6
+
+	seen = False
+	sql = "INSERT INTO " + table_name + " (feed_name, comment_id, receiver_id, sender_id, action, seen, notification_id, timeStamp, timeString) VALUES (%s, %s, %s,%s,%s,%s, %s, %s, %s)"
+	db.execute(db.mogrify(sql, (feed_name, comment_id, receiver_id, sender_id, action, seen, notification_id, timeStamp, timeString)))
+	post_db.commit()
+
+	# then if we are at more than the threshold, remove the oldest one
+	sql = "SELECT * FROM " + table_name
+	db.execute(sql)
+	query = db.fetchall()
+	notification_list = notificationListToDict(query)
+	if len(notification_list) > threshold:
+		sortAscending(notification_list)
+		removeFromShortList(feed_name, receiver_id, notification_list[0]['notification_id'])
+		
+
+def removeFromShortList(feed_name, receiver_id, notification_id):
+	table_name = USER_NOTIFICATION_PREFIX + receiver_id
+	sql = "DELETE FROM " + table_name + " WHERE notification_id = %s"
+	db.execute(db.mogrify(sql, (notification_id,)))
+	post_db.commit()
+
+
+def getShortListNotifications(feed_name,userID):
+	table_name = USER_NOTIFICATION_PREFIX + userID
+	sql = "SELECT * FROM " + table_name + " WHERE receiver_id = %s AND feed_name = %s"
+	db.execute(db.mogrify(sql, (userID, feed_name)))
+	query = db.fetchall()
+	notification_list = notificationListToDict(query)
+	return notification_list
+
+
 def getNotifications(feed_name, userID):
 	sql = "SELECT * FROM " + NOTIFICAITON_TABLE + " WHERE receiver_id = %s AND feed_name = %s"
 	db.execute(db.mogrify(sql, (userID, feed_name)))
@@ -134,14 +192,14 @@ def notificationListToDict(query):
 		this_note['notification_id'] = note[6]
 		this_note['timeStamp'] = note[7]
 		this_note['timeString'] = note[8]
-		n_list.append(note)
+		n_list.append(this_note)
 
-	return note
+	return n_list
 
 
 
 def seeNotification(feed_name, notification_id):
-	sql = "UPDATE " + NOTIFICATION_TABLE + " SET hasSeen = True WHERE notificaiton_id = %s"
+	sql = "UPDATE " + NOTIFICATION_TABLE + " SET hasSeen = True WHERE notification = %s"
 	db.execute(db.mogrify(sql, (notification_id,)))
 	post_db.commit()
 
@@ -570,12 +628,14 @@ def getParticipatingUsers(feed_name, unique_id):
 	db.execute(db.mogrify(search_code))
 	user_list = db.fetchall()
 	for user_id in user_list:
-		if user_id not in users:
+		if user_id[0] not in users:
 			users.append(user_id[0])
+	for user in users:
+		print(user)
+	print("###########################################################")
 	return users
 
 
-# given 
 
 
 def postListToDict(posts):
@@ -693,27 +753,27 @@ def search(postDict, s = None, poster_id = None, isComment = None):
 		
 # runs mergesort on a list of messages
 def sortAscending(alist):
-   for fillslot in range(len(alist)-1,0,-1):
-       positionOfMax = 0
-       for location in range(1,fillslot+1):
-           if alist[location]['timeStamp'] > alist[positionOfMax]['timeStamp']:
-               positionOfMax = location
+	for fillslot in range(len(alist)-1,0,-1):
+		positionOfMax = 0
+		for location in range(1,fillslot+1):
+			if alist[location]['timeStamp'] > alist[positionOfMax]['timeStamp']:
+				positionOfMax = location
 
-       temp = alist[fillslot]
-       alist[fillslot] = alist[positionOfMax]
-       alist[positionOfMax] = temp
+		temp = alist[fillslot]
+		alist[fillslot] = alist[positionOfMax]
+		alist[positionOfMax] = temp
 
 # runs mergesort on a list of messages
 def sortDescending(alist):
-   for fillslot in range(len(alist)-1,0,-1):
-       positionOfMax = 0
-       for location in range(1,fillslot+1):
-           if alist[location]['timeStamp'] < alist[positionOfMax]['timeStamp']:
-               positionOfMax = location
+	for fillslot in range(len(alist)-1,0,-1):
+		positionOfMax = 0
+		for location in range(1,fillslot+1):
+			if alist[location]['timeStamp'] < alist[positionOfMax]['timeStamp']:
+				positionOfMax = location
 
-       temp = alist[fillslot]
-       alist[fillslot] = alist[positionOfMax]
-       alist[positionOfMax] = temp
+		temp = alist[fillslot]
+		alist[fillslot] = alist[positionOfMax]
+		alist[positionOfMax] = temp
 
 
 def test_posting(test_size):
@@ -744,6 +804,9 @@ def test_posting(test_size):
 	time_0 = time.time()
 	all_posts = getPosts(feed_name)
 	time_1 = time.time()
+
+	sortAscending(all_posts)
+
 	total_time = time_1 - time_0
 	times['get_time'] = total_time
 	print("done with get posts!")
@@ -752,9 +815,9 @@ def test_posting(test_size):
 	count = 0
 	time_0 = time.time()
 	for post in all_posts:
-		randomInt = random.randint(0,9)
+		randomInt = random.randint(0,3)
 		if randomInt < 3:
-			numComments = random.randint(1,5)
+			numComments = random.randint(10,30)
 			for n in range(0, numComments):
 				user_index = random.randint(0,6)
 				print("made comment number : " + str(count))
@@ -843,7 +906,7 @@ def makeTestList(start, size):
 	return test_list
 
 
-initial = 40
+initial = 1
 n = 1
 test_sizes = makeTestList(initial, n)
 all_times = list()
@@ -865,7 +928,7 @@ for key in all_times[0]:
 	print(s)
 
 
-
+# resetDatabase()
 
 db.close()
 post_db.close()

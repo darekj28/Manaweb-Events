@@ -208,6 +208,17 @@ def deleteUser(userID):
 	user_db.commit()
 
 
+# returns a list of all users
+def getUserList():
+	sql = "SELECT userID FROM user_info"
+	udb.execute(sql)
+	query = udb.fetchall()
+	user_list = list()
+	for user in query:
+		user_list.append(user[0])
+	return user_list
+
+
 def queryToDict(query):
 	user_info = {}
 	user_info['userID'] = query[0]

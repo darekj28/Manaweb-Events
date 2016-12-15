@@ -41,6 +41,7 @@ import posts
 from routes.createProfile import create_profile
 from routes.settings import original_settings
 from routes.updateSettings import update_settings
+from routes.mobile_api import mobile_api
 
 # Darek Made .py files
 # import geo
@@ -77,6 +78,7 @@ app.secret_key = "powerplay"
 app.register_blueprint(create_profile)
 app.register_blueprint(original_settings)
 app.register_blueprint(update_settings)
+app.register_blueprint(mobile_api)
 
 
 # geolocation stuff
@@ -235,127 +237,6 @@ def getIdUrl(poster_id):
 	return url
 
 
-@app.route("/setFeedFilter", methods = ['POST'])
-def setFeedFilter():
-	if request.method == 'POST':
-		thisUser = getUserInfo(session['userID'])
-		tradeFilter = True
-		playFilter = True
-		chillFilter = True
-	
-		if request.form.get('tradeFilter') == None:
-			tradeFilter = False
-		if request.form.get('playFilter') == None:
-			playFilter = False
-		if request.form.get('chillFilter') == None:
-			chillFilter = False
-
-		users.updateInfo(session['userID'], 'tradeFilter', tradeFilter)	
-		users.updateInfo(session['userID'], 'playFilter', playFilter)	
-		users.updateInfo(session['userID'], 'chillFilter', chillFilter)	
-		return redirect(url_for("index"))
-
-	else:
-		return "<h2> Invalid request on sendMessage, only post method please </h2>"
-
-@app.route("/makePost", methods = ['POST'])
-def makePost():
-	if request.method == 'POST':
-		postContent = request.json['postContent']
-		isTrade		= request.json['isTrade']
-		isPlay 		= request.json['isPlay']
-		isChill		= request.json['isChill']
-		comment_id  = request.json['comment_id']
-
-
-		posts.postInThread('BALT', body = postContent, poster_id = session['userID'], 
-				isTrade = isTrade, isPlay = isPlay, isChill = isChill, comment_id = comment_id)
-		
-		return redirect(url_for("index"))
-	else:
-		return "<h2> Invalid request on sendPost, only post method please </h2>"
-
-
-@ app.route('/generateUniqueId' , methods = ['POST'])
-def generateUniqueId():
-	timeStamp = time.time() 
-	unique_id = posts.hash_comment_id(str(timeStamp))
-	return jsonify ({ 'unique_id' : unique_id})	
-
-@app.route("/makeComment", methods = ['POST'])
-def makeComment():
-	if request.method == 'POST':
-		feed_name = "BALT"
-
-		comment_id = request.json['comment_id']
-		commentContent = request.json['commentContent']
-		unique_id = request.json['unique_id']
-		
-		posts.makeComment(feed_name, comment_id, commentContent, session['userID'], unique_id = unique_id)
-		
-		return redirect(url_for("index"))
-	else:
-		return "<h2> Invalid request on sendMessage, only post method please </h2>"
-
-
-@app.route('/deletePost', methods = ['POST'])
-def deletePost():
-	# feed_name = request.form.get('feed_name')
-	feed_name = "BALT"
-	unique_id = request.json.get('unique_id')
-	print(unique_id)
-	posts.deletePost(feed_name, unique_id)
-
-	return redirect(url_for('index'))
-
-
-@app.route('/deleteComment', methods = ['POST'])
-def deleteComment():
-	feed_name = "BALT"
-	# feed_name = request.form.get('feed_name')
-	unique_id = request.json.get('unique_id')
-	posts.deleteComment(feed_name, unique_id)
-	return redirect(url_for('index'))
-
-
-
-@app.route('/reportPost', methods = ['POST'])
-def reportPost():
-	# feed_name = request.json['feed_name']
-	feed_name = "BALT"
-	unique_id = request.json['unique_id']
-	reason = request.json["reason"]
-	description = reason
-	reporting_user = session['userID']
-	reported_user = request.json['reported_user']
-
-	
-
-	posts.reportPost(feed_name, unique_id, reason, description, reporting_user, reported_user)
-
-
-	return redirect(url_for('index'))
-	# return redirect(url_for("index"))
-
-@app.route('/reportComment', methods = ['POST'])
-def reportComment():
-	# feed_name = request.json['feed_name']
-	feed_name = "BALT"
-	print(request.json)
-	unique_id = request.json['unique_id']
-	reason = request.json["reason"]
-	description = reason
-	reporting_user = session['userID']
-	reported_user = request.json['reported_user']
-
-
-	
-	posts.reportComment(feed_name, unique_id, reason, description, reporting_user, reported_user)
-
-	return redirect(url_for("index"))
-
-
-
 
 
 @app.route('/logout')
@@ -429,20 +310,13 @@ def confirmation(pin = None):
 		else:
 			if (pin == thisUser['confirmationPin']):
 	
-				posts.updateInfo(session['userID'], 'confirmed', True)
+				users.updateInfo(session['userID'], 'confirmed', True)
 				return redirect(url_for('index'))
 			else:
 				return render_template('confirmation.html')
 
 
-@app.route('/sendConfirmation', methods = ['POST'])
-def sendConfirmation():
-	if (session.get('userID') == None):
-		return redirect(url_for('login'))
-	else:
-		thisUser = getUserInfo(session['userID'])
-		email_confirm.sendConfirmationEmail(thisUser)
-		return render_template('confirmation.html')
+
 
 
 @app.route('/reset', methods = ['GET', 'POST'])
@@ -478,36 +352,6 @@ def reset():
 		
 
 
-# gets the posts for the current feed (defaulted to BALT for now)
-@app.route('/getPosts', methods = ['POST'])
-def getPosts():
-	feed_name = "BALT"
-	post_list = posts.getPosts(feed_name)
-	posts.sortAscending(post_list)
-	return jsonify({ 'post_list' : post_list })	
-
-@app.route('/getPostById', methods = ['POST'])
-def getPostById():
-	feed_name = "BALT"
-	comment_id = request.form['comment_id']
-	this_post = posts.getPostById(feed_name, comment_id)
-
-	return jsonify({'this_post' : this_post})
-
-@app.route('/getComments', methods = ['POST'])
-def getComments():
-	feed_name = "BALT"
-	comment_id = request.form['comment_id']
-	comment_list = posts.getComments(feed_name, comment_id)
-	posts.sortAscending(comment_list)
-	return jsonify({ 'comment_list' : comment_list })	
-
-@app.route('/getInfoFromUserId', methods=['POST'])
-def getInfoFromUserId():
-	userID = request.json['userId']
-	return jsonify({'first_name' : getFirstName(userID),
-					'last_name'  : getLastName(userID),
-					'avatar_url' : getAvatarUrl(userID)})
 
 
 @app.route('/editPost', methods = ['POST'])
@@ -519,23 +363,6 @@ def editPost():
 	posts.editPost(feed_name, unique_id, field_name, field_data)
 	return redirect(url_for('index'))
 	
-@app.route('/editComment', methods = ['POST'])
-def editComment():
-	feed_name = "BALT"
-	unique_id = request.json['unique_id']
-	field_name = request.json['field_name']
-	field_data = request.json['field_data']
-	posts.editComment(feed_name, unique_id, field_name, field_data)
-	return redirect(url_for('index'))
-	
-
-
-# get current user info
-@app.route('/getCurrentUserInfo', methods = ['POST'])
-def getCurrentUserInfo():
-	thisUserID = session.get('userID')
-	thisUser = getUserInfo(thisUserID)
-	return jsonify({'thisUser' : thisUser})
 
 
 @app.route("/comment", methods = ['GET', 'POST'])
