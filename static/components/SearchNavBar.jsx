@@ -1,7 +1,7 @@
 var React = require('react');
 var Link = require('react-router').Link;
 // var $ = require('jquery');
-import Notifications from "./Notifications.jsx";
+import NotificationsDropdown from "./NotificationsDropdown.jsx";
 import AccountDropdown from "./AccountDropdown.jsx";
 import FilterButton from "./FilterButton.jsx";
 
@@ -80,7 +80,7 @@ export default class SearchNavBar extends React.Component {
 		 							<span className="glyphicon glyphicon-search"></span>
 		                        </a>
 		                    </li>
-				          	<Notifications/>
+				          	<NotificationsDropdown currentUser={this.props.currentUser}/>
 				          	<AccountDropdown name={this.props.name}/>
 				          </ul>
 				         <form className="navbar-form navbar-right navbar-search-form" role="search">                  

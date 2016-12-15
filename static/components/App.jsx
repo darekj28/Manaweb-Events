@@ -155,6 +155,7 @@ export default class App extends React.Component {
 							onClick={this.handleFilterClick} 
 							actions={actions}
 							name={this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name']}
+							currentUser={this.state.currentUser}
 							handleFilterClick={this.handleFilterClick}
 							handleFilterUser={this.handleFilterUser}
 							userIdToFilterPosts={this.state.userIdToFilterPosts}

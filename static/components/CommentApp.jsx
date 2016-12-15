@@ -130,7 +130,8 @@ export default class CommentApp extends React.Component {
 	render() {
 		return (<div id="CommentApp">
 			<CommentNavBar searchText={this.state.search} onSearch={this.handleSearch} 
-						name={this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name']}/>
+						name={this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name']}
+						currentUser={this.state.currentUser}/>
 			<div className="container">
 				<CommentFeedPost comment={this.state.original_post} isOriginalPost={true}/>
 				<CommentFeed currentUser={this.state.currentUser} searchText={this.state.search} filters={this.state.filters} 
