@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request, session, render_template
-import users
+from users import Users
 import posts
 import time
 # from py2neo import authenticate, Graph, Node
@@ -13,16 +13,16 @@ mobile_api = Blueprint('mobile_api', __name__)
 def getNotifications():
 	feed_name = "BALT"
 	userID = request.json['userID']
-	notificaiton_list = posts.getNotifications(feed_name, userID)
-	posts.sortAscending(notificaiton_list)
-	return jsonify({ 'notificaiton_list' : notificaiton_list })	
+	notification_list = posts.getNotifications(feed_name, userID)
+	posts.sortAscending(notification_list)
+	return jsonify({ 'notification_list' : notification_list })	
 
 
-@mobile_api.route('/seeNotificaiton', methods=['GET'])
+@mobile_api.route('/seeNotification', methods=['GET'])
 def seeNotificaiton():
 	feed_name = "BALT"
-	notification_id = request.json['notificaiton_id']
-	posts.seeNotificaiton(feed_name, notification_id)
+	notification_id = request.json['notification_id']
+	posts.markNotificaitonAsSeen(feed_name, notification_id)
 	
 
 @mobile_api.route('/sendConfirmation', methods = ['POST'])
@@ -98,9 +98,11 @@ def setFeedFilter():
 		if request.form.get('chillFilter') == None:
 			chillFilter = False
 
-		users.updateInfo(session['userID'], 'tradeFilter', tradeFilter)	
-		users.updateInfo(session['userID'], 'playFilter', playFilter)	
-		users.updateInfo(session['userID'], 'chillFilter', chillFilter)	
+		user_manager = Users()
+		user_manager.updateInfo(session['userID'], 'tradeFilter', tradeFilter)	
+		user_manager.updateInfo(session['userID'], 'playFilter', playFilter)	
+		user_manager.updateInfo(session['userID'], 'chillFilter', chillFilter)
+		user_manager.closeConnnection()	
 		return redirect(url_for("index"))
 
 	else:
@@ -204,6 +206,21 @@ def reportComment():
 
 
 
+@mobile_api.route('/verifyUser', methods=['POST'])
+def verifyUser():
+	thisUser = getUserInfo(request.form['username'])
+	return jsonify({ 'result' : (thisUser is None) })		
+
+@mobile_api.route('/verifyEmail', methods=['POST'])
+def verifyEmail():
+	user_manager = Users()
+	thisUser = user_manager.getInfoFromEmail(request.form['mail'])
+	user_manager.closeConnection()
+	return jsonify({ 'result' : (thisUser is None) })	
+
 def getUserInfo(user_id):
-	return users.getInfo(user_id)
+	user_manager = Users()
+	this_user = user_manager.getInfo(user_id)
+	user_manager.closeConnnection()
+	return this_user
 

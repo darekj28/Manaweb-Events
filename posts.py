@@ -12,7 +12,7 @@ import string
 import random
 import os
 import sys
-import users
+from users import Users
 import time
 
 
@@ -79,7 +79,9 @@ def resetDatabase():
 	deleteTable(COMMENT_ID_TABLE)
 	deleteTable(FEED_NAMES)
 
-	user_list = users.getUserList()
+	user_manager = Users()
+	user_list = user_manager.getUserList()
+	user_manager.closeConnection()
 	for userID in user_list:
 
 		notification_table_name = USER_NOTIFICATION_PREFIX + userID
@@ -140,7 +142,7 @@ def addToShortList(feed_name, comment_id, receiver_id, sender_id, action, notifi
 	db.execute(addIndexCode)
 
 
-	threshold = 6
+	threshold = 30
 
 	seen = False
 	sql = "INSERT INTO " + table_name + " (feed_name, comment_id, receiver_id, sender_id, action, seen, notification_id, timeStamp, timeString) VALUES (%s, %s, %s,%s,%s,%s, %s, %s, %s)"
@@ -199,7 +201,7 @@ def notificationListToDict(query):
 
 
 
-def seeNotification(feed_name, notification_id):
+def markNotificaitonAsSeen(feed_name, notification_id):
 	sql = "UPDATE " + NOTIFICATION_TABLE + " SET hasSeen = True WHERE notification = %s"
 	db.execute(db.mogrify(sql, (notification_id,)))
 	post_db.commit()
@@ -433,9 +435,12 @@ def makeComment(feed_name, comment_id, body, poster_id, unique_id = None):
 	# add notificaiton
 	# adjust this later
 	participating_users = getParticipatingUsers(feed_name, comment_id)
+	user_manager = User()
 	for userID in participating_users:
-		action = users.getInfo(poster_id)['first_name'] + " commented on " + this_post['body']
+		action = user_manager.getInfo(poster_id)['first_name'] + " commented on " + this_post['body']
 		createNotification(feed_name, comment_id, userID, poster_id, action)
+
+	user_manager.closeConnection()
 
 
 # # deletes a post by ID
@@ -617,25 +622,26 @@ def getParticipatingUsers(feed_name, unique_id):
 	if thisItem == None:
 		thisItem = getCommentById(unique_id)
 	comment_id = thisItem['comment_id']
-	users = list()
-	users.append(getPostById(feed_name, comment_id)['poster_id'])
+	user_list = list()
+	user_list.append(getPostById(feed_name, comment_id)['poster_id'])
 	c_feed_name = "c_" + feed_name
 	search_code = "SELECT poster_id FROM " + c_feed_name  + " WHERE comment_id = '" + comment_id + "'"
 	db.execute(db.mogrify(search_code))
-	user_list = db.fetchall()
-	for user_id in user_list:
+	user_query = db.fetchall()
+	for user_id in user_query:
 		if user_id[0] not in users:
-			users.append(user_id[0])
-	for user in users:
+			user_list.append(user_id[0])
+	for user in user_list:
 		print(user)
 	print("###########################################################")
-	return users
+	return user_list
 
 
 
 
 def postListToDict(posts):
 	postList = list()
+	user_manager = Users()
 	for post in posts:
 
 		thisPost = {}
@@ -650,17 +656,19 @@ def postListToDict(posts):
 		thisPost['isChill'] = post[8]
 		thisPost['comment_id'] = post[3]
 		thisPost['isComment'] = False
-		thisUser = users.getInfo(thisPost['poster_id'])
+		thisUser = user_manager.getInfo(thisPost['poster_id'])
 		thisPost['first_name'] = thisUser['first_name']
 		thisPost['last_name'] = thisUser['last_name']
 		thisPost['avatar_url'] = thisUser['avatar_url']
 		thisPost['unique_id'] = post[9]
 		thisPost['numComments'] = post[10]
 		postList.append(thisPost)
+	user_manager.closeConnection()	
 	return postList	
 
 def commentListToDict(comments):
 	commentList = list()
+	user_manager = Users()
 	for comment in comments:
 		thisComment = {}
 		thisComment['body'] = comment[0]
@@ -671,12 +679,13 @@ def commentListToDict(comments):
 		thisComment['comment_id'] = comment[3]
 		thisComment['unique_id'] = comment[6]
 		thisComment['isComment'] = True
-		thisUser = users.getInfo(thisComment['poster_id'])
+		thisUser = user_manager.getInfo(thisComment['poster_id'])
 		thisComment['first_name'] = thisUser['first_name']
 		thisComment['last_name'] = thisUser['last_name']
 		thisComment['avatar_url'] = thisUser['avatar_url']
 		thisComment['time'] = date_format(int(thisComment['timeStamp']))
 		commentList.append(thisComment)
+	user_manager.closeConnection()
 	return commentList	
 
 

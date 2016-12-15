@@ -34,7 +34,7 @@ import sqlite3
 import sys
 import re
 
-import users
+from users import Users
 import posts
 
 
@@ -90,15 +90,6 @@ FREEGEOPIP_URL = "http://freegeoip.net/json"
 
 EMPTY_STRING = ""
 
-@app.route('/verifyUser', methods=['POST'])
-def verifyUser():
-	thisUser = getUserInfo(request.form['username'])
-	return jsonify({ 'result' : (thisUser is None) })		
-
-@app.route('/verifyEmail', methods=['POST'])
-def verifyEmail():
-	thisUser = users.getInfoFromEmail(request.form['mail'])
-	return jsonify({ 'result' : (thisUser is None) })	
 
 @app.before_request
 def before_request():
@@ -261,7 +252,10 @@ def login():
 			
 			# if not, then check if the user tried to login with email
 			email = request.form['login_id']
-			thisUser = users.getInfoFromEmail(email)
+			user_manager = Users()
+			thisUser = user_manager.getInfoFromEmail(email)
+			user_manager.closeConnection()
+
 			if thisUser is None:
 				error = "Login ID does not exist. Please try again."
 				return render_template("login.html", error = error)
@@ -309,8 +303,9 @@ def confirmation(pin = None):
 			return render_template('confirmation.html')
 		else:
 			if (pin == thisUser['confirmationPin']):
-	
-				users.updateInfo(session['userID'], 'confirmed', True)
+				user_manager = Users()
+				user_manager = Users().updateInfo(session['userID'], 'confirmed', True)
+				user_manager = closeConnection()
 				return redirect(url_for('index'))
 			else:
 				return render_template('confirmation.html')
@@ -338,7 +333,9 @@ def reset():
 			# 		shutil.rmtree(fileDir + '/' + fileName)
 			
 			posts.resetDatabase()
-			users.resetDatabase()
+			user_manager = Users()
+			user_manager.resetDatabase()
+			user_manager.closeConnection()
 			logout()
 			makeTestAccounts()
 
@@ -443,11 +440,12 @@ def makeTestAccounts():
 		if userID[i] == 'darekj':
 			isAdmin = True
 
-		users.addUser(userID[i], first_name = first_name[i], last_name = last_name[i], password = password, email = email,  isActive = isActive,
+		user_manager = Users()
+		user_manager.addUser(userID[i], first_name = first_name[i], last_name = last_name[i], password = password, email = email,  isActive = isActive,
 			avatar_url = avatar_url, avatar_name = avatar_name, confirmationPin = confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
 			isAdmin = isAdmin, phone_number = phone_number, birthMonth = birthMonth[i], birthDay = birthDay[i], birthYear = birthYear[i],
 			gender = gender[i]) 
-		
+		user_manager.closeConnection()
 
 
 
@@ -486,11 +484,12 @@ def makeProfile():
 	birthDay = '5'
 	gender = 'Male'
 
-	users.addUser(userID[i], first_name = first_name, last_name = last_name, password = password, email = email,  isActive = True,
+	user_manager = Users()
+	user_manager.addUser(userID[i], first_name = first_name, last_name = last_name, password = password, email = email,  isActive = True,
 			avatar_url = avatar_url, avatar_name = avatar_name, confirmationPin = confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
 			isAdmin = False, phone_number = phone_number, birthMonth = birthMonth, birthDay = birthDay, birthYear = birthYear,
 			gender = gender) 
-
+	user_manager.closeConnection()
 
 
 # given a user, returns their age
@@ -506,17 +505,29 @@ def getAge(userID):
 
 
 def getUserInfo(user_id):
-	return users.getInfo(user_id)
+	user_manager = Users()
+	this_user = user_manager.getInfo(user_id)
+	user_manager.closeConnection()
+	return this_user
 
 def getFirstName(user_id):
-	return users.getInfo(user_id)['first_name']
+	user_manager = Users()
+	first_name =  user_manager.getInfo(user_id)['first_name']
+	user_manager.closeConnection()
+	return first_name
 
 def getLastName(user_id):
-	return users.getInfo(user_id)['last_name']
+	user_manager = Users()
+	last_name =  user_manager.getInfo(user_id)['last_name']
+	user_manager.closeConnection()
+	return last_name
 
 
 def getAvatarUrl(user_id):
-	return users.getInfo(user_id)['avatar_url']
+	user_manager = Users()
+	avatar_url =  user_manager.getInfo(user_id)['avatar_url']
+	user_manager.closeConnection()
+	return avatar_url
 
 def date_format(time=False):
 	return posts.date_format(time = False)
