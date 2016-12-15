@@ -52,8 +52,9 @@ post_db = psycopg2.connect(
     user=url.username,
     password=url.password,
     host=url.hostname,
-    port=url.port
+    port=url.port,
 )
+post_db.autocommit = True
 
 db = post_db.cursor()
 
