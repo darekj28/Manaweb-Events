@@ -74,8 +74,8 @@ class Posts:
 		
 		self.deleteTable(self.ADMIN_TABLE)
 		self.deleteTable(self.REPORT_TABLE)
-		self.deleteTable(self.EVENT_TABLE)
-		self.deleteTable(self.COMMENT_TABLE)
+
+
 		self.deleteTable(self.COMMENT_ID_TABLE)
 		self.deleteTable(self.FEED_NAMES)
 
@@ -83,13 +83,8 @@ class Posts:
 		user_list = user_manager.getUserList()
 		user_manager.closeConnection()
 		for userID in user_list:
-
 			notification_table_name = self.USER_NOTIFICATION_PREFIX + userID
-		
 			self.deleteTable(notification_table_name)
-
-
-
 
 		self.initializePosts()
 
@@ -240,28 +235,30 @@ class Posts:
 
 
 	def createThread(self, feed_name):
-		createTableCode = 'CREATE TABLE IF NOT EXISTS ' + feed_name + ' (body TEXT, poster_id TEXT, feed_name TEXT, comment_id TEXT, timeString TEXT, timeStamp FLOAT, isTrade BOOLEAN, isPlay BOOLEAN, isChill BOOLEAN, unique_id TEXT, numComments INT, following BOOLEAN, ghost_following BOOLEAN)'
-		self.db.execute(createTableCode)
-		addIndexCode = 'CREATE INDEX IF NOT EXISTS poster_id ON ' + feed_name + ' (poster_id)'
-		self.db.execute(addIndexCode)
-		addIndexCode = 'CREATE INDEX IF NOT EXISTS comment_id ON ' + feed_name + ' (comment_id)'
-		self.db.execute(addIndexCode)
-		addIndexCode = 'CREATE INDEX IF NOT EXISTS unique_id ON ' + feed_name + ' (unique_id)'
-		self.db.execute(addIndexCode)
-		addIndexCode = 'CREATE INDEX IF NOT EXISTS timeStamp ON ' + feed_name + ' (timeStamp)'
-		self.db.execute(addIndexCode)
+		if self.isFeed(feed_name):
+			self.addFeedName(feed_name)
+			createTableCode = 'CREATE TABLE IF NOT EXISTS ' + feed_name + ' (body TEXT, poster_id TEXT, feed_name TEXT, comment_id TEXT, timeString TEXT, timeStamp FLOAT, isTrade BOOLEAN, isPlay BOOLEAN, isChill BOOLEAN, unique_id TEXT, numComments INT, following BOOLEAN, ghost_following BOOLEAN)'
+			self.db.execute(createTableCode)
+			addIndexCode = 'CREATE INDEX IF NOT EXISTS poster_id ON ' + feed_name + ' (poster_id)'
+			self.db.execute(addIndexCode)
+			addIndexCode = 'CREATE INDEX IF NOT EXISTS comment_id ON ' + feed_name + ' (comment_id)'
+			self.db.execute(addIndexCode)
+			addIndexCode = 'CREATE INDEX IF NOT EXISTS unique_id ON ' + feed_name + ' (unique_id)'
+			self.db.execute(addIndexCode)
+			addIndexCode = 'CREATE INDEX IF NOT EXISTS timeStamp ON ' + feed_name + ' (timeStamp)'
+			self.db.execute(addIndexCode)
 
-		comments_id = "c_" + feed_name
-		createTableCode = 'CREATE TABLE IF NOT EXISTS ' + comments_id + ' (body TEXT, poster_id TEXT, feed_name TEXT, comment_id TEXT, timeString TEXT, timeStamp FLOAT, unique_id TEXT, following BOOLEAN, ghost_following BOOLEAN)'
-		self.db.execute(createTableCode)
-		addIndexCode = 'CREATE INDEX IF NOT EXISTS poster_id ON ' + comments_id + ' (poster_id)'
-		self.db.execute(addIndexCode)
-		addIndexCode = 'CREATE INDEX IF NOT EXISTS comment_id ON ' + comments_id + ' (comment_id)'
-		self.db.execute(addIndexCode)
-		addIndexCode = 'CREATE INDEX IF NOT EXISTS timeStamp ON ' + comments_id + ' (timeStamp)'
-		self.db.execute(addIndexCode)
-		addIndexCode = 'CREATE INDEX IF NOT EXISTS unique_id ON ' + comments_id + ' (unique_id)'
-		self.db.execute(addIndexCode)
+			comments_id = "c_" + feed_name
+			createTableCode = 'CREATE TABLE IF NOT EXISTS ' + comments_id + ' (body TEXT, poster_id TEXT, feed_name TEXT, comment_id TEXT, timeString TEXT, timeStamp FLOAT, unique_id TEXT, following BOOLEAN, ghost_following BOOLEAN)'
+			self.db.execute(createTableCode)
+			addIndexCode = 'CREATE INDEX IF NOT EXISTS poster_id ON ' + comments_id + ' (poster_id)'
+			self.db.execute(addIndexCode)
+			addIndexCode = 'CREATE INDEX IF NOT EXISTS comment_id ON ' + comments_id + ' (comment_id)'
+			self.db.execute(addIndexCode)
+			addIndexCode = 'CREATE INDEX IF NOT EXISTS timeStamp ON ' + comments_id + ' (timeStamp)'
+			self.db.execute(addIndexCode)
+			addIndexCode = 'CREATE INDEX IF NOT EXISTS unique_id ON ' + comments_id + ' (unique_id)'
+			self.db.execute(addIndexCode)
 
 
 	def createFeedNameTable(self):
@@ -269,6 +266,22 @@ class Posts:
 		self.db.execute(createTableCode)
 		addIndexCode = 'CREATE INDEX IF NOT EXISTS feed_name ON ' + self.FEED_NAMES + ' (feed_name)'
 		self.db.execute(addIndexCode)
+
+	def getFeedNames(self):
+		sql = "SELECT feed_name FROM " + self.FEED_NAMES 
+		self.db.execute(self.db.mogrify(sql))
+		query = self.db.fetchall()
+		feed_list = list()
+		for f in query:
+			feed_list.append(f[0])
+		return feed_list
+
+	def isFeed(self, feed_name):
+		feed_list = self.getFeedNames()
+		if feed_name in feed_list:
+			return True
+		else:
+			return False
 
 
 	def createReportTable(self):
