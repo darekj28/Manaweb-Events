@@ -117,7 +117,7 @@ export default class SearchNavBar extends React.Component {
 		                    </li>
 		                */}
 				          	<NotificationsDropdown notifications={this.state.notifications} numUnseen={this.state.numUnseen} getNotifications={this.getNotifications}/>
-				          	<AccountDropdown name={this.props.name}/>
+				          	<AccountDropdown currentUser = {this.props.currentUser} name={this.props.name}/>
 				          </ul>
 				         <form className="navbar-form navbar-right navbar-search-form" role="search">                  
 			                 <div className="form-group">

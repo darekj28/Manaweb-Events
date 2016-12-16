@@ -559,7 +559,7 @@
 								'ul',
 								{ className: 'nav navbar-nav navbar-right' },
 								React.createElement(_NotificationsDropdown2.default, { notifications: this.state.notifications, numUnseen: this.state.numUnseen, getNotifications: this.getNotifications }),
-								React.createElement(_AccountDropdown2.default, { name: this.props.name })
+								React.createElement(_AccountDropdown2.default, { currentUser: this.props.currentUser, name: this.props.name })
 							),
 							React.createElement(
 								'form',
@@ -9724,6 +9724,17 @@
 	            )
 	          ),
 	          React.createElement("li", { className: "divider" }),
+	          this.props.currentUser.isAdmin && React.createElement(
+	            "li",
+	            null,
+	            " ",
+	            React.createElement(
+	              "a",
+	              { href: "/adminTools" },
+	              " Admin Tools "
+	            ),
+	            " "
+	          ),
 	          React.createElement(
 	            "li",
 	            null,
@@ -11155,7 +11166,7 @@
 			key: 'seeNotifications',
 			value: function seeNotifications() {
 				this.state.notifications.map(function (obj) {
-					$.post('/seeNotifications', { notification_id: obj['notification_id'] });
+					$.post('/seeNotification', { notification_id: obj['notification_id'] });
 				});
 			}
 		}, {
@@ -11198,7 +11209,7 @@
 								'ul',
 								{ className: 'nav navbar-nav navbar-right' },
 								React.createElement(_NotificationsDropdown2.default, { notifications: this.state.notifications, numUnseen: this.state.numUnseen, getNotifications: this.getNotifications }),
-								React.createElement(_AccountDropdown2.default, { name: this.props.name })
+								React.createElement(_AccountDropdown2.default, { currentUser: this.props.currentUser, name: this.props.name })
 							),
 							React.createElement(
 								'form',

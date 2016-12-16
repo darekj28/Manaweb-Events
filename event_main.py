@@ -142,14 +142,25 @@ def adminLogin():
 		else:
 			return "<h1> Nice try! </h1>"
 
-@app.route("/", methods = ['GET', 'POST'])
+@app.route("/", methods = ['GET'])
 def index():
 	if request.method == 'GET':
 		thisUser = getUserInfo(session['userID'])
 		# this is currently hard coded
-		feed_name = "BALT"
-
 		post_manager = Posts()
+
+		# sets the default to BALT if empty
+		feed_name = request.args.get("feed")
+
+		if feed_name == None:
+			feed_name = "BALT"
+		
+		feed_name = feed_name.upper()
+
+		if not post_manager.isFeed(feed_name):
+			return redirect(url_for('index'))
+		
+		
 		post_manager.createThread(feed_name = feed_name)
 		postList = post_manager.getPosts(feed_name, tradeFilter = thisUser['tradeFilter'], playFilter = thisUser['playFilter'] , chillFilter = thisUser['chillFilter'])
 
@@ -163,59 +174,47 @@ def index():
 		post_manager.closeConnection()
 		return render_template("index.html", thisUser = thisUser, postList = postList, commentDict = commentDict, feed_name = feed_name)
 
-	elif request.method == 'POST':
-		return redirect(url_for('index'))
 
 
-@app.route("/search", methods = ['GET', 'POST'])
-def search():
+@app.route("/comment", methods = ['GET'])
+def comment():
 	if request.method == 'GET':
-		search_id = request.args.get('id')
-		search_s = request.args.get('s')
-		thisUser = getUserInfo(session['userID'])
-		# this is currently hard coded
-		feed_name = "BALT"
-
+		
 		post_manager = Posts()
-		post_manager.createThread(feed_name = feed_name)
-		postList = post_manager.getPosts(feed_name, tradeFilter = thisUser['tradeFilter'], playFilter = thisUser['playFilter'] , chillFilter = thisUser['chillFilter'])
-		filterPostList = post_manager.search(postList, s = search_s, poster_id = search_id)
+		feed_name = request.args.get("feed")
 
+		if feed_name == None:
+			feed_name = "BALT"
 
+		feed_name = feed_name.upper()
 
-		commentsList = post_manager.getComments(feed_name)
-		foundCommentsList = post_manager.search(commentsList, s = search_s, poster_id = search_id)
+		if not post_manager.isFeed(feed_name):
+			return redirect(url_for('index'))
 
+		thisUser = getUserInfo(session['userID'])
+		comment_id = request.args.get('id')
+		if comment_id == None:
+			return redirect(url_for('index'))
+		
 
+		isRealPost = post_manager.getPostById(feed_name, comment_id)
+		if isRealPost == None:
+			return redirect(url_for('index'))
 
-		full_list = list()
-
-		for x in filterPostList:
-			full_list.append(x)
-		for x in foundCommentsList:
-			full_list.append(x)
-
-		post_manager.sortDescending(full_list)
-
-		postDict = {}
-		for item in postList:
-			temp_id = item['comment_id']
-			postDict[temp_id] = item
-
-		commentDict = {}
-		for item in filterPostList:
-			x = post_manager.getComments(feed_name, item['comment_id'])
-			post_manager.sortAscending(x)
-			commentDict[item['comment_id']] = x		
-
+		# comment_list = post_manager.getComments(feed_name, comment_id)
 		post_manager.closeConnection()
-		return render_template("search.html", thisUser = thisUser, full_list = full_list, commentDict = commentDict, feed_name = feed_name, postDict = postDict)
 
-	elif request.method == 'POST':
-		s = request.form['search']
-		url = getStringSearchUrl(s)
-		return redirect(url)
+		return render_template('index.html', thisUser = thisUser)
 
+
+
+@app.route("/adminTools", methods = ['GET'])
+def adminTools():
+	thisUser = getUserInfo(session['userID'])
+	if thisUser['isAdmin']:
+		return render_template("adminTools.html")
+	else:
+		redirect (url_for("index"))
 
 
 def getStringSearchUrl(s):
@@ -348,47 +347,6 @@ def reset():
 	else:
 		return "<h2> Something's gone wrong! </h2>"	
 		
-
-
-
-
-@app.route('/editPost', methods = ['POST'])
-def editPost():
-	feed_name = "BALT"
-	unique_id = request.json['unique_id']
-	field_name = request.json['field_name']
-	field_data = request.json['field_data']
-	post_manager = Posts()
-	post_manager.editPost(feed_name, unique_id, field_name, field_data)
-	post_manager.closeConnection()
-	return redirect(url_for('index'))
-	
-
-
-@app.route("/comment", methods = ['GET', 'POST'])
-def comment():
-	if request.method == 'GET':
-		feed_name = "BALT"
-		thisUser = getUserInfo(session['userID'])
-		comment_id = request.args.get('id')
-		if comment_id == None:
-			return redirect(url_for('index'))
-		post_manager = Posts()
-		isRealPost = post_manager.getPostById(feed_name, comment_id)
-		if isRealPost == None:
-			return redirect(url_for('index'))
-
-		comment_list = post_manager.getComments(feed_name, comment_id)
-		post_manager.closeConnection()
-
-		return render_template('index.html', thisUser = thisUser, comment_list = comment_list)
-
-
-	# hardcoded to just return index for now
-	elif request.method == 'POST':
-		return redirect(url_for('index'))
-
-
 
 # validate account returns true if account is confirmed, activated and exists
 def isActiveUser(userID):

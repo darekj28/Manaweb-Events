@@ -7,14 +7,17 @@ import time
 # graph = Graph()
 
 mobile_api = Blueprint('mobile_api', __name__)
-
+DEFAULT_FEED = "BALT"
 
 @mobile_api.route('/getNotifications', methods=['POST'])
 def getNotifications():
-	feed_name = "BALT"
+	feed_name = request.args.get("feed")
+	if feed_name == None:
+		feed_name = DEFAULT_FEED
 
 	userID = session.get('userID')
 	post_manager = Posts()
+
 	notification_list = post_manager.getShortListNotifications(feed_name, userID)
 	post_manager.sortAscending(notification_list)
 	post_manager.closeConnection()
@@ -23,7 +26,10 @@ def getNotifications():
 
 @mobile_api.route('/seeNotification', methods=['POST'])
 def seeNotificaiton():
-	feed_name = "BALT"
+	feed_name = request.args.get("feed")
+	if feed_name == None:
+		feed_name = DEFAULT_FEED
+
 	notification_id = request.form['notification_id']
 	post_manager = Posts()
 	post_manager.markNotificationAsSeen(feed_name, notification_id)
@@ -43,7 +49,9 @@ def sendConfirmation():
 # gets the posts for the current feed (defaulted to BALT for now)
 @mobile_api.route('/getPosts', methods = ['POST'])
 def getPosts():
-	feed_name = "BALT"
+	feed_name = request.args.get("feed")
+	if feed_name == None:
+		feed_name = DEFAULT_FEED
 	post_manager = Posts()
 	post_list = post_manager.getPosts(feed_name)
 	post_manager.sortAscending(post_list)
@@ -52,7 +60,9 @@ def getPosts():
 
 @mobile_api.route('/getPostById', methods = ['POST'])
 def getPostById():
-	feed_name = "BALT"
+	feed_name = request.args.get("feed")
+	if feed_name == None:
+		feed_name = DEFAULT_FEED
 	comment_id = request.form['comment_id']
 	post_manager = Posts()
 	this_post = post_manager.getPostById(feed_name, comment_id)
@@ -61,7 +71,9 @@ def getPostById():
 
 @mobile_api.route('/getComments', methods = ['POST'])
 def getComments():
-	feed_name = "BALT"
+	feed_name = request.args.get("feed")
+	if feed_name == None:
+		feed_name = DEFAULT_FEED
 	comment_id = request.form['comment_id']
 	post_manager = Posts()
 	comment_list = post_manager.getComments(feed_name, comment_id)
@@ -78,7 +90,9 @@ def getInfoFromUserId():
 
 @mobile_api.route('/editComment', methods = ['POST'])
 def editComment():
-	feed_name = "BALT"
+	feed_name = request.args.get("feed")
+	if feed_name == None:
+		feed_name = DEFAULT_FEED
 	unique_id = request.json['unique_id']
 	field_name = request.json['field_name']
 	field_data = request.json['field_data']
@@ -88,6 +102,19 @@ def editComment():
 	return redirect(url_for('index'))
 	
 
+@mobile_api.route('/editPost', methods = ['POST'])
+def editPost():
+	feed_name = request.args.get("feed")
+	if feed_name == None:
+		feed_name = DEFAULT_FEED
+	unique_id = request.json['unique_id']
+	field_name = request.json['field_name']
+	field_data = request.json['field_data']
+	post_manager = Posts()
+	post_manager.editPost(feed_name, unique_id, field_name, field_data)
+	post_manager.closeConnection()
+	return redirect(url_for('index'))
+	
 
 # get current user info
 @mobile_api.route('/getCurrentUserInfo', methods = ['POST'])
@@ -129,9 +156,11 @@ def makePost():
 		isPlay 		= request.json['isPlay']
 		isChill		= request.json['isChill']
 		comment_id  = request.json['comment_id']
-
+		feed_name = request.args.get("feed")
+		if feed_name == None:
+			feed_name = DEFAULT_FEED		
 		post_manager = Posts()
-		post_manager.postInThread('BALT', body = postContent, poster_id = session['userID'], 
+		post_manager.postInThread(feed_name, body = postContent, poster_id = session['userID'], 
 				isTrade = isTrade, isPlay = isPlay, isChill = isChill, comment_id = comment_id)
 		
 		post_manager.closeConnection()
@@ -151,7 +180,9 @@ def generateUniqueId():
 @mobile_api.route("/makeComment", methods = ['POST'])
 def makeComment():
 	if request.method == 'POST':
-		feed_name = "BALT"
+		feed_name = request.args.get("feed")
+		if feed_name == None:
+			feed_name = DEFAULT_FEED
 
 		comment_id = request.json['comment_id']
 		commentContent = request.json['commentContent']
@@ -169,7 +200,9 @@ def makeComment():
 @mobile_api.route('/deletePost', methods = ['POST'])
 def deletePost():
 	# feed_name = request.form.get('feed_name')
-	feed_name = "BALT"
+	feed_name = request.args.get("feed")
+	if feed_name == None:
+		feed_name = DEFAULT_FEED
 	unique_id = request.json.get('unique_id')
 	post_manager = Posts()
 	post_manager.deletePost(feed_name, unique_id)
@@ -180,7 +213,9 @@ def deletePost():
 
 @mobile_api.route('/deleteComment', methods = ['POST'])
 def deleteComment():
-	feed_name = "BALT"
+	feed_name = request.args.get("feed")
+	if feed_name == None:
+		feed_name = DEFAULT_FEED
 	# feed_name = request.form.get('feed_name')
 	unique_id = request.json.get('unique_id')
 	post_manager = Posts()
@@ -193,7 +228,9 @@ def deleteComment():
 @mobile_api.route('/reportPost', methods = ['POST'])
 def reportPost():
 	# feed_name = request.json['feed_name']
-	feed_name = "BALT"
+	feed_name = request.args.get("feed")
+	if feed_name == None:
+		feed_name = DEFAULT_FEED
 	unique_id = request.json['unique_id']
 	reason = request.json["reason"]
 	description = reason
@@ -211,7 +248,9 @@ def reportPost():
 @mobile_api.route('/reportComment', methods = ['POST'])
 def reportComment():
 	# feed_name = request.json['feed_name']
-	feed_name = "BALT"
+	feed_name = request.args.get("feed")
+	if feed_name == None:
+		feed_name = DEFAULT_FEED
 	print(request.json)
 	unique_id = request.json['unique_id']
 	reason = request.json["reason"]
@@ -240,9 +279,23 @@ def verifyEmail():
 	user_manager.closeConnection()
 	return jsonify({ 'result' : (thisUser is None) })	
 
+
+@mobile_api.route('/createFeed', methods = ['POST'])
+def createFeed():
+	post_manager = Posts()
+	feed_name = request.form['feed_name']
+	feed_name_confirmation = request.form['feed_name']
+	if feed_name == feed_name_confirmation:
+		post_manager.createThread(feed_name)
+	post_manager.closeConnection()
+	return redirect(url_for('adminTools'))
+
 def getUserInfo(user_id):
 	user_manager = Users()
 	this_user = user_manager.getInfo(user_id)
 	user_manager.closeConnection()
 	return this_user
+
+
+
 
