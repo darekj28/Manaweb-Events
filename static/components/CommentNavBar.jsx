@@ -3,6 +3,7 @@ var Link = require('react-router').Link;
 // var $ = require('jquery');
 import NotificationsDropdown from "./NotificationsDropdown.jsx";
 import AccountDropdown from "./AccountDropdown.jsx";
+import FilterButton from "./FilterButton.jsx";
 
 export default class CommentNavBar extends React.Component {
 	constructor(props) {
@@ -73,6 +74,9 @@ export default class CommentNavBar extends React.Component {
 				                      			id="searchInput" className="form-control" placeholder="Search..." 
 				                      			onChange={this.handleSearch}/>
 				                      <div className = "input-group-addon"></div>
+				                      {this.props.actions.map(function(action, i) {
+											return  <FilterButton key={i} active={true} isSearch={true} name={action}/>;
+										})}
 								  </div>		  
 			                 </div> 
 			              </form>

@@ -29,7 +29,7 @@ export default class NotificationsApp extends React.Component {
 								currentUser={this.state.currentUser}/>
 				<div className="container">
 					<h2>{name}'s Notifications</h2>
-					<NotificationsFeed notifications={this.state.notifications}/>		
+					<NotificationsFeed currentUser = {this.state.currentUser} notifications={this.state.notifications}/>		
 				</div>	
 			</div>
 		);

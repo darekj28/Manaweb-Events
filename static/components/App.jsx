@@ -23,7 +23,7 @@ export default class App extends React.Component {
 		super(props);
 		this.state = {
 			filters : ['Trade', 'Play', 'Chill'],
-			actions : ['Trade'],
+			actions : [],
 			search : '',
 			userIdToFilterPosts : '',
 			post : '',
@@ -146,7 +146,7 @@ export default class App extends React.Component {
 		var alert;
 		if (this.state.alert) {
 			alert = <div className="alert alert-danger">
-			  			<strong>Bro!</strong> You must select something to do.
+			  			<strong>Bro!</strong> You must select something to do before you post man!
 					</div>;
 		}
 		return (<div>

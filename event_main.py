@@ -35,7 +35,7 @@ import sys
 import re
 
 from users import Users
-import posts
+from posts import Posts
 
 
 from routes.createProfile import create_profile
@@ -58,13 +58,9 @@ from routes.mobile_api import mobile_api
 # graph = Graph()
 
 
-# connect to sql server for messaging
-message_db = sqlite3.connect('posts/posts.db', check_same_thread = False)
-mdb = message_db.cursor()
 
-# connect to sql server for user info
-user_db = sqlite3.connect('users/user_table.db', check_same_thread = False)
-udb = user_db.cursor()
+
+
 
 # initialize app
 app = Flask(__name__)
@@ -153,16 +149,18 @@ def index():
 		# this is currently hard coded
 		feed_name = "BALT"
 
-		posts.createThread(feed_name = feed_name)
-		postList = posts.getPosts(feed_name, tradeFilter = thisUser['tradeFilter'], playFilter = thisUser['playFilter'] , chillFilter = thisUser['chillFilter'])
+		post_manager = Posts()
+		post_manager.createThread(feed_name = feed_name)
+		postList = post_manager.getPosts(feed_name, tradeFilter = thisUser['tradeFilter'], playFilter = thisUser['playFilter'] , chillFilter = thisUser['chillFilter'])
 
 		commentDict = {}
 		for item in postList:
-			x = posts.getComments(feed_name, item['comment_id'])
-			posts.sortAscending(x)
+			x = post_manager.getComments(feed_name, item['comment_id'])
+			post_manager.sortAscending(x)
 			commentDict[item['comment_id']] = x
 
-		posts.sortDescending(postList)
+		post_manager.sortDescending(postList)
+		post_manager.closeConnection()
 		return render_template("index.html", thisUser = thisUser, postList = postList, commentDict = commentDict, feed_name = feed_name)
 
 	elif request.method == 'POST':
@@ -178,15 +176,16 @@ def search():
 		# this is currently hard coded
 		feed_name = "BALT"
 
-		posts.createThread(feed_name = feed_name)
-		postList = posts.getPosts(feed_name, tradeFilter = thisUser['tradeFilter'], playFilter = thisUser['playFilter'] , chillFilter = thisUser['chillFilter'])
-		filterPostList = posts.search(postList, s = search_s, poster_id = search_id)
+		post_manager = Posts()
+		post_manager.createThread(feed_name = feed_name)
+		postList = post_manager.getPosts(feed_name, tradeFilter = thisUser['tradeFilter'], playFilter = thisUser['playFilter'] , chillFilter = thisUser['chillFilter'])
+		filterPostList = post_manager.search(postList, s = search_s, poster_id = search_id)
 
 
 
-		commentsList = posts.getComments(feed_name)
-		foundCommentsList = posts.search(commentsList, s = search_s, poster_id = search_id)
-		# posts.sortDescending(foundCommentsList)
+		commentsList = post_manager.getComments(feed_name)
+		foundCommentsList = post_manager.search(commentsList, s = search_s, poster_id = search_id)
+
 
 
 		full_list = list()
@@ -196,7 +195,7 @@ def search():
 		for x in foundCommentsList:
 			full_list.append(x)
 
-		posts.sortDescending(full_list)
+		post_manager.sortDescending(full_list)
 
 		postDict = {}
 		for item in postList:
@@ -205,11 +204,11 @@ def search():
 
 		commentDict = {}
 		for item in filterPostList:
-			x = posts.getComments(feed_name, item['comment_id'])
-			posts.sortAscending(x)
+			x = post_manager.getComments(feed_name, item['comment_id'])
+			post_manager.sortAscending(x)
 			commentDict[item['comment_id']] = x		
 
-
+		post_manager.closeConnection()
 		return render_template("search.html", thisUser = thisUser, full_list = full_list, commentDict = commentDict, feed_name = feed_name, postDict = postDict)
 
 	elif request.method == 'POST':
@@ -304,7 +303,7 @@ def confirmation(pin = None):
 		else:
 			if (pin == thisUser['confirmationPin']):
 				user_manager = Users()
-				user_manager = Users().updateInfo(session['userID'], 'confirmed', True)
+				user_manager.updateInfo(session['userID'], 'confirmed', True)
 				user_manager = closeConnection()
 				return redirect(url_for('index'))
 			else:
@@ -332,7 +331,9 @@ def reset():
 			# 	if os.path.isdir(fileDir + '/' + fileName):
 			# 		shutil.rmtree(fileDir + '/' + fileName)
 			
-			posts.resetDatabase()
+			post_manager = Posts()
+			post_manager.resetDatabase()
+			post_manager.closeConnection()
 			user_manager = Users()
 			user_manager.resetDatabase()
 			user_manager.closeConnection()
@@ -357,7 +358,9 @@ def editPost():
 	unique_id = request.json['unique_id']
 	field_name = request.json['field_name']
 	field_data = request.json['field_data']
-	posts.editPost(feed_name, unique_id, field_name, field_data)
+	post_manager = Posts()
+	post_manager.editPost(feed_name, unique_id, field_name, field_data)
+	post_manager.closeConnection()
 	return redirect(url_for('index'))
 	
 
@@ -370,10 +373,13 @@ def comment():
 		comment_id = request.args.get('id')
 		if comment_id == None:
 			return redirect(url_for('index'))
-		if posts.getPostById(feed_name, comment_id) == None:
+		post_manager = Posts()
+		isRealPost = post_manager.getPostById(feed_name, comment_id)
+		if isRealPost == None:
 			return redirect(url_for('index'))
 
-		comment_list = posts.getComments(feed_name, comment_id)
+		comment_list = post_manager.getComments(feed_name, comment_id)
+		post_manager.closeConnection()
 
 		return render_template('index.html', thisUser = thisUser, comment_list = comment_list)
 
@@ -463,8 +469,10 @@ def makeTestAccounts():
 
 
 	feed_name = "BALT"
-	posts.initializeSQL()
-	posts.initializeFeed(feed_name)
+	post_manager = Posts()
+	post_manager.initializeSQL()
+	post_manager.initializeFeed(feed_name)
+	post_manager.closeConnection()
 
 @app.route('/makeProfile', methods = ['POST'])
 def makeProfile():
@@ -530,7 +538,9 @@ def getAvatarUrl(user_id):
 	return avatar_url
 
 def date_format(time=False):
-	return posts.date_format(time = False)
+	post_manager = Posts()
+	data_format = post_manager.date_format(time = False)
+	post_manager.closeConnection()
 
 
 

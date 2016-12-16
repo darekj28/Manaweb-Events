@@ -58,6 +58,7 @@ export default class SearchNavBar extends React.Component {
 	}
 	render() {
 		var that = this;
+
 		return (
 			<nav className="navbar navbar-default" role="navigation">
 				<div className="container">

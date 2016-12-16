@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, session, render_template, redirect, url_for
 from users import Users
-import posts
+from posts import Posts
 import time
 # from py2neo import authenticate, Graph, Node
 # authenticate("localhost:7474", "neo4j", "powerplay")
@@ -9,20 +9,25 @@ import time
 mobile_api = Blueprint('mobile_api', __name__)
 
 
-@mobile_api.route('/getNotifications', methods=['GET'])
+@mobile_api.route('/getNotifications', methods=['POST'])
 def getNotifications():
 	feed_name = "BALT"
-	userID = request.json['userID']
-	notification_list = posts.getNotifications(feed_name, userID)
-	posts.sortAscending(notification_list)
+
+	userID = request.form['userID']
+	post_manager = Posts()
+	notification_list = post_manager.getNotifications(feed_name, userID)
+	post_manager.sortAscending(notification_list)
+	post_manager.closeConnection()
 	return jsonify({ 'notification_list' : notification_list })	
 
 
-@mobile_api.route('/seeNotification', methods=['GET'])
+@mobile_api.route('/seeNotification', methods=['POST'])
 def seeNotificaiton():
 	feed_name = "BALT"
 	notification_id = request.json['notification_id']
-	posts.markNotificaitonAsSeen(feed_name, notification_id)
+	post_manager = Posts()
+	post_manager.markNotificationAsSeen(feed_name, notification_id)
+	post_manager.close()
 	
 
 @mobile_api.route('/sendConfirmation', methods = ['POST'])
@@ -38,24 +43,29 @@ def sendConfirmation():
 @mobile_api.route('/getPosts', methods = ['POST'])
 def getPosts():
 	feed_name = "BALT"
-	post_list = posts.getPosts(feed_name)
-	posts.sortAscending(post_list)
+	post_manager = Posts()
+	post_list = post_manager.getPosts(feed_name)
+	post_manager.sortAscending(post_list)
+	post_manager.closeConnection()
 	return jsonify({ 'post_list' : post_list })	
 
 @mobile_api.route('/getPostById', methods = ['POST'])
 def getPostById():
 	feed_name = "BALT"
 	comment_id = request.form['comment_id']
-	this_post = posts.getPostById(feed_name, comment_id)
-
+	post_manager = Posts()
+	this_post = post_manager.getPostById(feed_name, comment_id)
+	post_manager.closeConnection()
 	return jsonify({'this_post' : this_post})
 
 @mobile_api.route('/getComments', methods = ['POST'])
 def getComments():
 	feed_name = "BALT"
 	comment_id = request.form['comment_id']
-	comment_list = posts.getComments(feed_name, comment_id)
-	posts.sortAscending(comment_list)
+	post_manager = Posts()
+	comment_list = post_manager.getComments(feed_name, comment_id)
+	post_manager.sortAscending(comment_list)
+	post_manager.closeConnection()
 	return jsonify({ 'comment_list' : comment_list })	
 
 @mobile_api.route('/getInfoFromUserId', methods=['POST'])
@@ -71,7 +81,9 @@ def editComment():
 	unique_id = request.json['unique_id']
 	field_name = request.json['field_name']
 	field_data = request.json['field_data']
-	posts.editComment(feed_name, unique_id, field_name, field_data)
+	post_manager = Posts()
+	post_manager.editComment(feed_name, unique_id, field_name, field_data)
+	post_manager.closeConnection()
 	return redirect(url_for('index'))
 	
 
@@ -117,10 +129,11 @@ def makePost():
 		isChill		= request.json['isChill']
 		comment_id  = request.json['comment_id']
 
-
-		posts.postInThread('BALT', body = postContent, poster_id = session['userID'], 
+		post_manager = Posts()
+		post_manager.postInThread('BALT', body = postContent, poster_id = session['userID'], 
 				isTrade = isTrade, isPlay = isPlay, isChill = isChill, comment_id = comment_id)
 		
+		post_manager.closeConnection()
 		return redirect(url_for("index"))
 	else:
 		return "<h2> Invalid request on sendPost, only post method please </h2>"
@@ -129,7 +142,9 @@ def makePost():
 @mobile_api.route('/generateUniqueId' , methods = ['POST'])
 def generateUniqueId():
 	timeStamp = time.time() 
-	unique_id = posts.hash_comment_id(str(timeStamp))
+	post_manager = Posts()
+	unique_id = post_manager.hash_comment_id(str(timeStamp))
+	post_manager.closeConnection()
 	return jsonify ({ 'unique_id' : unique_id})	
 
 @mobile_api.route("/makeComment", methods = ['POST'])
@@ -141,8 +156,10 @@ def makeComment():
 		commentContent = request.json['commentContent']
 		unique_id = request.json['unique_id']
 		
-		posts.makeComment(feed_name, comment_id, commentContent, session['userID'], unique_id = unique_id)
-		
+		post_manager = Posts()
+		post_manager.makeComment(feed_name, comment_id, commentContent, session['userID'], unique_id = unique_id)
+		post_manager.closeConnection()	
+
 		return redirect(url_for("index"))
 	else:
 		return "<h2> Invalid request on sendMessage, only post method please </h2>"
@@ -153,8 +170,9 @@ def deletePost():
 	# feed_name = request.form.get('feed_name')
 	feed_name = "BALT"
 	unique_id = request.json.get('unique_id')
-	print(unique_id)
-	posts.deletePost(feed_name, unique_id)
+	post_manager = Posts()
+	post_manager.deletePost(feed_name, unique_id)
+	post_manager.closeConnection()
 
 	return redirect(url_for('index'))
 
@@ -164,7 +182,9 @@ def deleteComment():
 	feed_name = "BALT"
 	# feed_name = request.form.get('feed_name')
 	unique_id = request.json.get('unique_id')
-	posts.deleteComment(feed_name, unique_id)
+	post_manager = Posts()
+	post_manager.deleteComment(feed_name, unique_id)
+	post_manager.closeConnection()
 	return redirect(url_for('index'))
 
 
@@ -180,9 +200,9 @@ def reportPost():
 	reported_user = request.json['reported_user']
 
 	
-
+	post_manager = Posts()
 	posts.reportPost(feed_name, unique_id, reason, description, reporting_user, reported_user)
-
+	post_manager.closeConnection()
 
 	return redirect(url_for('index'))
 	# return redirect(url_for("index"))
@@ -199,8 +219,9 @@ def reportComment():
 	reported_user = request.json['reported_user']
 
 
-	
+	post_manager = Posts()
 	posts.reportComment(feed_name, unique_id, reason, description, reporting_user, reported_user)
+	post_manager.closeConnection()
 
 	return redirect(url_for("index"))
 
