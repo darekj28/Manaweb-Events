@@ -318,6 +318,7 @@
 			value: function render() {
 				var actions = ['Trade', 'Play', 'Chill'];
 				var alert;
+				var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
 				if (this.state.alert) {
 					alert = React.createElement(
 						'div',
@@ -333,16 +334,10 @@
 				return React.createElement(
 					'div',
 					null,
-					React.createElement(_SearchNavBar2.default, { searchText: this.state.search,
-						onSearch: this.handleSearch,
-						onClick: this.handleFilterClick,
-						actions: actions,
-						name: this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
-						currentUser: this.state.currentUser,
-						handleFilterClick: this.handleFilterClick,
-						handleFilterUser: this.handleFilterUser,
-						userIdToFilterPosts: this.state.userIdToFilterPosts,
-						filters: this.state.filters }),
+					React.createElement(_SearchNavBar2.default, { searchText: this.state.search, onSearch: this.handleSearch, onClick: this.handleFilterClick,
+						actions: actions, name: name, currentUser: this.state.currentUser,
+						handleFilterClick: this.handleFilterClick, handleFilterUser: this.handleFilterUser,
+						userIdToFilterPosts: this.state.userIdToFilterPosts, filters: this.state.filters }),
 					React.createElement(
 						'div',
 						{ className: 'container' },
@@ -364,8 +359,7 @@
 						React.createElement(
 							'div',
 							{ className: 'app row' },
-							React.createElement(_Feed2.default, { currentUser: this.state.currentUser,
-								searchText: this.state.search,
+							React.createElement(_Feed2.default, { currentUser: this.state.currentUser, searchText: this.state.search,
 								filters: this.state.filters, posts: this.state.feed, actions: actions,
 								refreshFeed: this.refreshFeed,
 								handleFilterUser: this.handleFilterUser,
@@ -433,6 +427,12 @@
 	
 			var _this = _possibleConstructorReturn(this, (SearchNavBar.__proto__ || Object.getPrototypeOf(SearchNavBar)).call(this, props));
 	
+			_this.state = {
+				notifications: [],
+				numUnseen: ''
+			};
+			_this.getNotifications = _this.getNotifications.bind(_this);
+			_this.seeNotifications = _this.seeNotifications.bind(_this);
 			_this.handleSearch = _this.handleSearch.bind(_this);
 			_this.handleResetFilterUser = _this.handleResetFilterUser.bind(_this);
 			_this.handleResetFilterButtons = _this.handleResetFilterButtons.bind(_this);
@@ -443,23 +443,25 @@
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				var searchVisible = 0;
-				$('.navbar-search-form').hide();
-				$('[data-toggle="search"]').click(function () {
-					if (searchVisible == 0) {
-						searchVisible = 1;
-						$(this).parent().addClass('active');
-						$('.navbar-search-form').fadeIn(function () {
-							$('.navbar-search-form input').focus();
-						});
-					} else {
-						searchVisible = 0;
-						$(this).parent().removeClass('active');
-						$(this).blur();
-						$('.navbar-search-form').fadeOut(function () {
-							$('.navbar-search-form input').blur();
-						});
-					}
-				});
+				$('.navbar-search-form').show();
+	
+				// $('.navbar-search-form').hide();
+				// $('[data-toggle="search"]').click(function(){
+				//        if(searchVisible == 0){
+				//            searchVisible = 1;
+				//            $(this).parent().addClass('active');
+				//            $('.navbar-search-form').fadeIn(function(){
+				//                $('.navbar-search-form input').focus();
+				//            });
+				//        } else {
+				//            searchVisible = 0;
+				//            $(this).parent().removeClass('active');
+				//            $(this).blur();
+				//            $('.navbar-search-form').fadeOut(function(){
+				//                $('.navbar-search-form input').blur();
+				//            });
+				//        } 
+				//    });
 				$('#searchInput').keypress(function (event) {
 					if (event.keyCode == 13) {
 						event.preventDefault();
@@ -467,6 +469,36 @@
 				});
 				$('.SearchNavBarGlyphicon').focus(function () {
 					$(this).blur();
+				});
+			}
+		}, {
+			key: 'getNotifications',
+			value: function getNotifications() {
+				$.post('/getNotifications', function (data) {
+					var notifications = [];
+					var count = 0;
+					data.notification_list.map(function (obj) {
+						if (!obj['seen']) count++;
+						notifications.unshift({
+							comment_id: obj['comment_id'],
+							notification_id: obj['notification_id'],
+							timeString: obj['timeString'],
+							sender_id: obj['sender_id'],
+							action: obj['action'],
+							receiver_id: obj['receiver_id'],
+							seen: obj['seen']
+						});
+					});
+					this.setState({ notifications: notifications });
+					this.setState({ numUnseen: String(count) });
+				}.bind(this));
+				this.seeNotifications();
+			}
+		}, {
+			key: 'seeNotifications',
+			value: function seeNotifications() {
+				this.state.notifications.map(function (obj) {
+					$.post('/seeNotifications', { notification_id: obj['notification_id'] });
 				});
 			}
 		}, {
@@ -492,7 +524,6 @@
 				var _this2 = this;
 	
 				var that = this;
-	
 				return React.createElement(
 					'nav',
 					{ className: 'navbar navbar-default', role: 'navigation' },
@@ -527,16 +558,7 @@
 							React.createElement(
 								'ul',
 								{ className: 'nav navbar-nav navbar-right' },
-								React.createElement(
-									'li',
-									null,
-									React.createElement(
-										'a',
-										{ href: 'javascript:void(0)', 'data-toggle': 'search' },
-										React.createElement('span', { className: 'glyphicon glyphicon-search' })
-									)
-								),
-								React.createElement(_NotificationsDropdown2.default, { currentUser: this.props.currentUser }),
+								React.createElement(_NotificationsDropdown2.default, { notifications: this.state.notifications, numUnseen: this.state.numUnseen, getNotifications: this.getNotifications }),
 								React.createElement(_AccountDropdown2.default, { name: this.props.name })
 							),
 							React.createElement(
@@ -604,87 +626,42 @@
 	
 	        var _this = _possibleConstructorReturn(this, (NotificationsDropdown.__proto__ || Object.getPrototypeOf(NotificationsDropdown)).call(this, props));
 	
-	        _this.state = {
-	            notifications: [],
-	            newNotificaitons: ''
-	        };
-	
-	        _this.refreshNotifications = _this.refreshNotifications.bind(_this);
-	        _this.seeNotifications = _this.seeNotifications.bind(_this);
-	        _this.generateNotificationFeed = _this.generateNotificationFeed.bind(_this);
+	        _this.getNotifications = _this.getNotifications.bind(_this);
 	        return _this;
 	    }
 	
 	    _createClass(NotificationsDropdown, [{
-	        key: 'refreshNotifications',
-	        value: function refreshNotifications() {
-	            $.post('/getNotifications', { userID: this.props.currentUser.userID }, function (data) {
-	                var notifications = [];
-	                var count = 0;
-	                data.notification_list.map(function (obj) {
-	
-	                    if (obj['seen'] == false) count = count + 1;
-	                    notifications.unshift({
-	                        comment_id: obj['comment_id'],
-	                        notification_id: obj['notification_id'],
-	                        timeString: obj['timeString'],
-	                        sender_id: obj['sender_id'],
-	                        action: obj['action'],
-	                        receiver_id: obj['receiver_id'],
-	                        seen: obj['seen']
-	                    });
-	                });
-	                this.setState({ notifications: notifications });
-	                this.setState({ newNotificaitons: String(count) });
-	            }.bind(this));
-	        }
-	    }, {
-	        key: 'seeNotifications',
-	        value: function seeNotifications() {
-	            this.state.notifications.map(function (obj) {
-	                $.post('/seeNotifications', { notification_id: obj['notification_id'] });
-	            });
-	        }
-	    }, {
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            this.refreshNotifications();
-	        }
-	    }, {
-	        key: 'generateNotificationFeed',
-	        value: function generateNotificationFeed() {
-	            var notification_feed = [];
-	            for (var note in this.state.notifications) {
-	                notification_feed.unshift(React.createElement(
-	                    'li',
-	                    null,
-	                    ' ',
-	                    React.createElement(
-	                        'a',
-	                        { href: "/comment?id=" + note.comment_id },
-	                        ' ',
-	                        note.action + " at " + note.timeString,
-	                        '  '
-	                    ),
-	                    ' '
-	                ));
-	            }
+	        key: 'getNotifications',
+	        value: function getNotifications() {
+	            this.props.getNotifications();
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var notification_feed = this.generateNotificationFeed();
 	            return React.createElement(
 	                'li',
 	                { className: 'dropdown' },
 	                React.createElement(
 	                    'a',
-	                    { href: '#', className: 'SearchNavBarGlyphicon dropdown-toggle', 'data-toggle': 'dropdown', onClick: this.seeNotifications },
+	                    { href: '#', className: 'SearchNavBarGlyphicon dropdown-toggle', 'data-toggle': 'dropdown',
+	                        onClick: this.getNotifications },
 	                    React.createElement('span', { className: 'glyphicon glyphicon-envelope' })
 	                ),
 	                React.createElement(
 	                    'ul',
 	                    { className: 'dropdown-menu' },
+	                    this.props.notifications.map(function (note) {
+	                        return React.createElement(
+	                            'li',
+	                            null,
+	                            React.createElement(
+	                                Link,
+	                                { to: "/comment?id=" + note.comment_id },
+	                                ' ',
+	                                note.action + " at " + note.timeString
+	                            )
+	                        );
+	                    }),
 	                    React.createElement(
 	                        'li',
 	                        null,
@@ -697,8 +674,7 @@
 	                                'See All'
 	                            )
 	                        )
-	                    ),
-	                    '}'
+	                    )
 	                )
 	            );
 	        }
@@ -9995,6 +9971,7 @@
 				var _this2 = this;
 	
 				var that = this;
+	
 				return React.createElement(
 					'div',
 					null,
@@ -10013,7 +9990,7 @@
 							},
 							onSubmit: this.handlePostSubmit, onChange: this.handlePostChange }),
 						this.props.actions.map(function (action, i) {
-							if (action == "Trade") return React.createElement(_FilterButton2.default, { key: i, onClick: that.props.onClick, active: true, name: action });else return React.createElement(_FilterButton2.default, { key: i, onClick: that.props.onClick, active: false, name: action });
+							return React.createElement(_FilterButton2.default, { key: i, onClick: that.props.onClick, active: false, name: action });
 						}),
 						React.createElement(
 							'a',
@@ -10917,7 +10894,6 @@
 			var _this = _possibleConstructorReturn(this, (CommentApp.__proto__ || Object.getPrototypeOf(CommentApp)).call(this, props));
 	
 			_this.state = {
-				actions: [],
 				search: '',
 				comment: '',
 				feed: [],
@@ -10926,7 +10902,6 @@
 				unique_id: '',
 				original_post: []
 			};
-			// this.handleFilterClick = this.handleFilterClick.bind(this);
 			_this.handleSearch = _this.handleSearch.bind(_this);
 			_this.handleCommentChange = _this.handleCommentChange.bind(_this);
 			_this.handleCommentSubmit = _this.handleCommentSubmit.bind(_this);
@@ -11033,27 +11008,17 @@
 				this.getCurrentUserInfo();
 				this.getPostById();
 				this.getNextUniqueId();
-	
-				$('.filterButton').click(function (e) {
-					$(this).toggleClass('icon-danger');
-					$(this).toggleClass('icon-success');
-					$(this).blur();
-					e.preventDefault();
-				});
 			}
 		}, {
 			key: "render",
 			value: function render() {
-				var actions = ['Trade', 'Play', 'Chill'];
-	
+				var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
 				return React.createElement(
 					"div",
 					{ id: "CommentApp" },
 					React.createElement(_CommentNavBar2.default, {
-						actions: actions,
-						searchText: this.state.search, onSearch: this.handleSearch,
-						name: this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
-						currentUser: this.state.currentUser }),
+						searchText: this.state.search, onSearch: this.handleSearch, currentUser: this.state.currentUser,
+						name: name }),
 					React.createElement(
 						"div",
 						{ className: "container" },
@@ -11095,10 +11060,6 @@
 	
 	var _AccountDropdown2 = _interopRequireDefault(_AccountDropdown);
 	
-	var _FilterButton = __webpack_require__(/*! ./FilterButton.jsx */ 90);
-	
-	var _FilterButton2 = _interopRequireDefault(_FilterButton);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -11109,6 +11070,7 @@
 	
 	var React = __webpack_require__(/*! react */ 4);
 	var Link = __webpack_require__(/*! react-router */ 34).Link;
+	var browserHistory = __webpack_require__(/*! react-router */ 34).browserHistory;
 	// var $ = require('jquery');
 	
 	var CommentNavBar = function (_React$Component) {
@@ -11119,31 +11081,44 @@
 	
 			var _this = _possibleConstructorReturn(this, (CommentNavBar.__proto__ || Object.getPrototypeOf(CommentNavBar)).call(this, props));
 	
+			_this.state = {
+				notifications: [],
+				numUnseen: ''
+			};
+			_this.getNotifications = _this.getNotifications.bind(_this);
+			_this.seeNotifications = _this.seeNotifications.bind(_this);
 			_this.handleSearch = _this.handleSearch.bind(_this);
 			return _this;
 		}
 	
 		_createClass(CommentNavBar, [{
+			key: 'handleSearch',
+			value: function handleSearch() {
+				this.props.onSearch(this.searchText.value);
+			}
+		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				var searchVisible = 0;
-				$('.navbar-search-form').hide();
-				$('[data-toggle="search"]').click(function () {
-					if (searchVisible == 0) {
-						searchVisible = 1;
-						$(this).parent().addClass('active');
-						$('.navbar-search-form').fadeIn(function () {
-							$('.navbar-search-form input').focus();
-						});
-					} else {
-						searchVisible = 0;
-						$(this).parent().removeClass('active');
-						$(this).blur();
-						$('.navbar-search-form').fadeOut(function () {
-							$('.navbar-search-form input').blur();
-						});
-					}
-				});
+				// $('.navbar-search-form').hide();
+				$('.navbar-search-form').show();
+	
+				// $('[data-toggle="search"]').click(function(){
+				//        if(searchVisible == 0){
+				//            searchVisible = 1;
+				//            $(this).parent().addClass('active');
+				//            $('.navbar-search-form').fadeIn(function(){
+				//                $('.navbar-search-form input').focus();
+				//            });
+				//        } else {
+				//            searchVisible = 0;
+				//            $(this).parent().removeClass('active');
+				//            $(this).blur();
+				//            $('.navbar-search-form').fadeOut(function(){
+				//                $('.navbar-search-form input').blur();
+				//            });
+				//        } 
+				//    });
 				$('#searchInput').keypress(function (event) {
 					if (event.keyCode == 13) {
 						event.preventDefault();
@@ -11154,9 +11129,34 @@
 				});
 			}
 		}, {
-			key: 'handleSearch',
-			value: function handleSearch() {
-				this.props.onSearch(this.searchText.value);
+			key: 'getNotifications',
+			value: function getNotifications() {
+				$.post('/getNotifications', { userID: this.props.currentUser['userID'] }, function (data) {
+					var notifications = [];
+					var count = 0;
+					data.notification_list.map(function (obj) {
+						if (!obj['seen']) count++;
+						notifications.unshift({
+							comment_id: obj['comment_id'],
+							notification_id: obj['notification_id'],
+							timeString: obj['timeString'],
+							sender_id: obj['sender_id'],
+							action: obj['action'],
+							receiver_id: obj['receiver_id'],
+							seen: obj['seen']
+						});
+					});
+					this.setState({ notifications: notifications });
+					this.setState({ numUnseen: String(count) });
+				}.bind(this));
+				this.seeNotifications();
+			}
+		}, {
+			key: 'seeNotifications',
+			value: function seeNotifications() {
+				this.state.notifications.map(function (obj) {
+					$.post('/seeNotifications', { notification_id: obj['notification_id'] });
+				});
 			}
 		}, {
 			key: 'render',
@@ -11187,7 +11187,7 @@
 							),
 							React.createElement(
 								Link,
-								{ to: '/', className: 'SearchNavBarGlyphicon navbar-brand navbar-brand-logo' },
+								{ onClick: browserHistory.goBack, className: 'SearchNavBarGlyphicon navbar-brand navbar-brand-logo' },
 								React.createElement('span', { className: 'glyphicon glyphicon-chevron-left' })
 							)
 						),
@@ -11197,16 +11197,7 @@
 							React.createElement(
 								'ul',
 								{ className: 'nav navbar-nav navbar-right' },
-								React.createElement(
-									'li',
-									{ className: '' },
-									React.createElement(
-										'a',
-										{ href: 'javascript:void(0)', 'data-toggle': 'search' },
-										React.createElement('span', { className: 'glyphicon glyphicon-search' })
-									)
-								),
-								React.createElement(_NotificationsDropdown2.default, { currentUser: this.props.currentUser }),
+								React.createElement(_NotificationsDropdown2.default, { notifications: this.state.notifications, numUnseen: this.state.numUnseen, getNotifications: this.getNotifications }),
 								React.createElement(_AccountDropdown2.default, { name: this.props.name })
 							),
 							React.createElement(
@@ -11222,11 +11213,7 @@
 												return _this2.searchText = input;
 											},
 											id: 'searchInput', className: 'form-control', placeholder: 'Search...',
-											onChange: this.handleSearch }),
-										React.createElement('div', { className: 'input-group-addon' }),
-										this.props.actions.map(function (action, i) {
-											return React.createElement(_FilterButton2.default, { key: i, active: true, isSearch: true, name: action });
-										})
+											onChange: this.handleSearch })
 									)
 								)
 							)
@@ -12133,7 +12120,6 @@
 			_this.state = { currentUser: '',
 				notifications: [] };
 			_this.getCurrentUserInfo = _this.getCurrentUserInfo.bind(_this);
-			_this.getNotifications = _this.getNotifications.bind(_this);
 			return _this;
 		}
 	
@@ -12145,13 +12131,9 @@
 				}.bind(this));
 			}
 		}, {
-			key: 'getNotifications',
-			value: function getNotifications() {}
-		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				this.getCurrentUserInfo();
-				this.getNotifications();
 			}
 		}, {
 			key: 'render',
@@ -12160,8 +12142,7 @@
 				return React.createElement(
 					'div',
 					{ id: 'NotificationsApp' },
-					React.createElement(_NoSearchNavBar2.default, { name: name,
-						currentUser: this.state.currentUser }),
+					React.createElement(_NoSearchNavBar2.default, { name: name, currentUser: this.state.currentUser }),
 					React.createElement(
 						'div',
 						{ className: 'container' },
@@ -12215,14 +12196,23 @@
 	
 	var React = __webpack_require__(/*! react */ 4);
 	var Link = __webpack_require__(/*! react-router */ 34).Link;
+	var browserHistory = __webpack_require__(/*! react-router */ 34).browserHistory;
 	
 	var NoSearchNavBar = function (_React$Component) {
 		_inherits(NoSearchNavBar, _React$Component);
 	
-		function NoSearchNavBar() {
+		function NoSearchNavBar(props) {
 			_classCallCheck(this, NoSearchNavBar);
 	
-			return _possibleConstructorReturn(this, (NoSearchNavBar.__proto__ || Object.getPrototypeOf(NoSearchNavBar)).apply(this, arguments));
+			var _this = _possibleConstructorReturn(this, (NoSearchNavBar.__proto__ || Object.getPrototypeOf(NoSearchNavBar)).call(this, props));
+	
+			_this.state = {
+				notifications: [],
+				numUnseen: ''
+			};
+			_this.getNotifications = _this.getNotifications.bind(_this);
+			_this.seeNotifications = _this.seeNotifications.bind(_this);
+			return _this;
 		}
 	
 		_createClass(NoSearchNavBar, [{
@@ -12230,6 +12220,36 @@
 			value: function componentDidMount() {
 				$('.SearchNavBarGlyphicon').focus(function () {
 					$(this).blur();
+				});
+			}
+		}, {
+			key: 'getNotifications',
+			value: function getNotifications() {
+				$.post('/getNotifications', { userID: this.props.currentUser['userID'] }, function (data) {
+					var notifications = [];
+					var count = 0;
+					data.notification_list.map(function (obj) {
+						if (!obj['seen']) count++;
+						notifications.unshift({
+							comment_id: obj['comment_id'],
+							notification_id: obj['notification_id'],
+							timeString: obj['timeString'],
+							sender_id: obj['sender_id'],
+							action: obj['action'],
+							receiver_id: obj['receiver_id'],
+							seen: obj['seen']
+						});
+					});
+					this.setState({ notifications: notifications });
+					this.setState({ numUnseen: String(count) });
+				}.bind(this));
+				this.seeNotifications();
+			}
+		}, {
+			key: 'seeNotifications',
+			value: function seeNotifications() {
+				this.state.notifications.map(function (obj) {
+					$.post('/seeNotifications', { notification_id: obj['notification_id'] });
 				});
 			}
 		}, {
@@ -12259,7 +12279,7 @@
 							),
 							React.createElement(
 								Link,
-								{ to: '/', className: 'SearchNavBarGlyphicon navbar-brand navbar-brand-logo' },
+								{ onClick: browserHistory.goBack, className: 'SearchNavBarGlyphicon navbar-brand navbar-brand-logo' },
 								React.createElement('span', { className: 'glyphicon glyphicon-chevron-left' })
 							)
 						),
@@ -12269,7 +12289,7 @@
 							React.createElement(
 								'ul',
 								{ className: 'nav navbar-nav navbar-right' },
-								React.createElement(_NotificationsDropdown2.default, { currentUser: this.props.currentUser }),
+								React.createElement(_NotificationsDropdown2.default, { notifications: this.state.notifications, numUnseen: this.state.numUnseen, getNotifications: this.getNotifications }),
 								React.createElement(_AccountDropdown2.default, { name: this.props.name })
 							)
 						)
@@ -12319,7 +12339,7 @@
 	      newNotificaitons: ''
 	    };
 	
-	    _this.getNotifications = _this.getNotifications.bind(_this);
+	    // this.getNotifications = this.getNotifications.bind(this);
 	    return _this;
 	  }
 	  // refreshNotifications() {
@@ -12364,6 +12384,7 @@
 	  //         )
 	  //     }
 	  // }
+	
 	
 	  _createClass(NotificationsFeed, [{
 	    key: 'render',

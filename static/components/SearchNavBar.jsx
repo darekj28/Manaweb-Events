@@ -25,23 +25,25 @@ export default class SearchNavBar extends React.Component {
 	}
 	componentDidMount() {
 		var searchVisible = 0;
-		$('.navbar-search-form').hide();
-		$('[data-toggle="search"]').click(function(){
-	        if(searchVisible == 0){
-	            searchVisible = 1;
-	            $(this).parent().addClass('active');
-	            $('.navbar-search-form').fadeIn(function(){
-	                $('.navbar-search-form input').focus();
-	            });
-	        } else {
-	            searchVisible = 0;
-	            $(this).parent().removeClass('active');
-	            $(this).blur();
-	            $('.navbar-search-form').fadeOut(function(){
-	                $('.navbar-search-form input').blur();
-	            });
-	        } 
-	    });
+		$('.navbar-search-form').show();		
+
+		// $('.navbar-search-form').hide();
+		// $('[data-toggle="search"]').click(function(){
+	 //        if(searchVisible == 0){
+	 //            searchVisible = 1;
+	 //            $(this).parent().addClass('active');
+	 //            $('.navbar-search-form').fadeIn(function(){
+	 //                $('.navbar-search-form input').focus();
+	 //            });
+	 //        } else {
+	 //            searchVisible = 0;
+	 //            $(this).parent().removeClass('active');
+	 //            $(this).blur();
+	 //            $('.navbar-search-form').fadeOut(function(){
+	 //                $('.navbar-search-form input').blur();
+	 //            });
+	 //        } 
+	 //    });
 	    $('#searchInput').keypress(function(event) {
 	    	if(event.keyCode == 13){ 
 			   event.preventDefault();
@@ -52,7 +54,7 @@ export default class SearchNavBar extends React.Component {
 	    });
 	}
 	getNotifications() {
-		$.post('/getNotifications', {userID : this.props.currentUser['userID']}, 
+		$.post('/getNotifications', 
             function(data) {
                 var notifications = [];
                 var count = 0;
@@ -108,11 +110,12 @@ export default class SearchNavBar extends React.Component {
 				        </div>
 				        <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				          <ul className="nav navbar-nav navbar-right">
-		                    <li>
+		                   {/*  <li>
 		                        <a href="javascript:void(0)" data-toggle="search">
 		 							<span className="glyphicon glyphicon-search"></span>
 		                        </a>
 		                    </li>
+		                */}
 				          	<NotificationsDropdown notifications={this.state.notifications} numUnseen={this.state.numUnseen} getNotifications={this.getNotifications}/>
 				          	<AccountDropdown name={this.props.name}/>
 				          </ul>
