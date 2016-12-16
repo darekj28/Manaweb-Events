@@ -77,7 +77,7 @@ export default class SearchNavBar extends React.Component {
 	}
 	seeNotifications() {
         this.state.notifications.map(function (obj){
-            $.post('/seeNotifications', {notification_id: obj['notification_id']})
+            $.post('/seeNotification', {notification_id: obj['notification_id']})
         });
     }
 	handleResetFilterUser() {

@@ -215,9 +215,8 @@ class Posts:
 		return n_list
 
 
-
-	def markNotificaitonAsSeen(self, feed_name, notification_id):
-		sql = "UPDATE " + self.NOTIFICATION_TABLE + " SET hasSeen = True WHERE notification = %s"
+	def markNotificationAsSeen(self, feed_name, notification_id):
+		sql = "UPDATE " + self.NOTIFICATION_TABLE + " SET seen = True WHERE notification_id = %s"
 		self.db.execute(self.db.mogrify(sql, (notification_id,)))
 		self.post_db.commit()
 
