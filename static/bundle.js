@@ -184,7 +184,8 @@
 				feed: [],
 				currentUser: {},
 				alert: false,
-				unique_id: ''
+				unique_id: '',
+				feed_name: ''
 			};
 			_this.handleFilterClick = _this.handleFilterClick.bind(_this);
 			_this.handleFilterUser = _this.handleFilterUser.bind(_this);
@@ -661,20 +662,7 @@
 	                                note.action + " at " + note.timeString
 	                            )
 	                        );
-	                    }),
-	                    React.createElement(
-	                        'li',
-	                        null,
-	                        React.createElement(
-	                            Link,
-	                            { to: '/notifications' },
-	                            React.createElement(
-	                                'center',
-	                                null,
-	                                'See All'
-	                            )
-	                        )
-	                    )
+	                    })
 	                )
 	            );
 	        }

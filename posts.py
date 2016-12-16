@@ -169,25 +169,25 @@ class Posts:
 			self.removeFromShortList(feed_name, receiver_id, notification_list[0]['notification_id'])
 			
 
-	def removeFromShortList(self, feed_name, receiver_id, notification_id):
+	def removeFromShortList(self, receiver_id, notification_id):
 		table_name = self.USER_NOTIFICATION_PREFIX + receiver_id
 		sql = "DELETE FROM " + table_name + " WHERE notification_id = %s"
 		self.db.execute(self.db.mogrify(sql, (notification_id,)))
 		self.post_db.commit()
 
 
-	def getShortListNotifications(self, feed_name,userID):
+	def getShortListNotifications(self,userID):
 		table_name = self.USER_NOTIFICATION_PREFIX + userID
-		sql = "SELECT * FROM " + table_name + " WHERE receiver_id = %s AND feed_name = %s"
-		self.db.execute(self.db.mogrify(sql, (userID, feed_name)))
+		sql = "SELECT * FROM " + table_name + " WHERE receiver_id = %s"
+		self.db.execute(self.db.mogrify(sql, (userID,)))
 		query = self.db.fetchall()
 		notification_list = self.notificationListToDict(query)
 		return notification_list
 
 
-	def getNotifications(self, feed_name, userID):
-		sql = "SELECT * FROM " + self.NOTIFICATION_TABLE + " WHERE receiver_id = %s AND feed_name = %s"
-		self.db.execute(self.db.mogrify(sql, (userID, feed_name)))
+	def getNotifications(self, userID):
+		sql = "SELECT * FROM " + self.NOTIFICATION_TABLE + " WHERE receiver_id = %s"
+		self.db.execute(self.db.mogrify(sql, (userID,)))
 		query = self.db.fetchall()
 		notification_list = self.notificationListToDict(query)
 		return notification_list
@@ -206,17 +206,13 @@ class Posts:
 			this_note['timeStamp'] = note[7]
 			this_note['timeString'] = note[8]
 			n_list.append(this_note)
-
 		return n_list
 
 
-	def markNotificationAsSeen(self, feed_name, notification_id):
+	def markNotificationAsSeen(self, notification_id):
 		sql = "UPDATE " + self.NOTIFICATION_TABLE + " SET seen = True WHERE notification_id = %s"
 		self.db.execute(self.db.mogrify(sql, (notification_id,)))
 		self.post_db.commit()
-
-
-
 
 
 	def createAdminTable(self):
@@ -499,10 +495,10 @@ class Posts:
 	def getPosts(self, feed_name, tradeFilter = None, playFilter = None, chillFilter = None):
 		
 		feed_table_name =  feed_name
-		sql_code = "SELECT * FROM " + feed_table_name + " WHERE ghost_following = %s"
+		sql_code = "SELECT * FROM " + feed_table_name + " WHERE ghost_following = %s AND feed_name = %s"
 
 		ghost_following = False
-		self.db.execute(self.db.mogrify(sql_code, (ghost_following,)))	
+		self.db.execute(self.db.mogrify(sql_code, (ghost_following,feed_name)))	
 
 		posts = self.db.fetchall()
 		postDict = self.postListToDict(posts)

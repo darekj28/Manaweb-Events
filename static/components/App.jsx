@@ -30,7 +30,8 @@ export default class App extends React.Component {
 			feed : [],
 			currentUser : {},
 			alert : false,
-			unique_id : ''
+			unique_id : '',
+			feed_name : ''
 		};
 		this.handleFilterClick = this.handleFilterClick.bind(this);
 		this.handleFilterUser = this.handleFilterUser.bind(this);
@@ -52,7 +53,7 @@ export default class App extends React.Component {
 		}.bind(this));
 	}
 	refreshFeed() {
-		$.post('/getPosts', function(data) {
+		$.post('/getPosts', function(data){
 			var feed = [];
 			data.post_list.map(function(obj) {
 				feed.unshift({

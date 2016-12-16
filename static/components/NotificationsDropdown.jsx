@@ -19,7 +19,7 @@ export default class NotificationsDropdown extends React.Component {
                     {this.props.notifications.map(function(note) {
                         return (<li><Link to={"/comment?id=" + note.comment_id}> {note.action +  " at " + note.timeString}</Link></li>);
                     })}
-                    <li><Link to="/notifications"><center>See All</center></Link></li>
+                   {/* <li><Link to="/notifications"><center>See All</center></Link></li> */}
                 </ul>
             </li>
 		);
