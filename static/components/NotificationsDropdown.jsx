@@ -7,8 +7,6 @@ export default class NotificationsDropdown extends React.Component {
             notifications : [],
             newNotificaitons: ''
          };
-
-
         this.refreshNotifications = this.refreshNotifications.bind(this);
         this.seeNotifications = this.seeNotifications.bind(this);
         this.generateNotificationFeed = this.generateNotificationFeed.bind(this);
@@ -19,7 +17,6 @@ export default class NotificationsDropdown extends React.Component {
                 var notifications = [];
                 var count = 0;
                     data.notification_list.map(function(obj) {
-
                         if (obj['seen'] == false) count = count + 1; 
                         notifications.unshift({
                             comment_id : obj['comment_id'],
@@ -31,22 +28,18 @@ export default class NotificationsDropdown extends React.Component {
                             seen : obj['seen']
                         });
                     });
-            this.setState({notifications : notifications});
-            this.setState({newNotificaitons: String(count)})
-        }.bind(this));
+                this.setState({notifications : notifications});
+                this.setState({newNotificaitons: String(count)})
+            }.bind(this));
     }
-    
-
     seeNotifications() {
         this.state.notifications.map(function (obj){
             $.post('/seeNotifications', {notification_id: obj['notification_id']})
         });
     }
-
     componentDidMount() {
         this.refreshNotifications();
     }
-
     generateNotificationFeed(){
         var notification_feed = [];
         for (var note in this.state.notifications){
@@ -55,7 +48,6 @@ export default class NotificationsDropdown extends React.Component {
             )
         }
     }
-
 	render() { 
         var notification_feed = this.generateNotificationFeed()
 		return (

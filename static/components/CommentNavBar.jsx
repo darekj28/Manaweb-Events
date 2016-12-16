@@ -3,12 +3,14 @@ var Link = require('react-router').Link;
 // var $ = require('jquery');
 import NotificationsDropdown from "./NotificationsDropdown.jsx";
 import AccountDropdown from "./AccountDropdown.jsx";
-import FilterButton from "./FilterButton.jsx";
 
 export default class CommentNavBar extends React.Component {
 	constructor(props) {
 		super(props);
 		this.handleSearch = this.handleSearch.bind(this);
+	}
+	handleSearch() {
+		this.props.onSearch(this.searchText.value);
 	}
 	componentDidMount() {
 		var searchVisible = 0;
@@ -37,9 +39,6 @@ export default class CommentNavBar extends React.Component {
 	    $('.SearchNavBarGlyphicon').focus(function() {
 	    	$(this).blur();
 	    });
-	}
-	handleSearch() {
-		this.props.onSearch(this.searchText.value);
 	}
 	render() {
 		return (
@@ -73,10 +72,6 @@ export default class CommentNavBar extends React.Component {
 				                      <input type="text" value={this.props.searchText} ref={(input) => this.searchText = input} 
 				                      			id="searchInput" className="form-control" placeholder="Search..." 
 				                      			onChange={this.handleSearch}/>
-				                      <div className = "input-group-addon"></div>
-				                      {this.props.actions.map(function(action, i) {
-											return  <FilterButton key={i} active={true} isSearch={true} name={action}/>;
-										})}
 								  </div>		  
 			                 </div> 
 			              </form>

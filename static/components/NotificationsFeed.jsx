@@ -8,7 +8,7 @@ export default class NotificationsFeed extends React.Component {
             newNotificaitons: ''
          };
 
-        this.getNotifications = this.getNotifications.bind(this);
+        // this.getNotifications = this.getNotifications.bind(this);
     }
     // refreshNotifications() {
     //     $.post('/getNotifications', {userID : this.props.currentUser.userID}, 
@@ -52,7 +52,6 @@ export default class NotificationsFeed extends React.Component {
     //         )
     //     }
     // }
-
 	render() {
 		return (
 			<div>
