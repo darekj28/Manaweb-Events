@@ -13,9 +13,9 @@ mobile_api = Blueprint('mobile_api', __name__)
 def getNotifications():
 	feed_name = "BALT"
 
-	userID = request.form['userID']
+	userID = session.get('userID')
 	post_manager = Posts()
-	notification_list = post_manager.getNotifications(feed_name, userID)
+	notification_list = post_manager.getShortListNotifications(feed_name, userID)
 	post_manager.sortAscending(notification_list)
 	post_manager.closeConnection()
 	return jsonify({ 'notification_list' : notification_list })	
@@ -24,10 +24,11 @@ def getNotifications():
 @mobile_api.route('/seeNotification', methods=['POST'])
 def seeNotificaiton():
 	feed_name = "BALT"
-	notification_id = request.json['notification_id']
+	notification_id = request.form['notification_id']
 	post_manager = Posts()
 	post_manager.markNotificationAsSeen(feed_name, notification_id)
-	post_manager.close()
+	post_manager.closeConnection()
+	return jsonify({'success' : True})
 	
 
 @mobile_api.route('/sendConfirmation', methods = ['POST'])
