@@ -235,7 +235,7 @@ class Posts:
 
 
 	def createThread(self, feed_name):
-		if self.isFeed(feed_name):
+		if not self.isFeed(feed_name):
 			self.addFeedName(feed_name)
 			createTableCode = 'CREATE TABLE IF NOT EXISTS ' + feed_name + ' (body TEXT, poster_id TEXT, feed_name TEXT, comment_id TEXT, timeString TEXT, timeStamp FLOAT, isTrade BOOLEAN, isPlay BOOLEAN, isChill BOOLEAN, unique_id TEXT, numComments INT, following BOOLEAN, ghost_following BOOLEAN)'
 			self.db.execute(createTableCode)
