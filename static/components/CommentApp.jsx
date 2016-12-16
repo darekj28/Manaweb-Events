@@ -119,12 +119,11 @@ export default class CommentApp extends React.Component {
 		this.getNextUniqueId();
 	}
 	render() {
-
+		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
 		return (<div id="CommentApp">
 			<CommentNavBar 
-				 searchText={this.state.search} onSearch={this.handleSearch} 
-						name={this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name']}
-						currentUser={this.state.currentUser}/>
+				 searchText={this.state.search} onSearch={this.handleSearch} currentUser={this.state.currentUser}
+						name={name}/>
 			<div className="container">
 				<CommentFeedPost comment={this.state.original_post} isOriginalPost={true}/>
 				<CommentFeed currentUser={this.state.currentUser} searchText={this.state.search} filters={this.state.filters} 
