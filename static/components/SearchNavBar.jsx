@@ -13,6 +13,12 @@ function contains(collection, item) {
 export default class SearchNavBar extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			notifications : [],
+			numUnseen : ''
+		};
+		this.getNotifications = this.getNotifications.bind(this);
+        this.seeNotifications = this.seeNotifications.bind(this);
 		this.handleSearch = this.handleSearch.bind(this);
 		this.handleResetFilterUser = this.handleResetFilterUser.bind(this);
 		this.handleResetFilterButtons = this.handleResetFilterButtons.bind(this);
@@ -45,6 +51,33 @@ export default class SearchNavBar extends React.Component {
 	    	$(this).blur();
 	    });
 	}
+	getNotifications() {
+		$.post('/getNotifications', {userID : this.props.currentUser['userID']}, 
+            function(data) {
+                var notifications = [];
+                var count = 0;
+                data.notification_list.map(function(obj) {
+                    if (!obj['seen']) count++; 
+                    notifications.unshift({
+                        comment_id : obj['comment_id'],
+                        notification_id : obj['notification_id'],
+                        timeString : obj['timeString'],
+                        sender_id : obj['sender_id'],
+                        action : obj['action'],
+                        receiver_id : obj['receiver_id'],
+                        seen : obj['seen']
+                    });
+                });
+                this.setState({notifications : notifications});
+                this.setState({numUnseen: String(count)});
+            }.bind(this));
+		this.seeNotifications();
+	}
+	seeNotifications() {
+        this.state.notifications.map(function (obj){
+            $.post('/seeNotifications', {notification_id: obj['notification_id']})
+        });
+    }
 	handleResetFilterUser() {
 		this.props.handleFilterUser(this.props.userIdToFilterPosts);
 	}
@@ -58,7 +91,6 @@ export default class SearchNavBar extends React.Component {
 	}
 	render() {
 		var that = this;
-
 		return (
 			<nav className="navbar navbar-default" role="navigation">
 				<div className="container">
@@ -81,7 +113,7 @@ export default class SearchNavBar extends React.Component {
 		 							<span className="glyphicon glyphicon-search"></span>
 		                        </a>
 		                    </li>
-				          	<NotificationsDropdown currentUser={this.props.currentUser}/>
+				          	<NotificationsDropdown notifications={this.state.notifications} numUnseen={this.state.numUnseen} getNotifications={this.getNotifications}/>
 				          	<AccountDropdown name={this.props.name}/>
 				          </ul>
 				         <form className="navbar-form navbar-right navbar-search-form" role="search">                  

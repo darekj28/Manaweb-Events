@@ -21,7 +21,6 @@ export default class CommentApp extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			actions : [],
 			search : '',
 			comment : '',
 			feed : [],
@@ -30,7 +29,6 @@ export default class CommentApp extends React.Component {
 			unique_id : '',
 			original_post : []
 		};
-		// this.handleFilterClick = this.handleFilterClick.bind(this);
 		this.handleSearch = this.handleSearch.bind(this);
 		this.handleCommentChange = this.handleCommentChange.bind(this);
 		this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
@@ -119,23 +117,13 @@ export default class CommentApp extends React.Component {
 		this.getCurrentUserInfo();
 		this.getPostById();
 		this.getNextUniqueId();
-
-		$('.filterButton').click(function(e) {
-			$(this).toggleClass('icon-danger');
-			$(this).toggleClass('icon-success');
-			$(this).blur();
-			e.preventDefault();
-		});
 	}
 	render() {
-		var actions = ['Trade', 'Play', 'Chill'];
-
+		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
 		return (<div id="CommentApp">
 			<CommentNavBar 
-				actions = {actions}
-				 searchText={this.state.search} onSearch={this.handleSearch} 
-						name={this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name']}
-						currentUser={this.state.currentUser}/>
+				 searchText={this.state.search} onSearch={this.handleSearch} currentUser={this.state.currentUser}
+						name={name}/>
 			<div className="container">
 				<CommentFeedPost comment={this.state.original_post} isOriginalPost={true}/>
 				<CommentFeed currentUser={this.state.currentUser} searchText={this.state.search} filters={this.state.filters} 

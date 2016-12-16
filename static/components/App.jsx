@@ -144,22 +144,17 @@ export default class App extends React.Component {
 	render() {
 		var actions = ['Trade', 'Play', 'Chill'];
 		var alert;
+		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
 		if (this.state.alert) {
 			alert = <div className="alert alert-danger">
 			  			<strong>Bro!</strong> You must select something to do before you post man!
 					</div>;
 		}
 		return (<div>
-			<SearchNavBar searchText={this.state.search} 
-							onSearch={this.handleSearch} 
-							onClick={this.handleFilterClick} 
-							actions={actions}
-							name={this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name']}
-							currentUser={this.state.currentUser}
-							handleFilterClick={this.handleFilterClick}
-							handleFilterUser={this.handleFilterUser}
-							userIdToFilterPosts={this.state.userIdToFilterPosts}
-							filters={this.state.filters}/>
+			<SearchNavBar searchText={this.state.search} onSearch={this.handleSearch} onClick={this.handleFilterClick} 
+							actions={actions} name={name} currentUser={this.state.currentUser}
+							handleFilterClick={this.handleFilterClick} handleFilterUser={this.handleFilterUser}
+							userIdToFilterPosts={this.state.userIdToFilterPosts} filters={this.state.filters}/>
 			<div className="container">
 				<div className="app row">
 					<EventName name="Name of Event"/>
@@ -173,8 +168,7 @@ export default class App extends React.Component {
 				</div>
 				{alert}
 				<div className="app row">
-				<Feed currentUser={this.state.currentUser} 
-						searchText={this.state.search} 
+				<Feed currentUser={this.state.currentUser} searchText={this.state.search} 
 						filters={this.state.filters} posts={this.state.feed} actions={actions}
 						refreshFeed={this.refreshFeed}
 						handleFilterUser={this.handleFilterUser}

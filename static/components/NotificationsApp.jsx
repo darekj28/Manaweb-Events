@@ -8,25 +8,20 @@ export default class NotificationsApp extends React.Component {
 		this.state = {currentUser : '',
 					notifications : []};
 		this.getCurrentUserInfo = this.getCurrentUserInfo.bind(this);
-		this.getNotifications = this.getNotifications.bind(this);
 	}
 	getCurrentUserInfo() {
 		$.post('/getCurrentUserInfo', function(data) {
 			this.setState({currentUser : data.thisUser});
 		}.bind(this));
 	}
-	getNotifications() {
-	}
 	componentDidMount() {
 		this.getCurrentUserInfo();
-		this.getNotifications();
 	}
 	render() {
 		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
 		return (
 			<div id="NotificationsApp">
-				<NoSearchNavBar name={name}
-								currentUser={this.state.currentUser}/>
+				<NoSearchNavBar name={name} currentUser={this.state.currentUser}/>
 				<div className="container">
 					<h2>{name}'s Notifications</h2>
 					<NotificationsFeed currentUser = {this.state.currentUser} notifications={this.state.notifications}/>		
