@@ -8,7 +8,8 @@
 import React from 'react';
 import {Component} from 'react'
 import {  AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
-          Alert, Image} from 'react-native';
+          Alert, Image, Animated, TouchableWithoutFeedback} from 'react-native';
+import dismissKeyboard from 'react-native-dismiss-keyboard';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ActionBar from '../actionbar/ActionBar'; // downloaded from https://github.com/Osedea/react-native-action-bar
@@ -20,6 +21,9 @@ import PostMessageBox from '../components/PostMessageBox'
 
 const ACTIVITY_BAR_HEIGHT = 40
 const ACTIVITY_BAR_COLOR = 'black'
+const POST_MESSAGE_HEIGHT_SHORT = 50
+const POST_MESSAGE_HEIGHT_TALL = 150
+const ANIMATE_DURATION = 500
 class FeedScreen extends Component {
 
 
@@ -33,9 +37,12 @@ class FeedScreen extends Component {
       login_id : "",
       password: "",
       activity_index: 0,
+      post_message_expanded: false,
+      post_message_height: new Animated.Value(50)
     }
+    this.container_message.bind(this)
     this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
-
+    this.postMessagePressed = this.postMessagePressed.bind(this)
     this._activities = FeedScreen.populateActivities()
   }
 
@@ -54,17 +61,30 @@ class FeedScreen extends Component {
     this.setState({select_activity: !this.state.select_activity})
   }
 
+  postMessagePressed() {
+      let initial = this.state.post_message_expanded ? POST_MESSAGE_HEIGHT_TALL : POST_MESSAGE_HEIGHT_SHORT
+      let final = this.state.post_message_expanded ? POST_MESSAGE_HEIGHT_SHORT : POST_MESSAGE_HEIGHT_TALL
+      this.setState({
+          post_message_expanded : !this.state.post_message_expanded  //Step 2
+      });
+      this.state.post_message_height.setValue(initial)
+      Animated.timing(          // Uses easing functions
+          this.state.post_message_height, {toValue: final, duration: ANIMATE_DURATION}
+      ).start();
+  }
+
+  container_message = function() {
+      return {
+          flexDirection:'row',
+      }
+  }
+
 
   render() {
-    let index = 0;
-    const data = [
-        { key: index++, section: true, label: 'Vegetables' },
-        { key: index++, label: 'Beets' },
-        { key: index++, label: 'Red Peppers' },
-    ];
 
     let dropdownIcon = require('./res/down_arrow.png')
     return (
+        <TouchableWithoutFeedback onPress={() => {dismissKeyboard(); this.postMessagePressed()}}>
         <View style = {styles.container}>
             <ActionBar
                 backgroundColor={'#3B373C'}
@@ -99,10 +119,18 @@ class FeedScreen extends Component {
                 </View>
             </View>
 
-            <PostMessageBox text='I love to blink' />
+            <Animated.View style = {[this.container_message(), {height: this.state.post_message_height}]}>
+                <PostMessageBox
+                    onClick={(event) => this.postMessagePressed()}
+                    animateDuration={ANIMATE_DURATION}
+                    post_message_expanded={this.state.post_message_expanded}>
+                </PostMessageBox>
+            </Animated.View>
+
+
 
         </View>
-
+        </TouchableWithoutFeedback>
     )
   }
 
@@ -129,8 +157,9 @@ const styles = StyleSheet.create({
   },
   containerHorizontal: {
      flexDirection:'row',
-     flex: 1,
+     height: ACTIVITY_BAR_HEIGHT,
   },
+
   titleTextLarge: {
     fontSize: 30
   },
