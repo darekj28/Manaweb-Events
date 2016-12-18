@@ -40,7 +40,6 @@ class FeedScreen extends Component {
       post_message_expanded: false,
       post_message_height: new Animated.Value(50)
     }
-    this.container_message.bind(this)
     this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
     this.postMessagePressed = this.postMessagePressed.bind(this)
     this._activities = FeedScreen.populateActivities()
@@ -73,9 +72,11 @@ class FeedScreen extends Component {
       ).start();
   }
 
-  container_message = function() {
-      return {
-          flexDirection:'row',
+  collapseMessageBox() {
+      dismissKeyboard();
+      if (this.state.post_message_expanded) {
+          // We only toggle the message box when it's in the expanded state to close it
+          this.postMessagePressed()
       }
   }
 
@@ -84,7 +85,7 @@ class FeedScreen extends Component {
 
     let dropdownIcon = require('./res/down_arrow.png')
     return (
-        <TouchableWithoutFeedback onPress={() => {dismissKeyboard(); this.postMessagePressed()}}>
+        <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
         <View style = {styles.container}>
             <ActionBar
                 backgroundColor={'#3B373C'}
@@ -119,7 +120,7 @@ class FeedScreen extends Component {
                 </View>
             </View>
 
-            <Animated.View style = {[this.container_message(), {height: this.state.post_message_height}]}>
+            <Animated.View style = {{flexDirection:'row', height: this.state.post_message_height}}>
                 <PostMessageBox
                     onClick={(event) => this.postMessagePressed()}
                     animateDuration={ANIMATE_DURATION}

@@ -9,10 +9,8 @@ import React from 'react';
 import {Component} from 'react'
 import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
         TouchableWithoutFeedback, Alert, Image, Animated} from 'react-native';
-import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import renderIf from './renderIf'
-import TextField from 'react-native-md-textinput';
 
 
 
