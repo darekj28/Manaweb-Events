@@ -1,0 +1,329 @@
+@font-face {
+  font-family: 'Aqua';
+  src: url('aqua.ttf');
+}
+@font-face {
+  font-family: 'museo_sans500';
+  src: url('MuseoSans_500-webfont.eot');
+  src: url('MuseoSans_500-webfont.eot?#iefix') format('embedded-opentype'),
+       url('MuseoSans_500-webfont.woff2') format('woff2'),
+       url('MuseoSans_500-webfont.woff') format('woff'),
+       url('MuseoSans_500-webfont.ttf') format('truetype'),
+       url('MuseoSans_500-webfont.svg#museo_sans500') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family : "raleway";
+  src : url('Raleway-Regular.ttf');
+}
+body {
+  font-family : "raleway";
+  background-color : #ffffff;
+  color : #0f0f0f;
+}
+#EventName {
+  letter-spacing: 5px;
+}
+
+.valid {
+  border-width: 1.5px;
+  border-color: #090;
+  border-style: solid;
+}
+.invalid {
+  border-width: 1.5px;
+  border-color: #C33;
+  border-style: solid;
+}
+.avatar_container {
+  width :150px;
+  height:150px;
+  background-size:cover;
+  border : 2px solid #000000;
+  border-radius : 10px;
+  margin-bottom : 15px;
+}
+.popover-title { 
+  display: none; 
+}
+.warning {
+  padding-right : 900px;
+}
+.CommentFeedPost {
+  list-style-type: none;
+  border-bottom: 1px solid #dbdbdb;
+}
+.CommentFeedPostOriginal {
+  list-style-type:none;
+}
+.numberOfComments {
+  text-decoration: none;
+  color:#ad8ed2;
+  cursor:pointer;
+}
+.CommentContainer:hover .numberOfComments{
+  color:#5b1da5;
+}
+.CommentContainer:hover .PostBottomIcon{
+  color:#5b1da5;
+}
+.PostDropdown {
+  border-bottom : none;
+  margin-top : 8px;
+  max-width : 20px;
+  width: 10px;
+}
+.Post {
+  list-style-type: none;
+  border-bottom: 1px solid #dbdbdb;
+}
+.form-control.FeedPostBody {
+  max-width: 85%;
+}
+.PostBottomIcon {
+  padding-right : 6px;
+  top : 8px;
+}
+.CommentBottomIcon {
+  margin-left: 72px;
+  padding-right : 20px;
+  top : -5px;
+}
+.CommentDropdown {
+  border-bottom : none;
+  margin-top : 13px;
+  max-width : 20px;
+  width: 10px;
+}
+.alert {
+  margin-top : 10px;
+}
+#CommentFeed {
+  max-height: 55vh;
+  overflow-y: auto;
+  margin-top: 10px;
+  padding-left : 10px;
+  padding-right: 20px;
+  background-color : #ffffff;
+  border : 1px solid #dfdfdf;
+  border-radius : 4px;
+}
+.FeedPostBody {
+  max-width : 120vh;
+  word-wrap: break-word;
+  position : relative;
+}
+.CommentFeedPostBody {
+  max-width : 120vh;
+  word-wrap: break-word;
+  position: relative;
+  top : -26px;
+}
+#Feed {
+  margin-top: 10px;
+  padding-left : 10px;
+  padding-right: 20px;
+  max-height: 60vh;
+  overflow-y: auto;
+  background-color : #ffffff;
+  border : 1px solid #dfdfdf;
+  border-radius : 4px;
+}
+#actionbuttons {
+  margin-right: 10px;
+}
+.signin {
+  margin-left: 5px;
+}
+.form-group {
+  flex-grow:1;
+}
+.setting {
+  margin-left: 10px;
+}
+.Avatar {
+  max-height: 48px;
+  max-width: 48px;
+  min-height: 48px;
+  min-width: 48px;
+}
+.AvatarSpace {
+  width: 60px;
+  min-height : 70px;
+  float: left;
+  margin-top: 10px;
+}
+.PostSpace {
+  padding-top: 10px;
+  margin-left: 75px;
+}
+.FeedPostHeader {
+  white-space : nowrap;
+}
+
+.FeedPostHeader .headerpart {
+  float : left;
+  display : inline-block;
+}
+.FeedPostHeader .username {
+  padding-left: 5px;
+}
+.FeedPostHeader .name:hover {
+  color: #ad8ed2;
+  cursor : pointer;
+}
+.FeedPostHeader .time {
+  padding-left : 4px;
+  padding-right: 20px;
+}
+.FeedPostHeader .postType {
+  color : #939393;
+  background-color : #ffffff;
+  border-radius: 4px;
+  border : 1px solid #939393;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.FeedPostBody {
+  position: relative;
+  top : -21px;
+}
+.icon-danger {
+  color:#d9534f;
+  cursor: pointer;
+}
+.icon-danger:hover {
+  color:#973a37;
+}
+.icon-success {
+  color:#5cb85c;
+  cursor: pointer;
+}
+.icon-success:hover{
+  color:#408040;
+}
+.glyphicon {
+  font-size: 20px;
+}
+.AppGlyphicon:hover {
+  color:#5b1da5;
+  cursor:pointer;
+}
+.AppGlyphicon {
+  color:#ad8ed2;
+}
+.app.row {
+  padding-left:10px;
+  padding-right:10px;
+}
+#EventName {
+  display : inline-block;
+}
+.SearchNavBarGlyphicon:hover {  
+  cursor : pointer;
+}
+.StartButton {
+  display : inline-block;
+  cursor: pointer;
+}
+.SubmitButton {
+  cursor: pointer;
+}
+.MessagePost {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+#PostInput {
+  border : 1px solid #dfdfdf;
+  border-radius : 4px;
+}
+#CommentInput {
+  border : 1px solid #dfdfdf;
+  border-radius : 4px;
+  margin-bottom : 10px;
+}
+.input-group.input-group-unstyled input.form-control {
+    -webkit-border-radius: 4px;
+       -moz-border-radius: 4px;
+            border-radius: 4px;
+}
+.input-group-unstyled .input-group-addon {
+    border-radius: 4px;
+    border: 0px;
+    background-color: transparent;
+}
+#searchInput {
+    margin-top : 2px;
+}
+.navbar-default {
+  background-color: #0f0f0f;
+  border-radius : 0px;
+}
+.navbar-default .navbar-brand {
+  color: #ffffff;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: #ad8ed2;
+}
+.navbar-default .navbar-text {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #ffffff;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color: #ad8ed2;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #ffffff;
+  background-color: #5b1da5;
+}
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: #ffffff;
+  background-color: #5b1da5;
+}
+.navbar-default .navbar-toggle {
+  border-color: #5b1da5;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  background-color: #5b1da5;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #ffffff;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #ffffff;
+}
+.navbar-default .navbar-link {
+  color: #ffffff;
+}
+.navbar-default .navbar-link:hover {
+  color: #ad8ed2;
+}
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #ffffff;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
+    color: #ad8ed2;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #ffffff;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #ffffff;
+    background-color: #5b1da5;
+  }
+}

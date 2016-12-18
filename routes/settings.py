@@ -2,7 +2,7 @@ from flask import Blueprint, request, session, render_template
 # from py2neo import authenticate, Graph, Node
 import os 
 import sqlite3
-import users
+from users import Users
 
 
 # authenticate("localhost:7474", "neo4j", "powerplay")
@@ -43,27 +43,29 @@ def settings():
 		slash_splits = avatar_url.split('/')
 		avatar_name = slash_splits[len(slash_splits)-1].split('.')[0]
 
-		
+		user_manager = Users()
+
 
 		if (first_name != EMPTY_STRING):
-			users.updateInfo(session['userID'], 'first_name', first_name)
+			user_manager.updateInfo(session['userID'], 'first_name', first_name)
 		if (lastName != EMPTY_STRING):
-			users.updateInfo(session['userID'], 'last_name', last_name)
+			user_manager.updateInfo(session['userID'], 'last_name', last_name)
 		if (birthDay != EMPTY_STRING):
-			users.updateInfo(session['userID'], 'birthDay', birthDay)
+			user_manager.updateInfo(session['userID'], 'birthDay', birthDay)
 		if (birthMonth!= EMPTY_STRING):
-			users.updateInfo(session['userID'], 'birthMonth', birthMonth)
+			user_manager.updateInfo(session['userID'], 'birthMonth', birthMonth)
 		if (birthYear != EMPTY_STRING):
-			users.updateInfo(session['userID'], 'birthYear', birthYear)
+			user_manager.updateInfo(session['userID'], 'birthYear', birthYear)
 		if (gender != EMPTY_STRING):
-			users.updateInfo(session['userID'], 'gender', gender)
+			user_manager.updateInfo(session['userID'], 'gender', gender)
 		if (password != EMPTY_STRING):
-			users.updateInfo(session['userID'], 'password', password)
+			user_manager.updateInfo(session['userID'], 'password', password)
 
 		if (avatar_url != EMPTY_STRING):
-			users.updateInfo(session['userID'], 'avatar_url', avatar_url)
-			users.updateInfo(session['userID'], 'avatar_name', avatar_name)	
+			user_manager.updateInfo(session['userID'], 'avatar_url', avatar_url)
+			user_manager.updateInfo(session['userID'], 'avatar_name', avatar_name)	
 
+		user_manager.closeConnection()
 
 		return render_template('settingsChanged.html')
 	else: 

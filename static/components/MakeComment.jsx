@@ -17,13 +17,13 @@ export default class MakeComment extends React.Component {
 			$(this).blur();
 	        if(!messageVisible){
 	            messageVisible = !messageVisible;
-	            $(this).siblings('#CommentComment').fadeIn(function(){
-	                $(this).children('#CommentTextComment').focus();
+	            $(this).siblings('#CommentPost').fadeIn(function(){
+	                $(this).children('#CommentInput').focus();
 	            });
 	        } else {
 	            messageVisible = !messageVisible;
-	            $(this).siblings('#CommentComment').fadeOut(function(){
-	                $(this).children('#CommentTextComment').blur();
+	            $(this).siblings('#CommentPost').fadeOut(function(){
+	                $(this).children('#CommentInput').blur();
 	            });
 	        } 
 	    });  
@@ -46,8 +46,8 @@ export default class MakeComment extends React.Component {
 				<a id="StartButtonComment" className="StartButton">
 					<span className="glyphicon glyphicon-pencil AppGlyphicon"></span>
 				</a>
-				<div id="CommentComment" className="Message pull-right input-group input-group-unstyled">
-					<input id="CommentTextComment" type="text" className="CommentText form-control" 
+				<div id="CommentPost" className="Message pull-right input-group input-group-unstyled">
+					<input id="CommentInput" type="text" className="CommentText form-control" 
 							onKeyPress={this.handleEnterPress} value={this.props.commentText} 
 							placeholder={this.props.placeholder} ref={(input) => this.commentText = input} 
 							onSubmit={this.handleCommentSubmit} onChange={this.handleCommentChange}></input>

@@ -1,11 +1,10 @@
 var React = require('react');
 var Link = require('react-router').Link;
 var browserHistory = require('react-router').browserHistory;
-// var $ = require('jquery');
 import NotificationsDropdown from "./NotificationsDropdown.jsx";
 import AccountDropdown from "./AccountDropdown.jsx";
 
-export default class CommentNavBar extends React.Component {
+export default class NoSearchNavBar extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -14,38 +13,9 @@ export default class CommentNavBar extends React.Component {
 		};
 		this.getNotifications = this.getNotifications.bind(this);
         this.seeNotifications = this.seeNotifications.bind(this);
-		this.handleSearch = this.handleSearch.bind(this);
-	}
-	handleSearch() {
-		this.props.onSearch(this.searchText.value);
 	}
 	componentDidMount() {
-		var searchVisible = 0;
-		// $('.navbar-search-form').hide();
-		$('.navbar-search-form').show();
-
-		// $('[data-toggle="search"]').click(function(){
-	 //        if(searchVisible == 0){
-	 //            searchVisible = 1;
-	 //            $(this).parent().addClass('active');
-	 //            $('.navbar-search-form').fadeIn(function(){
-	 //                $('.navbar-search-form input').focus();
-	 //            });
-	 //        } else {
-	 //            searchVisible = 0;
-	 //            $(this).parent().removeClass('active');
-	 //            $(this).blur();
-	 //            $('.navbar-search-form').fadeOut(function(){
-	 //                $('.navbar-search-form input').blur();
-	 //            });
-	 //        } 
-	 //    });
-	    $('#searchInput').keypress(function(event) {
-	    	if(event.keyCode == 13){ 
-			   event.preventDefault();
-			}
-	    });
-	    $('.SearchNavBarGlyphicon').focus(function() {
+		$('.SearchNavBarGlyphicon').focus(function() {
 	    	$(this).blur();
 	    });
 	}
@@ -73,7 +43,7 @@ export default class CommentNavBar extends React.Component {
 	}
 	seeNotifications() {
         this.state.notifications.map(function (obj){
-            $.post('/seeNotification', {notification_id: obj['notification_id']})
+            $.post('/seeNotifications', {notification_id: obj['notification_id']})
         });
     }
 	render() {
@@ -94,26 +64,12 @@ export default class CommentNavBar extends React.Component {
 				        </div>
 				        <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				          <ul className="nav navbar-nav navbar-right">
-		                    {/* <li className="">
-		                        <a href="javascript:void(0)" data-toggle="search">
-		 							<span className="glyphicon glyphicon-search"></span>
-		                        </a>
-		                    </li> */}
- 				          	<NotificationsDropdown notifications={this.state.notifications} numUnseen={this.state.numUnseen} getNotifications={this.getNotifications}/>
-				          	<AccountDropdown currentUser = {this.props.currentUser} name={this.props.name}/>
+				          	<NotificationsDropdown notifications={this.state.notifications} numUnseen={this.state.numUnseen} getNotifications={this.getNotifications}/>
+				          	<AccountDropdown name={this.props.name}/>
 				          </ul>
-				         <form className="navbar-form navbar-right navbar-search-form" role="search">                  
-			                 <div className="form-group">
-			                 	  <div className="input-group input-group-unstyled">
-				                      <input type="text" value={this.props.searchText} ref={(input) => this.searchText = input} 
-				                      			id="searchInput" className="form-control" placeholder="Search..." 
-				                      			onChange={this.handleSearch}/>
-								  </div>		  
-			                 </div> 
-			              </form>
 				        </div>
 				      </div>
 				    </nav>
-		)
+			);
 	}
 }

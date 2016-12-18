@@ -26,9 +26,9 @@ export default class CommentFeedPost extends React.Component {
 	}
 	render() {
 		var comment = this.props.comment;
-
+		var rowClass = this.props.isOriginalPost ? "CommentFeedPostOriginal" : "CommentFeedPost"; 
 		return (
-			<li className="CommentFeedPost">
+			<li className={rowClass}>
 				<Avatar source={comment.avatar}/>
 				<div className="PostSpace">
 					<div className="row"><CommentFeedPostHeader comment = {this.props.comment}

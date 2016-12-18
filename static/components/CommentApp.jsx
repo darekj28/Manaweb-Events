@@ -21,7 +21,6 @@ export default class CommentApp extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			actions : [],
 			search : '',
 			comment : '',
 			feed : [],
@@ -30,7 +29,6 @@ export default class CommentApp extends React.Component {
 			unique_id : '',
 			original_post : []
 		};
-		// this.handleFilterClick = this.handleFilterClick.bind(this);
 		this.handleSearch = this.handleSearch.bind(this);
 		this.handleCommentChange = this.handleCommentChange.bind(this);
 		this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
@@ -83,7 +81,10 @@ export default class CommentApp extends React.Component {
 			this.setState({feed : feed});
 		}.bind(this));
 	}
-	handleSearch(searchText) { this.setState({search : searchText}); }
+	handleSearch(searchText) { 
+		$('#CommentFeed').animate({scrollTop: $('#CommentFeed').prop("scrollHeight")}, 300);
+		this.setState({search : searchText}); 
+	}
 	handleCommentChange(commentText) { this.setState({comment : commentText}); }
 	handleCommentSubmit(commentText) {
 		var feed = this.state.feed;
@@ -116,18 +117,13 @@ export default class CommentApp extends React.Component {
 		this.getCurrentUserInfo();
 		this.getPostById();
 		this.getNextUniqueId();
-
-		$('.filterButton').click(function(e) {
-			$(this).toggleClass('icon-danger');
-			$(this).toggleClass('icon-success');
-			$(this).blur();
-			e.preventDefault();
-		});
 	}
 	render() {
+		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
 		return (<div id="CommentApp">
-			<CommentNavBar searchText={this.state.search} onSearch={this.handleSearch} 
-						name={this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name']}/>
+			<CommentNavBar 
+				 searchText={this.state.search} onSearch={this.handleSearch} currentUser={this.state.currentUser}
+						name={name}/>
 			<div className="container">
 				<CommentFeedPost comment={this.state.original_post} isOriginalPost={true}/>
 				<CommentFeed currentUser={this.state.currentUser} searchText={this.state.search} filters={this.state.filters} 

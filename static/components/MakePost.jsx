@@ -21,12 +21,12 @@ export default class MakePost extends React.Component {
 	        if(!messageVisible){
 	            messageVisible = !messageVisible;
 	            $(this).siblings('#MessagePost').fadeIn(function(){
-	                $(this).children('#PostTextPost').focus();
+	                $(this).children('#PostInput').focus();
 	            });
 	        } else {
 	            messageVisible = !messageVisible;
 	            $(this).siblings('#MessagePost').fadeOut(function(){
-	                $(this).children('#PostTextPost').blur();
+	                $(this).children('#PostInput').blur();
 	            });
 	        } 
 	    });
@@ -46,19 +46,19 @@ export default class MakePost extends React.Component {
 	}
 	render() {
 		var that = this;
+
 		return(
 			<div> 
 				<a id="StartButtonPost" className="StartButton">
 					<span className="glyphicon glyphicon-pencil AppGlyphicon"></span>
 				</a>
 				<div id="MessagePost" className="Message pull-right input-group input-group-unstyled">
-					<input id="PostTextPost" type="text" className="PostText form-control" 
+					<input id="PostInput" type="text" className="PostText form-control" 
 							onKeyPress={this.handleEnterPress} value={this.props.postText} 
 							placeholder={this.props.placeholder} ref={(input) => this.postText = input} 
 							onSubmit={this.handlePostSubmit} onChange={this.handlePostChange}></input>
 					{this.props.actions.map(function(action, i) {
-						if (action == "Trade") return <FilterButton key={i} onClick={that.props.onClick} active={true} name={action}/>;
-						else return <FilterButton key={i} onClick={that.props.onClick} active={false} name={action}/>;
+						return <FilterButton key={i} onClick={that.props.onClick} active={false} name={action}/>;
 					})}
 					<a className="SubmitButton input-group-addon" id="SubmitButtonPost" 
 							onClick={this.handlePostSubmit}>

@@ -1,31 +1,21 @@
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>
-            Manaweb Homepage!
-        </title>
-        <meta charset="UTF-8">
-    </head>
-    <body>
-        <script type="text/javascript" src="{{ url_for('static', filename='fb.js') }}"></script>
+{% extends "base.html" %}
+{% include "homeBannerNoLogin.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        Manaweb Homepage!
+    </title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <script type="text/javascript" src="{{ url_for('static', filename='fb.js') }}"></script>
+    <div class="container"><h4> <strong>Congratulations!</strong> Your settings have been successfully updated. </h4></div>
+    {% if error %}
+    <p class = "error"> <strong> Error: </strong> {{ error}} </p>
+    {% endif %}
 
-
-        <h2> Congratulations! Your settings have been successfully updated </h2>
-        <br> 
-        <h1> Click <a href = "/"> here </a> to return to the home page </h1>
-
-
-
-
-
-        {% if error %}
-        <p class = "error"> <strong> Error: </strong> {{ error}} </p>
-        {% endif %}
-
-
-
-
-
-    </body>
-
-    </html>
+</body>
+</html>
+{% endblock %}

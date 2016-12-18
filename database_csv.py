@@ -50,14 +50,18 @@ def output_info(table_name):
 
 
 udb.execute("ALTER TABLE BALT ALTER COLUMN timeStamp SET DATA TYPE FLOAT")
-# udb.execute("ALTER TABLE c_BALT ALTER COLUMN timeStamp FLOAT")
-# udb.execute("ALTER TABLE admin_table ALTER COLUMN timeStamp FLOAT")
-# udb.execute("ALTER TABLE report_table ALTER COLUMN timeStamp FLOAT")
-# udb.execute("ALTER TABLE c_id ALTER COLUMN timeStamp FLOAT")
-# udb.execute("ALTER TABLE feed_names ALTER COLUMN timeStamp FLOAT")
 
+ADMIN_TABLE = "test_admin_table"
+REPORT_TABLE = "test_report_table"
+COMMENT_ID_TABLE = "test_c_id"
+FEED_NAMES = "test_feed_names"
+EVENT_TABLE = "TEST_EVENT"
+COMMENT_TABLE = "c_" + EVENT_TABLE
+NOTIFICATION_TABLE = "test_notification_table"
+NOTIFICAITON_ID_TABLE = "test_n_id"
 
-table_list = ["user_info", "user_actions","BALT", "c_BALT", "report_table", "admin_table", "feed_names", "c_id"]
+# table_list = ["user_info", "user_actions","BALT", "c_BALT", "report_table", "admin_table", "feed_names", "c_id"]
+table_list = [ADMIN_TABLE, REPORT_TABLE, COMMENT_ID_TABLE, FEED_NAMES, EVENT_TABLE, COMMENT_TABLE, NOTIFICATION_TABLE, NOTIFICAITON_ID_TABLE]
 for table_name in table_list:
 	output_info(table_name)
 

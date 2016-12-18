@@ -1,4 +1,4 @@
 npm -g webpack
 webpack -d
 npm test
-python3 local_test.py
+python3 event_main.py

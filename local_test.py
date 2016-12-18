@@ -34,13 +34,14 @@ import sqlite3
 import sys
 import re
 
-import users
+from users import Users
 import posts
 
 
 from routes.createProfile import create_profile
 from routes.settings import original_settings
 from routes.updateSettings import update_settings
+from routes.mobile_api import mobile_api
 
 # Darek Made .py files
 # import geo
@@ -77,6 +78,7 @@ app.secret_key = "powerplay"
 app.register_blueprint(create_profile)
 app.register_blueprint(original_settings)
 app.register_blueprint(update_settings)
+app.register_blueprint(mobile_api)
 
 
 # geolocation stuff
@@ -88,15 +90,6 @@ FREEGEOPIP_URL = "http://freegeoip.net/json"
 
 EMPTY_STRING = ""
 
-@app.route('/verifyUser', methods=['POST'])
-def verifyUser():
-	thisUser = getUserInfo(request.form['username'])
-	return jsonify({ 'result' : (thisUser is None) })		
-
-@app.route('/verifyEmail', methods=['POST'])
-def verifyEmail():
-	thisUser = users.getInfoFromEmail(request.form['mail'])
-	return jsonify({ 'result' : (thisUser is None) })	
 
 @app.before_request
 def before_request():
@@ -235,127 +228,6 @@ def getIdUrl(poster_id):
 	return url
 
 
-@app.route("/setFeedFilter", methods = ['POST'])
-def setFeedFilter():
-	if request.method == 'POST':
-		thisUser = getUserInfo(session['userID'])
-		tradeFilter = True
-		playFilter = True
-		chillFilter = True
-	
-		if request.form.get('tradeFilter') == None:
-			tradeFilter = False
-		if request.form.get('playFilter') == None:
-			playFilter = False
-		if request.form.get('chillFilter') == None:
-			chillFilter = False
-
-		users.updateInfo(session['userID'], 'tradeFilter', tradeFilter)	
-		users.updateInfo(session['userID'], 'playFilter', playFilter)	
-		users.updateInfo(session['userID'], 'chillFilter', chillFilter)	
-		return redirect(url_for("index"))
-
-	else:
-		return "<h2> Invalid request on sendMessage, only post method please </h2>"
-
-@app.route("/makePost", methods = ['POST'])
-def makePost():
-	if request.method == 'POST':
-		postContent = request.json['postContent']
-		isTrade		= request.json['isTrade']
-		isPlay 		= request.json['isPlay']
-		isChill		= request.json['isChill']
-		comment_id  = request.json['comment_id']
-
-
-		posts.postInThread('BALT', body = postContent, poster_id = session['userID'], 
-				isTrade = isTrade, isPlay = isPlay, isChill = isChill, comment_id = comment_id)
-		
-		return redirect(url_for("index"))
-	else:
-		return "<h2> Invalid request on sendPost, only post method please </h2>"
-
-
-@ app.route('/generateUniqueId' , methods = ['POST'])
-def generateUniqueId():
-	timeStamp = time.time() 
-	unique_id = posts.hash_comment_id(str(timeStamp))
-	return jsonify ({ 'unique_id' : unique_id})	
-
-@app.route("/makeComment", methods = ['POST'])
-def makeComment():
-	if request.method == 'POST':
-		feed_name = "BALT"
-
-		comment_id = request.json['comment_id']
-		commentContent = request.json['commentContent']
-		unique_id = request.json['unique_id']
-		
-		posts.makeComment(feed_name, comment_id, commentContent, session['userID'], unique_id = unique_id)
-		
-		return redirect(url_for("index"))
-	else:
-		return "<h2> Invalid request on sendMessage, only post method please </h2>"
-
-
-@app.route('/deletePost', methods = ['POST'])
-def deletePost():
-	# feed_name = request.form.get('feed_name')
-	feed_name = "BALT"
-	unique_id = request.json.get('unique_id')
-	print(unique_id)
-	posts.deletePost(feed_name, unique_id)
-
-	return redirect(url_for('index'))
-
-
-@app.route('/deleteComment', methods = ['POST'])
-def deleteComment():
-	feed_name = "BALT"
-	# feed_name = request.form.get('feed_name')
-	unique_id = request.json.get('unique_id')
-	posts.deleteComment(feed_name, unique_id)
-	return redirect(url_for('index'))
-
-
-
-@app.route('/reportPost', methods = ['POST'])
-def reportPost():
-	# feed_name = request.json['feed_name']
-	feed_name = "BALT"
-	unique_id = request.json['unique_id']
-	reason = request.json["reason"]
-	description = reason
-	reporting_user = session['userID']
-	reported_user = request.json['reported_user']
-
-	
-
-	posts.reportPost(feed_name, unique_id, reason, description, reporting_user, reported_user)
-
-
-	return redirect(url_for('index'))
-	# return redirect(url_for("index"))
-
-@app.route('/reportComment', methods = ['POST'])
-def reportComment():
-	# feed_name = request.json['feed_name']
-	feed_name = "BALT"
-	print(request.json)
-	unique_id = request.json['unique_id']
-	reason = request.json["reason"]
-	description = reason
-	reporting_user = session['userID']
-	reported_user = request.json['reported_user']
-
-
-	
-	posts.reportComment(feed_name, unique_id, reason, description, reporting_user, reported_user)
-
-	return redirect(url_for("index"))
-
-
-
 
 
 @app.route('/logout')
@@ -380,7 +252,10 @@ def login():
 			
 			# if not, then check if the user tried to login with email
 			email = request.form['login_id']
-			thisUser = users.getInfoFromEmail(email)
+			user_manager = Users()
+			thisUser = user_manager.getInfoFromEmail(email)
+			user_manager.closeConnection()
+
 			if thisUser is None:
 				error = "Login ID does not exist. Please try again."
 				return render_template("login.html", error = error)
@@ -428,21 +303,15 @@ def confirmation(pin = None):
 			return render_template('confirmation.html')
 		else:
 			if (pin == thisUser['confirmationPin']):
-	
-				posts.updateInfo(session['userID'], 'confirmed', True)
+				user_manager = Users()
+				user_manager = Users().updateInfo(session['userID'], 'confirmed', True)
+				user_manager = closeConnection()
 				return redirect(url_for('index'))
 			else:
 				return render_template('confirmation.html')
 
 
-@app.route('/sendConfirmation', methods = ['POST'])
-def sendConfirmation():
-	if (session.get('userID') == None):
-		return redirect(url_for('login'))
-	else:
-		thisUser = getUserInfo(session['userID'])
-		email_confirm.sendConfirmationEmail(thisUser)
-		return render_template('confirmation.html')
+
 
 
 @app.route('/reset', methods = ['GET', 'POST'])
@@ -464,7 +333,9 @@ def reset():
 			# 		shutil.rmtree(fileDir + '/' + fileName)
 			
 			posts.resetDatabase()
-			users.resetDatabase()
+			user_manager = Users()
+			user_manager.resetDatabase()
+			user_manager.closeConnection()
 			logout()
 			makeTestAccounts()
 
@@ -478,36 +349,6 @@ def reset():
 		
 
 
-# gets the posts for the current feed (defaulted to BALT for now)
-@app.route('/getPosts', methods = ['POST'])
-def getPosts():
-	feed_name = "BALT"
-	post_list = posts.getPosts(feed_name)
-	posts.sortAscending(post_list)
-	return jsonify({ 'post_list' : post_list })	
-
-@app.route('/getPostById', methods = ['POST'])
-def getPostById():
-	feed_name = "BALT"
-	comment_id = request.form['comment_id']
-	this_post = posts.getPostById(feed_name, comment_id)
-
-	return jsonify({'this_post' : this_post})
-
-@app.route('/getComments', methods = ['POST'])
-def getComments():
-	feed_name = "BALT"
-	comment_id = request.form['comment_id']
-	comment_list = posts.getComments(feed_name, comment_id)
-	posts.sortAscending(comment_list)
-	return jsonify({ 'comment_list' : comment_list })	
-
-@app.route('/getInfoFromUserId', methods=['POST'])
-def getInfoFromUserId():
-	userID = request.json['userId']
-	return jsonify({'first_name' : getFirstName(userID),
-					'last_name'  : getLastName(userID),
-					'avatar_url' : getAvatarUrl(userID)})
 
 
 @app.route('/editPost', methods = ['POST'])
@@ -519,23 +360,6 @@ def editPost():
 	posts.editPost(feed_name, unique_id, field_name, field_data)
 	return redirect(url_for('index'))
 	
-@app.route('/editComment', methods = ['POST'])
-def editComment():
-	feed_name = "BALT"
-	unique_id = request.json['unique_id']
-	field_name = request.json['field_name']
-	field_data = request.json['field_data']
-	posts.editComment(feed_name, unique_id, field_name, field_data)
-	return redirect(url_for('index'))
-	
-
-
-# get current user info
-@app.route('/getCurrentUserInfo', methods = ['POST'])
-def getCurrentUserInfo():
-	thisUserID = session.get('userID')
-	thisUser = getUserInfo(thisUserID)
-	return jsonify({'thisUser' : thisUser})
 
 
 @app.route("/comment", methods = ['GET', 'POST'])
@@ -616,11 +440,12 @@ def makeTestAccounts():
 		if userID[i] == 'darekj':
 			isAdmin = True
 
-		users.addUser(userID[i], first_name = first_name[i], last_name = last_name[i], password = password, email = email,  isActive = isActive,
+		user_manager = Users()
+		user_manager.addUser(userID[i], first_name = first_name[i], last_name = last_name[i], password = password, email = email,  isActive = isActive,
 			avatar_url = avatar_url, avatar_name = avatar_name, confirmationPin = confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
 			isAdmin = isAdmin, phone_number = phone_number, birthMonth = birthMonth[i], birthDay = birthDay[i], birthYear = birthYear[i],
 			gender = gender[i]) 
-		
+		user_manager.closeConnection()
 
 
 
@@ -659,11 +484,12 @@ def makeProfile():
 	birthDay = '5'
 	gender = 'Male'
 
-	users.addUser(userID[i], first_name = first_name, last_name = last_name, password = password, email = email,  isActive = True,
+	user_manager = Users()
+	user_manager.addUser(userID[i], first_name = first_name, last_name = last_name, password = password, email = email,  isActive = True,
 			avatar_url = avatar_url, avatar_name = avatar_name, confirmationPin = confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
 			isAdmin = False, phone_number = phone_number, birthMonth = birthMonth, birthDay = birthDay, birthYear = birthYear,
 			gender = gender) 
-
+	user_manager.closeConnection()
 
 
 # given a user, returns their age
@@ -679,17 +505,29 @@ def getAge(userID):
 
 
 def getUserInfo(user_id):
-	return users.getInfo(user_id)
+	user_manager = Users()
+	this_user = user_manager.getInfo(user_id)
+	user_manager.closeConnection()
+	return this_user
 
 def getFirstName(user_id):
-	return users.getInfo(user_id)['first_name']
+	user_manager = Users()
+	first_name =  user_manager.getInfo(user_id)['first_name']
+	user_manager.closeConnection()
+	return first_name
 
 def getLastName(user_id):
-	return users.getInfo(user_id)['last_name']
+	user_manager = Users()
+	last_name =  user_manager.getInfo(user_id)['last_name']
+	user_manager.closeConnection()
+	return last_name
 
 
 def getAvatarUrl(user_id):
-	return users.getInfo(user_id)['avatar_url']
+	user_manager = Users()
+	avatar_url =  user_manager.getInfo(user_id)['avatar_url']
+	user_manager.closeConnection()
+	return avatar_url
 
 def date_format(time=False):
 	return posts.date_format(time = False)
@@ -703,6 +541,7 @@ app.jinja_env.globals.update(getStringSearchUrl=getStringSearchUrl)
 app.jinja_env.globals.update(getFirstName=getFirstName)
 app.jinja_env.globals.update(getLastName=getLastName)
 app.jinja_env.globals.update(getAvatarUrl=getAvatarUrl)
+
 
 
 

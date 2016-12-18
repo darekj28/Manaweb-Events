@@ -68,7 +68,6 @@ $(document).ready(function() {
 		var disabled = false;
 		for (var i = 0; i < requiredFields.length; i++) {
 			if (!$(requiredFields[i]).hasClass("valid")) {
-				console.log(requiredFields[i]);
 				disabled = true;
 			}
 		}

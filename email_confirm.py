@@ -1,6 +1,6 @@
 import smtplib
 from py2neo import authenticate, Graph, Node, Relationship
-import users
+from users import Users
 
 def sendConfirmationEmail(thisUser):
 	#to send from temporary gmail 
