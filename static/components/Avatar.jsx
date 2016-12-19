@@ -7,7 +7,7 @@ export default class Avatar extends React.Component {
 	render() {
 		return (
 			<a href="#" className="pull-left AvatarSpace">
-				<img className="Avatar img-rounded" src={this.props.source}/>
+				{this.props.source != undefined && <img className="Avatar img-rounded" src={this.props.source}/>}
 			</a>
 			)
 	}

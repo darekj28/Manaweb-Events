@@ -12,10 +12,14 @@ export default class CommentFeedPostHeader extends React.Component {
 	render() {
 		return(
 			<div id = {"comment_" + this.props.comment.unique_id} className="FeedPostHeader">
-				<div className="headerpart pull-left"><b>{this.props.comment.name}</b></div>
-				<div className="headerpart pull-left username text-muted">@{this.props.comment.userID}</div>
-				{!this.props.isOriginalPost && <div className="headerpart time pull-left text-muted">&#8226; {this.props.comment.time}</div>}
-				{this.props.isOriginalPost && <div className="headerpart time pull-left text-muted">&#8226; {this.props.comment.timeString}</div>}
+				{this.props.comment.name != undefined && 
+				<div className="headerpart pull-left"><b>{this.props.comment.name}</b></div> }
+				{this.props.comment.name != undefined && 
+				<div className="headerpart pull-left username text-muted">@{this.props.comment.userID}</div>}
+				{!this.props.isOriginalPost && 
+				<div className="headerpart time pull-left text-muted">&#8226; {this.props.comment.time}</div>}
+				{(this.props.comment.name != undefined && this.props.isOriginalPost) && 
+				<div className="headerpart time pull-left text-muted">&#8226; {this.props.comment.timeString}</div>}
 				{(!this.props.isOriginalPost && (this.props.isAdmin || !this.props.isOP)) && 
 				<div className="dropdown">
 					<a href="#" className="dropdown-toggle pull-right" data-toggle="dropdown" onClick={this.scrollToDropdown}>
@@ -23,9 +27,12 @@ export default class CommentFeedPostHeader extends React.Component {
 		                				pull-right CommentBottomIcon AppGlyphicon"></span>
 		            </a>
 		            <ul className="CommentDropdown pull-right dropdown-menu">
-		              	{(this.props.isOP || this.props.isAdmin) && <li><a id="hce" href="#" onClick={this.props.handleCommentEdit}>Edit comment</a></li> }
-		              	{(this.props.isOP || this.props.isAdmin) && <li><a id="hcd" href="#" onClick={this.props.handleCommentDelete}>Delete comment</a></li> }
-		              	{(!this.props.isOP || this.props.isAdmin) && <li><a id="hcr" href="#" onClick={this.props.handleCommentReport}>Report comment</a></li> }
+		              	{(this.props.isOP || this.props.isAdmin) && 
+		              		<li><a id="hce" href="#" onClick={this.props.handleCommentEdit}>Edit comment</a></li> }
+		              	{(this.props.isOP || this.props.isAdmin) && 
+		              		<li><a id="hcd" href="#" onClick={this.props.handleCommentDelete}>Delete comment</a></li> }
+		              	{(!this.props.isOP || this.props.isAdmin) && 
+		              		<li><a id="hcr" href="#" onClick={this.props.handleCommentReport}>Report comment</a></li> }
 		            </ul>
 	        	</div>}
 			</div>
