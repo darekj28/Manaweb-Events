@@ -32,6 +32,7 @@ class Posts:
 		self.NOTIFICAITON_ID_TABLE = "n_id"
 		self.USER_NOTIFICATION_PREFIX = "n_"
 		self.SEEN_POSTS_SUFFIX = "_seen_posts"
+		self.COMMENT_ID_PREFIX = "c_"
 
 		# for when we upload to heroku
 		# comment out if testing
@@ -77,22 +78,23 @@ class Posts:
 
 	# adds a post to the last seen posts table
 	def addPostToSeenTable(self, feed_name, comment_id):
-		sql =  "ALTER TABLE " + feed_name + self.SEEN_POSTS_SUFFIX + " ADD %s BOOLEAN"
-		self.db.execute(self.db.mogrify(sql, (comment_id,)))
+		column_name = self.COMMENT_ID_PREFIX + comment_id
+		sql =  "ALTER TABLE " + feed_name + self.SEEN_POSTS_SUFFIX + " ADD " + column_name + " BOOLEAN"
+		self.db.execute(self.db.mogrify(sql))
 
-		thisPost = self.getPostById(comment_id)
+		thisPost = self.getPostById(feed_name, comment_id)
 
-		sql = "UPDATE " + feed_name + self.SEEN_POSTS_SUFFIX + " SET %s = %s"
-		self.db.execute(self.mogrify(sql, (comment_id, False)))
+		sql = "UPDATE " + feed_name + self.SEEN_POSTS_SUFFIX + " SET " + column_name + " = %s"
+		self.db.execute(self.db.mogrify(sql, (False, )))
 
-		sql = "UPDATE "  + feed_name + self.SEEN_POSTS_SUFFIX + "SET %s = %s WHERE userID = %s"
-		self.db.execute(self.mogrify(sql, (comment_id, True, thisPost['post_id'])))
+		sql = "UPDATE "  + feed_name + self.SEEN_POSTS_SUFFIX + " SET " + column_name + " = %s WHERE userID = %s"
+		self.db.execute(self.db.mogrify(sql, (True, thisPost['poster_id'])))
 		self.post_db.commit()
 
 
 	def updatePostAsSeen(self, feed_name, userID, comment_id):
-		sql = "UPDATE " + feed_name + self.SEEN_POSTS_SUFFIX + "SET %s = %s WHERE userID = %s"
-		self.db.execute(self.mogrify(sql, (comment_id, True, userID)))
+		sql = "UPDATE " + feed_name + self.SEEN_POSTS_SUFFIX + " SET %s = %s WHERE userID = %s"
+		self.db.execute(self.db.mogrify(sql, (comment_id, True, userID)))
 		self.post_db.commit()
 
 
