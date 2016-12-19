@@ -126,7 +126,7 @@ export default class App extends React.Component {
 			    contentType: 'application/json;charset=UTF-8'
 			});
 			this.setState({feed : feed, post: ''});
-			$('#Feed').animate({scrollTop: 0}, 300);
+			$('html, body').animate({scrollTop: 0}, 300);
 		}
 		this.refreshFeed();
 	}

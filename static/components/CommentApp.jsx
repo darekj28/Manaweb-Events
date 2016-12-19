@@ -94,7 +94,7 @@ export default class CommentApp extends React.Component {
 		    contentType: 'application/json;charset=UTF-8'
 		});
 		this.setState({feed : feed, comment: ''});
-		$('#CommentFeed').animate({scrollTop: $('#CommentFeed').prop("scrollHeight")}, 300);
+		$('html, body').animate({scrollTop: $('#CommentFeed').prop("scrollHeight")}, 300);
 		this.getNextUniqueId();
 		this.refreshFeed();
 	}

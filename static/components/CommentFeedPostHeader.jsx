@@ -5,9 +5,7 @@ export default class CommentFeedPostHeader extends React.Component {
 		this.scrollToDropdown = this.scrollToDropdown.bind(this);
 	}
 	scrollToDropdown(){
-		var comment = document.getElementById('comment_' + this.props.comment.unique_id);
-		var offset = comment.offsetTop - 350;
-		$('#CommentFeed').animate({scrollTop : offset}, 500);
+		$('html, body').animate({scrollTop : $("#commentdropdown_" + this.props.comment.unique_id).offset().top - 300}, 500);
 	}
 	render() {
 		return(
@@ -21,8 +19,9 @@ export default class CommentFeedPostHeader extends React.Component {
 				{(this.props.comment.name != undefined && this.props.isOriginalPost) && 
 				<div className="headerpart time pull-left text-muted">&#8226; {this.props.comment.timeString}</div>}
 				{(!this.props.isOriginalPost && (this.props.isAdmin || !this.props.isOP)) && 
-				<div className="dropdown">
-					<a href="#" className="dropdown-toggle pull-right" data-toggle="dropdown" onClick={this.scrollToDropdown}>
+				<div className="dropdown" id={"commentdropdown_" + this.props.comment.unique_id}>
+					<a href="#" className="dropdown-toggle pull-right" 
+								data-toggle="dropdown" onClick={this.scrollToDropdown}>
 		                <span className="glyphicon glyphicon-option-horizontal 
 		                				pull-right CommentBottomIcon AppGlyphicon"></span>
 		            </a>

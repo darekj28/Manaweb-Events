@@ -30,9 +30,9 @@ export default class FeedPost extends React.Component {
 		this.setState({ comment_id : nextProps.post.comment_id });
 	}
 	scrollToDropdown() {
-		var post = document.getElementById('post_' + this.props.post.comment_id);
+		var post = document.getElementById('dropdown_' + this.props.post.comment_id);
 		var offset = post.offsetTop - 300;
-		$('#Feed').animate({scrollTop : offset}, 500);
+		$('html, body').animate({scrollTop : offset}, 500);
 	}
 	render() {
 		var post = this.props.post;
