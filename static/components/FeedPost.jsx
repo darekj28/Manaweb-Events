@@ -26,6 +26,9 @@ export default class FeedPost extends React.Component {
 		this.props.refreshPostDisplayedInModal(this.props.post);
 		$('#ReportPostModal').modal('show');
 	}
+	componentWillReceiveProps(nextProps) {
+		this.setState({ comment_id : nextProps.post.comment_id });
+	}
 	scrollToDropdown() {
 		var post = document.getElementById('post_' + this.props.post.comment_id);
 		var offset = post.offsetTop - 300;

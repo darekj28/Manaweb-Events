@@ -116,8 +116,9 @@ export default class CommentApp extends React.Component {
 						name={name}/>
 			<div className="container">
 				<CommentFeedPost comment={this.state.original_post} isOriginalPost={true}/>
-				<CommentFeed currentUser={this.state.currentUser} searchText={this.state.search} filters={this.state.filters} 
-							refreshFeed={this.refreshFeed} comments={this.state.feed} />
+				<CommentFeed currentUser={this.state.currentUser} searchText={this.state.search} 
+							filters={this.state.filters} refreshFeed={this.refreshFeed} 
+							comments={this.state.feed} />
 				<MakeComment placeholder="What's up bro?" commentText={this.state.comment} 
 						onCommentChange ={this.handleCommentChange} onCommentSubmit={this.handleCommentSubmit}/>
 			</div>

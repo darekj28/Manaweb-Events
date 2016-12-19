@@ -31,11 +31,14 @@ export default class CommentFeedPost extends React.Component {
 			<li className={rowClass}>
 				<Avatar source={comment.avatar}/>
 				<div className="PostSpace">
-					<div className="row"><CommentFeedPostHeader comment = {this.props.comment}
-												isOP={this.props.isOP} isAdmin={this.props.isAdmin} handleCommentEdit={this.handleCommentEdit}
-												handleCommentDelete={this.handleCommentDelete} handleCommentReport={this.handleCommentReport}
+					<div className="row"><CommentFeedPostHeader comment={comment}
+												isOP={this.props.isOP} isAdmin={this.props.isAdmin} 
+												handleCommentEdit={this.handleCommentEdit}
+												handleCommentDelete={this.handleCommentDelete} 
+												handleCommentReport={this.handleCommentReport}
 												isOriginalPost={this.props.isOriginalPost}/></div>
-					<div className="row"><CommentFeedPostBody content={comment.commentContent} isOriginalPost={this.props.isOriginalPost}/></div>
+					<div className="row"><CommentFeedPostBody content={comment.commentContent} 
+									isOriginalPost={this.props.isOriginalPost}/></div>
 				</div>
 			</li>)
 	}

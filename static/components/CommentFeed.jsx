@@ -33,7 +33,8 @@ export default class CommentFeed extends React.Component {
 			if (!doesCommentMatchSearch())
 				return;
 			else 
-				rows.push(<CommentFeedPost key={i} comment={comment} isOP={that.props.currentUser['userID']==comment.userID}
+				rows.push(<CommentFeedPost key={i} comment={comment} 
+						isOP={that.props.currentUser['userID']==comment.userID}
 						isAdmin={that.props.currentUser['isAdmin']} isOriginalPost={false} 
 						refreshFeed={that.props.refreshFeed}
 						refreshCommentDisplayedInModal={that.refreshCommentDisplayedInModal}/>);
@@ -43,8 +44,10 @@ export default class CommentFeed extends React.Component {
 	render() {
 		var rows = this.filter();
 		return (<ul id="CommentFeed">{rows}
-					<EditCommentModal comment={this.state.commentInModal} refreshFeed={this.props.refreshFeed}/>
-					<DeleteCommentModal comment={this.state.commentInModal} refreshFeed={this.props.refreshFeed}/>
+					<EditCommentModal comment={this.state.commentInModal} 
+										refreshFeed={this.props.refreshFeed}/>
+					<DeleteCommentModal comment={this.state.commentInModal} 
+										refreshFeed={this.props.refreshFeed}/>
 					<ReportCommentModal comment={this.state.commentInModal}/>
 			</ul>);
 	}
