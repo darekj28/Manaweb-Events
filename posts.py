@@ -754,7 +754,7 @@ class Posts:
 			thisUser = user_manager.getInfo(thisPost['poster_id'])
 			thisPost['first_name'] = thisUser['first_name']
 			thisPost['last_name'] = thisUser['last_name']
-			thisPost['avatar_url'] = thisUser['avatar_url']
+			thisPost['avatar_url'] = ''.join(thisUser['avatar_url'].partition("/static/")[1:3])
 			thisPost['unique_id'] = post[9]
 			thisPost['numComments'] = post[10]
 			postList.append(thisPost)
@@ -777,7 +777,7 @@ class Posts:
 			thisUser = user_manager.getInfo(thisComment['poster_id'])
 			thisComment['first_name'] = thisUser['first_name']
 			thisComment['last_name'] = thisUser['last_name']
-			thisComment['avatar_url'] = thisUser['avatar_url']
+			thisComment['avatar_url'] = ''.join(thisUser['avatar_url'].partition("/static/")[1:3])
 			thisComment['time'] = self.date_format(int(thisComment['timeStamp']))
 			commentList.append(thisComment)
 		user_manager.closeConnection()
