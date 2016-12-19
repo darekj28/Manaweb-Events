@@ -35,8 +35,8 @@ export default class CommentApp extends React.Component {
 			this.setState({currentUser : data.thisUser});
 		}.bind(this));
 	}
-	getPostById() {
-		$.post('/getPostById', {comment_id : this.state.comment_id}, 
+	getPostById(comment_id) {
+		$.post('/getPostById', {comment_id : comment_id}, 
 			function(data) {
 				var this_post = {
 						commentContent : data.this_post['body'],
@@ -49,8 +49,8 @@ export default class CommentApp extends React.Component {
 				this.setState({original_post : this_post});
 			}.bind(this));
 	}
-	refreshFeed() {
-		$.post('/getComments', {comment_id : this.state.comment_id}, function(data) {
+	refreshFeed(comment_id) {
+		$.post('/getComments', {comment_id : comment_id}, function(data) {
 			var feed = [];
 			data.comment_list.map(function(obj) {
 				feed.push({
@@ -99,14 +99,13 @@ export default class CommentApp extends React.Component {
 		this.refreshFeed();
 	}
 	componentWillReceiveProps(nextProps) {
-		this.setState({ comment_id : nextProps.params.comment_id });
-		this.refreshFeed();
-		this.getPostById();
+		this.refreshFeed(nextProps.params.comment_id);
+		this.getPostById(nextProps.params.comment_id);
 	}
 	componentDidMount() {
-		this.refreshFeed();
 		this.getCurrentUserInfo();
-		this.getPostById();
+		this.refreshFeed(this.state.comment_id);
+		this.getPostById(this.state.comment_id);
 		this.getNextUniqueId();
 	}
 	render() {
