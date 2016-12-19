@@ -13,7 +13,7 @@ export default class DeletePostModal extends React.Component {
 			data : JSON.stringify(obj, null, '\t'),
 			contentType: 'application/json;charset=UTF-8'
 		});
-		this.props.refreshFeed();
+		this.props.handlePostDelete(this.props.post);
 	}
 	render() {
 		return(

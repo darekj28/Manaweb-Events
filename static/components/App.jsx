@@ -36,9 +36,11 @@ export default class App extends React.Component {
 		this.handleFilterClick = this.handleFilterClick.bind(this);
 		this.handleFilterUser = this.handleFilterUser.bind(this);
 		this.handleSearch = this.handleSearch.bind(this);
-		this.handlePostChange = this.handlePostChange.bind(this);
+		this.handleTypingPost = this.handleTypingPost.bind(this);
 		this.handlePostSubmit = this.handlePostSubmit.bind(this);
-		this.refreshFeed = this.refreshFeed.bind(this);
+		this.handlePostEdit = this.handlePostEdit.bind(this);
+		this.handlePostDelete = this.handlePostDelete.bind(this);
+		this.initializeFeed = this.initializeFeed.bind(this);
 		this.getNextUniqueId = this.getNextUniqueId.bind(this);
 		this.getCurrentUserInfo = this.getCurrentUserInfo.bind(this);
 	}
@@ -52,7 +54,7 @@ export default class App extends React.Component {
 			this.setState({currentUser : data.thisUser});
 		}.bind(this));
 	}
-	refreshFeed() {
+	initializeFeed() {
 		$.post('/getPosts', function(data){
 			var feed = [];
 			data.post_list.map(function(obj) {
@@ -84,17 +86,17 @@ export default class App extends React.Component {
 			if (this.state.actions.length == 0) this.setState({alert : true});
 			else this.setState({alert : false});
 		}
-		$('#Feed').animate({scrollTop: 0}, 300);
+		$('html, body').animate({scrollTop: 0}, 300);
 	}
 	handleFilterUser(user) {
 		if (user != this.state.userIdToFilterPosts) this.setState({ userIdToFilterPosts : user });
 		else this.setState({ userIdToFilterPosts : ''});
 	}
 	handleSearch(searchText) { 
-		$('#Feed').animate({scrollTop: 0}, 300);
+		$('html, body').animate({scrollTop: 0}, 300);
 		this.setState({search : searchText});
 	}
-	handlePostChange(postText) {this.setState({post : postText});}
+	handleTypingPost(postText) {this.setState({post : postText});}
 	handlePostSubmit(postText) {
 		var feed = this.state.feed;
 		this.getNextUniqueId();
@@ -128,10 +130,35 @@ export default class App extends React.Component {
 			this.setState({feed : feed, post: ''});
 			$('html, body').animate({scrollTop: 0}, 300);
 		}
-		this.refreshFeed();
+		this.initializeFeed();
+	}
+	handlePostEdit(post, editedContent) {
+		var feed = this.state.feed;
+		for (var i = 0; i < feed.length; i++) {
+			if (feed[i].comment_id == post.comment_id) {
+				post['postContent'] = editedContent;
+				feed[i] = post;
+				break;
+			}
+		}
+		this.setState({ feed : feed });
+		this.initializeFeed();
+	}
+	handlePostDelete(post) {
+		var feed = this.state.feed;
+		var index;
+		for (var i = 0; i < feed.length; i++) {
+			if (feed[i].comment_id == post.comment_id) {
+				index = i;
+				break;
+			}
+		}
+		feed.splice(index, 1);
+		this.setState({ feed : feed });
+		this.initializeFeed();
 	}
 	componentDidMount() {
-		this.refreshFeed();
+		this.initializeFeed();
 		this.getNextUniqueId();
 		this.getCurrentUserInfo();
 
@@ -163,7 +190,7 @@ export default class App extends React.Component {
 				<div className="app row">
 					<MakePost placeholder="What's happening?" postText={this.state.post} 
 							onClick={this.handleFilterClick}
-							onPostChange={this.handlePostChange} 
+							onPostChange={this.handleTypingPost} 
 							onPostSubmit={this.handlePostSubmit} 
 							actions={actions}/>
 				</div>
@@ -171,9 +198,10 @@ export default class App extends React.Component {
 				<div className="app row">
 				<Feed currentUser={this.state.currentUser} searchText={this.state.search} 
 						filters={this.state.filters} posts={this.state.feed} actions={actions}
-						refreshFeed={this.refreshFeed}
 						handleFilterUser={this.handleFilterUser}
-						userIdToFilterPosts={this.state.userIdToFilterPosts} />
+						userIdToFilterPosts={this.state.userIdToFilterPosts}
+						handlePostEdit={this.handlePostEdit}
+						handlePostDelete={this.handlePostDelete} />
 				</div>
 			</div>
 		</div>);

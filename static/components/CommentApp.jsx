@@ -18,8 +18,10 @@ export default class CommentApp extends React.Component {
 			original_post : []
 		};
 		this.handleSearch = this.handleSearch.bind(this);
-		this.handleCommentChange = this.handleCommentChange.bind(this);
+		this.handleTypingComment = this.handleTypingComment.bind(this);
 		this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
+		this.handleCommentEdit = this.handleCommentEdit.bind(this);
+		this.handleCommentDelete = this.handleCommentDelete.bind(this);
 		this.getNextUniqueId = this.getNextUniqueId.bind(this);
 		this.getCurrentUserInfo = this.getCurrentUserInfo.bind(this);
 		this.getPostById = this.getPostById.bind(this);
@@ -69,10 +71,10 @@ export default class CommentApp extends React.Component {
 		}.bind(this));
 	}
 	handleSearch(searchText) { 
-		$('#CommentFeed').animate({scrollTop: $('#CommentFeed').prop("scrollHeight")}, 300);
+		$('html, body').animate({scrollTop: $('#CommentFeed').prop("scrollHeight")}, 300);
 		this.setState({search : searchText}); 
 	}
-	handleCommentChange(commentText) { this.setState({comment : commentText}); }
+	handleTypingComment(commentText) { this.setState({comment : commentText}); }
 	handleCommentSubmit(commentText) {
 		var feed = this.state.feed;
 		feed.push({ commentContent: commentText, 
@@ -99,6 +101,31 @@ export default class CommentApp extends React.Component {
 		this.getNextUniqueId();
 		this.refreshFeed(this.state.comment_id);
 	}
+	handleCommentEdit(post, editedContent) {
+		var feed = this.state.feed;
+		for (var i = 0; i < feed.length; i++) {
+			if (feed[i].unique_id == post.unique_id) {
+				post['commentContent'] = editedContent;
+				feed[i] = post;
+				break;
+			}
+		}
+		this.setState({ feed : feed });
+		this.refreshFeed(this.state.comment_id);
+	}
+	handleCommentDelete(post) {
+		var feed = this.state.feed;
+		var index;
+		for (var i = 0; i < feed.length; i++) {
+			if (feed[i].unique_id == post.unique_id) {
+				index = i;
+				break;
+			}
+		}
+		feed.splice(index, 1);
+		this.setState({ feed : feed });
+		this.refreshFeed(this.state.comment_id);
+	}
 	componentWillReceiveProps(nextProps) {
 		this.refreshFeed(nextProps.params.comment_id);
 		this.getPostById(nextProps.params.comment_id);
@@ -118,10 +145,12 @@ export default class CommentApp extends React.Component {
 			<div className="container">
 				<CommentFeedPost comment={this.state.original_post} isOriginalPost={true}/>
 				<CommentFeed currentUser={this.state.currentUser} searchText={this.state.search} 
-							filters={this.state.filters} refreshFeed={this.refreshFeed} 
+							filters={this.state.filters} 
+							handleCommentEdit={this.handleCommentEdit}
+							handleCommentDelete={this.handleCommentDelete}
 							comments={this.state.feed} />
 				<MakeComment placeholder="What's up bro?" commentText={this.state.comment} 
-						onCommentChange ={this.handleCommentChange} onCommentSubmit={this.handleCommentSubmit}/>
+						onCommentChange ={this.handleTypingComment} onCommentSubmit={this.handleCommentSubmit}/>
 			</div>
 		</div>);
 	}

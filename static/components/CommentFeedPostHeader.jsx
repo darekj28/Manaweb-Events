@@ -27,11 +27,11 @@ export default class CommentFeedPostHeader extends React.Component {
 		            </a>
 		            <ul className="CommentDropdown pull-right dropdown-menu">
 		              	{(this.props.isOP || this.props.isAdmin) && 
-		              		<li><a id="hce" href="#" onClick={this.props.handleCommentEdit}>Edit comment</a></li> }
+		              		<li><a id="hce" onClick={this.props.handleCommentEdit}>Edit comment</a></li> }
 		              	{(this.props.isOP || this.props.isAdmin) && 
-		              		<li><a id="hcd" href="#" onClick={this.props.handleCommentDelete}>Delete comment</a></li> }
+		              		<li><a id="hcd" onClick={this.props.handleCommentDelete}>Delete comment</a></li> }
 		              	{(!this.props.isOP || this.props.isAdmin) && 
-		              		<li><a id="hcr" href="#" onClick={this.props.handleCommentReport}>Report comment</a></li> }
+		              		<li><a id="hcr" onClick={this.props.handleCommentReport}>Report comment</a></li> }
 		            </ul>
 	        	</div>}
 			</div>

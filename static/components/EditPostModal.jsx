@@ -21,7 +21,7 @@ export default class EditPostModal extends React.Component {
 			data : JSON.stringify(obj, null, '\t'),
 			contentType: 'application/json;charset=UTF-8'
 		});
-		this.props.refreshFeed();
+		this.props.handlePostEdit(this.props.post, this.state.postContent);
 	}
 	componentWillReceiveProps(nextProps) {
 		this.setState({ postContent : nextProps.post.postContent });
