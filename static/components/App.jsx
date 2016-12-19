@@ -173,7 +173,7 @@ export default class App extends React.Component {
 						filters={this.state.filters} posts={this.state.feed} actions={actions}
 						refreshFeed={this.refreshFeed}
 						handleFilterUser={this.handleFilterUser}
-						userIdToFilterPosts={this.state.userIdToFilterPosts} /> 
+						userIdToFilterPosts={this.state.userIdToFilterPosts} />
 				</div>
 			</div>
 		</div>);
