@@ -31,7 +31,7 @@ class Posts:
 		self.NOTIFICATION_TABLE = "notification_table"
 		self.NOTIFICAITON_ID_TABLE = "n_id"
 		self.USER_NOTIFICATION_PREFIX = "n_"
-		self.SEEN_POSTS_TABLE = "seen_posts_table"
+		self.SEEN_POSTS_SUFFIX = "_seen_posts"
 
 		# for when we upload to heroku
 		# comment out if testing
@@ -64,44 +64,57 @@ class Posts:
 		return ''.join(random.choice(chars) for _ in range(size))
 
 
-	def createSeenPostsTable(self):
-		sql = "CREATE TABLE IF NOT EXISTS " + self.SEEN_POSTS_TABLE + " (userID TEXT PRIMARY KEY)"
+	def createSeenPostsTable(self, feed_name):
+		sql = "CREATE TABLE IF NOT EXISTS " + feed_name + self.SEEN_POSTS_SUFFIX + " (userID TEXT PRIMARY KEY)"
 		self.db.execute(sql)
 
 
 
 		
-		addIndexCode = 'CREATE INDEX IF NOT EXISTS userID ON ' + self.SEEN_POSTS_TABLE + ' (userID)'
+		addIndexCode = 'CREATE INDEX IF NOT EXISTS userID ON ' + feed_name + self.SEEN_POSTS_SUFFIX + ' (userID)'
 		self.db.execute(addIndexCode)
 
 
 	# adds a post to the last seen posts table
-	def addPostToSeenTable(self, comment_id):
-		sql =  "ALTER TABLE " + self.SEEN_POSTS_TABLE + " ADD %s BOOLEAN"
+	def addPostToSeenTable(self, feed_name, comment_id):
+		sql =  "ALTER TABLE " + feed_name + self.SEEN_POSTS_SUFFIX + " ADD %s BOOLEAN"
 		self.db.execute(self.db.mogrify(sql, (comment_id,)))
 
 		thisPost = self.getPostById(comment_id)
 
-		sql = "UPDATE " + self.SEEN_POSTS_TABLE + " SET %s = %s"
+		sql = "UPDATE " + feed_name + self.SEEN_POSTS_SUFFIX + " SET %s = %s"
 		self.db.execute(self.mogrify(sql, (comment_id, False)))
 
-		sql = "UPDATE " + self.SEEN_POSTS_TABLE + "SET %s = %s WHERE userID = %s"
+		sql = "UPDATE "  + feed_name + self.SEEN_POSTS_SUFFIX + "SET %s = %s WHERE userID = %s"
 		self.db.execute(self.mogrify(sql, (comment_id, True, thisPost['post_id'])))
 		self.post_db.commit()
 
 
-	def updatePostAsSeen(self, userID, comment_id):
-		sql = "UPDATE " + self.SEEN_POSTS_TABLE + "SET %s = %s WHERE userID = %s"
+	def updatePostAsSeen(self, feed_name, userID, comment_id):
+		sql = "UPDATE " + feed_name + self.SEEN_POSTS_SUFFIX + "SET %s = %s WHERE userID = %s"
 		self.db.execute(self.mogrify(sql, (comment_id, True, userID)))
 		self.post_db.commit()
 
 
 	def addUserToLastSeenTable(self, userID):
-		sql = "INSERT INTO " + self.SEEN_POSTS_TABLE + " (userID) VALUES (%s) ON CONFLICT (userID) DO UPDATE SET userID = %s"
-		self.db.execute(self.db.mogrify(sql, (userID, userID)))
-		self.post_db.commit()
+		feed_names_list = self.getFeedNames()
+		for feed_name in feed_names_list:
+			sql = "INSERT INTO " + feed_name + self.SEEN_POSTS_SUFFIX + " (userID) VALUES (%s) ON CONFLICT (userID) DO UPDATE SET userID = %s"
+			self.db.execute(self.db.mogrify(sql, (userID, userID)))
+			self.post_db.commit()
 
 	
+	def getFeedNames(self):
+		sql = "SELECT feed_name FROM " + self.FEED_NAMES
+		self.db.execute(sql)
+		query = self.db.fetchall()
+		feed_names_list = list()
+		for name in query:
+			if name[0] not in feed_names_list:
+				feed_names_list.append(name[0])
+
+		return feed_names_list
+
 
 	# deletes a table
 	def deleteTable(self, table_name):	
@@ -338,14 +351,6 @@ class Posts:
 		addIndexCode = 'CREATE INDEX IF NOT EXISTS feed_name ON ' + self.FEED_NAMES + ' (feed_name)'
 		self.db.execute(addIndexCode)
 
-	def getFeedNames(self):
-		sql = "SELECT feed_name FROM " + self.FEED_NAMES 
-		self.db.execute(self.db.mogrify(sql))
-		query = self.db.fetchall()
-		feed_list = list()
-		for f in query:
-			feed_list.append(f[0])
-		return feed_list
 
 	def isFeed(self, feed_name):
 		feed_list = self.getFeedNames()
@@ -509,6 +514,9 @@ class Posts:
 		action = "MAKE POST"
 		isComment = False
 		self.updateAdminTable(feed_name, body, poster_id, action, unique_id, timeString, timeStamp, isComment)
+
+		# add to posts seen table
+		self.addPostToSeenTable(feed_name, comment_id)
 
 	def makeComment(self, feed_name, comment_id, body, poster_id, unique_id = None):
 		timeStamp = time.time()
