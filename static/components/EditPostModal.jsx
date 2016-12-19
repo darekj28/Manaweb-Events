@@ -14,7 +14,7 @@ export default class EditPostModal extends React.Component {
 		var obj = {unique_id : this.props.post.unique_id,
 						field_name : "body", 
 						field_data : this.state.postContent};
-
+		
 		$.ajax({
 			type : 'POST',
 			url  : '/editPost',

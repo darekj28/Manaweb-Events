@@ -76,7 +76,7 @@ export default class CommentApp extends React.Component {
 	handleCommentSubmit(commentText) {
 		var feed = this.state.feed;
 		feed.push({ commentContent: commentText, 
-					avatar  : "../" + this.state.currentUser['avatar_url'], 
+					avatar  : this.state.currentUser['avatar_url'], 
 					name    : this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
 					userID  : this.state.currentUser['userID'], 
 					time	: "just now", 
