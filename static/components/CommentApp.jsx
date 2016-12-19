@@ -5,18 +5,6 @@ import CommentFeed from "CommentFeed.jsx";
 import MakeComment from "MakeComment.jsx";
 // var $ = require('jquery');
 
-function getParameterByName(name, url) {
-  	if (!url) {
-      url = window.location.href;
-    }
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
-
 export default class CommentApp extends React.Component {
 	constructor(props) {
 		super(props);
@@ -25,7 +13,7 @@ export default class CommentApp extends React.Component {
 			comment : '',
 			feed : [],
 			currentUser : '',
-			comment_id : getParameterByName('id', window.location.href),
+			comment_id : this.props.params.comment_id,
 			unique_id : '',
 			original_post : []
 		};
@@ -50,8 +38,7 @@ export default class CommentApp extends React.Component {
 	getPostById() {
 		$.post('/getPostById', {comment_id : this.state.comment_id}, 
 			function(data) {
-				var this_post = this.state.original_post;
-					this_post = {
+				var this_post = {
 						commentContent : data.this_post['body'],
 						avatar 		: data.this_post['avatar_url'],
 						name 		: data.this_post['first_name'] + ' ' + data.this_post['last_name'],
@@ -61,7 +48,6 @@ export default class CommentApp extends React.Component {
 					}
 				this.setState({original_post : this_post});
 			}.bind(this));
-
 	}
 	refreshFeed() {
 		$.post('/getComments', {comment_id : this.state.comment_id}, function(data) {
@@ -111,6 +97,11 @@ export default class CommentApp extends React.Component {
 		$('#CommentFeed').animate({scrollTop: $('#CommentFeed').prop("scrollHeight")}, 300);
 		this.getNextUniqueId();
 		this.refreshFeed();
+	}
+	componentWillReceiveProps(nextProps) {
+		this.setState({ comment_id : nextProps.params.comment_id });
+		this.refreshFeed();
+		this.getPostById();
 	}
 	componentDidMount() {
 		this.refreshFeed();

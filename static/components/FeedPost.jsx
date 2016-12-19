@@ -43,7 +43,7 @@ export default class FeedPost extends React.Component {
 					<div className="row"><FeedPostBody content={post.postContent}/></div>
 					<div className="PostFooter row">
 						<div className="CommentContainer">
-						<Link to={'/comment?id=' + this.state.comment_id}>
+						<Link to={'/comment/' + this.state.comment_id}>
 						<span className="glyphicon glyphicon-comment pull-left PostBottomIcon AppGlyphicon" 
 								id={"viewComment_" + this.state.comment_id}>
 								</span>

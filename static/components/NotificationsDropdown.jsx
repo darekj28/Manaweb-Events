@@ -49,7 +49,7 @@ export default class NotificationsDropdown extends React.Component {
                 <ul className="dropdown-menu">
                     {this.state.notifications.map(function(note, i) {
                         return (<li key={i}>
-                                    <Link to={"/comment?id=" + note.comment_id}> 
+                                    <Link to={"/comment/" + note.comment_id}> 
                                         {note.action +  " at " + note.timeString}
                                     </Link>
                                 </li>);

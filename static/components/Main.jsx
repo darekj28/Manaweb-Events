@@ -22,7 +22,7 @@ ReactDOM.render(
 	<Router history={browserHistory}>
 	<Route path="/" component={Main}>
 		<IndexRoute component={App}/>
-	  	<Route path="comment" component={CommentApp}/>
+	  	<Route path="comment/:comment_id" component={CommentApp}/>
 	  	<Route path="notifications" component={NotificationsApp}/>
     </Route></Router>, document.getElementById('app'));
 
