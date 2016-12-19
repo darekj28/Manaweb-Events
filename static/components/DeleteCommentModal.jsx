@@ -16,7 +16,7 @@ export default class DeleteCommentModal extends React.Component {
 			data : JSON.stringify(obj, null, '\t'),
 			contentType: 'application/json;charset=UTF-8'
 		});
-		this.props.refreshFeed();
+		this.props.refreshFeed(this.props.comment.comment_id);
 	}
 	render() {
 		return(

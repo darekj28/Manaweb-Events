@@ -69,6 +69,15 @@ def getPostById():
 	post_manager.closeConnection()
 	return jsonify({'this_post' : this_post})
 
+@mobile_api.route('/getCommentById', methods = ['POST'])
+def getCommentById():
+	feed_name = DEFAULT_FEED
+	comment_id = request.form['unique_id']
+	post_manager = Posts()
+	this_comment = post_manager.getCommentById(feed_name, unique_id)
+	post_manager.closeConnection()
+	return jsonify({'this_comment' : this_comment})	
+
 @mobile_api.route('/getComments', methods = ['POST'])
 def getComments():
 	feed_name = DEFAULT_FEED
@@ -77,6 +86,7 @@ def getComments():
 	comment_list = post_manager.getComments(feed_name, comment_id)
 	post_manager.sortAscending(comment_list)
 	post_manager.closeConnection()
+
 	return jsonify({ 'comment_list' : comment_list })	
 
 @mobile_api.route('/getInfoFromUserId', methods=['POST'])

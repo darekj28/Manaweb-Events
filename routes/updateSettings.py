@@ -41,8 +41,9 @@ def updateSettings():
 	user_manager.updateInfo(session['userID'], 'birthDay', request.form['birthDay'])
 	user_manager.updateInfo(session['userID'], 'birthYear', request.form['birthYear'])
 	user_manager.updateInfo(session['userID'], 'phone_number', request.form['phone_number'])
-	user_manager.updateInfo(session['userID'], 'avatar_name', request.form['avatar'] )
-	avatar_url = './' + request.form['avatar']
+	avatar_name = request.form['avatar'].split('/')[3].split('.')[0]
+	user_manager.updateInfo(session['userID'], 'avatar_name', avatar_name)
+	avatar_url =  request.form['avatar']
 	user_manager.updateInfo(session['userID'], 'avatar_url', avatar_url)
 	user_manager.closeConnection()
 

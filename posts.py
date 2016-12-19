@@ -384,7 +384,7 @@ class Posts:
 	def reportComment(self, feed_name, unique_id, reason, description, reporting_user, reported_user):
 		body = self.getCommentById(feed_name, unique_id)['body']
 		timeStamp = time.time()
-		timeString = self.timeString()
+		timeString = self.getTimeString()
 		self.db.execute(self.db.mogrify("INSERT INTO " + self.REPORT_TABLE + "(feed_name, id, body, reason, isComment, description, timeStamp, timeString, reporting_user, reported_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (feed_name, unique_id, body, reason, True, description, timeStamp, timeString, reporting_user, reported_user)))
 		self.post_db.commit()	
 		action = "REPORTED COMMENT"
@@ -643,7 +643,7 @@ class Posts:
 	def editPost(self, feed_name, unique_id, field_name, field_data):
 		table_name  = feed_name
 		timeStamp = time.time()
-		timeString = self.timeString()
+		timeString = self.getTimeString()
 		update_code = "UPDATE " + table_name  + " SET " + field_name + " = %s WHERE unique_id = '" + unique_id + "'"
 		self.db.execute(self.db.mogrify(update_code, (field_data,)))
 		self.post_db.commit()
@@ -777,7 +777,7 @@ class Posts:
 			thisUser = user_manager.getInfo(thisComment['poster_id'])
 			thisComment['first_name'] = thisUser['first_name']
 			thisComment['last_name'] = thisUser['last_name']
-			thisComment['avatar_url'] = ''.join(thisUser['avatar_url'].partition("/static/")[1:3])
+			thisComment['avatar_url'] = "../" + thisUser['avatar_url']
 			thisComment['time'] = self.date_format(int(thisComment['timeStamp']))
 			commentList.append(thisComment)
 		user_manager.closeConnection()

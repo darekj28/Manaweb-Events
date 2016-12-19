@@ -49,6 +49,7 @@ export default class CommentApp extends React.Component {
 				this.setState({original_post : this_post});
 			}.bind(this));
 	}
+	
 	refreshFeed(comment_id) {
 		$.post('/getComments', {comment_id : comment_id}, function(data) {
 			var feed = [];
@@ -75,7 +76,7 @@ export default class CommentApp extends React.Component {
 	handleCommentSubmit(commentText) {
 		var feed = this.state.feed;
 		feed.push({ commentContent: commentText, 
-					avatar  : this.state.currentUser['avatar_url'], 
+					avatar  : "../" + this.state.currentUser['avatar_url'], 
 					name    : this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
 					userID  : this.state.currentUser['userID'], 
 					time	: "just now", 
@@ -96,7 +97,7 @@ export default class CommentApp extends React.Component {
 		this.setState({feed : feed, comment: ''});
 		$('html, body').animate({scrollTop: $('#CommentFeed').prop("scrollHeight")}, 300);
 		this.getNextUniqueId();
-		this.refreshFeed();
+		this.refreshFeed(this.state.comment_id);
 	}
 	componentWillReceiveProps(nextProps) {
 		this.refreshFeed(nextProps.params.comment_id);

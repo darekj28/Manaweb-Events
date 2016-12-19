@@ -21,7 +21,7 @@ export default class EditCommentModal extends React.Component {
 			data : JSON.stringify(obj, null, '\t'),
 			contentType: 'application/json;charset=UTF-8'
 		});
-		this.props.refreshFeed();
+		this.props.refreshFeed(this.props.comment.comment_id);
 	}
 	componentWillReceiveProps(nextProps) {
 		this.setState({ commentContent : nextProps.comment.commentContent });
