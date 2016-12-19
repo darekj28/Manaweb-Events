@@ -22,9 +22,6 @@ body {
   background-color : #ffffff;
   color : #0f0f0f;
 }
-#EventName {
-  letter-spacing: 5px;
-}
 
 .valid {
   border-width: 1.5px;
@@ -50,6 +47,9 @@ body {
 .warning {
   padding-right : 900px;
 }
+.NotificationsFeedPost{
+  list-style-type : none;
+}
 .CommentFeedPost {
   list-style-type: none;
   border-bottom: 1px solid #dbdbdb;
@@ -58,7 +58,6 @@ body {
   list-style-type:none;
 }
 .numberOfComments {
-  text-decoration: none;
   color:#ad8ed2;
   cursor:pointer;
 }
