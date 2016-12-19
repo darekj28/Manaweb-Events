@@ -31,6 +31,7 @@ class Posts:
 		self.NOTIFICATION_TABLE = "notification_table"
 		self.NOTIFICAITON_ID_TABLE = "n_id"
 		self.USER_NOTIFICATION_PREFIX = "n_"
+		self.SEEN_POSTS_TABLE = "seen_posts_table"
 
 		# for when we upload to heroku
 		# comment out if testing
@@ -62,6 +63,45 @@ class Posts:
 	def id_generator(self, size=6, chars=string.ascii_uppercase + string.digits):
 		return ''.join(random.choice(chars) for _ in range(size))
 
+
+	def createSeenPostsTable(self):
+		sql = "CREATE TABLE IF NOT EXISTS " + self.SEEN_POSTS_TABLE + " (userID TEXT PRIMARY KEY)"
+		self.db.execute(sql)
+
+
+
+		
+		addIndexCode = 'CREATE INDEX IF NOT EXISTS userID ON ' + self.SEEN_POSTS_TABLE + ' (userID)'
+		self.db.execute(addIndexCode)
+
+
+	# adds a post to the last seen posts table
+	def addPostToSeenTable(self, comment_id):
+		sql =  "ALTER TABLE " + self.SEEN_POSTS_TABLE + " ADD %s BOOLEAN"
+		self.db.execute(self.db.mogrify(sql, (comment_id,)))
+
+		thisPost = self.getPostById(comment_id)
+
+		sql = "UPDATE " + self.SEEN_POSTS_TABLE + " SET %s = %s"
+		self.db.execute(self.mogrify(sql, (comment_id, False)))
+
+		sql = "UPDATE " + self.SEEN_POSTS_TABLE + "SET %s = %s WHERE userID = %s"
+		self.db.execute(self.mogrify(sql, (comment_id, True, thisPost['post_id'])))
+		self.post_db.commit()
+
+
+	def updatePostAsSeen(self, userID, comment_id):
+		sql = "UPDATE " + self.SEEN_POSTS_TABLE + "SET %s = %s WHERE userID = %s"
+		self.db.execute(self.mogrify(sql, (comment_id, True, userID)))
+		self.post_db.commit()
+
+
+	def addUserToLastSeenTable(self, userID):
+		sql = "INSERT INTO " + self.SEEN_POSTS_TABLE + " (userID) VALUES (%s) ON CONFLICT (userID) DO UPDATE SET userID = %s"
+		self.db.execute(self.db.mogrify(sql, (userID, userID)))
+		self.post_db.commit()
+
+	
 
 	# deletes a table
 	def deleteTable(self, table_name):	
@@ -100,7 +140,7 @@ class Posts:
 		timeStamp = time.time()
 		timeString = self.getTimeString()
 		if thisItem != None:
-			sql = "INSERT INTO " + feed_name + " (body, poster_id, feed_name, comment_id, unique_id, timeString, timeStamp, following, ghost_following) VALUES = (%s, %s, %s,%s,%s,%s,%s,%s,%s)"
+			sql = "INSERT INTO " + feed_name + " (body, poster_id, feed_name, comment_id, unique_id, timeString, timeStamp, following, ghost_following) VALUES (%s, %s, %s,%s,%s,%s,%s,%s,%s)"
 			
 		else:
 			thisItem = self.getCommentById(unique_id)
