@@ -19,16 +19,22 @@ def getFeedNames():
 
 @mobile_api.route('/getNotifications', methods=['POST'])
 def getNotifications():
-
-
 	userID = session.get('userID')
 	post_manager = Posts()
-
 	notification_list = post_manager.getShortListNotifications(userID)
 	post_manager.sortAscending(notification_list)
 	post_manager.closeConnection()
 	return jsonify({ 'notification_list' : notification_list })	
 
+
+@mobile_api.route('/getNumUnseenPosts', methods = ['POST'])
+def getNumUnseenPosts():
+	feed_name = request.form['feed_name']
+	userID = session['userID']
+	post_manager = Posts()
+	numUnseenPosts = post_manager.getNumUnseenPosts(feed_name, userID)
+	post_manager.closeConnection()
+	return jsonify({'numUnseenPosts': numUnseenPosts})
 
 @mobile_api.route('/seeNotification', methods=['POST'])
 def seeNotificaiton():
