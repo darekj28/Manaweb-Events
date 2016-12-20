@@ -185,16 +185,19 @@
 				currentUser: {},
 				alert: false,
 				unique_id: '',
-				feed_name: ''
+				feed_name: 'BALT'
 			};
 			_this.handleFilterClick = _this.handleFilterClick.bind(_this);
 			_this.handleFilterUser = _this.handleFilterUser.bind(_this);
 			_this.handleSearch = _this.handleSearch.bind(_this);
-			_this.handlePostChange = _this.handlePostChange.bind(_this);
+			_this.handleTypingPost = _this.handleTypingPost.bind(_this);
 			_this.handlePostSubmit = _this.handlePostSubmit.bind(_this);
-			_this.refreshFeed = _this.refreshFeed.bind(_this);
+			_this.handlePostEdit = _this.handlePostEdit.bind(_this);
+			_this.handlePostDelete = _this.handlePostDelete.bind(_this);
+			_this.initializeFeed = _this.initializeFeed.bind(_this);
 			_this.getNextUniqueId = _this.getNextUniqueId.bind(_this);
 			_this.getCurrentUserInfo = _this.getCurrentUserInfo.bind(_this);
+			_this.markPostFeedAsSeen = _this.markPostFeedAsSeen.bind(_this);
 			return _this;
 		}
 	
@@ -213,8 +216,16 @@
 				}.bind(this));
 			}
 		}, {
-			key: 'refreshFeed',
-			value: function refreshFeed() {
+			key: 'markPostFeedAsSeen',
+			value: function markPostFeedAsSeen() {
+				$.post('/markPostFeedAsSeen', { feed_name: this.state.feed_name }, function (data) {
+					var x = [];
+				}.bind(this));
+			}
+		}, {
+			key: 'initializeFeed',
+			value: function initializeFeed() {
+				var that = this;
 				$.post('/getPosts', function (data) {
 					var feed = [];
 					data.post_list.map(function (obj) {
@@ -232,6 +243,7 @@
 							numberOfComments: obj['numComments']
 						});
 					});
+					that.markPostFeedAsSeen();
 					this.setState({ feed: feed });
 				}.bind(this));
 			}
@@ -246,7 +258,7 @@
 					this.setState({ actions: newFilters });
 					if (this.state.actions.length == 0) this.setState({ alert: true });else this.setState({ alert: false });
 				}
-				$('#Feed').animate({ scrollTop: 0 }, 300);
+				$('html, body').animate({ scrollTop: 0 }, 300);
 			}
 		}, {
 			key: 'handleFilterUser',
@@ -256,19 +268,19 @@
 		}, {
 			key: 'handleSearch',
 			value: function handleSearch(searchText) {
-				$('#Feed').animate({ scrollTop: 0 }, 300);
+				$('html, body').animate({ scrollTop: 0 }, 300);
 				this.setState({ search: searchText });
 			}
 		}, {
-			key: 'handlePostChange',
-			value: function handlePostChange(postText) {
+			key: 'handleTypingPost',
+			value: function handleTypingPost(postText) {
 				this.setState({ post: postText });
 			}
 		}, {
 			key: 'handlePostSubmit',
 			value: function handlePostSubmit(postText) {
 				var feed = this.state.feed;
-				this.getNextUniqueId();
+				// this.getNextUniqueId();
 				if (this.state.actions.length == 0) this.setState({ alert: true });else {
 					this.setState({ alert: false });
 					feed.unshift({ postContent: postText,
@@ -279,14 +291,14 @@
 						isTrade: contains(this.state.actions, "Trade"),
 						isPlay: contains(this.state.actions, "Play"),
 						isChill: contains(this.state.actions, "Chill"),
-						comment_id: this.state.unique_id,
+						// comment_id : this.state.unique_id,
 						numberOfComments: 0
 					});
 					var obj = { postContent: postText,
 						isTrade: contains(this.state.actions, "Trade"),
 						isPlay: contains(this.state.actions, "Play"),
 						isChill: contains(this.state.actions, "Chill"),
-						comment_id: this.state.unique_id,
+						// comment_id : this.state.unique_id,
 						numberOfComments: 0
 					};
 					$.ajax({
@@ -298,12 +310,41 @@
 					this.setState({ feed: feed, post: '' });
 					$('html, body').animate({ scrollTop: 0 }, 300);
 				}
-				this.refreshFeed();
+				this.initializeFeed();
+			}
+		}, {
+			key: 'handlePostEdit',
+			value: function handlePostEdit(post, editedContent) {
+				var feed = this.state.feed;
+				for (var i = 0; i < feed.length; i++) {
+					if (feed[i].comment_id == post.comment_id) {
+						post['postContent'] = editedContent;
+						feed[i] = post;
+						break;
+					}
+				}
+				this.setState({ feed: feed });
+				this.initializeFeed();
+			}
+		}, {
+			key: 'handlePostDelete',
+			value: function handlePostDelete(post) {
+				var feed = this.state.feed;
+				var index;
+				for (var i = 0; i < feed.length; i++) {
+					if (feed[i].comment_id == post.comment_id) {
+						index = i;
+						break;
+					}
+				}
+				feed.splice(index, 1);
+				this.setState({ feed: feed });
+				this.initializeFeed();
 			}
 		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
-				this.refreshFeed();
+				this.initializeFeed();
 				this.getNextUniqueId();
 				this.getCurrentUserInfo();
 	
@@ -352,7 +393,7 @@
 							{ className: 'app row' },
 							React.createElement(_MakePost2.default, { placeholder: 'What\'s happening?', postText: this.state.post,
 								onClick: this.handleFilterClick,
-								onPostChange: this.handlePostChange,
+								onPostChange: this.handleTypingPost,
 								onPostSubmit: this.handlePostSubmit,
 								actions: actions })
 						),
@@ -362,9 +403,10 @@
 							{ className: 'app row' },
 							React.createElement(_Feed2.default, { currentUser: this.state.currentUser, searchText: this.state.search,
 								filters: this.state.filters, posts: this.state.feed, actions: actions,
-								refreshFeed: this.refreshFeed,
 								handleFilterUser: this.handleFilterUser,
-								userIdToFilterPosts: this.state.userIdToFilterPosts })
+								userIdToFilterPosts: this.state.userIdToFilterPosts,
+								handlePostEdit: this.handlePostEdit,
+								handlePostDelete: this.handlePostDelete })
 						)
 					)
 				);
@@ -10103,9 +10145,9 @@
 							if (post["userID"].toLowerCase().indexOf(that.props.userIdToFilterPosts.toLowerCase()) === -1) return false;else return true;
 						} else return true;
 					}
-					if (!doesPostMatchFilter() || !doesPostMatchSearch() || !doesPostMatchSelectedUser()) return;else rows.push(React.createElement(_FeedPost2.default, { key: i, post: post, isOP: that.props.currentUser['userID'] == post.userID,
+					if (!doesPostMatchFilter() || !doesPostMatchSearch() || !doesPostMatchSelectedUser()) return;else rows.push(React.createElement(_FeedPost2.default, { key: i, post: post,
+						isOP: that.props.currentUser['userID'] == post.userID,
 						isAdmin: that.props.currentUser['isAdmin'],
-						refreshFeed: that.props.refreshFeed,
 						refreshPostDisplayedInModal: that.refreshPostDisplayedInModal,
 						handleFilterUser: that.props.handleFilterUser }));
 				});
@@ -10125,8 +10167,8 @@
 						rows,
 						" "
 					),
-					React.createElement(_EditPostModal2.default, { post: this.state.postInModal, refreshFeed: this.props.refreshFeed }),
-					React.createElement(_DeletePostModal2.default, { post: this.state.postInModal, refreshFeed: this.props.refreshFeed }),
+					React.createElement(_EditPostModal2.default, { post: this.state.postInModal, handlePostEdit: this.props.handlePostEdit }),
+					React.createElement(_DeletePostModal2.default, { post: this.state.postInModal, handlePostDelete: this.props.handlePostDelete }),
 					React.createElement(_ReportPostModal2.default, { post: this.state.postInModal })
 				);
 			}
@@ -10283,7 +10325,7 @@
 										null,
 										React.createElement(
 											'a',
-											{ id: 'hpe', href: '#', onClick: this.handlePostEdit },
+											{ id: 'hpe', onClick: this.handlePostEdit },
 											'Edit post'
 										)
 									),
@@ -10292,7 +10334,7 @@
 										null,
 										React.createElement(
 											'a',
-											{ id: 'hpd', href: '#', onClick: this.handlePostDelete },
+											{ id: 'hpd', onClick: this.handlePostDelete },
 											'Delete post'
 										)
 									),
@@ -10301,7 +10343,7 @@
 										null,
 										React.createElement(
 											'a',
-											{ id: 'hpr', href: '#', onClick: this.handlePostReport },
+											{ id: 'hpr', onClick: this.handlePostReport },
 											'Report post'
 										)
 									)
@@ -10555,7 +10597,7 @@
 					data: JSON.stringify(obj, null, '\t'),
 					contentType: 'application/json;charset=UTF-8'
 				});
-				this.props.refreshFeed();
+				this.props.handlePostEdit(this.props.post, this.state.postContent);
 			}
 		}, {
 			key: 'componentWillReceiveProps',
@@ -10666,7 +10708,7 @@
 					data: JSON.stringify(obj, null, '\t'),
 					contentType: 'application/json;charset=UTF-8'
 				});
-				this.props.refreshFeed();
+				this.props.handlePostDelete(this.props.post);
 			}
 		}, {
 			key: 'render',
@@ -10905,8 +10947,10 @@
 				original_post: []
 			};
 			_this.handleSearch = _this.handleSearch.bind(_this);
-			_this.handleCommentChange = _this.handleCommentChange.bind(_this);
+			_this.handleTypingComment = _this.handleTypingComment.bind(_this);
 			_this.handleCommentSubmit = _this.handleCommentSubmit.bind(_this);
+			_this.handleCommentEdit = _this.handleCommentEdit.bind(_this);
+			_this.handleCommentDelete = _this.handleCommentDelete.bind(_this);
 			_this.getNextUniqueId = _this.getNextUniqueId.bind(_this);
 			_this.getCurrentUserInfo = _this.getCurrentUserInfo.bind(_this);
 			_this.getPostById = _this.getPostById.bind(_this);
@@ -10966,12 +11010,12 @@
 		}, {
 			key: "handleSearch",
 			value: function handleSearch(searchText) {
-				$('#CommentFeed').animate({ scrollTop: $('#CommentFeed').prop("scrollHeight") }, 300);
+				$('html, body').animate({ scrollTop: $('#CommentFeed').prop("scrollHeight") }, 300);
 				this.setState({ search: searchText });
 			}
 		}, {
-			key: "handleCommentChange",
-			value: function handleCommentChange(commentText) {
+			key: "handleTypingComment",
+			value: function handleTypingComment(commentText) {
 				this.setState({ comment: commentText });
 			}
 		}, {
@@ -10979,17 +11023,18 @@
 			value: function handleCommentSubmit(commentText) {
 				var feed = this.state.feed;
 				feed.push({ commentContent: commentText,
-					avatar: "../" + this.state.currentUser['avatar_url'],
+					avatar: this.state.currentUser['avatar_url'],
 					name: this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
 					userID: this.state.currentUser['userID'],
 					time: "just now",
-					comment_id: this.state.comment_id,
-					unique_id: this.state.unique_id
+					comment_id: this.state.comment_id
+					// unique_id : this.state.unique_id
 				});
 	
 				var obj = { commentContent: commentText,
-					comment_id: this.state.comment_id,
-					unique_id: this.state.unique_id };
+					comment_id: this.state.comment_id
+					// unique_id : this.state.unique_id
+				};
 	
 				$.ajax({
 					type: 'POST',
@@ -11000,6 +11045,35 @@
 				this.setState({ feed: feed, comment: '' });
 				$('html, body').animate({ scrollTop: $('#CommentFeed').prop("scrollHeight") }, 300);
 				this.getNextUniqueId();
+				this.refreshFeed(this.state.comment_id);
+			}
+		}, {
+			key: "handleCommentEdit",
+			value: function handleCommentEdit(post, editedContent) {
+				var feed = this.state.feed;
+				for (var i = 0; i < feed.length; i++) {
+					if (feed[i].unique_id == post.unique_id) {
+						post['commentContent'] = editedContent;
+						feed[i] = post;
+						break;
+					}
+				}
+				this.setState({ feed: feed });
+				this.refreshFeed(this.state.comment_id);
+			}
+		}, {
+			key: "handleCommentDelete",
+			value: function handleCommentDelete(post) {
+				var feed = this.state.feed;
+				var index;
+				for (var i = 0; i < feed.length; i++) {
+					if (feed[i].unique_id == post.unique_id) {
+						index = i;
+						break;
+					}
+				}
+				feed.splice(index, 1);
+				this.setState({ feed: feed });
 				this.refreshFeed(this.state.comment_id);
 			}
 		}, {
@@ -11031,10 +11105,12 @@
 						{ className: "container" },
 						React.createElement(_CommentFeedPost2.default, { comment: this.state.original_post, isOriginalPost: true }),
 						React.createElement(_CommentFeed2.default, { currentUser: this.state.currentUser, searchText: this.state.search,
-							filters: this.state.filters, refreshFeed: this.refreshFeed,
+							filters: this.state.filters,
+							handleCommentEdit: this.handleCommentEdit,
+							handleCommentDelete: this.handleCommentDelete,
 							comments: this.state.feed }),
 						React.createElement(_MakeComment2.default, { placeholder: "What's up bro?", commentText: this.state.comment,
-							onCommentChange: this.handleCommentChange, onCommentSubmit: this.handleCommentSubmit })
+							onCommentChange: this.handleTypingComment, onCommentSubmit: this.handleCommentSubmit })
 					)
 				);
 			}
@@ -11399,7 +11475,7 @@
 								null,
 								React.createElement(
 									'a',
-									{ id: 'hce', href: '#', onClick: this.props.handleCommentEdit },
+									{ id: 'hce', onClick: this.props.handleCommentEdit },
 									'Edit comment'
 								)
 							),
@@ -11408,7 +11484,7 @@
 								null,
 								React.createElement(
 									'a',
-									{ id: 'hcd', href: '#', onClick: this.props.handleCommentDelete },
+									{ id: 'hcd', onClick: this.props.handleCommentDelete },
 									'Delete comment'
 								)
 							),
@@ -11417,7 +11493,7 @@
 								null,
 								React.createElement(
 									'a',
-									{ id: 'hcr', href: '#', onClick: this.props.handleCommentReport },
+									{ id: 'hcr', onClick: this.props.handleCommentReport },
 									'Report comment'
 								)
 							)
@@ -11565,7 +11641,6 @@
 					if (!doesCommentMatchSearch()) return;else rows.push(React.createElement(_CommentFeedPost2.default, { key: i, comment: comment,
 						isOP: that.props.currentUser['userID'] == comment.userID,
 						isAdmin: that.props.currentUser['isAdmin'], isOriginalPost: false,
-						refreshFeed: that.props.refreshFeed,
 						refreshCommentDisplayedInModal: that.refreshCommentDisplayedInModal }));
 				});
 				return rows;
@@ -11579,9 +11654,9 @@
 					{ id: "CommentFeed" },
 					rows,
 					React.createElement(_EditCommentModal2.default, { comment: this.state.commentInModal,
-						refreshFeed: this.props.refreshFeed }),
+						handleCommentEdit: this.props.handleCommentEdit }),
 					React.createElement(_DeleteCommentModal2.default, { comment: this.state.commentInModal,
-						refreshFeed: this.props.refreshFeed }),
+						handleCommentDelete: this.props.handleCommentDelete }),
 					React.createElement(_ReportCommentModal2.default, { comment: this.state.commentInModal })
 				);
 			}
@@ -11648,7 +11723,7 @@
 					data: JSON.stringify(obj, null, '\t'),
 					contentType: 'application/json;charset=UTF-8'
 				});
-				this.props.refreshFeed(this.props.comment.comment_id);
+				this.props.handleCommentEdit(this.props.comment, this.state.commentContent);
 			}
 		}, {
 			key: 'componentWillReceiveProps',
@@ -11761,7 +11836,7 @@
 					data: JSON.stringify(obj, null, '\t'),
 					contentType: 'application/json;charset=UTF-8'
 				});
-				this.props.refreshFeed(this.props.comment.comment_id);
+				this.props.handleCommentDelete(this.props.comment);
 			}
 		}, {
 			key: 'render',

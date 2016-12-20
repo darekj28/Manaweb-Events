@@ -8,7 +8,8 @@ import geo
 import os
 import smtplib
 import sqlite3
-import users
+from users import Users
+from posts import Posts
 
 create_profile = Blueprint('create_profile', __name__)
 
@@ -43,7 +44,7 @@ def createProfile():
 		birthMonth = request.form['birthMonth']
 		birthYear = request.form['birthYear']
 		gender = request.form['gender']
-		avatar_url = request.form['avatar']
+		avatar_url = request.form['avatar'][1:]
 		slash_splits = avatar_url.split('/')
 		avatar_name = slash_splits[len(slash_splits)-1].split('.')[0]
 		phone_number = request.form['phone_number']
@@ -55,12 +56,17 @@ def createProfile():
 
 		confirmed = True
 		
-
-		users.addUser(userID, first_name = first_name, last_name = last_name, password = password, email = email,  isActive = isActive,
+		user_manager = Users()
+		user_manager.addUser(userID, first_name = first_name, last_name = last_name, password = password, email = email,  isActive = isActive,
 			avatar_url = avatar_url, avatar_name = avatar_name, confirmationPin = confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
 			isAdmin = False, phone_number = phone_number, birthMonth = birthMonth, birthDay = birthDay, birthYear = birthYear,
 			gender = gender) 
 
+		user_manager.closeConnection()
+
+		post_manager = Posts()
+		post_manager.addUserToLastSeenTables(userID)
+		post_manager.closeConnection()
 	
 		# email_confirm.sendConfirmationEmail(newUser)
 		
@@ -71,7 +77,7 @@ def createProfile():
 		session['first_name'] = first_name
 		session['userID'] = userID
 
-		userFileDir = './static/img/' + session['userID']
+		userFileDir = '/static/img/' + session['userID']
 		# if directory exists, clear it
 		# if os.path.isdir(userFileDir):
 		# 	fileList = os.listdir(userFileDir)

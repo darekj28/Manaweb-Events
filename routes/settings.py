@@ -16,7 +16,7 @@ EMPTY_STRING = ""
 @original_settings.route('/settings', methods = ['GET', 'POST'])
 def settings():
 	if (request.method == 'GET'):
-		avatar_url = './static/avatars'
+		avatar_url = '/static/avatars'
 		avatar_list = list()
 		fileList = os.listdir(avatar_url)
 		for fileName in fileList:

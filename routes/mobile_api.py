@@ -39,6 +39,17 @@ def seeNotificaiton():
 	return jsonify({'success' : True})
 	
 
+
+@mobile_api.route('/markPostFeedAsSeen', methods = ['POST'])
+def markPostFeedAsSeen():
+	feed_name = request.form['feed_name']
+	userID = session['userID']
+	post_manager = Posts()
+	post_manager.markPostFeedAsSeen(feed_name, userID)
+	post_manager.closeConnection()
+	return jsonify({'success': True})
+			
+
 @mobile_api.route('/sendConfirmation', methods = ['POST'])
 def sendConfirmation():
 	if (session.get('userID') == None):
@@ -159,7 +170,8 @@ def makePost():
 		isTrade		= request.json['isTrade']
 		isPlay 		= request.json['isPlay']
 		isChill		= request.json['isChill']
-		comment_id  = request.json['comment_id']
+		# comment_id  = request.json['comment_id']
+		comment_id = None
 		feed_name = DEFAULT_FEED		
 		post_manager = Posts()
 		post_manager.postInThread(feed_name, body = postContent, poster_id = session['userID'], 
@@ -187,7 +199,8 @@ def makeComment():
 
 		comment_id = request.json['comment_id']
 		commentContent = request.json['commentContent']
-		unique_id = request.json['unique_id']
+		# unique_id = request.json['unique_id']
+		unique_id = None
 		
 		post_manager = Posts()
 		post_manager.makeComment(feed_name, comment_id, commentContent, session['userID'], unique_id = unique_id)

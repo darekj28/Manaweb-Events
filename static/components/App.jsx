@@ -31,7 +31,7 @@ export default class App extends React.Component {
 			currentUser : {},
 			alert : false,
 			unique_id : '',
-			feed_name : ''
+			feed_name : 'BALT'
 		};
 		this.handleFilterClick = this.handleFilterClick.bind(this);
 		this.handleFilterUser = this.handleFilterUser.bind(this);
@@ -43,6 +43,7 @@ export default class App extends React.Component {
 		this.initializeFeed = this.initializeFeed.bind(this);
 		this.getNextUniqueId = this.getNextUniqueId.bind(this);
 		this.getCurrentUserInfo = this.getCurrentUserInfo.bind(this);
+		this.markPostFeedAsSeen = this.markPostFeedAsSeen.bind(this);
 	}
 	getNextUniqueId() {
 		$.post('/generateUniqueId', function(data) {
@@ -54,7 +55,16 @@ export default class App extends React.Component {
 			this.setState({currentUser : data.thisUser});
 		}.bind(this));
 	}
+
+	markPostFeedAsSeen() {
+		$.post('/markPostFeedAsSeen', {feed_name: this.state.feed_name}, 
+			function(data){
+				var x = [];
+		}.bind(this));
+	}
+
 	initializeFeed() {
+		var that = this;
 		$.post('/getPosts', function(data){
 			var feed = [];
 			data.post_list.map(function(obj) {
@@ -71,8 +81,11 @@ export default class App extends React.Component {
 					unique_id   : obj['unique_id'],
 					numberOfComments : obj['numComments']
 				});
+				
 			});
+			that.markPostFeedAsSeen()
 			this.setState({feed : feed});
+
 		}.bind(this));
 	}
 	handleFilterClick(filter, isSearch) {
@@ -99,7 +112,7 @@ export default class App extends React.Component {
 	handleTypingPost(postText) {this.setState({post : postText});}
 	handlePostSubmit(postText) {
 		var feed = this.state.feed;
-		this.getNextUniqueId();
+		// this.getNextUniqueId();
 		if (this.state.actions.length == 0) this.setState({alert : true});
 		else {
 			this.setState({alert : false});
@@ -111,14 +124,14 @@ export default class App extends React.Component {
 						isTrade : contains(this.state.actions, "Trade"),
 						isPlay  : contains(this.state.actions, "Play"), 
 						isChill : contains(this.state.actions, "Chill"),
-						comment_id : this.state.unique_id,
+						// comment_id : this.state.unique_id,
 						numberOfComments : 0,
 					});
 			var obj = {postContent : postText, 
 						isTrade : contains(this.state.actions, "Trade"),
 						isPlay  : contains(this.state.actions, "Play"), 
 						isChill : contains(this.state.actions, "Chill"),
-						comment_id : this.state.unique_id,
+						// comment_id : this.state.unique_id,
 						numberOfComments : 0
 					};
 			$.ajax({

@@ -82,13 +82,14 @@ export default class CommentApp extends React.Component {
 					name    : this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
 					userID  : this.state.currentUser['userID'], 
 					time	: "just now", 
-					comment_id : this.state.comment_id,
-					unique_id : this.state.unique_id
+					comment_id : this.state.comment_id
+					// unique_id : this.state.unique_id
 				});
 
 		var obj = {commentContent : commentText, 
-					comment_id : this.state.comment_id,
-					unique_id : this.state.unique_id};
+					comment_id : this.state.comment_id
+					// unique_id : this.state.unique_id
+				};
 
 		$.ajax({
 			type : 'POST',

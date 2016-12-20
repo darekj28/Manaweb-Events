@@ -11,16 +11,24 @@ post_manager = Posts()
 user_list = user_manager.getUserList()
 
 
-feed_name_list = post_manager.getFeedNames()
 
-for feed_name in feed_name_list:
-	post_manager.deleteTable(feed_name + "_seen_posts")
-	post_manager.createSeenPostsTable(feed_name)
 
-for userID in user_list:
-	post_manager.addUserToLastSeenTable(userID)
+userID = 'darekj'
+feed_name = "BALT"
 
-post_manager.addUserToLastSeenTable("briank")
+
+
+
+
+
+
+# post_manager.createLastPostTable()
+# post_manager.removeFeed(feed_name)
+# post_manager.addFeedName(feed_name)
+print(post_manager.getLastPost(feed_name))
+
+
+
 
 user_manager.closeConnection()
 post_manager.closeConnection()
