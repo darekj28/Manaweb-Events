@@ -99,7 +99,7 @@ class Posts:
 
 	# adds a post to the last seen posts table
 	# updates everyone's post 
-	def updateSeenTableWithNewPost(self, feed_name):
+	def updateSeenTableWithNewPost(self, feed_name, comment_id):
 		
 		timeStamp = time.time()
 		timeString = self.getTimeString()
@@ -115,11 +115,12 @@ class Posts:
 		for item in query:
 			numUnseenDict[item[0]] = item[2]
 
-
-		# update the 
+		this_post = self.getPostById(feed_name, comment_id)
 		sql = "UPDATE " + table_name + " SET numUnseen = %s, timeStamp = %s, timeString = %s WHERE userID = %s"
 		for user in numUnseenDict.keys():
-			self.db.execute(self.db.mogrify(sql, (numUnseenDict[user] + 1, timeStamp, timeString, user)))
+			# only increment if this is not the op
+			if user != this_post['poster_id']:
+				self.db.execute(self.db.mogrify(sql, (numUnseenDict[user] + 1, timeStamp, timeString, user)))
 
 
 
@@ -192,11 +193,11 @@ class Posts:
 			lastPost = self.getLastSeenPost(feed_name, userID)
 			count = 0
 			for post in post_list:
-				if post['timeStamp'] > lastPost['timeStamp']:
+				if post['timeStamp'] > lastPost['timeStamp'] and post['userID'] != userID:
 					count = count + 1
 
 			sql = "UPDATE " + table_name + " SET numUnseen = %s WHERE userID = %s"
-			self.db.execute(self.db.mogrify(sel, (count, userID)))
+			self.db.execute(self.db.mogrify(sql, (count, userID)))
 
 
 	
@@ -639,7 +640,7 @@ class Posts:
 		self.updateAdminTable(feed_name, body, poster_id, action, unique_id, timeString, timeStamp, isComment)
 
 		# add to posts seen table
-		self.updateSeenTableWithNewPost(feed_name)
+		self.updateSeenTableWithNewPost(feed_name, comment_id)
 		self.updateLastPostTable(feed_name, comment_id)
 
 	def makeComment(self, feed_name, comment_id, body, poster_id, unique_id = None):
