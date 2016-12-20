@@ -31,7 +31,8 @@ export default class App extends React.Component {
 			currentUser : {},
 			alert : false,
 			unique_id : '',
-			feed_name : 'BALT'
+			feed_name : 'BALT',
+			numUnseenPosts : 0
 		};
 		this.handleFilterClick = this.handleFilterClick.bind(this);
 		this.handleFilterUser = this.handleFilterUser.bind(this);
@@ -44,6 +45,7 @@ export default class App extends React.Component {
 		this.getNextUniqueId = this.getNextUniqueId.bind(this);
 		this.getCurrentUserInfo = this.getCurrentUserInfo.bind(this);
 		this.markPostFeedAsSeen = this.markPostFeedAsSeen.bind(this);
+		this.setNumUnseenPosts = this.setNumUnseenPosts.bind(this);
 	}
 	getNextUniqueId() {
 		$.post('/generateUniqueId', function(data) {
@@ -62,6 +64,14 @@ export default class App extends React.Component {
 				var x = [];
 		}.bind(this));
 	}
+
+	setNumUnseenPosts(){
+		$.post('getNumUnseenPosts', {feed_name: this.state.feed_name},
+			function(data){
+				this.setState({numUnseenPosts : data['numUnseenPosts']})
+			}.bind(this));
+	}
+
 
 	initializeFeed() {
 		var that = this;
@@ -174,6 +184,7 @@ export default class App extends React.Component {
 		this.initializeFeed();
 		this.getNextUniqueId();
 		this.getCurrentUserInfo();
+		this.setNumUnseenPosts();
 
 		$('.filterButton').click(function(e) {
 			$(this).toggleClass('icon-danger');
@@ -186,6 +197,8 @@ export default class App extends React.Component {
 		var actions = ['Trade', 'Play', 'Chill'];
 		var alert;
 		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
+
+
 		if (this.state.alert) {
 			alert = <div className="alert alert-danger">
 			  			<strong>Bro!</strong> You must select something to do before you post man!
@@ -198,7 +211,7 @@ export default class App extends React.Component {
 							userIdToFilterPosts={this.state.userIdToFilterPosts} filters={this.state.filters}/>
 			<div className="container">
 				<div className="app row">
-					<EventName name="Name of Event"/>
+					<EventName name= {this.state.feed_name} numUnseenPosts = {this.state.numUnseenPosts} />
 				</div>
 				<div className="app row">
 					<MakePost placeholder="What's happening?" postText={this.state.post} 

@@ -185,7 +185,8 @@
 				currentUser: {},
 				alert: false,
 				unique_id: '',
-				feed_name: 'BALT'
+				feed_name: 'BALT',
+				numUnseenPosts: 0
 			};
 			_this.handleFilterClick = _this.handleFilterClick.bind(_this);
 			_this.handleFilterUser = _this.handleFilterUser.bind(_this);
@@ -198,6 +199,7 @@
 			_this.getNextUniqueId = _this.getNextUniqueId.bind(_this);
 			_this.getCurrentUserInfo = _this.getCurrentUserInfo.bind(_this);
 			_this.markPostFeedAsSeen = _this.markPostFeedAsSeen.bind(_this);
+			_this.setNumUnseenPosts = _this.setNumUnseenPosts.bind(_this);
 			return _this;
 		}
 	
@@ -220,6 +222,13 @@
 			value: function markPostFeedAsSeen() {
 				$.post('/markPostFeedAsSeen', { feed_name: this.state.feed_name }, function (data) {
 					var x = [];
+				}.bind(this));
+			}
+		}, {
+			key: 'setNumUnseenPosts',
+			value: function setNumUnseenPosts() {
+				$.post('getNumUnseenPosts', { feed_name: this.state.feed_name }, function (data) {
+					this.setState({ numUnseenPosts: data['numUnseenPosts'] });
 				}.bind(this));
 			}
 		}, {
@@ -347,6 +356,7 @@
 				this.initializeFeed();
 				this.getNextUniqueId();
 				this.getCurrentUserInfo();
+				this.setNumUnseenPosts();
 	
 				$('.filterButton').click(function (e) {
 					$(this).toggleClass('icon-danger');
@@ -361,6 +371,7 @@
 				var actions = ['Trade', 'Play', 'Chill'];
 				var alert;
 				var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
+	
 				if (this.state.alert) {
 					alert = React.createElement(
 						'div',
@@ -386,7 +397,7 @@
 						React.createElement(
 							'div',
 							{ className: 'app row' },
-							React.createElement(_EventName2.default, { name: 'Name of Event' })
+							React.createElement(_EventName2.default, { name: this.state.feed_name, numUnseenPosts: this.state.numUnseenPosts })
 						),
 						React.createElement(
 							'div',
@@ -1330,12 +1341,18 @@
 	 * will remain to ensure logic does not differ in production.
 	 */
 	
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  if (true) {
+	var validateFormat = function validateFormat(format) {};
+	
+	if (true) {
+	  validateFormat = function validateFormat(format) {
 	    if (format === undefined) {
 	      throw new Error('invariant requires an error message argument');
 	    }
-	  }
+	  };
+	}
+	
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  validateFormat(format);
 	
 	  if (!condition) {
 	    var error;
@@ -9922,7 +9939,10 @@
 					React.createElement(
 						"h1",
 						null,
-						this.props.name
+						this.props.name,
+						" has ",
+						this.props.numUnseenPosts,
+						" unseen posts "
 					)
 				);
 			}
