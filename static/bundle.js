@@ -372,6 +372,8 @@
 				var alert;
 				var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
 	
+				setInterval(this.initializeFeed, 1000 * 10);
+	
 				if (this.state.alert) {
 					alert = React.createElement(
 						'div',
