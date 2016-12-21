@@ -117,7 +117,7 @@ class Posts:
 		for user in numUnseenDict.keys():
 			# only increment if this is not the op
 			if user != this_post['poster_id']:
-				self.db.execute(self.db.mogrify(sql, (numUnseenDict[user] + 1, this_post['timeStamp'], thisPost['timeString'], user)))
+				self.db.execute(self.db.mogrify(sql, (numUnseenDict[user] + 1, this_post['timeStamp'], this_post['timeString'], user)))
 
 
 
