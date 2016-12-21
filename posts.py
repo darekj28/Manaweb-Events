@@ -100,9 +100,6 @@ class Posts:
 	# adds a post to the last seen posts table
 	# updates everyone's post 
 	def updateSeenTableWithNewPost(self, feed_name, comment_id):
-		
-		timeStamp = time.time()
-		timeString = self.getTimeString()
 
 		table_name = feed_name + self.SEEN_POSTS_SUFFIX
 
@@ -120,7 +117,7 @@ class Posts:
 		for user in numUnseenDict.keys():
 			# only increment if this is not the op
 			if user != this_post['poster_id']:
-				self.db.execute(self.db.mogrify(sql, (numUnseenDict[user] + 1, timeStamp, timeString, user)))
+				self.db.execute(self.db.mogrify(sql, (numUnseenDict[user] + 1, this_post['timeStamp'], thisPost['timeString'], user)))
 
 
 
@@ -128,8 +125,8 @@ class Posts:
 
 	def getNumUnseenPosts(self, feed_name, userID):
 		table_name = feed_name + self.SEEN_POSTS_SUFFIX
-		sql = "SELECT numUnseen FROM " + table_name
-		self.db.execute(sql)
+		sql = "SELECT numUnseen FROM " + table_name + " WHERE userID = %s"
+		self.db.execute(self.db.mogrify(sql, (userID,)))
 		query = self.db.fetchall()
 		return query[0][0]
 
@@ -139,9 +136,8 @@ class Posts:
 		timeStamp = time.time()
 		timeString = self.getTimeString()
 		sql = "UPDATE " + table_name + " SET last_seen_post = %s, numUnseen = %s, timeStamp = %s, timeString = %s WHERE userID = %s"
-		last_seen_post = self.getLastPost(feed_name)
-		self.db.execute(self.db.mogrify(sql, (last_seen_post, 0, timeStamp, timeString, userID)))
-		self.post_db.commit()
+		last_seen_post = self.getPostById(feed_name, self.getLastPost(feed_name))
+		self.db.execute(self.db.mogrify(sql, (last_seen_post['comment_id'], 0, last_seen_post['timeStamp'], last_seen_post['timeString'], userID)))
 
 
 	# maybe make another table that stores this information
@@ -191,13 +187,15 @@ class Posts:
 
 		for userID in user_list: 
 			lastPost = self.getLastSeenPost(feed_name, userID)
+			lastPostInfo = self.getPostById(feed_name, lastPost['comment_id'])
 			count = 0
+			
 			for post in post_list:
-				if post['timeStamp'] > lastPost['timeStamp'] and post['userID'] != userID:
+				if post['timeStamp'] > lastPostInfo['timeStamp'] and post['poster_id'] != userID:
 					count = count + 1
 
-			sql = "UPDATE " + table_name + " SET numUnseen = %s WHERE userID = %s"
-			self.db.execute(self.db.mogrify(sql, (count, userID)))
+			sql = "UPDATE " + table_name + " SET numUnseen = %s, timeStamp = %s, timeString = %s WHERE userID = %s"
+			self.db.execute(self.db.mogrify(sql, (count, lastPostInfo['timeStamp'], lastPostInfo['timeString'], userID)))
 
 
 	
