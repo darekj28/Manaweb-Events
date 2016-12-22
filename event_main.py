@@ -161,20 +161,11 @@ def index():
 
 		if not post_manager.isFeed(feed_name):
 			return redirect(url_for('index'))
-		
-		
-		post_manager.createThread(feed_name = feed_name)
-		postList = post_manager.getPosts(feed_name, tradeFilter = thisUser['tradeFilter'], playFilter = thisUser['playFilter'] , chillFilter = thisUser['chillFilter'])
 
-		commentDict = {}
-		for item in postList:
-			x = post_manager.getComments(feed_name, item['comment_id'])
-			post_manager.sortAscending(x)
-			commentDict[item['comment_id']] = x
-
-		post_manager.sortDescending(postList)
 		post_manager.closeConnection()
-		return render_template("index.html", thisUser = thisUser, postList = postList, commentDict = commentDict, feed_name = feed_name)
+		
+	
+		return render_template("index.html")
 
 
 
