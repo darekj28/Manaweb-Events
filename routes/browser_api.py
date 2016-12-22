@@ -287,7 +287,7 @@ def verifyUser():
 	thisUser = getUserInfo(request.form['username'])
 	return jsonify({ 'result' : (thisUser is None) })		
 
-@mobile_api.route('/verifyEmail', methods=['POST'])
+@browser_api.route('/verifyEmail', methods=['POST'])
 def verifyEmail():
 	user_manager = Users()
 	thisUser = user_manager.getInfoFromEmail(request.form['mail'])
