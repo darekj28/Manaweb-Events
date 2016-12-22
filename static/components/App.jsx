@@ -46,6 +46,7 @@ export default class App extends React.Component {
 		this.getCurrentUserInfo = this.getCurrentUserInfo.bind(this);
 		this.markPostFeedAsSeen = this.markPostFeedAsSeen.bind(this);
 		this.setNumUnseenPosts = this.setNumUnseenPosts.bind(this);
+		this.refreshFeed = this.refreshFeed.bind(this);
 	}
 	getNextUniqueId() {
 		$.post('/generateUniqueId', function(data) {
@@ -98,6 +99,32 @@ export default class App extends React.Component {
 
 		}.bind(this));
 	}
+
+	refreshFeed() {
+		var that = this;
+		$.post('/getPosts', function(data){
+			var feed = [];
+			data.post_list.map(function(obj) {
+				feed.unshift({
+					postContent : obj['body'],
+					avatar 		: obj['avatar_url'],
+					name 		: obj['first_name'] + ' ' + obj['last_name'],
+					userID 		: obj['poster_id'],
+					time  		: obj['time'],
+					isTrade 	: obj['isTrade'],
+					isPlay 		: obj['isPlay'],
+					isChill 	: obj['isChill'],
+					comment_id  : obj['comment_id'],
+					unique_id   : obj['unique_id'],
+					numberOfComments : obj['numComments']
+				});
+				
+			});
+			this.setState({feed : feed});
+
+		}.bind(this));
+	}
+
 	handleFilterClick(filter, isSearch) {
 		if (isSearch) {
 			var newFilters = toggle(this.state.filters, filter);
@@ -198,7 +225,7 @@ export default class App extends React.Component {
 		var alert;
 		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
 
-		// setInterval(this.initializeFeed, 30000);
+		// setInterval(this.refreshFeed, 30000);
 
 		if (this.state.alert) {
 			alert = <div className="alert alert-danger">

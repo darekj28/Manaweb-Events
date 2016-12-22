@@ -10,6 +10,38 @@ mobile_api = Blueprint('mobile_api', __name__)
 DEFAULT_FEED = "BALT"
 
 
+@mobile_api.route('/mobileCreateProfile', methods = ['POST'])
+def mobileCreateProfile():
+		first_name = request.form['first_name'].title()
+		last_name = request.form['last_name'].title()
+		userID = request.form['userID']
+		password = request.form['password']
+		email = request.form['email']
+		birthDay = request.form['birthDay']
+		birthMonth = request.form['birthMonth']
+		birthYear = request.form['birthYear']
+		gender = request.form.get('gender')
+		avatar_url = request.form['avatar'][1:]
+		slash_splits = avatar_url.split('/')
+		avatar_name = slash_splits[len(slash_splits)-1].split('.')[0]
+		phone_number = request.form['phone_number']
+		isActive = True
+		confirmationPin = email_confirm.hashUserID(userID)
+		# confirmed = False
+
+		confirmed = True		
+		user_manager = Users()
+		user_manager.addUser(userID, first_name = first_name, last_name = last_name, password = password, email = email,  isActive = isActive,
+			avatar_url = avatar_url, avatar_name = avatar_name, confirmationPin = confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
+			isAdmin = False, phone_number = phone_number, birthMonth = birthMonth, birthDay = birthDay, birthYear = birthYear,
+			gender = gender) 
+
+		user_manager.closeConnection()
+
+		post_manager = Posts()
+		post_manager.addUserToLastSeenTables(userID)
+		post_manager.closeConnection()
+
 @mobile_api.route('/getFeedNames', methods = ['POST'])
 def getFeedNames():
 	post_manager = Posts()
@@ -33,6 +65,7 @@ def getNumUnseenPosts():
 	userID = session['userID']
 	post_manager = Posts()
 	numUnseenPosts = post_manager.getNumUnseenPosts(feed_name, userID)
+	print(userID)
 	post_manager.closeConnection()
 	return jsonify({'numUnseenPosts': numUnseenPosts})
 
@@ -222,9 +255,10 @@ def deletePost():
 	# feed_name = request.form.get('feed_name')
 	feed_name = DEFAULT_FEED
 	unique_id = request.json.get('unique_id')
-	post_manager = Posts()
-	post_manager.deletePost(feed_name, unique_id)
-	post_manager.closeConnection()
+	if unique_id != None:
+		post_manager = Posts()
+		post_manager.deletePost(feed_name, unique_id)
+		post_manager.closeConnection()
 
 	return redirect(url_for('index'))
 

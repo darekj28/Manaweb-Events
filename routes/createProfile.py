@@ -43,7 +43,8 @@ def createProfile():
 		birthDay = request.form['birthDay']
 		birthMonth = request.form['birthMonth']
 		birthYear = request.form['birthYear']
-		gender = request.form['gender']
+		gender = request.form.get('gender')
+
 		avatar_url = request.form['avatar'][1:]
 		slash_splits = avatar_url.split('/')
 		avatar_name = slash_splits[len(slash_splits)-1].split('.')[0]
@@ -55,6 +56,9 @@ def createProfile():
 
 
 		confirmed = True
+
+
+
 		
 		user_manager = Users()
 		user_manager.addUser(userID, first_name = first_name, last_name = last_name, password = password, email = email,  isActive = isActive,
