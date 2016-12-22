@@ -13,6 +13,10 @@ export default class MakePost extends React.Component {
 		var messageVisible = true;
 		var that = this;
 
+		$(document).ready(function(){
+		    $('[data-toggle="tooltip"]').tooltip(); 
+		});
+
 		$('#SubmitButtonPost').click(function() {
 			$(this).blur();
 		});
@@ -61,7 +65,7 @@ export default class MakePost extends React.Component {
 						return <FilterButton key={i} onClick={that.props.onClick} active={false} name={action}/>;
 					})}
 					<a className="SubmitButton input-group-addon" id="SubmitButtonPost" 
-							onClick={this.handlePostSubmit}>
+							onClick={this.handlePostSubmit} data-toggle = "tooltip" title = "Post">
 						<span className="glyphicon glyphicon-send AppGlyphicon"></span>
 					</a>
 				

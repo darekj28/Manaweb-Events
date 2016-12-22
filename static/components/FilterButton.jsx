@@ -8,6 +8,13 @@ export default class FilterButton extends React.Component {
 		var that = this;
 		this.props.onClick(that.props.name, that.props.isSearch);
 	}
+
+	componentDidMount() {
+		$(document).ready(function(){
+		    $('[data-toggle="tooltip"]').tooltip(); 
+		});
+	}
+
 	render() {
 		var icon;
 		var active = this.props.active ? "icon-success" : "icon-danger";
@@ -24,7 +31,7 @@ export default class FilterButton extends React.Component {
 			default : 
 				alert('Invalid action.')
 		}
-		return(<a className="input-group-addon">
+		return(<a className="input-group-addon" data-toggle="tooltip" title= {this.props.name}>
 			<span className={icon + " " + active + " filterButton"}
 					onClick={this.handleClick}>
 					</span>

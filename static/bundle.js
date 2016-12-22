@@ -200,6 +200,7 @@
 			_this.getCurrentUserInfo = _this.getCurrentUserInfo.bind(_this);
 			_this.markPostFeedAsSeen = _this.markPostFeedAsSeen.bind(_this);
 			_this.setNumUnseenPosts = _this.setNumUnseenPosts.bind(_this);
+			_this.refreshFeed = _this.refreshFeed.bind(_this);
 			return _this;
 		}
 	
@@ -253,6 +254,30 @@
 						});
 					});
 					that.markPostFeedAsSeen();
+					this.setState({ feed: feed });
+				}.bind(this));
+			}
+		}, {
+			key: 'refreshFeed',
+			value: function refreshFeed() {
+				var that = this;
+				$.post('/getPosts', function (data) {
+					var feed = [];
+					data.post_list.map(function (obj) {
+						feed.unshift({
+							postContent: obj['body'],
+							avatar: obj['avatar_url'],
+							name: obj['first_name'] + ' ' + obj['last_name'],
+							userID: obj['poster_id'],
+							time: obj['time'],
+							isTrade: obj['isTrade'],
+							isPlay: obj['isPlay'],
+							isChill: obj['isChill'],
+							comment_id: obj['comment_id'],
+							unique_id: obj['unique_id'],
+							numberOfComments: obj['numComments']
+						});
+					});
 					this.setState({ feed: feed });
 				}.bind(this));
 			}
@@ -372,7 +397,7 @@
 				var alert;
 				var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
 	
-				// setInterval(this.initializeFeed, 30000);
+				// setInterval(this.refreshFeed, 30000);
 	
 				if (this.state.alert) {
 					alert = React.createElement(
@@ -9829,7 +9854,7 @@
   \********************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -9858,13 +9883,20 @@
 		}
 	
 		_createClass(FilterButton, [{
-			key: "handleClick",
+			key: 'handleClick',
 			value: function handleClick() {
 				var that = this;
 				this.props.onClick(that.props.name, that.props.isSearch);
 			}
 		}, {
-			key: "render",
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				$(document).ready(function () {
+					$('[data-toggle="tooltip"]').tooltip();
+				});
+			}
+		}, {
+			key: 'render',
 			value: function render() {
 				var icon;
 				var active = this.props.active ? "icon-success" : "icon-danger";
@@ -9882,9 +9914,9 @@
 						alert('Invalid action.');
 				}
 				return React.createElement(
-					"a",
-					{ className: "input-group-addon" },
-					React.createElement("span", { className: icon + " " + active + " filterButton",
+					'a',
+					{ className: 'input-group-addon', 'data-toggle': 'tooltip', title: this.props.name },
+					React.createElement('span', { className: icon + " " + active + " filterButton",
 						onClick: this.handleClick })
 				);
 			}
@@ -10005,6 +10037,10 @@
 				var messageVisible = true;
 				var that = this;
 	
+				$(document).ready(function () {
+					$('[data-toggle="tooltip"]').tooltip();
+				});
+	
 				$('#SubmitButtonPost').click(function () {
 					$(this).blur();
 				});
@@ -10068,7 +10104,7 @@
 						React.createElement(
 							'a',
 							{ className: 'SubmitButton input-group-addon', id: 'SubmitButtonPost',
-								onClick: this.handlePostSubmit },
+								onClick: this.handlePostSubmit, 'data-toggle': 'tooltip', title: 'Post' },
 							React.createElement('span', { className: 'glyphicon glyphicon-send AppGlyphicon' })
 						)
 					)
