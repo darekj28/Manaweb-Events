@@ -186,7 +186,7 @@
 				alert: false,
 				unique_id: '',
 				feed_name: 'BALT',
-				numUnseenPosts: 0
+				numUnseenPosts: -1
 			};
 			_this.handleFilterClick = _this.handleFilterClick.bind(_this);
 			_this.handleFilterUser = _this.handleFilterUser.bind(_this);
@@ -231,6 +231,7 @@
 				$.post('getNumUnseenPosts', { feed_name: this.state.feed_name }, function (data) {
 					this.setState({ numUnseenPosts: data['numUnseenPosts'] });
 				}.bind(this));
+				// console.log(this.state.numUnseenPosts);
 			}
 		}, {
 			key: 'initializeFeed',
@@ -9970,13 +9971,18 @@
 				return React.createElement(
 					"div",
 					{ id: "EventName", className: "pull-left" },
-					React.createElement(
+					this.props.numUnseenPosts == -1 ? React.createElement(
+						"h1",
+						null,
+						this.props.name,
+						"  "
+					) : React.createElement(
 						"h1",
 						null,
 						this.props.name,
 						" has ",
 						this.props.numUnseenPosts,
-						" unseen posts "
+						" unseen posts  "
 					)
 				);
 			}

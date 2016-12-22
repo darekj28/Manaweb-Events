@@ -32,7 +32,7 @@ export default class App extends React.Component {
 			alert : false,
 			unique_id : '',
 			feed_name : 'BALT',
-			numUnseenPosts : 0
+			numUnseenPosts : -1
 		};
 		this.handleFilterClick = this.handleFilterClick.bind(this);
 		this.handleFilterUser = this.handleFilterUser.bind(this);
@@ -71,6 +71,7 @@ export default class App extends React.Component {
 			function(data){
 				this.setState({numUnseenPosts : data['numUnseenPosts']})
 			}.bind(this));
+		// console.log(this.state.numUnseenPosts);
 	}
 
 
