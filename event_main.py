@@ -176,7 +176,10 @@ def index():
 		post_manager.closeConnection()
 		return render_template("index.html", thisUser = thisUser, postList = postList, commentDict = commentDict, feed_name = feed_name)
 
-
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    return render_template("index.html")
 
 @app.route("/comment", methods = ['GET'])
 def comment():
