@@ -42,6 +42,7 @@ from routes.createProfile import create_profile
 from routes.settings import original_settings
 from routes.updateSettings import update_settings
 from routes.mobile_api import mobile_api
+from routes.browser_api import browser_api
 
 # Darek Made .py files
 # import geo
@@ -75,6 +76,7 @@ app.register_blueprint(create_profile)
 app.register_blueprint(original_settings)
 app.register_blueprint(update_settings)
 app.register_blueprint(mobile_api)
+app.register_blueprint(browser_api)
 
 
 # geolocation stuff
