@@ -13,8 +13,6 @@ DEFAULT_FEED = "BALT"
 
 @mobile_api.route('/mobileCreateProfile', methods = ['POST'])
 def mobileCreateProfile():
-
-
 	first_name = request.json['first_name'].title()
 	last_name = request.json['last_name'].title()
 	userID = request.json['userID']
@@ -56,4 +54,10 @@ def mobileCreateProfile():
 	# post_manager = Posts()
 	# post_manager.addUserToLastSeenTables(userID)
 	# post_manager.closeConnection()
+
+
+@mobile_api.route('/testMobileApi', methods = ['POST'])
+def testMobileApi():
+	return jsonify({'reponse' : 'success', 'data' : 'show up', 'method' : 'post'}) 
+
 
