@@ -16,7 +16,8 @@ function contains(collection, item) {
 	if(collection.indexOf(item) !== -1) return true;
 	else return false;
 }
-
+var feed_name = "BALT";
+var actions = ['Trade', 'Play', 'Chill'];
 export default class App extends React.Component {
 	constructor(props) {
 		super(props);
@@ -28,9 +29,6 @@ export default class App extends React.Component {
 			post : '',
 			feed : [],
 			currentUser : {},
-			alert : false,
-			unique_id : '',
-			feed_name : 'BALT',
 			numUnseenPosts : -1
 		};
 		this.handleFilterClick = this.handleFilterClick.bind(this);
@@ -52,14 +50,11 @@ export default class App extends React.Component {
 	}
 
 	markPostFeedAsSeen() {
-		$.post('/markPostFeedAsSeen', {feed_name: this.state.feed_name}, 
-			function(data){
-				var x = [];
-		}.bind(this));
+		$.post('/markPostFeedAsSeen', {feed_name: feed_name});
 	}
 
 	setNumUnseenPosts(){
-		$.post('getNumUnseenPosts', {feed_name: this.state.feed_name},
+		$.post('getNumUnseenPosts', {feed_name: feed_name},
 			function(data){
 				this.setState({numUnseenPosts : data['numUnseenPosts']})
 			}.bind(this));
@@ -97,8 +92,7 @@ export default class App extends React.Component {
 		else {
 			var newFilters = toggle(this.state.actions, filter);
 			this.setState({actions : newFilters});
-			if (this.state.actions.length == 0) this.setState({alert : true});
-			else this.setState({alert : false});
+			if (this.state.actions.length != 0) this.setState({alert : false});
 		}
 		$('html, body').animate({scrollTop: 0}, 300);
 	}
@@ -180,11 +174,9 @@ export default class App extends React.Component {
 		});
 	}
 	render() {
-		var actions = ['Trade', 'Play', 'Chill'];
-		var alert;
 		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
-
-		if (this.state.alert) {
+		var alert;
+		if ((this.state.alert)) {
 			alert = <div className="alert alert-danger">
 			  			<strong>Bro!</strong> You must select something to do before you post man!
 					</div>;
@@ -196,7 +188,7 @@ export default class App extends React.Component {
 							userIdToFilterPosts={this.state.userIdToFilterPosts} filters={this.state.filters}/>
 			<div className="container">
 				<div className="app row">
-					<EventName name= {this.state.feed_name} numUnseenPosts = {this.state.numUnseenPosts} />
+					<EventName name= {feed_name} numUnseenPosts = {this.state.numUnseenPosts} />
 				</div>
 				<div className="app row">
 					<MakePost placeholder="What's happening?" postText={this.state.post} 

@@ -31,11 +31,8 @@ var config = {
   target : 'node',
   plugins: [
     new webpack.DefinePlugin({
-        'process.env.NODE_ENV': '"development"'
-    }),
-    new webpack.DefinePlugin({
         'process.env': {
-  	    'NODE_ENV': '"development"'
+          NODE_ENV: JSON.stringify('production')
         }
     })
   ],
