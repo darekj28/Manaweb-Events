@@ -103,7 +103,6 @@ export default class CommentApp extends React.Component {
 			}
 		}
 		this.setState({ feed : feed });
-		this.refreshFeed(this.state.comment_id);
 	}
 	handleCommentDelete(post) {
 		var feed = this.state.feed;
@@ -116,7 +115,6 @@ export default class CommentApp extends React.Component {
 		}
 		feed.splice(index, 1);
 		this.setState({ feed : feed });
-		this.refreshFeed(this.state.comment_id);
 	}
 	componentWillReceiveProps(nextProps) {
 		this.refreshFeed(nextProps.params.comment_id);

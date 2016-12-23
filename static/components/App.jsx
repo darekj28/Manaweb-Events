@@ -40,7 +40,6 @@ export default class App extends React.Component {
 		this.handlePostSubmit = this.handlePostSubmit.bind(this);
 		this.handlePostEdit = this.handlePostEdit.bind(this);
 		this.handlePostDelete = this.handlePostDelete.bind(this);
-		this.initializeFeed = this.initializeFeed.bind(this);
 		this.getCurrentUserInfo = this.getCurrentUserInfo.bind(this);
 		this.markPostFeedAsSeen = this.markPostFeedAsSeen.bind(this);
 		this.setNumUnseenPosts = this.setNumUnseenPosts.bind(this);
@@ -64,11 +63,6 @@ export default class App extends React.Component {
 			function(data){
 				this.setState({numUnseenPosts : data['numUnseenPosts']})
 			}.bind(this));
-	}
-
-	initializeFeed() {
-		this.refreshFeed();
-		this.markPostFeedAsSeen();
 	}
 
 	refreshFeed() {
@@ -147,7 +141,7 @@ export default class App extends React.Component {
 			this.setState({feed : feed, post: ''});
 			$('html, body').animate({scrollTop: 0}, 300);
 		}
-		this.initializeFeed();
+		this.refreshFeed();
 	}
 	handlePostEdit(post, editedContent) {
 		var feed = this.state.feed;
@@ -159,7 +153,6 @@ export default class App extends React.Component {
 			}
 		}
 		this.setState({ feed : feed });
-		this.initializeFeed();
 	}
 	handlePostDelete(post) {
 		var feed = this.state.feed;
@@ -172,10 +165,10 @@ export default class App extends React.Component {
 		}
 		feed.splice(index, 1);
 		this.setState({ feed : feed });
-		this.initializeFeed();
 	}
 	componentDidMount() {
-		this.initializeFeed();
+		this.refreshFeed();
+		this.markPostFeedAsSeen();
 		this.getCurrentUserInfo();
 		this.setNumUnseenPosts();
 
