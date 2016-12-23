@@ -91,7 +91,7 @@ EMPTY_STRING = ""
 
 @app.before_request
 def before_request():
-	if request.method == 'GET' and request.endpoint != 'mobileTestApi':	
+	if request.method == 'GET':	
 		if (request.endpoint == 'clearAdmin'):
 			clearAdmin()	
 		if (session.get('isAdmin') == None):

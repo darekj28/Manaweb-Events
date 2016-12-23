@@ -29,7 +29,7 @@ class TestHTTP extends Component {
 
 
   testPost(){
-    fetch("https://www.manaweb.com/getPosts", {
+    fetch("www.manaweb.com/getPosts", {
         method: "POST",
 
          })

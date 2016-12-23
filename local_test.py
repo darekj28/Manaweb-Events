@@ -35,13 +35,14 @@ import sys
 import re
 
 from users import Users
-import posts
+from posts import Posts
 
 
 from routes.createProfile import create_profile
 from routes.settings import original_settings
 from routes.updateSettings import update_settings
 from routes.mobile_api import mobile_api
+from routes.browser_api import browser_api
 
 # Darek Made .py files
 # import geo
@@ -58,13 +59,9 @@ from routes.mobile_api import mobile_api
 # graph = Graph()
 
 
-# connect to sql server for messaging
-message_db = sqlite3.connect('posts/posts.db', check_same_thread = False)
-mdb = message_db.cursor()
 
-# connect to sql server for user info
-user_db = sqlite3.connect('users/user_table.db', check_same_thread = False)
-udb = user_db.cursor()
+
+
 
 # initialize app
 app = Flask(__name__)
@@ -79,6 +76,7 @@ app.register_blueprint(create_profile)
 app.register_blueprint(original_settings)
 app.register_blueprint(update_settings)
 app.register_blueprint(mobile_api)
+app.register_blueprint(browser_api)
 
 
 # geolocation stuff
@@ -146,77 +144,79 @@ def adminLogin():
 		else:
 			return "<h1> Nice try! </h1>"
 
-@app.route("/", methods = ['GET', 'POST'])
+@app.route("/", methods = ['GET'])
 def index():
 	if request.method == 'GET':
 		thisUser = getUserInfo(session['userID'])
 		# this is currently hard coded
-		feed_name = "BALT"
+		post_manager = Posts()
 
-		posts.createThread(feed_name = feed_name)
-		postList = posts.getPosts(feed_name, tradeFilter = thisUser['tradeFilter'], playFilter = thisUser['playFilter'] , chillFilter = thisUser['chillFilter'])
+		# sets the default to BALT if empty
+		feed_name = request.args.get("feed")
+
+		if feed_name == None:
+			feed_name = "BALT"
+		
+		feed_name = feed_name.upper()
+
+		if not post_manager.isFeed(feed_name):
+			return redirect(url_for('index'))
+		
+		
+		post_manager.createThread(feed_name = feed_name)
+		postList = post_manager.getPosts(feed_name, tradeFilter = thisUser['tradeFilter'], playFilter = thisUser['playFilter'] , chillFilter = thisUser['chillFilter'])
 
 		commentDict = {}
 		for item in postList:
-			x = posts.getComments(feed_name, item['comment_id'])
-			posts.sortAscending(x)
+			x = post_manager.getComments(feed_name, item['comment_id'])
+			post_manager.sortAscending(x)
 			commentDict[item['comment_id']] = x
 
-		posts.sortDescending(postList)
+		post_manager.sortDescending(postList)
+		post_manager.closeConnection()
 		return render_template("index.html", thisUser = thisUser, postList = postList, commentDict = commentDict, feed_name = feed_name)
 
-	elif request.method == 'POST':
-		return redirect(url_for('index'))
 
 
-@app.route("/search", methods = ['GET', 'POST'])
-def search():
+@app.route("/comment", methods = ['GET'])
+def comment():
 	if request.method == 'GET':
-		search_id = request.args.get('id')
-		search_s = request.args.get('s')
+		
+		post_manager = Posts()
+		feed_name = request.args.get("feed")
+
+		if feed_name == None:
+			feed_name = "BALT"
+
+		feed_name = feed_name.upper()
+
+		if not post_manager.isFeed(feed_name):
+			return redirect(url_for('index'))
+
 		thisUser = getUserInfo(session['userID'])
-		# this is currently hard coded
-		feed_name = "BALT"
+		comment_id = request.args.get('id')
+		if comment_id == None:
+			return redirect(url_for('index'))
+		
 
-		posts.createThread(feed_name = feed_name)
-		postList = posts.getPosts(feed_name, tradeFilter = thisUser['tradeFilter'], playFilter = thisUser['playFilter'] , chillFilter = thisUser['chillFilter'])
-		filterPostList = posts.search(postList, s = search_s, poster_id = search_id)
+		isRealPost = post_manager.getPostById(feed_name, comment_id)
+		if isRealPost == None:
+			return redirect(url_for('index'))
 
+		# comment_list = post_manager.getComments(feed_name, comment_id)
+		post_manager.closeConnection()
 
-
-		commentsList = posts.getComments(feed_name)
-		foundCommentsList = posts.search(commentsList, s = search_s, poster_id = search_id)
-		# posts.sortDescending(foundCommentsList)
-
-
-		full_list = list()
-
-		for x in filterPostList:
-			full_list.append(x)
-		for x in foundCommentsList:
-			full_list.append(x)
-
-		posts.sortDescending(full_list)
-
-		postDict = {}
-		for item in postList:
-			temp_id = item['comment_id']
-			postDict[temp_id] = item
-
-		commentDict = {}
-		for item in filterPostList:
-			x = posts.getComments(feed_name, item['comment_id'])
-			posts.sortAscending(x)
-			commentDict[item['comment_id']] = x		
+		return render_template('index.html', thisUser = thisUser)
 
 
-		return render_template("search.html", thisUser = thisUser, full_list = full_list, commentDict = commentDict, feed_name = feed_name, postDict = postDict)
 
-	elif request.method == 'POST':
-		s = request.form['search']
-		url = getStringSearchUrl(s)
-		return redirect(url)
-
+@app.route("/adminTools", methods = ['GET'])
+def adminTools():
+	thisUser = getUserInfo(session['userID'])
+	if thisUser['isAdmin']:
+		return render_template("adminTools.html")
+	else:
+		redirect (url_for("index"))
 
 
 def getStringSearchUrl(s):
@@ -304,7 +304,7 @@ def confirmation(pin = None):
 		else:
 			if (pin == thisUser['confirmationPin']):
 				user_manager = Users()
-				user_manager = Users().updateInfo(session['userID'], 'confirmed', True)
+				user_manager.updateInfo(session['userID'], 'confirmed', True)
 				user_manager = closeConnection()
 				return redirect(url_for('index'))
 			else:
@@ -332,7 +332,9 @@ def reset():
 			# 	if os.path.isdir(fileDir + '/' + fileName):
 			# 		shutil.rmtree(fileDir + '/' + fileName)
 			
-			posts.resetDatabase()
+			post_manager = Posts()
+			post_manager.resetDatabase()
+			post_manager.closeConnection()
 			user_manager = Users()
 			user_manager.resetDatabase()
 			user_manager.closeConnection()
@@ -347,42 +349,6 @@ def reset():
 	else:
 		return "<h2> Something's gone wrong! </h2>"	
 		
-
-
-
-
-@app.route('/editPost', methods = ['POST'])
-def editPost():
-	feed_name = "BALT"
-	unique_id = request.json['unique_id']
-	field_name = request.json['field_name']
-	field_data = request.json['field_data']
-	posts.editPost(feed_name, unique_id, field_name, field_data)
-	return redirect(url_for('index'))
-	
-
-
-@app.route("/comment", methods = ['GET', 'POST'])
-def comment():
-	if request.method == 'GET':
-		feed_name = "BALT"
-		thisUser = getUserInfo(session['userID'])
-		comment_id = request.args.get('id')
-		if comment_id == None:
-			return redirect(url_for('index'))
-		if posts.getPostById(feed_name, comment_id) == None:
-			return redirect(url_for('index'))
-
-		comment_list = posts.getComments(feed_name, comment_id)
-
-		return render_template('index.html', thisUser = thisUser, comment_list = comment_list)
-
-
-	# hardcoded to just return index for now
-	elif request.method == 'POST':
-		return redirect(url_for('index'))
-
-
 
 # validate account returns true if account is confirmed, activated and exists
 def isActiveUser(userID):
@@ -463,8 +429,10 @@ def makeTestAccounts():
 
 
 	feed_name = "BALT"
-	posts.initializeSQL()
-	posts.initializeFeed(feed_name)
+	post_manager = Posts()
+	post_manager.initializeSQL()
+	post_manager.initializeFeed(feed_name)
+	post_manager.closeConnection()
 
 @app.route('/makeProfile', methods = ['POST'])
 def makeProfile():
@@ -530,7 +498,9 @@ def getAvatarUrl(user_id):
 	return avatar_url
 
 def date_format(time=False):
-	return posts.date_format(time = False)
+	post_manager = Posts()
+	data_format = post_manager.date_format(time = False)
+	post_manager.closeConnection()
 
 
 
@@ -544,8 +514,7 @@ app.jinja_env.globals.update(getAvatarUrl=getAvatarUrl)
 
 
 
-
 if __name__ == '__main__':
     app.debug = True
-    port = int(os.environ.get("PORT", 8000))
-    app.run(host='0.0.0.0', port=port)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='127.0.0.1', port=port)
