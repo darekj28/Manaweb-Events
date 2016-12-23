@@ -61,7 +61,6 @@ export default class App extends React.Component {
 	}
 
 	refreshFeed() {
-		var that = this;
 		$.post('/getPosts', function(data){
 			var feed = [];
 			data.post_list.map(function(obj) {
@@ -175,31 +174,37 @@ export default class App extends React.Component {
 					</div>;
 		}
 		return (<div>
-			<SearchNavBar searchText={this.state.search} onSearch={this.handleSearch} onClick={this.handleFilterClick} 
-							actions={actions} name={name} currentUser={this.state.currentUser}
-							handleFilterClick={this.handleFilterClick} handleFilterUser={this.handleFilterUser}
-							userIdToFilterPosts={this.state.userIdToFilterPosts} filters={this.state.filters}/>
-			<div className="container">
-				<div className="app row">
-					<EventName name= {feed_name} numUnseenPosts = {this.state.numUnseenPosts} />
-				</div>
-				<div className="app row">
-					<MakePost placeholder="What's happening?" postText={this.state.post} 
-							onClick={this.handleFilterClick}
-							onPostChange={this.handleTypingPost} 
-							onPostSubmit={this.handlePostSubmit} 
-							actions={actions}/>
-				</div>
-				{alert}
-				<div className="app row">
-				<Feed currentUser={this.state.currentUser} searchText={this.state.search} 
-						filters={this.state.filters} posts={this.state.feed} actions={actions}
-						handleFilterUser={this.handleFilterUser}
-						userIdToFilterPosts={this.state.userIdToFilterPosts}
-						handlePostEdit={this.handlePostEdit}
-						handlePostDelete={this.handlePostDelete} />
-				</div>
-			</div>
-		</div>);
+					<SearchNavBar searchText={this.state.search} 
+									onSearch={this.handleSearch} 
+									onClick={this.handleFilterClick} 
+									actions={actions} 
+									name={name} 
+									currentUser={this.state.currentUser}
+									handleFilterClick={this.handleFilterClick} 
+									handleFilterUser={this.handleFilterUser}
+									userIdToFilterPosts={this.state.userIdToFilterPosts} 
+									filters={this.state.filters}/>
+					<div className="container">
+						<div className="app row">
+							<EventName name= {feed_name} numUnseenPosts = {this.state.numUnseenPosts} />
+						</div>
+						<div className="app row">
+							<MakePost placeholder="What's happening?" postText={this.state.post} 
+									onClick={this.handleFilterClick}
+									onPostChange={this.handleTypingPost} 
+									onPostSubmit={this.handlePostSubmit} 
+									actions={actions}/>
+						</div>
+						{alert}
+						<div className="app row">
+						<Feed currentUser={this.state.currentUser} searchText={this.state.search} 
+								filters={this.state.filters} posts={this.state.feed} actions={actions}
+								handleFilterUser={this.handleFilterUser}
+								userIdToFilterPosts={this.state.userIdToFilterPosts}
+								handlePostEdit={this.handlePostEdit}
+								handlePostDelete={this.handlePostDelete} />
+						</div>
+					</div>
+				</div>);
 	}
 }

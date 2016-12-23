@@ -1,4 +1,5 @@
 var React = require('react');
+var Link = require('react-router').Link;
 
 export default class AccountDropdown extends React.Component {
 	render() {
@@ -8,13 +9,13 @@ export default class AccountDropdown extends React.Component {
                 <span className="glyphicon glyphicon-user"></span>
               </a>
               <ul className="dropdown-menu">
-              <li><a href="#">{this.props.name}</a></li>
+              {this.props.currentUser['first_name'] && <li><a href="#">{this.props.name}</a></li>}
               <li className="divider"></li>
               {this.props.currentUser.isAdmin && 
                 <li> <a href = "/adminTools"> Admin Tools </a> </li>
               }
 
-                <li><a href="/settings">Settings</a></li>
+                <li><Link to="/settings">Settings</Link></li>
 				<li><a href="/logout">Logout</a></li>
               </ul>
             </li>

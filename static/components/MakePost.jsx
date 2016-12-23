@@ -11,7 +11,6 @@ export default class MakePost extends React.Component {
 	}
 	componentDidMount() {
 		var messageVisible = true;
-		var that = this;
 
 		$(document).ready(function(){
 		    $('[data-toggle="tooltip"]').tooltip(); 
@@ -49,8 +48,6 @@ export default class MakePost extends React.Component {
 		        this.props.onPostSubmit(this.postText.value); 
 	}
 	render() {
-		var that = this;
-
 		return(
 			<div> 
 				<a id="StartButtonPost" className="StartButton">
@@ -62,8 +59,8 @@ export default class MakePost extends React.Component {
 							placeholder={this.props.placeholder} ref={(input) => this.postText = input} 
 							onSubmit={this.handlePostSubmit} onChange={this.handlePostChange}></input>
 					{this.props.actions.map(function(action, i) {
-						return <FilterButton key={i} onClick={that.props.onClick} selected={false} name={action}/>;
-					})}
+						return <FilterButton key={i} onClick={this.props.onClick} selected={false} name={action}/>;
+					}, this)}
 					<a className="SubmitButton input-group-addon" id="SubmitButtonPost" 
 							onClick={this.handlePostSubmit} data-toggle = "tooltip" title = "Post">
 						<span className="glyphicon glyphicon-send AppGlyphicon"></span>

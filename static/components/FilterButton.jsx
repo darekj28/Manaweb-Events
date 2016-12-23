@@ -6,9 +6,8 @@ export default class FilterButton extends React.Component {
 		this.handleClick = this.handleClick.bind(this);
 	}
 	handleClick() {
-		var that = this;
 		this.setState({ isSelected : !this.state.isSelected });
-		this.props.onClick(that.props.name, that.props.isSearch);
+		this.props.onClick(this.props.name, this.props.isSearch);
 	}
 
 	componentDidMount() {

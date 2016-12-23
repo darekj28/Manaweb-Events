@@ -51,11 +51,11 @@ export default class Feed extends React.Component {
 				return;
 			else 
 				rows.push(<FeedPost key={i} post={post} 
-						isOP={that.props.currentUser['userID'] == post.userID}
-						isAdmin={that.props.currentUser['isAdmin']} 
-						refreshPostDisplayedInModal={that.refreshPostDisplayedInModal}
-						handleFilterUser={that.props.handleFilterUser}/>);
-		});
+						isOP={this.props.currentUser['userID'] == post.userID}
+						isAdmin={this.props.currentUser['isAdmin']} 
+						refreshPostDisplayedInModal={this.refreshPostDisplayedInModal}
+						handleFilterUser={this.props.handleFilterUser}/>);
+		}, this);
 		return rows;
 	}
 	render() {

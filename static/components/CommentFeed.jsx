@@ -16,7 +16,7 @@ export default class CommentFeed extends React.Component {
 	}
 	filter() {
 		var rows = [];
-		var that=this;
+		var that = this;
 		this.props.comments.map(function(comment, i) {
 			function contains(collection, item) {
 				if(collection.indexOf(item) !== -1) return true;
@@ -34,10 +34,10 @@ export default class CommentFeed extends React.Component {
 				return;
 			else 
 				rows.push(<CommentFeedPost key={i} comment={comment} 
-						isOP={that.props.currentUser['userID']==comment.userID}
-						isAdmin={that.props.currentUser['isAdmin']} isOriginalPost={false} 
-						refreshCommentDisplayedInModal={that.refreshCommentDisplayedInModal}/>);
-		});
+						isOP={this.props.currentUser['userID']==comment.userID}
+						isAdmin={this.props.currentUser['isAdmin']} isOriginalPost={false} 
+						refreshCommentDisplayedInModal={this.refreshCommentDisplayedInModal}/>);
+		}, this);
 		return rows;
 	}
 	render() {

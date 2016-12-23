@@ -9,6 +9,7 @@ var browserHistory = require('react-router').browserHistory;
 import App from 'App.jsx';
 import CommentApp from 'CommentApp.jsx';
 import NotificationsApp from 'NotificationsApp.jsx';
+import SettingsApp from 'SettingsApp.jsx';
 
 class Main extends React.Component {
 	render() {
@@ -24,5 +25,6 @@ ReactDOM.render(
 		<IndexRoute component={App}/>
 	  	<Route path="comment/:comment_id" component={CommentApp}/>
 	  	<Route path="notifications" component={NotificationsApp}/>
+	  	<Route path="settings" component={SettingsApp}/>
     </Route></Router>, document.getElementById('app'));
 

@@ -59,7 +59,6 @@ export default class SearchNavBar extends React.Component {
 		this.props.onSearch(this.searchText.value);
 	}
 	render() {
-		var that = this;
 		return (
 			<nav className="navbar navbar-default" role="navigation">
 				<div className="container">
@@ -96,11 +95,11 @@ export default class SearchNavBar extends React.Component {
 				                      			onChange={this.handleSearch}/>
 				                      <div className = "input-group-addon"></div>
 								  	  {this.props.actions.map(function(action, i) {
-											var button = !that.props.isComment ? <FilterButton key={i} 
-													onClick={that.props.onClick} 
+											var button = !this.props.isComment ? <FilterButton key={i} 
+													onClick={this.props.onClick} 
 													selected={true} isSearch={true} name={action}/> : '';
 											return button;
-										})}
+										}, this)}
 								  </div>
 								  
 			                 </div> 

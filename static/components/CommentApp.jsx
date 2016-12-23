@@ -91,7 +91,6 @@ export default class CommentApp extends React.Component {
 		});
 		this.setState({feed : feed, comment: ''});
 		$('html, body').animate({scrollTop: $('#CommentFeed').prop("scrollHeight")}, 300);
-		this.refreshFeed(this.state.comment_id);
 	}
 	handleCommentEdit(post, editedContent) {
 		var feed = this.state.feed;
