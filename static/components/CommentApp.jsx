@@ -22,15 +22,9 @@ export default class CommentApp extends React.Component {
 		this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
 		this.handleCommentEdit = this.handleCommentEdit.bind(this);
 		this.handleCommentDelete = this.handleCommentDelete.bind(this);
-		this.getNextUniqueId = this.getNextUniqueId.bind(this);
 		this.getCurrentUserInfo = this.getCurrentUserInfo.bind(this);
 		this.getPostById = this.getPostById.bind(this);
 		this.refreshFeed = this.refreshFeed.bind(this);
-	}
-	getNextUniqueId() {
-		$.post('/generateUniqueId', function(data) {
-			this.setState({ unique_id : data.unique_id });
-		}.bind(this));
 	}
 	getCurrentUserInfo() {
 		$.post('/getCurrentUserInfo', function(data) {
@@ -83,12 +77,10 @@ export default class CommentApp extends React.Component {
 					userID  : this.state.currentUser['userID'], 
 					time	: "just now", 
 					comment_id : this.state.comment_id
-					// unique_id : this.state.unique_id
 				});
 
 		var obj = {commentContent : commentText, 
 					comment_id : this.state.comment_id
-					// unique_id : this.state.unique_id
 				};
 
 		$.ajax({
@@ -99,7 +91,6 @@ export default class CommentApp extends React.Component {
 		});
 		this.setState({feed : feed, comment: ''});
 		$('html, body').animate({scrollTop: $('#CommentFeed').prop("scrollHeight")}, 300);
-		this.getNextUniqueId();
 		this.refreshFeed(this.state.comment_id);
 	}
 	handleCommentEdit(post, editedContent) {
@@ -135,7 +126,6 @@ export default class CommentApp extends React.Component {
 		this.getCurrentUserInfo();
 		this.refreshFeed(this.state.comment_id);
 		this.getPostById(this.state.comment_id);
-		this.getNextUniqueId();
 	}
 	render() {
 		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];

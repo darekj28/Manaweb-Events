@@ -1,5 +1,4 @@
 var React = require('react');
-
 import SearchNavBar from 'SearchNavBar.jsx';
 import EventName from 'EventName.jsx';
 import MakePost from 'MakePost.jsx';
@@ -42,16 +41,10 @@ export default class App extends React.Component {
 		this.handlePostEdit = this.handlePostEdit.bind(this);
 		this.handlePostDelete = this.handlePostDelete.bind(this);
 		this.initializeFeed = this.initializeFeed.bind(this);
-		this.getNextUniqueId = this.getNextUniqueId.bind(this);
 		this.getCurrentUserInfo = this.getCurrentUserInfo.bind(this);
 		this.markPostFeedAsSeen = this.markPostFeedAsSeen.bind(this);
 		this.setNumUnseenPosts = this.setNumUnseenPosts.bind(this);
 		this.refreshFeed = this.refreshFeed.bind(this);
-	}
-	getNextUniqueId() {
-		$.post('/generateUniqueId', function(data) {
-			this.setState({ unique_id : data.unique_id });
-		}.bind(this));
 	}
 	getCurrentUserInfo() {
 		$.post('/getCurrentUserInfo', function(data) {
@@ -71,34 +64,11 @@ export default class App extends React.Component {
 			function(data){
 				this.setState({numUnseenPosts : data['numUnseenPosts']})
 			}.bind(this));
-		// console.log(this.state.numUnseenPosts);
 	}
 
-
 	initializeFeed() {
-		var that = this;
-		$.post('/getPosts', function(data){
-			var feed = [];
-			data.post_list.map(function(obj) {
-				feed.unshift({
-					postContent : obj['body'],
-					avatar 		: obj['avatar_url'],
-					name 		: obj['first_name'] + ' ' + obj['last_name'],
-					userID 		: obj['poster_id'],
-					time  		: obj['time'],
-					isTrade 	: obj['isTrade'],
-					isPlay 		: obj['isPlay'],
-					isChill 	: obj['isChill'],
-					comment_id  : obj['comment_id'],
-					unique_id   : obj['unique_id'],
-					numberOfComments : obj['numComments']
-				});
-				
-			});
-			that.markPostFeedAsSeen()
-			this.setState({feed : feed});
-
-		}.bind(this));
+		this.refreshFeed();
+		this.markPostFeedAsSeen();
 	}
 
 	refreshFeed() {
@@ -122,7 +92,6 @@ export default class App extends React.Component {
 				
 			});
 			this.setState({feed : feed});
-
 		}.bind(this));
 	}
 
@@ -150,7 +119,6 @@ export default class App extends React.Component {
 	handleTypingPost(postText) {this.setState({post : postText});}
 	handlePostSubmit(postText) {
 		var feed = this.state.feed;
-		// this.getNextUniqueId();
 		if (this.state.actions.length == 0) this.setState({alert : true});
 		else {
 			this.setState({alert : false});
@@ -162,14 +130,12 @@ export default class App extends React.Component {
 						isTrade : contains(this.state.actions, "Trade"),
 						isPlay  : contains(this.state.actions, "Play"), 
 						isChill : contains(this.state.actions, "Chill"),
-						// comment_id : this.state.unique_id,
 						numberOfComments : 0,
 					});
 			var obj = {postContent : postText, 
 						isTrade : contains(this.state.actions, "Trade"),
 						isPlay  : contains(this.state.actions, "Play"), 
 						isChill : contains(this.state.actions, "Chill"),
-						// comment_id : this.state.unique_id,
 						numberOfComments : 0
 					};
 			$.ajax({
@@ -210,7 +176,6 @@ export default class App extends React.Component {
 	}
 	componentDidMount() {
 		this.initializeFeed();
-		this.getNextUniqueId();
 		this.getCurrentUserInfo();
 		this.setNumUnseenPosts();
 
@@ -225,8 +190,6 @@ export default class App extends React.Component {
 		var actions = ['Trade', 'Play', 'Chill'];
 		var alert;
 		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
-
-		// setInterval(this.refreshFeed, 30000);
 
 		if (this.state.alert) {
 			alert = <div className="alert alert-danger">
