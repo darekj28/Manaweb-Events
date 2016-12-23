@@ -116,6 +116,7 @@ export default class CommentApp extends React.Component {
 		this.setState({ feed : feed });
 	}
 	componentWillReceiveProps(nextProps) {
+		this.setState({ comment_id : nextProps.params.comment_id });
 		this.refreshFeed(nextProps.params.comment_id);
 		this.getPostById(nextProps.params.comment_id);
 	}

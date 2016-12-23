@@ -10,7 +10,20 @@ function idToName (id) {
 	}
 	return str;
 }
-
+function testValid (field) {
+	switch (field) {
+		case "first_name":
+			break;
+		case "last_name":
+			break;
+		case "password":
+			break;
+		case "password_confirm":
+			break;
+		default:
+			alert("Invalid field");
+	}
+}
 export default class SettingsTextInput extends React.Component {
 	constructor(props) {
 		super(props);
@@ -23,15 +36,16 @@ export default class SettingsTextInput extends React.Component {
 		obj[this.props.id] = event.target.value;
 		this.props.handleTyping(obj);
 	}
-	handleBlur() {
-		this.props.handleBlur(ableToSubmit);
+	handleBlur(event) {
+		this.props.handleBlur(event.target.value);
 	}
 	render() {
 		var type = (this.props.id == "password" || this.props.id == "password_confirm") ? "password" : "text";
+		var valid = this.state.valid ? "valid" : "invalid";
 		return (
 			<div>
 				<div className="form-group">
-					<input className="setting" id={this.props.id} type={type} 
+					<input className={"setting " + valid} id={this.props.id} type={type} 
 						value={this.props.value} 
 						onChange={this.handleTyping} onBlur={this.handleBlur}/>
 				</div>
