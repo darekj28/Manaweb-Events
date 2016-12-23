@@ -71,7 +71,8 @@ export default class SearchNavBar extends React.Component {
 				            <span className="icon-bar"></span>
 				            <span className="icon-bar"></span>
 				          </button>
-				          <Link to="/" onClick={this.handleResetFilterUser} className="SearchNavBarGlyphicon navbar-brand navbar-brand-logo">
+				          <Link to="/" onClick={this.handleResetFilterUser} className="SearchNavBarGlyphicon 
+				          								navbar-brand navbar-brand-logo">
 				                <span className="glyphicon glyphicon-home"></span>
 				              </Link>
 				        </div>
@@ -89,12 +90,15 @@ export default class SearchNavBar extends React.Component {
 				         <form className="navbar-form navbar-right navbar-search-form" role="search">                  
 			                 <div className="form-group">
 			                 	  <div className="input-group input-group-unstyled">
-				                      <input type="text" value={this.props.searchText} ref={(input) => this.searchText = input} 
+				                      <input type="text" value={this.props.searchText} 
+				                      			ref={(input) => this.searchText = input} 
 				                      			id="searchInput" className="form-control" placeholder="Search..." 
 				                      			onChange={this.handleSearch}/>
 				                      <div className = "input-group-addon"></div>
 								  	  {this.props.actions.map(function(action, i) {
-											var button = !that.props.isComment ? <FilterButton key={i} onClick={that.props.onClick} active={true} isSearch={true} name={action}/> : '';
+											var button = !that.props.isComment ? <FilterButton key={i} 
+													onClick={that.props.onClick} 
+													selected={true} isSearch={true} name={action}/> : '';
 											return button;
 										})}
 								  </div>

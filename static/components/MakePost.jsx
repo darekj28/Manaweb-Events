@@ -62,7 +62,7 @@ export default class MakePost extends React.Component {
 							placeholder={this.props.placeholder} ref={(input) => this.postText = input} 
 							onSubmit={this.handlePostSubmit} onChange={this.handlePostChange}></input>
 					{this.props.actions.map(function(action, i) {
-						return <FilterButton key={i} onClick={that.props.onClick} active={false} name={action}/>;
+						return <FilterButton key={i} onClick={that.props.onClick} selected={false} name={action}/>;
 					})}
 					<a className="SubmitButton input-group-addon" id="SubmitButtonPost" 
 							onClick={this.handlePostSubmit} data-toggle = "tooltip" title = "Post">

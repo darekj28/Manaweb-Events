@@ -165,13 +165,6 @@ export default class App extends React.Component {
 		this.markPostFeedAsSeen();
 		this.getCurrentUserInfo();
 		this.setNumUnseenPosts();
-
-		$('.filterButton').click(function(e) {
-			$(this).toggleClass('icon-danger');
-			$(this).toggleClass('icon-success');
-			$(this).blur();
-			e.preventDefault();
-		});
 	}
 	render() {
 		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];

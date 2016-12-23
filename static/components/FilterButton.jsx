@@ -2,10 +2,12 @@ var React = require('react');
 export default class FilterButton extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = {isSelected : this.props.selected};
 		this.handleClick = this.handleClick.bind(this);
 	}
 	handleClick() {
 		var that = this;
+		this.setState({ isSelected : !this.state.isSelected });
 		this.props.onClick(that.props.name, that.props.isSearch);
 	}
 
@@ -17,7 +19,7 @@ export default class FilterButton extends React.Component {
 
 	render() {
 		var icon;
-		var active = this.props.active ? "icon-success" : "icon-danger";
+		var selected = this.state.isSelected ? "icon-success" : "icon-danger";
 		switch(this.props.name) {
 			case 'Trade' : 
 				icon="glyphicon glyphicon-transfer";
@@ -29,10 +31,10 @@ export default class FilterButton extends React.Component {
 				icon="glyphicon glyphicon-time";
 				break;
 			default : 
-				alert('Invalid action.')
+				alert('Invalid action.');
 		}
 		return(<a className="input-group-addon" data-toggle="tooltip" title= {this.props.name}>
-			<span className={icon + " " + active + " filterButton"}
+			<span className={icon + " filterButton " + selected}
 					onClick={this.handleClick}>
 					</span>
 			</a>);
