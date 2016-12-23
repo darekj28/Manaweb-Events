@@ -25,8 +25,8 @@ export default class NoSearchNavBar extends React.Component {
 				            <span className="icon-bar"></span>
 				            <span className="icon-bar"></span>
 				          </button>
-				          <Link onClick={browserHistory.goBack} className="SearchNavBarGlyphicon navbar-brand navbar-brand-logo">
-				                <span className="glyphicon glyphicon-chevron-left"></span>
+				          <Link to="/" className="SearchNavBarGlyphicon navbar-brand navbar-brand-logo">
+				                <span className="glyphicon glyphicon-home"></span>
 				              </Link>
 				        </div>
 				        <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
