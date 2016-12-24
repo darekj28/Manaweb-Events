@@ -58,7 +58,7 @@ def mobileCreateProfile():
 
 @mobile_api.route('/testMobileApi', methods = ['POST'])
 def testMobileApi():
-	json =  {'reponse' : 'success', 'data' : 'show up', 'method' : 'post'}
+	json =  jsonify({'reponse' : 'success', 'data' : 'show up', 'method' : 'post'}) 
 	resp = Response(json, status=200, mimetype='application/json')
     return resp
 
