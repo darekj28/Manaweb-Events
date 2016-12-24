@@ -35,10 +35,10 @@ export default class SettingsApp extends React.Component {
 			birthDay 			: '',
 			birthYear 			: '',
 			avatar 				: '',
-			valid_text_fields	: text_fields,
-			valid_select_fields	: select_fields,
+			valid_text_fields	: [	"first_name", "last_name", "password", "password_confirm", "phone_number" ],
+			valid_select_fields	: [ "birthMonth", "birthDay", "birthYear", "avatar" ],
 			submittable			: true
-		}
+		};
 		this.getCurrentUserInfo = this.getCurrentUserInfo.bind(this);
 		this.handleTyping = this.handleTyping.bind(this);
 		this.handleBlur = this.handleBlur.bind(this);
@@ -72,9 +72,10 @@ export default class SettingsApp extends React.Component {
 		this.setState(obj);
 	}
 	handleBlur(field, valid) {
-		if (valid) this.setState({ valid_text_fields : add(array, field) });
-		else this.setState({ valid_text_fields : remove(array, field) });
-		this.setState({ submittable : isSameSet(text_fields, this.state.valid_text_fields) });
+		var valid_text_fields = this.state.valid_text_fields;
+		if (valid) this.setState({ valid_text_fields : add(valid_text_fields, field) });
+		else this.setState({ valid_text_fields : remove(valid_text_fields, field) });
+		this.setState({ submittable : isSameSet(text_fields, valid_text_fields) });
 	}
 	componentDidMount() {
 		this.autopopulateSettings();
@@ -97,7 +98,8 @@ export default class SettingsApp extends React.Component {
 									</div>;
 						}, this)}
 						<div className="form-group">
-							<button className="btn btn-default"> Update! </button>
+							{this.state.submittable && <button className="btn btn-default"> Update! </button>}
+							{!this.state.submittable && <button className="btn btn-default" disabled> Update! </button>}
 						</div>
 					</form>
 				</div>

@@ -10,30 +10,12 @@ export default class MakePost extends React.Component {
 		this.handleEnterPress = this.handleEnterPress.bind(this);
 	}
 	componentDidMount() {
-		var messageVisible = true;
-
 		$(document).ready(function(){
 		    $('[data-toggle="tooltip"]').tooltip(); 
 		});
-
 		$('#SubmitButtonPost').click(function() {
 			$(this).blur();
 		});
-		$('#StartButtonPost').click(function(){
-			$(this).blur();
-	        if(!messageVisible){
-	            messageVisible = !messageVisible;
-	            $(this).siblings('#MessagePost').fadeIn(function(){
-	                $(this).children('#PostInput').focus();
-	            });
-	        } else {
-	            messageVisible = !messageVisible;
-	            $(this).siblings('#MessagePost').fadeOut(function(){
-	                $(this).children('#PostInput').blur();
-	            });
-	        } 
-	    });
-	    
 	}
 	handlePostSubmit() {
 		if (this.postText.value.length > 0)
@@ -50,9 +32,6 @@ export default class MakePost extends React.Component {
 	render() {
 		return(
 			<div> 
-				<a id="StartButtonPost" className="StartButton">
-					<span className="glyphicon glyphicon-pencil AppGlyphicon"></span>
-				</a>
 				<div id="MessagePost" className="Message pull-right input-group input-group-unstyled">
 					<input id="PostInput" type="text" className="PostText form-control" 
 							onKeyPress={this.handleEnterPress} value={this.props.postText} 

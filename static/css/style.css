@@ -33,6 +33,9 @@ body {
   border-color: #C33;
   border-style: solid;
 }
+.warning {
+  color : #C33;
+}
 .avatar_container {
   width :150px;
   height:150px;
@@ -222,10 +225,6 @@ body {
 }
 .SearchNavBarGlyphicon:hover {  
   cursor : pointer;
-}
-.StartButton {
-  display : inline-block;
-  cursor: pointer;
 }
 .SubmitButton {
   cursor: pointer;

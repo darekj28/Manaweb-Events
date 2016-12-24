@@ -10,24 +10,36 @@ function idToName (id) {
 	}
 	return str;
 }
-function testValid (field) {
+function testValid (field, value) {
 	switch (field) {
 		case "first_name":
+			var condition = /^[a-z ,.'-]+$/i;
+			if (!value.match(condition)) return false;
 			break;
 		case "last_name":
+			var condition = /^[a-z ,.'-]+$/i;
+			if (!value.match(condition)) return false;
 			break;
 		case "password":
+			var condition = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,}$/;
+			if (!value.match(condition)) return false;
 			break;
 		case "password_confirm":
+			var condition = $('#password').val();
+			if (!value.match(condition)) return false;
 			break;
-		default:
-			alert("Invalid field");
+		case "phone_number" :
+			break;
+		default :
+			return true;
 	}
+	return true;
 }
+
 export default class SettingsTextInput extends React.Component {
 	constructor(props) {
 		super(props);
-		this.setState = { valid : true };
+		this.state = { valid : true };
 		this.handleTyping = this.handleTyping.bind(this);
 		this.handleBlur = this.handleBlur.bind(this);
 	}
@@ -37,7 +49,12 @@ export default class SettingsTextInput extends React.Component {
 		this.props.handleTyping(obj);
 	}
 	handleBlur(event) {
-		this.props.handleBlur(event.target.value);
+		var isValid = testValid(this.props.id, event.target.value);
+		this.setState({ valid : isValid } );
+		this.props.handleBlur(this.props.id, isValid);
+	}
+	componentDidMount() {
+		$('#password').popover();
 	}
 	render() {
 		var type = (this.props.id == "password" || this.props.id == "password_confirm") ? "password" : "text";
@@ -45,13 +62,18 @@ export default class SettingsTextInput extends React.Component {
 		return (
 			<div>
 				<div className="form-group">
-					<input className={"setting " + valid} id={this.props.id} type={type} 
+					{this.props.id != "password" && <input className={"setting " + valid} id={this.props.id} type={type} 
 						value={this.props.value} 
-						onChange={this.handleTyping} onBlur={this.handleBlur}/>
+						onChange={this.handleTyping} onBlur={this.handleBlur}/>}
+					{this.props.id == "password" && <input data-toggle="popover" data-trigger="focus" 
+						data-content="Your password must contain at least one letter and one number."
+						className={"setting " + valid} id={this.props.id} type={type} 
+						value={this.props.value} onClick={focus()}
+						onChange={this.handleTyping} onBlur={this.handleBlur}/>}
 				</div>
-				<div className="form-group warning" id={this.props.id + "_warning"}>
+				{!this.state.valid && <div className="form-group warning" id={this.props.id + "_warning"}>
 					Invalid {idToName(this.props.id)}
-				</div>
+				</div>}
 			</div>
 			);
 	}
