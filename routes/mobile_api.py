@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, session, render_template, redirect, url_for
+from flask import Blueprint, jsonify, request, session, render_template, redirect, url_for, Response
 from users import Users
 from posts import Posts
 import time
@@ -58,6 +58,9 @@ def mobileCreateProfile():
 
 @mobile_api.route('/testMobileApi', methods = ['POST'])
 def testMobileApi():
-	return jsonify({'reponse' : 'success', 'data' : 'show up', 'method' : 'post'}) 
+	json =  jsonify({'reponse' : 'success', 'data' : 'show up', 'method' : 'post'}) 
+	resp = Response(json, status=200, mimetype='application/json')
+
+    return resp
 
 
