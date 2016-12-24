@@ -1,8 +1,8 @@
 var React = require('react');
-import CommentNavBar from "CommentNavBar.jsx";
-import CommentFeedPost from "CommentFeedPost.jsx";
-import CommentFeed from "CommentFeed.jsx";
-import MakeComment from "MakeComment.jsx";
+import CommentNavBar from "./CommentNavBar.jsx";
+import CommentFeedPost from "./CommentFeedPost.jsx";
+import CommentFeed from "./CommentFeed.jsx";
+import MakeComment from "./MakeComment.jsx";
 // var $ = require('jquery');
 
 export default class CommentApp extends React.Component {

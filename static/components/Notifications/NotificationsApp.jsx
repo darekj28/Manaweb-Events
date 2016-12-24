@@ -1,6 +1,6 @@
 var React = require('react');
-import NoSearchNavBar from "NoSearchNavBar.jsx";
-import NotificationsFeed from 'NotificationsFeed.jsx';
+import NoSearchNavBar from "../GenericNavBar/NoSearchNavBar.jsx";
+import NotificationsFeed from './NotificationsFeed.jsx';
 
 export default class NotificationsApp extends React.Component {
 	constructor(props) {

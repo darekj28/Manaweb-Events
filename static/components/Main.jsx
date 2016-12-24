@@ -6,10 +6,10 @@ var Link = require('react-router').Link;
 var IndexRoute = require('react-router').IndexRoute;
 var browserHistory = require('react-router').browserHistory;
 
-import App from 'App.jsx';
-import CommentApp from 'CommentApp.jsx';
-import NotificationsApp from 'NotificationsApp.jsx';
-import SettingsApp from 'SettingsApp.jsx';
+import App from './Home/App.jsx';
+import CommentApp from './Comment/CommentApp.jsx';
+import NotificationsApp from './Notifications/NotificationsApp.jsx';
+import SettingsApp from './Settings/SettingsApp.jsx';
 
 class Main extends React.Component {
 	render() {

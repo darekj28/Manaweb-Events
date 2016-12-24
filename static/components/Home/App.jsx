@@ -1,8 +1,8 @@
 var React = require('react');
-import SearchNavBar from 'SearchNavBar.jsx';
-import EventName from 'EventName.jsx';
-import MakePost from 'MakePost.jsx';
-import Feed from 'Feed.jsx';
+import SearchNavBar from './SearchNavBar.jsx';
+import EventName from './EventName.jsx';
+import MakePost from './MakePost.jsx';
+import Feed from './Feed.jsx';
 // var $ = require('jquery');
 
 function toggle(collection, item) {

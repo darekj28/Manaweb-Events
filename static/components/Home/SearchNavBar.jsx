@@ -1,23 +1,27 @@
 var React = require('react');
 var Link = require('react-router').Link;
-var browserHistory = require('react-router').browserHistory;
 // var $ = require('jquery');
-import NotificationsDropdown from "./NotificationsDropdown.jsx";
-import AccountDropdown from "./AccountDropdown.jsx";
+import NotificationsDropdown from "../GenericNavBar/NotificationsDropdown.jsx";
+import AccountDropdown from "../GenericNavBar/AccountDropdown.jsx";
+import FilterButton from "./FilterButton.jsx";
 
-export default class CommentNavBar extends React.Component {
+function contains(collection, item) {
+	if(collection.indexOf(item) !== -1) return true;
+	else return false;
+}
+
+export default class SearchNavBar extends React.Component {
 	constructor(props) {
 		super(props);
 		this.handleSearch = this.handleSearch.bind(this);
-	}
-	handleSearch() {
-		this.props.onSearch(this.searchText.value);
+		this.handleResetFilterUser = this.handleResetFilterUser.bind(this);
+		this.handleResetFilterButtons = this.handleResetFilterButtons.bind(this);
 	}
 	componentDidMount() {
 		var searchVisible = 0;
-		// $('.navbar-search-form').hide();
-		$('.navbar-search-form').show();
+		$('.navbar-search-form').show();		
 
+		// $('.navbar-search-form').hide();
 		// $('[data-toggle="search"]').click(function(){
 	 //        if(searchVisible == 0){
 	 //            searchVisible = 1;
@@ -43,6 +47,17 @@ export default class CommentNavBar extends React.Component {
 	    	$(this).blur();
 	    });
 	}
+	handleResetFilterUser() {
+		this.props.handleFilterUser(this.props.userIdToFilterPosts);
+	}
+	handleResetFilterButtons() {
+		this.props.actions.map(function(action) {
+			if (contains(filters, action)) this.props.handleFilterClick(action, true);
+		});
+	}
+	handleSearch() {
+		this.props.onSearch(this.searchText.value);
+	}
 	render() {
 		return (
 			<nav className="navbar navbar-default" role="navigation">
@@ -55,27 +70,38 @@ export default class CommentNavBar extends React.Component {
 				            <span className="icon-bar"></span>
 				            <span className="icon-bar"></span>
 				          </button>
-				          <Link onClick={browserHistory.goBack} className="SearchNavBarGlyphicon navbar-brand navbar-brand-logo">
-				                <span className="glyphicon glyphicon-chevron-left"></span>
+				          <Link to="/" onClick={this.handleResetFilterUser} className="SearchNavBarGlyphicon 
+				          								navbar-brand navbar-brand-logo">
+				                <span className="glyphicon glyphicon-home"></span>
 				              </Link>
 				        </div>
 				        <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				          <ul className="nav navbar-nav navbar-right">
-		                    {/* <li className="">
+		                   {/*  <li>
 		                        <a href="javascript:void(0)" data-toggle="search">
 		 							<span className="glyphicon glyphicon-search"></span>
 		                        </a>
-		                    </li> */}
- 				          	<NotificationsDropdown/>
+		                    </li>
+		                */}
+				          	<NotificationsDropdown/>
 				          	<AccountDropdown currentUser = {this.props.currentUser} name={this.props.name}/>
 				          </ul>
 				         <form className="navbar-form navbar-right navbar-search-form" role="search">                  
 			                 <div className="form-group">
 			                 	  <div className="input-group input-group-unstyled">
-				                      <input type="text" value={this.props.searchText} ref={(input) => this.searchText = input} 
+				                      <input type="text" value={this.props.searchText} 
+				                      			ref={(input) => this.searchText = input} 
 				                      			id="searchInput" className="form-control" placeholder="Search..." 
 				                      			onChange={this.handleSearch}/>
-								  </div>		  
+				                      <div className = "input-group-addon"></div>
+								  	  {this.props.actions.map(function(action, i) {
+											var button = !this.props.isComment ? <FilterButton key={i} 
+													onClick={this.props.onClick} 
+													selected={true} isSearch={true} name={action}/> : '';
+											return button;
+										}, this)}
+								  </div>
+								  
 			                 </div> 
 			              </form>
 				        </div>

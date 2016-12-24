@@ -13,7 +13,7 @@ export default class SettingsInputLabel extends React.Component {
 	render() {
 		return (
 			<div className="form-group">
-				<label className="control-label" for={this.props.id}>{idToName(this.props.id)}</label>
+				<label className="control-label" for={this.props.field}>{idToName(this.props.field)}</label>
 			</div>
 			);
 	}

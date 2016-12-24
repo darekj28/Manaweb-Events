@@ -1,8 +1,8 @@
 var React = require('react');
-import CommentFeedPost from "CommentFeedPost.jsx";
-import EditCommentModal from "EditCommentModal.jsx";
-import DeleteCommentModal from "DeleteCommentModal.jsx";
-import ReportCommentModal from "ReportCommentModal.jsx";
+import CommentFeedPost from "./CommentFeedPost.jsx";
+import EditCommentModal from "./EditCommentModal.jsx";
+import DeleteCommentModal from "./DeleteCommentModal.jsx";
+import ReportCommentModal from "./ReportCommentModal.jsx";
 
 export default class CommentFeed extends React.Component {
 	constructor(props) {
