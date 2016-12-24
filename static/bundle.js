@@ -10417,6 +10417,7 @@
 		}, {
 			key: "componentWillReceiveProps",
 			value: function componentWillReceiveProps(nextProps) {
+				this.setState({ comment_id: nextProps.params.comment_id });
 				this.refreshFeed(nextProps.params.comment_id);
 				this.getPostById(nextProps.params.comment_id);
 			}
@@ -11655,8 +11656,8 @@
 							),
 							React.createElement(
 								Link,
-								{ onClick: browserHistory.goBack, className: 'SearchNavBarGlyphicon navbar-brand navbar-brand-logo' },
-								React.createElement('span', { className: 'glyphicon glyphicon-chevron-left' })
+								{ to: '/', className: 'SearchNavBarGlyphicon navbar-brand navbar-brand-logo' },
+								React.createElement('span', { className: 'glyphicon glyphicon-home' })
 							)
 						),
 						React.createElement(
@@ -12017,6 +12018,20 @@
 		}
 		return str;
 	}
+	function testValid(field) {
+		switch (field) {
+			case "first_name":
+				break;
+			case "last_name":
+				break;
+			case "password":
+				break;
+			case "password_confirm":
+				break;
+			default:
+				alert("Invalid field");
+		}
+	}
 	
 	var SettingsTextInput = function (_React$Component) {
 		_inherits(SettingsTextInput, _React$Component);
@@ -12041,20 +12056,21 @@
 			}
 		}, {
 			key: 'handleBlur',
-			value: function handleBlur() {
-				this.props.handleBlur(ableToSubmit);
+			value: function handleBlur(event) {
+				this.props.handleBlur(event.target.value);
 			}
 		}, {
 			key: 'render',
 			value: function render() {
 				var type = this.props.id == "password" || this.props.id == "password_confirm" ? "password" : "text";
+				var valid = this.state.valid ? "valid" : "invalid";
 				return React.createElement(
 					'div',
 					null,
 					React.createElement(
 						'div',
 						{ className: 'form-group' },
-						React.createElement('input', { className: 'setting', id: this.props.id, type: type,
+						React.createElement('input', { className: "setting " + valid, id: this.props.id, type: type,
 							value: this.props.value,
 							onChange: this.handleTyping, onBlur: this.handleBlur })
 					),

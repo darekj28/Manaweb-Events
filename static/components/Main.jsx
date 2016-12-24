@@ -19,6 +19,7 @@ class Main extends React.Component {
 		    </div>);
 	}
 }
+
 ReactDOM.render(
 	<Router history={browserHistory}>
 	<Route path="/" component={Main}>
