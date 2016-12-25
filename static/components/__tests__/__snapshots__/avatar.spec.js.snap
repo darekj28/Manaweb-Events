@@ -1,9 +1,0 @@
-exports[`Avatar renders correctly 1`] = `
-<a
-  className="pull-left AvatarSpace"
-  href="#">
-  <img
-    className="Avatar img-rounded"
-    src="../../default.png" />
-</a>
-`;
