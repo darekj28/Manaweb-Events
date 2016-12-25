@@ -6,7 +6,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {Alert, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 
 import ViewContainer from '../../components/ViewContainer';
 import HomeStatusBar from '../../components/HomeStatusBar';
@@ -22,17 +22,65 @@ export default class RegisterName extends Component {
     super(props)
     this.state = {
       first_name : "",
-      last_name : ""
+      last_name : "",
+      validation_output : {error: "Please enter a non blank name"}
     }
+    this.validateFullName = this.validateFullName.bind(this);
+    this.submitFullName = this.submitFullName.bind(this);
+    this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
+    this.handleLastNameChange = this.handleLastNameChange.bind(this);
   }
 
 
-  _navigateToRegisterId(first_name, last_name) {
-    this.props.navigator.push({
-    href: "RegisterId",
-    first_name : first_name,
-    last_name : last_name
+  validateFullName() {
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
+
+
+    fetch(test_url + "/mobileNameValidation", {method: "POST",
+    headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, 
+      body: 
+      JSON.stringify(
+       {
+        first_name: this.state.first_name,
+        last_name: this.state.last_name
+      })
     })
+    .then((response) => response.json())
+    .then((responseData) => {
+      this.setState({validation_output : responseData})
+    })
+    .done();
+  }
+
+  submitFullName() {
+    if (this.state.validation_output['result'] == 'success')
+      this._navigateToRegisterPhoneNumber();
+    else 
+      Alert.alert(
+        this.state.validation_output['error']);
+  }
+
+  _navigateToRegisterPhoneNumber() {
+    this.setState({test: 'this ran'})
+    this.props.navigator.push({
+    href: "RegisterPhoneNumber",
+    first_name : this.state.first_name,
+    last_name : this.state.last_name
+    })
+  }
+
+  handleFirstNameChange(first_name) {
+    this.setState({first_name: first_name});
+    this.validateFullName();
+  }
+
+  handleLastNameChange(last_name) {
+    this.setState({last_name: last_name}) 
+    this.validateFullName();
   }
 
   render() {
@@ -44,25 +92,43 @@ export default class RegisterName extends Component {
               </TouchableOpacity>
 
               <Text style = {styles.welcome}>
-                Welcome! Please start with your name
+                What is your name?
               </Text>
 
                <TextInput
-
-              onChangeText = {(val) => this.setState({first_name : val})}
-              style = {styles.input} placeholder = "first_name"
+                onChangeText = {this.handleFirstNameChange}
+                style = {styles.input} placeholder = "First Name"
+                maxLength = {20}
               />
 
                <TextInput
-              onChangeText = {(val) => this.setState({last_name : val})}
-              style = {styles.input} placeholder = "last_name"
+              onChangeText = {this.handleLastNameChange}
+              style = {styles.input} placeholder = "Last Name"
+              maxLength = {20}
               />
 
-              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToRegisterId(this.state.first_name, this.state.last_name)}>
+              <TouchableHighlight style = {styles.button} onPress = {this.submitFullName}>
                 <Text style = {styles.buttonText}>
                   Next!
                 </Text>
               </TouchableHighlight>
+
+              {/* For testing the state changes
+                <Text>
+                  {this.state.first_name} !!
+               </Text>
+                */}
+
+
+              {this.state.validation_output['result'] == 'failure' && 
+                <Text> 
+                  {this.state.validation_output['error']}
+                  </Text>
+              }
+
+              
+           
+
       </View>
     )
   }

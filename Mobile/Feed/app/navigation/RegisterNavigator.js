@@ -4,10 +4,11 @@ import React from 'react';
 import {Component} from 'react'
 import {AppRegistry, StyleSheet, Text, View, ListView, TouchableOpacity, TouchableHighlight, Navigator} from 'react-native';
 import RegisterName from '../screens/register/RegisterName';
-import RegisterId from '../screens/register/RegisterId';
+import RegisterUsername from '../screens/register/RegisterUsername';
 import RegisterEmail from '../screens/register/RegisterEmail';
 import RegisterPassword from '../screens/register/RegisterPassword';
 import RegisterBirthday from '../screens/register/RegisterBirthday';
+import RegisterPhoneNumber from '../screens/register/RegisterPhoneNumber';
 import RegisterGenderAvatar from '../screens/register/RegisterGenderAvatar';
 
 
@@ -25,27 +26,38 @@ class RegisterNavigator extends Component {
           {...globalNavigatorProps} />
         )
 
-    case "RegisterId":
+     case "RegisterPhoneNumber":
       return (
+          <RegisterPhoneNumber first_name = {route.first_name} last_name = {route.last_name}
+             {...globalNavigatorProps} 
+             />
+        )
 
-          <RegisterId first_name = {route.first_name} last_name = {route.last_name}
+  
+    case "RegisterPassword":
+      return (
+          <RegisterPassword first_name = {route.first_name} last_name = {route.last_name} phone_number = {route.phone_number}
              {...globalNavigatorProps} 
              />
         )
 
     case "RegisterEmail":
       return (
-          <RegisterEmail first_name = {route.first_name} last_name = {route.last_name} userID = {route.userID}
-             {...globalNavigatorProps} 
-             />
-        )
-    case "RegisterPassword":
-      return (
-          <RegisterPassword first_name = {route.first_name} last_name = {route.last_name} userID = {route.userID} email = {route.email}
+          <RegisterEmail first_name = {route.first_name} last_name = {route.last_name}
+           phone_number = {route.phone_number} password = {route.password}
              {...globalNavigatorProps} 
              />
         )
 
+
+    case "RegisterUsername":
+      return (
+
+          <RegisterUsername first_name = {route.first_name} last_name = {route.last_name}
+           phone_number = {route.phone_number} password = {route.password} email = {route.email}
+             {...globalNavigatorProps} 
+             />
+        )
 
     case "RegisterBirthday":
       return (

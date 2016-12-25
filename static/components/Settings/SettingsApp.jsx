@@ -116,6 +116,7 @@ export default class SettingsApp extends React.Component {
 
 	componentDidMount() {
 		this.autopopulateSettings();
+		this.getCurrentUserInfo();
 		$('#UpdateSettingsSubmit').click(function(e) {
 			e.preventDefault();
 		});

@@ -23,19 +23,19 @@ class RegisterPassword extends Component {
     super(props)
     this.state = {
       password : "",
-      password_confirm: ""
+      password_confirm: "",
+      validation_output : ""
     }
   }
 
 
 // add validators
-  _navigateToRegisterBirthday(password, password_confirm) {
+  _navigateToRegisterEmail() {
     this.props.navigator.push({
-    href: "RegisterBirthday",
-    password : password,
-    password_confirm: password_confirm,
-    email : this.props.email,
-    userID: this.props.userID,
+    href: "RegisterEmail",
+    password : this.state.password,
+    password_confirm: this.state.password_confirm,
+    phone_number : this.props.phone_number,
     first_name: this.props.first_name,
     last_name: this.props.last_name
     })
@@ -50,17 +50,17 @@ class RegisterPassword extends Component {
 
                <TextInput
               onChangeText = {(val) => this.setState({password : val})}
-              style = {styles.input} placeholder = "password"
+              style = {styles.input} placeholder = "Password"
               secureTextEntry = {true}
               />
 
               <TextInput
               onChangeText = {(val) => this.setState({password_confirm : val})}
-              style = {styles.input} placeholder = "password_confirm"
+              style = {styles.input} placeholder = "Confirm Password"
               secureTextEntry = {true}
               />
 
-              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToRegisterBirthday(this.state.password, this.state.password_confirm)}>
+              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToRegisterEmail()}>
                 <Text style = {styles.buttonText}>
                   Next!
                 </Text>

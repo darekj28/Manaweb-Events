@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput, Button} from 'react-native';
+import {AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput, Button} from 'react-native';
 
 import ViewContainer from '../components/ViewContainer';
 import HomeStatusBar from '../components/HomeStatusBar';
@@ -31,9 +31,9 @@ class StartScreen extends Component {
     href: "Login",
     })
   }
-  _navigateToRegister() {
+  _navigateToRegisterName() {
     this.props.navigator.push({
-    href: "Register",
+    href: "RegisterName",
     })
   }
 
@@ -59,7 +59,7 @@ class StartScreen extends Component {
               </TouchableHighlight>
 
 
-              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToRegister()}>
+              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToRegisterName()}>
                 <Text style = {styles.buttonText}>
                   Register!
                 </Text>
