@@ -1,13 +1,7 @@
-from flask import Blueprint, jsonify, request, session, render_template
+from flask import Blueprint, jsonify, request, redirect, url_for, session
 from users import Users
 
-# from py2neo import authenticate, Graph, Node
-# authenticate("localhost:7474", "neo4j", "powerplay")
-# graph = Graph()
-
-update_settings = Blueprint('update_settings', __name__)
-FORMATS = ['commander', 'cube', 'draft', 'legacy', 'modern', 'pauper', 'sealed' , 'standard', 
-'two_headed_giant',  'vintage']
+update_settings = Blueprint('update_settings', __name__) 
 
 @update_settings.route('/getPreviousSettings', methods=['GET'])
 def getPreviousSettings():
@@ -26,28 +20,22 @@ def getPreviousSettings():
 			'phone_number'		: thisUser['phone_number']
 		})
 
-
-
-
 @update_settings.route('/updateSettings', methods=['POST'])
 def updateSettings():
 	user_manager = Users()
 	thisUser = user_manager.getInfo(session['userID'])
-
-	user_manager.updateInfo(session['userID'], 'first_name', request.form['first_name'])
-	user_manager.updateInfo(session['userID'], 'last_name', request.form['last_name'])
-	user_manager.updateInfo(session['userID'], 'password', request.form['password'])
-	user_manager.updateInfo(session['userID'], 'birthMonth', request.form['birthMonth'])
-	user_manager.updateInfo(session['userID'], 'birthDay', request.form['birthDay'])
-	user_manager.updateInfo(session['userID'], 'birthYear', request.form['birthYear'])
-	user_manager.updateInfo(session['userID'], 'phone_number', request.form['phone_number'])
-	avatar_name = request.form['avatar'].split('/')[3].split('.')[0]
-	user_manager.updateInfo(session['userID'], 'avatar_name', avatar_name)
-	avatar_url =  request.form['avatar']
-	user_manager.updateInfo(session['userID'], 'avatar_url', avatar_url)
+	user_manager.updateInfo(session['userID'], 'first_name'	, 	request.json['first_name'])
+	user_manager.updateInfo(session['userID'], 'last_name'	, 	request.json['last_name'])
+	user_manager.updateInfo(session['userID'], 'password'	, 	request.json['password'])
+	user_manager.updateInfo(session['userID'], 'birthMonth'	, 	request.json['month_of_birth'])
+	user_manager.updateInfo(session['userID'], 'birthDay'	, 	request.json['day_of_birth'])
+	user_manager.updateInfo(session['userID'], 'birthYear'	, 	request.json['year_of_birth'])
+	user_manager.updateInfo(session['userID'], 'phone_number', 	request.json['phone_number'])
+	user_manager.updateInfo(session['userID'], 'avatar_name', 	request.json['avatar'])
+	user_manager.updateInfo(session['userID'], 'avatar_url'	, 	'/static/avatars/' + request.json['avatar'] + '.png')
 	user_manager.closeConnection()
 
-	return render_template('settingsChanged.html')
+	return redirect(url_for('index'))
 
 	
 
