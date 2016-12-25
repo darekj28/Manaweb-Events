@@ -3,6 +3,8 @@ from users import Users
 from posts import Posts
 import time
 import email_confirm
+import sms
+import validation
 # from py2neo import authenticate, Graph, Node
 # authenticate("localhost:7474", "neo4j", "powerplay")
 # graph = Graph()
@@ -58,11 +60,49 @@ def mobileCreateProfile():
 	# post_manager.closeConnection()
 
 
+
+@mobile_api.route('/mobileTextConfirmation', methods = ['POST'])
+def mobileTextConfirmation():
+	phone_number = reqeust.json['phone_number']
+	confirmationPin = sms.sendTextConfirmationPin(phone_number)
+	return jsonify({'confirmationPin' : confirmationPin})
+
+
+@mobile_api.route('/mobileNameValidation', methods = ['POST'])
+def mobileNameValidation():
+	first_name = request.json['first_name']
+	last_name = request.json['last_name']
+	validator_output = validation.validateFullName(first_name, last_name)
+	return jsonify(validator_output)
+
+@mobile_api.route('/mobilePhoneNumberValidation', methods = ['POST'])
+def mobilePhoneNumberValidation():
+	phone_number = request.json['phone_number']
+	validator_output = validation.validatePhoneNumber(phone_number)
+	return jsonify(validator_output)
+
+@mobile_api.route('/mobilePasswordValidation', methods = ['POST'])
+def mobilePasswordValidation():
+	password = request.json['password']
+	password_confirm = request.json['password_confirm']
+	validator_output = validation.validatePassword(password, password_confirm)
+	return jsonify(validator_output)
+
+@mobile_api.route('/mobileEmailValidation', methods = ['POST'])
+def mobileEmailValidation():
+	email = request.json['email']
+	validator_output = validation.validateEmail(email)
+	return jsonify(validator_output)
+
+@mobile_api.route('/mobileUsernameValidation', methods =['POST'])
+def mobileUsernameValidation():
+	username = request.json['username']
+	validator_output = validation.validateUsername(username)
+	return jsonify(validator_output)
+
+
 @mobile_api.route('/testMobileApi', methods = ['POST'])
 def testMobileApi():
-	print("bro")
-	print(request.json)
-	
 	data = {'output' : request.json.get('test')}
 	return jsonify(data)
 
