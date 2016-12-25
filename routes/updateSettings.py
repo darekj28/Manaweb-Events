@@ -24,7 +24,6 @@ def getPreviousSettings():
 def updateSettings():
 	user_manager = Users()
 	thisUser = user_manager.getInfo(session['userID'])
-	print('hellooooo')
 	user_manager.updateInfo(session['userID'], 'first_name'	, 	request.json['first_name'])
 	user_manager.updateInfo(session['userID'], 'last_name'	, 	request.json['last_name'])
 	user_manager.updateInfo(session['userID'], 'password'	, 	request.json['password'])
