@@ -535,7 +535,11 @@ class Posts:
 		table_name = "c_" + feed_name
 		self.db.execute(self.db.mogrify("SELECT * FROM " + table_name + " WHERE unique_id = %s", (unique_id,)))
 		this_comment = self.db.fetchall()
-		output = self.commentListToDict(this_comment)
+
+		user_manager = Users()
+		user_info_table = user_manager.getUserInfoTable()
+		output = self.commentListToDict(this_comment, user_info_table)
+		user_manager.closeConnection()
 
 		sys.stdout.flush()
 		if len (output) == 0:
@@ -733,9 +737,12 @@ class Posts:
 			ghost_following = False
 			self.db.execute(self.db.mogrify(sql_code, (ghost_following,)))	
 		# db.execute("SELECT * FROM " + thread_id)
-		posts = self.db.fetchall()
-		postDict = self.commentListToDict(posts)
-		return postDict
+		comments = self.db.fetchall()
+		user_manager = Users()
+		user_info_table = user_manager.getUserInfoTable()
+		commentDict = self.commentListToDict(comments, user_info_table)
+		user_manager.closeConnection()
+		return commentDict
 
 
 	# add back later
@@ -885,9 +892,9 @@ class Posts:
 			postList.append(thisPost)	
 		return postList	
 
-	def commentListToDict(self, comments):
+	def commentListToDict(self, comments, user_info_table):
 		commentList = list()
-		user_manager = Users()
+
 		for comment in comments:
 			thisComment = {}
 			thisComment['body'] = comment[0]
@@ -898,7 +905,7 @@ class Posts:
 			thisComment['comment_id'] = comment[3]
 			thisComment['unique_id'] = comment[6]
 			thisComment['isComment'] = True
-			thisUser = user_manager.getInfo(thisComment['poster_id'])
+			thisUser = user_info_table[thisComment['poster_id']]
 			thisComment['first_name'] = thisUser['first_name']
 			thisComment['last_name'] = thisUser['last_name']
 			thisComment['avatar_url'] = thisUser['avatar_url']
