@@ -43,6 +43,7 @@ export default class SettingsApp extends React.Component {
 		this.handleChange = this.handleChange.bind(this);
 		this.handleTextBlur = this.handleTextBlur.bind(this);
 		this.handleSelectBlur = this.handleSelectBlur.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
 		this.autopopulateSettings = this.autopopulateSettings.bind(this);
 	}
 	autopopulateSettings() {
@@ -92,11 +93,33 @@ export default class SettingsApp extends React.Component {
 	}
 
 	handleSubmit() {
-
+		var obj = {
+			first_name 		: this.state.first_name,
+			last_name  		: this.state.last_name,
+			password   		: this.state.password,
+			phone_number 	: this.state.phone_number,
+			day_of_birth 	: this.state.day_of_birth,
+			month_of_birth 	: this.state.month_of_birth,
+			year_of_birth 	: this.state.year_of_birth,
+			avatar 			: this.state.avatar
+		}
+		$.ajax({
+			type: 'POST',
+			url: '/updateSettings',
+			data : JSON.stringify(obj, null, '\t'),
+		    contentType: 'application/json;charset=UTF-8'
+		});
+		$('#UpdateSettingsSubmit').blur();
+		$('#UpdateSettingsAlert').fadeIn(400).delay(5000).fadeOut(400);
+		$("html, body").animate({ scrollTop: $(document).height()-$(window).height() }, 300);
 	}
 
 	componentDidMount() {
 		this.autopopulateSettings();
+		$('#UpdateSettingsSubmit').click(function(e) {
+			e.preventDefault();
+		});
+		$('#UpdateSettingsAlert').hide();
 	}
 	render() {
 		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
@@ -128,11 +151,16 @@ export default class SettingsApp extends React.Component {
 						<div id="avatar_container" className="avatar_container centered-text"></div>
 						<div className="form-group">
 							{this.state.submittable && 
-								<button className="btn btn-default"> Update! </button>}
+								<button className="btn btn-default" id="UpdateSettingsSubmit" 
+										onClick={this.handleSubmit}> Update! </button>}
 							{!this.state.submittable && 
-								<button className="btn btn-default" onClick={this.handleSubmit} disabled> Update! </button>}
+								<button className="btn btn-default" id="UpdateSettingsSubmit" 
+										onClick={this.handleSubmit} disabled> Update! </button>}
 						</div>
 					</form>
+					<div className="alert alert-success" id="UpdateSettingsAlert">
+					  <strong>Success!</strong> Your settings have been updated.
+					</div>
 				</div>
 			</div>
 			);

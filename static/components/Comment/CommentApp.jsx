@@ -65,7 +65,7 @@ export default class CommentApp extends React.Component {
 		}.bind(this));
 	}
 	handleSearch(searchText) { 
-		$('html, body').animate({scrollTop: $('#CommentFeed').prop("scrollHeight")}, 300);
+		$("html, body").animate({ scrollTop: $(document).height()-$(window).height() }, 300);
 		this.setState({search : searchText}); 
 	}
 	handleTypingComment(commentText) { this.setState({comment : commentText}); }
@@ -90,7 +90,7 @@ export default class CommentApp extends React.Component {
 		    contentType: 'application/json;charset=UTF-8'
 		});
 		this.setState({feed : feed, comment: ''});
-		$('html, body').animate({scrollTop: $('#CommentFeed').prop("scrollHeight")}, 300);
+		$("html, body").animate({ scrollTop: $(document).height()-$(window).height() }, 300);
 	}
 	handleCommentEdit(post, editedContent) {
 		var feed = this.state.feed;
