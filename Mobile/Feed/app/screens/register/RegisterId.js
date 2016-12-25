@@ -57,6 +57,8 @@ class RegisterId extends Component {
                   Next!
                 </Text>
               </TouchableHighlight>
+
+
       </View>
     )
   }

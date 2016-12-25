@@ -10,6 +10,8 @@ import RegisterEmail from '../screens/register/RegisterEmail'
 import RegisterPassword from '../screens/register/RegisterPassword'
 import LoginScreen from '../screens/LoginScreen'
 import FeedScreen from '../screens/FeedScreen'
+import RegisterNavigator from './RegisterNavigator'
+import TestHTTP from '../screens/TestHTTP'
 
 
 
@@ -29,7 +31,7 @@ class StartNavigator extends Component {
   switch(route.href){
     case "Register":
       return (
-        <RegisterName  
+        <RegisterNavigator 
           {...globalNavigatorProps} />
         )
 
@@ -86,10 +88,18 @@ class StartNavigator extends Component {
 
         )
 
+      case "TestHTTP":
+      return (
+          <TestHTTP
+              {...globalNavigatorProps} 
+             />
+
+        )
+
 
     default:
         return (
-          <Text> {'BRO DO NOT GO TO THIS ROUTE $(route}'} </Text>
+          <Text> {'BRO DO NOT GO TO THIS ROUTE $(route)'} </Text>
         )
   }
 }

@@ -18,7 +18,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 
-class RegisterId extends Component {
+class StartScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -43,6 +43,12 @@ class RegisterId extends Component {
     })
   }
 
+  _navigateToTestHTTP() {
+    this.props.navigator.push({
+    href: "TestHTTP",
+    })
+  }
+
   render() {
     return (
       <View style = {styles.container}>
@@ -62,6 +68,12 @@ class RegisterId extends Component {
 			        <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToFeed()}>
                 <Text style = {styles.buttonText}>
                   Testing button. Go to feed page
+                </Text>
+              </TouchableHighlight>
+
+              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToTestHTTP()}>
+                <Text style = {styles.buttonText}>
+                  Testing HTTP Request
                 </Text>
               </TouchableHighlight>
 
@@ -108,4 +120,4 @@ const styles = StyleSheet.create({
 
 });
 
-module.exports = RegisterId
+module.exports = StartScreen

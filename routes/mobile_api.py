@@ -13,6 +13,7 @@ DEFAULT_FEED = "BALT"
 
 @mobile_api.route('/mobileCreateProfile', methods = ['POST'])
 def mobileCreateProfile():
+	
 	first_name = request.json['first_name'].title()
 	last_name = request.json['last_name'].title()
 	userID = request.json['userID']
@@ -23,10 +24,17 @@ def mobileCreateProfile():
 	birthYear = request.json['birth_year']
 	gender = request.json.get('gender')
 
+	print(first_name)
+	print(last_name)
+	print(userID)
+	print(birthDay)
+	print(birthMonth)
+	print(birthYear)
+
 	# avatar_url = request.form['avatar'][1:]
 
-	if int(birthYear) > 2004:
-		return jsonify({'response': "too young for you bro..."})
+	# if int(birthYear) > 2004:
+	# 	return jsonify({'response': "too young for you bro..."})
 
 
 
@@ -48,7 +56,7 @@ def mobileCreateProfile():
 
 	user_manager.closeConnection()
 
-	return jsonify(request.form)
+	return jsonify({'response' : 'account made baby!'})
 	# return jsonify({'response': "success!" })
 
 	# post_manager = Posts()
@@ -58,7 +66,10 @@ def mobileCreateProfile():
 
 @mobile_api.route('/testMobileApi', methods = ['POST'])
 def testMobileApi():
-	data = {'reponse' : 'success', 'data' : 'show up', 'method' : 'post'}
+	print("bro")
+	print(request.json)
+	
+	data = {'output' : request.json.get('test')}
 	return jsonify(data)
 
 

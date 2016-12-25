@@ -35,31 +35,21 @@ class RegisterGenderAvatar extends Component {
   _navigateToRegisterSubmit() {
     
     this.submitAccountCreation();
-    // this.props.navigator.push({
-    // href: "RegisterSubmit",
-    // avatar : this.state.avatar,
-    // gender : this.state.gender,
-    // birth_day : this.props.birth_day,
-    // birth_month: this.props.birth_month,
-    // birth_year: this.props.birth_year,
-    // password : this.props.password,
-    // email : this.props.email,
-    // userID: this.props.userID,
-    // first_name: this.props.first_name,
-    // last_name: this.props.last_name,
-    // password: this.props.password
 
-    // })
   }
 
 
   submitAccountCreation() {
     
-    Alert.alert(
-      "birth_day -> " + this.props.birth_day
-    )
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
 
-    fetch("http://66.111.4.54:5000/mobileCreateProfile/", {method: "POST", 
+
+    fetch(url + "/mobileCreateProfile", {method: "POST",
+    headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, 
       body: 
       JSON.stringify(
        {
@@ -80,14 +70,10 @@ class RegisterGenderAvatar extends Component {
     .then((responseData) => {
         Alert.alert(
             "POST Response",
-            "Response Body -> " + JSON.stringify(responseData)
+            "Response Body -> " + JSON.stringify(responseData.response)
         )
     })
     .done();
-
-    Alert.alert(
-            "AFTER POST Response"
-        )
   }
 
   render() {

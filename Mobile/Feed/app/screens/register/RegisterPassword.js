@@ -22,16 +22,18 @@ class RegisterPassword extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      password : ""
+      password : "",
+      password_confirm: ""
     }
   }
 
 
-
-  _navigateToRegisterSubmit(email) {
+// add validators
+  _navigateToRegisterBirthday(password, password_confirm) {
     this.props.navigator.push({
-    href: "RegisterSubmit",
+    href: "RegisterBirthday",
     password : password,
+    password_confirm: password_confirm,
     email : this.props.email,
     userID: this.props.userID,
     first_name: this.props.first_name,
@@ -52,7 +54,13 @@ class RegisterPassword extends Component {
               secureTextEntry = {true}
               />
 
-              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToRegisterSubmit(this.state.password)}>
+              <TextInput
+              onChangeText = {(val) => this.setState({password_confirm : val})}
+              style = {styles.input} placeholder = "password_confirm"
+              secureTextEntry = {true}
+              />
+
+              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToRegisterBirthday(this.state.password, this.state.password_confirm)}>
                 <Text style = {styles.buttonText}>
                   Next!
                 </Text>

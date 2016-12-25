@@ -33,31 +33,7 @@ export default class RegisterScreen extends Component {
   onRegisterPressed (){
     console.log(this.state);
   }
-  // async onRegisterPressed() {
-  //   try {
-  //     let response = await fetch('127.0.0.1:5000/makeProfile', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Accept': 'application/json'
-  //       },
-  //       body: JSON.stringify({
-  //         user:
-  //         {
-  //           userID: this.state.userID,
-  //           email: this.state.email,
-  //           first_name: this.state.first_name,
-  //           last_name: this.state.last_name,
-  //           password: this.state.password
-  //         }
-  //       })
-  //     });
 
-  //     let res = await response.text();
-
-  //   } catch (errors){
-
-  //   }
-  // }
 
   render() {
     return (

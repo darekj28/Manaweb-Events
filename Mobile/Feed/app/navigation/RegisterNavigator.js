@@ -7,19 +7,15 @@ import RegisterName from '../screens/register/RegisterName';
 import RegisterId from '../screens/register/RegisterId';
 import RegisterEmail from '../screens/register/RegisterEmail';
 import RegisterPassword from '../screens/register/RegisterPassword';
+import RegisterBirthday from '../screens/register/RegisterBirthday';
+import RegisterGenderAvatar from '../screens/register/RegisterGenderAvatar';
 
 
 class RegisterNavigator extends Component {
 
   _renderScene(route, navigator) {
   var globalNavigatorProps = {
-    navigator: navigator,
-    first_name: "",
-    last_name: "",
-    userID : "",
-    email: "",
-    password: "",
-    password_confirm: ""
+    navigator: navigator
   }
 
   switch(route.href){
@@ -28,7 +24,6 @@ class RegisterNavigator extends Component {
         <RegisterName 
           {...globalNavigatorProps} />
         )
-
 
     case "RegisterId":
       return (
@@ -52,9 +47,32 @@ class RegisterNavigator extends Component {
         )
 
 
+    case "RegisterBirthday":
+      return (
+          <RegisterBirthday first_name = {route.first_name} last_name = {route.last_name} userID = {route.userID} email = {route.email} password = {route.password}
+             {...globalNavigatorProps} 
+             />
+        )
+
+
+    case "RegisterGenderAvatar":
+      return (
+          <RegisterGenderAvatar first_name = {route.first_name} last_name = {route.last_name} userID = {route.userID} email = {route.email} password = {route.password} 
+            birth_month = {route.birth_month} birth_day = {route.birth_day} birth_year = {route.birth_year}
+             {...globalNavigatorProps} 
+             />
+        )
+
+
     default:
         return (
-          <Text> {'BRO DO NOT GO TO THIS ROUTE $(route}'} </Text>
+          <ViewContainer>
+          <TouchableOpacity onPress = {() => this.props.navigator.pop()}>
+                <Icon name = "chevron-left" size = {30} />
+              </TouchableOpacity>
+
+          <Text> {'BRO! DO NOT GO TO THIS ROUTE ${route}'} </Text>
+          </ViewContainer>
         )
   }
 }

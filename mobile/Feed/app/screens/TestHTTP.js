@@ -20,6 +20,7 @@ import DatePicker from 'react-native-datepicker';
 
 
 
+
 class TestHTTP extends Component {
   constructor(props) {
     super(props)
@@ -29,36 +30,27 @@ class TestHTTP extends Component {
 
 
   testPost(){
-    fetch("www.manaweb.com/getPosts", {
+    fetch("http://0.0.0.0:5000/testMobileApi", {
         method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      body: 
+        JSON.stringify(
+        {
+         test : "test string"
+        })
 
-         })
-      // body: 
-      // JSON.stringify(
-      //  {
-      //   avatar : this.state.avatar,
-      //   gender : this.state.gender,
-      //   birth_day : this.props.birth_day,
-      //   birth_month: this.props.birth_month,
-      //   birth_year: this.props.birth_year,
-      //   password : this.props.password,
-      //   email : this.props.email,
-      //   userID: this.props.userID,
-      //   first_name: this.props.first_name,
-      //   last_name: this.props.last_name,
-      //   password: this.props.password
-      // })
-    // })
-    // .then((response) => response.json())
+    })
+    .then((response) => response.json())
     .then((responseData) => {
         Alert.alert(
-            "GET Response",
-            "Response Body -> " + JSON.stringify(responseData['response'])
+            "POST Response",
+            "Response Body -> " + JSON.stringify(responseData)
         )
     })
     .done();
-
-    
   }
 
 
