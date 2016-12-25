@@ -301,6 +301,15 @@ class Users:
 		query = size_test[0]
 		return self.queryToDict(query)
 
+	def getUserInfoTable(self):
+		table_name = self.USER_TABLE
+		output_table = {}
+		users_list = self.getUserList()
+		for user in users_list:
+			this_user_info = self.getInfo(user)
+			output_table[user] = this_user_info
+		return output_table
+
 	def deleteUser(self, userID):
 		table_name = self.USER_TABLE
 		udb.execute("DELETE FROM " + table_name + " WHERE userID = %s", (userID,))

@@ -521,7 +521,11 @@ class Posts:
 	def getPostById(self, feed_name, comment_id):
 		self.db.execute(self.db.mogrify("SELECT * FROM " + feed_name + " WHERE comment_id = %s", (comment_id,)))
 		this_post = self.db.fetchall()
-		output = self.postListToDict(this_post)
+		user_manager = Users()
+
+		user_info_table = user_manager.getUserInfoTable()
+		output = self.postListToDict(this_post, user_info_table)
+		user_manager.closeConnection()
 		if len(output) == 0:
 			return None
 		else:
@@ -707,7 +711,10 @@ class Posts:
 		self.db.execute(self.db.mogrify(sql_code, (ghost_following,feed_name)))	
 
 		posts = self.db.fetchall()
-		postDict = self.postListToDict(posts)
+		user_manager = Users()
+		user_info_table = user_manager.getUserInfoTable()
+		postDict = self.postListToDict(posts, user_info_table)
+		user_manager.closeConnection()
 		return postDict
 
 
@@ -854,11 +861,9 @@ class Posts:
 
 
 
-	def postListToDict(self, posts):
+	def postListToDict(self, posts, user_info_table):
 		postList = list()
-		user_manager = Users()
 		for post in posts:
-
 			thisPost = {}
 			thisPost['body'] = post[0]
 			thisPost['poster_id'] = post[1]
@@ -871,14 +876,13 @@ class Posts:
 			thisPost['isChill'] = post[8]
 			thisPost['comment_id'] = post[3]
 			thisPost['isComment'] = False
-			thisUser = user_manager.getInfo(thisPost['poster_id'])
+			thisUser = user_info_table[thisPost['poster_id']]
 			thisPost['first_name'] = thisUser['first_name']
 			thisPost['last_name'] = thisUser['last_name']
 			thisPost['avatar_url'] = thisUser['avatar_url']
 			thisPost['unique_id'] = post[9]
 			thisPost['numComments'] = post[10]
-			postList.append(thisPost)
-		user_manager.closeConnection()	
+			postList.append(thisPost)	
 		return postList	
 
 	def commentListToDict(self, comments):
@@ -900,7 +904,6 @@ class Posts:
 			thisComment['avatar_url'] = thisUser['avatar_url']
 			thisComment['time'] = self.date_format(int(thisComment['timeStamp']))
 			commentList.append(thisComment)
-		user_manager.closeConnection()
 		return commentList	
 
 

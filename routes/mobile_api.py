@@ -24,12 +24,6 @@ def mobileCreateProfile():
 	birthYear = request.json['birth_year']
 	gender = request.json.get('gender')
 
-	print(first_name)
-	print(last_name)
-	print(userID)
-	print(birthDay)
-	print(birthMonth)
-	print(birthYear)
 
 	# avatar_url = request.form['avatar'][1:]
 

@@ -74,8 +74,16 @@ def getPosts():
 	feed_name = "BALT"
 
 	post_manager = Posts()
+	# time1 = time.time()
 	post_list = post_manager.getPosts(feed_name)
+	# time2 = time.time()
 	post_manager.sortAscending(post_list)
+	# time3 = time.time()
+	# getPostTime = time2 - time1
+	# sortTime = time3 - time2
+	# print('getPosts time : '  + str(getPostTime))
+	# print('sort time : '  + str(sortTime))
+
 	post_manager.closeConnection()
 	return jsonify({ 'post_list' : post_list })	
 
