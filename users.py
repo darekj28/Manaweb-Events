@@ -366,6 +366,26 @@ class Users:
 		query = size_test[0]
 		return self.queryToDict(query)
 
+	def isEmailTaken(self, email):
+		email_user = self.getInfoFromEmail(email)
+		if email_user == None:
+			return False
+		else:
+			return True
+
+	def isUsernameTaken(self, username):
+		user = self.getInfo(username)
+		if user == None:
+			return False
+		else:
+			return True
+
+
+	def usernameInUser(self, username):
+
+
+
+
 
 
 def test():
