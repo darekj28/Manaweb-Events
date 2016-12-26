@@ -27,7 +27,7 @@ def sendTextConfirmationPin(user_phone_number):
 	confirmationPin = hashString(str(timeStamp))
 	message = message_template + confirmationPin
 	# we comment this out so Dareks phone doesn't get spammed
-	#  sendMessage(Twilio_Number, user_phone_number, message)
+	sendMessage(Twilio_Number, user_phone_number, message)
 	
 	return confirmationPin
 
