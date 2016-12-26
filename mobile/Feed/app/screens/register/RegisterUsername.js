@@ -22,43 +22,114 @@ class RegisterUsername extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      email : ""
+      username : "",
+      validation_output: {'error' : "invalid email"}
     }
+
+    this.handleUsernameSubmit = this.handleUsernameSubmit.bind(this);
+    this.handleUsernameChange = this.handleUsernameChange.bind(this);
+    this.validateUsername = this.validateUsername.bind(this);
+    this._navigateToFeed = this._navigateToFeed.bind(this);
+    this.createAccount = this.createAccount.bind(this);
+
   }
 
 
+  createAccount() {
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
 
-  _navigateToSubmit(userID) {
+
+    fetch(url + "/mobileCreateProfile", {method: "POST",
+    headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, 
+      body: 
+      JSON.stringify(
+       {
+        password : this.props.password,
+        email : this.props.email,
+        username: this.state.username,
+        first_name: this.props.first_name,
+        last_name: this.props.last_name,
+        password: this.props.password
+      })
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+        Alert.alert(
+            "POST Response",
+            "Response Body -> " + JSON.stringify(responseData.response)
+        )
+    })
+    .done();
+  }
+
+  handleUsernameSubmit() {
+    if (this.state.validation_output['result'] == 'success') {
+      this.createAccount()
+    }
+  }
+
+  handleUsernameChange(username) {
+    this.setState({username : username})
+    this.validateUsername(username);
+  }
+
+  validateUsername(username) {
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
+    fetch(test_url + "/mobileEmailValidation", {method: "POST",
+    headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, 
+      body: 
+      JSON.stringify(
+       {
+        username : username
+      })
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+      this.setState({validation_output : responseData})
+    })
+    .done();
+  }
+
+  _navigateToFeed() {
     this.props.navigator.push({
-    href: "RegisterEmail",
-    userID : userID,
-    first_name: this.props.first_name,
-    last_name: this.props.last_name
+    href: "Feed",
+    username : this.state.username
     })
   }
 
   render() {
     return (
       <View style = {styles.container}>
-
               <TouchableOpacity onPress = {() => this.props.navigator.pop()}>
-                <Icon name = "chevron-left" size = {20} />
+                <Icon name = "chevron-left" size = {30} />
               </TouchableOpacity>
 
                <TextInput
-              onChangeText = {(val) => this.setState({userID : val})}
-              style = {styles.input} placeholder = "userID"
+              onChangeText = {this.handleUsernameChange}
+              style = {styles.input} 
+              placeholder = "Choose a username"
               />
 
-
-
-              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToRegisterEmail(this.state.userID)}>
+              <TouchableHighlight style = {styles.button} onPress = {this.handleEmailSubmit}>
                 <Text style = {styles.buttonText}>
-                  Next!
+                  Create Account!
                 </Text>
               </TouchableHighlight>
 
-
+              {
+                this.state.validation_output['result'] == 'failure' && 
+                <Text> 
+                  {this.state.validation_output['error']}
+                  </Text>
+              }
       </View>
     )
   }

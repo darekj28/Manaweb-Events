@@ -38,10 +38,10 @@ class RegisterPhoneNumber extends Component {
 
 
 
-  validatePhoneNumber() {
+  validatePhoneNumber(phone_number) {
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
-    fetch(url + "/mobilePhoneNumberValidation", {method: "POST",
+    fetch(test_url + "/mobilePhoneNumberValidation", {method: "POST",
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ class RegisterPhoneNumber extends Component {
       body: 
       JSON.stringify(
        {
-        phone_number : this.state.phone_number
+        phone_number : phone_number
       })
     })
     .then((response) => response.json())
@@ -76,11 +76,11 @@ class RegisterPhoneNumber extends Component {
     //     this.state.validation_output['error']);
   }
 
-  sendConfirmationPin(phone_number){
+  sendConfirmationPin(){
 
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
-    fetch(test_url + "/mobileTextConfirmation", {method: "POST",
+    fetch(url + "/mobileTextConfirmation", {method: "POST",
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -97,7 +97,6 @@ class RegisterPhoneNumber extends Component {
       this._navigateToConfirmCode();
     })
     .done();
-    
   }
 
   
@@ -111,7 +110,7 @@ class RegisterPhoneNumber extends Component {
       // if (length == 3)
       //   var new_phone_number = this.state.phone_number + "-";
       //   this.setState({phone_number : new_phone_number});
-      this.validatePhoneNumber();
+      this.validatePhoneNumber(phone_number);
 
   }
 
@@ -148,7 +147,7 @@ class RegisterPhoneNumber extends Component {
 
 
 
-              <TouchableHighlight style = {styles.button} onPress = {(event) => this.handlePhoneNumberSubmit()}>
+              <TouchableHighlight style = {styles.button} onPress = {this.handlePhoneNumberSubmit}>
                 <Text style = {styles.buttonText}>
                   Next!
                 </Text>

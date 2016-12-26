@@ -3,5 +3,5 @@ brew install node
 brew install watchman
 sudo npm install -g react-native-cli
 cd mobile/feed
-npm install --save rc-menu react react-dom react-native react-native-dismiss-keyboard react-native-gifted-spinner react-native-modal-dropdown react-native-modal-picker react-native-router-flux react-native-vector-icons
+npm install --save rc-menu react react-dom react-native react-native-dismiss-keyboard react-native-gifted-spinner react-native-modal-dropdown react-native-modal-picker react-native-router-flux react-native-vector-icons react-native-datepicker 
 react-native run-ios

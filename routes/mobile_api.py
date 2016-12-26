@@ -18,27 +18,21 @@ def mobileCreateProfile():
 	
 	first_name = request.json['first_name'].title()
 	last_name = request.json['last_name'].title()
-	userID = request.json['userID']
+	userID = request.json['username']
 	password = request.json['password']
 	email = request.json['email']
-	birthDay = request.json['birth_day']
-	birthMonth = request.json['birth_month']
-	birthYear = request.json['birth_year']
-	gender = request.json.get('gender')
-
-
-	# avatar_url = request.form['avatar'][1:]
-
-	# if int(birthYear) > 2004:
-	# 	return jsonify({'response': "too young for you bro..."})
-
-
-
-	avatar_name = request.json.get('avatar')
-	avatar_url = "directory:/" + avatar_name
-
-	# phone_number = request.form['phone_number']
-	phone_number = "555-555-5555"
+	phone_number = request.json['phone_number']
+	# birthDay = request.json['birth_day']
+	# birthMonth = request.json['birth_month']
+	# birthYear = request.json['birth_year']
+	# gender = request.json.get('gender')
+	birthYear = "1994"
+	birthDay = "1"
+	birthMonth = "1"
+	gender = "Other"
+	avatar_name = "Jace"
+	avatar_url = '/static/avatars/' + avatar_name + '.png'
+	
 	isActive = True
 	confirmationPin = email_confirm.hashUserID(userID)
 	# confirmed = False
@@ -70,9 +64,8 @@ def mobileTextConfirmation():
 
 @mobile_api.route('/mobileNameValidation', methods = ['POST'])
 def mobileNameValidation():
-	first_name = request.json['first_name']
-	last_name = request.json['last_name']
-	validator_output = validation.validateFullName(first_name, last_name)
+	name = request.json['name']
+	validator_output = validation.validateName(name)
 	return jsonify(validator_output)
 
 @mobile_api.route('/mobilePhoneNumberValidation', methods = ['POST'])

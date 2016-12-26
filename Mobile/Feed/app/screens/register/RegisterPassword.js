@@ -35,10 +35,10 @@ class RegisterPassword extends Component {
   }
 
 
-  validatePassword() {
+  validatePassword(password, password_confirm) {
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
-    fetch(url + "/mobilePasswordValidation", {method: "POST",
+    fetch(test_url + "/mobilePasswordValidation", {method: "POST",
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -46,8 +46,8 @@ class RegisterPassword extends Component {
       body: 
       JSON.stringify(
        {
-        password: this.state.password,
-        password_confirm: this.state.password_confirm
+        password: password,
+        password_confirm: password_confirm
       })
     })
     .then((response) => response.json())
@@ -65,12 +65,12 @@ class RegisterPassword extends Component {
 
   handlePasswordChange(password) {
     this.setState({password : password})
-    this.validatePassword()
+    this.validatePassword(password, this.state.password_confirm)
   }
 
   handlePasswordConfirmChange(password_confirm) {
     this.setState({password_confirm : password_confirm})
-    this.validatePassword()
+    this.validatePassword(this.state.password, password_confirm)
   }
 
 // add validators

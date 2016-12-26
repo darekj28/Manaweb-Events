@@ -23,21 +23,23 @@ export default class RegisterName extends Component {
     this.state = {
       first_name : "",
       last_name : "",
-      validation_output : {error: "Please enter a non blank name"}
+      first_name_validation_output : {error: "Please enter a non blank first name"},
+      last_name_validation_output : {error: "Please enter a non blank last name"}
     }
-    this.validateFullName = this.validateFullName.bind(this);
+    this.validateFirstName = this.validateFirstName.bind(this);
+    this.validateLastName = this.validateLastName.bind(this);
     this.submitFullName = this.submitFullName.bind(this);
     this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
     this.handleLastNameChange = this.handleLastNameChange.bind(this);
   }
 
 
-  validateFullName() {
+  validateFirstName(first_name) {
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
 
 
-    fetch(url + "/mobileNameValidation", {method: "POST",
+    fetch(test_url + "/mobileNameValidation", {method: "POST",
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -45,27 +47,48 @@ export default class RegisterName extends Component {
       body: 
       JSON.stringify(
        {
-        first_name: this.state.first_name,
-        last_name: this.state.last_name
+        name: first_name
       })
     })
     .then((response) => response.json())
     .then((responseData) => {
-      this.setState({validation_output : responseData})
+      this.setState({first_name_validation_output : responseData})
     })
     .done();
   }
 
+  validateLastName(last_name) {
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
+
+
+    fetch(test_url + "/mobileNameValidation", {method: "POST",
+    headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, 
+      body: 
+      JSON.stringify(
+       {
+        name: last_name
+      })
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+      this.setState({last_name_validation_output : responseData})
+    })
+    .done();
+  }
+
+
   submitFullName() {
-    if (this.state.validation_output['result'] == 'success')
+    if (this.state.first_name_validation_output['result'] == 'success' 
+      && this.state.last_name_validation_output['result'] == 'success')
       this._navigateToRegisterPhoneNumber();
-    else 
-      Alert.alert(
-        this.state.validation_output['error']);
   }
 
   _navigateToRegisterPhoneNumber() {
-    this.setState({test: 'this ran'})
+
     this.props.navigator.push({
     href: "RegisterPhoneNumber",
     first_name : this.state.first_name,
@@ -75,12 +98,12 @@ export default class RegisterName extends Component {
 
   handleFirstNameChange(first_name) {
     this.setState({first_name: first_name});
-    this.validateFullName();
+    this.validateFirstName(first_name);
   }
 
   handleLastNameChange(last_name) {
     this.setState({last_name: last_name}) 
-    this.validateFullName();
+    this.validateLastName(last_name);
   }
 
   render() {
@@ -104,11 +127,25 @@ export default class RegisterName extends Component {
                 maxLength = {20}
               />
 
+              {
+                this.state.first_name_validation_output['result'] == 'failure' && 
+                <Text> 
+                  {this.state.first_name_validation_output['error']}
+                  </Text>
+              }
+
                <TextInput
               onChangeText = {this.handleLastNameChange}
               style = {styles.input} placeholder = "Last Name"
               maxLength = {20}
               />
+
+              {
+                this.state.last_name_validation_output['result'] == 'failure' && 
+                <Text> 
+                  {this.state.last_name_validation_output['error']}
+                  </Text>
+              }
 
               
 
@@ -127,12 +164,7 @@ export default class RegisterName extends Component {
                 */}
 
 
-              {
-                this.state.validation_output['result'] == 'failure' && 
-                <Text> 
-                  {this.state.validation_output['error']}
-                  </Text>
-              }
+              
 
               
            
