@@ -8,7 +8,7 @@
 import React from 'react';
 import {Component} from 'react'
 import {  AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
-          Alert, Image, Animated, TouchableWithoutFeedback} from 'react-native';
+          Alert, Image, Animated, TouchableWithoutFeedback, ScrollView} from 'react-native';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -18,12 +18,13 @@ import ActionBar from '../actionbar/ActionBar'; // downloaded from https://githu
 // import ModalPicker from 'react-native-modal-picker' // https://www.npmjs.com/package/react-native-modal-picker
 import ModalDropdown from 'react-native-modal-dropdown'; // https://github.com/sohobloo/react-native-modal-dropdown
 import PostMessageBox from '../components/PostMessageBox'
+import FeedBox from '../components/FeedBox'
 
 const ACTIVITY_BAR_HEIGHT = 40
 const ACTIVITY_BAR_COLOR = 'black'
 const POST_MESSAGE_HEIGHT_SHORT = 50
 const POST_MESSAGE_HEIGHT_TALL = 150
-const ANIMATE_DURATION = 500
+const ANIMATE_DURATION = 700
 class FeedScreen extends Component {
 
 
@@ -85,40 +86,45 @@ class FeedScreen extends Component {
 
     let dropdownIcon = require('./res/down_arrow.png')
     return (
-        <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
+
         <View style = {styles.container}>
-            <ActionBar
-                backgroundColor={'#3B373C'}
-                leftIconName={'none'}
-                title={'Manaweb'}
-                titleStyle={styles.titleTextLarge}
-                onTitlePress={this.handleTitlePress}
-                onRightPress={this.handleRightAction}
-                rightIconName={'menu'}
-            />
+            <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
+                <ActionBar
+                    backgroundColor={'#3B373C'}
+                    leftIconName={'none'}
+                    title={'Manaweb'}
+                    titleStyle={styles.titleTextLarge}
+                    onTitlePress={this.handleTitlePress}
+                    onRightPress={this.handleRightAction}
+                    onLeftPress = {() => {}}
+                    rightIconName={'menu'}
+                />
+            </TouchableWithoutFeedback>
 
-            <View style = {styles.containerHorizontal}>
-                <View style = {{flex: 0.85}}>
-                    <Text style = {styles.activity_text}>
-                        {this._activities[this.state.activity_index]}
-                    </Text>
+            <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
+                <View style = {styles.containerHorizontal}>
+                    <View style = {{flex: 0.85}}>
+                        <Text style = {styles.activity_text}>
+                            {this._activities[this.state.activity_index]}
+                        </Text>
+                    </View>
+
+                    <View style = {{flex: 0.15}}>
+                        <ModalDropdown  style={styles.dropdown_bar}
+                                        defaultIndex={0}
+                                        defaultValue={this._activities[0]}
+                                        dropdownStyle={styles.dropdown_box}
+                                        options={this._activities}
+                                        onSelect={(idx, value) => this.setState({activity_index: idx})}
+                                        renderRow={this._dropdown_renderRow.bind(this)}>
+
+                                        <Image  style={styles.dropdown_image}
+                                                source={dropdownIcon}>
+                                        </Image>
+                        </ModalDropdown>
+                    </View>
                 </View>
-
-                <View style = {{flex: 0.15}}>
-                    <ModalDropdown  style={styles.dropdown_bar}
-                                    defaultIndex={0}
-                                    defaultValue={this._activities[0]}
-                                    dropdownStyle={styles.dropdown_box}
-                                    options={this._activities}
-                                    onSelect={(idx, value) => this.setState({activity_index: idx})}
-                                    renderRow={this._dropdown_renderRow.bind(this)}>
-
-                                    <Image  style={styles.dropdown_image}
-                                            source={dropdownIcon}>
-                                    </Image>
-                    </ModalDropdown>
-                </View>
-            </View>
+            </TouchableWithoutFeedback>
 
             <Animated.View style = {{flexDirection:'row', height: this.state.post_message_height}}>
                 <PostMessageBox
@@ -128,10 +134,20 @@ class FeedScreen extends Component {
                 </PostMessageBox>
             </Animated.View>
 
-
+            <View style={{flex:1}}>
+            <ScrollView
+                // ref={(scrollView) => { _scrollView = scrollView; }}
+                automaticallyAdjustContentInsets={false}
+                onScroll={() => {}}
+                scrollEventThrottle={200}
+                onPress={() => {Alert.alert('Scroll clicked')}}
+                >
+                {messages.map(createFeedRow)}
+            </ScrollView>
+            </View>
 
         </View>
-        </TouchableWithoutFeedback>
+
     )
   }
 
@@ -147,9 +163,25 @@ class FeedScreen extends Component {
       </TouchableHighlight>
     );
   }
-
-
 }
+
+var messages = ['This is my first message',
+'This is my second message',
+'This is my third message',
+'This is my fourth message',
+'This is my fifth message',
+'This is my sixth message',
+'This is my seventh message',
+'This is my eigth message',
+'This is my ninth message',
+'This is my tenth message'
+]
+
+var createFeedRow = (message, i) =>
+    <FeedBox
+        key={i}
+        message={message}
+        image_ID = { i%3 }/>;
 
 const styles = StyleSheet.create({
   container: {
@@ -205,6 +237,10 @@ const styles = StyleSheet.create({
     height: 30,
     tintColor: 'white',
     alignSelf: 'flex-end'
+  },
+  scrollView: {
+    backgroundColor: '#6A85B1',
+    height: 300,
   },
 });
 
