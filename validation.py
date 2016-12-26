@@ -12,16 +12,18 @@ def validateLogin(login_id, password):
 	email_regex = re.compile("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
 	loginIdIsEmail = email_regex.match(login_id)
 	user_manager = Users()
+
+	lower_login_id = login_id.lower()
 	# if the login id is an email
 	if loginIdIsEmail:
-		user_info = user_manager.getInfoFromEmail(login_id)
+		user_info = user_manager.getInfoFromEmail(lower_login_id)
 	
 	# otherwise the login is a userID
 	else:
-		user_info = user_manager.getInfo(login_id)
+		user_info = user_manager.getInfo(lower_login_id)
 
 	user_manager.closeConnection()
-	
+
 	# user doesn't exists
 	if user_info == None:
 		output['result'] = 'failure'
