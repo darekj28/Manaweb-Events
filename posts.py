@@ -31,6 +31,9 @@ class Posts:
 		self.NOTIFICATION_TABLE = "notification_table"
 		self.NOTIFICAITON_ID_TABLE = "n_id"
 		self.USER_NOTIFICATION_PREFIX = "n_"
+		self.SEEN_POSTS_SUFFIX = "_seen_posts"
+		self.COMMENT_ID_PREFIX = "c_"
+		self.LAST_POST_TABLE = "last_post_table"
 
 		# for when we upload to heroku
 		# comment out if testing
@@ -62,6 +65,175 @@ class Posts:
 	def id_generator(self, size=6, chars=string.ascii_uppercase + string.digits):
 		return ''.join(random.choice(chars) for _ in range(size))
 
+
+	def createSeenPostsTable(self, feed_name):
+		sql = "CREATE TABLE IF NOT EXISTS " + feed_name + self.SEEN_POSTS_SUFFIX + " (userID TEXT PRIMARY KEY, last_seen_post TEXT, numUnseen INTEGER, timeStamp FLOAT, timeString TEXT)"
+		self.db.execute(sql)
+		
+		addIndexCode = 'CREATE INDEX IF NOT EXISTS userID ON ' + feed_name + self.SEEN_POSTS_SUFFIX + ' (userID)'
+		self.db.execute(addIndexCode)
+
+
+	def removeFeed(self, feed_name):
+		sql = "DELETE FROM " + self.FEED_NAMES +  " WHERE feed_name = %s"
+		self.db.execute(self.db.mogrify(sql, (feed_name,)))
+
+
+	def initializeSeenPostsTable(self):
+		
+		feed_names_list = self.getFeedNames()
+
+		
+		for feed_name in feed_names_list:
+			self.createSeenPostsTable(feed_name)
+			table_name = feed_name + self.SEEN_POSTS_SUFFIX
+			
+
+		user_manager = Users()
+		user_list = user_manager.getUserList()
+		user_manager.closeConnection()
+
+		for user in user_list:
+			self.addUserToLastSeenTables(user)
+				
+
+	# adds a post to the last seen posts table
+	# updates everyone's post 
+	def updateSeenTableWithNewPost(self, feed_name, comment_id):
+
+		table_name = feed_name + self.SEEN_POSTS_SUFFIX
+
+		# update every user as this is the most recent
+		# update the number of unseen posts
+		sql = "SELECT * FROM " + table_name
+		self.db.execute(sql)
+		query = self.db.fetchall() 
+		numUnseenDict = {}
+		for item in query:
+			numUnseenDict[item[0]] = item[2]
+
+		this_post = self.getPostById(feed_name, comment_id)
+		sql = "UPDATE " + table_name + " SET numUnseen = %s, timeStamp = %s, timeString = %s WHERE userID = %s"
+		for user in numUnseenDict.keys():
+			# only increment if this is not the op
+			if user != this_post['poster_id']:
+				self.db.execute(self.db.mogrify(sql, (numUnseenDict[user] + 1, this_post['timeStamp'], this_post['timeString'], user)))
+
+
+
+
+
+	def getNumUnseenPosts(self, feed_name, userID):
+		table_name = feed_name + self.SEEN_POSTS_SUFFIX
+		sql = "SELECT numUnseen FROM " + table_name + " WHERE userID = %s"
+		self.db.execute(self.db.mogrify(sql, (userID,)))
+		query = self.db.fetchall()
+		return query[0][0]
+
+
+	def markPostFeedAsSeen(self, feed_name, userID):
+		table_name = feed_name + self.SEEN_POSTS_SUFFIX
+		timeStamp = time.time()
+		timeString = self.getTimeString()
+		sql = "UPDATE " + table_name + " SET last_seen_post = %s, numUnseen = %s, timeStamp = %s, timeString = %s WHERE userID = %s"
+		last_seen_post = self.getPostById(feed_name, self.getLastPost(feed_name))
+		self.db.execute(self.db.mogrify(sql, (last_seen_post['comment_id'], 0, last_seen_post['timeStamp'], last_seen_post['timeString'], userID)))
+
+
+	# maybe make another table that stores this information
+	# returns the comment_id of the most recent post
+	def getLastPost(self, feed_name):
+		sql = "SELECT comment_id FROM " + self.LAST_POST_TABLE + " WHERE feed_name = %s" 
+		self.db.execute(self.db.mogrify(sql, (feed_name,)))
+		query = self.db.fetchall()
+		return query[0][0]
+
+	def createLastPostTable(self):
+
+		sql = "CREATE TABLE IF NOT EXISTS " + self.LAST_POST_TABLE + " (feed_name TEXT PRIMARY KEY, comment_id TEXT)"
+		self.db.execute(sql)
+
+		addIndexCode = 'CREATE INDEX IF NOT EXISTS feed_name ON ' + self.LAST_POST_TABLE + ' (feed_name)'
+		self.db.execute(addIndexCode)
+
+
+		
+	def updateLastPostTable(self, feed_name, comment_id):
+		sql = "UPDATE " + self.LAST_POST_TABLE + " SET comment_id = %s WHERE feed_name =  %s"
+		self.db.execute(self.db.mogrify(sql, (comment_id, feed_name)))
+
+
+	# run this every time a user creates an account
+	def addUserToLastSeenTables(self, userID):
+		# defaults starts their number of unseen posts as number of posts in the feed (can adjust this later)
+		
+		feed_names_list = self.getFeedNames()
+		for feed_name in feed_names_list:
+			initialNumUnseenPosts = self.getNumPosts(feed_name)
+			sql = "INSERT INTO " + feed_name + self.SEEN_POSTS_SUFFIX + " (userID, numUnseen) VALUES (%s, %s) ON CONFLICT (userID) DO UPDATE SET userID = %s"
+			self.db.execute(self.db.mogrify(sql, (userID, initialNumUnseenPosts , userID)))
+			self.post_db.commit()
+
+	
+	# this will manually recalculate the number of unseen posts 
+	# should be performed when there is a deletion of a post 
+	def recalculateUnseenPosts(self, feed_name):
+		table_name = feed_name + self.SEEN_POSTS_SUFFIX
+		user_manager = Users()
+		user_list = user_manager.getUserList()
+		user_manager.closeConnection()
+
+		post_list = self.getPosts(feed_name)
+
+		for userID in user_list: 
+			lastPost = self.getLastSeenPost(feed_name, userID)
+			lastPostInfo = self.getPostById(feed_name, lastPost['comment_id'])
+			count = 0
+			
+			for post in post_list:
+				if post['timeStamp'] > lastPostInfo['timeStamp'] and post['poster_id'] != userID:
+					count = count + 1
+
+			sql = "UPDATE " + table_name + " SET numUnseen = %s, timeStamp = %s, timeString = %s WHERE userID = %s"
+			self.db.execute(self.db.mogrify(sql, (count, lastPostInfo['timeStamp'], lastPostInfo['timeString'], userID)))
+
+
+	
+
+	def getLastSeenPost(self, feed_name, userID):
+		table_name = feed_name + self.SEEN_POSTS_SUFFIX
+		sql = "SELECT * FROM " + table_name + " WHERE userID = %s"
+		self.db.execute(self.db.mogrify(sql, (userID,)))
+
+		query = self.db.fetchone()
+
+		output = {}
+		output['userID'] = query[0]
+		output['comment_id'] = query[1]
+		output['numUnseen'] = query[2]
+		output['timeStamp'] = query[3]
+
+		return output
+
+
+
+
+	def getFeedNames(self):
+		sql = "SELECT feed_name FROM " + self.FEED_NAMES
+		self.db.execute(sql)
+		query = self.db.fetchall()
+		feed_names_list = list()
+		for name in query:
+			if name[0] not in feed_names_list:
+				feed_names_list.append(name[0])
+
+		return feed_names_list
+
+	def getNumPosts(self, feed_name):
+		sql = "SELECT * FROM " + feed_name
+		self.db.execute(sql)
+		query = self.db.fetchall()
+		return len(query)	
 
 	# deletes a table
 	def deleteTable(self, table_name):	
@@ -100,7 +272,7 @@ class Posts:
 		timeStamp = time.time()
 		timeString = self.getTimeString()
 		if thisItem != None:
-			sql = "INSERT INTO " + feed_name + " (body, poster_id, feed_name, comment_id, unique_id, timeString, timeStamp, following, ghost_following) VALUES = (%s, %s, %s,%s,%s,%s,%s,%s,%s)"
+			sql = "INSERT INTO " + feed_name + " (body, poster_id, feed_name, comment_id, unique_id, timeString, timeStamp, following, ghost_following) VALUES (%s, %s, %s,%s,%s,%s,%s,%s,%s)"
 			
 		else:
 			thisItem = self.getCommentById(unique_id)
@@ -293,19 +465,11 @@ class Posts:
 
 
 	def createFeedNameTable(self):
-		createTableCode = 'CREATE TABLE IF NOT EXISTS ' + self.FEED_NAMES + ' (feed_name TEXT)'
+		createTableCode = 'CREATE TABLE IF NOT EXISTS ' + self.FEED_NAMES + ' (feed_name TEXT PRIMARY KEY)'
 		self.db.execute(createTableCode)
 		addIndexCode = 'CREATE INDEX IF NOT EXISTS feed_name ON ' + self.FEED_NAMES + ' (feed_name)'
 		self.db.execute(addIndexCode)
 
-	def getFeedNames(self):
-		sql = "SELECT feed_name FROM " + self.FEED_NAMES 
-		self.db.execute(self.db.mogrify(sql))
-		query = self.db.fetchall()
-		feed_list = list()
-		for f in query:
-			feed_list.append(f[0])
-		return feed_list
 
 	def isFeed(self, feed_name):
 		feed_list = self.getFeedNames()
@@ -337,7 +501,7 @@ class Posts:
 	def reportComment(self, feed_name, unique_id, reason, description, reporting_user, reported_user):
 		body = self.getCommentById(feed_name, unique_id)['body']
 		timeStamp = time.time()
-		timeString = self.timeString()
+		timeString = self.getTimeString()
 		self.db.execute(self.db.mogrify("INSERT INTO " + self.REPORT_TABLE + "(feed_name, id, body, reason, isComment, description, timeStamp, timeString, reporting_user, reported_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (feed_name, unique_id, body, reason, True, description, timeStamp, timeString, reporting_user, reported_user)))
 		self.post_db.commit()	
 		action = "REPORTED COMMENT"
@@ -357,7 +521,11 @@ class Posts:
 	def getPostById(self, feed_name, comment_id):
 		self.db.execute(self.db.mogrify("SELECT * FROM " + feed_name + " WHERE comment_id = %s", (comment_id,)))
 		this_post = self.db.fetchall()
-		output = self.postListToDict(this_post)
+		user_manager = Users()
+
+		user_info_table = user_manager.getUserInfoTable()
+		output = self.postListToDict(this_post, user_info_table)
+		user_manager.closeConnection()
 		if len(output) == 0:
 			return None
 		else:
@@ -367,7 +535,11 @@ class Posts:
 		table_name = "c_" + feed_name
 		self.db.execute(self.db.mogrify("SELECT * FROM " + table_name + " WHERE unique_id = %s", (unique_id,)))
 		this_comment = self.db.fetchall()
-		output = self.commentListToDict(this_comment)
+
+		user_manager = Users()
+		user_info_table = user_manager.getUserInfoTable()
+		output = self.commentListToDict(this_comment, user_info_table)
+		user_manager.closeConnection()
 
 		sys.stdout.flush()
 		if len (output) == 0:
@@ -376,8 +548,11 @@ class Posts:
 
 
 	def addFeedName(self, feed_name):
-		self.db.execute(self.db.mogrify("INSERT INTO " + self.FEED_NAMES + " (feed_name) VALUES (%s) ", (feed_name,)))
+		self.db.execute(self.db.mogrify("INSERT INTO " + self.FEED_NAMES + " (feed_name) VALUES (%s) ON CONFLICT (feed_name) DO UPDATE SET feed_name = %s", (feed_name, feed_name)))
 		self.post_db.commit()
+
+		sql  = "INSERT INTO " + self.LAST_POST_TABLE  + " (feed_name) VALUES (%s) ON CONFLICT (feed_name) DO UPDATE SET feed_name = %s"
+		self.db.execute(self.db.mogrify(sql, (feed_name, feed_name)))
 
 	def addNotificationId(self, notification_id):
 		self.db.execute(self.db.mogrify("INSERT INTO " + self.NOTIFICAITON_ID_TABLE + "(notification_id) VALUES (%s) ", (notification_id,)))
@@ -449,7 +624,7 @@ class Posts:
 			isChill = False
 
 		if comment_id == None:
-			comment_id = hash_comment_id(str(timeStamp))
+			comment_id = self.hash_comment_id(str(timeStamp))
 
 		self.addCommentIdToList(comment_id)
 		unique_id = comment_id
@@ -469,6 +644,10 @@ class Posts:
 		action = "MAKE POST"
 		isComment = False
 		self.updateAdminTable(feed_name, body, poster_id, action, unique_id, timeString, timeStamp, isComment)
+
+		# add to posts seen table
+		self.updateSeenTableWithNewPost(feed_name, comment_id)
+		self.updateLastPostTable(feed_name, comment_id)
 
 	def makeComment(self, feed_name, comment_id, body, poster_id, unique_id = None):
 		timeStamp = time.time()
@@ -511,8 +690,6 @@ class Posts:
 		user_manager.closeConnection()
 
 
-	# # deletes a post by ID
-	# def deletePost(thead_id, post_id):
 
 	# sorts a list of messages
 	# the first message will be the earliest message in time
@@ -538,7 +715,10 @@ class Posts:
 		self.db.execute(self.db.mogrify(sql_code, (ghost_following,feed_name)))	
 
 		posts = self.db.fetchall()
-		postDict = self.postListToDict(posts)
+		user_manager = Users()
+		user_info_table = user_manager.getUserInfoTable()
+		postDict = self.postListToDict(posts, user_info_table)
+		user_manager.closeConnection()
 		return postDict
 
 
@@ -557,9 +737,12 @@ class Posts:
 			ghost_following = False
 			self.db.execute(self.db.mogrify(sql_code, (ghost_following,)))	
 		# db.execute("SELECT * FROM " + thread_id)
-		posts = self.db.fetchall()
-		postDict = self.commentListToDict(posts)
-		return postDict
+		comments = self.db.fetchall()
+		user_manager = Users()
+		user_info_table = user_manager.getUserInfoTable()
+		commentDict = self.commentListToDict(comments, user_info_table)
+		user_manager.closeConnection()
+		return commentDict
 
 
 	# add back later
@@ -593,7 +776,7 @@ class Posts:
 	def editPost(self, feed_name, unique_id, field_name, field_data):
 		table_name  = feed_name
 		timeStamp = time.time()
-		timeString = self.timeString()
+		timeString = self.getTimeString()
 		update_code = "UPDATE " + table_name  + " SET " + field_name + " = %s WHERE unique_id = '" + unique_id + "'"
 		self.db.execute(self.db.mogrify(update_code, (field_data,)))
 		self.post_db.commit()
@@ -640,6 +823,7 @@ class Posts:
 		self.db.execute(self.db.mogrify(sql, (unique_id,)))
 		self.post_db.commit()
 
+		self.recalculateUnseenPosts(feed_name)
 
 
 	def deleteComment(self, feed_name, unique_id):
@@ -684,11 +868,9 @@ class Posts:
 
 
 
-	def postListToDict(self, posts):
+	def postListToDict(self, posts, user_info_table):
 		postList = list()
-		user_manager = Users()
 		for post in posts:
-
 			thisPost = {}
 			thisPost['body'] = post[0]
 			thisPost['poster_id'] = post[1]
@@ -701,19 +883,18 @@ class Posts:
 			thisPost['isChill'] = post[8]
 			thisPost['comment_id'] = post[3]
 			thisPost['isComment'] = False
-			thisUser = user_manager.getInfo(thisPost['poster_id'])
+			thisUser = user_info_table[thisPost['poster_id']]
 			thisPost['first_name'] = thisUser['first_name']
 			thisPost['last_name'] = thisUser['last_name']
 			thisPost['avatar_url'] = thisUser['avatar_url']
 			thisPost['unique_id'] = post[9]
 			thisPost['numComments'] = post[10]
-			postList.append(thisPost)
-		user_manager.closeConnection()	
+			postList.append(thisPost)	
 		return postList	
 
-	def commentListToDict(self, comments):
+	def commentListToDict(self, comments, user_info_table):
 		commentList = list()
-		user_manager = Users()
+
 		for comment in comments:
 			thisComment = {}
 			thisComment['body'] = comment[0]
@@ -724,13 +905,12 @@ class Posts:
 			thisComment['comment_id'] = comment[3]
 			thisComment['unique_id'] = comment[6]
 			thisComment['isComment'] = True
-			thisUser = user_manager.getInfo(thisComment['poster_id'])
+			thisUser = user_info_table[thisComment['poster_id']]
 			thisComment['first_name'] = thisUser['first_name']
 			thisComment['last_name'] = thisUser['last_name']
 			thisComment['avatar_url'] = thisUser['avatar_url']
 			thisComment['time'] = self.date_format(int(thisComment['timeStamp']))
 			commentList.append(thisComment)
-		user_manager.closeConnection()
 		return commentList	
 
 
@@ -937,15 +1117,6 @@ def test_posting(test_size):
 	return times
 
 
-
-def initializeSQL():
-	createFeedNameTable()
-	createCommentIdTable()
-
-
-def initializeFeed(feed_name):
-	addFeedName(feed_name)
-	createThread(feed_name)
 
 
 def makeTestList(start, size):

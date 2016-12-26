@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput, Button} from 'react-native';
+import {AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput, Button} from 'react-native';
 
 import ViewContainer from '../components/ViewContainer';
 import HomeStatusBar from '../components/HomeStatusBar';
@@ -18,11 +18,12 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 
-class RegisterId extends Component {
+class StartScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      email : ""
+      email : "", 
+      current_username: ""
     }
   }
 
@@ -31,9 +32,9 @@ class RegisterId extends Component {
     href: "Login",
     })
   }
-  _navigateToRegister() {
+  _navigateToRegisterName() {
     this.props.navigator.push({
-    href: "Register",
+    href: "RegisterName",
     })
   }
 
@@ -43,9 +44,27 @@ class RegisterId extends Component {
     })
   }
 
+  _navigateToTestHTTP() {
+    this.props.navigator.push({
+    href: "TestHTTP",
+    })
+  }
+
+  componentDidMount() {
+     AsyncStorage.getItem("current_username").then((value) => {
+            this.setState({"current_username": value});
+        }).done();
+  }
+
   render() {
+
     return (
       <View style = {styles.container}>
+
+              <Text>
+                {this.state.username} !!
+              </Text>
+
               <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToLogin()}>
                 <Text style = {styles.buttonText}>
                   Login!
@@ -53,7 +72,7 @@ class RegisterId extends Component {
               </TouchableHighlight>
 
 
-              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToRegister()}>
+              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToRegisterName()}>
                 <Text style = {styles.buttonText}>
                   Register!
                 </Text>
@@ -62,6 +81,12 @@ class RegisterId extends Component {
 			        <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToFeed()}>
                 <Text style = {styles.buttonText}>
                   Testing button. Go to feed page
+                </Text>
+              </TouchableHighlight>
+
+              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToTestHTTP()}>
+                <Text style = {styles.buttonText}>
+                  Testing HTTP Request
                 </Text>
               </TouchableHighlight>
 
@@ -108,4 +133,4 @@ const styles = StyleSheet.create({
 
 });
 
-module.exports = RegisterId
+module.exports = StartScreen

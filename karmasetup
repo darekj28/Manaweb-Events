@@ -1,2 +1,0 @@
-npm install --save-dev karma karma-cli karma-chrome-launcher karma-mocha karma-sourcemap-loader karma-expect karma-spec-reporter karma-webpack karma-sinon expect mocha enzyme sinon babel-preset-airbnb
-sudo npm install -g karma-cli

@@ -1,9 +1,0 @@
-exports[`EventName renders correctly 1`] = `
-<div
-  className="pull-left"
-  id="EventName">
-  <h1>
-    Jay Kim
-  </h1>
-</div>
-`;

@@ -22,9 +22,6 @@ body {
   background-color : #ffffff;
   color : #0f0f0f;
 }
-#EventName {
-  letter-spacing: 5px;
-}
 
 .valid {
   border-width: 1.5px;
@@ -35,6 +32,9 @@ body {
   border-width: 1.5px;
   border-color: #C33;
   border-style: solid;
+}
+.warning {
+  color : #C33;
 }
 .avatar_container {
   width :150px;
@@ -50,15 +50,18 @@ body {
 .warning {
   padding-right : 900px;
 }
+.NotificationsFeedPost{
+  list-style-type : none;
+}
 .CommentFeedPost {
   list-style-type: none;
   border-bottom: 1px solid #dbdbdb;
 }
 .CommentFeedPostOriginal {
   list-style-type:none;
+  border-bottom: 1px solid #dbdbdb;
 }
 .numberOfComments {
-  text-decoration: none;
   color:#ad8ed2;
   cursor:pointer;
 }
@@ -100,14 +103,14 @@ body {
   margin-top : 10px;
 }
 #CommentFeed {
-  max-height: 55vh;
-  overflow-y: auto;
+  /*max-height: 55vh;*/
+  /*overflow-y: auto;*/
   margin-top: 10px;
   padding-left : 10px;
   padding-right: 20px;
   background-color : #ffffff;
-  border : 1px solid #dfdfdf;
-  border-radius : 4px;
+/*  border : 1px solid #dfdfdf;
+  border-radius : 4px;*/
 }
 .FeedPostBody {
   max-width : 120vh;
@@ -124,11 +127,11 @@ body {
   margin-top: 10px;
   padding-left : 10px;
   padding-right: 20px;
-  max-height: 60vh;
-  overflow-y: auto;
+  /*max-height: 60vh;*/
+  /*overflow-y: auto;*/
   background-color : #ffffff;
-  border : 1px solid #dfdfdf;
-  border-radius : 4px;
+/*  border : 1px solid #dfdfdf;
+  border-radius : 4px;*/
 }
 #actionbuttons {
   margin-right: 10px;
@@ -222,10 +225,6 @@ body {
 }
 .SearchNavBarGlyphicon:hover {  
   cursor : pointer;
-}
-.StartButton {
-  display : inline-block;
-  cursor: pointer;
 }
 .SubmitButton {
   cursor: pointer;

@@ -22,17 +22,54 @@ class RegisterEmail extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      email : ""
+      email : "",
+      validation_output: {'error' : "invalid email"}
+    }
+
+    this.handleEmailSubmit = this.handleEmailSubmit.bind(this);
+    this.handleEmailChange = this.handleEmailChange.bind(this);
+    this.validateEmail = this.validateEmail.bind(this);
+    this._navigateToRegisterUsername = this._navigateToRegisterUsername.bind(this);
+  }
+
+  handleEmailSubmit() {
+    if (this.state.validation_output['result'] == 'success') {
+      this._navigateToRegisterUsername()
     }
   }
 
+  handleEmailChange(email) {
+    this.setState({email : email})
+    this.validateEmail(email);
+  }
 
+  validateEmail(email) {
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
+    fetch(url + "/mobileEmailValidation", {method: "POST",
+    headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, 
+      body: 
+      JSON.stringify(
+       {
+        email : email
+      })
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+      this.setState({validation_output : responseData})
+    })
+    .done();
+  }
 
-  _navigateToRegisterPassword(email) {
+  _navigateToRegisterUsername() {
     this.props.navigator.push({
-    href: "RegisterPassword",
-    email : email,
-    userID: this.props.userID,
+    href: "RegisterUsername",
+    email : this.state.email,
+    phone_number : this.props.phone_number,
+    password : this.props.password,
     first_name: this.props.first_name,
     last_name: this.props.last_name
     })
@@ -46,15 +83,24 @@ class RegisterEmail extends Component {
               </TouchableOpacity>
 
                <TextInput
-              onChangeText = {(val) => this.setState({email : val})}
-              style = {styles.input} placeholder = "email"
+              onChangeText = {this.handleEmailChange}
+              keyboardType = "email-address"
+              style = {styles.input} 
+              placeholder = "Enter your e-mail"
               />
 
-              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToRegisterPassword(this.state.email)}>
+              <TouchableHighlight style = {styles.button} onPress = {this.handleEmailSubmit}>
                 <Text style = {styles.buttonText}>
                   Next!
                 </Text>
               </TouchableHighlight>
+
+              {
+                this.state.validation_output['result'] == 'failure' && 
+                <Text> 
+                  {this.state.validation_output['error']}
+                  </Text>
+              }
       </View>
     )
   }

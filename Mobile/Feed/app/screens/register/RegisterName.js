@@ -6,7 +6,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {ScrollView, Alert, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 
 import ViewContainer from '../../components/ViewContainer';
 import HomeStatusBar from '../../components/HomeStatusBar';
@@ -22,17 +22,88 @@ export default class RegisterName extends Component {
     super(props)
     this.state = {
       first_name : "",
-      last_name : ""
+      last_name : "",
+      first_name_validation_output : {error: "Please enter a non blank first name"},
+      last_name_validation_output : {error: "Please enter a non blank last name"}
     }
+    this.validateFirstName = this.validateFirstName.bind(this);
+    this.validateLastName = this.validateLastName.bind(this);
+    this.submitFullName = this.submitFullName.bind(this);
+    this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
+    this.handleLastNameChange = this.handleLastNameChange.bind(this);
   }
 
 
-  _navigateToRegisterId(first_name, last_name) {
-    this.props.navigator.push({
-    href: "RegisterId",
-    first_name : first_name,
-    last_name : last_name
+  validateFirstName(first_name) {
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
+
+
+    fetch(url + "/mobileNameValidation", {method: "POST",
+    headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, 
+      body: 
+      JSON.stringify(
+       {
+        name: first_name
+      })
     })
+    .then((response) => response.json())
+    .then((responseData) => {
+      this.setState({first_name_validation_output : responseData})
+    })
+    .done();
+  }
+
+  validateLastName(last_name) {
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
+
+
+    fetch(url + "/mobileNameValidation", {method: "POST",
+    headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, 
+      body: 
+      JSON.stringify(
+       {
+        name: last_name
+      })
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+      this.setState({last_name_validation_output : responseData})
+    })
+    .done();
+  }
+
+
+  submitFullName() {
+    if (this.state.first_name_validation_output['result'] == 'success' 
+      && this.state.last_name_validation_output['result'] == 'success')
+      this._navigateToRegisterPhoneNumber();
+  }
+
+  _navigateToRegisterPhoneNumber() {
+
+    this.props.navigator.push({
+    href: "RegisterPhoneNumber",
+    first_name : this.state.first_name,
+    last_name : this.state.last_name
+    })
+  }
+
+  handleFirstNameChange(first_name) {
+    this.setState({first_name: first_name});
+    this.validateFirstName(first_name);
+  }
+
+  handleLastNameChange(last_name) {
+    this.setState({last_name: last_name}) 
+    this.validateLastName(last_name);
   }
 
   render() {
@@ -44,25 +115,60 @@ export default class RegisterName extends Component {
               </TouchableOpacity>
 
               <Text style = {styles.welcome}>
-                Welcome! Please start with your name
+                What is your name?
               </Text>
 
+              <ScrollView 
+                scrollEnabled={false}
+              >
                <TextInput
-
-              onChangeText = {(val) => this.setState({first_name : val})}
-              style = {styles.input} placeholder = "first_name"
+                onChangeText = {this.handleFirstNameChange}
+                style = {styles.input} placeholder = "First Name"
+                maxLength = {20}
               />
 
+              {
+                this.state.first_name_validation_output['result'] == 'failure' && 
+                <Text> 
+                  {this.state.first_name_validation_output['error']}
+                  </Text>
+              }
+
                <TextInput
-              onChangeText = {(val) => this.setState({last_name : val})}
-              style = {styles.input} placeholder = "last_name"
+              onChangeText = {this.handleLastNameChange}
+              style = {styles.input} placeholder = "Last Name"
+              maxLength = {20}
               />
 
-              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToRegisterId(this.state.first_name, this.state.last_name)}>
+              {
+                this.state.last_name_validation_output['result'] == 'failure' && 
+                <Text> 
+                  {this.state.last_name_validation_output['error']}
+                  </Text>
+              }
+
+              
+
+              <TouchableHighlight style = {styles.button} onPress = {this.submitFullName}>
                 <Text style = {styles.buttonText}>
                   Next!
                 </Text>
               </TouchableHighlight>
+
+              </ScrollView>
+
+              {/* For testing the state changes
+                <Text>
+                  {this.state.first_name} !!
+               </Text>
+                */}
+
+
+              
+
+              
+           
+
       </View>
     )
   }

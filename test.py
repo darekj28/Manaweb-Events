@@ -1,15 +1,29 @@
 import urllib
 import pytz
 import os
+from posts import Posts
+from users import Users
 
-# for when we upload to heroku
-# comment out if testing
-urllib.parse.uses_netloc.append("postgres")
-os.environ["DATABASE_URL"] = "postgres://spkgochzoicojm:y0MABz523D1H-zMqeZVvplCuC2@ec2-54-163-252-55.compute-1.amazonaws.com:5432/d15b0teu2kkhek"
-url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
+user_manager = Users()
+post_manager = Posts()
 
-print(url.path[1:])
-print(url.username)
-print(url.password)
-print(url.hostname)
-print(url.port)
+
+user_list = user_manager.getUserList()
+
+
+
+
+userID = 'darekj'
+feed_name = "BALT"
+
+
+
+for user in user_list:
+	print(user_manager.getUserInfoTable()[user])
+
+
+
+
+
+user_manager.closeConnection()
+post_manager.closeConnection()
