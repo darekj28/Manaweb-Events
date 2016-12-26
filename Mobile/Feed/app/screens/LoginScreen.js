@@ -20,19 +20,63 @@ class LoginScreen extends Component {
     super(props)
     this.state = {
       login_id : "",
-      password: ""
+      password: "",
+      username: ""
     }
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
+    this.handleLoginIdChange = this.handleLoginIdChange.bind(this);
+    this._navigateToFeed = this._navigateToFeed.bind(this);
+  }
+
+    handleLoginSubmit() {
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
+
+
+    fetch(url + "/mobileCreateProfile", {method: "POST",
+    headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, 
+      body: 
+      JSON.stringify(
+       {
+        password : this.props.password,
+        email : this.props.email,
+        username: this.state.username,
+        first_name: this.props.first_name,
+        last_name: this.props.last_name,
+        password: this.props.password,
+        phone_number : this.props.phone_number
+      })
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+        
+        if (responseData['result'] == 'success') {
+            AsyncStorage.setItem("username", responseData['username']);
+            this.setState({username: responseData['username']})
+        }
+        this._navigateToFeed()
+    })
+    .done();
   }
 
 
 
-  _nagigateToLogin(login_id, password) {
+  _navigateToFeed() {
+    this.props.navigator.push({
+    href: "Feed"
+    })
+  }
 
+  handlePasswordChange(password) {
+    this.setState({password: password})
+  }
 
-    // this.props.navigator.push({
-    // href: "SubmitLogin",
-
-    // })
+  handleLoginIdChange(login_id) {
+    this.setState({login_id : login_id})
   }
 
   render() {
@@ -44,13 +88,13 @@ class LoginScreen extends Component {
               </TouchableOpacity>
 
                <TextInput 
-              onChangeText = {(val) => this.setState({login_id : val})}
-              style = {styles.input} placeholder = "UserID or Email"
+              onChangeText = {this.handleLoginIdChange}
+              style = {styles.input} placeholder = "Enter Username or Email"
               />
 
 
               <TextInput 
-              onChangeText = {(val) => this.setState({password : val})}
+              onChangeText = {this.handlePasswordChange}
               style = {styles.input}
               placeholder = "Password"
               secureTextEntry = {true}
@@ -58,7 +102,7 @@ class LoginScreen extends Component {
         
   
 
-              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToRegisterEmail(this.state.login_id, this.state.password)}>
+              <TouchableHighlight style = {styles.button} onPress = {this.handleLoginSubmit}>
                 <Text style = {styles.buttonText}>
                   Login Baby!
                 </Text>

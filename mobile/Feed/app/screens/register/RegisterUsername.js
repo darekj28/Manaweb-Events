@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 
 import ViewContainer from '../../components/ViewContainer';
 import HomeStatusBar from '../../components/HomeStatusBar';
@@ -53,15 +53,17 @@ class RegisterUsername extends Component {
         username: this.state.username,
         first_name: this.props.first_name,
         last_name: this.props.last_name,
-        password: this.props.password
+        password: this.props.password,
+        phone_number : this.props.phone_number
       })
     })
     .then((response) => response.json())
     .then((responseData) => {
-        Alert.alert(
-            "POST Response",
-            "Response Body -> " + JSON.stringify(responseData.response)
-        )
+        
+        if (responseData['result'] == 'success') {
+            AsyncStorage.setItem("username", this.props.username);
+        }
+        this._navigateToFeed()
     })
     .done();
   }
@@ -80,7 +82,7 @@ class RegisterUsername extends Component {
   validateUsername(username) {
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
-    fetch(test_url + "/mobileEmailValidation", {method: "POST",
+    fetch(url + "/mobileUsernameValidation", {method: "POST",
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -118,7 +120,7 @@ class RegisterUsername extends Component {
               placeholder = "Choose a username"
               />
 
-              <TouchableHighlight style = {styles.button} onPress = {this.handleEmailSubmit}>
+              <TouchableHighlight style = {styles.button} onPress = {this.handleUsernameSubmit}>
                 <Text style = {styles.buttonText}>
                   Create Account!
                 </Text>

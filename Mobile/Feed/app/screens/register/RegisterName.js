@@ -39,7 +39,7 @@ export default class RegisterName extends Component {
     var test_url = "http://0.0.0.0:5000"
 
 
-    fetch(test_url + "/mobileNameValidation", {method: "POST",
+    fetch(url + "/mobileNameValidation", {method: "POST",
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ export default class RegisterName extends Component {
     var test_url = "http://0.0.0.0:5000"
 
 
-    fetch(test_url + "/mobileNameValidation", {method: "POST",
+    fetch(url + "/mobileNameValidation", {method: "POST",
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',

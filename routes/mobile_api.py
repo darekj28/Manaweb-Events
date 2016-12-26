@@ -5,9 +5,7 @@ import time
 import email_confirm
 import sms
 import validation
-# from py2neo import authenticate, Graph, Node
-# authenticate("localhost:7474", "neo4j", "powerplay")
-# graph = Graph()
+
 
 mobile_api = Blueprint('mobile_api', __name__)
 DEFAULT_FEED = "BALT"
@@ -46,12 +44,19 @@ def mobileCreateProfile():
 
 	user_manager.closeConnection()
 
-	return jsonify({'response' : 'account made baby!'})
+	return jsonify({'result' : 'success'})
 	# return jsonify({'response': "success!" })
 
 	# post_manager = Posts()
 	# post_manager.addUserToLastSeenTables(userID)
 	# post_manager.closeConnection()
+
+@mobile_api.route('/mobileLogin', methods =['POST'])
+def mobileLogin()
+	login_id = request.json['login']
+	password = request.json['password']
+	validator_output = validation.validateLogin(login_id, password)
+	return jsonify(output)
 
 
 

@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput, Button} from 'react-native';
+import {AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput, Button} from 'react-native';
 
 import ViewContainer from '../components/ViewContainer';
 import HomeStatusBar from '../components/HomeStatusBar';
@@ -22,7 +22,8 @@ class StartScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      email : ""
+      email : "", 
+      current_username: ""
     }
   }
 
@@ -49,9 +50,21 @@ class StartScreen extends Component {
     })
   }
 
+  componentDidMount() {
+     AsyncStorage.getItem("current_username").then((value) => {
+            this.setState({"current_username": value});
+        }).done();
+  }
+
   render() {
+
     return (
       <View style = {styles.container}>
+
+              <Text>
+                {this.state.username} !!
+              </Text>
+
               <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToLogin()}>
                 <Text style = {styles.buttonText}>
                   Login!

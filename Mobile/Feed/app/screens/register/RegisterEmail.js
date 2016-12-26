@@ -46,7 +46,7 @@ class RegisterEmail extends Component {
   validateEmail(email) {
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
-    fetch(test_url + "/mobileEmailValidation", {method: "POST",
+    fetch(url + "/mobileEmailValidation", {method: "POST",
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ class RegisterEmail extends Component {
 
   _navigateToRegisterUsername() {
     this.props.navigator.push({
-    href: "RegisterPassword",
+    href: "RegisterUsername",
     email : this.state.email,
     phone_number : this.props.phone_number,
     password : this.props.password,

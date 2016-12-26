@@ -38,7 +38,7 @@ class RegisterPassword extends Component {
   validatePassword(password, password_confirm) {
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
-    fetch(test_url + "/mobilePasswordValidation", {method: "POST",
+    fetch(url + "/mobilePasswordValidation", {method: "POST",
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',

@@ -41,7 +41,7 @@ class RegisterPhoneNumber extends Component {
   validatePhoneNumber(phone_number) {
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
-    fetch(test_url + "/mobilePhoneNumberValidation", {method: "POST",
+    fetch(url + "/mobilePhoneNumberValidation", {method: "POST",
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',

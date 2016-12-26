@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {  AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
+import {AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
           Alert, Image, Animated, TouchableWithoutFeedback} from 'react-native';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import _ from 'lodash'
@@ -38,7 +38,8 @@ class FeedScreen extends Component {
       password: "",
       activity_index: 0,
       post_message_expanded: false,
-      post_message_height: new Animated.Value(50)
+      post_message_height: new Animated.Value(50),
+      current_username: ""
     }
     this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
     this.postMessagePressed = this.postMessagePressed.bind(this)
@@ -80,12 +81,22 @@ class FeedScreen extends Component {
       }
   }
 
+  componentDidMount() {
+            AsyncStorage.getItem("current_username").then((value) => {
+            this.setState({"current_username": value});
+        }).done();
+  }
+
 
   render() {
+
+
 
     let dropdownIcon = require('./res/down_arrow.png')
     return (
         <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
+
+          
         <View style = {styles.container}>
             <ActionBar
                 backgroundColor={'#3B373C'}
@@ -96,6 +107,10 @@ class FeedScreen extends Component {
                 onRightPress={this.handleRightAction}
                 rightIconName={'menu'}
             />
+            
+            <Text>
+            {this.state.current_username} !!!
+          </Text>
 
             <View style = {styles.containerHorizontal}>
                 <View style = {{flex: 0.85}}>
@@ -118,6 +133,8 @@ class FeedScreen extends Component {
                                     </Image>
                     </ModalDropdown>
                 </View>
+
+
             </View>
 
             <Animated.View style = {{flexDirection:'row', height: this.state.post_message_height}}>
