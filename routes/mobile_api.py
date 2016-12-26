@@ -56,6 +56,7 @@ def mobileLogin():
 	login_id = request.json['login_id']
 	password = request.json['password']
 	validator_output = validation.validateLogin(login_id, password)
+	
 	return jsonify(validator_output)
 
 
