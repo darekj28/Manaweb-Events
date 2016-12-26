@@ -24,10 +24,54 @@ class RegisterPassword extends Component {
     this.state = {
       password : "",
       password_confirm: "",
-      validation_output : ""
+      validation_output : {}
+    }
+
+    this._navigateToRegisterEmail = this._navigateToRegisterEmail.bind(this);
+    this.handlePasswordConfirmChange = this.handlePasswordConfirmChange.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.validatePassword = this.validatePassword.bind(this);
+    this.handlePasswordSubmit = this.handlePasswordSubmit.bind(this);
+  }
+
+
+  validatePassword() {
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
+    fetch(url + "/mobilePasswordValidation", {method: "POST",
+    headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, 
+      body: 
+      JSON.stringify(
+       {
+        password: this.state.password,
+        password_confirm: this.state.password_confirm
+      })
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+      this.setState({validation_output : responseData})
+    })
+    .done();
+  }
+
+  handlePasswordSubmit() { 
+    if (this.state.validation_output['result'] == 'success') {
+      this._navigateToRegisterEmail();
     }
   }
 
+  handlePasswordChange(password) {
+    this.setState({password : password})
+    this.validatePassword()
+  }
+
+  handlePasswordConfirmChange(password_confirm) {
+    this.setState({password_confirm : password_confirm})
+    this.validatePassword()
+  }
 
 // add validators
   _navigateToRegisterEmail() {
@@ -49,22 +93,38 @@ class RegisterPassword extends Component {
               </TouchableOpacity>
 
                <TextInput
-              onChangeText = {(val) => this.setState({password : val})}
+              onChangeText = {this.handlePasswordChange}
               style = {styles.input} placeholder = "Password"
               secureTextEntry = {true}
               />
 
               <TextInput
-              onChangeText = {(val) => this.setState({password_confirm : val})}
+              onChangeText = {this.handlePasswordConfirmChange}
               style = {styles.input} placeholder = "Confirm Password"
               secureTextEntry = {true}
               />
 
-              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToRegisterEmail()}>
+              <TouchableHighlight style = {styles.button} onPress = {this.handlePasswordSubmit}>
                 <Text style = {styles.buttonText}>
                   Next!
                 </Text>
               </TouchableHighlight>
+
+                {
+                this.state.validation_output['result'] == 'failure' && 
+                <Text> 
+                  {this.state.validation_output['error']}
+                  </Text>
+              }
+
+              <Text>
+                Password : {this.state.password}
+                </Text>
+
+                <Text> 
+                  Password Confirm : {this.state.password_confirm}
+                </Text>
+
       </View>
     )
   }
@@ -74,7 +134,7 @@ class RegisterPassword extends Component {
 
 const styles = StyleSheet.create({
   input : {
-    color : "coral",
+    color : "black",
     height: 35,
     marginTop: 10,
     padding : 4,

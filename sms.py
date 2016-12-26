@@ -1,5 +1,6 @@
 from twilio.rest import TwilioRestClient 
 from users import Users
+import time
 
 # put your own credentials here 
 ACCOUNT_SID = "AC9fd48a9574442d6cbad3b2e8775be710" 
@@ -25,14 +26,16 @@ def sendTextConfirmationPin(user_phone_number):
 	timeStamp = time.time()
 	confirmationPin = hashString(str(timeStamp))
 	message = message_template + confirmationPin
-	sendMessage(Twilio_Number, user_phone_number, message)
+	# we comment this out so Dareks phone doesn't get spammed
+	#  sendMessage(Twilio_Number, user_phone_number, message)
 	
 	return confirmationPin
 
 
-def hashString(userID):
-	hash_id = abs(hash(userID))
-	hex_hash_id = hex(hash_id)
+def hashString(s):
+	hash_id = abs(hash(s))
+	# hex_hash_id = hex(hash_id)
+	hex_hash_id = str(hash_id)
 	confirmationPin = ""
 	for i in range(2,len(hex_hash_id)):
 		confirmationPin = confirmationPin + hex_hash_id[i]

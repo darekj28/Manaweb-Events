@@ -8,6 +8,8 @@ import RegisterName from '../screens/register/RegisterName'
 import RegisterPhoneNumber from '../screens/register/RegisterPhoneNumber'
 import RegisterEmail from '../screens/register/RegisterEmail'
 import RegisterUsername from '../screens/register/RegisterUsername'
+import RegisterConfirmCode from '../screens/register/RegisterConfirmCode'
+import RegisterPassword from '../screens/register/RegisterPassword'
 
 
 
@@ -59,10 +61,19 @@ class StartNavigator extends Component {
              />
         )
 
+    case "RegisterConfirmCode":
+      return (
+          <RegisterConfirmCode first_name = {route.first_name} last_name = {route.last_name} 
+          phone_number = {route.phone_number} confirmationPin = {route.confirmationPin}
+             {...globalNavigatorProps} 
+             />
+        )
+
   
     case "RegisterPassword":
       return (
-          <RegisterPassword first_name = {route.first_name} last_name = {route.last_name} phone_number = {route.phone_number}
+          <RegisterPassword first_name = {route.first_name} last_name = {route.last_name} 
+          phone_number = {route.phone_number}
              {...globalNavigatorProps} 
              />
         )
@@ -86,7 +97,7 @@ class StartNavigator extends Component {
         )
 
       {/* We shall see if we still use these
-        
+
     case "RegisterBirthday":
       return (
           <RegisterBirthday first_name = {route.first_name} last_name = {route.last_name} userID = {route.userID} email = {route.email} password = {route.password}

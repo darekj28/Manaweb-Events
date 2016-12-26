@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {Alert, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {ScrollView, Alert, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 
 import ViewContainer from '../../components/ViewContainer';
 import HomeStatusBar from '../../components/HomeStatusBar';
@@ -23,12 +23,13 @@ class RegisterPhoneNumber extends Component {
     super(props)
     this.state = {
       phone_number : "",
-      validation_output: {},
-      confirmationPin : "",
+      validation_output: {'error' : "invalid phone number"},
+      confirmationPin : "not set yet",
+      length : 0
     }
 
     this.validatePhoneNumber = this.validatePhoneNumber.bind(this);
-    this._navigateToRegisterPassword = this._navigateToRegisterPassword.bind(this);
+    this._navigateToConfirmCode = this._navigateToConfirmCode.bind(this);
     this.handlePhoneNumberChange = this.handlePhoneNumberChange.bind(this);
     this.handlePhoneNumberSubmit = this.handlePhoneNumberSubmit.bind(this);
     this.sendConfirmationPin = this.sendConfirmationPin.bind(this);
@@ -40,7 +41,7 @@ class RegisterPhoneNumber extends Component {
   validatePhoneNumber() {
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
-    fetch(test_url + "/mobilePhoneNumberValidation", {method: "POST",
+    fetch(url + "/mobilePhoneNumberValidation", {method: "POST",
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -59,12 +60,20 @@ class RegisterPhoneNumber extends Component {
   }
 
   // handle the submission of the phone number
-  handlePhoneNumberSubmit(){
-    if (this.state.validation_output['result'] == 'success')
-      this.sendConfirmationPin(this.state.phone_number);
-    else 
-      Alert.alert(
-        this.state.validation_output['error']);
+  handlePhoneNumberSubmit(){  
+    Alert.alert(
+      "We will send a verification code to " + this.state.phone_number,
+      "SMS fees may apply",
+      [
+        {text: 'Edit', style: 'cancel'},
+        {text: 'OK', onPress: () => this.sendConfirmationPin()}
+      ]
+    )
+    // if (this.state.validation_output['result'] == 'success')
+    //   this.sendConfirmationPin(this.state.phone_number);
+    // else 
+    //   Alert.alert(
+    //     this.state.validation_output['error']);
   }
 
   sendConfirmationPin(phone_number){
@@ -85,25 +94,34 @@ class RegisterPhoneNumber extends Component {
     .then((response) => response.json())
     .then((responseData) => {
       this.setState({confirmationPin : responseData['confirmationPin']})
+      this._navigateToConfirmCode();
     })
     .done();
-
+    
   }
 
   
 
   handlePhoneNumberChange(phone_number) {
       this.setState({phone_number: phone_number});
+      var length = phone_number.length
+      this.setState({length : length})
+      // var length = phone_number.length
+      // this.setState({length : length})
+      // if (length == 3)
+      //   var new_phone_number = this.state.phone_number + "-";
+      //   this.setState({phone_number : new_phone_number});
       this.validatePhoneNumber();
 
   }
 
-  _navigateToRegisterPassword() {
+  _navigateToConfirmCode() {
     this.props.navigator.push({
-    href: "RegisterPassword",
+    href: "RegisterConfirmCode",
       first_name : this.props.first_name,
       last_name: this.props.last_name,
-      phone_number : this.state.phone_number
+      phone_number : this.state.phone_number,
+      confirmationPin : this.state.confirmationPin
     })
   }
 
@@ -115,13 +133,18 @@ class RegisterPhoneNumber extends Component {
                 <Icon name = "chevron-left" size = {20} />
               </TouchableOpacity>
 
+              <ScrollView 
+                scrollEnabled={false}
+              >
                <TextInput
-                onChangeText = {(val) => this.setState({phone_number : val})}
+                onChangeText = {this.handlePhoneNumberChange}
                 style = {styles.input} placeholder = "Phone Number"
-                keyboardStyle = {'numeric'}
-                dataDetectorTypes = {'phoneNumber'}
-                value = {this.state.phone_number}
+                keyboardType = "number-pad"
+                dataDetectorTypes = "phoneNumber"
+                maxLength = {11}
               />
+
+              
 
 
 
@@ -130,6 +153,29 @@ class RegisterPhoneNumber extends Component {
                   Next!
                 </Text>
               </TouchableHighlight>
+
+
+               {
+                this.state.validation_output['result'] == 'failure' && 
+                <Text> 
+                  {this.state.validation_output['error']}
+                  </Text>
+              }
+
+              <Text>
+                (For testing) Phone number length:   {this.state.length} !!
+              </Text>
+
+              <Text>
+              The current phone number state:    {this.state.phone_number} !!!
+              </Text>
+
+              <Text>
+              The current confirmation pin state : {this.state.confirmationPin}
+              </Text>
+
+              </ScrollView>
+
 
 
       </View>

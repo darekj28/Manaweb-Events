@@ -63,7 +63,7 @@ def mobileCreateProfile():
 
 @mobile_api.route('/mobileTextConfirmation', methods = ['POST'])
 def mobileTextConfirmation():
-	phone_number = reqeust.json['phone_number']
+	phone_number = request.json['phone_number']
 	confirmationPin = sms.sendTextConfirmationPin(phone_number)
 	return jsonify({'confirmationPin' : confirmationPin})
 

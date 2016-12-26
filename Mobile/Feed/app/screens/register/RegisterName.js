@@ -6,7 +6,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {Alert, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {ScrollView, Alert, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 
 import ViewContainer from '../../components/ViewContainer';
 import HomeStatusBar from '../../components/HomeStatusBar';
@@ -37,7 +37,7 @@ export default class RegisterName extends Component {
     var test_url = "http://0.0.0.0:5000"
 
 
-    fetch(test_url + "/mobileNameValidation", {method: "POST",
+    fetch(url + "/mobileNameValidation", {method: "POST",
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -95,6 +95,9 @@ export default class RegisterName extends Component {
                 What is your name?
               </Text>
 
+              <ScrollView 
+                scrollEnabled={false}
+              >
                <TextInput
                 onChangeText = {this.handleFirstNameChange}
                 style = {styles.input} placeholder = "First Name"
@@ -107,11 +110,15 @@ export default class RegisterName extends Component {
               maxLength = {20}
               />
 
+              
+
               <TouchableHighlight style = {styles.button} onPress = {this.submitFullName}>
                 <Text style = {styles.buttonText}>
                   Next!
                 </Text>
               </TouchableHighlight>
+
+              </ScrollView>
 
               {/* For testing the state changes
                 <Text>
@@ -120,7 +127,8 @@ export default class RegisterName extends Component {
                 */}
 
 
-              {this.state.validation_output['result'] == 'failure' && 
+              {
+                this.state.validation_output['result'] == 'failure' && 
                 <Text> 
                   {this.state.validation_output['error']}
                   </Text>
