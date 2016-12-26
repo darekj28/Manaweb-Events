@@ -52,7 +52,7 @@ def mobileCreateProfile():
 	# post_manager.closeConnection()
 
 @mobile_api.route('/mobileLogin', methods =['POST'])
-def mobileLogin()
+def mobileLogin():
 	login_id = request.json['login']
 	password = request.json['password']
 	validator_output = validation.validateLogin(login_id, password)
