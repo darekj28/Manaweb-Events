@@ -381,8 +381,6 @@ class Users:
 			return True
 
 
-	def usernameInUser(self, username):
-
 
 
 
