@@ -53,10 +53,10 @@ def mobileCreateProfile():
 
 @mobile_api.route('/mobileLogin', methods =['POST'])
 def mobileLogin():
-	login_id = request.json['login']
+	login_id = request.json['login_id']
 	password = request.json['password']
 	validator_output = validation.validateLogin(login_id, password)
-	return jsonify(output)
+	return jsonify(validator_output)
 
 
 

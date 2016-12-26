@@ -9,6 +9,7 @@ banned_username_words = ['admin', 'manaweb']
 
 
 def validateLogin(login_id, password):
+	output = {}
 	email_regex = re.compile("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
 	loginIdIsEmail = email_regex.match(login_id)
 	user_manager = Users()
@@ -30,14 +31,15 @@ def validateLogin(login_id, password):
 		output['error'] = "This login id doesn't exists"
 
 	elif user_info['password'] != password:
-		ouput['result'] = 'failure'
-		ouput['error'] = 'login credentials incorrect'
+		output['result'] = 'failure'
+		output['error'] = 'login credentials incorrect'
 
 
 	else:
 		output['result'] = 'success'
 		output['username'] = user_info['userID']
 
+		
 	return output
 
 
