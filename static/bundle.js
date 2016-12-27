@@ -377,7 +377,7 @@
 						filters: this.state.filters }),
 					React.createElement(
 						'div',
-						{ className: 'container' },
+						{ className: 'container app-container' },
 						React.createElement(
 							'div',
 							{ className: 'app row' },
@@ -9210,7 +9210,7 @@
 					React.createElement('span', { className: icon + " filterButton " + selected, onClick: this.handleClick })
 				);else return React.createElement(
 					'a',
-					{ className: 'input-group-addon', 'data-toggle': 'tooltip', title: this.props.name,
+					{ className: 'input-group-addon', 'data-container': 'body', 'data-toggle': 'tooltip', title: this.props.name,
 						'data-placement': 'bottom' },
 					React.createElement('span', { className: icon + " filterButton " + selected, onClick: this.handleClick })
 				);
@@ -10445,7 +10445,7 @@
 						name: name }),
 					React.createElement(
 						"div",
-						{ className: "container" },
+						{ className: "container app-container" },
 						React.createElement(
 							"div",
 							{ className: "app row" },
@@ -11579,7 +11579,7 @@
 					React.createElement(_NoSearchNavBar2.default, { currentUser: this.state.currentUser, name: name }),
 					React.createElement(
 						'div',
-						{ className: 'container' },
+						{ className: 'container app-container' },
 						this.state.currentUser['first_name'] != undefined && React.createElement(
 							'h2',
 							null,
@@ -12015,7 +12015,7 @@
 					React.createElement(_NoSearchNavBar2.default, { currentUser: this.state.currentUser, name: name }),
 					React.createElement(
 						'div',
-						{ className: 'container' },
+						{ className: 'container app-container' },
 						React.createElement(
 							'form',
 							{ 'class': 'form-horizontal' },
