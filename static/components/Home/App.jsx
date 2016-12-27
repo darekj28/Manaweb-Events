@@ -29,7 +29,8 @@ export default class App extends React.Component {
 			post : '',
 			feed : [],
 			currentUser : {},
-			numUnseenPosts : -1
+			initialUnseenPosts : -1,
+			numUnseenPosts: -1
 		};
 		this.handleFilterClick = this.handleFilterClick.bind(this);
 		this.handleFilterUser = this.handleFilterUser.bind(this);
@@ -40,7 +41,8 @@ export default class App extends React.Component {
 		this.handlePostDelete = this.handlePostDelete.bind(this);
 		this.getCurrentUserInfo = this.getCurrentUserInfo.bind(this);
 		this.markPostFeedAsSeen = this.markPostFeedAsSeen.bind(this);
-		this.setNumUnseenPosts = this.setNumUnseenPosts.bind(this);
+		this.initializeNumUnseenPosts = this.initializeNumUnseenPosts.bind(this);
+		this.refreshNumUnseenPosts = this.refreshNumUnseenPosts.bind(this);
 		this.refreshFeed = this.refreshFeed.bind(this);
 	}
 	getCurrentUserInfo() {
@@ -53,10 +55,11 @@ export default class App extends React.Component {
 		$.post('/markPostFeedAsSeen', {feed_name: feed_name});
 	}
 
-	setNumUnseenPosts(){
+	initializeNumUnseenPosts(){
 		$.post('getNumUnseenPosts', {feed_name: feed_name},
 			function(data){
 				this.setState({numUnseenPosts : data['numUnseenPosts']})
+				this.setState({initialUnseenPosts: data['numUnseenPosts']})
 			}.bind(this));
 	}
 
@@ -81,6 +84,14 @@ export default class App extends React.Component {
 			});
 			this.setState({feed : feed});
 		}.bind(this));
+	}
+
+	refreshNumUnseenPosts() {
+		$.post('getNumUnseenPosts', {feed_name: feed_name},
+			function(data){
+				var newUnseenPosts = data['numUnseenPosts'] + this.state.initialUnseenPosts
+				this.setState({numUnseenPosts :  newUnseenPosts})
+			}.bind(this));
 	}
 
 	handleFilterClick(filter, isSearch) {
@@ -163,9 +174,11 @@ export default class App extends React.Component {
 		this.refreshFeed();
 		this.markPostFeedAsSeen();
 		this.getCurrentUserInfo();
-		this.setNumUnseenPosts();
+		this.initializeNumUnseenPosts();
+		setInterval(this.refreshNumUnseenPosts, 10000);
 	}
 	render() {
+		
 		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
 		var alert;
 		if ((this.state.alert)) {
@@ -185,6 +198,12 @@ export default class App extends React.Component {
 									userIdToFilterPosts={this.state.userIdToFilterPosts} 
 									filters={this.state.filters}/>
 					<div className="container app-container">
+					<div>
+						num unseen posts {this.state.numUnseenPosts}
+					</div>
+					<div>
+						num initial unseen posts {this.state.initialUnseenPosts}
+					</div>
 						<div className="app row">
 							<EventName name= {feed_name} numUnseenPosts = {this.state.numUnseenPosts} />
 						</div>

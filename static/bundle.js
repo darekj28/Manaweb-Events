@@ -190,6 +190,7 @@
 				post: '',
 				feed: [],
 				currentUser: {},
+				initialUnseenPosts: -1,
 				numUnseenPosts: -1
 			};
 			_this.handleFilterClick = _this.handleFilterClick.bind(_this);
@@ -201,7 +202,8 @@
 			_this.handlePostDelete = _this.handlePostDelete.bind(_this);
 			_this.getCurrentUserInfo = _this.getCurrentUserInfo.bind(_this);
 			_this.markPostFeedAsSeen = _this.markPostFeedAsSeen.bind(_this);
-			_this.setNumUnseenPosts = _this.setNumUnseenPosts.bind(_this);
+			_this.initializeNumUnseenPosts = _this.initializeNumUnseenPosts.bind(_this);
+			_this.refreshNumUnseenPosts = _this.refreshNumUnseenPosts.bind(_this);
 			_this.refreshFeed = _this.refreshFeed.bind(_this);
 			return _this;
 		}
@@ -219,10 +221,11 @@
 				$.post('/markPostFeedAsSeen', { feed_name: feed_name });
 			}
 		}, {
-			key: 'setNumUnseenPosts',
-			value: function setNumUnseenPosts() {
+			key: 'initializeNumUnseenPosts',
+			value: function initializeNumUnseenPosts() {
 				$.post('getNumUnseenPosts', { feed_name: feed_name }, function (data) {
 					this.setState({ numUnseenPosts: data['numUnseenPosts'] });
+					this.setState({ initialUnseenPosts: data['numUnseenPosts'] });
 				}.bind(this));
 			}
 		}, {
@@ -246,6 +249,14 @@
 						});
 					});
 					this.setState({ feed: feed });
+				}.bind(this));
+			}
+		}, {
+			key: 'refreshNumUnseenPosts',
+			value: function refreshNumUnseenPosts() {
+				$.post('getNumUnseenPosts', { feed_name: feed_name }, function (data) {
+					var newUnseenPosts = data['numUnseenPosts'] + this.state.initialUnseenPosts;
+					this.setState({ numUnseenPosts: newUnseenPosts });
 				}.bind(this));
 			}
 		}, {
@@ -343,11 +354,13 @@
 				this.refreshFeed();
 				this.markPostFeedAsSeen();
 				this.getCurrentUserInfo();
-				this.setNumUnseenPosts();
+				this.initializeNumUnseenPosts();
+				setInterval(this.refreshNumUnseenPosts, 10000);
 			}
 		}, {
 			key: 'render',
 			value: function render() {
+	
 				var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
 				var alert;
 				if (this.state.alert) {
@@ -378,6 +391,18 @@
 					React.createElement(
 						'div',
 						{ className: 'container app-container' },
+						React.createElement(
+							'div',
+							null,
+							'num unseen posts ',
+							this.state.numUnseenPosts
+						),
+						React.createElement(
+							'div',
+							null,
+							'num initial unseen posts ',
+							this.state.initialUnseenPosts
+						),
 						React.createElement(
 							'div',
 							{ className: 'app row' },
