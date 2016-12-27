@@ -14,20 +14,20 @@ function testValid (field, value) {
 	switch (field) {
 		case "first_name":
 			var condition = /^[a-z ,.'-]+$/i;
-			if (!value.match(condition)) return false;
+			if (!value.match(condition)) return "invalid";
 		case "last_name":
 			var condition = /^[a-z ,.'-]+$/i;
-			if (!value.match(condition)) return false;
+			if (!value.match(condition)) return "invalid";
 		case "password":
 			var condition = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,}$/;
-			if (!value.match(condition)) return false;
+			if (!value.match(condition)) return "invalid";
 		case "password_confirm":
 			var condition = $('#password').val();
-			if (value != condition) return false;
+			if (value != condition) return "invalid";
 		default :
-			return true;
+			return "valid";
 	}
-	return true;
+	return "valid";
 }
 function warningForField(field, value) {
 	if (!value) return "You can\'t leave this empty.";
@@ -43,7 +43,7 @@ function warningForField(field, value) {
 export default class SettingsTextInput extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { valid : true };
+		this.state = { valid : "valid" };
 		this.handleTyping = this.handleTyping.bind(this);
 		this.handleBlur = this.handleBlur.bind(this);
 	}
@@ -62,20 +62,19 @@ export default class SettingsTextInput extends React.Component {
 	}
 	render() {
 		var type = (this.props.field == "password" || this.props.field == "password_confirm") ? "password" : "text";
-		var valid = this.state.valid ? "valid" : "invalid";
 		return (
 			<div>
 				<div className="form-group">
-					{this.props.field != "password" && <input className={"setting " + valid} id={this.props.field} type={type} 
+					{this.props.field != "password" && <input className={"setting " + this.state.valid} id={this.props.field} type={type} 
 						value={this.props.value} 
 						onChange={this.handleTyping} onBlur={this.handleBlur}/>}
 					{this.props.field == "password" && <input data-toggle="popover" data-trigger="focus" 
 						data-content="Your password must contain at least one letter and one number."
-						className={"setting " + valid} id={this.props.field} type={type} 
+						className={"setting " + this.state.valid} id={this.props.field} type={type} 
 						value={this.props.value} onClick={focus()}
 						onChange={this.handleTyping} onBlur={this.handleBlur}/>}
 				</div>
-				{!this.state.valid && <div className="form-group warning" id={this.props.field + "_warning"}>
+				{(this.state.valid == "invalid") && <div className="form-group warning" id={this.props.field + "_warning"}>
 					{warningForField(this.props.field, $('#' + this.props.field).val())}
 				</div>}
 			</div>

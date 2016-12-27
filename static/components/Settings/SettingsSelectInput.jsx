@@ -22,9 +22,9 @@ function testValid (field, value) {
 		case "year_of_birth":
 			return isValidYear(value);
 		default :
-			return true;
+			return "valid";
 	}
-	return true;
+	return "valid";
 }
 
 function warningForField(field, value) {
@@ -47,7 +47,8 @@ function isValidMonth(day, month) {
 	for (var i = 0; i < months.length; i++)
 		if (parseInt(month) == months[i].value)
 			max_days = months[i].days;
-	return (day <= max_days);
+	if (day <= max_days) return "valid";
+	else return "invalid";
 }
 
 function isValidDay(month, day) {
@@ -55,12 +56,14 @@ function isValidDay(month, day) {
 	for (var i = 0; i < months.length; i++)
 		if (parseInt(month) == months[i].value)
 			max_days = months[i].days;
-	return (day <= max_days);
+	if (day <= max_days) return "valid";
+	else return "invalid";
 }
 
 function isValidYear(year) {
 	var high = 2006; var low = 1900;
-	return (parseInt(year) > high || parseInt(year) < low);
+	if (parseInt(year) > high || parseInt(year) < low) return "invalid";
+	else return "valid";
 }
 
 function generateDays() {
@@ -99,7 +102,7 @@ var avatar_list = generateAvatars(avatars);
 export default class SettingsSelectInput extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { valid : true };
+		this.state = { valid : "valid" };
 		this.handleSelect = this.handleSelect.bind(this);
 		this.handleBlur = this.handleBlur.bind(this);
 		this.handleAvatarDisplay = this.handleAvatarDisplay.bind(this);
@@ -124,7 +127,6 @@ export default class SettingsSelectInput extends React.Component {
 		if (this.props.field == "avatar") this.handleAvatarDisplay();
 	}
 	render() {
-		var valid = this.state.valid ? "valid" : "invalid";
 		var options;
 		switch (this.props.field) {
 			case "month_of_birth" : 
@@ -143,7 +145,7 @@ export default class SettingsSelectInput extends React.Component {
 		return (
 			<div>
 				<div className="form-group">
-					<select className={"setting " + valid} data-width="fit" id={this.props.field} name={this.props.field}
+					<select className={"setting " + this.state.valid} data-width="fit" id={this.props.field} name={this.props.field}
 									multiple data-max-options="1" title={idToName(this.props.field)}
 									onChange={this.handleSelect} onBlur={this.handleBlur}> 
 						{options.map(function(option) {
@@ -151,7 +153,7 @@ export default class SettingsSelectInput extends React.Component {
 						})}
 					</select>
 				</div>
-				{!this.state.valid && 
+				{(this.state.valid == "invalid") && 
 					<div className="form-group warning" id={this.props.field + "_warning"}>
 						{warningForField(this.props.field, $('#' + this.props.field).val())}
 					</div>}

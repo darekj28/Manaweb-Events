@@ -77,7 +77,7 @@ export default class SettingsApp extends React.Component {
 	handleTextBlur(field, valid) {
 		var valid_text_fields = this.state.valid_text_fields;
 		var valid_select_fields = this.state.valid_select_fields;
-		if (valid) this.setState({ valid_text_fields : add(valid_text_fields, field) });
+		if (valid == "valid") this.setState({ valid_text_fields : add(valid_text_fields, field) });
 		else this.setState({ valid_text_fields : remove(valid_text_fields, field) });
 		this.setState({ submittable : isSameSet(text_fields, valid_text_fields) && 
 										isSameSet(select_fields, valid_select_fields) });
@@ -86,7 +86,7 @@ export default class SettingsApp extends React.Component {
 	handleSelectBlur(field, valid) {
 		var valid_text_fields = this.state.valid_text_fields; 
 		var valid_select_fields = this.state.valid_select_fields;
-		if (valid) this.setState({ valid_select_fields : add(valid_select_fields, field) });
+		if (valid == "valid") this.setState({ valid_select_fields : add(valid_select_fields, field) });
 		else this.setState({ valid_select_fields : remove(valid_select_fields, field) });
 		this.setState({ submittable : isSameSet(text_fields, valid_text_fields) && 
 										isSameSet(select_fields, valid_select_fields) });
