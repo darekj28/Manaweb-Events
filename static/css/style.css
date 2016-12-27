@@ -243,7 +243,6 @@ body {
   display : block;
 }
 #PostInput {
-  margin-top : 5px;
   border : 1px solid #dfdfdf;
   border-radius : 4px;
   resize : vertical;
@@ -258,7 +257,6 @@ body {
 #CommentInput {
   border : 1px solid #dfdfdf;
   border-radius : 4px;
-  margin-top : 5px;
   resize: vertical;
 }
 
