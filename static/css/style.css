@@ -124,12 +124,15 @@ body {
   max-width : 120vh;
   word-wrap: break-word;
   position : relative;
+  top : -21px;
+  white-space: pre-wrap;
 }
 .CommentFeedPostBody {
   max-width : 120vh;
   word-wrap: break-word;
   position: relative;
   top : -26px;
+  white-space: pre-wrap;
 }
 #Feed {
   margin-top: 10px;
@@ -196,10 +199,6 @@ body {
   padding-left: 5px;
   padding-right: 5px;
 }
-.FeedPostBody {
-  position: relative;
-  top : -21px;
-}
 .icon-danger {
   color:#d9534f;
   cursor: pointer;
@@ -237,14 +236,17 @@ body {
 .SubmitButton {
   cursor: pointer;
 }
-.MessagePost {
-  padding-left: 10px;
-  padding-right: 10px;
+#MessagePost {
+  display : block;
+}
+#CommentPost {
+  display : block;
 }
 #PostInput {
   margin-top : 5px;
   border : 1px solid #dfdfdf;
   border-radius : 4px;
+  resize : vertical;
 }
 #TogglePost {
   margin-top : 5px;
@@ -257,6 +259,7 @@ body {
   border : 1px solid #dfdfdf;
   border-radius : 4px;
   margin-top : 5px;
+  resize: vertical;
 }
 
 .input-group.input-group-unstyled input.form-control {
@@ -264,8 +267,8 @@ body {
        -moz-border-radius: 4px;
             border-radius: 4px;
 }
-.input-group-unstyled .input-group-addon {
-    border-radius: 4px;
+.input-group-addon {
+    /*border-radius: 4px;*/
     border: 0px;
     background-color: transparent;
 }

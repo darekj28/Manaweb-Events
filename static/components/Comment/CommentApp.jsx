@@ -132,17 +132,20 @@ export default class CommentApp extends React.Component {
 				 searchText={this.state.search} onSearch={this.handleSearch} currentUser={this.state.currentUser}
 						name={name}/>
 			<div className="container">
-				<CommentFeedPost comment={this.state.original_post} isOriginalPost={true}/>
-				<br/>
-				<MakeComment placeholder="What's up bro?" commentText={this.state.comment} 
+				<div className="app row">
+					<CommentFeedPost comment={this.state.original_post} isOriginalPost={true}/>
+				</div>
+				<div className="app row">
+					<MakeComment placeholder="What's up bro?" commentText={this.state.comment} 
 						onCommentChange ={this.handleTypingComment} onCommentSubmit={this.handleCommentSubmit}/>
-				<br/>
-				<br/>
-				<CommentFeed currentUser={this.state.currentUser} searchText={this.state.search} 
+				</div>
+				<div className="app row">
+					<CommentFeed currentUser={this.state.currentUser} searchText={this.state.search} 
 							filters={this.state.filters} 
 							handleCommentEdit={this.handleCommentEdit}
 							handleCommentDelete={this.handleCommentDelete}
 							comments={this.state.feed} />
+				</div>
 			</div>
 		</div>);
 	}

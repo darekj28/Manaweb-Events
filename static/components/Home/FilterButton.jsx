@@ -11,9 +11,7 @@ export default class FilterButton extends React.Component {
 	}
 
 	componentDidMount() {
-		$(document).ready(function(){
-		    $('[data-toggle="tooltip"]').tooltip(); 
-		});
+		$('[data-toggle="tooltip"]').tooltip(); 
 	}
 
 	render() {
@@ -32,11 +30,16 @@ export default class FilterButton extends React.Component {
 			default : 
 				alert('Invalid action.');
 		}
-		return(<a className="input-group-addon" data-toggle="tooltip" title= {this.props.name}>
-			<span className={icon + " filterButton " + selected}
-					onClick={this.handleClick}>
+		if (!this.props.isSearch)
+			return(<a className="input-group-addon" data-container="body" data-toggle="tooltip" title= {this.props.name}>
+					<span className={icon + " filterButton " + selected} onClick={this.handleClick}>
 					</span>
-			</a>);
+				</a>)
+		else return(<a className="input-group-addon">
+					<span className={icon + " filterButton " + selected} onClick={this.handleClick}>
+					</span>
+				</a>
+			);
 	}
 }
 
