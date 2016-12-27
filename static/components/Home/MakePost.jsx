@@ -16,6 +16,12 @@ export default class MakePost extends React.Component {
 		$('#SubmitButtonPost').click(function() {
 			$(this).blur();
 		});
+		$('#MessagePost').hide();
+		$('#TogglePost').click(function() {
+			$('#MessagePost').fadeToggle(function() {
+				$('#PostInput').focus();
+			});
+		})
 	}
 	handlePostSubmit() {
 		if (this.postText.value.length > 0)
@@ -32,6 +38,7 @@ export default class MakePost extends React.Component {
 	render() {
 		return(
 			<div> 
+				<div id="TogglePost">Post a message...</div>
 				<div id="MessagePost" className="Message pull-right input-group input-group-unstyled">
 					<input id="PostInput" type="text" className="PostText form-control" 
 							onKeyPress={this.handleEnterPress} value={this.props.postText} 
@@ -43,8 +50,7 @@ export default class MakePost extends React.Component {
 					<a className="SubmitButton input-group-addon" id="SubmitButtonPost" 
 							onClick={this.handlePostSubmit} data-toggle = "tooltip" title = "Post">
 						<span className="glyphicon glyphicon-send AppGlyphicon"></span>
-					</a>
-				
+					</a>	
 				</div>
 			</div>);
 	}

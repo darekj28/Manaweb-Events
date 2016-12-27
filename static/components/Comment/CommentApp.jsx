@@ -65,7 +65,7 @@ export default class CommentApp extends React.Component {
 		}.bind(this));
 	}
 	handleSearch(searchText) { 
-		$("html, body").animate({ scrollTop: $(document).height()-$(window).height() }, 300);
+		$("html, body").animate({ scrollTop: $('#CommentFeed').prop('scrollHeight') }, 300);
 		this.setState({search : searchText}); 
 	}
 	handleTypingComment(commentText) { this.setState({comment : commentText}); }
@@ -90,7 +90,7 @@ export default class CommentApp extends React.Component {
 		    contentType: 'application/json;charset=UTF-8'
 		});
 		this.setState({feed : feed, comment: ''});
-		$("html, body").animate({ scrollTop: $(document).height()-$(window).height() }, 300);
+		$("html, body").animate({ scrollTop: $('#CommentFeed').prop('scrollHeight') }, 300);
 	}
 	handleCommentEdit(post, editedContent) {
 		var feed = this.state.feed;
@@ -133,13 +133,16 @@ export default class CommentApp extends React.Component {
 						name={name}/>
 			<div className="container">
 				<CommentFeedPost comment={this.state.original_post} isOriginalPost={true}/>
+				<br/>
+				<MakeComment placeholder="What's up bro?" commentText={this.state.comment} 
+						onCommentChange ={this.handleTypingComment} onCommentSubmit={this.handleCommentSubmit}/>
+				<br/>
+				<br/>
 				<CommentFeed currentUser={this.state.currentUser} searchText={this.state.search} 
 							filters={this.state.filters} 
 							handleCommentEdit={this.handleCommentEdit}
 							handleCommentDelete={this.handleCommentDelete}
 							comments={this.state.feed} />
-				<MakeComment placeholder="What's up bro?" commentText={this.state.comment} 
-						onCommentChange ={this.handleTypingComment} onCommentSubmit={this.handleCommentSubmit}/>
 			</div>
 		</div>);
 	}

@@ -111,7 +111,7 @@ export default class SettingsApp extends React.Component {
 		});
 		$('#UpdateSettingsSubmit').blur();
 		$('#UpdateSettingsAlert').fadeIn(400).delay(5000).fadeOut(400);
-		$("html, body").animate({ scrollTop: $(document).height()-$(window).height() }, 300);
+		$("html, body").animate({ scrollTop: $('#SettingsApp').prop('scrollHeight') }, 600);
 	}
 
 	componentDidMount() {

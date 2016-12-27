@@ -13,6 +13,12 @@ export default class MakeComment extends React.Component {
 		$('#SubmitButtonComment').click(function() {
 			$(this).blur();
 		});
+		$('#CommentPost').hide();
+		$('#ToggleComment').click(function() {
+			$('#CommentPost').fadeToggle(function() {
+				$('#CommentInput').focus();
+			});
+		})
 	}
 	handleCommentSubmit() {
 		if (this.commentText.value.length > 0)
@@ -28,7 +34,8 @@ export default class MakeComment extends React.Component {
 	}
 	render() {
 		return(
-			<div> 
+			<div id="MakeComment"> 
+				<div id="ToggleComment">Make a comment...</div>
 				<div id="CommentPost" className="Message pull-right input-group input-group-unstyled">
 					<input id="CommentInput" type="text" className="CommentText form-control" 
 							onKeyPress={this.handleEnterPress} value={this.props.commentText} 
