@@ -887,6 +887,7 @@ class Posts:
 			thisPost['first_name'] = thisUser['first_name']
 			thisPost['last_name'] = thisUser['last_name']
 			thisPost['avatar_url'] = thisUser['avatar_url']
+			thisPost['avatar'] = thisUser['avatar_name']
 			thisPost['unique_id'] = post[9]
 			thisPost['numComments'] = post[10]
 			postList.append(thisPost)	
@@ -909,6 +910,7 @@ class Posts:
 			thisComment['first_name'] = thisUser['first_name']
 			thisComment['last_name'] = thisUser['last_name']
 			thisComment['avatar_url'] = thisUser['avatar_url']
+			thisComment['avatar'] = thisUser['avatar_name']
 			thisComment['time'] = self.date_format(int(thisComment['timeStamp']))
 			commentList.append(thisComment)
 		return commentList	
