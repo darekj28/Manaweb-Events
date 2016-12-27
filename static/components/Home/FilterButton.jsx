@@ -31,11 +31,11 @@ export default class FilterButton extends React.Component {
 				alert('Invalid action.');
 		}
 		if (!this.props.isSearch)
-			return(<a className="input-group-addon" data-container="body" data-toggle="tooltip" title= {this.props.name}>
+			return(<a className="input-group-addon" data-container="body" data-toggle="tooltip" title={this.props.name}>
 					<span className={icon + " filterButton " + selected} onClick={this.handleClick}>
 					</span>
 				</a>)
-		else return(<a className="input-group-addon" data-toggle = "tooltip" title = {this.props.name}
+		else return(<a className="input-group-addon" data-container="body" data-toggle="tooltip" title={this.props.name}
 					 data-placement="bottom">
 					<span className={icon + " filterButton " + selected} onClick={this.handleClick}>
 					</span>

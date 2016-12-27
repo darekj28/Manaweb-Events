@@ -127,7 +127,7 @@ export default class SettingsApp extends React.Component {
 		return(
 			<div id="SettingsApp">
 				<NoSearchNavBar currentUser={this.state.currentUser} name={name}/>
-				<div className="container">
+				<div className="container app-container">
 					<form class="form-horizontal">
 						<div className="page-header">
 							<h2> Update Settings </h2>

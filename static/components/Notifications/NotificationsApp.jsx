@@ -46,7 +46,7 @@ export default class NotificationsApp extends React.Component {
 		return (
 			<div id="NotificationsApp">
 				<NoSearchNavBar currentUser={this.state.currentUser} name={name}/>
-				<div className="container">
+				<div className="container app-container">
 					{this.state.currentUser['first_name'] != undefined && 
 						<h2>{name}'s Notifications</h2>}
 					<NotificationsFeed notifications={this.state.notifications}/>		

@@ -184,7 +184,7 @@ export default class App extends React.Component {
 									handleFilterUser={this.handleFilterUser}
 									userIdToFilterPosts={this.state.userIdToFilterPosts} 
 									filters={this.state.filters}/>
-					<div className="container">
+					<div className="container app-container">
 						<div className="app row">
 							<EventName name= {feed_name} numUnseenPosts = {this.state.numUnseenPosts} />
 						</div>

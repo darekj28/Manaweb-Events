@@ -22,7 +22,9 @@ body {
   background-color : #ffffff;
   color : #0f0f0f;
 }
-
+.app-container {
+  padding-top : 65px;
+}
 .valid {
   border-width: 1.5px;
   border-color: #090;
@@ -259,7 +261,9 @@ body {
   border-radius : 4px;
   resize: vertical;
 }
-
+.tooltip {
+  overflow : visible;
+}
 .input-group.input-group-unstyled input.form-control {
     -webkit-border-radius: 4px;
        -moz-border-radius: 4px;
@@ -276,6 +280,9 @@ body {
 .navbar-default {
   background-color: #0f0f0f;
   border-radius : 0px;
+  position : fixed;
+  width : 100%;
+  z-index : 500;
 }
 .navbar-default .navbar-brand {
   color: #ffffff;
