@@ -1,12 +1,6 @@
 from flask import Flask, render_template, request, url_for, redirect, session, flash, jsonify, send_from_directory
-from flask_wtf import Form
 from werkzeug import secure_filename
-from wtforms import StringField, PasswordField, TextField, SelectField, SelectMultipleField
-from wtforms.validators import DataRequired
 
-
-
-# from py2neo import authenticate, Graph, Node, Relationship
 
 
 # used for the date.today() in calculating age
@@ -26,8 +20,6 @@ import urllib
 import json
 from contextlib import closing
 import random
-
-
 import requests
 import sqlite3
 
@@ -36,12 +28,11 @@ import re
 
 from users import Users
 from posts import Posts
+from app_factory import create_app
 
 
-from routes.createProfile import create_profile
-from routes.updateSettings import update_settings
-from routes.mobile_api import mobile_api
-from routes.browser_api import browser_api
+
+
 
 # Darek Made .py files
 # import geo
@@ -58,17 +49,12 @@ from routes.browser_api import browser_api
 # graph = Graph()
 
 
+app = create_app()
 
-
-
-
-# initialize app
-app = Flask(__name__)
-
-# NOTE !!!!  this should definitely be randomly generated and look like some crazy impossible to guess hash
-# but for now we'll keep is simple and easy to remember
-app.secret_key = "powerplay"
-
+from routes.createProfile import create_profile
+from routes.updateSettings import update_settings
+from routes.mobile_api import mobile_api
+from routes.browser_api import browser_api
 
 
 app.register_blueprint(create_profile)
@@ -77,14 +63,7 @@ app.register_blueprint(mobile_api)
 app.register_blueprint(browser_api)
 
 
-# geolocation stuff
-FREEGEOPIP_URL = "http://freegeoip.net/json"
-# FORMATS = ['commander', 'cube', 'draft', 'legacy', 'modern', 'pauper', 'sealed' , 'standard', 
-# 'two_headed_giant',  'vintage']
-# UPDATABLE_FIELDS = ['firstName', 'lastName', 'password', 'birthMonth', 'birthDay',
-				# 'birthYear','genderPreference','minAge','maxAge', 'bio']
 
-EMPTY_STRING = ""
 
 
 @app.before_request
@@ -494,19 +473,12 @@ def date_format(time=False):
 	data_format = post_manager.date_format(time = False)
 	post_manager.closeConnection()
 
-
-
-app.jinja_env.globals.update(getAge=getAge)
-app.jinja_env.globals.update(getIdUrl=getIdUrl)
-
-app.jinja_env.globals.update(getStringSearchUrl=getStringSearchUrl)
-app.jinja_env.globals.update(getFirstName=getFirstName)
-app.jinja_env.globals.update(getLastName=getLastName)
-app.jinja_env.globals.update(getAvatarUrl=getAvatarUrl)
-
-
-
 if __name__ == '__main__':
     app.debug = True
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port, threaded=True)
+
+EMPTY_STRING = ""
+
+
+

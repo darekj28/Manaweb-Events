@@ -264,7 +264,7 @@ def reportPost():
 
 	
 	post_manager = Posts()
-	posts.reportPost(feed_name, unique_id, reason, description, reporting_user, reported_user)
+	post_manager.reportPost(feed_name, unique_id, reason, description, reporting_user, reported_user)
 	post_manager.closeConnection()
 
 	return redirect(url_for('index'))
@@ -283,7 +283,7 @@ def reportComment():
 
 
 	post_manager = Posts()
-	posts.reportComment(feed_name, unique_id, reason, description, reporting_user, reported_user)
+	posts_manager.reportComment(feed_name, unique_id, reason, description, reporting_user, reported_user)
 	post_manager.closeConnection()
 
 	return redirect(url_for("index"))

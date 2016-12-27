@@ -6,9 +6,15 @@ import email_confirm
 import sms
 import validation
 
+# from tasks import asyncGetPosts
+# from tasks import test
+
+
+
 
 mobile_api = Blueprint('mobile_api', __name__)
 DEFAULT_FEED = "BALT"
+
 
 
 @mobile_api.route('/mobileCreateProfile', methods = ['POST'])
@@ -113,21 +119,41 @@ def getCurrentUserInfo():
 	return jsonify({'thisUser' : thisUser})
 
 @mobile_api.route('/mobileGetPosts', methods = ['POST'])
-def getPosts():
+def mobileGetPosts():
 	# feed_name = request.form['feed_name']
 	feed_name = "BALT"
-
 	post_manager = Posts()
-	# time1 = time.time()
 	post_list = post_manager.getPosts(feed_name)
-	# time2 = time.time()
 	post_manager.sortAscending(post_list)
-	# time3 = time.time()
-	# getPostTime = time2 - time1
-	# sortTime = time3 - time2
-	# print('getPosts time : '  + str(getPostTime))
-	# print('sort time : '  + str(sortTime))
-
 	post_manager.closeConnection()
-	return jsonify({'post_list' : post_list})	
+	return jsonify({'post_list' : post_list})
+
+
+@mobile_api.route('/status/<task_id>')
+def taskStatus(task_id):
+    task = test.AsyncResult(task_id)
+    if task.state == 'PENDING':
+        # job did not start yet
+        response = {
+            'state': task.state,
+            'status': 'Pending...'
+        }
+    elif task.state != 'FAILURE':
+        response = {
+            'state': task.state,
+            'current': task.info.get('answer', 0),
+        }
+        if 'result' in task.info:
+            response['result'] = task.info['result']
+    else:
+        # something went wrong in the background job
+        response = {
+            'state': task.state,
+            'current': 1,
+            'total': 1,
+            'status': str(task.info),  # this is the exception raised
+        }
+    return jsonify(response)
+
+
 
