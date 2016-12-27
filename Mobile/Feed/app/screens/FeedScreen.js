@@ -43,7 +43,8 @@ class FeedScreen extends Component {
       post_message_height: new Animated.Value(50),
       current_username: "",
       feed: [],
-      currentUser: {}
+      currentUser: {},
+      test: ""
     }
     this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
     this.postMessagePressed = this.postMessagePressed.bind(this)
@@ -53,9 +54,9 @@ class FeedScreen extends Component {
 
 
   async initializeFeed() {
-    var url = "https://manaweb-events.herokuapp.com"
-    var test_url = "http://0.0.0.0:5000"
-      fetch(url + "/mobileGetPosts", {method: "POST",
+    let url = "https://manaweb-events.herokuapp.com"
+    let test_url = "http://0.0.0.0:5000"
+    let response = await fetch(test_url + "/mobileGetPosts", {method: "POST",
           headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -66,8 +67,11 @@ class FeedScreen extends Component {
         feed_name: "BALT"
       })
     })
-    .then((response) => response.json())
-    .then((responseData) => {
+    let responseData = await response.json();
+    
+
+    this.setState({test: "Test changed"})
+    if (responseData.post_list.length > 0) {
         var feed = []
         for (var i = 0; i < responseData['post_list'].length; i++) {
           var obj = responseData['post_list'][i]
@@ -86,8 +90,10 @@ class FeedScreen extends Component {
           })
         }
         this.setState({feed: feed})
-      })
-    .done();
+        this.setState({test: "Test changed"})
+    } 
+
+      
   }
 
 
@@ -125,7 +131,7 @@ class FeedScreen extends Component {
   }
 
   async initializeUsername(){
-     var value = await AsyncStorage.getItem("current_username")
+     let value = await AsyncStorage.getItem("current_username")
         if (value == null) {
           this.setState({"current_username" : ""})
         }
@@ -136,9 +142,9 @@ class FeedScreen extends Component {
 
 
   async initializeUserInfo(){
-    var url = "https://manaweb-events.herokuapp.com"
-    var test_url = "http://0.0.0.0:5000"
-    fetch(url + "/mobileGetCurrentUserInfo", {method: "POST",
+    let url = "https://manaweb-events.herokuapp.com"
+    let test_url = "http://0.0.0.0:5000"
+    let response = await fetch(url + "/mobileGetCurrentUserInfo", {method: "POST",
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -149,27 +155,22 @@ class FeedScreen extends Component {
         userID: this.state.current_username
       })
     })
-    .then((response) => response.json())
-    .then((responseData) => {
-          this.setState({currentUser: responseData['this_user']})
-      })
-    .done();
+    let responseData = await response.json()
+    this.setState({currentUser: responseData['this_user']})
+  
   }
 
   componentWillMount() {
-      this.initializeUsername();
-      this.initializeUserInfo();
-      this.initializeFeed();
-
+      this.initializeUsername().done();
+      this.initializeUserInfo().done();
+      this.initializeFeed().done();
         // AsyncStorage.getItem("current_username").then((value) => {
         //   if (value == null){
         //     this.setState({"current_username" : ""})
         //   } else {
         //     this.setState({"current_username": value});
-
         //   }
         // }).done();
-
   }
 
 
@@ -194,7 +195,6 @@ class FeedScreen extends Component {
                 />
             </TouchableWithoutFeedback>
 
-
               {
                 this.state.current_username == "" ?
                 <Text>
@@ -206,6 +206,9 @@ class FeedScreen extends Component {
                 </Text>
               }
           
+            <Text>
+                  Test:  {this.state.test} !!
+              </Text>
 
             <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
                 <View style = {styles.containerHorizontal}>
