@@ -51,19 +51,19 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _App = __webpack_require__(/*! App.jsx */ 1);
+	var _App = __webpack_require__(/*! ./Home/App.jsx */ 1);
 	
 	var _App2 = _interopRequireDefault(_App);
 	
-	var _CommentApp = __webpack_require__(/*! CommentApp.jsx */ 98);
+	var _CommentApp = __webpack_require__(/*! ./Comment/CommentApp.jsx */ 98);
 	
 	var _CommentApp2 = _interopRequireDefault(_CommentApp);
 	
-	var _NotificationsApp = __webpack_require__(/*! NotificationsApp.jsx */ 108);
+	var _NotificationsApp = __webpack_require__(/*! ./Notifications/NotificationsApp.jsx */ 108);
 	
 	var _NotificationsApp2 = _interopRequireDefault(_NotificationsApp);
 	
-	var _SettingsApp = __webpack_require__(/*! SettingsApp.jsx */ 112);
+	var _SettingsApp = __webpack_require__(/*! ./Settings/SettingsApp.jsx */ 112);
 	
 	var _SettingsApp2 = _interopRequireDefault(_SettingsApp);
 	
@@ -121,9 +121,9 @@
 
 /***/ },
 /* 1 */
-/*!***********************************!*\
-  !*** ./static/components/App.jsx ***!
-  \***********************************/
+/*!****************************************!*\
+  !*** ./static/components/Home/App.jsx ***!
+  \****************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -134,19 +134,19 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _SearchNavBar = __webpack_require__(/*! SearchNavBar.jsx */ 2);
+	var _SearchNavBar = __webpack_require__(/*! ./SearchNavBar.jsx */ 2);
 	
 	var _SearchNavBar2 = _interopRequireDefault(_SearchNavBar);
 	
-	var _EventName = __webpack_require__(/*! EventName.jsx */ 88);
+	var _EventName = __webpack_require__(/*! ./EventName.jsx */ 88);
 	
 	var _EventName2 = _interopRequireDefault(_EventName);
 	
-	var _MakePost = __webpack_require__(/*! MakePost.jsx */ 89);
+	var _MakePost = __webpack_require__(/*! ./MakePost.jsx */ 89);
 	
 	var _MakePost2 = _interopRequireDefault(_MakePost);
 	
-	var _Feed = __webpack_require__(/*! Feed.jsx */ 90);
+	var _Feed = __webpack_require__(/*! ./Feed.jsx */ 90);
 	
 	var _Feed2 = _interopRequireDefault(_Feed);
 	
@@ -415,9 +415,9 @@
 
 /***/ },
 /* 2 */
-/*!********************************************!*\
-  !*** ./static/components/SearchNavBar.jsx ***!
-  \********************************************/
+/*!*************************************************!*\
+  !*** ./static/components/Home/SearchNavBar.jsx ***!
+  \*************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -428,11 +428,11 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _NotificationsDropdown = __webpack_require__(/*! ./NotificationsDropdown.jsx */ 3);
+	var _NotificationsDropdown = __webpack_require__(/*! ../GenericNavBar/NotificationsDropdown.jsx */ 3);
 	
 	var _NotificationsDropdown2 = _interopRequireDefault(_NotificationsDropdown);
 	
-	var _AccountDropdown = __webpack_require__(/*! ./AccountDropdown.jsx */ 86);
+	var _AccountDropdown = __webpack_require__(/*! ../GenericNavBar/AccountDropdown.jsx */ 86);
 	
 	var _AccountDropdown2 = _interopRequireDefault(_AccountDropdown);
 	
@@ -600,9 +600,9 @@
 
 /***/ },
 /* 3 */
-/*!*****************************************************!*\
-  !*** ./static/components/NotificationsDropdown.jsx ***!
-  \*****************************************************/
+/*!*******************************************************************!*\
+  !*** ./static/components/GenericNavBar/NotificationsDropdown.jsx ***!
+  \*******************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -699,6 +699,7 @@
 	                            )
 	                        );
 	                    }),
+	                    React.createElement('li', { className: 'divider' }),
 	                    React.createElement(
 	                        'li',
 	                        null,
@@ -9044,9 +9045,9 @@
 
 /***/ },
 /* 86 */
-/*!***********************************************!*\
-  !*** ./static/components/AccountDropdown.jsx ***!
-  \***********************************************/
+/*!*************************************************************!*\
+  !*** ./static/components/GenericNavBar/AccountDropdown.jsx ***!
+  \*************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9140,9 +9141,9 @@
 
 /***/ },
 /* 87 */
-/*!********************************************!*\
-  !*** ./static/components/FilterButton.jsx ***!
-  \********************************************/
+/*!*************************************************!*\
+  !*** ./static/components/Home/FilterButton.jsx ***!
+  \*************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9183,9 +9184,7 @@
 		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
-				$(document).ready(function () {
-					$('[data-toggle="tooltip"]').tooltip();
-				});
+				$('[data-toggle="tooltip"]').tooltip();
 			}
 		}, {
 			key: 'render',
@@ -9205,11 +9204,14 @@
 					default:
 						alert('Invalid action.');
 				}
-				return React.createElement(
+				if (!this.props.isSearch) return React.createElement(
 					'a',
-					{ className: 'input-group-addon', 'data-toggle': 'tooltip', title: this.props.name },
-					React.createElement('span', { className: icon + " filterButton " + selected,
-						onClick: this.handleClick })
+					{ className: 'input-group-addon', 'data-container': 'body', 'data-toggle': 'tooltip', title: this.props.name },
+					React.createElement('span', { className: icon + " filterButton " + selected, onClick: this.handleClick })
+				);else return React.createElement(
+					'a',
+					{ className: 'input-group-addon' },
+					React.createElement('span', { className: icon + " filterButton " + selected, onClick: this.handleClick })
 				);
 			}
 		}]);
@@ -9226,9 +9228,9 @@
 
 /***/ },
 /* 88 */
-/*!*****************************************!*\
-  !*** ./static/components/EventName.jsx ***!
-  \*****************************************/
+/*!**********************************************!*\
+  !*** ./static/components/Home/EventName.jsx ***!
+  \**********************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9271,9 +9273,15 @@
 						"h1",
 						null,
 						this.props.name,
-						" has ",
-						this.props.numUnseenPosts,
-						" unseen posts  "
+						" ",
+						React.createElement(
+							"small",
+							null,
+							" ",
+							this.props.numUnseenPosts,
+							" unseen posts "
+						),
+						" "
 					)
 				);
 			}
@@ -9286,9 +9294,9 @@
 
 /***/ },
 /* 89 */
-/*!****************************************!*\
-  !*** ./static/components/MakePost.jsx ***!
-  \****************************************/
+/*!*********************************************!*\
+  !*** ./static/components/Home/MakePost.jsx ***!
+  \*********************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9324,51 +9332,31 @@
 	
 			_this.handlePostChange = _this.handlePostChange.bind(_this);
 			_this.handlePostSubmit = _this.handlePostSubmit.bind(_this);
-			_this.handleEnterPress = _this.handleEnterPress.bind(_this);
 			return _this;
 		}
 	
 		_createClass(MakePost, [{
 			key: 'componentDidMount',
 			value: function componentDidMount() {
-				var messageVisible = true;
-	
-				$(document).ready(function () {
-					$('[data-toggle="tooltip"]').tooltip();
-				});
-	
 				$('#SubmitButtonPost').click(function () {
 					$(this).blur();
 				});
-				$('#StartButtonPost').click(function () {
-					$(this).blur();
-					if (!messageVisible) {
-						messageVisible = !messageVisible;
-						$(this).siblings('#MessagePost').fadeIn(function () {
-							$(this).children('#PostInput').focus();
-						});
-					} else {
-						messageVisible = !messageVisible;
-						$(this).siblings('#MessagePost').fadeOut(function () {
-							$(this).children('#PostInput').blur();
-						});
-					}
+				$('#MessagePost').hide();
+				$('#TogglePost').click(function () {
+					$('#MessagePost').slideToggle(function () {
+						$('#PostInput').focus();
+					});
 				});
 			}
 		}, {
 			key: 'handlePostSubmit',
 			value: function handlePostSubmit() {
-				if (this.postText.value.length > 0) this.props.onPostSubmit(this.postText.value);
+				if (this.postText.value.trim().length > 0) this.props.onPostSubmit(this.postText.value);
 			}
 		}, {
 			key: 'handlePostChange',
 			value: function handlePostChange() {
 				this.props.onPostChange(this.postText.value);
-			}
-		}, {
-			key: 'handleEnterPress',
-			value: function handleEnterPress(target) {
-				if (this.postText.value.length > 0) if (target.charCode == 13) this.props.onPostSubmit(this.postText.value);
 			}
 		}, {
 			key: 'render',
@@ -9379,15 +9367,19 @@
 					'div',
 					null,
 					React.createElement(
-						'a',
-						{ id: 'StartButtonPost', className: 'StartButton' },
-						React.createElement('span', { className: 'glyphicon glyphicon-pencil AppGlyphicon' })
+						'div',
+						{ id: 'TogglePost' },
+						React.createElement(
+							'h4',
+							null,
+							'Post a message...'
+						)
 					),
 					React.createElement(
 						'div',
-						{ id: 'MessagePost', className: 'Message pull-right input-group input-group-unstyled' },
-						React.createElement('input', { id: 'PostInput', type: 'text', className: 'PostText form-control',
-							onKeyPress: this.handleEnterPress, value: this.props.postText,
+						{ id: 'MessagePost' },
+						React.createElement('textarea', { id: 'PostInput', className: 'PostText form-control',
+							value: this.props.postText, rows: '4',
 							placeholder: this.props.placeholder, ref: function ref(input) {
 								return _this2.postText = input;
 							},
@@ -9396,10 +9388,22 @@
 							return React.createElement(_FilterButton2.default, { key: i, onClick: this.props.onClick, selected: false, name: action });
 						}, this),
 						React.createElement(
-							'a',
-							{ className: 'SubmitButton input-group-addon', id: 'SubmitButtonPost',
-								onClick: this.handlePostSubmit, 'data-toggle': 'tooltip', title: 'Post' },
-							React.createElement('span', { className: 'glyphicon glyphicon-send AppGlyphicon' })
+							'div',
+							{ className: 'SubmitButton input-group-addon',
+								onClick: this.handlePostSubmit },
+							React.createElement(
+								'span',
+								{ className: 'AppGlyphicon' },
+								React.createElement(
+									'h4',
+									null,
+									React.createElement(
+										'b',
+										null,
+										'POST!'
+									)
+								)
+							)
 						)
 					)
 				);
@@ -9413,9 +9417,9 @@
 
 /***/ },
 /* 90 */
-/*!************************************!*\
-  !*** ./static/components/Feed.jsx ***!
-  \************************************/
+/*!*****************************************!*\
+  !*** ./static/components/Home/Feed.jsx ***!
+  \*****************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9533,9 +9537,9 @@
 
 /***/ },
 /* 91 */
-/*!****************************************!*\
-  !*** ./static/components/FeedPost.jsx ***!
-  \****************************************/
+/*!*********************************************!*\
+  !*** ./static/components/Home/FeedPost.jsx ***!
+  \*********************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9714,9 +9718,9 @@
 
 /***/ },
 /* 92 */
-/*!**************************************!*\
-  !*** ./static/components/Avatar.jsx ***!
-  \**************************************/
+/*!*******************************************!*\
+  !*** ./static/components/Home/Avatar.jsx ***!
+  \*******************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9762,9 +9766,9 @@
 
 /***/ },
 /* 93 */
-/*!**********************************************!*\
-  !*** ./static/components/FeedPostHeader.jsx ***!
-  \**********************************************/
+/*!***************************************************!*\
+  !*** ./static/components/Home/FeedPostHeader.jsx ***!
+  \***************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9847,9 +9851,9 @@
 
 /***/ },
 /* 94 */
-/*!********************************************!*\
-  !*** ./static/components/FeedPostBody.jsx ***!
-  \********************************************/
+/*!*************************************************!*\
+  !*** ./static/components/Home/FeedPostBody.jsx ***!
+  \*************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9895,9 +9899,9 @@
 
 /***/ },
 /* 95 */
-/*!*********************************************!*\
-  !*** ./static/components/EditPostModal.jsx ***!
-  \*********************************************/
+/*!**************************************************!*\
+  !*** ./static/components/Home/EditPostModal.jsx ***!
+  \**************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10016,9 +10020,9 @@
 
 /***/ },
 /* 96 */
-/*!***********************************************!*\
-  !*** ./static/components/DeletePostModal.jsx ***!
-  \***********************************************/
+/*!****************************************************!*\
+  !*** ./static/components/Home/DeletePostModal.jsx ***!
+  \****************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10120,9 +10124,9 @@
 
 /***/ },
 /* 97 */
-/*!***********************************************!*\
-  !*** ./static/components/ReportPostModal.jsx ***!
-  \***********************************************/
+/*!****************************************************!*\
+  !*** ./static/components/Home/ReportPostModal.jsx ***!
+  \****************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10240,9 +10244,9 @@
 
 /***/ },
 /* 98 */
-/*!******************************************!*\
-  !*** ./static/components/CommentApp.jsx ***!
-  \******************************************/
+/*!**************************************************!*\
+  !*** ./static/components/Comment/CommentApp.jsx ***!
+  \**************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10253,19 +10257,19 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _CommentNavBar = __webpack_require__(/*! CommentNavBar.jsx */ 99);
+	var _CommentNavBar = __webpack_require__(/*! ./CommentNavBar.jsx */ 99);
 	
 	var _CommentNavBar2 = _interopRequireDefault(_CommentNavBar);
 	
-	var _CommentFeedPost = __webpack_require__(/*! CommentFeedPost.jsx */ 100);
+	var _CommentFeedPost = __webpack_require__(/*! ./CommentFeedPost.jsx */ 100);
 	
 	var _CommentFeedPost2 = _interopRequireDefault(_CommentFeedPost);
 	
-	var _CommentFeed = __webpack_require__(/*! CommentFeed.jsx */ 103);
+	var _CommentFeed = __webpack_require__(/*! ./CommentFeed.jsx */ 103);
 	
 	var _CommentFeed2 = _interopRequireDefault(_CommentFeed);
 	
-	var _MakeComment = __webpack_require__(/*! MakeComment.jsx */ 107);
+	var _MakeComment = __webpack_require__(/*! ./MakeComment.jsx */ 107);
 	
 	var _MakeComment2 = _interopRequireDefault(_MakeComment);
 	
@@ -10354,7 +10358,7 @@
 		}, {
 			key: "handleSearch",
 			value: function handleSearch(searchText) {
-				$('html, body').animate({ scrollTop: $('#CommentFeed').prop("scrollHeight") }, 300);
+				$("html, body").animate({ scrollTop: $('#CommentFeed').prop('scrollHeight') }, 300);
 				this.setState({ search: searchText });
 			}
 		}, {
@@ -10385,7 +10389,7 @@
 					contentType: 'application/json;charset=UTF-8'
 				});
 				this.setState({ feed: feed, comment: '' });
-				$('html, body').animate({ scrollTop: $('#CommentFeed').prop("scrollHeight") }, 300);
+				$("html, body").animate({ scrollTop: $('#CommentFeed').prop('scrollHeight') }, 300);
 			}
 		}, {
 			key: "handleCommentEdit",
@@ -10441,14 +10445,26 @@
 					React.createElement(
 						"div",
 						{ className: "container" },
-						React.createElement(_CommentFeedPost2.default, { comment: this.state.original_post, isOriginalPost: true }),
-						React.createElement(_CommentFeed2.default, { currentUser: this.state.currentUser, searchText: this.state.search,
-							filters: this.state.filters,
-							handleCommentEdit: this.handleCommentEdit,
-							handleCommentDelete: this.handleCommentDelete,
-							comments: this.state.feed }),
-						React.createElement(_MakeComment2.default, { placeholder: "What's up bro?", commentText: this.state.comment,
-							onCommentChange: this.handleTypingComment, onCommentSubmit: this.handleCommentSubmit })
+						React.createElement(
+							"div",
+							{ className: "app row" },
+							React.createElement(_CommentFeedPost2.default, { comment: this.state.original_post, isOriginalPost: true })
+						),
+						React.createElement(
+							"div",
+							{ className: "app row" },
+							React.createElement(_MakeComment2.default, { placeholder: "What's up bro?", commentText: this.state.comment,
+								onCommentChange: this.handleTypingComment, onCommentSubmit: this.handleCommentSubmit })
+						),
+						React.createElement(
+							"div",
+							{ className: "app row" },
+							React.createElement(_CommentFeed2.default, { currentUser: this.state.currentUser, searchText: this.state.search,
+								filters: this.state.filters,
+								handleCommentEdit: this.handleCommentEdit,
+								handleCommentDelete: this.handleCommentDelete,
+								comments: this.state.feed })
+						)
 					)
 				);
 			}
@@ -10461,9 +10477,9 @@
 
 /***/ },
 /* 99 */
-/*!*********************************************!*\
-  !*** ./static/components/CommentNavBar.jsx ***!
-  \*********************************************/
+/*!*****************************************************!*\
+  !*** ./static/components/Comment/CommentNavBar.jsx ***!
+  \*****************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10474,11 +10490,11 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _NotificationsDropdown = __webpack_require__(/*! ./NotificationsDropdown.jsx */ 3);
+	var _NotificationsDropdown = __webpack_require__(/*! ../GenericNavBar/NotificationsDropdown.jsx */ 3);
 	
 	var _NotificationsDropdown2 = _interopRequireDefault(_NotificationsDropdown);
 	
-	var _AccountDropdown = __webpack_require__(/*! ./AccountDropdown.jsx */ 86);
+	var _AccountDropdown = __webpack_require__(/*! ../GenericNavBar/AccountDropdown.jsx */ 86);
 	
 	var _AccountDropdown2 = _interopRequireDefault(_AccountDropdown);
 	
@@ -10616,9 +10632,9 @@
 
 /***/ },
 /* 100 */
-/*!***********************************************!*\
-  !*** ./static/components/CommentFeedPost.jsx ***!
-  \***********************************************/
+/*!*******************************************************!*\
+  !*** ./static/components/Comment/CommentFeedPost.jsx ***!
+  \*******************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10637,7 +10653,7 @@
 	
 	var _CommentFeedPostBody2 = _interopRequireDefault(_CommentFeedPostBody);
 	
-	var _Avatar = __webpack_require__(/*! ./Avatar.jsx */ 92);
+	var _Avatar = __webpack_require__(/*! ../Home/Avatar.jsx */ 92);
 	
 	var _Avatar2 = _interopRequireDefault(_Avatar);
 	
@@ -10725,9 +10741,9 @@
 
 /***/ },
 /* 101 */
-/*!*****************************************************!*\
-  !*** ./static/components/CommentFeedPostHeader.jsx ***!
-  \*****************************************************/
+/*!*************************************************************!*\
+  !*** ./static/components/Comment/CommentFeedPostHeader.jsx ***!
+  \*************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10848,9 +10864,9 @@
 
 /***/ },
 /* 102 */
-/*!***************************************************!*\
-  !*** ./static/components/CommentFeedPostBody.jsx ***!
-  \***************************************************/
+/*!***********************************************************!*\
+  !*** ./static/components/Comment/CommentFeedPostBody.jsx ***!
+  \***********************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10905,9 +10921,9 @@
 
 /***/ },
 /* 103 */
-/*!*******************************************!*\
-  !*** ./static/components/CommentFeed.jsx ***!
-  \*******************************************/
+/*!***************************************************!*\
+  !*** ./static/components/Comment/CommentFeed.jsx ***!
+  \***************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10918,19 +10934,19 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _CommentFeedPost = __webpack_require__(/*! CommentFeedPost.jsx */ 100);
+	var _CommentFeedPost = __webpack_require__(/*! ./CommentFeedPost.jsx */ 100);
 	
 	var _CommentFeedPost2 = _interopRequireDefault(_CommentFeedPost);
 	
-	var _EditCommentModal = __webpack_require__(/*! EditCommentModal.jsx */ 104);
+	var _EditCommentModal = __webpack_require__(/*! ./EditCommentModal.jsx */ 104);
 	
 	var _EditCommentModal2 = _interopRequireDefault(_EditCommentModal);
 	
-	var _DeleteCommentModal = __webpack_require__(/*! DeleteCommentModal.jsx */ 105);
+	var _DeleteCommentModal = __webpack_require__(/*! ./DeleteCommentModal.jsx */ 105);
 	
 	var _DeleteCommentModal2 = _interopRequireDefault(_DeleteCommentModal);
 	
-	var _ReportCommentModal = __webpack_require__(/*! ReportCommentModal.jsx */ 106);
+	var _ReportCommentModal = __webpack_require__(/*! ./ReportCommentModal.jsx */ 106);
 	
 	var _ReportCommentModal2 = _interopRequireDefault(_ReportCommentModal);
 	
@@ -11007,9 +11023,9 @@
 
 /***/ },
 /* 104 */
-/*!************************************************!*\
-  !*** ./static/components/EditCommentModal.jsx ***!
-  \************************************************/
+/*!********************************************************!*\
+  !*** ./static/components/Comment/EditCommentModal.jsx ***!
+  \********************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11128,9 +11144,9 @@
 
 /***/ },
 /* 105 */
-/*!**************************************************!*\
-  !*** ./static/components/DeleteCommentModal.jsx ***!
-  \**************************************************/
+/*!**********************************************************!*\
+  !*** ./static/components/Comment/DeleteCommentModal.jsx ***!
+  \**********************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11234,9 +11250,9 @@
 
 /***/ },
 /* 106 */
-/*!**************************************************!*\
-  !*** ./static/components/ReportCommentModal.jsx ***!
-  \**************************************************/
+/*!**********************************************************!*\
+  !*** ./static/components/Comment/ReportCommentModal.jsx ***!
+  \**********************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11354,9 +11370,9 @@
 
 /***/ },
 /* 107 */
-/*!*******************************************!*\
-  !*** ./static/components/MakeComment.jsx ***!
-  \*******************************************/
+/*!***************************************************!*\
+  !*** ./static/components/Comment/MakeComment.jsx ***!
+  \***************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11386,7 +11402,6 @@
 	
 			_this.handleCommentChange = _this.handleCommentChange.bind(_this);
 			_this.handleCommentSubmit = _this.handleCommentSubmit.bind(_this);
-			_this.handleEnterPress = _this.handleEnterPress.bind(_this);
 			return _this;
 		}
 	
@@ -11398,35 +11413,22 @@
 				$('#SubmitButtonComment').click(function () {
 					$(this).blur();
 				});
-				$('#StartButtonComment').click(function () {
-					$(this).blur();
-					if (!messageVisible) {
-						messageVisible = !messageVisible;
-						$(this).siblings('#CommentPost').fadeIn(function () {
-							$(this).children('#CommentInput').focus();
-						});
-					} else {
-						messageVisible = !messageVisible;
-						$(this).siblings('#CommentPost').fadeOut(function () {
-							$(this).children('#CommentInput').blur();
-						});
-					}
+				$('#CommentPost').hide();
+				$('#ToggleComment').click(function () {
+					$('#CommentPost').slideToggle(function () {
+						$('#CommentInput').focus();
+					});
 				});
 			}
 		}, {
 			key: 'handleCommentSubmit',
 			value: function handleCommentSubmit() {
-				if (this.commentText.value.length > 0) this.props.onCommentSubmit(this.commentText.value);
+				if (this.commentText.value.trim().length > 0) this.props.onCommentSubmit(this.commentText.value);
 			}
 		}, {
 			key: 'handleCommentChange',
 			value: function handleCommentChange() {
 				this.props.onCommentChange(this.commentText.value);
-			}
-		}, {
-			key: 'handleEnterPress',
-			value: function handleEnterPress(target) {
-				if (this.commentText.value.length > 0) if (target.charCode == 13) this.props.onCommentSubmit(this.commentText.value);
 			}
 		}, {
 			key: 'render',
@@ -11435,26 +11437,42 @@
 	
 				return React.createElement(
 					'div',
-					null,
+					{ id: 'MakeComment' },
 					React.createElement(
-						'a',
-						{ id: 'StartButtonComment', className: 'StartButton' },
-						React.createElement('span', { className: 'glyphicon glyphicon-pencil AppGlyphicon' })
+						'div',
+						{ id: 'ToggleComment' },
+						React.createElement(
+							'h4',
+							null,
+							'Make a comment...'
+						)
 					),
 					React.createElement(
 						'div',
-						{ id: 'CommentPost', className: 'Message pull-right input-group input-group-unstyled' },
-						React.createElement('input', { id: 'CommentInput', type: 'text', className: 'CommentText form-control',
-							onKeyPress: this.handleEnterPress, value: this.props.commentText,
-							placeholder: this.props.placeholder, ref: function ref(input) {
+						{ id: 'CommentPost' },
+						React.createElement('textarea', { id: 'CommentInput', className: 'form-control',
+							value: this.props.commentText,
+							placeholder: this.props.placeholder, rows: '2', ref: function ref(input) {
 								return _this2.commentText = input;
 							},
 							onSubmit: this.handleCommentSubmit, onChange: this.handleCommentChange }),
 						React.createElement(
-							'a',
-							{ className: 'SubmitButton input-group-addon', id: 'SubmitButtonComment',
+							'div',
+							{ className: 'SubmitButton input-group-addon',
 								onClick: this.handleCommentSubmit },
-							React.createElement('span', { className: 'glyphicon glyphicon-send AppGlyphicon' })
+							React.createElement(
+								'span',
+								{ className: 'AppGlyphicon' },
+								React.createElement(
+									'h4',
+									null,
+									React.createElement(
+										'b',
+										null,
+										'POST!'
+									)
+								)
+							)
 						)
 					)
 				);
@@ -11468,9 +11486,9 @@
 
 /***/ },
 /* 108 */
-/*!************************************************!*\
-  !*** ./static/components/NotificationsApp.jsx ***!
-  \************************************************/
+/*!**************************************************************!*\
+  !*** ./static/components/Notifications/NotificationsApp.jsx ***!
+  \**************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11481,11 +11499,11 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _NoSearchNavBar = __webpack_require__(/*! NoSearchNavBar.jsx */ 109);
+	var _NoSearchNavBar = __webpack_require__(/*! ../GenericNavBar/NoSearchNavBar.jsx */ 109);
 	
 	var _NoSearchNavBar2 = _interopRequireDefault(_NoSearchNavBar);
 	
-	var _NotificationsFeed = __webpack_require__(/*! NotificationsFeed.jsx */ 110);
+	var _NotificationsFeed = __webpack_require__(/*! ./NotificationsFeed.jsx */ 110);
 	
 	var _NotificationsFeed2 = _interopRequireDefault(_NotificationsFeed);
 	
@@ -11580,9 +11598,9 @@
 
 /***/ },
 /* 109 */
-/*!**********************************************!*\
-  !*** ./static/components/NoSearchNavBar.jsx ***!
-  \**********************************************/
+/*!************************************************************!*\
+  !*** ./static/components/GenericNavBar/NoSearchNavBar.jsx ***!
+  \************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11682,9 +11700,9 @@
 
 /***/ },
 /* 110 */
-/*!*************************************************!*\
-  !*** ./static/components/NotificationsFeed.jsx ***!
-  \*************************************************/
+/*!***************************************************************!*\
+  !*** ./static/components/Notifications/NotificationsFeed.jsx ***!
+  \***************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -11735,7 +11753,7 @@
 	        value: function render() {
 	            return React.createElement(
 	                "ul",
-	                null,
+	                { id: "NotificationsFeed" },
 	                this.addNotificationsToFeed()
 	            );
 	        }
@@ -11748,9 +11766,9 @@
 
 /***/ },
 /* 111 */
-/*!*****************************************************!*\
-  !*** ./static/components/NotificationsFeedPost.jsx ***!
-  \*****************************************************/
+/*!*******************************************************************!*\
+  !*** ./static/components/Notifications/NotificationsFeedPost.jsx ***!
+  \*******************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11788,8 +11806,21 @@
 	                { className: 'NotificationsFeedPost' },
 	                React.createElement(
 	                    Link,
-	                    { to: "/comment/" + note.comment_id },
-	                    note.action + " at " + note.timeString
+	                    { to: "/comment/" + note.comment_id, id: 'NotificationsFeedPostLink' },
+	                    React.createElement(
+	                        'div',
+	                        { className: 'row' },
+	                        note.action
+	                    ),
+	                    React.createElement(
+	                        'div',
+	                        { className: 'row' },
+	                        React.createElement(
+	                            'small',
+	                            null,
+	                            note.timeString
+	                        )
+	                    )
 	                )
 	            );
 	        }
@@ -11802,9 +11833,9 @@
 
 /***/ },
 /* 112 */
-/*!*******************************************!*\
-  !*** ./static/components/SettingsApp.jsx ***!
-  \*******************************************/
+/*!****************************************************!*\
+  !*** ./static/components/Settings/SettingsApp.jsx ***!
+  \****************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11827,7 +11858,7 @@
 	
 	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
 	
-	var _NoSearchNavBar = __webpack_require__(/*! ./NoSearchNavBar.jsx */ 109);
+	var _NoSearchNavBar = __webpack_require__(/*! ../GenericNavBar/NoSearchNavBar.jsx */ 109);
 	
 	var _NoSearchNavBar2 = _interopRequireDefault(_NoSearchNavBar);
 	
@@ -11857,7 +11888,7 @@
 	}
 	
 	var text_fields = ["first_name", "last_name", "password", "password_confirm", "phone_number"];
-	var select_fields = ["birthMonth", "birthDay", "birthYear", "avatar"];
+	var select_fields = ["month_of_birth", "day_of_birth", "year_of_birth", "avatar"];
 	
 	var SettingsApp = function (_React$Component) {
 		_inherits(SettingsApp, _React$Component);
@@ -11874,17 +11905,19 @@
 				password: '',
 				password_confirm: '',
 				phone_number: '',
-				birthMonth: '',
-				birthDay: '',
-				birthYear: '',
+				month_of_birth: '',
+				day_of_birth: '',
+				year_of_birth: '',
 				avatar: '',
-				valid_text_fields: text_fields,
-				valid_select_fields: select_fields,
+				valid_text_fields: ["first_name", "last_name", "password", "password_confirm", "phone_number"],
+				valid_select_fields: ["month_of_birth", "day_of_birth", "year_of_birth", "avatar"],
 				submittable: true
 			};
 			_this.getCurrentUserInfo = _this.getCurrentUserInfo.bind(_this);
-			_this.handleTyping = _this.handleTyping.bind(_this);
-			_this.handleBlur = _this.handleBlur.bind(_this);
+			_this.handleChange = _this.handleChange.bind(_this);
+			_this.handleTextBlur = _this.handleTextBlur.bind(_this);
+			_this.handleSelectBlur = _this.handleSelectBlur.bind(_this);
+			_this.handleSubmit = _this.handleSubmit.bind(_this);
 			_this.autopopulateSettings = _this.autopopulateSettings.bind(_this);
 			return _this;
 		}
@@ -11902,9 +11935,9 @@
 							password: user.password,
 							password_confirm: user.password,
 							phone_number: user.phone_number,
-							birthDay: user.birthDay,
-							birthYear: user.birthYear,
-							birthMonth: user.birthMonth,
+							day_of_birth: user.birthDay,
+							year_of_birth: user.birthYear,
+							month_of_birth: user.birthMonth,
 							avatar: user.avatar_name
 						});
 					}.bind(this)
@@ -11918,20 +11951,58 @@
 				}.bind(this));
 			}
 		}, {
-			key: 'handleTyping',
-			value: function handleTyping(obj) {
+			key: 'handleChange',
+			value: function handleChange(obj) {
 				this.setState(obj);
 			}
 		}, {
-			key: 'handleBlur',
-			value: function handleBlur(field, valid) {
-				if (valid) this.setState({ valid_text_fields: add(array, field) });else this.setState({ valid_text_fields: remove(array, field) });
-				this.setState({ submittable: isSameSet(text_fields, this.state.valid_text_fields) });
+			key: 'handleTextBlur',
+			value: function handleTextBlur(field, valid) {
+				var valid_text_fields = this.state.valid_text_fields;
+				var valid_select_fields = this.state.valid_select_fields;
+				if (valid == "valid") this.setState({ valid_text_fields: add(valid_text_fields, field) });else this.setState({ valid_text_fields: remove(valid_text_fields, field) });
+				this.setState({ submittable: isSameSet(text_fields, valid_text_fields) && isSameSet(select_fields, valid_select_fields) });
+			}
+		}, {
+			key: 'handleSelectBlur',
+			value: function handleSelectBlur(field, valid) {
+				var valid_text_fields = this.state.valid_text_fields;
+				var valid_select_fields = this.state.valid_select_fields;
+				if (valid == "valid") this.setState({ valid_select_fields: add(valid_select_fields, field) });else this.setState({ valid_select_fields: remove(valid_select_fields, field) });
+				this.setState({ submittable: isSameSet(text_fields, valid_text_fields) && isSameSet(select_fields, valid_select_fields) });
+			}
+		}, {
+			key: 'handleSubmit',
+			value: function handleSubmit() {
+				var obj = {
+					first_name: this.state.first_name,
+					last_name: this.state.last_name,
+					password: this.state.password,
+					phone_number: this.state.phone_number,
+					day_of_birth: this.state.day_of_birth,
+					month_of_birth: this.state.month_of_birth,
+					year_of_birth: this.state.year_of_birth,
+					avatar: this.state.avatar
+				};
+				$.ajax({
+					type: 'POST',
+					url: '/updateSettings',
+					data: JSON.stringify(obj, null, '\t'),
+					contentType: 'application/json;charset=UTF-8'
+				});
+				$('#UpdateSettingsSubmit').blur();
+				$('#UpdateSettingsAlert').fadeIn(400).delay(5000).fadeOut(400);
+				$("html, body").animate({ scrollTop: $('#SettingsApp').prop('scrollHeight') }, 600);
 			}
 		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				this.autopopulateSettings();
+				this.getCurrentUserInfo();
+				$('#UpdateSettingsSubmit').click(function (e) {
+					e.preventDefault();
+				});
+				$('#UpdateSettingsAlert').hide();
 			}
 		}, {
 			key: 'render',
@@ -11960,20 +12031,50 @@
 								return React.createElement(
 									'div',
 									null,
-									React.createElement(_SettingsInputLabel2.default, { id: field }),
-									React.createElement(_SettingsTextInput2.default, { id: field, value: this.state[field],
-										handleTyping: this.handleTyping, handleBlur: this.handleBlur })
+									React.createElement(_SettingsInputLabel2.default, { field: field }),
+									React.createElement(_SettingsTextInput2.default, { field: field, value: this.state[field],
+										handleTyping: this.handleChange,
+										handleBlur: this.handleTextBlur })
 								);
 							}, this),
+							select_fields.map(function (field) {
+								return React.createElement(
+									'div',
+									null,
+									React.createElement(_SettingsInputLabel2.default, { field: field }),
+									React.createElement(_SettingsSelectInput2.default, { field: field, value: this.state[field],
+										avatar_list: this.state.avatar_list,
+										handleSelect: this.handleChange,
+										handleBlur: this.handleSelectBlur })
+								);
+							}, this),
+							React.createElement('div', { id: 'avatar_container', className: 'avatar_container centered-text' }),
 							React.createElement(
 								'div',
 								{ className: 'form-group' },
-								React.createElement(
+								this.state.submittable && React.createElement(
 									'button',
-									{ className: 'btn btn-default' },
+									{ className: 'btn btn-default', id: 'UpdateSettingsSubmit',
+										onClick: this.handleSubmit },
+									' Update! '
+								),
+								!this.state.submittable && React.createElement(
+									'button',
+									{ className: 'btn btn-default', id: 'UpdateSettingsSubmit',
+										onClick: this.handleSubmit, disabled: true },
 									' Update! '
 								)
 							)
+						),
+						React.createElement(
+							'div',
+							{ className: 'alert alert-success', id: 'UpdateSettingsAlert' },
+							React.createElement(
+								'strong',
+								null,
+								'Success!'
+							),
+							' Your settings have been updated.'
 						)
 					)
 				);
@@ -11987,9 +12088,9 @@
 
 /***/ },
 /* 113 */
-/*!*************************************************!*\
-  !*** ./static/components/SettingsTextInput.jsx ***!
-  \*************************************************/
+/*!**********************************************************!*\
+  !*** ./static/components/Settings/SettingsTextInput.jsx ***!
+  \**********************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12018,19 +12119,34 @@
 		}
 		return str;
 	}
-	function testValid(field) {
+	function testValid(field, value) {
 		switch (field) {
 			case "first_name":
-				break;
+				var condition = /^[a-z ,.'-]+$/i;
+				if (!value.match(condition)) return "invalid";
 			case "last_name":
-				break;
+				var condition = /^[a-z ,.'-]+$/i;
+				if (!value.match(condition)) return "invalid";
 			case "password":
-				break;
+				var condition = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,}$/;
+				if (!value.match(condition)) return "invalid";
 			case "password_confirm":
-				break;
+				var condition = $('#password').val();
+				if (value != condition) return "invalid";
 			default:
-				alert("Invalid field");
+				return "valid";
 		}
+		return "valid";
+	}
+	function warningForField(field, value) {
+		if (!value) return "You can\'t leave this empty.";
+		switch (field) {
+			case "password_confirm":
+				return "Your passwords don\'t match.";
+			default:
+				return "Invalid " + idToName(field);
+		}
+		return "Invalid " + idToName(field);
 	}
 	
 	var SettingsTextInput = function (_React$Component) {
@@ -12041,7 +12157,7 @@
 	
 			var _this = _possibleConstructorReturn(this, (SettingsTextInput.__proto__ || Object.getPrototypeOf(SettingsTextInput)).call(this, props));
 	
-			_this.setState = { valid: true };
+			_this.state = { valid: "valid" };
 			_this.handleTyping = _this.handleTyping.bind(_this);
 			_this.handleBlur = _this.handleBlur.bind(_this);
 			return _this;
@@ -12051,34 +12167,44 @@
 			key: 'handleTyping',
 			value: function handleTyping(event) {
 				var obj = {};
-				obj[this.props.id] = event.target.value;
+				obj[this.props.field] = event.target.value;
 				this.props.handleTyping(obj);
 			}
 		}, {
 			key: 'handleBlur',
 			value: function handleBlur(event) {
-				this.props.handleBlur(event.target.value);
+				var isValid = testValid(this.props.field, event.target.value);
+				this.setState({ valid: isValid });
+				this.props.handleBlur(this.props.field, isValid);
+			}
+		}, {
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				$('#password').popover();
 			}
 		}, {
 			key: 'render',
 			value: function render() {
-				var type = this.props.id == "password" || this.props.id == "password_confirm" ? "password" : "text";
-				var valid = this.state.valid ? "valid" : "invalid";
+				var type = this.props.field == "password" || this.props.field == "password_confirm" ? "password" : "text";
 				return React.createElement(
 					'div',
 					null,
 					React.createElement(
 						'div',
 						{ className: 'form-group' },
-						React.createElement('input', { className: "setting " + valid, id: this.props.id, type: type,
+						this.props.field != "password" && React.createElement('input', { className: "setting " + this.state.valid, id: this.props.field, type: type,
 							value: this.props.value,
+							onChange: this.handleTyping, onBlur: this.handleBlur }),
+						this.props.field == "password" && React.createElement('input', { 'data-toggle': 'popover', 'data-trigger': 'focus',
+							'data-content': 'Your password must contain at least one letter and one number.',
+							className: "setting " + this.state.valid, id: this.props.field, type: type,
+							value: this.props.value, onClick: focus(),
 							onChange: this.handleTyping, onBlur: this.handleBlur })
 					),
-					React.createElement(
+					this.state.valid == "invalid" && React.createElement(
 						'div',
-						{ className: 'form-group warning', id: this.props.id + "_warning" },
-						'Invalid ',
-						idToName(this.props.id)
+						{ className: 'form-group warning', id: this.props.field + "_warning" },
+						warningForField(this.props.field, $('#' + this.props.field).val())
 					)
 				);
 			}
@@ -12091,12 +12217,12 @@
 
 /***/ },
 /* 114 */
-/*!***************************************************!*\
-  !*** ./static/components/SettingsSelectInput.jsx ***!
-  \***************************************************/
+/*!************************************************************!*\
+  !*** ./static/components/Settings/SettingsSelectInput.jsx ***!
+  \************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -12112,19 +12238,186 @@
 	
 	var React = __webpack_require__(/*! react */ 4);
 	
+	function idToName(id) {
+		var arr = id.split('_');
+		var str = "";
+		var temp;
+		for (var i = 0; i < arr.length; i++) {
+			temp = arr[i].charAt(0).toLowerCase() + arr[i].substr(1).toLowerCase();
+			str = str.concat(temp + ' ');
+		}
+		return str;
+	}
+	
+	function testValid(field, value) {
+		switch (field) {
+			case "month_of_birth":
+				var day = $('#day_of_birth').val();
+				if (day) return isValidMonth(day, value);
+			case "day_of_birth":
+				var month = $('#month_of_birth').val();
+				if (month) return isValidDay(month, value);
+			case "year_of_birth":
+				return isValidYear(value);
+			default:
+				return "valid";
+		}
+		return "valid";
+	}
+	
+	function warningForField(field, value) {
+		if (!value) return "You can\'t leave this empty.";
+		switch (field) {
+			case "month_of_birth":
+				return "Hmm, the month doesn\'t look right. There aren't that many days in that month.";
+			case "day_of_birth":
+				return "Hmm, the day doesn\'t look right. Be sure to use a 1 or 2-digit number that is a day of the month.";
+			case "year_of_birth":
+				return "Hmm, the year doesn\'t look right. Be sure to use a 4-digit number.";
+			default:
+				return "Invalid " + idToName(field);
+		}
+		return "Invalid " + idToName(field);
+	}
+	
+	function isValidMonth(day, month) {
+		var max_days;
+		for (var i = 0; i < months.length; i++) {
+			if (parseInt(month) == months[i].value) max_days = months[i].days;
+		}if (day <= max_days) return "valid";else return "invalid";
+	}
+	
+	function isValidDay(month, day) {
+		var max_days;
+		for (var i = 0; i < months.length; i++) {
+			if (parseInt(month) == months[i].value) max_days = months[i].days;
+		}if (day <= max_days) return "valid";else return "invalid";
+	}
+	
+	function isValidYear(year) {
+		var high = 2006;var low = 1900;
+		if (parseInt(year) > high || parseInt(year) < low) return "invalid";else return "valid";
+	}
+	
+	function generateDays() {
+		var days = [];
+		var start = 1;var end = 31;
+		for (var i = start; i <= end; i++) {
+			days.push({ label: i, value: i });
+		}
+		return days;
+	}
+	
+	function generateYears() {
+		var years = [];
+		var current_year = new Date().getFullYear();
+		var start = current_year - 60;var end = current_year;
+		for (var i = start; i <= end; i++) {
+			years.push({ label: i, value: i });
+		}
+		return years;
+	}
+	
+	function generateAvatars(arr) {
+		var avatars = [];
+		for (var i = 0; i < arr.length; i++) {
+			avatars.push({ label: arr[i], value: arr[i].toLowerCase() });
+		}
+		return avatars;
+	}
+	
+	var days = generateDays();
+	var years = generateYears();
+	var avatars = ["Ajani", "Chandra", "Elspeth", "Gideon", "Jace", "Lilianna", "Nahiri", "Nicol", "Nissa", "Ugin"];
+	var months = [{ label: "January", value: 1, days: 31 }, { label: "February", value: 2, days: 29 }, { label: "March", value: 3, days: 31 }, { label: "April", value: 4, days: 30 }, { label: "May", value: 5, days: 31 }, { label: "June", value: 6, days: 30 }, { label: "July", value: 7, days: 31 }, { label: "August", value: 8, days: 31 }, { label: "September", value: 9, days: 30 }, { label: "October", value: 10, days: 31 }, { label: "November", value: 11, days: 30 }, { label: "December", value: 12, days: 31 }];
+	var avatar_list = generateAvatars(avatars);
+	
 	var SettingsSelectInput = function (_React$Component) {
 		_inherits(SettingsSelectInput, _React$Component);
 	
-		function SettingsSelectInput() {
+		function SettingsSelectInput(props) {
 			_classCallCheck(this, SettingsSelectInput);
 	
-			return _possibleConstructorReturn(this, (SettingsSelectInput.__proto__ || Object.getPrototypeOf(SettingsSelectInput)).apply(this, arguments));
+			var _this = _possibleConstructorReturn(this, (SettingsSelectInput.__proto__ || Object.getPrototypeOf(SettingsSelectInput)).call(this, props));
+	
+			_this.state = { valid: "valid" };
+			_this.handleSelect = _this.handleSelect.bind(_this);
+			_this.handleBlur = _this.handleBlur.bind(_this);
+			_this.handleAvatarDisplay = _this.handleAvatarDisplay.bind(_this);
+			return _this;
 		}
 	
 		_createClass(SettingsSelectInput, [{
-			key: "render",
+			key: 'handleSelect',
+			value: function handleSelect(event) {
+				var obj = {};
+				obj[this.props.field] = event.target.value;
+				this.props.handleSelect(obj);
+			}
+		}, {
+			key: 'handleBlur',
+			value: function handleBlur(event) {
+				var isValid = testValid(this.props.field, event.target.value);
+				this.setState({ valid: isValid });
+				this.props.handleBlur(this.props.field, isValid);
+			}
+		}, {
+			key: 'handleAvatarDisplay',
+			value: function handleAvatarDisplay() {
+				var av = $('#avatar').val();
+				var container = document.getElementById('avatar_container');
+				container.style.backgroundImage = 'url(static/avatars/' + av + '.png)';
+			}
+		}, {
+			key: 'componentWillReceiveProps',
+			value: function componentWillReceiveProps(nextProps) {
+				$('select[name=' + nextProps.field + ']').val(nextProps.value);
+				if (this.props.field == "avatar") this.handleAvatarDisplay();
+			}
+		}, {
+			key: 'render',
 			value: function render() {
-				return React.createElement("input", { className: "setting", id: this.props.name, name: "first_name", type: "text", placeholder: "First" });
+				var options;
+				switch (this.props.field) {
+					case "month_of_birth":
+						options = months;
+						break;
+					case "day_of_birth":
+						options = days;
+						break;
+					case "year_of_birth":
+						options = years;
+						break;
+					case "avatar":
+						options = avatar_list;
+						break;
+				}
+				return React.createElement(
+					'div',
+					null,
+					React.createElement(
+						'div',
+						{ className: 'form-group' },
+						React.createElement(
+							'select',
+							{ className: "setting " + this.state.valid, 'data-width': 'fit', id: this.props.field, name: this.props.field,
+								multiple: true, 'data-max-options': '1', title: idToName(this.props.field),
+								onChange: this.handleSelect, onBlur: this.handleBlur },
+							options.map(function (option) {
+								return React.createElement(
+									'option',
+									{ value: option.value },
+									option.label
+								);
+							})
+						)
+					),
+					this.state.valid == "invalid" && React.createElement(
+						'div',
+						{ className: 'form-group warning', id: this.props.field + "_warning" },
+						warningForField(this.props.field, $('#' + this.props.field).val())
+					)
+				);
 			}
 		}]);
 	
@@ -12135,9 +12428,9 @@
 
 /***/ },
 /* 115 */
-/*!**************************************************!*\
-  !*** ./static/components/SettingsInputLabel.jsx ***!
-  \**************************************************/
+/*!***********************************************************!*\
+  !*** ./static/components/Settings/SettingsInputLabel.jsx ***!
+  \***********************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12183,8 +12476,8 @@
 					{ className: 'form-group' },
 					React.createElement(
 						'label',
-						{ className: 'control-label', 'for': this.props.id },
-						idToName(this.props.id)
+						{ className: 'control-label', 'for': this.props.field },
+						idToName(this.props.field)
 					)
 				);
 			}
