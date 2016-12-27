@@ -19,6 +19,7 @@ import ActionBar from '../actionbar/ActionBar'; // downloaded from https://githu
 import ModalDropdown from 'react-native-modal-dropdown'; // https://github.com/sohobloo/react-native-modal-dropdown
 import PostMessageBox from '../components/PostMessageBox'
 import FeedBox from '../components/FeedBox'
+import Feed from '../components/Feed'
 
 const ACTIVITY_BAR_HEIGHT = 40
 const ACTIVITY_BAR_COLOR = 'black'
@@ -40,13 +41,54 @@ class FeedScreen extends Component {
       activity_index: 0,
       post_message_expanded: false,
       post_message_height: new Animated.Value(50),
-      current_username: ""
+      current_username: "",
+      feed: [],
+      currentUser: {}
     }
     this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
     this.postMessagePressed = this.postMessagePressed.bind(this)
     this._activities = FeedScreen.populateActivities()
+    this.initializeFeed = this.initializeFeed.bind(this);
   }
 
+
+  async initializeFeed() {
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
+      fetch(url + "/mobileGetPosts", {method: "POST",
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, 
+      body: 
+      JSON.stringify(
+       {
+        feed_name: "BALT"
+      })
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+        var feed = []
+        for (var i = 0; i < responseData['post_list'].length; i++) {
+          var obj = responseData['post_list'][i]
+          feed.unshift({
+            postContent : obj['body'],
+            avatar    : obj['avatar'],
+            name    : obj['first_name'] + ' ' + obj['last_name'],
+            userID    : obj['poster_id'],
+            time      : obj['time'],
+            isTrade   : obj['isTrade'],
+            isPlay    : obj['isPlay'],
+            isChill   : obj['isChill'],
+            comment_id  : obj['comment_id'],
+            unique_id   : obj['unique_id'],
+            numberOfComments : obj['numComments']
+          })
+        }
+        this.setState({feed: feed})
+      })
+    .done();
+  }
 
 
   handleTitlePress() {
@@ -82,10 +124,52 @@ class FeedScreen extends Component {
       }
   }
 
-  componentDidMount() {
-            AsyncStorage.getItem("current_username").then((value) => {
-            this.setState({"current_username": value});
-        }).done();
+  async initializeUsername(){
+     var value = await AsyncStorage.getItem("current_username")
+        if (value == null) {
+          this.setState({"current_username" : ""})
+        }
+        else {
+          this.setState({"current_username" : value})
+        }
+  }
+
+
+  async initializeUserInfo(){
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
+    fetch(url + "/mobileGetCurrentUserInfo", {method: "POST",
+    headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, 
+      body: 
+      JSON.stringify(
+       {
+        userID: this.state.current_username
+      })
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+          this.setState({currentUser: responseData['this_user']})
+      })
+    .done();
+  }
+
+  componentWillMount() {
+      this.initializeUsername();
+      this.initializeUserInfo();
+      this.initializeFeed();
+
+        // AsyncStorage.getItem("current_username").then((value) => {
+        //   if (value == null){
+        //     this.setState({"current_username" : ""})
+        //   } else {
+        //     this.setState({"current_username": value});
+
+        //   }
+        // }).done();
+
   }
 
 
@@ -109,9 +193,19 @@ class FeedScreen extends Component {
                     rightIconName={'menu'}
                 />
             </TouchableWithoutFeedback>
-			<Text>
-            {this.state.current_username} !!!
-          </Text>
+
+
+              {
+                this.state.current_username == "" ?
+                <Text>
+                  No one is logged in right now...please login!
+                  </Text>
+                  :
+                <Text>
+                  Logged in user {this.state.current_username} !!
+                </Text>
+              }
+          
 
             <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
                 <View style = {styles.containerHorizontal}>
@@ -147,15 +241,9 @@ class FeedScreen extends Component {
             </Animated.View>
 
             <View style={{flex:1}}>
-            <ScrollView
-                // ref={(scrollView) => { _scrollView = scrollView; }}
-                automaticallyAdjustContentInsets={false}
-                onScroll={() => {}}
-                scrollEventThrottle={200}
-                onPress={() => {Alert.alert('Scroll clicked')}}
-                >
-                {messages.map(createFeedRow)}
-            </ScrollView>
+
+            <Feed posts = {this.state.feed} currentUser = {this.state.currentUser}/>
+           
             </View>
 
         </View>

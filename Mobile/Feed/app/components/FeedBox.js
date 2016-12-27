@@ -20,6 +20,7 @@ export default class FeedBox extends Component {
     }
 
     render() {
+
         return (
             <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#000000',
                 borderBottomWidth: 1}}>
@@ -44,7 +45,7 @@ export default class FeedBox extends Component {
                     <View style={{width: PROFILE_WIDTH}}>
                     </View>
                     <Text style = {styles.text_message}>
-                        {this.props.message}
+                        {this.props.post.postContent} 
                     </Text>
                 </View>
             </View>

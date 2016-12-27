@@ -39,7 +39,6 @@ def validateLogin(login_id, password):
 		output['result'] = 'success'
 		output['username'] = user_info['userID']
 
-		
 	return output
 
 

@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -21,7 +21,8 @@ class LoginScreen extends Component {
     this.state = {
       login_id : "",
       password: "",
-      username: ""
+      username: "",
+      validation_output: {result : "nothing yet"}
     }
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
@@ -32,9 +33,7 @@ class LoginScreen extends Component {
     handleLoginSubmit() {
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
-
-
-    fetch(url + "/mobileCreateProfile", {method: "POST",
+    fetch(url + "/mobileLogin", {method: "POST",
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -42,23 +41,25 @@ class LoginScreen extends Component {
       body: 
       JSON.stringify(
        {
-        password : this.props.password,
-        email : this.props.email,
-        username: this.state.username,
-        first_name: this.props.first_name,
-        last_name: this.props.last_name,
-        password: this.props.password,
-        phone_number : this.props.phone_number
+        login_id : this.state.login_id,
+        password: this.state.password
       })
     })
     .then((response) => response.json())
     .then((responseData) => {
-        
         if (responseData['result'] == 'success') {
-            AsyncStorage.setItem("username", responseData['username']);
-            this.setState({username: responseData['username']})
+            AsyncStorage.setItem("current_username", responseData['username']).then((value) => {
+              this.setState({username: responseData['username']})
+              this.setState({validation_output: responseData})
+              this._navigateToFeed()
+            })
+      
         }
-        this._navigateToFeed()
+        else {
+
+          this.setState({ validation_output : responseData})
+        }
+        
     })
     .done();
   }
@@ -107,6 +108,14 @@ class LoginScreen extends Component {
                   Login Baby!
                 </Text>
               </TouchableHighlight>
+
+
+              {
+                this.state.validation_output['result'] == 'failure' && 
+                <Text> 
+                  {this.state.validation_output['error']}
+                  </Text>
+              }
       </View>
     )
   }

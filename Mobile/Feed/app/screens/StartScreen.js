@@ -25,6 +25,12 @@ class StartScreen extends Component {
       email : "", 
       current_username: ""
     }
+    this.handleLogout = this.handleLogout.bind(this);
+  }
+
+  handleLogout(val) {
+    AsyncStorage.setItem("current_username", "");
+    this.setState({current_username: ""})
   }
 
   _navigateToLogin() {
@@ -50,9 +56,13 @@ class StartScreen extends Component {
     })
   }
 
-  componentDidMount() {
+  componentWillMount() {
      AsyncStorage.getItem("current_username").then((value) => {
+          if (value == null){
+            this.setState({"current_username" : ""})
+          } else {
             this.setState({"current_username": value});
+          }
         }).done();
   }
 
@@ -61,9 +71,18 @@ class StartScreen extends Component {
     return (
       <View style = {styles.container}>
 
-              <Text>
-                {this.state.username} !!
-              </Text>
+              {
+                this.state.current_username == "" ?
+                <Text>
+                  No one is logged in right now..please login!
+                  </Text>
+                  :
+                <Text>
+                  Logged in as user {this.state.current_username} !!
+                </Text>
+                
+              }
+          
 
               <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToLogin()}>
                 <Text style = {styles.buttonText}>
@@ -84,9 +103,10 @@ class StartScreen extends Component {
                 </Text>
               </TouchableHighlight>
 
-              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToTestHTTP()}>
+
+              <TouchableHighlight style = {styles.button} onPress = {this.handleLogout}>
                 <Text style = {styles.buttonText}>
-                  Testing HTTP Request
+                  Logout
                 </Text>
               </TouchableHighlight>
 

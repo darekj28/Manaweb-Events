@@ -56,7 +56,6 @@ def mobileLogin():
 	login_id = request.json['login_id']
 	password = request.json['password']
 	validator_output = validation.validateLogin(login_id, password)
-	
 	return jsonify(validator_output)
 
 
@@ -105,4 +104,30 @@ def testMobileApi():
 	data = {'output' : request.json.get('test')}
 	return jsonify(data)
 
+@mobile_api.route('/mobileGetCurrentUserInfo', methods = ['POST'])
+def getCurrentUserInfo():
+	thisUserID = request.json['userID']
+	user_manager = Users()
+	thisUser = user_manager.getInfo(thisUserID)
+	user_manager.closeConnection()
+	return jsonify({'thisUser' : thisUser})
+
+@mobile_api.route('/mobileGetPosts', methods = ['POST'])
+def getPosts():
+	# feed_name = request.form['feed_name']
+	feed_name = "BALT"
+
+	post_manager = Posts()
+	# time1 = time.time()
+	post_list = post_manager.getPosts(feed_name)
+	# time2 = time.time()
+	post_manager.sortAscending(post_list)
+	# time3 = time.time()
+	# getPostTime = time2 - time1
+	# sortTime = time3 - time2
+	# print('getPosts time : '  + str(getPostTime))
+	# print('sort time : '  + str(sortTime))
+
+	post_manager.closeConnection()
+	return jsonify({'post_list' : post_list})	
 
