@@ -126,7 +126,7 @@ def mobileGetPosts():
 	post_list = post_manager.getPosts(feed_name)
 	post_manager.sortAscending(post_list)
 	post_manager.closeConnection()
-	return jsonify({'post_list' : post_list})
+	return jsonify({'result' : 'success', 'post_list' : post_list})
 
 
 @mobile_api.route('/status/<task_id>')
