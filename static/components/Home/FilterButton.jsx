@@ -35,7 +35,8 @@ export default class FilterButton extends React.Component {
 					<span className={icon + " filterButton " + selected} onClick={this.handleClick}>
 					</span>
 				</a>)
-		else return(<a className="input-group-addon">
+		else return(<a className="input-group-addon" data-toggle = "tooltip" title = {this.props.name}
+					 data-placement="bottom">
 					<span className={icon + " filterButton " + selected} onClick={this.handleClick}>
 					</span>
 				</a>

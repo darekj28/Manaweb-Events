@@ -9210,7 +9210,8 @@
 					React.createElement('span', { className: icon + " filterButton " + selected, onClick: this.handleClick })
 				);else return React.createElement(
 					'a',
-					{ className: 'input-group-addon' },
+					{ className: 'input-group-addon', 'data-toggle': 'tooltip', title: this.props.name,
+						'data-placement': 'bottom' },
 					React.createElement('span', { className: icon + " filterButton " + selected, onClick: this.handleClick })
 				);
 			}

@@ -95,7 +95,8 @@ export default class SearchNavBar extends React.Component {
 				                      			onChange={this.handleSearch}/>
 				                      <div className = "input-group-addon"></div>
 								  	  {this.props.actions.map(function(action, i) {
-											var button = !this.props.isComment ? <FilterButton key={i} 
+											var button = !this.props.isComment ? 
+											<FilterButton key={i} 
 													onClick={this.props.onClick} 
 													selected={true} isSearch={true} name={action}/> : '';
 											return button;
