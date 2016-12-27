@@ -15,7 +15,7 @@ export default class NotificationsFeed extends React.Component {
     }
 	render() {
 		return (
-			<ul>
+			<ul id="NotificationsFeed">
 				{this.addNotificationsToFeed()}
 			</ul>
 			);

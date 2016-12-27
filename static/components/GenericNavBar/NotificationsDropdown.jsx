@@ -54,6 +54,7 @@ export default class NotificationsDropdown extends React.Component {
                                     </Link>
                                 </li>);
                     })}
+                    <li className="divider"></li>
                     <li><Link to="/notifications"><center>See All</center></Link></li>
                 </ul>
             </li>

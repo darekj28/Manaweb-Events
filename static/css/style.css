@@ -52,6 +52,14 @@ body {
 }
 .NotificationsFeedPost{
   list-style-type : none;
+  padding-top : 5px;
+  padding-bottom : 5px;
+  border-bottom: 1px solid #dbdbdb;
+}
+#NotificationsFeed > li > a {
+  text-decoration : none;
+  color : #0f0f0f;
+  cursor : pointer;
 }
 .CommentFeedPost {
   list-style-type: none;
