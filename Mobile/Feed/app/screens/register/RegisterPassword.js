@@ -115,7 +115,7 @@ class RegisterPassword extends Component {
                 <Text> 
                   {this.state.validation_output['error']}
                   </Text>
-              }
+               }
 
               <Text>
                 Password : {this.state.password}

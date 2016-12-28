@@ -14,6 +14,7 @@ import renderIf from './renderIf'
 
 
 
+
 const FILTER_BAR_SHORT = 0
 const FILTER_BAR_TALL = 35
 export default class PostMessageBox extends Component {
@@ -27,6 +28,8 @@ export default class PostMessageBox extends Component {
         this.onClick = this.onClick.bind(this)
         this.imageStyle = this.imageStyle.bind(this)
         this.setFilter = this.setFilter.bind(this)
+        this.handlePostTextChange = this.handlePostTextChange.bind(this);
+        this.handlePostSubmit = this.handlePostSubmit.bind(this);
     }
 
     onClick() {
@@ -44,6 +47,11 @@ export default class PostMessageBox extends Component {
         var newFilter = this.state.filter_enable
         newFilter[index] = !newFilter[index]
         this.setState({filter_enable: newFilter})
+        this.props.handleFilterPress(index);
+    }
+
+    handlePostTextChange (text) {
+        this.props.handlePostTyping(text)
     }
 
     imageStyle(index) {
@@ -66,11 +74,16 @@ export default class PostMessageBox extends Component {
 
     }
 
+    handlePostSubmit() {
+        if (this.props.newPostContent.length > 0)
+            this.props.handlePostSubmit(this.props.newPostContent);
+    }
+
     render() {
         let filterIcon1 = require('./res/icon1.png')
         let filterIcon2 = require('./res/icon2.png')
         let filterIcon3 = require('./res/icon3.png')
-
+        // var newPostContent = this.props.newPostContent;
         if (!this.props.post_message_expanded) {
             return (
                 <TouchableWithoutFeedback onPress={this.onClick}>
@@ -80,6 +93,7 @@ export default class PostMessageBox extends Component {
                             {'Post a Message'}
                         </Text>
                     </View>
+
                 </TouchableWithoutFeedback>
             );
         } else {
@@ -93,10 +107,10 @@ export default class PostMessageBox extends Component {
                         multiline = {true}
                         numberOfLines = {1}
                         underlineColorAndroid={"transparent"}
-                        onChangeText={(text) => this.setState({text})}
+                        onChangeText={this.handlePostTextChange}
                         placeholder={'Post a Message'}
-                        value={this.state.text}>
-                    </TextInput>
+                        value = {this.props.newPostContent}
+                    />
                 </View>
                 <Animated.View style={[styles.container, {height: this.state.filter_bar_height}]}>
                     <View style = {{flex: 0.85, flexDirection:'row'}}>
@@ -119,7 +133,7 @@ export default class PostMessageBox extends Component {
                         </TouchableHighlight>
                     </View>
                     <View style = {{flex: 0.15}}>
-                        <TouchableHighlight onPress={() => Alert.alert('Posted')}>
+                        <TouchableHighlight onPress={this.handlePostSubmit.bind(this)}>
                             <Text style={{fontSize: 15}}>
                                 {'POST'}
                             </Text>

@@ -46,10 +46,11 @@ export default class FeedBox extends Component {
                     </Text>
                     <View style={{flex: 1}}/>
                     <View style={{flex: 0, margin: 1}}>
-                        <Text style = {styles.text_feed_type}>
-                            {'Trade'}
-                        </Text>
+                        { post.isTrade && <Text style = {styles.text_feed_type}> Trade </Text> }
+                        { post.isPlay && <Text style = {styles.text_feed_type}> Play </Text> }
+                        { post.isChill && <Text style = {styles.text_feed_type}> Chill </Text> }
                     </View>
+                    
                 </View>
                 <View style={{flex: 1, flexDirection:'row'}}>
                     <View style={{width: PROFILE_WIDTH}}>
