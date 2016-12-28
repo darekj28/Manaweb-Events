@@ -1,5 +1,4 @@
 var React = require('react');
-// var $ = require('jquery');
 export default class DeletePostModal extends React.Component {
 	handlePostDelete() {
 		var obj = {unique_id : this.props.post.unique_id};

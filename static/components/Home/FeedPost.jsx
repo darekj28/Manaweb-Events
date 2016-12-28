@@ -1,6 +1,5 @@
 var React = require('react');
 var Link = require('react-router').Link;
-// var $ = require('jquery');
 import Avatar from "./Avatar.jsx";
 import FeedPostHeader from "./FeedPostHeader.jsx";
 import FeedPostBody from "./FeedPostBody.jsx";

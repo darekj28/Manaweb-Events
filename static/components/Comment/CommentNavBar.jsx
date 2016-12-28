@@ -1,7 +1,6 @@
 var React = require('react');
 var Link = require('react-router').Link;
 var browserHistory = require('react-router').browserHistory;
-// var $ = require('jquery');
 import NotificationsDropdown from "../GenericNavBar/NotificationsDropdown.jsx";
 import AccountDropdown from "../GenericNavBar/AccountDropdown.jsx";
 

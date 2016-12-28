@@ -1,6 +1,5 @@
 var React = require('react');
 var Link = require('react-router').Link;
-// var $ = require('jquery');
 import NotificationsDropdown from "../GenericNavBar/NotificationsDropdown.jsx";
 import AccountDropdown from "../GenericNavBar/AccountDropdown.jsx";
 import FilterButton from "./FilterButton.jsx";
