@@ -130,11 +130,11 @@ def mobileMakePost():
 	isTrade		= request.json['isTrade']
 	isPlay 		= request.json['isPlay']
 	isChill		= request.json['isChill']
-	# comment_id  = request.json['comment_id']
+	poster_id = request.json['userID']
 	comment_id = None
 	feed_name = DEFAULT_FEED		
 	post_manager = Posts()
-	post_manager.postInThread(feed_name, body = postContent, poster_id = session['userID'], 
+	post_manager.postInThread(feed_name, body = postContent, poster_id = poster_id, 
 			isTrade = isTrade, isPlay = isPlay, isChill = isChill, comment_id = comment_id)
 	
 	post_manager.closeConnection()
