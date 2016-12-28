@@ -1,7 +1,11 @@
 var React = require('react');
 var Link = require('react-router').Link;
+var AppActions = require('../../actions/AppActions.jsx');
 
 export default class AccountDropdown extends React.Component {
+  removeCurrentUser() {
+    AppActions.removeCurrentUser();
+  }
 	render() {
 		return (
 			     <li className="dropdown">
@@ -15,7 +19,7 @@ export default class AccountDropdown extends React.Component {
                 <li> <a href = "/adminTools"> Admin Tools </a> </li>
                 }
                 <li><Link to="/settings">Settings</Link></li>
-				        <li><a href="/logout">Logout</a></li>
+				        <li><a href="/logout" onClick={this.removeCurrentUser.bind(this)}>Logout</a></li>
               </ul>
           </li>
 		);

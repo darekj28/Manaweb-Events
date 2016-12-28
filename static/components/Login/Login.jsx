@@ -20,6 +20,7 @@ export default class Login extends React.Component {
 					<input type="text" id="user" onChange={this.handleTyping.bind(this)} placeholder="Username"/>
 					<input type="password" id="password" onChange={this.handleTyping.bind(this)} placeholder="Password"/>
 				</div>
+				<button onClick={this.login.bind(this)}>Sign In!</button>
 			</form>
 			)
 	}

@@ -3,6 +3,8 @@ import SearchNavBar from './SearchNavBar.jsx';
 import EventName from './EventName.jsx';
 import MakePost from './MakePost.jsx';
 import Feed from './Feed.jsx';
+import AppStore from '../../stores/AppStore.jsx';
+import AppActions from '../../actions/AppActions.jsx';
 
 function toggle(collection, item) {
 	var idx = collection.indexOf(item);
@@ -27,14 +29,16 @@ export default class App extends React.Component {
 			userIdToFilterPosts : '',
 			post : '',
 			feed : [],
-			currentUser : {},
+			// currentUser : {},
+			currentUser : AppStore.getCurrentUser(),
 			initialUnseenPosts : -1,
 			numUnseenPosts: -1
 		};
 	}
 	getCurrentUserInfo() {
 		$.post('/getCurrentUserInfo', function(data) {
-			this.setState({currentUser : data.thisUser});
+			// this.setState({currentUser : data.thisUser});
+			AppActions.addCurrentUser(data.thisUser);
 		}.bind(this));
 	}
 
@@ -163,9 +167,14 @@ export default class App extends React.Component {
 		this.getCurrentUserInfo.bind(this)();
 		this.initializeNumUnseenPosts.bind(this)();
 		this.setState({ timer : setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
+		AppStore.addChangeListener(this._onChange.bind(this));
 	}
 	componentWillUnmount() {
 		clearInterval(this.state.timer);
+		AppStore.removeChangeListener(this._onChange.bind(this));
+	}
+	_onChange() {
+		this.setState({ currentUser : AppStore.getCurrentUser() });
 	}
 	render() {
 		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
