@@ -26,6 +26,19 @@ const ACTIVITY_BAR_COLOR = 'black'
 const POST_MESSAGE_HEIGHT_SHORT = 50
 const POST_MESSAGE_HEIGHT_TALL = 150
 const ANIMATE_DURATION = 700
+
+function contains(collection, item) {
+  if(collection.indexOf(item) !== -1) return true;
+  else return false;
+}
+
+function toggle(collection, item) {
+  var idx = collection.indexOf(item);
+  if(idx !== -1) collection.splice(idx, 1);
+  else collection.push(item);
+  return collection;
+}
+
 class FeedScreen extends Component {
   static populateActivities() {
      return ['SCG Atlanta', 'Activity 2', 'Activity 3', 'Activity 4']
@@ -34,24 +47,112 @@ class FeedScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      login_id : "",
-      password: "",
+      filters : ['Trade', 'Play', 'Chill'],
+      post_actions : [],
+      alert: false,
+      search : '',
+      userIdToFilterPosts : '',
       activity_index: 0,
       post_message_expanded: false,
       post_message_height: new Animated.Value(50),
       current_username: "",
       feed: [],
-      currentUser: {}
+      currentUser: {'userID' : 'not initialized'},
+      newPostContent: "",
+      test: ""
     }
     this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
     this.postMessagePressed = this.postMessagePressed.bind(this)
     this._activities = FeedScreen.populateActivities()
-    this.initializeScreen = this.initializeScreen.bind(this);
+    this.refreshScreen = this.refreshScreen.bind(this);
     this.initializeUserInfo = this.initializeUserInfo.bind(this);
+    this.handlePostSubmit = this.handlePostSubmit.bind(this);
+    this.handlePostTyping = this.handlePostTyping.bind(this);
+    this.initializeUsername = this.initializeUsername.bind(this);
+    this.handleFilterPress = this.handleFilterPress.bind(this);
+    this.handleServerPostSubmit = this.handleServerPostSubmit.bind(this);
+   
   }
 
 
-  async initializeScreen() {
+  handlePostTyping (newPostContent) {
+    this.setState({newPostContent : newPostContent})
+  }
+
+
+  handleFilterPress(index) {
+      var filters = ['Trade', 'Play', 'Chill']
+      var this_filter = filters[index]
+      var newFilters = toggle(this.state.post_actions, this_filter);
+      this.setState({post_actions : newFilters});
+
+      // make an alert 
+      if (this.state.post_actions.length != 0) this.setState({alert : false});
+    // scroll to top
+    // $('html, body').animate({scrollTop: 0}, 300);
+  }
+
+    // updates feed then sends the post to the server 
+    handlePostSubmit(newPostContent){
+      var feed = this.state.feed;
+
+      if (this.state.post_actions.length == 0) {
+        this.setState({alert : true});
+      }
+
+      else {
+        this.setState({alert : false});
+        feed.unshift({ 
+              postContent: newPostContent, 
+              avatar  : this.state.currentUser['avatar_name'], 
+              name    : this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
+              userID  : this.state.currentUser['userID'], 
+              time  : "just now", 
+              isTrade : contains(this.state.post_actions, "Trade"),
+              isPlay  : contains(this.state.post_actions, "Play"), 
+              isChill : contains(this.state.post_actions, "Chill"),
+              numberOfComments : 0,
+            });
+        setTimeout(function (){ 
+          this.handleServerPostSubmit(newPostContent);
+          }.bind(this), 1000)
+     }
+    }
+
+
+
+    // sends the post to the server and refreshes the page
+    async handleServerPostSubmit (newPostContent) {
+      
+      let url = "https://manaweb-events.herokuapp.com"
+      let test_url = "http://0.0.0.0:5000"
+      let response = await fetch(url + "/mobileMakePost", {method: "POST",
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          }, 
+        body: 
+        JSON.stringify(
+         {
+          postContent : newPostContent,
+          userID : this.state.currentUser['userID'],
+          numberOfComments : 0,
+          isTrade : contains(this.state.post_actions, "Trade"),
+          isPlay  : contains(this.state.post_actions, "Play"), 
+          isChill : contains(this.state.post_actions, "Chill"),
+        })
+      })
+      let responseData = await response.json();   
+      if (responseData['result'] == 'success') {
+        this.setState({newPostContent : ""})
+        this.refreshScreen(false);
+      }
+      else {
+        this.setState({newPostContent: 'failure...'})
+      }
+    }
+
+  async refreshScreen(initialize) {
     let url = "https://manaweb-events.herokuapp.com"
     let test_url = "http://0.0.0.0:5000"
     let response = await fetch(url + "/mobileGetPosts", {method: "POST",
@@ -87,12 +188,11 @@ class FeedScreen extends Component {
             })
           }
           this.setState({feed: feed})
-      } 
-      this.initializeUserInfo()
-    }
-     
-
-      
+         }
+      if (initialize == true){
+         this.initializeUserInfo();
+       }
+    } 
   }
 
 
@@ -155,26 +255,28 @@ class FeedScreen extends Component {
       })
     })
     let responseData = await response.json()
-    this.setState({currentUser: responseData['this_user']})
-  
+
+    if (responseData['result'] == 'success') {
+      this.setState({currentUser: responseData['thisUser']})
+    }
   }
 
   componentWillMount() {
       this.initializeUsername().done();
-      this.initializeScreen().done();
-        // AsyncStorage.getItem("current_username").then((value) => {
-        //   if (value == null){
-        //     this.setState({"current_username" : ""})
-        //   } else {
-        //     this.setState({"current_username": value});
-        //   }
-        // }).done();
+      this.refreshScreen(true).done();
+      // this.refreshScreen(true);
+    
   }
 
 
   render() {
 
-
+    var alert;
+    if ((this.state.alert)) {
+      alert = <Text>
+              Bro! You must select something to do before you post man!
+              </Text>;
+    }
 
     let dropdownIcon = require('./res/down_arrow.png')
     return (
@@ -193,16 +295,11 @@ class FeedScreen extends Component {
                 />
             </TouchableWithoutFeedback>
 
-              {
-                this.state.current_username == "" ?
-                <Text>
-                  No one is logged in right now...please login!
-                  </Text>
-                  :
-                <Text>
-                  Logged in user {this.state.current_username} !!
-                </Text>
-              }
+            {/*
+            <Text>
+              {this.state.post_actions}
+            </Text>
+            */}
           
 
             <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
@@ -234,7 +331,13 @@ class FeedScreen extends Component {
                 <PostMessageBox
                     onClick={(event) => this.postMessagePressed()}
                     animateDuration={ANIMATE_DURATION}
-                    post_message_expanded={this.state.post_message_expanded}>
+                    post_message_expanded={this.state.post_message_expanded}
+                    handleFilterPress = {this.handleFilterPress}
+                    newPostContent = {this.state.newPostContent}
+                    handlePostTyping = {this.handlePostTyping}
+                    handlePostSubmit = {this.handlePostSubmit}
+                    newPostContent = {this.state.newPostContent}
+                    >
                 </PostMessageBox>
             </Animated.View>
 
