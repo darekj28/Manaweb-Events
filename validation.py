@@ -4,6 +4,7 @@
 
 from users import Users
 import re
+from passlib.hash import argon2
 
 banned_username_words = ['admin', 'manaweb']
 
@@ -18,19 +19,20 @@ def validateLogin(login_id, password):
 	# if the login id is an email
 	if loginIdIsEmail:
 		user_info = user_manager.getInfoFromEmail(lower_login_id)
-	
+
+
 	# otherwise the login is a userID
 	else:
 		user_info = user_manager.getInfo(lower_login_id)
-
 	user_manager.closeConnection()
+	password_match = argon2.verify(password, user_info['password'])
 
 	# user doesn't exists
 	if user_info == None:
 		output['result'] = 'failure'
 		output['error'] = "This login id doesn't exists"
 
-	elif user_info['password'] != password:
+	elif password_match:
 		output['result'] = 'failure'
 		output['error'] = 'login credentials incorrect'
 
