@@ -1,11 +1,6 @@
 var React = require('react');
 // var $ = require('jquery');
 export default class MakeComment extends React.Component {
-	constructor(props) {
-		super(props);
-		this.handleCommentChange = this.handleCommentChange.bind(this);
-		this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
-	}
 	componentDidMount() {
 		var messageVisible = true;
 		var that = this;
@@ -34,9 +29,9 @@ export default class MakeComment extends React.Component {
 					<textarea id="CommentInput" className="form-control" 
 							value={this.props.commentText} 
 							placeholder={this.props.placeholder} rows="2" ref={(input) => this.commentText = input} 
-							onSubmit={this.handleCommentSubmit} onChange={this.handleCommentChange}></textarea>
+							onChange={this.handleCommentChange.bind(this)}></textarea>
 					<div className="SubmitButton input-group-addon"
-							onClick={this.handleCommentSubmit}>
+							onClick={this.handleCommentSubmit.bind(this)}>
 						<span className="AppGlyphicon"><h4><b>POST!</b></h4></span>
 					</div>
 				</div>

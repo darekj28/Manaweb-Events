@@ -1,9 +1,5 @@
 var React = require('react');
 export default class CommentFeedPostHeader extends React.Component {
-	constructor(props) {
-		super(props);
-		this.scrollToDropdown = this.scrollToDropdown.bind(this);
-	}
 	scrollToDropdown(){
 		$('html, body').animate({scrollTop : $("#commentdropdown_" + this.props.comment.unique_id).offset().top - 300}, 500);
 	}
@@ -21,7 +17,7 @@ export default class CommentFeedPostHeader extends React.Component {
 				{(!this.props.isOriginalPost && (this.props.isAdmin || !this.props.isOP)) && 
 				<div className="dropdown" id={"commentdropdown_" + this.props.comment.unique_id}>
 					<a href="#" className="dropdown-toggle pull-right" 
-								data-toggle="dropdown" onClick={this.scrollToDropdown}>
+								data-toggle="dropdown" onClick={this.scrollToDropdown.bind(this)}>
 		                <span className="glyphicon glyphicon-option-horizontal 
 		                				pull-right CommentBottomIcon AppGlyphicon"></span>
 		            </a>

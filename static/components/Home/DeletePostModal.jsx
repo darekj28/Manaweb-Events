@@ -1,10 +1,5 @@
 var React = require('react');
-// var $ = require('jquery');
 export default class DeletePostModal extends React.Component {
-	constructor(props) {
-		super(props);
-		this.handlePostDelete = this.handlePostDelete.bind(this);
-	}
 	handlePostDelete() {
 		var obj = {unique_id : this.props.post.unique_id};
 		$.ajax({
@@ -28,7 +23,7 @@ export default class DeletePostModal extends React.Component {
 						</div>
 						<div className="modal-body" id="DeletePostModalBody">
 							<button id="dpm_yes" type="button" className="btn btn-default" data-dismiss="modal" 
-									onClick={this.handlePostDelete}>Yes</button>
+									onClick={this.handlePostDelete.bind(this)}>Yes</button>
 							<button id="dpm_no" type="button" className="btn btn-default" data-dismiss="modal">No</button>
 						</div>
 					</div>

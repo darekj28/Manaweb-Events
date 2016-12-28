@@ -9,8 +9,6 @@ export default class NotificationsApp extends React.Component {
 			currentUser : '',
             notifications : []
         };
-		this.getNotifications = this.getNotifications.bind(this);
-		this.getCurrentUserInfo = this.getCurrentUserInfo.bind(this);
 	}
 	getCurrentUserInfo() {
 		$.post('/getCurrentUserInfo', function(data) {
@@ -38,8 +36,8 @@ export default class NotificationsApp extends React.Component {
             }.bind(this));
     }
 	componentDidMount() {
-		this.getNotifications();
-		this.getCurrentUserInfo();
+		this.getNotifications.bind(this)();
+		this.getCurrentUserInfo.bind(this)();
 	}
 	render() {
 		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];

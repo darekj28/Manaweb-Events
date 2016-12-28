@@ -1,11 +1,8 @@
 var React = require('react');
-// var $ = require('jquery');
 export default class EditPostModal extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {postContent : this.props.post.postContent};
-		this.handlePostEditChange = this.handlePostEditChange.bind(this);
-		this.handlePostEditSubmit = this.handlePostEditSubmit.bind(this);
 	}
 	handlePostEditChange(e) {
 		this.setState({ postContent : e.target.value});
@@ -40,11 +37,11 @@ export default class EditPostModal extends React.Component {
 						<div className="modal-body" id="EditPostModalBody">
 							<textarea className="form-control EditFeedPostBody" id="FeedPostBody" 
 									value={this.state.postContent} 
-									onChange={this.handlePostEditChange}></textarea>
+									onChange={this.handlePostEditChange.bind(this)}></textarea>
 						</div>
 						<div className="modal-footer">
 							<button id="epm_submit" type="button" className="btn btn-default" data-dismiss="modal" 
-									onClick={this.handlePostEditSubmit}>Submit</button>
+									onClick={this.handlePostEditSubmit.bind(this)}>Submit</button>
 						</div>
 					</div>
 				</div>

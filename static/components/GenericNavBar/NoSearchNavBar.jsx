@@ -5,9 +5,6 @@ import NotificationsDropdown from "./NotificationsDropdown.jsx";
 import AccountDropdown from "./AccountDropdown.jsx";
 
 export default class NoSearchNavBar extends React.Component {
-	constructor(props) {
-		super(props);
-	}
 	componentDidMount() {
 		$('.SearchNavBarGlyphicon').focus(function() {
 	    	$(this).blur();
