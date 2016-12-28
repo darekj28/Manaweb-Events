@@ -6,10 +6,6 @@ import NotificationsDropdown from "../GenericNavBar/NotificationsDropdown.jsx";
 import AccountDropdown from "../GenericNavBar/AccountDropdown.jsx";
 
 export default class CommentNavBar extends React.Component {
-	constructor(props) {
-		super(props);
-		this.handleSearch = this.handleSearch.bind(this);
-	}
 	handleSearch() {
 		this.props.onSearch(this.searchText.value);
 	}
@@ -74,7 +70,7 @@ export default class CommentNavBar extends React.Component {
 			                 	  <div className="input-group input-group-unstyled">
 				                      <input type="text" value={this.props.searchText} ref={(input) => this.searchText = input} 
 				                      			id="searchInput" className="form-control" placeholder="Search..." 
-				                      			onChange={this.handleSearch}/>
+				                      			onChange={this.handleSearch.bind(this)}/>
 								  </div>		  
 			                 </div> 
 			              </form>

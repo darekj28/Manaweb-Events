@@ -5,13 +5,6 @@ import Avatar from "../Home/Avatar.jsx";
 // var $ = require('jquery');
 
 export default class CommentFeedPost extends React.Component {
-	constructor(props) {
-		super(props);
-		this.handleCommentEdit = this.handleCommentEdit.bind(this);
-		this.handleCommentDelete = this.handleCommentDelete.bind(this);
-		this.handleCommentReport = this.handleCommentReport.bind(this);
-	}
-
 	handleCommentEdit() {
 		this.props.refreshCommentDisplayedInModal(this.props.comment);
 		$('#EditCommentModal').modal('show');
@@ -33,9 +26,9 @@ export default class CommentFeedPost extends React.Component {
 				<div className="PostSpace">
 					<div className="row"><CommentFeedPostHeader comment={comment}
 												isOP={this.props.isOP} isAdmin={this.props.isAdmin} 
-												handleCommentEdit={this.handleCommentEdit}
-												handleCommentDelete={this.handleCommentDelete} 
-												handleCommentReport={this.handleCommentReport}
+												handleCommentEdit={this.handleCommentEdit.bind(this)}
+												handleCommentDelete={this.handleCommentDelete.bind(this)} 
+												handleCommentReport={this.handleCommentReport.bind(this)}
 												isOriginalPost={this.props.isOriginalPost}/></div>
 					<div className="row"><CommentFeedPostBody content={comment.commentContent} 
 									isOriginalPost={this.props.isOriginalPost}/></div>

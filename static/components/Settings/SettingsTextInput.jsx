@@ -44,8 +44,6 @@ export default class SettingsTextInput extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = { valid : "valid" };
-		this.handleTyping = this.handleTyping.bind(this);
-		this.handleBlur = this.handleBlur.bind(this);
 	}
 	handleTyping(event) {
 		var obj = {};
@@ -72,7 +70,7 @@ export default class SettingsTextInput extends React.Component {
 						data-content="Your password must contain at least one letter and one number."
 						className={"setting " + this.state.valid} id={this.props.field} type={type} 
 						value={this.props.value} onClick={focus()}
-						onChange={this.handleTyping} onBlur={this.handleBlur}/>}
+						onChange={this.handleTyping.bind(this)} onBlur={this.handleBlur.bind(this)}/>}
 				</div>
 				{(this.state.valid == "invalid") && <div className="form-group warning" id={this.props.field + "_warning"}>
 					{warningForField(this.props.field, $('#' + this.props.field).val())}

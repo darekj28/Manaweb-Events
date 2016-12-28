@@ -2,10 +2,6 @@ var React = require('react');
 // var $ = require('jquery');
 
 export default class DeleteCommentModal extends React.Component {
-	constructor(props) {
-		super(props);
-		this.handleCommentDelete = this.handleCommentDelete.bind(this);
-	}
 	handleCommentDelete() {
 		var obj = {feed_name : "BALT", 
 					comment_id : this.props.comment.comment_id,
@@ -31,7 +27,7 @@ export default class DeleteCommentModal extends React.Component {
 						</div>
 						<div className="modal-body" id="DeleteCommentModalBody">
 							<button id='dcm_yes' type="button" className="btn btn-default" data-dismiss="modal" 
-									onClick={this.handleCommentDelete}>Yes</button>
+									onClick={this.handleCommentDelete.bind(this)}>Yes</button>
 							<button id="dcm_no" type="button" className="btn btn-default" data-dismiss="modal">No</button>
 						</div>
 					</div>

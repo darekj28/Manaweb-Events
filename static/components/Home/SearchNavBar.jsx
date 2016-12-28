@@ -11,12 +11,6 @@ function contains(collection, item) {
 }
 
 export default class SearchNavBar extends React.Component {
-	constructor(props) {
-		super(props);
-		this.handleSearch = this.handleSearch.bind(this);
-		this.handleResetFilterUser = this.handleResetFilterUser.bind(this);
-		this.handleResetFilterButtons = this.handleResetFilterButtons.bind(this);
-	}
 	componentDidMount() {
 		var searchVisible = 0;
 		$('.navbar-search-form').show();		
@@ -50,11 +44,6 @@ export default class SearchNavBar extends React.Component {
 	handleResetFilterUser() {
 		this.props.handleFilterUser(this.props.userIdToFilterPosts);
 	}
-	handleResetFilterButtons() {
-		this.props.actions.map(function(action) {
-			if (contains(filters, action)) this.props.handleFilterClick(action, true);
-		});
-	}
 	handleSearch() {
 		this.props.onSearch(this.searchText.value);
 	}
@@ -70,7 +59,7 @@ export default class SearchNavBar extends React.Component {
 				            <span className="icon-bar"></span>
 				            <span className="icon-bar"></span>
 				          </button>
-				          <Link to="/" onClick={this.handleResetFilterUser} className="SearchNavBarGlyphicon 
+				          <Link to="/" onClick={this.handleResetFilterUser.bind(this)} className="SearchNavBarGlyphicon 
 				          								navbar-brand navbar-brand-logo">
 				                <span className="glyphicon glyphicon-home"></span>
 				              </Link>
@@ -92,12 +81,12 @@ export default class SearchNavBar extends React.Component {
 				                      <input type="text" value={this.props.searchText} 
 				                      			ref={(input) => this.searchText = input} 
 				                      			id="searchInput" className="form-control" placeholder="Search..." 
-				                      			onChange={this.handleSearch}/>
+				                      			onChange={this.handleSearch.bind(this)}/>
 				                      <div className = "input-group-addon"></div>
 								  	  {this.props.actions.map(function(action, i) {
 											var button = !this.props.isComment ? 
 											<FilterButton key={i} 
-													onClick={this.props.onClick} 
+													onClick={this.props.handleFilterClick} 
 													selected={true} isSearch={true} name={action}/> : '';
 											return button;
 										}, this)}

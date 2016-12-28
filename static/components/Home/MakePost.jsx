@@ -3,11 +3,6 @@ var React = require('react');
 import FilterButton from "./FilterButton.jsx";
 
 export default class MakePost extends React.Component {
-	constructor(props) {
-		super(props);
-		this.handlePostChange = this.handlePostChange.bind(this);
-		this.handlePostSubmit = this.handlePostSubmit.bind(this);
-	}
 	componentDidMount() {
 		$('#SubmitButtonPost').click(function() {
 			$(this).blur();
@@ -34,12 +29,12 @@ export default class MakePost extends React.Component {
 					<textarea id="PostInput" className="PostText form-control" 
 							value={this.props.postText} rows="4"
 							placeholder={this.props.placeholder} ref={(input) => this.postText = input} 
-							onSubmit={this.handlePostSubmit} onChange={this.handlePostChange}></textarea>
+							onSubmit={this.handlePostSubmit} onChange={this.handlePostChange.bind(this)}></textarea>
 					{this.props.actions.map(function(action, i) {
 						return <FilterButton key={i} onClick={this.props.onClick} selected={false} name={action}/>;
 					}, this)}
 					<div className="SubmitButton input-group-addon"
-							onClick={this.handlePostSubmit}>
+							onClick={this.handlePostSubmit.bind(this)}>
 						<span className="AppGlyphicon"><h4><b>POST!</b></h4></span>
 					</div>	
 				</div>

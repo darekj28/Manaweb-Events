@@ -103,9 +103,6 @@ export default class SettingsSelectInput extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = { valid : "valid" };
-		this.handleSelect = this.handleSelect.bind(this);
-		this.handleBlur = this.handleBlur.bind(this);
-		this.handleAvatarDisplay = this.handleAvatarDisplay.bind(this);
 	}
 	handleSelect(event) {
 		var obj = {};
@@ -124,7 +121,7 @@ export default class SettingsSelectInput extends React.Component {
 	}
 	componentWillReceiveProps(nextProps) {
 		$('select[name=' + nextProps.field + ']').val(nextProps.value);
-		if (this.props.field == "avatar") this.handleAvatarDisplay();
+		if (this.props.field == "avatar") this.handleAvatarDisplay.bind(this)();
 	}
 	render() {
 		var options;
@@ -147,7 +144,7 @@ export default class SettingsSelectInput extends React.Component {
 				<div className="form-group">
 					<select className={"setting " + this.state.valid} data-width="fit" id={this.props.field} name={this.props.field}
 									multiple data-max-options="1" title={idToName(this.props.field)}
-									onChange={this.handleSelect} onBlur={this.handleBlur}> 
+									onChange={this.handleSelect.bind(this)} onBlur={this.handleBlur.bind(this)}> 
 						{options.map(function(option) {
 							return <option value={option.value}>{option.label}</option>
 						})}

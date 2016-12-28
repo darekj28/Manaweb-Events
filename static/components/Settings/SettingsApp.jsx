@@ -39,12 +39,6 @@ export default class SettingsApp extends React.Component {
 			valid_select_fields	: [ "month_of_birth", "day_of_birth", "year_of_birth", "avatar" ],
 			submittable			: true
 		};
-		this.getCurrentUserInfo = this.getCurrentUserInfo.bind(this);
-		this.handleChange = this.handleChange.bind(this);
-		this.handleTextBlur = this.handleTextBlur.bind(this);
-		this.handleSelectBlur = this.handleSelectBlur.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-		this.autopopulateSettings = this.autopopulateSettings.bind(this);
 	}
 	autopopulateSettings() {
 		$.ajax({
@@ -115,8 +109,8 @@ export default class SettingsApp extends React.Component {
 	}
 
 	componentDidMount() {
-		this.autopopulateSettings();
-		this.getCurrentUserInfo();
+		this.autopopulateSettings.bind(this)();
+		this.getCurrentUserInfo.bind(this)();
 		$('#UpdateSettingsSubmit').click(function(e) {
 			e.preventDefault();
 		});
@@ -136,8 +130,8 @@ export default class SettingsApp extends React.Component {
 							return <div>
 										<SettingsInputLabel field={field} />
 										<SettingsTextInput field={field} value={this.state[field]} 
-													handleTyping={this.handleChange} 
-													handleBlur={this.handleTextBlur}/>
+													handleTyping={this.handleChange.bind(this)} 
+													handleBlur={this.handleTextBlur.bind(this)}/>
 									</div>;
 						}, this)}
 						{select_fields.map(function(field) {
@@ -145,18 +139,18 @@ export default class SettingsApp extends React.Component {
 										<SettingsInputLabel field={field} />
 										<SettingsSelectInput field={field} value={this.state[field]}
 															avatar_list={this.state.avatar_list}
-															handleSelect={this.handleChange} 
-															handleBlur={this.handleSelectBlur}/>
+															handleSelect={this.handleChange.bind(this)} 
+															handleBlur={this.handleSelectBlur.bind(this)}/>
 									</div>
 						}, this)}
 						<div id="avatar_container" className="avatar_container centered-text"></div>
 						<div className="form-group">
 							{this.state.submittable && 
 								<button className="btn btn-default" id="UpdateSettingsSubmit" 
-										onClick={this.handleSubmit}> Update! </button>}
+										onClick={this.handleSubmit.bind(this)}> Update! </button>}
 							{!this.state.submittable && 
 								<button className="btn btn-default" id="UpdateSettingsSubmit" 
-										onClick={this.handleSubmit} disabled> Update! </button>}
+										onClick={this.handleSubmit.bind(this)} disabled> Update! </button>}
 						</div>
 					</form>
 					<div className="alert alert-success" id="UpdateSettingsAlert">

@@ -9,10 +9,6 @@ export default class FeedPost extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {comment_id : this.props.post.comment_id};
-		this.handlePostEdit = this.handlePostEdit.bind(this);
-		this.handlePostDelete = this.handlePostDelete.bind(this);
-		this.handlePostReport = this.handlePostReport.bind(this);
-		this.scrollToDropdown = this.scrollToDropdown.bind(this);
 	}
 	handlePostEdit() {
 		this.props.refreshPostDisplayedInModal(this.props.post);
@@ -54,15 +50,15 @@ export default class FeedPost extends React.Component {
 						</Link>
 						</div>
 						{ (this.props.isAdmin || !this.props.isOP) && 
-						<div className="dropdown pull-right" id={"dropdown_" + this.props.post.comment_id} onClick={this.scrollToDropdown}>
+						<div className="dropdown pull-right" id={"dropdown_" + this.props.post.comment_id} onClick={this.scrollToDropdown.bind(this)}>
 							<a href="#" className="dropdown-toggle" data-toggle="dropdown">
 				                <span className="glyphicon glyphicon-option-horizontal 
 				                				pull-right PostBottomIcon AppGlyphicon"></span>
 				            </a>
 				            <ul className="PostDropdown pull-right dropdown-menu">
-				              	{(this.props.isAdmin) && <li><a id="hpe" onClick={this.handlePostEdit}>Edit post</a></li> }
-			              		{(this.props.isAdmin) && <li><a id="hpd" onClick={this.handlePostDelete}>Delete post</a></li> }
-			              		{(!this.props.isOP || this.props.isAdmin) && <li><a id="hpr" onClick={this.handlePostReport}>Report post</a></li> }
+				              	{(this.props.isAdmin) && <li><a id="hpe" onClick={this.handlePostEdit.bind(this)}>Edit post</a></li> }
+			              		{(this.props.isAdmin) && <li><a id="hpd" onClick={this.handlePostDelete.bind(this)}>Delete post</a></li> }
+			              		{(!this.props.isOP || this.props.isAdmin) && <li><a id="hpr" onClick={this.handlePostReport.bind(this)}>Report post</a></li> }
 				            </ul>
 				        </div>}	
 					</div>

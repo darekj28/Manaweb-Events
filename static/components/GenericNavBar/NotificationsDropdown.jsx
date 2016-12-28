@@ -7,8 +7,6 @@ export default class NotificationsDropdown extends React.Component {
             notifications : [],
             numUnseen : ''
         };
-        this.getNotifications = this.getNotifications.bind(this);
-        this.seeNotification = this.seeNotification.bind(this);
     }
     getNotifications() {
         $.post('/getNotifications', 
@@ -30,7 +28,7 @@ export default class NotificationsDropdown extends React.Component {
                 this.setState({notifications : notifications});
                 this.setState({numUnseen: String(count)});
             }.bind(this));
-        this.seeNotification();
+        this.seeNotification.bind(this)();
     }
     seeNotification() {
         this.state.notifications.map(function (obj){
@@ -38,7 +36,7 @@ export default class NotificationsDropdown extends React.Component {
         });
     }
     componentDidMount() {
-        this.getNotifications();
+        this.getNotifications.bind(this)();
     }
 	render() { 
 		return (
