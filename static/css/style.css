@@ -190,7 +190,7 @@ body {
   cursor : pointer;
 }
 .FeedPostHeader .time {
-  padding-left : 4px;
+  padding-left : 6px;
   padding-right: 20px;
 }
 .FeedPostHeader .postType {
