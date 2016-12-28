@@ -148,6 +148,7 @@ class Posts:
 		query = self.db.fetchall()
 		return query[0][0]
 
+
 	def createLastPostTable(self):
 
 		sql = "CREATE TABLE IF NOT EXISTS " + self.LAST_POST_TABLE + " (feed_name TEXT PRIMARY KEY, comment_id TEXT)"
@@ -157,7 +158,14 @@ class Posts:
 		self.db.execute(addIndexCode)
 
 
+	def recalculateLastPostTable(self, feed_name):
+		allPosts = self.getPosts(feed_name)
+		self.sortDescending(allPosts)
+		lastPostId = allPosts[0]['comment_id']
+		self.updateLastPostTable(feed_name, lastPostId)
 		
+
+
 	def updateLastPostTable(self, feed_name, comment_id):
 		sql = "UPDATE " + self.LAST_POST_TABLE + " SET comment_id = %s WHERE feed_name =  %s"
 		self.db.execute(self.db.mogrify(sql, (comment_id, feed_name)))
@@ -823,8 +831,9 @@ class Posts:
 		self.db.execute(self.db.mogrify(sql, (unique_id,)))
 		self.post_db.commit()
 
+		
+		self.recalculateLastPostTable(feed_name)
 		self.recalculateUnseenPosts(feed_name)
-
 
 	def deleteComment(self, feed_name, unique_id):
 		timeStamp = time.time()
