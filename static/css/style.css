@@ -18,7 +18,7 @@
   src : url('Raleway-Regular.ttf');
 }
 body {
-  font-family : "raleway";
+  font-family : "museo_sans500";
   background-color : #ffffff;
   color : #0f0f0f;
 }
@@ -263,6 +263,7 @@ body {
 }
 .tooltip {
   overflow : visible;
+  font-family : "museo_sans500";
 }
 .input-group.input-group-unstyled input.form-control {
     -webkit-border-radius: 4px;
