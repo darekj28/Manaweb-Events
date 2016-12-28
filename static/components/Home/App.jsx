@@ -198,12 +198,6 @@ export default class App extends React.Component {
 									userIdToFilterPosts={this.state.userIdToFilterPosts} 
 									filters={this.state.filters}/>
 					<div className="container app-container">
-					<div>
-						num unseen posts {this.state.numUnseenPosts}
-					</div>
-					<div>
-						num initial unseen posts {this.state.initialUnseenPosts}
-					</div>
 						<div className="app row">
 							<EventName name= {feed_name} numUnseenPosts = {this.state.numUnseenPosts} />
 						</div>

@@ -393,18 +393,6 @@
 						{ className: 'container app-container' },
 						React.createElement(
 							'div',
-							null,
-							'num unseen posts ',
-							this.state.numUnseenPosts
-						),
-						React.createElement(
-							'div',
-							null,
-							'num initial unseen posts ',
-							this.state.initialUnseenPosts
-						),
-						React.createElement(
-							'div',
 							{ className: 'app row' },
 							React.createElement(_EventName2.default, { name: feed_name, numUnseenPosts: this.state.numUnseenPosts })
 						),
