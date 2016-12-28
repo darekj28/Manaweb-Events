@@ -18,7 +18,7 @@
   src : url('Raleway-Regular.ttf');
 }
 body {
-  font-family : "raleway";
+  font-family : "HelveticaNeue-Light";
   background-color : #ffffff;
   color : #0f0f0f;
 }
@@ -190,7 +190,7 @@ body {
   cursor : pointer;
 }
 .FeedPostHeader .time {
-  padding-left : 4px;
+  padding-left : 6px;
   padding-right: 20px;
 }
 .FeedPostHeader .postType {
@@ -263,6 +263,7 @@ body {
 }
 .tooltip {
   overflow : visible;
+  font-family : "HelveticaNeue-Light";
 }
 .input-group.input-group-unstyled input.form-control {
     -webkit-border-radius: 4px;
