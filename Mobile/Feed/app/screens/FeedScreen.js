@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
+import {RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
           Alert, Image, Animated, TouchableWithoutFeedback, ScrollView} from 'react-native';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import _ from 'lodash'
@@ -27,8 +27,6 @@ const POST_MESSAGE_HEIGHT_SHORT = 50
 const POST_MESSAGE_HEIGHT_TALL = 150
 const ANIMATE_DURATION = 700
 class FeedScreen extends Component {
-
-
   static populateActivities() {
      return ['SCG Atlanta', 'Activity 2', 'Activity 3', 'Activity 4']
   }
@@ -43,20 +41,20 @@ class FeedScreen extends Component {
       post_message_height: new Animated.Value(50),
       current_username: "",
       feed: [],
-      currentUser: {},
-      test: ""
+      currentUser: {}
     }
     this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
     this.postMessagePressed = this.postMessagePressed.bind(this)
     this._activities = FeedScreen.populateActivities()
-    this.initializeFeed = this.initializeFeed.bind(this);
+    this.initializeScreen = this.initializeScreen.bind(this);
+    this.initializeUserInfo = this.initializeUserInfo.bind(this);
   }
 
 
-  async initializeFeed() {
+  async initializeScreen() {
     let url = "https://manaweb-events.herokuapp.com"
     let test_url = "http://0.0.0.0:5000"
-    let response = await fetch(test_url + "/mobileGetPosts", {method: "POST",
+    let response = await fetch(url + "/mobileGetPosts", {method: "POST",
           headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -69,29 +67,30 @@ class FeedScreen extends Component {
     })
     let responseData = await response.json();
     
-
-    this.setState({test: "Test changed"})
-    if (responseData.post_list.length > 0) {
-        var feed = []
-        for (var i = 0; i < responseData['post_list'].length; i++) {
-          var obj = responseData['post_list'][i]
-          feed.unshift({
-            postContent : obj['body'],
-            avatar    : obj['avatar'],
-            name    : obj['first_name'] + ' ' + obj['last_name'],
-            userID    : obj['poster_id'],
-            time      : obj['time'],
-            isTrade   : obj['isTrade'],
-            isPlay    : obj['isPlay'],
-            isChill   : obj['isChill'],
-            comment_id  : obj['comment_id'],
-            unique_id   : obj['unique_id'],
-            numberOfComments : obj['numComments']
-          })
-        }
-        this.setState({feed: feed})
-        this.setState({test: "Test changed"})
-    } 
+    if (responseData['result'] == 'success'){
+      if (responseData.post_list.length > 0) {
+          var feed = []
+          for (var i = 0; i < responseData['post_list'].length; i++) {
+            var obj = responseData['post_list'][i]
+            feed.unshift({
+              postContent : obj['body'],
+              avatar    : obj['avatar'],
+              name    : obj['first_name'] + ' ' + obj['last_name'],
+              userID    : obj['poster_id'],
+              time      : obj['time'],
+              isTrade   : obj['isTrade'],
+              isPlay    : obj['isPlay'],
+              isChill   : obj['isChill'],
+              comment_id  : obj['comment_id'],
+              unique_id   : obj['unique_id'],
+              numberOfComments : obj['numComments']
+            })
+          }
+          this.setState({feed: feed})
+      } 
+      this.initializeUserInfo()
+    }
+     
 
       
   }
@@ -162,8 +161,7 @@ class FeedScreen extends Component {
 
   componentWillMount() {
       this.initializeUsername().done();
-      this.initializeUserInfo().done();
-      this.initializeFeed().done();
+      this.initializeScreen().done();
         // AsyncStorage.getItem("current_username").then((value) => {
         //   if (value == null){
         //     this.setState({"current_username" : ""})
@@ -206,9 +204,6 @@ class FeedScreen extends Component {
                 </Text>
               }
           
-            <Text>
-                  Test:  {this.state.test} !!
-              </Text>
 
             <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
                 <View style = {styles.containerHorizontal}>

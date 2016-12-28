@@ -6,11 +6,7 @@ import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHig
 const PROFILE_HEIGHT = 40
 const PROFILE_WIDTH = 40
 
-var profileImages = [
-    require('./res/prof1.png'),
-    require('./res/prof2.png'),
-    require('./res/prof3.png')
-];
+
 
 export default class FeedBox extends Component {
     constructor(props) {
@@ -20,19 +16,33 @@ export default class FeedBox extends Component {
     }
 
     render() {
-
+      const avatar_prefix = './res/'
+      const avatar_extension = '.png'
+      const post = this.props.post
+      avatar_list = ['nissa', 'chandra', 'elspeth', 'nicol', 'ugin', 'jace', 'liliana', 'ajani', 'nahiri', 'gideon']
         return (
             <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#000000',
                 borderBottomWidth: 1}}>
                 <View style={{flex: 1, flexDirection:'row', justifyContent: 'flex-start'}}>
-                    <Image  style={styles.profile_image}
-                        source={profileImages[this.props.image_ID]}>
-                    </Image>
+                      
+                {post.avatar =='nissa' && <Image  style={styles.profile_image} source={require('../static/avatars/nissa.png')} />}
+                {post.avatar == 'chandra' && <Image  style={styles.profile_image} source={require('../static/avatars/chandra.png')} />}
+                {post.avatar == 'elspeth' && <Image  style={styles.profile_image} source={require('../static/avatars/elspeth.png')} />}
+                {post.avatar == 'nicol' && <Image  style={styles.profile_image} source={require('../static/avatars/nicol.png')} />}
+                {post.avatar == 'ugin' && <Image  style={styles.profile_image} source={require('../static/avatars/ugin.png')} />}
+                {post.avatar == 'jace' && <Image  style={styles.profile_image} source={require('../static/avatars/jace.png')} />}
+                {post.avatar == 'liliana' && <Image  style={styles.profile_image} source={require('../static/avatars/liliana.png')} />}
+                {post.avatar == 'ajani' && <Image  style={styles.profile_image} source={require('../static/avatars/ajani.png')} />}
+                {post.avatar == 'nahiri' && <Image  style={styles.profile_image} source={require('../static/avatars/nahiri.png')} />}
+                {post.avatar == 'gideon' && <Image  style={styles.profile_image} source={require('../static/avatars/gideon.png')} />}
+
+
                     <Text style = {styles.text_name}>
-                        {'Blob Blob'}
+                        {post.name}
                     </Text>
+
                     <Text style = {styles.text_userID}>
-                        {'@blobblob'}
+                        {post.userID}
                     </Text>
                     <View style={{flex: 1}}/>
                     <View style={{flex: 0, margin: 1}}>
@@ -45,7 +55,7 @@ export default class FeedBox extends Component {
                     <View style={{width: PROFILE_WIDTH}}>
                     </View>
                     <Text style = {styles.text_message}>
-                        {this.props.post.postContent} 
+                        {post.postContent} 
                     </Text>
                 </View>
             </View>
