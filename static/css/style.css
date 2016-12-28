@@ -263,7 +263,7 @@ body {
 }
 .tooltip {
   overflow : visible;
-  font-family : "museo_sans500";
+  font-family : "HelveticaNeue-Light";
 }
 .input-group.input-group-unstyled input.form-control {
     -webkit-border-radius: 4px;
