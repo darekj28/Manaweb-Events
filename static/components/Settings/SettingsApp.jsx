@@ -3,6 +3,7 @@ import SettingsTextInput from './SettingsTextInput.jsx';
 import SettingsSelectInput from './SettingsSelectInput.jsx';
 import SettingsInputLabel from './SettingsInputLabel.jsx';
 import NoSearchNavBar from '../GenericNavBar/NoSearchNavBar.jsx';
+import AppStore from '../../stores/AppStore.jsx';
 
 function remove(array, value) {
 	var index = array.indexOf(value);
@@ -25,7 +26,7 @@ export default class SettingsApp extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			currentUser 		: '',
+			currentUser 		: AppStore.getCurrentUser(),
 			first_name 			: '',
 			last_name  			: '',
 			password			: '',
@@ -58,12 +59,6 @@ export default class SettingsApp extends React.Component {
 				});
 			}.bind(this)
 		});
-	}
-
-	getCurrentUserInfo() {
-		$.post('/getCurrentUserInfo', function(data) {
-			this.setState({currentUser : data.thisUser});
-		}.bind(this));
 	}
 	
 	handleChange(obj) { this.setState(obj); }
@@ -110,7 +105,6 @@ export default class SettingsApp extends React.Component {
 
 	componentDidMount() {
 		this.autopopulateSettings.bind(this)();
-		this.getCurrentUserInfo.bind(this)();
 		$('#UpdateSettingsSubmit').click(function(e) {
 			e.preventDefault();
 		});

@@ -29,7 +29,6 @@ export default class App extends React.Component {
 			userIdToFilterPosts : '',
 			post : '',
 			feed : [],
-			// currentUser : {},
 			currentUser : AppStore.getCurrentUser(),
 			initialUnseenPosts : -1,
 			numUnseenPosts: -1
@@ -37,11 +36,30 @@ export default class App extends React.Component {
 	}
 	getCurrentUserInfo() {
 		$.post('/getCurrentUserInfo', function(data) {
-			// this.setState({currentUser : data.thisUser});
 			AppActions.addCurrentUser(data.thisUser);
 		}.bind(this));
 	}
-
+	getNotifications() {
+        $.post('/getNotifications', 
+            function(data) {
+                var notifications = [];
+                var count = 0;
+                data.notification_list.map(function(obj) {
+                    if (!obj['seen']) count++; 
+                    notifications.unshift({
+                        comment_id : obj['comment_id'],
+                        notification_id : obj['notification_id'],
+                        timeString : obj['timeString'],
+                        sender_id : obj['sender_id'],
+                        action : obj['action'],
+                        receiver_id : obj['receiver_id'],
+                        seen : obj['seen']
+                    });
+                });
+                AppActions.addNotifications(notifications);
+                AppActions.addNotificationCount(String(count));
+            }.bind(this));
+    }
 	markPostFeedAsSeen() {
 		$.post('/markPostFeedAsSeen', {feed_name: feed_name});
 	}
@@ -164,7 +182,8 @@ export default class App extends React.Component {
 	componentDidMount() {
 		this.refreshFeed.bind(this)();
 		this.markPostFeedAsSeen.bind(this)();
-		this.getCurrentUserInfo.bind(this)();
+		this.getCurrentUserInfo.bind(this)(); //move
+		this.getNotifications.bind(this)(); //move
 		this.initializeNumUnseenPosts.bind(this)();
 		this.setState({ timer : setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
 		AppStore.addChangeListener(this._onChange.bind(this));

@@ -1,44 +1,24 @@
 var React = require('react');
 import NoSearchNavBar from "../GenericNavBar/NoSearchNavBar.jsx";
 import NotificationsFeed from './NotificationsFeed.jsx';
-
+import AppStore from '../../stores/AppStore.jsx';
 export default class NotificationsApp extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			currentUser : '',
-            notifications : []
+			currentUser : AppStore.getCurrentUser(),
+            notifications : AppStore.getNotifications()
         };
 	}
-	getCurrentUserInfo() {
-		$.post('/getCurrentUserInfo', function(data) {
-			this.setState({currentUser : data.thisUser});
-		}.bind(this));
-	}
-	getNotifications() {
-        $.post('/getNotifications', 
-            function(data) {
-                var notifications = [];
-                var count = 0;
-                data.notification_list.map(function(obj) {
-                    if (!obj['seen']) count++; 
-                    notifications.unshift({
-                        comment_id : obj['comment_id'],
-                        notification_id : obj['notification_id'],
-                        timeString : obj['timeString'],
-                        sender_id : obj['sender_id'],
-                        action : obj['action'],
-                        receiver_id : obj['receiver_id'],
-                        seen : obj['seen']
-                    });
-                });
-                this.setState({notifications : notifications});
-            }.bind(this));
-    }
 	componentDidMount() {
-		this.getNotifications.bind(this)();
-		this.getCurrentUserInfo.bind(this)();
-	}
+        AppStore.addChangeListener(this._onChange.bind(this));
+    }
+    componentWillUnmount() {
+        AppStore.removeChangeListener(this._onChange.bind(this));
+    }
+    _onChange() {
+        this.setState({ notifications : AppStore.getNotifications() })
+    }
 	render() {
 		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
 		return (

@@ -3,6 +3,7 @@ import CommentNavBar from "./CommentNavBar.jsx";
 import CommentFeedPost from "./CommentFeedPost.jsx";
 import CommentFeed from "./CommentFeed.jsx";
 import MakeComment from "./MakeComment.jsx";
+import AppStore from '../../stores/AppStore.jsx';
 
 export default class CommentApp extends React.Component {
 	constructor(props) {
@@ -11,16 +12,11 @@ export default class CommentApp extends React.Component {
 			search : '',
 			comment : '',
 			feed : [],
-			currentUser : '',
+			currentUser : AppStore.getCurrentUser(),
 			comment_id : this.props.params.comment_id,
 			unique_id : '',
 			original_post : []
 		};
-	}
-	getCurrentUserInfo() {
-		$.post('/getCurrentUserInfo', function(data) {
-			this.setState({currentUser : data.thisUser});
-		}.bind(this));
 	}
 	getPostById(comment_id) {
 		$.post('/getPostById', {comment_id : comment_id}, 
@@ -124,7 +120,6 @@ export default class CommentApp extends React.Component {
 		this.getPostById.bind(this)(nextProps.params.comment_id);
 	}
 	componentDidMount() {
-		this.getCurrentUserInfo.bind(this)();
 		this.refreshFeed.bind(this)(this.state.comment_id);
 		this.getPostById.bind(this)(this.state.comment_id);
 		$('#MakeComment').hide();

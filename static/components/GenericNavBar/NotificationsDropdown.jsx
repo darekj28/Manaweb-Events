@@ -1,34 +1,14 @@
 var React = require('react');
 var Link = require('react-router').Link;
+import AppStore from '../../stores/AppStore.jsx';
+
 export default class NotificationsDropdown extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            notifications : [],
-            numUnseen : ''
+            notifications : AppStore.getNotifications(),
+            numUnseen : AppStore.getNotificationCount()
         };
-    }
-    getNotifications() {
-        $.post('/getNotifications', 
-            function(data) {
-                var notifications = [];
-                var count = 0;
-                data.notification_list.map(function(obj) {
-                    if (!obj['seen']) count++; 
-                    notifications.unshift({
-                        comment_id : obj['comment_id'],
-                        notification_id : obj['notification_id'],
-                        timeString : obj['timeString'],
-                        sender_id : obj['sender_id'],
-                        action : obj['action'],
-                        receiver_id : obj['receiver_id'],
-                        seen : obj['seen']
-                    });
-                });
-                this.setState({notifications : notifications});
-                this.setState({numUnseen: String(count)});
-            }.bind(this));
-        this.seeNotification.bind(this)();
     }
     seeNotification() {
         this.state.notifications.map(function (obj){
@@ -36,7 +16,15 @@ export default class NotificationsDropdown extends React.Component {
         });
     }
     componentDidMount() {
-        this.getNotifications.bind(this)();
+        this.seeNotification.bind(this)();
+        AppStore.addChangeListener(this._onChange.bind(this));
+    }
+    componentWillUnmount() {
+        AppStore.removeChangeListener(this._onChange.bind(this));
+    }
+    _onChange() {
+        this.setState({ notifications : AppStore.getNotifications(), 
+                            numUnseen : AppStore.getNotificationCount() })
     }
 	render() { 
 		return (

@@ -4,7 +4,7 @@ var AppActions = require('../../actions/AppActions.jsx');
 
 export default class AccountDropdown extends React.Component {
   removeCurrentUser() {
-    AppActions.removeCurrentUser();
+      AppActions.removeCurrentUser();
   }
 	render() {
 		return (
