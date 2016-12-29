@@ -165,7 +165,8 @@ export default class App extends React.Component {
 		this.setState({ currentUser : AppStore.getCurrentUser() });
 		this.refreshFeed.bind(this)();
 		this.initializeNumUnseenPosts.bind(this)();
-		this.setState({ timer : setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
+		if (!this.state.timer)
+			this.setState({ timer : setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
 	}
 	render() {
 		if (this.state.currentUser['userID']) {

@@ -35,19 +35,19 @@ def createProfile():
 	
 	elif request.method == 'POST':
 		# read the form data and save it
-		first_name = request.form['first_name'].title()
-		last_name = request.form['last_name'].title()
-		userID = request.form['userID']
+		first_name = request.form['first_name']
+		last_name = request.form['last_name']
+		userID = request.form['username']
 		password = request.form['password']
-		email = request.form['email']
-		birthDay = request.form['birthDay']
-		birthMonth = request.form['birthMonth']
-		birthYear = request.form['birthYear']
-		gender = request.form.get('gender')
-
-		avatar_url = request.form['avatar'][1:]
-		slash_splits = avatar_url.split('/')
-		avatar_name = slash_splits[len(slash_splits)-1].split('.')[0]
+		email = request.form['email_address']
+		birthDay = request.form['day_of_birth']
+		birthMonth = request.form['month_of_birth']
+		birthYear = request.form['year_of_birth']
+		# avatar_url = request.form['avatar'][1:]
+		# slash_splits = avatar_url.split('/')
+		# avatar_name = slash_splits[len(slash_splits)-1].split('.')[0]
+		avatar_name = request.form['avatar']
+		avatar_url = '/static/avatars/' + avatar_name + '.png'
 		phone_number = request.form['phone_number']
 		isActive = True
 

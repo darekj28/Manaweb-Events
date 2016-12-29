@@ -39,7 +39,7 @@ class AppStore extends React.Component {
 	  	emitter.emit('change');
 	}
 	addChangeListener(callback) {
-	  	emitter.once('change', listener = callback);
+	  	emitter.on('change', listener = callback);
 	}
 	removeChangeListener(callback) {
 	  	emitter.off('change', callback);

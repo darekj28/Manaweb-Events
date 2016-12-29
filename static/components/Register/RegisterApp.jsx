@@ -44,11 +44,10 @@ export default class RegisterApp extends React.Component {
 			};
 	}
 	componentDidMount() {
-		$('#RegisterSubmit').click(function(e) {
-			e.preventDefault();
+		$('#RegisterSubmit').one('click', function(e) {
 			$(this).blur();
-
-		})
+			this.handleSubmit.bind(this)();
+		}.bind(this));
 	}
 	loginError(err) {
 		this.setState({ error : err });
@@ -72,7 +71,24 @@ export default class RegisterApp extends React.Component {
 										isSameSet(select_fields, valid_select_fields) });
 	}
 	handleSubmit() {
-
+		var obj = {
+			first_name 			: this.state.first_name		,
+			last_name			: this.state.last_name		,
+			username 			: this.state.username 		,
+			email_address		: this.state.email_address	,
+			password			: this.state.password		,
+			phone_number 		: this.state.phone_number 	,
+			month_of_birth 		: this.state.month_of_birth ,
+			day_of_birth 		: this.state.day_of_birth 	,
+			year_of_birth 		: this.state.year_of_birth 	,
+			avatar 				: this.state.avatar 			
+		};
+		$.ajax({
+			type: "POST",
+			url : '/createProfile',
+			data : JSON.stringify(obj, null, '\t'),
+			contentType : 'application/json;charset=UTF-8'
+		});
 	}
 	render() {
 		return(
@@ -104,12 +120,11 @@ export default class RegisterApp extends React.Component {
 						<div id="avatar_container" className="avatar_container centered-text"></div>
 						<div className="form-group">
 							{this.state.submittable && 
-								<Link to="/"> <button className="btn btn-default" id="RegisterSubmit" 
-										onClick={this.handleSubmit.bind(this)}> Get Started! </button>
+								<Link to="/"> <button className="btn btn-default" id="RegisterSubmit"> 
+										Get Started! </button>
 									</Link> }
 							{!this.state.submittable && 
-								<button className="btn btn-default" id="RegisterSubmit" 
-									onClick={this.handleSubmit.bind(this)} disabled> 
+								<button className="btn btn-default" id="RegisterSubmit" disabled> 
 									Get Started!
 								</button>}
 						</div>

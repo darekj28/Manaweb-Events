@@ -57,9 +57,10 @@ export default class LoginNavBar extends React.Component {
             }.bind(this));
     }
     componentDidMount() {
-    	$('#LoginButton').click(function() {
+    	$('#LoginButton').one('click', function() {
     		$(this).blur();
-    	});
+    		this.login.bind(this)();
+    	}.bind(this));
     }
 	render() {
 		return (
@@ -88,8 +89,9 @@ export default class LoginNavBar extends React.Component {
                             <input type="password" className="form-control login" id="password" 
                             	onChange={this.handleTyping.bind(this)} placeholder="Password"/>
                         </div>
-			            <Link to="/"><button className="btn btn-default form-control" id="LoginButton" 
-			            		onClick={this.login.bind(this)}>Sign In!</button></Link>
+			            <Link to="/"><button className="btn btn-default form-control" id="LoginButton">
+			            Sign In!</button>
+			            </Link>
 			        </form>
 			  </div>
 			</nav>
