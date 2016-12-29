@@ -16,6 +16,7 @@ import sys
 
 import psycopg2
 import urllib
+from passlib.hash import argon2
 
 
 			
@@ -45,6 +46,7 @@ class Users:
 		    host=url.hostname,
 		    port=url.port
 		)
+		self.user_db.autocommit = True
 		self.udb = self.user_db.cursor()
 
 
@@ -133,7 +135,8 @@ class Users:
 		input_properties['userID'] = userID
 		input_properties['first_name'] = first_name
 		input_properties['last_name'] = last_name
-		input_properties['password'] = password
+		hash_password = argon2.using(rounds=4).hash(usersPassword)
+		input_properties['password'] = hash_password
 		input_properties['email'] = email
 		input_properties['isActive'] = isActive
 		input_properties['avatar_url'] = avatar_url
@@ -156,22 +159,23 @@ class Users:
 			self.udb.execute(self.udb.mogrify("INSERT INTO " + table_name + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
 				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp) \
 				  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
-				(userID.lower(), first_name, last_name, password, email, isActive, avatar_url,
+				(userID.lower(), first_name, last_name, hash_password, email, isActive, avatar_url,
 				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp)))
 
 			action = "ACCOUNT CREATED"
 			self.udb.execute(self.udb.mogrify("INSERT INTO " + "user_actions" + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
 				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action) \
 				  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
-				(userID.lower(), first_name, last_name, password, email, isActive, avatar_url,
+				(userID.lower(), first_name, last_name, hash_password, email, isActive, avatar_url,
 				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action)))
 
 		# otherwise simply update information
 		else: 
 			for prop in self.properties:
-				if prop != 'userID':
+				if prop != 'userID' and prop != 'password':
 					self.updateInfo(userID, prop, input_properties[prop])
 
+			self.updateInfo(userID, 'password', hash_password)
 			self.updateInfo(userID, 'timeString', timeString)
 			self.updateInfo(userID, 'timeStamp', timeStamp)
 
@@ -179,7 +183,7 @@ class Users:
 			update_code = self.udb.mogrify("INSERT INTO " + "user_actions" + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
 				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action) \
 				  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
-				(userID.lower(), first_name, last_name, password, email, isActive, avatar_url,
+				(userID.lower(), first_name, last_name, hash_password, email, isActive, avatar_url,
 				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action))
 			self.udb.execute(update_code)
 
@@ -380,9 +384,15 @@ class Users:
 		else:
 			return True
 
-
-
-
+	# this is a temporary method just to update the old passwords
+	def hashUserPasswords(self, userID):
+		user_manager = Users()
+		thisUser = user_manager.getInfo(userID)
+		password = 	thisUser['password']
+		hash_password = argon2.using(rounds = 4).hash(password)
+		print(hash_password)
+		sql = "UPDATE user_info SET password = %s WHERE userID = %s"
+		self.udb.execute(self.udb.mogrify(sql, (hash_password, userID)))
 
 
 
