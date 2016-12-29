@@ -20,7 +20,7 @@ export default class LoginNavBar extends React.Component {
 			data : JSON.stringify(obj, null, '\t'),
 			contentType : 'application/json;charset=UTF-8',
 			success : function(res) {
-				if (!res.error) {
+				if (res['error'] == false) {
 					this.getCurrentUserInfo.bind(this)();
 					this.getNotifications.bind(this)();
 				}

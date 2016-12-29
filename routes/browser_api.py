@@ -17,6 +17,7 @@ def login() :
 	user = request.json['user']
 	password = request.json['password']
 	res = validation.validateLogin(user, password)
+	print(res)
 	if res['result'] == 'success':
 		session['logged_in'] = True
 		session['userID'] = user
