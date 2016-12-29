@@ -51,14 +51,14 @@ def output_info(table_name):
 
 udb.execute("ALTER TABLE BALT ALTER COLUMN timeStamp SET DATA TYPE FLOAT")
 
-ADMIN_TABLE = "test_admin_table"
-REPORT_TABLE = "test_report_table"
-COMMENT_ID_TABLE = "test_c_id"
-FEED_NAMES = "test_feed_names"
-EVENT_TABLE = "TEST_EVENT"
+ADMIN_TABLE = "admin_table"
+REPORT_TABLE = "report_table"
+COMMENT_ID_TABLE = "c_id"
+FEED_NAMES = "feed_names"
+EVENT_TABLE = "BALT"
 COMMENT_TABLE = "c_" + EVENT_TABLE
-NOTIFICATION_TABLE = "test_notification_table"
-NOTIFICAITON_ID_TABLE = "test_n_id"
+NOTIFICATION_TABLE = "notification_table"
+NOTIFICAITON_ID_TABLE = "n_id"
 
 # table_list = ["user_info", "user_actions","BALT", "c_BALT", "report_table", "admin_table", "feed_names", "c_id"]
 table_list = [ADMIN_TABLE, REPORT_TABLE, COMMENT_ID_TABLE, FEED_NAMES, EVENT_TABLE, COMMENT_TABLE, NOTIFICATION_TABLE, NOTIFICAITON_ID_TABLE]

@@ -645,6 +645,8 @@ class Posts:
 		# not just_following (ghost follower)
 		ghost_following = False
 
+		poster_id = poster_id.lower()
+
 		post_code = self.db.mogrify("INSERT INTO " + feed_name + " (body, poster_id, feed_name, comment_id, timeString, timeStamp, isTrade, isPlay, isChill, unique_id, numComments, following, ghost_following) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s, %s, %s)", (body, poster_id, feed_name, comment_id, timeString, timeStamp, isTrade, isPlay, isChill, unique_id, numComments, following, ghost_following))
 		self.db.execute(post_code)
 		self.post_db.commit()
@@ -725,8 +727,9 @@ class Posts:
 		posts = self.db.fetchall()
 		user_manager = Users()
 		user_info_table = user_manager.getUserInfoTable()
-		postDict = self.postListToDict(posts, user_info_table)
 		user_manager.closeConnection()
+		postDict = self.postListToDict(posts, user_info_table)
+		
 		return postDict
 
 
@@ -1015,6 +1018,15 @@ class Posts:
 			temp = alist[fillslot]
 			alist[fillslot] = alist[positionOfMax]
 			alist[positionOfMax] = temp
+
+
+	def makePosterIdLowerCase(self):
+
+		sql = "UPDATE " + self.EVENT_TABLE + " SET poster_id = %s WHERE poster_id = %s"
+		poster_id = 'Darekj'
+		lower_id = 'darekj'
+		self.db.execute(self.db.mogrify(sql, (lower_id, poster_id)))
+
 
 
 def test_posting(test_size):
