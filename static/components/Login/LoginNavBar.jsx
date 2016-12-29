@@ -19,9 +19,14 @@ export default class LoginNavBar extends React.Component {
 			url : '/verifyAndLogin',
 			data : JSON.stringify(obj, null, '\t'),
 			contentType : 'application/json;charset=UTF-8',
-			success : function(data) {
-				this.getCurrentUserInfo.bind(this)();
-				this.getNotifications.bind(this)();
+			success : function(res) {
+				if (!res.error) {
+					this.getCurrentUserInfo.bind(this)();
+					this.getNotifications.bind(this)();
+				}
+				else {
+					this.props.loginError(res.error);
+				}
 			}.bind(this)
 		});
 	}

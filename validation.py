@@ -30,11 +30,11 @@ def validateLogin(login_id, password):
 	# user doesn't exists
 	if user_info == None:
 		output['result'] = 'failure'
-		output['error'] = "This login id doesn't exists"
+		output['error'] = "This username doesn't exist."
 
 	elif password_match:
 		output['result'] = 'failure'
-		output['error'] = 'login credentials incorrect'
+		output['error'] = 'Login credentials incorrect.'
 
 
 	else:

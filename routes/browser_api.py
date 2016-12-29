@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request, session, render_template, redirect, url_for
 from users import Users
 from posts import Posts
+import validation
 import time
 import email_confirm
 # from py2neo import authenticate, Graph, Node
@@ -13,9 +14,17 @@ DEFAULT_FEED = "BALT"
 
 @browser_api.route('/verifyAndLogin', methods=['POST'])
 def login() :
-	session['logged_in'] = True
-	session['userID'] = request.json['user']
-	return jsonify({ 'logged_in' : True})
+	user = request.json['user']
+	password = request.json['password']
+	res = validation.validateLogin(user, password)
+	if res['result'] == 'success' :
+		print(res['result'])
+		session['logged_in'] = True
+		session['userID'] = user
+		return jsonify({ 'error' : False })
+	else : 
+		print(res['error'])
+		return jsonify({ 'error' : res['error'] })
 
 @browser_api.route('/getFeedNames', methods = ['POST'])
 def getFeedNames():
