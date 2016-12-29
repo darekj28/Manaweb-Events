@@ -49,6 +49,15 @@ body {
   border-radius : 10px;
   margin-bottom : 15px;
 }
+#SignUpButton:focus {
+  outline : none;
+}
+#LogInButton:focus {
+  outline : none;
+}
+#RegisterSubmit:focus {
+  outline : none;
+}
 .popover-title { 
   display: none; 
 }

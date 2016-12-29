@@ -12,7 +12,7 @@ export default class LoginApp extends React.Component {
 		this.setState({ error : err });
 	}
 	componentDidMount() {
-		$('#SignUpButton').click(function() {
+		$('#SignUpButton').click(function(e) {
 			$(this).blur();
 		});
 	}

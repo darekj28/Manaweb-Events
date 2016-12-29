@@ -156,6 +156,7 @@ export default class App extends React.Component {
 	}
 	componentDidMount() {
 		AppStore.addChangeListener(this._onChange.bind(this));
+		this.refreshFeed.bind(this)();
 	}
 	componentWillUnmount() {
 		clearInterval(this.state.timer);
@@ -163,7 +164,6 @@ export default class App extends React.Component {
 	}
 	_onChange() {
 		this.setState({ currentUser : AppStore.getCurrentUser() });
-		this.refreshFeed.bind(this)();
 		this.initializeNumUnseenPosts.bind(this)();
 		if (!this.state.timer)
 			this.setState({ timer : setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
