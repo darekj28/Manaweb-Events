@@ -40,6 +40,8 @@ export default class NotificationsDropdown extends React.Component {
                                     </Link>
                                 </li>);
                     })}
+                    {!this.state.notifications.length && 
+                        <li className="unclickableDropdown" id="NoNewNotificationsDropdown">No new notifications.</li>}
                     <li className="divider"></li>
                     <li><Link to="/notifications"><center>See All</center></Link></li>
                 </ul>

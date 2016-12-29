@@ -120,7 +120,8 @@ export default class RegisterApp extends React.Component {
 						<div id="avatar_container" className="avatar_container centered-text"></div>
 						<div className="form-group">
 							{this.state.submittable && 
-								<Link to="/"> <button className="btn btn-default" id="RegisterSubmit"> 
+								<Link to="/"> <button className="btn btn-default blurButton" 
+									id="RegisterSubmit"> 
 										Get Started! </button>
 									</Link> }
 							{!this.state.submittable && 

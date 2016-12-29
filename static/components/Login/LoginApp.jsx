@@ -12,21 +12,14 @@ export default class LoginApp extends React.Component {
 	loginError(err) {
 		this.setState({ error : err });
 	}
-	componentDidMount() {
-		$('#SignUpButton').click(function(e) {
-			$(this).blur();
-		});
-	}
-
-	// handleFacebookLoginClick() {
- // 		 console.log();
-	// }
-
 	responseFacebook(response) {
-		console.log(response)
+		console.log(response);
 	}
-
-
+	componentDidMount() {
+		$('#SignUpButton').one("click", function() {
+			$(this).blur();
+		})
+	}
 	render() {
 		const appId = "1138002282937846"
 		const testAppId = "1298398903564849"
@@ -42,10 +35,6 @@ export default class LoginApp extends React.Component {
                     			Create A Profile!
                     		</button>
                     	</Link>
-
-                    	<br/>
-                    	<br/>
-
                     	<FacebookLogin
 						    appId= {appId}
 						    autoLoad={true}

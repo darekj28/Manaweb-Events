@@ -13,11 +13,11 @@ export default class AccountDropdown extends React.Component {
                 <span className="glyphicon glyphicon-user"></span>
               </a>
               <ul className="dropdown-menu">
-                {this.props.currentUser['userID'] && <li><a href="#">{this.props.name}</a></li>}
+                {this.props.currentUser['userID'] && 
+                  <li className="unclickableDropdown" id="DropdownName">{this.props.name}</li>}
                 <li className="divider"></li>
                 {this.props.currentUser.isAdmin && 
-                <li> <a href = "/adminTools"> Admin Tools </a> </li>
-                }
+                  <li> <a href = "/adminTools"> Admin Tools </a> </li>}
                 <li><Link to="/settings">Settings</Link></li>
 				        <li><Link to="/" onClick={this.removeCurrentUser.bind(this)}>Logout</Link></li>
               </ul>
