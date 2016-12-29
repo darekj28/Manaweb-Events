@@ -12,7 +12,7 @@ export default class LoginNavBar extends React.Component {
 		obj[event.target.id] = event.target.value;
 		this.setState(obj);
 	}
-	login(event) {
+	login() {
 		var obj = { user : this.state.user, password : this.state.password };
 		$.ajax({
 			type: "POST",
