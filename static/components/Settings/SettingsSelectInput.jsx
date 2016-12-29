@@ -116,8 +116,10 @@ export default class SettingsSelectInput extends React.Component {
 	}
 	handleAvatarDisplay() {
 		var av = $('#avatar').val();
-		var container = document.getElementById('avatar_container');
-		container.style.backgroundImage = 'url(static/avatars/' + av + '.png)';
+		if (!av) {
+			var container = document.getElementById('avatar_container');
+			container.style.backgroundImage = 'url(static/avatars/' + av + '.png)';
+		}
 	}
 	componentWillReceiveProps(nextProps) {
 		$('select[name=' + nextProps.field + ']').val(nextProps.value);

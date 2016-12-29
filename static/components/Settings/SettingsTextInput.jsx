@@ -15,15 +15,22 @@ function testValid (field, value) {
 		case "first_name":
 			var condition = /^[a-z ,.'-]+$/i;
 			if (!value.match(condition)) return "invalid";
+			break;
 		case "last_name":
 			var condition = /^[a-z ,.'-]+$/i;
 			if (!value.match(condition)) return "invalid";
+			break;
 		case "password":
 			var condition = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,}$/;
 			if (!value.match(condition)) return "invalid";
+			break;
 		case "password_confirm":
 			var condition = $('#password').val();
-			if (value != condition) return "invalid";
+			console.log(condition);
+			console.log(value);
+			console.log(value != condition || !value);
+			if (value != condition || !value) return "invalid";
+			break;
 		default :
 			return "valid";
 	}
@@ -57,7 +64,8 @@ export default class SettingsTextInput extends React.Component {
 	}
 	componentDidMount() {
 		$('#password').popover();
-		if (this.props.isUpdate) this.setState({ valid : "valid" });
+		if (this.props.isUpdate && (this.props.field != "password" && this.props.field != "password_confirm")) 
+			this.setState({ valid : "valid" });
 	}
 	render() {
 		var type = (this.props.field == "password" || this.props.field == "password_confirm") ? "password" : "text";
@@ -66,7 +74,7 @@ export default class SettingsTextInput extends React.Component {
 				<div className="form-group">
 					{this.props.field != "password" && <input className={"setting " + this.state.valid} id={this.props.field} type={type} 
 						value={this.props.value} 
-						onChange={this.handleTyping} onBlur={this.handleBlur}/>}
+						onChange={this.handleTyping.bind(this)} onBlur={this.handleBlur.bind(this)}/>}
 					{this.props.field == "password" && <input data-toggle="popover" data-trigger="focus" 
 						data-content="Your password must contain at least one letter and one number."
 						className={"setting " + this.state.valid} id={this.props.field} type={type} 

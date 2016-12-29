@@ -20,7 +20,7 @@ function isSameSet (arr1, arr2) {
   return $(arr1).not(arr2).length === 0 && $(arr2).not(arr1).length === 0;  
 }
 
-var text_fields = [	"first_name", "last_name", "password", "password_confirm", "phone_number" ];
+var text_fields = [	"first_name", "last_name", "username", "email_address", "password", "password_confirm", "phone_number" ];
 var select_fields = [ "month_of_birth", "day_of_birth", "year_of_birth", "avatar" ];
 
 export default class RegisterApp extends React.Component {
@@ -29,6 +29,8 @@ export default class RegisterApp extends React.Component {
 		this.state = {error : '',
 				first_name 			: '',
 				last_name  			: '',
+				username 			: '',
+				email_address		: '',
 				password			: '',
 				password_confirm 	: '',
 				phone_number 		: '',
@@ -44,6 +46,7 @@ export default class RegisterApp extends React.Component {
 	componentDidMount() {
 		$('#RegisterSubmit').click(function(e) {
 			e.preventDefault();
+			$(this).blur();
 		})
 	}
 	loginError(err) {
@@ -68,7 +71,7 @@ export default class RegisterApp extends React.Component {
 										isSameSet(select_fields, valid_select_fields) });
 	}
 	handleSubmit() {
-		
+
 	}
 	render() {
 		return(
@@ -103,10 +106,10 @@ export default class RegisterApp extends React.Component {
 								<button className="btn btn-default" id="RegisterSubmit" 
 										onClick={this.handleSubmit.bind(this)}> Update! </button>}
 							{!this.state.submittable && 
-								<button className="btn btn-default" id="RegisterSubmit" 
+								<Link to="/"> <button className="btn btn-default" id="RegisterSubmit" 
 									onClick={this.handleSubmit.bind(this)} disabled> 
-									<Link to="/"> Update! </Link> 
-								</button>}
+									Update! 
+								</button> </Link> }
 						</div>
 					</form>
 				</div>	

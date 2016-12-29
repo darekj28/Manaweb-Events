@@ -49,8 +49,6 @@ export default class SettingsApp extends React.Component {
 				this.setState({
 					first_name 			: user.first_name,
 					last_name  			: user.last_name,
-					password   			: user.password,
-					password_confirm 	: user.password,
 					phone_number		: user.phone_number,
 					day_of_birth		: user.birthDay,
 					year_of_birth		: user.birthYear,

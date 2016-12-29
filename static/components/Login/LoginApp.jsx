@@ -23,9 +23,9 @@ export default class LoginApp extends React.Component {
 					{this.state.error && <LoginError error={this.state.error}/>}
 					<h1><center>M A N A W E B</center></h1>
                     <center>
-                    	<button className="btn btn-default" id="SignUpButton">
-                    		<Link to="/register">Create A Profile!</Link>
-                    	</button>
+                    	<Link to="/register"><button className="btn btn-default" id="SignUpButton">
+                    		Create A Profile!
+                    	</button></Link>
                 	</center>
 				</div>
 			</div>
