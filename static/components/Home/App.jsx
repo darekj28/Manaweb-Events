@@ -43,6 +43,7 @@ export default class App extends React.Component {
 			function(data){
 				this.setState({numUnseenPosts : data['numUnseenPosts']})
 				this.setState({initialUnseenPosts: data['numUnseenPosts']})
+				this.markPostFeedAsSeen.bind(this)();
 			}.bind(this));
 	}
 
@@ -163,7 +164,6 @@ export default class App extends React.Component {
 	_onChange() {
 		this.setState({ currentUser : AppStore.getCurrentUser() });
 		this.refreshFeed.bind(this)();
-		this.markPostFeedAsSeen.bind(this)();
 		this.initializeNumUnseenPosts.bind(this)();
 		this.setState({ timer : setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
 	}

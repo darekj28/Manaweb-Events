@@ -59,18 +59,6 @@ export default class RegisterApp extends React.Component {
 		this.setState({ submittable : isSameSet(text_fields, valid_text_fields) && 
 										isSameSet(select_fields, valid_select_fields) });
 	}
-	handleSubmit() {
-		var obj = {
-			first_name 		: this.state.first_name,
-			last_name  		: this.state.last_name,
-			password   		: this.state.password,
-			phone_number 	: this.state.phone_number,
-			day_of_birth 	: this.state.day_of_birth,
-			month_of_birth 	: this.state.month_of_birth,
-			year_of_birth 	: this.state.year_of_birth,
-			avatar 			: this.state.avatar
-		}
-	}
 	handleSelectBlur(field, valid) {
 		var valid_text_fields = this.state.valid_text_fields; 
 		var valid_select_fields = this.state.valid_select_fields;
@@ -78,6 +66,9 @@ export default class RegisterApp extends React.Component {
 		else this.setState({ valid_select_fields : remove(valid_select_fields, field) });
 		this.setState({ submittable : isSameSet(text_fields, valid_text_fields) && 
 										isSameSet(select_fields, valid_select_fields) });
+	}
+	handleSubmit() {
+		
 	}
 	render() {
 		return(
