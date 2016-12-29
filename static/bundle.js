@@ -1457,18 +1457,12 @@
 	 * will remain to ensure logic does not differ in production.
 	 */
 	
-	var validateFormat = function validateFormat(format) {};
-	
-	if (false) {
-	  validateFormat = function validateFormat(format) {
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  if (false) {
 	    if (format === undefined) {
 	      throw new Error('invariant requires an error message argument');
 	    }
-	  };
-	}
-	
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  validateFormat(format);
+	  }
 	
 	  if (!condition) {
 	    var error;
@@ -10668,7 +10662,7 @@
   \***************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -10694,44 +10688,50 @@
 		}
 	
 		_createClass(FeedPostHeader, [{
-			key: 'handleFilterUser',
+			key: "handleFilterUser",
 			value: function handleFilterUser() {
 				this.props.handleFilterUser(this.props.post.userID);
 			}
 		}, {
-			key: 'render',
+			key: "render",
 			value: function render() {
-				var postType = "";
-				if (this.props.post.isTrade) postType = postType.concat(' trade ');
-				if (this.props.post.isPlay) postType = postType.concat(' play ');
-				if (this.props.post.isChill) postType = postType.concat(' chill ');
 				return React.createElement(
-					'div',
-					{ className: 'FeedPostHeader' },
-					React.createElement(
-						'div',
-						{ className: 'postType pull-right' },
-						postType
+					"div",
+					{ className: "FeedPostHeader" },
+					this.props.post.isChill && React.createElement(
+						"div",
+						{ className: "postType pull-right" },
+						React.createElement("span", { className: "HeaderGlyphicon glyphicon glyphicon-time" })
+					),
+					this.props.post.isTrade && React.createElement(
+						"div",
+						{ className: "postType pull-right" },
+						React.createElement("span", { className: "HeaderGlyphicon glyphicon glyphicon-transfer" })
+					),
+					this.props.post.isPlay && React.createElement(
+						"div",
+						{ className: "postType pull-right" },
+						React.createElement("span", { className: "HeaderGlyphicon glyphicon glyphicon-play" })
 					),
 					React.createElement(
-						'div',
-						{ className: 'headerpart name', onClick: this.handleFilterUser.bind(this) },
+						"div",
+						{ className: "headerpart name", onClick: this.handleFilterUser.bind(this) },
 						React.createElement(
-							'b',
+							"b",
 							null,
 							this.props.post.name
 						)
 					),
 					React.createElement(
-						'div',
-						{ className: 'headerpart username text-muted' },
-						'@',
+						"div",
+						{ className: "headerpart username text-muted" },
+						"@",
 						this.props.post.userID
 					),
 					React.createElement(
-						'div',
-						{ className: 'headerpart time text-muted' },
-						'\u2022 ',
+						"div",
+						{ className: "headerpart time text-muted" },
+						"\u2022 ",
 						this.props.post.time
 					)
 				);
@@ -11218,27 +11218,37 @@
 							)
 						),
 						React.createElement(
-							'center',
-							null,
+							'div',
+							{ className: 'row button-row' },
 							React.createElement(
-								Link,
-								{ to: '/register' },
+								'center',
+								null,
 								React.createElement(
-									'button',
-									{ className: 'btn btn-default', id: 'SignUpButton' },
-									'Create A Profile!'
+									Link,
+									{ to: '/register' },
+									React.createElement(
+										'button',
+										{ className: 'btn btn-default', id: 'SignUpButton' },
+										'Create A Profile!'
+									)
 								)
-							),
-							React.createElement('br', null),
-							React.createElement('br', null),
-							React.createElement(_reactFacebookLogin2.default, {
-								appId: appId,
-								autoLoad: true,
-								fields: 'name,email'
-								// onClick={this.handleFacebookLoginClick}
-								, callback: this.responseFacebook,
-								icon: 'fa-facebook',
-								size: 'small' })
+							)
+						),
+						React.createElement(
+							'div',
+							{ className: 'row button-row' },
+							React.createElement(
+								'center',
+								null,
+								React.createElement(_reactFacebookLogin2.default, {
+									appId: appId,
+									autoLoad: true,
+									fields: 'name,email'
+									// onClick={this.handleFacebookLoginClick}
+									, callback: this.responseFacebook,
+									icon: 'fa-facebook',
+									size: 'small' })
+							)
 						)
 					)
 				);
@@ -11397,29 +11407,28 @@
 							)
 						),
 						React.createElement(
-							'form',
-							{ className: 'collapse navbar-collapse navbar-form navbar-right',
-								id: 'bs-example-navbar-collapse-1' },
+							'div',
+							{ className: 'collapse navbar-collapse', id: 'bs-example-navbar-collapse-1' },
 							React.createElement(
-								'div',
-								{ className: 'form-group' },
-								React.createElement('input', { type: 'text', className: 'form-control login', id: 'user',
-									onChange: this.handleTyping.bind(this), placeholder: 'Username' })
-							),
-							React.createElement(
-								'div',
-								{ className: 'form-group' },
-								React.createElement('input', { type: 'password', className: 'form-control login', id: 'password',
-									onChange: this.handleTyping.bind(this), placeholder: 'Password' })
-							),
-							React.createElement(
-								Link,
-								{ to: '/' },
+								'form',
+								{ className: 'navbar-form navbar-right' },
 								React.createElement(
-									'button',
-									{ className: 'btn btn-default form-control blurButton',
-										id: 'LoginButton' },
-									'Sign In!'
+									'div',
+									{ className: 'form-group' },
+									React.createElement('input', { type: 'text', className: 'form-control login', id: 'user',
+										onChange: this.handleTyping.bind(this), placeholder: 'Username' }),
+									React.createElement('input', { type: 'password', className: 'form-control login', id: 'password',
+										onChange: this.handleTyping.bind(this), placeholder: 'Password' }),
+									React.createElement(
+										Link,
+										{ to: '/' },
+										React.createElement(
+											'button',
+											{ className: 'btn btn-default form-control blurButton',
+												id: 'LoginButton' },
+											' Sign In!'
+										)
+									)
 								)
 							)
 						)
