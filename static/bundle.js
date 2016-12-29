@@ -1442,12 +1442,18 @@
 	 * will remain to ensure logic does not differ in production.
 	 */
 	
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  if (false) {
+	var validateFormat = function validateFormat(format) {};
+	
+	if (false) {
+	  validateFormat = function validateFormat(format) {
 	    if (format === undefined) {
 	      throw new Error('invariant requires an error message argument');
 	    }
-	  }
+	  };
+	}
+	
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  validateFormat(format);
 	
 	  if (!condition) {
 	    var error;
@@ -11142,19 +11148,38 @@
 		function LoginApp() {
 			_classCallCheck(this, LoginApp);
 	
-			return _possibleConstructorReturn(this, (LoginApp.__proto__ || Object.getPrototypeOf(LoginApp)).apply(this, arguments));
+			var _this = _possibleConstructorReturn(this, (LoginApp.__proto__ || Object.getPrototypeOf(LoginApp)).call(this));
+	
+			_this.state = { error: '' };
+			return _this;
 		}
 	
 		_createClass(LoginApp, [{
+			key: 'loginError',
+			value: function loginError(err) {
+				this.setState({ error: err });
+			}
+		}, {
 			key: 'render',
 			value: function render() {
 				return React.createElement(
 					'div',
 					null,
-					React.createElement(_LoginNavBar2.default, null),
+					React.createElement(_LoginNavBar2.default, { loginError: this.loginError.bind(this) }),
 					React.createElement(
 						'div',
 						{ className: 'container app-container' },
+						this.state.error && React.createElement(
+							'div',
+							{ className: 'alert alert-danger' },
+							React.createElement(
+								'strong',
+								null,
+								'Bro!'
+							),
+							' ',
+							this.state.error
+						),
 						React.createElement(
 							'h1',
 							null,
@@ -11245,9 +11270,13 @@
 					url: '/verifyAndLogin',
 					data: JSON.stringify(obj, null, '\t'),
 					contentType: 'application/json;charset=UTF-8',
-					success: function (data) {
-						this.getCurrentUserInfo.bind(this)();
-						this.getNotifications.bind(this)();
+					success: function (res) {
+						if (res['error'] == false) {
+							this.getCurrentUserInfo.bind(this)();
+							this.getNotifications.bind(this)();
+						} else {
+							this.props.loginError(res.error);
+						}
 					}.bind(this)
 				});
 			}
