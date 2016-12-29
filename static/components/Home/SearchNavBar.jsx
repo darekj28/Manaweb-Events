@@ -64,8 +64,8 @@ export default class SearchNavBar extends React.Component {
 				          								navbar-brand navbar-brand-logo">
 				                <span className="glyphicon glyphicon-home"></span>
 				              </Link>
-				        </div>
-				        <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				    </div>
+				    <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				          <ul className="nav navbar-nav navbar-right">
 		                   {/*  <li>
 		                        <a href="javascript:void(0)" data-toggle="search">
