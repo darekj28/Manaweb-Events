@@ -1,5 +1,7 @@
 var React = require('react');
+var Link = require('react-router').Link;
 import LoginNavBar from './LoginNavBar.jsx';
+import LoginError from './LoginError.jsx';
 export default class LoginApp extends React.Component {
 	constructor() {
 		super();
@@ -8,21 +10,23 @@ export default class LoginApp extends React.Component {
 	loginError(err) {
 		this.setState({ error : err });
 	}
+	componentDidMount() {
+		$('#SignUpButton').click(function() {
+			$(this).blur();
+		});
+	}
 	render() {
 		return (
 			<div>
 				<LoginNavBar loginError={this.loginError.bind(this)}/>
 				<div className="container app-container">
-					{this.state.error && 
-					<div className="alert alert-danger">
-			  			<strong>Bro!</strong> {this.state.error}
-					</div>}
+					{this.state.error && <LoginError error={this.state.error}/>}
 					<h1><center>M A N A W E B</center></h1>
-					<form method="get" action="createProfile">
-                        <center>
-                        	<button type="submit" className="btn btn-default">Sign Up Here!</button>
-                    	</center>
-                    </form>
+                    <center>
+                    	<button className="btn btn-default" id="SignUpButton">
+                    		<Link to="/register">Create A Profile!</Link>
+                    	</button>
+                	</center>
 				</div>
 			</div>
 		);

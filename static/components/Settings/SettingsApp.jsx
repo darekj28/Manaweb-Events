@@ -125,7 +125,8 @@ export default class SettingsApp extends React.Component {
 										<SettingsInputLabel field={field} />
 										<SettingsTextInput field={field} value={this.state[field]} 
 													handleTyping={this.handleChange.bind(this)} 
-													handleBlur={this.handleTextBlur.bind(this)}/>
+													handleBlur={this.handleTextBlur.bind(this)}
+													isUpdate={true}/>
 									</div>;
 						}, this)}
 						{select_fields.map(function(field) {
@@ -134,7 +135,8 @@ export default class SettingsApp extends React.Component {
 										<SettingsSelectInput field={field} value={this.state[field]}
 															avatar_list={this.state.avatar_list}
 															handleSelect={this.handleChange.bind(this)} 
-															handleBlur={this.handleSelectBlur.bind(this)}/>
+															handleBlur={this.handleSelectBlur.bind(this)}
+															isUpdate={true}/>
 									</div>
 						}, this)}
 						<div id="avatar_container" className="avatar_container centered-text"></div>

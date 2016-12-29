@@ -43,7 +43,7 @@ function warningForField(field, value) {
 export default class SettingsTextInput extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { valid : "valid" };
+		this.state = { valid : "" };
 	}
 	handleTyping(event) {
 		var obj = {};
@@ -57,6 +57,7 @@ export default class SettingsTextInput extends React.Component {
 	}
 	componentDidMount() {
 		$('#password').popover();
+		if (this.props.isUpdate) this.setState({ valid : "valid" });
 	}
 	render() {
 		var type = (this.props.field == "password" || this.props.field == "password_confirm") ? "password" : "text";

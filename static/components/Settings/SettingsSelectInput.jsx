@@ -102,7 +102,7 @@ var avatar_list = generateAvatars(avatars);
 export default class SettingsSelectInput extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { valid : "valid" };
+		this.state = { valid : "" };
 	}
 	handleSelect(event) {
 		var obj = {};
@@ -122,6 +122,9 @@ export default class SettingsSelectInput extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		$('select[name=' + nextProps.field + ']').val(nextProps.value);
 		if (this.props.field == "avatar") this.handleAvatarDisplay.bind(this)();
+	}
+	componentDidMount() {
+		if (this.props.isUpdate) this.setState({ valid : "valid" });
 	}
 	render() {
 		var options;
