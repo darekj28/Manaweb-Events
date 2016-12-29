@@ -51,14 +51,16 @@ export default class SearchNavBar extends React.Component {
 			<nav className="navbar navbar-default" role="navigation">
 				<div className="container">
 					<div className="navbar-header">
-						<button type="button" className="SearchNavBarGlyphicon navbar-toggle" data-toggle="collapse" 
+						<button type="button" className="SearchNavBarGlyphicon navbar-toggle" 
+										data-toggle="collapse" 
 										data-target="#bs-example-navbar-collapse-1">
 				            <span className="sr-only">Toggle navigation</span>
 				            <span className="icon-bar"></span>
 				            <span className="icon-bar"></span>
 				            <span className="icon-bar"></span>
 				          </button>
-				          <Link to="/" onClick={this.handleResetFilterUser.bind(this)} className="SearchNavBarGlyphicon 
+				          <Link to="/" onClick={this.handleResetFilterUser.bind(this)} 
+				          				className="SearchNavBarGlyphicon 
 				          								navbar-brand navbar-brand-logo">
 				                <span className="glyphicon glyphicon-home"></span>
 				              </Link>
@@ -72,14 +74,17 @@ export default class SearchNavBar extends React.Component {
 		                    </li>
 		                */}
 				          	<NotificationsDropdown/>
-				          	<AccountDropdown currentUser = {this.props.currentUser} name={this.props.name}/>
+				          	<AccountDropdown currentUser = {this.props.currentUser} 
+				          				name={this.props.name}/>
 				          </ul>
-				         <form className="navbar-form navbar-right navbar-search-form" role="search">                  
+				         <form className="navbar-form navbar-right navbar-search-form" 
+				         		role="search">                  
 			                 <div className="form-group">
 			                 	  <div className="input-group input-group-unstyled">
 				                      <input type="text" value={this.props.searchText} 
 				                      			ref={(input) => this.searchText = input} 
-				                      			id="searchInput" className="form-control" placeholder="Search..." 
+				                      			id="searchInput" className="form-control" 
+				                      			placeholder="Search..." 
 				                      			onChange={this.handleSearch.bind(this)}/>
 				                      <div className = "input-group-addon"></div>
 								  	  {this.props.actions.map(function(action, i) {

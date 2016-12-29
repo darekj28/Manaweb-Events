@@ -11,6 +11,11 @@ browser_api = Blueprint('browser_api', __name__)
 DEFAULT_FEED = "BALT"
 
 
+@browser_api.route('/verifyAndLogin', methods=['POST'])
+def login() :
+	session['logged_in'] = True
+	session['userID'] = request.json['user']
+	return jsonify({ 'logged_in' : True})
 
 @browser_api.route('/getFeedNames', methods = ['POST'])
 def getFeedNames():

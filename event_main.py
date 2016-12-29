@@ -86,10 +86,10 @@ def before_request():
 			if (urlString != 'static'):
 				if ('logged_in' not in session):
 					if request.endpoint != 'create_profile.createProfile':
-						return render_template('login.html')
+						return render_template('index.html')
 				if (not session.get('logged_in')):
 					if request.endpoint != 'create_profile.createProfile':
-						return render_template('login.html')
+						return render_template('index.html')
 
 				# first make sure someone is logged in
 				if (session.get('userID') != None):
@@ -229,12 +229,12 @@ def login():
 
 			if thisUser is None:
 				error = "Login ID does not exist. Please try again."
-				return render_template("login.html", error = error)
+				return render_template("index.html", error = error)
 
 			# try logging in with email
 			elif thisUser['password'] != request.form['password']:
 				error = "Invalid password. Please try again."
-				return render_template("login.html", error = error)
+				return render_template("index.html", error = error)
 			else:
 				session['logged_in'] = True
 				session['first_name'] = thisUser['first_name']
@@ -244,7 +244,7 @@ def login():
 		# try logging in with userID
 		elif thisUser['password'] != request.form['password']:
 				error = "Invalid password. Please try again."
-				return render_template("login.html", error = error)		
+				return render_template("index.html", error = error)		
 
 		# otherwise log in the user successfully
 		else:

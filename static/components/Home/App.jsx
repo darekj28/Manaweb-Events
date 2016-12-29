@@ -4,7 +4,7 @@ import EventName from './EventName.jsx';
 import MakePost from './MakePost.jsx';
 import Feed from './Feed.jsx';
 import AppStore from '../../stores/AppStore.jsx';
-import AppActions from '../../actions/AppActions.jsx';
+import LoginApp from '../Login/LoginApp.jsx';
 
 function toggle(collection, item) {
 	var idx = collection.indexOf(item);
@@ -34,32 +34,6 @@ export default class App extends React.Component {
 			numUnseenPosts: -1
 		};
 	}
-	getCurrentUserInfo() {
-		$.post('/getCurrentUserInfo', function(data) {
-			AppActions.addCurrentUser(data.thisUser);
-		}.bind(this));
-	}
-	getNotifications() {
-        $.post('/getNotifications', 
-            function(data) {
-                var notifications = [];
-                var count = 0;
-                data.notification_list.map(function(obj) {
-                    if (!obj['seen']) count++; 
-                    notifications.unshift({
-                        comment_id : obj['comment_id'],
-                        notification_id : obj['notification_id'],
-                        timeString : obj['timeString'],
-                        sender_id : obj['sender_id'],
-                        action : obj['action'],
-                        receiver_id : obj['receiver_id'],
-                        seen : obj['seen']
-                    });
-                });
-                AppActions.addNotifications(notifications);
-                AppActions.addNotificationCount(String(count));
-            }.bind(this));
-    }
 	markPostFeedAsSeen() {
 		$.post('/markPostFeedAsSeen', {feed_name: feed_name});
 	}
@@ -180,12 +154,6 @@ export default class App extends React.Component {
 		this.setState({ feed : feed });
 	}
 	componentDidMount() {
-		this.refreshFeed.bind(this)();
-		this.markPostFeedAsSeen.bind(this)();
-		this.getCurrentUserInfo.bind(this)(); //move
-		this.getNotifications.bind(this)(); //move
-		this.initializeNumUnseenPosts.bind(this)();
-		this.setState({ timer : setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
 		AppStore.addChangeListener(this._onChange.bind(this));
 	}
 	componentWillUnmount() {
@@ -194,10 +162,15 @@ export default class App extends React.Component {
 	}
 	_onChange() {
 		this.setState({ currentUser : AppStore.getCurrentUser() });
+		this.refreshFeed.bind(this)();
+		this.markPostFeedAsSeen.bind(this)();
+		this.initializeNumUnseenPosts.bind(this)();
+		this.setState({ timer : setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
 	}
 	render() {
-		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
-		return (<div>
+		if (this.state.currentUser['userID']) {
+			var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
+			return (<div>
 					<SearchNavBar searchText={this.state.search} 
 									onSearch={this.handleSearch.bind(this)} 
 									actions={actions} 
@@ -224,7 +197,8 @@ export default class App extends React.Component {
 						</div>}
 						<div className="app row">
 						<Feed currentUser={this.state.currentUser} searchText={this.state.search} 
-								filters={this.state.filters} posts={this.state.feed} actions={actions}
+								filters={this.state.filters} posts={this.state.feed} 
+								actions={actions}
 								handleFilterUser={this.handleFilterUser.bind(this)}
 								userIdToFilterPosts={this.state.userIdToFilterPosts}
 								handlePostEdit={this.handlePostEdit.bind(this)}
@@ -232,5 +206,9 @@ export default class App extends React.Component {
 						</div>
 					</div>
 				</div>);
+		}
+		else {
+			return <LoginApp/>;
+		}
 	}
 }

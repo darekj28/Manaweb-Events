@@ -25,6 +25,9 @@ body {
 .app-container {
   padding-top : 65px;
 }
+.login {
+  margin-right : 5px;
+}
 .valid {
   border-width: 1.5px;
   border-color: #090;

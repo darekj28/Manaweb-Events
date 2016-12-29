@@ -47,20 +47,20 @@ class AppStore extends React.Component {
 	dispatcherCallback(payload) {
 		var action = payload.action;
 		switch(action.actionType) {
-		  case AppConstants.ADD_CURRENTUSER:
-		    _loadCurrentUser(action.data);
-		    break;
-		  case AppConstants.REMOVE_CURRENTUSER:
-		  	_removeCurrentUser();
-		  	break;
-		  case AppConstants.ADD_NOTIFICATIONS:
-		  	_addNotifications(action.data);
-		  	break;
-		  case AppConstants.ADD_NOTIFICATIONCOUNT:
-		  	_addNotificationCount(action.data);
-		  	break;
-		  default:
-		    return true;
+		    case AppConstants.ADD_CURRENTUSER:
+			    _loadCurrentUser(action.data);
+			    break;
+		    case AppConstants.REMOVE_CURRENTUSER:
+		    	_removeCurrentUser();
+		    	break;
+		    case AppConstants.ADD_NOTIFICATIONS:
+		    	_addNotifications(action.data);
+		    	break;
+		    case AppConstants.ADD_NOTIFICATIONCOUNT:
+		    	_addNotificationCount(action.data);
+		    	break;
+		    default:
+		      	return true;
 		}
 		this.emitChange.bind(this)();
 		return true;

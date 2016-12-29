@@ -61,8 +61,10 @@ export default class Feed extends React.Component {
 		return (
 				<div>
 					<ul id="Feed" > {rows} </ul>
-					<EditPostModal post={this.state.postInModal} handlePostEdit={this.props.handlePostEdit}/>
-					<DeletePostModal post={this.state.postInModal} handlePostDelete={this.props.handlePostDelete}/>
+					<EditPostModal post={this.state.postInModal} 
+									handlePostEdit={this.props.handlePostEdit}/>
+					<DeletePostModal post={this.state.postInModal} 
+									handlePostDelete={this.props.handlePostDelete}/>
 					<ReportPostModal post={this.state.postInModal}/>
 				</div>
 			);
