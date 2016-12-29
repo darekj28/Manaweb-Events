@@ -102,7 +102,7 @@ var avatar_list = generateAvatars(avatars);
 export default class SettingsSelectInput extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { valid : "" };
+		this.state = { valid : "", warning : "" };
 	}
 	handleSelect(event) {
 		var obj = {};
@@ -111,12 +111,13 @@ export default class SettingsSelectInput extends React.Component {
 	}
 	handleBlur(event) {
 		var isValid = testValid(this.props.field, event.target.value);
-		this.setState({ valid : isValid });
+		this.setState({ valid : isValid, 
+					warning : warningForField(this.props.field, event.target.value) });
 		this.props.handleBlur(this.props.field, isValid);
 	}
 	handleAvatarDisplay() {
 		var av = $('#avatar').val();
-		if (!av) {
+		if (av) {
 			var container = document.getElementById('avatar_container');
 			container.style.backgroundImage = 'url(static/avatars/' + av + '.png)';
 		}
@@ -157,7 +158,7 @@ export default class SettingsSelectInput extends React.Component {
 				</div>
 				{(this.state.valid == "invalid") && 
 					<div className="form-group warning" id={this.props.field + "_warning"}>
-						{warningForField(this.props.field, $('#' + this.props.field).val())}
+						{this.state.warning}
 					</div>}
 			</div>
 			);

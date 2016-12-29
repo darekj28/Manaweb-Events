@@ -47,6 +47,7 @@ export default class RegisterApp extends React.Component {
 		$('#RegisterSubmit').click(function(e) {
 			e.preventDefault();
 			$(this).blur();
+
 		})
 	}
 	loginError(err) {
@@ -103,13 +104,14 @@ export default class RegisterApp extends React.Component {
 						<div id="avatar_container" className="avatar_container centered-text"></div>
 						<div className="form-group">
 							{this.state.submittable && 
-								<button className="btn btn-default" id="RegisterSubmit" 
-										onClick={this.handleSubmit.bind(this)}> Update! </button>}
-							{!this.state.submittable && 
 								<Link to="/"> <button className="btn btn-default" id="RegisterSubmit" 
+										onClick={this.handleSubmit.bind(this)}> Get Started! </button>
+									</Link> }
+							{!this.state.submittable && 
+								<button className="btn btn-default" id="RegisterSubmit" 
 									onClick={this.handleSubmit.bind(this)} disabled> 
-									Update! 
-								</button> </Link> }
+									Get Started!
+								</button>}
 						</div>
 					</form>
 				</div>	

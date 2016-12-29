@@ -26,9 +26,6 @@ function testValid (field, value) {
 			break;
 		case "password_confirm":
 			var condition = $('#password').val();
-			console.log(condition);
-			console.log(value);
-			console.log(value != condition || !value);
 			if (value != condition || !value) return "invalid";
 			break;
 		default :
@@ -50,7 +47,41 @@ function warningForField(field, value) {
 export default class SettingsTextInput extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { valid : "" };
+		this.state = { valid : "", warning : "" };
+	}
+	verifyUsername(username) {
+		var obj = { username : username };
+		$.ajax({
+			type: 'POST',
+			url: '/registerUsername',
+			data : JSON.stringify(obj, null, '\t'),
+		    contentType: 'application/json;charset=UTF-8',
+		    success : function(res) {
+		    	if (!res['error']) {
+		    		this.setState({ valid : "valid" });
+		    	}
+		    	else {
+		    		this.setState({ valid : "invalid", warning : res['error'] });
+		    	}
+		    }.bind(this)
+		});
+	}
+	verifyEmail(email_address) {
+		var obj = { email_address : email_address };
+		$.ajax({
+			type: 'POST',
+			url: '/registerEmail',
+			data : JSON.stringify(obj, null, '\t'),
+		    contentType: 'application/json;charset=UTF-8',
+		    success : function(res) {
+		    	if (!res['error']) {
+		    		this.setState({ valid : "valid" });
+		    	}
+		    	else {
+		    		this.setState({ valid : "invalid", warning : res['error'] });
+		    	}
+		    }.bind(this)
+		});
 	}
 	handleTyping(event) {
 		var obj = {};
@@ -58,8 +89,21 @@ export default class SettingsTextInput extends React.Component {
 		this.props.handleTyping(obj);
 	}
 	handleBlur(event) {
-		var isValid = testValid(this.props.field, event.target.value);
-		this.setState({ valid : isValid });
+		if (this.props.field == "username" || this.props.field == "email_address") {
+			switch (this.props.field) {
+				case "username" :
+					this.verifyUsername.bind(this)(event.target.value);
+					break;
+				case "email_address" : 
+					this.verifyEmail.bind(this)(event.target.value);
+					break;
+			}
+		}
+		else { 
+			var isValid = testValid(this.props.field, event.target.value);
+			this.setState({ valid : isValid, 
+					warning : warningForField(this.props.field, event.target.value) });
+		};
 		this.props.handleBlur(this.props.field, isValid);
 	}
 	componentDidMount() {
@@ -82,7 +126,7 @@ export default class SettingsTextInput extends React.Component {
 						onChange={this.handleTyping.bind(this)} onBlur={this.handleBlur.bind(this)}/>}
 				</div>
 				{(this.state.valid == "invalid") && <div className="form-group warning" id={this.props.field + "_warning"}>
-					{warningForField(this.props.field, $('#' + this.props.field).val())}
+					{this.state.warning}
 				</div>}
 			</div>
 			);

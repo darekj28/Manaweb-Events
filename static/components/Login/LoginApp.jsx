@@ -1,5 +1,6 @@
 var React = require('react');
 var Link = require('react-router').Link;
+
 import LoginNavBar from './LoginNavBar.jsx';
 import LoginError from './LoginError.jsx';
 export default class LoginApp extends React.Component {

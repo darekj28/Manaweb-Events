@@ -1,6 +1,24 @@
-{% extends "base.html" %}
-
-{% block content %}
-<div id="app"></div>
-<script src={{ url_for('static', filename='bundle.js') }}></script>
-{% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+	  <link rel="SHORTCUT ICON" href="{{url_for('static', filename = 'favicon_test/favicon.ico')}}"/>
+	  <title>
+	    Manaweb!
+	  </title>
+	  <meta charset="UTF-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+	  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+	  <link rel = "stylesheet" type = "text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+	  <script type="text/javascript" src="{{ url_for('static', filename='jquery/dist/jquery.min.js') }}"></script>  
+	  <script type="text/javascript" src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>  
+	  {% block content %}
+		<div id="app"></div>
+		<script src={{ url_for('static', filename='bundle.js') }}></script>
+	  {% endblock %}
+	  {% if error %}
+	  <div class="container"><p class = "alert alert-danger error"> <strong> Error: </strong> {{ error }} </p></div>
+	  {% endif %}
+</body>
+</html>

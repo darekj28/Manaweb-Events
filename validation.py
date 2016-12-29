@@ -115,14 +115,14 @@ def validateEmail(email):
 	isMatch = email_regex.match(email)
 	if not isMatch:
 		output['result'] = 'failure'
-		output['error'] = 'invalid email address'
+		output['error'] = 'Invalid email address.'
 
 	user_manager = Users()
 	isEmailTaken = user_manager.isEmailTaken(email)
 	user_manager.closeConnection()
 	if isEmailTaken:
 		output['result'] = 'failure'
-		output['error'] = 'This email is already in use'
+		output['error'] = 'This email is already in use.'
 
 	return output
 
@@ -134,29 +134,29 @@ def validateUsername(username):
 	length = len(username)
 	if length < 2:
 		output['result'] = 'failure'
-		output['error'] = 'Username must be at least 2 characters'
+		output['error'] = 'Username must be at least 2 characters.'
 
 	if length > 15:
-		output['result'] = 'faulure'
-		output['error'] = 'Username cannot be 15 or more characters'
+		output['result'] = 'failure'
+		output['error'] = 'Username cannot be 15 or more characters.'
 
 	for char in username:
 		if not char.isalnum() and char != '_':
 			output['result'] = 'failure'
-			output['error'] = 'Username can only have alphanumeric and underscores'
+			output['error'] = 'Username can only have alphanumeric characters or underscores.'
 
 	lower_username = username.lower()
 	for word in banned_username_words:
 		if lower_username.find(word) != -1:
 			output['result'] = 'failure'
-			output['error'] = word + " cannot be part of a username"
+			output['error'] = "Inappropriate."
 
 	user_manager = Users()
 	isUsernameTaken = user_manager.isUsernameTaken(username.lower())
 	user_manager.closeConnection()
 	if isUsernameTaken:
 		output['result'] = 'failure'
-		output['error'] = 'This username is already in use'
+		output['error'] = 'This username is already in use.'
 
 	return output
 

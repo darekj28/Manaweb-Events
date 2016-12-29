@@ -17,13 +17,29 @@ def login() :
 	user = request.json['user']
 	password = request.json['password']
 	res = validation.validateLogin(user, password)
-	print(res)
 	if res['result'] == 'success':
 		session['logged_in'] = True
 		session['userID'] = user
 		return jsonify({ 'error' : False })
 	else : 
-		print(res['error'])
+		return jsonify({ 'error' : res['error'] })
+
+@browser_api.route('/registerUsername', methods=['POST'])
+def registerUsername() :
+	username = request.json['username']
+	res = validation.validateUsername(username)
+	if res['result'] == 'success' :
+		return jsonify({ 'error' : False })
+	else : 
+		return jsonify({ 'error' : res['error'] })
+
+@browser_api.route('/registerEmail', methods=['POST'])
+def registerEmail() :
+	email_address = request.json['email_address']
+	res = validation.validateEmail(email_address)
+	if res['result'] == 'success' :
+		return jsonify({ 'error' : False })
+	else : 
 		return jsonify({ 'error' : res['error'] })
 
 @browser_api.route('/getFeedNames', methods = ['POST'])

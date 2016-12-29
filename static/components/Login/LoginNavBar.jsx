@@ -1,4 +1,5 @@
 var React = require('react');
+var Link = require('react-router').Link;
 import AppActions from '../../actions/AppActions.jsx';
 
 export default class LoginNavBar extends React.Component {
@@ -12,7 +13,6 @@ export default class LoginNavBar extends React.Component {
 		this.setState(obj);
 	}
 	login(event) {
-		event.preventDefault();
 		var obj = { user : this.state.user, password : this.state.password };
 		$.ajax({
 			type: "POST",
@@ -66,9 +66,9 @@ export default class LoginNavBar extends React.Component {
 			<nav className="navbar navbar-default" role="navigation">
 			  <div className="container">
 		       		<div className="navbar-header">
-	                 	<a id="home" className="navbar-brand navbar-brand-logo" href="/">
+	                 	<Link to="/" className="navbar-brand navbar-brand-logo">
 	                        <span className="glyphicon glyphicon-home"></span>
-	                  	</a>
+	                  	</Link>
 	                  	<button type="button" className="SearchNavBarGlyphicon navbar-toggle" 
 	                  					data-toggle="collapse" 
 										data-target="#bs-example-navbar-collapse-1">
@@ -88,8 +88,8 @@ export default class LoginNavBar extends React.Component {
                             <input type="password" className="form-control login" id="password" 
                             	onChange={this.handleTyping.bind(this)} placeholder="Password"/>
                         </div>
-			            <button className="btn btn-default form-control" id="LoginButton" 
-			            		onClick={this.login.bind(this)}>Sign In!</button>
+			            <Link to="/"><button className="btn btn-default form-control" id="LoginButton" 
+			            		onClick={this.login.bind(this)}>Sign In!</button></Link>
 			        </form>
 			  </div>
 			</nav>
