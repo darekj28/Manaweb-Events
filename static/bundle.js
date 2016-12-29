@@ -700,6 +700,11 @@
 	                            )
 	                        );
 	                    }),
+	                    !this.state.notifications.length && React.createElement(
+	                        'li',
+	                        { className: 'unclickableDropdown', id: 'NoNewNotificationsDropdown' },
+	                        'No new notifications.'
+	                    ),
 	                    React.createElement('li', { className: 'divider' }),
 	                    React.createElement(
 	                        'li',
@@ -9958,12 +9963,8 @@
 	          { className: 'dropdown-menu' },
 	          this.props.currentUser['userID'] && React.createElement(
 	            'li',
-	            null,
-	            React.createElement(
-	              'a',
-	              { href: '#' },
-	              this.props.name
-	            )
+	            { className: 'unclickableDropdown', id: 'DropdownName' },
+	            this.props.name
 	          ),
 	          React.createElement('li', { className: 'divider' }),
 	          this.props.currentUser.isAdmin && React.createElement(
@@ -11178,22 +11179,21 @@
 			value: function loginError(err) {
 				this.setState({ error: err });
 			}
-		}, {
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				$('#SignUpButton').click(function (e) {
-					$(this).blur();
-				});
-			}
-	
 			// handleFacebookLoginClick() {
-			// 		 console.log();
+	
 			// }
 	
 		}, {
 			key: 'responseFacebook',
 			value: function responseFacebook(response) {
 				console.log(response);
+			}
+		}, {
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				$('#SignUpButton').one("click", function () {
+					$(this).blur();
+				});
 			}
 		}, {
 			key: 'render',
@@ -11417,7 +11417,8 @@
 								{ to: '/' },
 								React.createElement(
 									'button',
-									{ className: 'btn btn-default form-control', id: 'LoginButton' },
+									{ className: 'btn btn-default form-control blurButton',
+										id: 'LoginButton' },
 									'Sign In!'
 								)
 							)
@@ -11696,7 +11697,7 @@
 								null,
 								"Bro!"
 							),
-							" This post is deleted."
+							" This post was deleted."
 						),
 						React.createElement(
 							"div",
@@ -12914,7 +12915,7 @@
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+		value: true
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -12934,35 +12935,40 @@
 	var React = __webpack_require__(/*! react */ 5);
 	
 	var NotificationsFeed = function (_React$Component) {
-	    _inherits(NotificationsFeed, _React$Component);
+		_inherits(NotificationsFeed, _React$Component);
 	
-	    function NotificationsFeed() {
-	        _classCallCheck(this, NotificationsFeed);
+		function NotificationsFeed() {
+			_classCallCheck(this, NotificationsFeed);
 	
-	        return _possibleConstructorReturn(this, (NotificationsFeed.__proto__ || Object.getPrototypeOf(NotificationsFeed)).apply(this, arguments));
-	    }
+			return _possibleConstructorReturn(this, (NotificationsFeed.__proto__ || Object.getPrototypeOf(NotificationsFeed)).apply(this, arguments));
+		}
 	
-	    _createClass(NotificationsFeed, [{
-	        key: "addNotificationsToFeed",
-	        value: function addNotificationsToFeed() {
-	            var notes = [];
-	            this.props.notifications.map(function (note, i) {
-	                notes.push(React.createElement(_NotificationsFeedPost2.default, { key: i, note: note }));
-	            });
-	            return notes;
-	        }
-	    }, {
-	        key: "render",
-	        value: function render() {
-	            return React.createElement(
-	                "ul",
-	                { id: "NotificationsFeed" },
-	                this.addNotificationsToFeed.bind(this)()
-	            );
-	        }
-	    }]);
+		_createClass(NotificationsFeed, [{
+			key: "addNotificationsToFeed",
+			value: function addNotificationsToFeed() {
+				var notes = [];
+				this.props.notifications.map(function (note, i) {
+					notes.push(React.createElement(_NotificationsFeedPost2.default, { key: i, note: note }));
+				});
+				return notes;
+			}
+		}, {
+			key: "render",
+			value: function render() {
+				return React.createElement(
+					"ul",
+					{ id: "NotificationsFeed" },
+					this.addNotificationsToFeed.bind(this)(),
+					!this.props.notifications.length && React.createElement(
+						"li",
+						{ id: "NoNewNotifications" },
+						"No new notifications."
+					)
+				);
+			}
+		}]);
 	
-	    return NotificationsFeed;
+		return NotificationsFeed;
 	}(React.Component);
 	
 	exports.default = NotificationsFeed;
@@ -13116,9 +13122,9 @@
 				day_of_birth: '',
 				year_of_birth: '',
 				avatar: '',
-				valid_text_fields: ["first_name", "last_name", "password", "password_confirm", "phone_number"],
+				valid_text_fields: ["first_name", "last_name", "phone_number"],
 				valid_select_fields: ["month_of_birth", "day_of_birth", "year_of_birth", "avatar"],
-				submittable: true
+				submittable: false
 			};
 			return _this;
 		}
@@ -13938,7 +13944,8 @@
 									' ',
 									React.createElement(
 										'button',
-										{ className: 'btn btn-default', id: 'RegisterSubmit' },
+										{ className: 'btn btn-default blurButton',
+											id: 'RegisterSubmit' },
 										'Get Started! '
 									)
 								),

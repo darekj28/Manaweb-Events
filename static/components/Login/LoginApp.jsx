@@ -12,9 +12,9 @@ export default class LoginApp extends React.Component {
 	loginError(err) {
 		this.setState({ error : err });
 	}
-	handleFacebookLoginClick() {
+	// handleFacebookLoginClick() {
 		
-	}
+	// }
 	responseFacebook(response) {
 		console.log(response);
 	}
@@ -32,7 +32,6 @@ export default class LoginApp extends React.Component {
 				<div className="container app-container">
 					{this.state.error && <LoginError error={this.state.error}/>}
 					<h1><center>M A N A W E B</center></h1>
-<<<<<<< HEAD
                     <center>
                     	<Link to="/register">
                     	<button className="btn btn-default" id="SignUpButton">
@@ -53,29 +52,7 @@ export default class LoginApp extends React.Component {
 						    size = "small" />
 
                 	</center>
-=======
-                    <div className="button-row row">
-                    	<center>
-	                    	<Link to="/register">
-	                    		<button className="btn btn-default" id="SignUpButton">
-	                    			Create A Profile!
-	                    		</button>
-	                    	</Link>
-                    	</center>
-                    </div>
-                    <div className="button-row row">
-                    	<center>
-	                    	<FacebookLogin
-							    appId= {appId}
-							    autoLoad={true}
-							    fields="name,email"
-							    onClick={this.handleFacebookLoginClick}
-							    callback={this.responseFacebook}
-							    icon="fa-facebook"
-							    size = "small" />
-                		</center>
-                	</div>
->>>>>>> fab37dc151108705c4e20b4f9bbd436a46592c22
+
 				</div>
 			</div>
 		);
