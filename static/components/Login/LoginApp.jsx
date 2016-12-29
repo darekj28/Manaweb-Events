@@ -32,16 +32,17 @@ export default class LoginApp extends React.Component {
 				<div className="container app-container">
 					{this.state.error && <LoginError error={this.state.error}/>}
 					<h1><center>M A N A W E B</center></h1>
-                    <center>
-                    	<Link to="/register">
-                    	<button className="btn btn-default" id="SignUpButton">
-                    			Create A Profile!
-                    		</button>
-                    	</Link>
-
-                    	<br/>
-                    	<br/>
-
+					<div className="row button-row">
+	                    <center>
+	                    	<Link to="/register">
+	                    	<button className="btn btn-default" id="SignUpButton">
+	                    			Create A Profile!
+	                    		</button>
+	                    	</Link>
+	                    </center>
+                    </div>
+                    <div className="row button-row">
+                    	<center>
                     	<FacebookLogin
 						    appId= {appId}
 						    autoLoad={true}
@@ -50,8 +51,8 @@ export default class LoginApp extends React.Component {
 						    callback={this.responseFacebook}
 						    icon="fa-facebook"
 						    size = "small" />
-
-                	</center>
+                		</center>
+                	</div>
 
 				</div>
 			</div>

@@ -12,7 +12,7 @@ export default class LoginNavBar extends React.Component {
 		obj[event.target.id] = event.target.value;
 		this.setState(obj);
 	}
-	login(event) {
+	login() {
 		var obj = { user : this.state.user, password : this.state.password };
 		$.ajax({
 			type: "POST",
@@ -79,21 +79,20 @@ export default class LoginNavBar extends React.Component {
 				            <span className="icon-bar"></span>
 				        </button>
 		        	</div>
-			        <form className="collapse navbar-collapse navbar-form navbar-right" 
-			        			id="bs-example-navbar-collapse-1">
-                        <div className="form-group">
-                            <input type="text" className="form-control login" id="user" 
+			        <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <form className="navbar-form navbar-right">
+                        	<div className="form-group">
+                            	<input type="text" className="form-control login" id="user" 
                             	onChange={this.handleTyping.bind(this)} placeholder="Username"/>
-                        </div>
-                        <div className="form-group">
-                            <input type="password" className="form-control login" id="password" 
-                            	onChange={this.handleTyping.bind(this)} placeholder="Password"/>
-                        </div>
-			            <Link to="/"><button className="btn btn-default form-control blurButton"
-			            id="LoginButton">
-			            Sign In!</button>
-			            </Link>
-			        </form>
+	                            <input type="password" className="form-control login" id="password" 
+	                            	onChange={this.handleTyping.bind(this)} placeholder="Password"/>
+				            	<Link to="/">
+				            		<button className="btn btn-default form-control blurButton"
+				            					id="LoginButton"> Sign In!</button>
+				            	</Link>
+				            </div>
+				        </form>
+			        </div>
 			  </div>
 			</nav>
 		)

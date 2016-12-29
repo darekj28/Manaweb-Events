@@ -87,7 +87,28 @@ export default class RegisterApp extends React.Component {
 			type: "POST",
 			url : '/createProfile',
 			data : JSON.stringify(obj, null, '\t'),
-			contentType : 'application/json;charset=UTF-8'
+			contentType : 'application/json;charset=UTF-8',
+			success : function(data) {
+				this.login.bind(this)();
+			}.bind(this)
+		});
+	}
+	login() {
+		var obj = { user : this.state.username, password : this.state.password };
+		$.ajax({
+			type: "POST",
+			url : '/verifyAndLogin',
+			data : JSON.stringify(obj, null, '\t'),
+			contentType : 'application/json;charset=UTF-8',
+			success : function(res) {
+				if (!res['error']) {
+					this.getCurrentUserInfo.bind(this)();
+					this.getNotifications.bind(this)();
+				}
+				else {
+					this.props.loginError(res.error);
+				}
+			}.bind(this)
 		});
 	}
 	render() {
