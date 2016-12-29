@@ -97,7 +97,7 @@ class Users:
 	def addUser(self, userID, first_name, last_name, password, email, isActive, avatar_url,
 				 avatar_name, confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
 				  isAdmin = None, phone_number = None, birthMonth = None
-				 ,birthDay = None, birthYear = None, gender = None, confirmed = None):
+				 ,birthDay = None, birthYear = None, gender = None, confirmed = None, fb_id = None):
 		
 		table_name = self.USER_TABLE
 
@@ -126,6 +126,8 @@ class Users:
 		if confirmed == None:
 			confirmed = True
 
+		if fb_id == None:
+			fb_id = ""
 
 		timeStamp = time.time()
 		timeString = self.getTimeString()
@@ -157,12 +159,14 @@ class Users:
 		# if user email or userID doesn't exist create new one
 		if self.getInfo(userID) == None and self.getInfoFromEmail(email) == None:
 			self.udb.execute(self.udb.mogrify("INSERT INTO " + table_name + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
-				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp) \
-				  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
+				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, fb_id) \
+				  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
 				(userID.lower(), first_name, last_name, hash_password, email, isActive, avatar_url,
-				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp)))
+				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, fb_id)))
 
 			action = "ACCOUNT CREATED"
+			if (fb_id == ""):
+				action = action + " WITH FACEBOOK"
 			self.udb.execute(self.udb.mogrify("INSERT INTO " + "user_actions" + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
 				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action) \
 				  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
@@ -383,6 +387,21 @@ class Users:
 			return False
 		else:
 			return True
+
+	def addUserInfoColumn(self, colName, colType):
+		sql = "ALTER TABLE user_info ADD " + colName + " " + colType
+		self.udb.execute(sql)
+
+
+	def isFacebookUser(self, fb_id):
+		sql = "SELECT * FROM user_info WHERE fb_id = %s"
+		query = self.udb.execute(self.udb.mogrify(sql, (fb_id,)))
+		numMatchingUsers = len(query)
+		if numMatchingUsers > 0:
+			return True
+		else:
+			return False
+
 
 	# # this is a temporary method just to update the old passwords
 	# def hashUserPasswords(self, userID, password):

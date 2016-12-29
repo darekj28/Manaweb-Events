@@ -669,6 +669,7 @@ class Posts:
 		
 		self.addCommentIdToList(unique_id)
 
+		poster_id = poster_id.lower()
 		# update number of comments
 		this_post = self.getPostById(feed_name,comment_id)
 		updatedNumComments = this_post['numComments'] + 1
@@ -1026,6 +1027,9 @@ class Posts:
 		poster_id = 'Darekj'
 		lower_id = 'darekj'
 		self.db.execute(self.db.mogrify(sql, (lower_id, poster_id)))
+
+	# def deleteUser(self, userID):
+		
 
 
 
