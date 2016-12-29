@@ -3,6 +3,9 @@
     --dark : #96bf6d;
     --navbar : #32535E;
     --main-color : #404040;
+    --success : #5cb85c;
+    --warning : #d9534f;
+    --border-gray : #dbdbdb;
 }
 @font-face {
   font-family: 'Aqua';
@@ -39,16 +42,16 @@ body {
 }
 .valid {
   border-width: 1.5px;
-  border-color: #090;
+  border-color: var(--success);
   border-style: solid;
 }
 .invalid {
   border-width: 1.5px;
-  border-color: #C33;
+  border-color: var(--warning);
   border-style: solid;
 }
 .warning {
-  color : #C33;
+  color : var(--warning);
 }
 .avatar_container {
   width :150px;
@@ -79,14 +82,11 @@ body {
 .popover-title { 
   display: none; 
 }
-.warning {
-  padding-right : 900px;
-}
 .NotificationsFeedPost{
   list-style-type : none;
   padding-top : 5px;
   padding-bottom : 5px;
-  border-bottom: 1px solid #dbdbdb;
+  border-bottom: 1px solid var(--border-gray);
 }
 #NotificationsFeed > li > a {
   text-decoration : none;
@@ -95,11 +95,11 @@ body {
 }
 .CommentFeedPost {
   list-style-type: none;
-  border-bottom: 1px solid #dbdbdb;
+  border-bottom: 1px solid var(--border-gray);
 }
 .CommentFeedPostOriginal {
   list-style-type:none;
-  border-bottom: 1px solid #dbdbdb;
+  border-bottom: 1px solid var(--border-gray);
 }
 .numberOfComments {
   color:var(--light);
@@ -119,7 +119,7 @@ body {
 }
 .Post {
   list-style-type: none;
-  border-bottom: 1px solid #dbdbdb;
+  border-bottom: 1px solid var(--border-gray);
 }
 .form-control.FeedPostBody {
   max-width: 85%;
@@ -232,14 +232,14 @@ body {
   padding-right: 5px;
 }
 .icon-danger {
-  color:#d9534f;
+  color:var(--warning);
   cursor: pointer;
 }
 .icon-danger:hover {
   color:#973a37;
 }
 .icon-success {
-  color:#5cb85c;
+  color:var(--success);
   cursor: pointer;
 }
 .icon-success:hover{
