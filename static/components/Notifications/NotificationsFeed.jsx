@@ -13,6 +13,8 @@ export default class NotificationsFeed extends React.Component {
 		return (
 			<ul id="NotificationsFeed">
 				{this.addNotificationsToFeed.bind(this)()}
+				{!this.props.notifications.length && 
+					<li id="NoNewNotifications">No new notifications.</li>}
 			</ul>
 			);
 	}

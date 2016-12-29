@@ -22,11 +22,15 @@ body {
   background-color : #ffffff;
   color : #0f0f0f;
 }
+
 .app-container {
   padding-top : 65px;
 }
 .login {
   margin-right : 5px;
+}
+.button-row {
+  padding-top : 20px;
 }
 .valid {
   border-width: 1.5px;
@@ -49,13 +53,22 @@ body {
   border-radius : 10px;
   margin-bottom : 15px;
 }
+.unclickableDropdown {
+  cursor : default;
+}
+#DropdownName {
+  padding-left : 20px;
+}
+#NoNewNotifications {
+  list-style-type: none;
+}
+#NoNewNotificationsDropdown {
+  padding-left : 16px;
+}
+.blurButton:focus {
+  outline : none;
+}
 #SignUpButton:focus {
-  outline : none;
-}
-#LogInButton:focus {
-  outline : none;
-}
-#RegisterSubmit:focus {
   outline : none;
 }
 .popover-title { 

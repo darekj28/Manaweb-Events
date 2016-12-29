@@ -36,9 +36,9 @@ export default class SettingsApp extends React.Component {
 			day_of_birth 		: '',
 			year_of_birth 		: '',
 			avatar 				: '',
-			valid_text_fields	: [	"first_name", "last_name", "password", "password_confirm", "phone_number" ],
+			valid_text_fields	: [	"first_name", "last_name", "phone_number" ],
 			valid_select_fields	: [ "month_of_birth", "day_of_birth", "year_of_birth", "avatar" ],
-			submittable			: true
+			submittable			: false
 		};
 	}
 	autopopulateSettings() {

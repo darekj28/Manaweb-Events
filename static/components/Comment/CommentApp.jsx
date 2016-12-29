@@ -134,7 +134,7 @@ export default class CommentApp extends React.Component {
 					<div className="container app-container">
 						{this.state.deleted && 
 						<div className="alert alert-danger">
-				  			<strong>Bro!</strong> This post is deleted.
+				  			<strong>Bro!</strong> This post was deleted.
 						</div>}
 						<div id="OriginalPost" className="app row">
 							<CommentFeedPost comment={this.state.original_post} isOriginalPost={true}/>
