@@ -50,7 +50,7 @@ export default class LoginApp extends React.Component {
 						    appId= {appId}
 						    autoLoad={true}
 						    fields="name,email"
-						    onClick={this.handleFacebookLoginClick}
+						    // onClick={this.handleFacebookLoginClick}
 						    callback={this.responseFacebook}
 						    icon="fa-facebook"
 						    size = "small" />

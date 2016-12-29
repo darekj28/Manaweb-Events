@@ -11234,9 +11234,9 @@
 							React.createElement(_reactFacebookLogin2.default, {
 								appId: appId,
 								autoLoad: true,
-								fields: 'name,email',
-								onClick: this.handleFacebookLoginClick,
-								callback: this.responseFacebook,
+								fields: 'name,email'
+								// onClick={this.handleFacebookLoginClick}
+								, callback: this.responseFacebook,
 								icon: 'fa-facebook',
 								size: 'small' })
 						)
