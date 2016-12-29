@@ -20,19 +20,21 @@ def validateLogin(login_id, password):
 	if loginIdIsEmail:
 		user_info = user_manager.getInfoFromEmail(lower_login_id)
 
-
 	# otherwise the login is a userID
 	else:
 		user_info = user_manager.getInfo(lower_login_id)
+
 	user_manager.closeConnection()
 	password_match = argon2.verify(password, user_info['password'])
+	print(password_match)
+	
 
 	# user doesn't exists
 	if user_info == None:
 		output['result'] = 'failure'
 		output['error'] = "This username doesn't exist."
 
-	elif password_match:
+	elif not password_match:
 		output['result'] = 'failure'
 		output['error'] = 'Login credentials incorrect.'
 

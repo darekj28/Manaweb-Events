@@ -384,16 +384,16 @@ class Users:
 		else:
 			return True
 
-	# this is a temporary method just to update the old passwords
-	def hashUserPasswords(self, userID):
-		user_manager = Users()
-		thisUser = user_manager.getInfo(userID)
-		password = 	thisUser['password']
-		hash_password = argon2.using(rounds = 4).hash(password)
-		print(hash_password)
-		sql = "UPDATE user_info SET password = %s WHERE userID = %s"
-		self.udb.execute(self.udb.mogrify(sql, (hash_password, userID)))
+	# # this is a temporary method just to update the old passwords
+	# def hashUserPasswords(self, userID, password):
+	# 	user_manager = Users()
+	# 	thisUser = user_manager.getInfo(userID)
+	# 	# password = 	thisUser['password']
 
+	# 	hash_password = argon2.using(rounds = 4).hash(password)
+	# 	print(hash_password)
+	# 	sql = "UPDATE user_info SET password = %s WHERE userID = %s"
+	# 	self.udb.execute(self.udb.mogrify(sql, (hash_password, userID)))
 
 
 def test():
