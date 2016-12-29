@@ -57,13 +57,13 @@ body {
   cursor : default;
 }
 #DropdownName {
-  padding-left : 20px;
+  text-align: center;
 }
 #NoNewNotifications {
   list-style-type: none;
 }
 #NoNewNotificationsDropdown {
-  padding-left : 16px;
+  text-align: center;
 }
 .blurButton:focus {
   outline : none;
@@ -362,6 +362,10 @@ body {
 
 @media (max-width: 767px) {
   .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #ffffff;
+    white-space : normal;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li {
     color: #ffffff;
   }
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {

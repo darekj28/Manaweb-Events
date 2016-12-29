@@ -89,10 +89,12 @@ export default class LoginNavBar extends React.Component {
                             <input type="password" className="form-control login" id="password" 
                             	onChange={this.handleTyping.bind(this)} placeholder="Password"/>
                         </div>
-			            <Link to="/"><button className="btn btn-default form-control blurButton"
-			            id="LoginButton">
-			            Sign In!</button>
-			            </Link>
+                        <div className="form-group">
+				            <Link to="/"><button className="btn btn-default form-control blurButton"
+				            id="LoginButton">
+				            Sign In!</button>
+				            </Link>
+				        </div>
 			        </form>
 			  </div>
 			</nav>
