@@ -50,7 +50,7 @@ def mobileCreateProfile():
 
 	user_manager.closeConnection()
 
-	return jsonify({'result' : 'success'})
+	return jsonify({'result' : 'success', 'username': userID})
 	# return jsonify({'response': "success!" })
 
 	# post_manager = Posts()

@@ -12,14 +12,61 @@ browser_api = Blueprint('browser_api', __name__)
 DEFAULT_FEED = "BALT"
 
 
+@browser_api.route('/isFacebookUser')
+def isFacebookUser():
+	fb_id = request.json['fb_id']
+	user_manager = Users()
+	isFbUser = user_manager.isFacebookUser(fb_id)
+	user_manager.closeConnection()
+	return jsonify(isFbUser)
+
+@browser_api.route('/facebookCreateAccount', methods = ['POST'])
+def facebookCreateAccount():
+	first_name = request.json['first_name'].title()
+	last_name = request.json['last_name'].title()
+	userID = request.json['username']
+	password = "FB_DEFAULT_PASSWORD"
+	email = request.json['email']
+	fb_id = request.json['fb_id']
+	phone_number = "555-555-5555"
+	# birthDay = request.json['birth_day']
+	# birthMonth = request.json['birth_month']
+	# birthYear = request.json['birth_year']
+	# gender = request.json.get('gender')
+	birthYear = "1994"
+	birthDay = "1"
+	birthMonth = "1"
+	gender = "Other"
+	avatar_name = "Jace"
+	avatar_url = '/static/avatars/' + avatar_name + '.png'
+	
+	isActive = True
+	confirmationPin = email_confirm.hashUserID(userID)
+	# confirmed = False
+	confirmed = True		
+	user_manager = Users()
+	user_manager.addFacebookUser(userID, first_name = first_name, last_name = last_name, password = password, email = email,  isActive = isActive,
+		avatar_url = avatar_url, avatar_name = avatar_name, confirmationPin = confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
+		isAdmin = False, phone_number = phone_number, birthMonth = birthMonth, birthDay = birthDay, birthYear = birthYear,
+		gender = gender, fb_id = fb_id) 
+
+	user_manager.closeConnection()
+
+	session['logged_in'] = True
+	session['userID'] = userID
+
+	return jsonify({'result' : 'success', 'username': userID})
+
+
+
 @browser_api.route('/verifyAndLogin', methods=['POST'])
-def login() :
+def verifyAndLogin() :
 	user = request.json['user']
 	password = request.json['password']
 	res = validation.validateLogin(user, password)
 	if res['result'] == 'success':
 		session['logged_in'] = True
-		session['userID'] = user
+		session['userID'] = res['username']
 		return jsonify({ 'error' : False })
 	else : 
 		return jsonify({ 'error' : res['error'] })
