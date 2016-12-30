@@ -251,7 +251,6 @@
 				$.post('getNumUnseenPosts', { feed_name: feed_name, currentUser: this.state.currentUser }, function (data) {
 					var newUnseenPosts = data['numUnseenPosts'] + this.state.initialUnseenPosts;
 					this.setState({ numUnseenPosts: newUnseenPosts });
-					console.log(newUnseenPosts);
 				}.bind(this));
 			}
 		}, {
@@ -764,7 +763,7 @@
 	var assign = __webpack_require__(/*! object-assign */ 7);
 	var ee = __webpack_require__(/*! event-emitter */ 36);
 	
-	var _currentUser = localStorage.CurrentUser ? JSON.parse(localStorage.CurrentUser) : {};
+	var _currentUser = localStorage.CurrentUser ? JSON.parse(localStorage.CurrentUser) : "";
 	var _notifications = localStorage.Notifications ? JSON.parse(localStorage.Notifications) : [];
 	var _notification_count = localStorage.NotificationCount ? JSON.parse(localStorage.NotificationCount) : "";
 	
@@ -773,7 +772,7 @@
 		localStorage.CurrentUser = JSON.stringify(_currentUser);
 	}
 	function _removeCurrentUser(data) {
-		_currentUser = {};
+		_currentUser = "";
 		localStorage.CurrentUser = JSON.stringify(_currentUser);
 	}
 	function _addNotifications(data) {
@@ -11362,7 +11361,7 @@
 							React.createElement('br', null),
 							React.createElement('br', null),
 							React.createElement(_reactFacebookLogin2.default, {
-								appId: testAppId,
+								appId: appId,
 								autoLoad: false,
 								fields: 'first_name,email, last_name, name'
 								// onClick={this.handleFacebookLoginClick}
@@ -11740,8 +11739,10 @@
 					success: function (res) {
 						if (!res['error']) {
 							this.setState({ valid: "valid" });
+							this.props.handleBlur("username", "valid");
 						} else {
 							this.setState({ valid: "invalid", warning: res['error'] });
+							this.props.handleBlur("username", "invalid");
 						}
 					}.bind(this)
 				});
@@ -11758,8 +11759,10 @@
 					success: function (res) {
 						if (!res['error']) {
 							this.setState({ valid: "valid" });
+							this.props.handleBlur("email_address", "valid");
 						} else {
 							this.setState({ valid: "invalid", warning: res['error'] });
+							this.props.handleBlur("email_address", "invalid");
 						}
 					}.bind(this)
 				});
@@ -13980,7 +13983,7 @@
 		return $(arr1).not(arr2).length === 0 && $(arr2).not(arr1).length === 0;
 	}
 	
-	var text_fields = ["first_name", "last_name", "username", "email_address", "password", "password_confirm", "phone_number"];
+	var text_fields = ["first_name", "last_name", "username", "email_address", "password", "phone_number"];
 	var select_fields = ["month_of_birth", "day_of_birth", "year_of_birth", "avatar"];
 	
 	var RegisterApp = function (_React$Component) {
@@ -14013,7 +14016,7 @@
 		_createClass(RegisterApp, [{
 			key: 'componentDidMount',
 			value: function componentDidMount() {
-				$('#RegisterSubmit').one('click', function (e) {
+				$('#RegisterSubmit').on('click', function () {
 					$(this).blur();
 					this.handleSubmit.bind(this)();
 				}.bind(this));
@@ -14064,8 +14067,10 @@
 					url: '/createProfile',
 					data: JSON.stringify(obj, null, '\t'),
 					contentType: 'application/json;charset=UTF-8',
-					success: function (data) {
-						this.login.bind(this)();
+					success: function (res) {
+						if (res['result'] == "success") {
+							this.login.bind(this)();
+						}
 					}.bind(this)
 				});
 			}
@@ -14081,8 +14086,6 @@
 					success: function (res) {
 						if (!res['error']) {
 							this.getCurrentUserInfo.bind(this)();
-						} else {
-							this.props.loginError(res.error);
 						}
 					}.bind(this)
 				});
@@ -14090,7 +14093,7 @@
 		}, {
 			key: 'getCurrentUserInfo',
 			value: function getCurrentUserInfo() {
-				$.post('/getCurrentUserInfo', { currentUser: this.state.user }, function (data) {
+				$.post('/getCurrentUserInfo', { currentUser: this.state.username }, function (data) {
 					AppActions.addCurrentUser(data.thisUser);
 					this.getNotifications.bind(this)();
 				}.bind(this));
@@ -14098,7 +14101,7 @@
 		}, {
 			key: 'getNotifications',
 			value: function getNotifications() {
-				$.post('/getNotifications', { currentUser: this.state.user }, function (data) {
+				$.post('/getNotifications', { currentUser: this.state.username }, function (data) {
 					var notifications = [];
 					var count = 0;
 					data.notification_list.map(function (obj) {
@@ -14178,7 +14181,7 @@
 								),
 								!this.state.submittable && React.createElement(
 									'button',
-									{ className: 'btn btn-default', id: 'RegisterSubmit', disabled: true },
+									{ className: 'btn btn-default', disabled: true },
 									'Get Started!'
 								)
 							)
