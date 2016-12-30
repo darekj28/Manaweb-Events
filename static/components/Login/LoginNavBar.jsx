@@ -1,6 +1,7 @@
 var React = require('react');
 var Link = require('react-router').Link;
 import AppActions from '../../actions/AppActions.jsx';
+import AppStore from '../../stores/AppStore.jsx';
 import { browserHistory } from 'react-router';
 
 export default class LoginNavBar extends React.Component {
