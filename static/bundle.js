@@ -11361,7 +11361,7 @@
 							React.createElement('br', null),
 							React.createElement('br', null),
 							React.createElement(_reactFacebookLogin2.default, {
-								appId: appId,
+								appId: testAppId,
 								autoLoad: false,
 								fields: 'first_name,email, last_name, name'
 								// onClick={this.handleFacebookLoginClick}
