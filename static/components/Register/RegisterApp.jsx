@@ -23,7 +23,7 @@ function contains(collection, item) {
 	if(collection.indexOf(item) !== -1) return true;
 	else return false;
 }
-var text_fields = [	"first_name", "last_name", "username", "email_address", "password", "phone_number" ];
+var text_fields = [	"first_name", "last_name", "username", "email_address", "password", "password_confirm", "phone_number" ];
 var select_fields = [ "month_of_birth", "day_of_birth", "year_of_birth", "avatar" ];
 var required_text_fields = [ "first_name", "last_name", "username", "email_address", "password" ];
 export default class RegisterApp extends React.Component {
