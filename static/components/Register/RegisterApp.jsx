@@ -19,13 +19,13 @@ function add(array, value) {
 	if (index === -1) array.push(value);
 	return array;
 }
-function isSameSet (arr1, arr2) {
-  return $(arr1).not(arr2).length === 0 && $(arr2).not(arr1).length === 0;  
+function contains(collection, item) {
+	if(collection.indexOf(item) !== -1) return true;
+	else return false;
 }
-
 var text_fields = [	"first_name", "last_name", "username", "email_address", "password", "phone_number" ];
 var select_fields = [ "month_of_birth", "day_of_birth", "year_of_birth", "avatar" ];
-
+var required_text_fields = [ "first_name", "last_name", "username", "email_address", "password" ];
 export default class RegisterApp extends React.Component {
 	constructor() {
 		super();
@@ -56,16 +56,16 @@ export default class RegisterApp extends React.Component {
 		var valid_select_fields = this.state.valid_select_fields;
 		if (valid == "valid") this.setState({ valid_text_fields : add(valid_text_fields, field) });
 		else this.setState({ valid_text_fields : remove(valid_text_fields, field) });
-		this.setState({ submittable : isSameSet(text_fields, valid_text_fields) && 
-										isSameSet(select_fields, valid_select_fields) });
+		this.setState({ submittable : required_text_fields.every(field => contains(valid_text_fields, field)) && 
+									  select_fields.every(field => contains(valid_select_fields, field)) });
 	}
 	handleSelectBlur(field, valid) {
 		var valid_text_fields = this.state.valid_text_fields; 
 		var valid_select_fields = this.state.valid_select_fields;
 		if (valid == "valid") this.setState({ valid_select_fields : add(valid_select_fields, field) });
 		else this.setState({ valid_select_fields : remove(valid_select_fields, field) });
-		this.setState({ submittable : isSameSet(text_fields, valid_text_fields) && 
-										isSameSet(select_fields, valid_select_fields) });
+		this.setState({ submittable : required_text_fields.every(field => contains(valid_text_fields, field)) && 
+									  select_fields.every(field => contains(valid_select_fields, field)) });
 	}
 	handleSubmit() {
 		if (this.state.submittable) {
@@ -92,11 +92,11 @@ export default class RegisterApp extends React.Component {
 					}
 				}.bind(this)
 			});
-			$('#CreateProfileSuccess').fadeIn(400).delay(5000).fadeOut(400);
+			$('#CreateProfileSuccess').fadeIn(400).delay(4000).fadeOut(400);
 			$("html, body").animate({ scrollTop: $('#RegisterApp').prop('scrollHeight') }, 600);
 		}
 		else {
-			$('#CreateProfileFail').fadeIn(400).delay(5000).fadeOut(400);
+			$('#CreateProfileFail').fadeIn(400).delay(4000).fadeOut(400);
 			$("html, body").animate({ scrollTop: $('#RegisterApp').prop('scrollHeight') }, 600);
 			this.enableRegister.bind(this)();
 		}

@@ -15,9 +15,6 @@ function add(array, value) {
 	if (index === -1) array.push(value);
 	return array;
 }
-function isSameSet (arr1, arr2) {
-  return $(arr1).not(arr2).length === 0 && $(arr2).not(arr1).length === 0;  
-}
 function contains(collection, item) {
 	if(collection.indexOf(item) !== -1) return true;
 	else return false;
@@ -73,8 +70,8 @@ export default class SettingsApp extends React.Component {
 		var valid_select_fields = this.state.valid_select_fields;
 		if (valid == "valid") this.setState({ valid_text_fields : add(valid_text_fields, field) });
 		else this.setState({ valid_text_fields : remove(valid_text_fields, field) });
-		this.setState({ submittable : isSameSet(required_text_fields, valid_text_fields) && 
-										isSameSet(select_fields, valid_select_fields) });
+		this.setState({ submittable : required_text_fields.every(field => contains(valid_text_fields, field)) && 
+									  select_fields.every(field => contains(valid_select_fields, field)) });
 	}
 
 	handleSelectBlur(field, valid) {
@@ -82,15 +79,15 @@ export default class SettingsApp extends React.Component {
 		var valid_select_fields = this.state.valid_select_fields;
 		if (valid == "valid") this.setState({ valid_select_fields : add(valid_select_fields, field) });
 		else this.setState({ valid_select_fields : remove(valid_select_fields, field) });
-		this.setState({ submittable : isSameSet(required_text_fields, valid_text_fields) && 
-										isSameSet(select_fields, valid_select_fields) });
+		this.setState({ submittable : required_text_fields.every(field => contains(valid_text_fields, field)) && 
+									  select_fields.every(field => contains(valid_select_fields, field)) });
 	}
 
 	handleSubmit() {
 		if (this.state.submittable) {
 			var password = this.state.old_password;
-			if (contains(this.valid_text_fields, "password") && 
-				contains(this.valid_text_fields, "password_confirm"))
+			if (contains(this.state.valid_text_fields, "password") && 
+				contains(this.state.valid_text_fields, "password_confirm"))
 				password = this.state.password;
 			var obj = {
 				first_name 		: this.state.first_name,
@@ -110,12 +107,11 @@ export default class SettingsApp extends React.Component {
 			    contentType: 'application/json;charset=UTF-8'
 			});
 			$('#UpdateSettingsSubmit').blur();
-			$('#UpdateSettingsSuccess').fadeIn(400).delay(5000).fadeOut(400);
+			$('#UpdateSettingsSuccess').fadeIn(400).delay(4000).fadeOut(400);
 			$("html, body").animate({ scrollTop: $('#SettingsApp').prop('scrollHeight') }, 600);
-
 		}
 		else {
-			$('#UpdateSettingsFail').fadeIn(400).delay(5000).fadeOut(400);
+			$('#UpdateSettingsFail').fadeIn(400).delay(4000).fadeOut(400);
 			$("html, body").animate({ scrollTop: $('#SettingsApp').prop('scrollHeight') }, 600);
 		}
 	}
