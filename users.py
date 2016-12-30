@@ -176,8 +176,12 @@ class Users:
 		# otherwise simply update information
 		else: 
 			for prop in self.properties:
-				if prop != 'userID' and prop != 'password':
+				if prop == 'password':
+					hash_password = argon2.using(rounds=4).hash(password)
+					self.updateInfo(userID, prop, hash_password)
+				elif prop != 'userID' and prop != 'password':
 					self.updateInfo(userID, prop, input_properties[prop])
+
 
 			self.updateInfo(userID, 'password', hash_password)
 			self.updateInfo(userID, 'timeString', timeString)
@@ -270,7 +274,10 @@ class Users:
 		# otherwise simply update information
 		else: 
 			for prop in self.properties:
-				if prop != 'userID':
+				if prop == 'password':
+					hash_password = argon2.using(rounds=4).hash(password)
+					self.updateInfo(userID, prop, hash_password)
+				elif prop != 'userID' and prop != 'password':
 					self.updateInfo(userID, prop, input_properties[prop])
 
 			self.updateInfo(userID, 'timeString', timeString)
