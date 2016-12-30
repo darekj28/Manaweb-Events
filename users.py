@@ -296,12 +296,13 @@ class Users:
 		
 	def updateInfo(self, userID, field_name, field_data):
 		table_name  = self.USER_TABLE
+		if field_name == 'password':
+			field_data = argon2.using(rounds=4).hash(field_data)
 		self.udb.execute(self.udb.mogrify("UPDATE " + table_name  + " SET " + field_name + " = %s WHERE userID = '" + userID + "'", (field_data,)))
 		action = "ACCOUNT " + field_name + " UPDATED"
 		timeStamp = time.time()
 		timeString = self.getTimeString()
-		if field_name == 'password':
-			field_data = argon2.using(rounds=4).hash(field_data)
+		
 
 
 		if field_name.lower() != 'timestring' and field_name.lower() != 'userid' and field_name.lower() != 'timestamp':
