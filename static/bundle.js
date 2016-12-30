@@ -314,15 +314,14 @@
 					this.setState({ feed: feed, post: '' });
 					$('html, body').animate({ scrollTop: 0 }, 300);
 	
-					var that = this;
 					$.ajax({
 						type: 'POST',
 						url: '/makePost',
 						data: JSON.stringify(obj, null, '\t'),
 						contentType: 'application/json;charset=UTF-8',
-						success: function success() {
-							that.refreshFeed.bind(that)();
-						}
+						success: function () {
+							this.refreshFeed.bind(this)();
+						}.bind(this)
 					});
 				}
 			}
@@ -11455,7 +11454,7 @@
 							React.createElement('br', null),
 							React.createElement('br', null),
 							React.createElement(_reactFacebookLogin2.default, {
-								appId: testAppId,
+								appId: appId,
 								autoLoad: false,
 								fields: 'first_name,email, last_name, name'
 								// onClick={this.handleFacebookLoginClick}
