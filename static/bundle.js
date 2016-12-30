@@ -211,12 +211,12 @@
 		_createClass(App, [{
 			key: 'markPostFeedAsSeen',
 			value: function markPostFeedAsSeen() {
-				$.post('/markPostFeedAsSeen', { feed_name: feed_name });
+				$.post('/markPostFeedAsSeen', { feed_name: feed_name, currentUser: this.state.currentUser.userID });
 			}
 		}, {
 			key: 'initializeNumUnseenPosts',
 			value: function initializeNumUnseenPosts() {
-				$.post('getNumUnseenPosts', { feed_name: feed_name }, function (data) {
+				$.post('getNumUnseenPosts', { feed_name: feed_name, currentUser: this.state.currentUser.userID }, function (data) {
 					this.setState({ numUnseenPosts: data['numUnseenPosts'] });
 					this.setState({ initialUnseenPosts: data['numUnseenPosts'] });
 					this.markPostFeedAsSeen.bind(this)();
@@ -248,7 +248,7 @@
 		}, {
 			key: 'refreshNumUnseenPosts',
 			value: function refreshNumUnseenPosts() {
-				$.post('getNumUnseenPosts', { feed_name: feed_name }, function (data) {
+				$.post('getNumUnseenPosts', { feed_name: feed_name, currentUser: this.state.currentUser.userID }, function (data) {
 					var newUnseenPosts = data['numUnseenPosts'] + this.state.initialUnseenPosts;
 					this.setState({ numUnseenPosts: newUnseenPosts });
 				}.bind(this));
@@ -302,7 +302,8 @@
 						isTrade: contains(this.state.actions, "Trade"),
 						isPlay: contains(this.state.actions, "Play"),
 						isChill: contains(this.state.actions, "Chill"),
-						numberOfComments: 0
+						numberOfComments: 0,
+						currentUser: this.state.currentUser
 					};
 					$.ajax({
 						type: 'POST',
@@ -756,25 +757,25 @@
 	var assign = __webpack_require__(/*! object-assign */ 7);
 	var ee = __webpack_require__(/*! event-emitter */ 36);
 	
-	var _currentUser = sessionStorage.CurrentUser ? JSON.parse(sessionStorage.CurrentUser) : {};
-	var _notifications = sessionStorage.Notifications ? JSON.parse(sessionStorage.Notifications) : [];
-	var _notification_count = sessionStorage.NotificationCount ? JSON.parse(sessionStorage.NotificationCount) : "";
+	var _currentUser = localStorage.CurrentUser ? JSON.parse(localStorage.CurrentUser) : {};
+	var _notifications = localStorage.Notifications ? JSON.parse(localStorage.Notifications) : [];
+	var _notification_count = localStorage.NotificationCount ? JSON.parse(localStorage.NotificationCount) : "";
 	
 	function _loadCurrentUser(data) {
 		_currentUser = data;
-		sessionStorage.CurrentUser = JSON.stringify(_currentUser);
+		localStorage.CurrentUser = JSON.stringify(_currentUser);
 	}
 	function _removeCurrentUser(data) {
 		_currentUser = {};
-		sessionStorage.CurrentUser = JSON.stringify(_currentUser);
+		localStorage.CurrentUser = JSON.stringify(_currentUser);
 	}
 	function _addNotifications(data) {
 		_notifications = data;
-		sessionStorage.Notifications = JSON.stringify(_notifications);
+		localStorage.Notifications = JSON.stringify(_notifications);
 	}
 	function _addNotificationCount(data) {
 		_notification_count = data;
-		sessionStorage.NotificationCount = JSON.stringify(_notification_count);
+		localStorage.NotificationCount = JSON.stringify(_notification_count);
 	}
 	
 	var emitter = ee({}),
@@ -10427,7 +10428,7 @@
 						handlePostEdit: this.props.handlePostEdit }),
 					React.createElement(_DeletePostModal2.default, { post: this.state.postInModal,
 						handlePostDelete: this.props.handlePostDelete }),
-					React.createElement(_ReportPostModal2.default, { post: this.state.postInModal })
+					React.createElement(_ReportPostModal2.default, { post: this.state.postInModal, currentUser: this.props.currentUser })
 				);
 			}
 		}]);
@@ -11052,7 +11053,9 @@
 			value: function reportForSpam() {
 				var obj = { unique_id: this.props.post.unique_id,
 					reported_user: this.props.post.userID,
-					reason: "Spam" };
+					reason: "Spam",
+					currentUser: this.props.currentUser
+				};
 				$.ajax({
 					type: 'POST',
 					url: '/reportPost',
@@ -11065,7 +11068,9 @@
 			value: function reportForInappropriate() {
 				var obj = { unique_id: this.props.post.unique_id,
 					reported_user: this.props.post.userID,
-					reason: "Inappropriate" };
+					reason: "Inappropriate",
+					currentUser: this.props.currentUser
+				};
 				$.ajax({
 					type: 'POST',
 					url: '/reportPost',
@@ -11213,35 +11218,6 @@
 			value: function loginError(err) {
 				this.setState({ error: err });
 			}
-		}, {
-			key: 'getCurrentUserInfo',
-			value: function getCurrentUserInfo() {
-				$.post('/getCurrentUserInfo', function (data) {
-					_AppActions2.default.addCurrentUser(data.thisUser);
-				}.bind(this));
-			}
-		}, {
-			key: 'getNotifications',
-			value: function getNotifications() {
-				$.post('/getNotifications', function (data) {
-					var notifications = [];
-					var count = 0;
-					data.notification_list.map(function (obj) {
-						if (!obj['seen']) count++;
-						notifications.unshift({
-							comment_id: obj['comment_id'],
-							notification_id: obj['notification_id'],
-							timeString: obj['timeString'],
-							sender_id: obj['sender_id'],
-							action: obj['action'],
-							receiver_id: obj['receiver_id'],
-							seen: obj['seen']
-						});
-					});
-					_AppActions2.default.addNotifications(notifications);
-					_AppActions2.default.addNotificationCount(String(count));
-				}.bind(this));
-			}
 	
 			// handleFacebookLoginClick() {
 	
@@ -11270,9 +11246,9 @@
 								this.setState({ fb_id: response['id'] });
 							} else {
 								// send the user to the home page
-								console.log("take me to the home page");
-								this.getNotifications.bind(this);
-								this.getCurrentUserInfo.bind(this);
+								// console.log("fbUser")
+								// console.log(response)
+								_AppActions2.default.addCurrentUser(data.fbUser);
 								_reactRouter.browserHistory.push('/');
 							}
 						}.bind(this)
@@ -11500,7 +11476,6 @@
 					success: function (res) {
 						if (!res['error']) {
 							this.getCurrentUserInfo.bind(this)();
-							this.getNotifications.bind(this)();
 						} else {
 							this.props.loginError(res.error);
 						}
@@ -11510,14 +11485,15 @@
 		}, {
 			key: 'getCurrentUserInfo',
 			value: function getCurrentUserInfo() {
-				$.post('/getCurrentUserInfo', function (data) {
+				$.post('/getCurrentUserInfo', { currentUser: this.state.user }, function (data) {
 					_AppActions2.default.addCurrentUser(data.thisUser);
+					this.getNotifications.bind(this)();
 				}.bind(this));
 			}
 		}, {
 			key: 'getNotifications',
 			value: function getNotifications() {
-				$.post('/getNotifications', function (data) {
+				$.post('/getNotifications', { currentUser: this.state.user }, function (data) {
 					var notifications = [];
 					var count = 0;
 					data.notification_list.map(function (obj) {
@@ -12043,7 +12019,8 @@
 				});
 	
 				var obj = { commentContent: commentText,
-					comment_id: this.state.comment_id
+					comment_id: this.state.comment_id,
+					currentUser: this.state.currentUser
 				};
 	
 				$.ajax({
@@ -12670,7 +12647,7 @@
 						handleCommentEdit: this.props.handleCommentEdit }),
 					React.createElement(_DeleteCommentModal2.default, { comment: this.state.commentInModal,
 						handleCommentDelete: this.props.handleCommentDelete }),
-					React.createElement(_ReportCommentModal2.default, { comment: this.state.commentInModal })
+					React.createElement(_ReportCommentModal2.default, { comment: this.state.commentInModal, currentUser: this.props.currentUser })
 				);
 			}
 		}]);
@@ -12939,7 +12916,9 @@
 			value: function reportForSpam() {
 				var obj = { unique_id: this.props.comment.unique_id,
 					reported_user: this.props.comment.userID,
-					reason: "Spam" };
+					reason: "Spam",
+					currentUser: this.props.currentUser
+				};
 				$.ajax({
 					type: 'POST',
 					url: '/reportComment',
@@ -12952,7 +12931,9 @@
 			value: function reportForInappropriate() {
 				var obj = { unique_id: this.props.comment.unique_id,
 					reported_user: this.props.comment.userID,
-					reason: "Inappropriate" };
+					reason: "Inappropriate",
+					currentUser: this.props.currentUser
+				};
 				$.ajax({
 					type: 'POST',
 					url: '/reportComment',
@@ -13553,9 +13534,12 @@
 		_createClass(SettingsApp, [{
 			key: 'autopopulateSettings',
 			value: function autopopulateSettings() {
+				var obj = { currentUser: this.state.currentUser };
 				$.ajax({
-					type: 'GET',
+					type: 'POST',
 					url: '/getPreviousSettings',
+					data: JSON.stringify(obj, null, '\t'),
+					contentType: 'application/json;charset=UTF-8',
 					success: function (user) {
 						this.setState({
 							first_name: user.first_name,
@@ -13601,7 +13585,8 @@
 					day_of_birth: this.state.day_of_birth,
 					month_of_birth: this.state.month_of_birth,
 					year_of_birth: this.state.year_of_birth,
-					avatar: this.state.avatar
+					avatar: this.state.avatar,
+					currentUser: this.state.currentUser
 				};
 				$.ajax({
 					type: 'POST',
@@ -13896,9 +13881,14 @@
 						{ className: 'form-group' },
 						React.createElement(
 							'select',
-							{ className: "setting " + this.state.valid, 'data-width': 'fit', id: this.props.field, name: this.props.field,
-								multiple: true, 'data-max-options': '1', title: idToName(this.props.field),
+							{ className: "setting " + this.state.valid, id: this.props.field, name: this.props.field,
+								title: idToName(this.props.field),
 								onChange: this.handleSelect.bind(this), onBlur: this.handleBlur.bind(this) },
+							React.createElement(
+								'option',
+								{ disabled: true, selected: true },
+								' -- Select -- '
+							),
 							options.map(function (option) {
 								return React.createElement(
 									'option',
@@ -14084,12 +14074,41 @@
 					success: function (res) {
 						if (!res['error']) {
 							this.getCurrentUserInfo.bind(this)();
-							this.getNotifications.bind(this)();
 						} else {
 							this.props.loginError(res.error);
 						}
 					}.bind(this)
 				});
+			}
+		}, {
+			key: 'getCurrentUserInfo',
+			value: function getCurrentUserInfo() {
+				$.post('/getCurrentUserInfo', { currentUser: this.state.user }, function (data) {
+					AppActions.addCurrentUser(data.thisUser);
+					this.getNotifications.bind(this)();
+				}.bind(this));
+			}
+		}, {
+			key: 'getNotifications',
+			value: function getNotifications() {
+				$.post('/getNotifications', { currentUser: this.state.user }, function (data) {
+					var notifications = [];
+					var count = 0;
+					data.notification_list.map(function (obj) {
+						if (!obj['seen']) count++;
+						notifications.unshift({
+							comment_id: obj['comment_id'],
+							notification_id: obj['notification_id'],
+							timeString: obj['timeString'],
+							sender_id: obj['sender_id'],
+							action: obj['action'],
+							receiver_id: obj['receiver_id'],
+							seen: obj['seen']
+						});
+					});
+					AppActions.addNotifications(notifications);
+					AppActions.addNotificationCount(String(count));
+				}.bind(this));
 			}
 		}, {
 			key: 'render',

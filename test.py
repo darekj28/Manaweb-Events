@@ -17,28 +17,22 @@ celery = create_celery(app)
 # 	return a + b
 
 
-task = test.delay(4,5)
+# task = test.delay(4,5)
 # print(task)
-# user_manager = Users()
-# post_manager = Posts()
 
+user_manager = Users()
+post_manager = Posts()
 
-# user_list = user_manager.getUserList()
-
-
-
-
-# userID = 'darekj'
-# feed_name = "BALT"
-
-
-
-# for user in user_list:
-# 	print(user_manager.getUserInfoTable()[user])
+# user_manager.deleteUser('drd')
 
 
 
 
 
-# user_manager.closeConnection()
-# post_manager.closeConnection()
+post_manager.recalculateLastPostTable('BALT')
+post_manager.recalculateUnseenPosts("BALT")
+
+
+
+user_manager.closeConnection()
+post_manager.closeConnection()

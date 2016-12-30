@@ -24,9 +24,10 @@ def isFacebookUser():
 		output['userID'] = ""
 	else:
 		output['result'] = 'success'
-		output['userID'] = fbUser['userID']
+		output['fbUser'] = fbUser
 		session['logged_in'] = True
 		session['userID'] = fbUser['userID']
+
 	return jsonify(output)
 
 
@@ -105,6 +106,7 @@ def getFeedNames():
 @browser_api.route('/getNotifications', methods=['POST'])
 def getNotifications():
 	currentUser = request.form['currentUser']
+
 	# userID = session.get('userID')
 	post_manager = Posts()
 	notification_list = post_manager.getShortListNotifications(currentUser)
@@ -115,13 +117,17 @@ def getNotifications():
 
 @browser_api.route('/getNumUnseenPosts', methods = ['POST'])
 def getNumUnseenPosts():
-	feed_name = request.form['feed_name']
-	# userID = session['userID']
-	userID = request.form['feed_name']
-	post_manager = Posts()
-	numUnseenPosts = post_manager.getNumUnseenPosts(feed_name, userID)
-	post_manager.closeConnection()
-	return jsonify({'numUnseenPosts': numUnseenPosts})
+
+	if request.form.get('currentUser') != None:
+		feed_name = request.form['feed_name']
+		# userID = session['userID']
+		userID = request.form['currentUser']
+		post_manager = Posts()
+		numUnseenPosts = post_manager.getNumUnseenPosts(feed_name, userID)
+		post_manager.closeConnection()
+		return jsonify({'numUnseenPosts': numUnseenPosts})
+	else:
+		return jsonify({'numUnseenPosts': -1})
 
 @browser_api.route('/seeNotification', methods=['POST'])
 def seeNotificaiton():
@@ -135,13 +141,17 @@ def seeNotificaiton():
 
 @browser_api.route('/markPostFeedAsSeen', methods = ['POST'])
 def markPostFeedAsSeen():
-	feed_name = request.form['feed_name']
-	# userID = session['userID']
-	userID = request.form['currentUser']["userID"]
-	post_manager = Posts()
-	post_manager.markPostFeedAsSeen(feed_name, userID)
-	post_manager.closeConnection()
-	return jsonify({'success': True})
+	if request.form.get('currentUser') != None:
+		feed_name = request.form['feed_name']
+		# userID = session['userID']
+		userID = request.form['currentUser']
+		post_manager = Posts()
+		post_manager.markPostFeedAsSeen(feed_name, userID)
+		post_manager.closeConnection()
+
+		return jsonify({'success': True})
+	else: 
+		return jsonify({'success': False})
 			
 
 @browser_api.route('/sendConfirmation', methods = ['POST'])

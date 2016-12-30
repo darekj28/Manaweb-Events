@@ -35,11 +35,11 @@ export default class App extends React.Component {
 		};
 	}
 	markPostFeedAsSeen() {
-		$.post('/markPostFeedAsSeen', {feed_name: feed_name, currentUser : this.state.currentUser});
+		$.post('/markPostFeedAsSeen', {feed_name: feed_name, currentUser : this.state.currentUser.userID});
 	}
 
 	initializeNumUnseenPosts(){
-		$.post('getNumUnseenPosts', {feed_name: feed_name, currentUser : this.state.currentUser},
+		$.post('getNumUnseenPosts', {feed_name: feed_name, currentUser : this.state.currentUser.userID},
 			function(data){
 				this.setState({numUnseenPosts : data['numUnseenPosts']})
 				this.setState({initialUnseenPosts: data['numUnseenPosts']})
@@ -71,7 +71,7 @@ export default class App extends React.Component {
 	}
 
 	refreshNumUnseenPosts() {
-		$.post('getNumUnseenPosts', {feed_name: feed_name, currentUser : this.state.currentUser},
+		$.post('getNumUnseenPosts', {feed_name: feed_name, currentUser : this.state.currentUser.userID},
 			function(data){
 				var newUnseenPosts = data['numUnseenPosts'] + this.state.initialUnseenPosts
 				this.setState({numUnseenPosts :  newUnseenPosts})

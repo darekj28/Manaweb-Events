@@ -59,7 +59,9 @@ export default class LoginApp extends React.Component {
 			        }
 			        else {
 			        	// send the user to the home page
-			        	console.log("take me to the home page")
+			        	// console.log("fbUser")
+			        	// console.log(response)
+			        	AppActions.addCurrentUser(data.fbUser);
 			        	browserHistory.push('/')
 			        }
 			     }.bind(this)

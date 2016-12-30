@@ -128,6 +128,7 @@ class Posts:
 		sql = "SELECT numUnseen FROM " + table_name + " WHERE userID = %s"
 		self.db.execute(self.db.mogrify(sql, (userID,)))
 		query = self.db.fetchall()
+
 		if len(query) == 0:
 			self.addUserToLastSeenTables(userID)
 			return 0
@@ -135,6 +136,14 @@ class Posts:
 
 
 	def markPostFeedAsSeen(self, feed_name, userID):
+
+		table_name = feed_name + self.SEEN_POSTS_SUFFIX
+		sql = "SELECT numUnseen FROM " + table_name + " WHERE userID = %s"
+		self.db.execute(self.db.mogrify(sql, (userID,)))
+		query = self.db.fetchall()
+		if len(query) == 0:
+			self.addUserToLastSeenTables(userID)
+
 		table_name = feed_name + self.SEEN_POSTS_SUFFIX
 		timeStamp = time.time()
 		timeString = self.getTimeString()
@@ -179,11 +188,16 @@ class Posts:
 		# defaults starts their number of unseen posts as number of posts in the feed (can adjust this later)
 		
 		feed_names_list = self.getFeedNames()
-		for feed_name in feed_names_list:
-			initialNumUnseenPosts = self.getNumPosts(feed_name)
-			sql = "INSERT INTO " + feed_name + self.SEEN_POSTS_SUFFIX + " (userID, numUnseen) VALUES (%s, %s) ON CONFLICT (userID) DO UPDATE SET userID = %s"
-			self.db.execute(self.db.mogrify(sql, (userID, initialNumUnseenPosts , userID)))
-			self.post_db.commit()
+		user_manager = Users()
+		user_list = user_manager.getUserList()
+		user_manager.closeConnection()
+
+		if userID in user_list:
+			for feed_name in feed_names_list:
+				initialNumUnseenPosts = self.getNumPosts(feed_name)
+				sql = "INSERT INTO " + feed_name + self.SEEN_POSTS_SUFFIX + " (userID, numUnseen) VALUES (%s, %s) ON CONFLICT (userID) DO UPDATE SET userID = %s"
+				self.db.execute(self.db.mogrify(sql, (userID, initialNumUnseenPosts , userID)))
+				self.post_db.commit()
 
 	
 	# this will manually recalculate the number of unseen posts 

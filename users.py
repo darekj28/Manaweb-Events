@@ -320,13 +320,14 @@ class Users:
 
 	def deleteUser(self, userID):
 		table_name = self.USER_TABLE
-		udb.execute("DELETE FROM " + table_name + " WHERE userID = %s", (userID,))
+		self.udb.execute("DELETE FROM " + table_name + " WHERE userID = %s", (userID,))
 		action = "USER " + userID + " DELETED"
 		timeStamp = time.time()
 		timeString = self.getTimeString()
 		self.udb.execute(self.udb.mogrify("INSERT INTO " + self.USER_ACTION_TABLE + " (userID, timeString, timeStamp, action) VALUES (%s, %s, %s, %s)", (userID, timeString, timeStamp, action)))
 
-		self.user_db.commit()
+		
+		
 
 
 	# returns a list of all users
