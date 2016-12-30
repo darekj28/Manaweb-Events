@@ -4,7 +4,7 @@ var AppConstants = require('../constants/AppConstants.jsx');
 var assign = require('object-assign');
 var ee = require('event-emitter');
 
-var _currentUser = (localStorage.CurrentUser) ? JSON.parse(localStorage.CurrentUser) : {};
+var _currentUser = (localStorage.CurrentUser) ? JSON.parse(localStorage.CurrentUser) : "";
 var _notifications = (localStorage.Notifications) ? JSON.parse(localStorage.Notifications) : [];
 var _notification_count = (localStorage.NotificationCount) ? JSON.parse(localStorage.NotificationCount) : "";
 
@@ -13,7 +13,7 @@ function _loadCurrentUser(data) {
   	localStorage.CurrentUser = JSON.stringify(_currentUser);
 }	
 function _removeCurrentUser(data) {
-  	_currentUser = {};
+  	_currentUser = "";
   	localStorage.CurrentUser = JSON.stringify(_currentUser);
 }
 function _addNotifications(data) {
