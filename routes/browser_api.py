@@ -96,6 +96,15 @@ def registerEmail() :
 	else : 
 		return jsonify({ 'error' : res['error'] })
 
+@browser_api.route('/verifyOldPassword', methods=['POST'])
+def verifyOldPassword() :
+	password = request.json['password']
+	user = request.json['currentUser']
+	if password == user['password'] :
+		return jsonify({ 'error' : False })
+	else : 
+		return jsonify({ 'error' : "Error" })
+
 @browser_api.route('/getFeedNames', methods = ['POST'])
 def getFeedNames():
 	post_manager = Posts()

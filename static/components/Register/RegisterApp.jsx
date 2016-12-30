@@ -5,6 +5,8 @@ import LoginError from '../Login/LoginError.jsx';
 import SettingsTextInput from '../Settings/SettingsTextInput.jsx';
 import SettingsSelectInput from '../Settings/SettingsSelectInput.jsx';
 import SettingsInputLabel from '../Settings/SettingsInputLabel.jsx';
+import AppActions from '../../actions/AppActions.jsx';
+import { browserHistory } from 'react-router';
 
 function remove(array, value) {
 	var index = array.indexOf(value);
@@ -43,12 +45,6 @@ export default class RegisterApp extends React.Component {
 				submittable			: false
 			};
 	}
-	componentDidMount() {
-		$('#RegisterSubmit').on('click', function() {
-			$(this).blur();
-			this.handleSubmit.bind(this)();
-		}.bind(this));
-	}
 	loginError(err) {
 		this.setState({ error : err });
 	}
@@ -71,29 +67,38 @@ export default class RegisterApp extends React.Component {
 										isSameSet(select_fields, valid_select_fields) });
 	}
 	handleSubmit() {
-		var obj = {
-			first_name 			: this.state.first_name		,
-			last_name			: this.state.last_name		,
-			username 			: this.state.username 		,
-			email_address		: this.state.email_address	,
-			password			: this.state.password		,
-			phone_number 		: this.state.phone_number 	,
-			month_of_birth 		: this.state.month_of_birth ,
-			day_of_birth 		: this.state.day_of_birth 	,
-			year_of_birth 		: this.state.year_of_birth 	,
-			avatar 				: this.state.avatar 			
-		};
-		$.ajax({
-			type: "POST",
-			url : '/createProfile',
-			data : JSON.stringify(obj, null, '\t'),
-			contentType : 'application/json;charset=UTF-8',
-			success : function(res) {
-				if(res['result'] == "success") {
-					this.login.bind(this)();
-				}
-			}.bind(this)
-		});
+		if (this.state.submittable) {
+			var obj = {
+				first_name 			: this.state.first_name		,
+				last_name			: this.state.last_name		,
+				username 			: this.state.username 		,
+				email_address		: this.state.email_address	,
+				password			: this.state.password		,
+				phone_number 		: this.state.phone_number 	,
+				month_of_birth 		: this.state.month_of_birth ,
+				day_of_birth 		: this.state.day_of_birth 	,
+				year_of_birth 		: this.state.year_of_birth 	,
+				avatar 				: this.state.avatar 			
+			};
+			$.ajax({
+				type: "POST",
+				url : '/createProfile',
+				data : JSON.stringify(obj, null, '\t'),
+				contentType : 'application/json;charset=UTF-8',
+				success : function(res) {
+					if(res['result'] == "success") {
+						this.login.bind(this)();
+					}
+				}.bind(this)
+			});
+			$('#CreateProfileSuccess').fadeIn(400).delay(5000).fadeOut(400);
+			$("html, body").animate({ scrollTop: $('#RegisterApp').prop('scrollHeight') }, 600);
+		}
+		else {
+			$('#CreateProfileFail').fadeIn(400).delay(5000).fadeOut(400);
+			$("html, body").animate({ scrollTop: $('#RegisterApp').prop('scrollHeight') }, 600);
+			this.enableRegister.bind(this)();
+		}
 	}
 	login() {
 		var obj = { user : this.state.username, password : this.state.password };
@@ -134,11 +139,24 @@ export default class RegisterApp extends React.Component {
                 });
                 AppActions.addNotifications(notifications);
                 AppActions.addNotificationCount(String(count));
+                browserHistory.push('/');
             }.bind(this));
+    }
+    enableRegister() {
+    	$('#RegisterSubmit').one("click", function(e) {
+			e.preventDefault();
+			$(this).blur();
+			this.handleSubmit.bind(this)();
+		}.bind(this));
+    }
+    componentDidMount() {
+    	this.enableRegister.bind(this)();
+		$('#CreateProfileSuccess').hide();
+    	$('#CreateProfileFail').hide();
     }
 	render() {
 		return(
-			<div>
+			<div id="RegisterApp">
 				<LoginNavBar loginError={this.loginError.bind(this)}/>
 				<div className="container app-container">
 					{this.state.error && <LoginError error={this.state.error}/>}
@@ -165,15 +183,15 @@ export default class RegisterApp extends React.Component {
 						}, this)}
 						<div id="avatar_container" className="avatar_container centered-text"></div>
 						<div className="form-group">
-							{this.state.submittable && 
-								<Link to="/"> <button className="btn btn-default blurButton" 
+							<button className="btn btn-default blurButton" 
 									id="RegisterSubmit"> 
 										Get Started! </button>
-									</Link> }
-							{!this.state.submittable && 
-								<button className="btn btn-default" disabled> 
-									Get Started!
-								</button>}
+						</div>
+						<div className="alert alert-success" id="CreateProfileSuccess">
+						  <strong>Success!</strong> Please hold on as we redirect you.
+						</div>
+						<div className="alert alert-danger" id="CreateProfileFail">
+						  <strong>Bro!</strong> You need to fill out more stuff.
 						</div>
 					</form>
 				</div>	

@@ -1,6 +1,7 @@
 var React = require('react');
 var Link = require('react-router').Link;
 import AppActions from '../../actions/AppActions.jsx';
+import { browserHistory } from 'react-router';
 
 export default class LoginNavBar extends React.Component {
 	constructor() {
@@ -25,6 +26,7 @@ export default class LoginNavBar extends React.Component {
 				}
 				else {
 					this.props.loginError(res.error);
+					this.enableLogin.bind(this)();
 				}
 			}.bind(this)
 		});
@@ -54,13 +56,18 @@ export default class LoginNavBar extends React.Component {
                 });
                 AppActions.addNotifications(notifications);
                 AppActions.addNotificationCount(String(count));
+                browserHistory.push('/');
             }.bind(this));
     }
-    componentDidMount() {
-    	$('#LoginButton').one('click', function() {
+    enableLogin() {
+    	$('#LoginButton').one('click', function(e) {
+    		e.preventDefault();
     		$(this).blur();
     		this.login.bind(this)();
     	}.bind(this));
+    }
+    componentDidMount() {
+    	this.enableLogin.bind(this)();
     }
 	render() {
 		return (
@@ -86,10 +93,10 @@ export default class LoginNavBar extends React.Component {
                             	onChange={this.handleTyping.bind(this)} placeholder="Username"/>
 	                            <input type="password" className="form-control login" id="password" 
 	                            	onChange={this.handleTyping.bind(this)} placeholder="Password"/>
-				            	<Link to="/">
-				            		<button className="btn btn-default form-control blurButton"
+				            	
+				            	<button className="btn btn-default form-control blurButton"
 				            					id="LoginButton"> Sign In!</button>
-				            	</Link>
+
 				            </div>
 				        </form>
 			        </div>

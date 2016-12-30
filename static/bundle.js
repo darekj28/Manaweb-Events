@@ -757,7 +757,7 @@
 	var assign = __webpack_require__(/*! object-assign */ 7);
 	var ee = __webpack_require__(/*! event-emitter */ 36);
 	
-	var _currentUser = localStorage.CurrentUser ? JSON.parse(localStorage.CurrentUser) : {};
+	var _currentUser = localStorage.CurrentUser ? JSON.parse(localStorage.CurrentUser) : "";
 	var _notifications = localStorage.Notifications ? JSON.parse(localStorage.Notifications) : [];
 	var _notification_count = localStorage.NotificationCount ? JSON.parse(localStorage.NotificationCount) : "";
 	
@@ -766,7 +766,7 @@
 		localStorage.CurrentUser = JSON.stringify(_currentUser);
 	}
 	function _removeCurrentUser(data) {
-		_currentUser = {};
+		_currentUser = "";
 		localStorage.CurrentUser = JSON.stringify(_currentUser);
 	}
 	function _addNotifications(data) {
@@ -1458,18 +1458,12 @@
 	 * will remain to ensure logic does not differ in production.
 	 */
 	
-	var validateFormat = function validateFormat(format) {};
-	
-	if (false) {
-	  validateFormat = function validateFormat(format) {
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  if (false) {
 	    if (format === undefined) {
 	      throw new Error('invariant requires an error message argument');
 	    }
-	  };
-	}
-	
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  validateFormat(format);
+	  }
 	
 	  if (!condition) {
 	    var error;
@@ -11434,6 +11428,8 @@
 	
 	var _AppActions2 = _interopRequireDefault(_AppActions);
 	
+	var _reactRouter = __webpack_require__(/*! react-router */ 51);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -11478,6 +11474,7 @@
 							this.getCurrentUserInfo.bind(this)();
 						} else {
 							this.props.loginError(res.error);
+							this.enableLogin.bind(this)();
 						}
 					}.bind(this)
 				});
@@ -11510,15 +11507,22 @@
 					});
 					_AppActions2.default.addNotifications(notifications);
 					_AppActions2.default.addNotificationCount(String(count));
+					_reactRouter.browserHistory.push('/');
+				}.bind(this));
+			}
+		}, {
+			key: 'enableLogin',
+			value: function enableLogin() {
+				$('#LoginButton').one('click', function (e) {
+					e.preventDefault();
+					$(this).blur();
+					this.login.bind(this)();
 				}.bind(this));
 			}
 		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
-				$('#LoginButton').one('click', function () {
-					$(this).blur();
-					this.login.bind(this)();
-				}.bind(this));
+				this.enableLogin.bind(this)();
 			}
 		}, {
 			key: 'render',
@@ -11566,14 +11570,10 @@
 									React.createElement('input', { type: 'password', className: 'form-control login', id: 'password',
 										onChange: this.handleTyping.bind(this), placeholder: 'Password' }),
 									React.createElement(
-										Link,
-										{ to: '/' },
-										React.createElement(
-											'button',
-											{ className: 'btn btn-default form-control blurButton',
-												id: 'LoginButton' },
-											' Sign In!'
-										)
+										'button',
+										{ className: 'btn btn-default form-control blurButton',
+											id: 'LoginButton' },
+										' Sign In!'
 									)
 								)
 							)
@@ -11657,6 +11657,12 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
+	var _AppStore = __webpack_require__(/*! ../../stores/AppStore.jsx */ 4);
+	
+	var _AppStore2 = _interopRequireDefault(_AppStore);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -11664,6 +11670,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(/*! react */ 5);
+	
 	
 	function idToName(id) {
 		var arr = id.split('_');
@@ -11701,6 +11708,8 @@
 	function warningForField(field, value) {
 		if (!value) return "You can\'t leave this empty.";
 		switch (field) {
+			case "old_password":
+				return "Your old password is incorrect.";
 			case "password_confirm":
 				return "Your passwords don\'t match.";
 			default:
@@ -11733,8 +11742,10 @@
 					success: function (res) {
 						if (!res['error']) {
 							this.setState({ valid: "valid" });
+							this.props.handleBlur("username", "valid");
 						} else {
 							this.setState({ valid: "invalid", warning: res['error'] });
+							this.props.handleBlur("username", "invalid");
 						}
 					}.bind(this)
 				});
@@ -11751,8 +11762,30 @@
 					success: function (res) {
 						if (!res['error']) {
 							this.setState({ valid: "valid" });
+							this.props.handleBlur("email_address", "valid");
 						} else {
 							this.setState({ valid: "invalid", warning: res['error'] });
+							this.props.handleBlur("email_address", "invalid");
+						}
+					}.bind(this)
+				});
+			}
+		}, {
+			key: 'verifyOldPassword',
+			value: function verifyOldPassword(password) {
+				var obj = { password: password, currentUser: _AppStore2.default.getCurrentUser() };
+				$.ajax({
+					type: 'POST',
+					url: '/verifyOldPassword',
+					data: JSON.stringify(obj, null, '\t'),
+					contentType: 'application/json;charset=UTF-8',
+					success: function (res) {
+						if (!res['error']) {
+							this.setState({ valid: "valid" });
+							this.props.handleBlur("old_password", "valid");
+						} else {
+							this.setState({ valid: "invalid" });
+							this.props.handleBlur("old_password", "invalid");
 						}
 					}.bind(this)
 				});
@@ -11767,13 +11800,16 @@
 		}, {
 			key: 'handleBlur',
 			value: function handleBlur(event) {
-				if (this.props.field == "username" || this.props.field == "email_address") {
+				if (this.props.field == "username" || this.props.field == "email_address" || this.props.field == "old_password") {
 					switch (this.props.field) {
 						case "username":
 							this.verifyUsername.bind(this)(event.target.value);
 							break;
 						case "email_address":
 							this.verifyEmail.bind(this)(event.target.value);
+							break;
+						case "old_password":
+							this.verifyOldPassword.bind(this)(event.target.value);
 							break;
 					}
 				} else {
@@ -11787,12 +11823,12 @@
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				$('#password').popover();
-				if (this.props.isUpdate && this.props.field != "password" && this.props.field != "password_confirm") this.setState({ valid: "valid" });
+				if (this.props.isUpdate && this.props.field != "password" && this.props.field != "password_confirm" && this.props.field != "old_password") this.setState({ valid: "valid" });
 			}
 		}, {
 			key: 'render',
 			value: function render() {
-				var type = this.props.field == "password" || this.props.field == "password_confirm" ? "password" : "text";
+				var type = this.props.field == "password" || this.props.field == "password_confirm" || this.props.field == "old_password" ? "password" : "text";
 				return React.createElement(
 					'div',
 					null,
@@ -13501,9 +13537,12 @@
 	function isSameSet(arr1, arr2) {
 		return $(arr1).not(arr2).length === 0 && $(arr2).not(arr1).length === 0;
 	}
-	
-	var text_fields = ["first_name", "last_name", "password", "password_confirm", "phone_number"];
+	function contains(collection, item) {
+		if (collection.indexOf(item) !== -1) return true;else return false;
+	}
+	var text_fields = ["first_name", "last_name", "old_password", "password", "password_confirm", "phone_number"];
 	var select_fields = ["month_of_birth", "day_of_birth", "year_of_birth", "avatar"];
+	var required_text_fields = ["first_name", "last_name", "old_password", "phone_number"];
 	
 	var SettingsApp = function (_React$Component) {
 		_inherits(SettingsApp, _React$Component);
@@ -13517,6 +13556,7 @@
 				currentUser: _AppStore2.default.getCurrentUser(),
 				first_name: '',
 				last_name: '',
+				old_password: '',
 				password: '',
 				password_confirm: '',
 				phone_number: '',
@@ -13564,7 +13604,7 @@
 				var valid_text_fields = this.state.valid_text_fields;
 				var valid_select_fields = this.state.valid_select_fields;
 				if (valid == "valid") this.setState({ valid_text_fields: add(valid_text_fields, field) });else this.setState({ valid_text_fields: remove(valid_text_fields, field) });
-				this.setState({ submittable: isSameSet(text_fields, valid_text_fields) && isSameSet(select_fields, valid_select_fields) });
+				this.setState({ submittable: isSameSet(required_text_fields, valid_text_fields) && isSameSet(select_fields, valid_select_fields) });
 			}
 		}, {
 			key: 'handleSelectBlur',
@@ -13572,40 +13612,54 @@
 				var valid_text_fields = this.state.valid_text_fields;
 				var valid_select_fields = this.state.valid_select_fields;
 				if (valid == "valid") this.setState({ valid_select_fields: add(valid_select_fields, field) });else this.setState({ valid_select_fields: remove(valid_select_fields, field) });
-				this.setState({ submittable: isSameSet(text_fields, valid_text_fields) && isSameSet(select_fields, valid_select_fields) });
+				this.setState({ submittable: isSameSet(required_text_fields, valid_text_fields) && isSameSet(select_fields, valid_select_fields) });
 			}
 		}, {
 			key: 'handleSubmit',
 			value: function handleSubmit() {
-				var obj = {
-					first_name: this.state.first_name,
-					last_name: this.state.last_name,
-					password: this.state.password,
-					phone_number: this.state.phone_number,
-					day_of_birth: this.state.day_of_birth,
-					month_of_birth: this.state.month_of_birth,
-					year_of_birth: this.state.year_of_birth,
-					avatar: this.state.avatar,
-					currentUser: this.state.currentUser
-				};
-				$.ajax({
-					type: 'POST',
-					url: '/updateSettings',
-					data: JSON.stringify(obj, null, '\t'),
-					contentType: 'application/json;charset=UTF-8'
+				if (this.state.submittable) {
+					var password = this.state.old_password;
+					if (contains(this.valid_text_fields, "password") && contains(this.valid_text_fields, "password_confirm")) password = this.state.password;
+					var obj = {
+						first_name: this.state.first_name,
+						last_name: this.state.last_name,
+						password: password,
+						phone_number: this.state.phone_number,
+						day_of_birth: this.state.day_of_birth,
+						month_of_birth: this.state.month_of_birth,
+						year_of_birth: this.state.year_of_birth,
+						avatar: this.state.avatar,
+						currentUser: this.state.currentUser
+					};
+					$.ajax({
+						type: 'POST',
+						url: '/updateSettings',
+						data: JSON.stringify(obj, null, '\t'),
+						contentType: 'application/json;charset=UTF-8'
+					});
+					$('#UpdateSettingsSubmit').blur();
+					$('#UpdateSettingsSuccess').fadeIn(400).delay(5000).fadeOut(400);
+					$("html, body").animate({ scrollTop: $('#SettingsApp').prop('scrollHeight') }, 600);
+				} else {
+					$('#UpdateSettingsFail').fadeIn(400).delay(5000).fadeOut(400);
+					$("html, body").animate({ scrollTop: $('#SettingsApp').prop('scrollHeight') }, 600);
+				}
+			}
+		}, {
+			key: 'enableUpdate',
+			value: function enableUpdate() {
+				$('#UpdateSettingsSubmit').on("click", function (e) {
+					e.preventDefault();
+					$(this).blur();
 				});
-				$('#UpdateSettingsSubmit').blur();
-				$('#UpdateSettingsAlert').fadeIn(400).delay(5000).fadeOut(400);
-				$("html, body").animate({ scrollTop: $('#SettingsApp').prop('scrollHeight') }, 600);
 			}
 		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				this.autopopulateSettings.bind(this)();
-				$('#UpdateSettingsSubmit').click(function (e) {
-					e.preventDefault();
-				});
-				$('#UpdateSettingsAlert').hide();
+				this.enableUpdate.bind(this)();
+				$('#UpdateSettingsSuccess').hide();
+				$('#UpdateSettingsFail').hide();
 			}
 		}, {
 			key: 'render',
@@ -13657,29 +13711,33 @@
 							React.createElement(
 								'div',
 								{ className: 'form-group' },
-								this.state.submittable && React.createElement(
+								React.createElement(
 									'button',
 									{ className: 'btn btn-default', id: 'UpdateSettingsSubmit',
 										onClick: this.handleSubmit.bind(this) },
-									' Update! '
-								),
-								!this.state.submittable && React.createElement(
-									'button',
-									{ className: 'btn btn-default', id: 'UpdateSettingsSubmit',
-										onClick: this.handleSubmit.bind(this), disabled: true },
 									' Update! '
 								)
 							)
 						),
 						React.createElement(
 							'div',
-							{ className: 'alert alert-success', id: 'UpdateSettingsAlert' },
+							{ className: 'alert alert-success', id: 'UpdateSettingsSuccess' },
 							React.createElement(
 								'strong',
 								null,
 								'Success!'
 							),
 							' Your settings have been updated.'
+						),
+						React.createElement(
+							'div',
+							{ className: 'alert alert-danger', id: 'UpdateSettingsFail' },
+							React.createElement(
+								'strong',
+								null,
+								'Bro!'
+							),
+							' You need to fill out more stuff.'
 						)
 					)
 				);
@@ -13726,6 +13784,7 @@
 	}
 	
 	function testValid(field, value) {
+		if (!value) return "invalid";
 		switch (field) {
 			case "month_of_birth":
 				var day = $('#day_of_birth').val();
@@ -13886,7 +13945,7 @@
 								onChange: this.handleSelect.bind(this), onBlur: this.handleBlur.bind(this) },
 							React.createElement(
 								'option',
-								{ disabled: true, selected: true },
+								{ value: '', disabled: true, selected: true },
 								' -- Select -- '
 							),
 							options.map(function (option) {
@@ -13947,6 +14006,12 @@
 	
 	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
 	
+	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 107);
+	
+	var _AppActions2 = _interopRequireDefault(_AppActions);
+	
+	var _reactRouter = __webpack_require__(/*! react-router */ 51);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -13973,7 +14038,7 @@
 		return $(arr1).not(arr2).length === 0 && $(arr2).not(arr1).length === 0;
 	}
 	
-	var text_fields = ["first_name", "last_name", "username", "email_address", "password", "password_confirm", "phone_number"];
+	var text_fields = ["first_name", "last_name", "username", "email_address", "password", "phone_number"];
 	var select_fields = ["month_of_birth", "day_of_birth", "year_of_birth", "avatar"];
 	
 	var RegisterApp = function (_React$Component) {
@@ -14004,14 +14069,6 @@
 		}
 	
 		_createClass(RegisterApp, [{
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				$('#RegisterSubmit').one('click', function (e) {
-					$(this).blur();
-					this.handleSubmit.bind(this)();
-				}.bind(this));
-			}
-		}, {
 			key: 'loginError',
 			value: function loginError(err) {
 				this.setState({ error: err });
@@ -14040,27 +14097,37 @@
 		}, {
 			key: 'handleSubmit',
 			value: function handleSubmit() {
-				var obj = {
-					first_name: this.state.first_name,
-					last_name: this.state.last_name,
-					username: this.state.username,
-					email_address: this.state.email_address,
-					password: this.state.password,
-					phone_number: this.state.phone_number,
-					month_of_birth: this.state.month_of_birth,
-					day_of_birth: this.state.day_of_birth,
-					year_of_birth: this.state.year_of_birth,
-					avatar: this.state.avatar
-				};
-				$.ajax({
-					type: "POST",
-					url: '/createProfile',
-					data: JSON.stringify(obj, null, '\t'),
-					contentType: 'application/json;charset=UTF-8',
-					success: function (data) {
-						this.login.bind(this)();
-					}.bind(this)
-				});
+				if (this.state.submittable) {
+					var obj = {
+						first_name: this.state.first_name,
+						last_name: this.state.last_name,
+						username: this.state.username,
+						email_address: this.state.email_address,
+						password: this.state.password,
+						phone_number: this.state.phone_number,
+						month_of_birth: this.state.month_of_birth,
+						day_of_birth: this.state.day_of_birth,
+						year_of_birth: this.state.year_of_birth,
+						avatar: this.state.avatar
+					};
+					$.ajax({
+						type: "POST",
+						url: '/createProfile',
+						data: JSON.stringify(obj, null, '\t'),
+						contentType: 'application/json;charset=UTF-8',
+						success: function (res) {
+							if (res['result'] == "success") {
+								this.login.bind(this)();
+							}
+						}.bind(this)
+					});
+					$('#CreateProfileSuccess').fadeIn(400).delay(5000).fadeOut(400);
+					$("html, body").animate({ scrollTop: $('#RegisterApp').prop('scrollHeight') }, 600);
+				} else {
+					$('#CreateProfileFail').fadeIn(400).delay(5000).fadeOut(400);
+					$("html, body").animate({ scrollTop: $('#RegisterApp').prop('scrollHeight') }, 600);
+					this.enableRegister.bind(this)();
+				}
 			}
 		}, {
 			key: 'login',
@@ -14074,8 +14141,6 @@
 					success: function (res) {
 						if (!res['error']) {
 							this.getCurrentUserInfo.bind(this)();
-						} else {
-							this.props.loginError(res.error);
 						}
 					}.bind(this)
 				});
@@ -14083,15 +14148,15 @@
 		}, {
 			key: 'getCurrentUserInfo',
 			value: function getCurrentUserInfo() {
-				$.post('/getCurrentUserInfo', { currentUser: this.state.user }, function (data) {
-					AppActions.addCurrentUser(data.thisUser);
+				$.post('/getCurrentUserInfo', { currentUser: this.state.username }, function (data) {
+					_AppActions2.default.addCurrentUser(data.thisUser);
 					this.getNotifications.bind(this)();
 				}.bind(this));
 			}
 		}, {
 			key: 'getNotifications',
 			value: function getNotifications() {
-				$.post('/getNotifications', { currentUser: this.state.user }, function (data) {
+				$.post('/getNotifications', { currentUser: this.state.username }, function (data) {
 					var notifications = [];
 					var count = 0;
 					data.notification_list.map(function (obj) {
@@ -14106,16 +14171,33 @@
 							seen: obj['seen']
 						});
 					});
-					AppActions.addNotifications(notifications);
-					AppActions.addNotificationCount(String(count));
+					_AppActions2.default.addNotifications(notifications);
+					_AppActions2.default.addNotificationCount(String(count));
+					_reactRouter.browserHistory.push('/');
 				}.bind(this));
+			}
+		}, {
+			key: 'enableRegister',
+			value: function enableRegister() {
+				$('#RegisterSubmit').one("click", function (e) {
+					e.preventDefault();
+					$(this).blur();
+					this.handleSubmit.bind(this)();
+				}.bind(this));
+			}
+		}, {
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				this.enableRegister.bind(this)();
+				$('#CreateProfileSuccess').hide();
+				$('#CreateProfileFail').hide();
 			}
 		}, {
 			key: 'render',
 			value: function render() {
 				return React.createElement(
 					'div',
-					null,
+					{ id: 'RegisterApp' },
 					React.createElement(_LoginNavBar2.default, { loginError: this.loginError.bind(this) }),
 					React.createElement(
 						'div',
@@ -14158,22 +14240,32 @@
 							React.createElement(
 								'div',
 								{ className: 'form-group' },
-								this.state.submittable && React.createElement(
-									Link,
-									{ to: '/' },
-									' ',
-									React.createElement(
-										'button',
-										{ className: 'btn btn-default blurButton',
-											id: 'RegisterSubmit' },
-										'Get Started! '
-									)
-								),
-								!this.state.submittable && React.createElement(
+								React.createElement(
 									'button',
-									{ className: 'btn btn-default', id: 'RegisterSubmit', disabled: true },
-									'Get Started!'
+									{ className: 'btn btn-default blurButton',
+										id: 'RegisterSubmit' },
+									'Get Started! '
 								)
+							),
+							React.createElement(
+								'div',
+								{ className: 'alert alert-success', id: 'CreateProfileSuccess' },
+								React.createElement(
+									'strong',
+									null,
+									'Success!'
+								),
+								' Please hold on as we redirect you.'
+							),
+							React.createElement(
+								'div',
+								{ className: 'alert alert-danger', id: 'CreateProfileFail' },
+								React.createElement(
+									'strong',
+									null,
+									'Bro!'
+								),
+								' You need to fill out more stuff.'
 							)
 						)
 					)

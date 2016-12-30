@@ -40,6 +40,18 @@ body {
 .login {
   margin-right : 5px;
 }
+#SignUpButton:focus {
+  background-color: #fff;
+}
+#LoginButton:focus {
+  background-color: #fff;
+}
+#RegisterSubmit:focus {
+  background-color: #fff;
+}
+#UpdateSettingsSubmit:focus {
+  background-color: #fff;
+}
 .valid {
   border-width: 1.5px;
   border-color: var(--success);

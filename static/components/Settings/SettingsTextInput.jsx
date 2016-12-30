@@ -1,4 +1,5 @@
 var React = require('react');
+import AppStore from '../../stores/AppStore.jsx';
 
 function idToName (id) {
 	var arr = id.split('_');
@@ -36,6 +37,8 @@ function testValid (field, value) {
 function warningForField(field, value) {
 	if (!value) return "You can\'t leave this empty.";
 	switch (field) {
+		case "old_password" :
+			return "Your old password is incorrect.";
 		case "password_confirm" :
 			return "Your passwords don\'t match.";
 		default :
@@ -87,19 +90,42 @@ export default class SettingsTextInput extends React.Component {
 		    }.bind(this)
 		});
 	}
+	verifyOldPassword(password) {
+		var obj = { password : password, currentUser : AppStore.getCurrentUser() };
+		$.ajax({
+			type: 'POST',
+			url: '/verifyOldPassword',
+			data : JSON.stringify(obj, null, '\t'),
+		    contentType: 'application/json;charset=UTF-8',
+		    success : function(res) {
+		    	if (!res['error']) {
+		    		this.setState({ valid : "valid" });
+					this.props.handleBlur("old_password", "valid");
+		    	}
+		    	else {
+		    		this.setState({ valid : "invalid" });
+					this.props.handleBlur("old_password", "invalid");
+		    	}
+		    }.bind(this)
+		});
+	}
 	handleTyping(event) {
 		var obj = {};
 		obj[this.props.field] = event.target.value;
 		this.props.handleTyping(obj);
 	}
 	handleBlur(event) {
-		if (this.props.field == "username" || this.props.field == "email_address") {
+		if ((this.props.field == "username" || this.props.field == "email_address") || 
+					this.props.field == "old_password") {
 			switch (this.props.field) {
 				case "username" :
 					this.verifyUsername.bind(this)(event.target.value);
 					break;
 				case "email_address" : 
 					this.verifyEmail.bind(this)(event.target.value);
+					break;
+				case "old_password" :
+					this.verifyOldPassword.bind(this)(event.target.value);
 					break;
 			}
 		}
@@ -112,11 +138,15 @@ export default class SettingsTextInput extends React.Component {
 	}
 	componentDidMount() {
 		$('#password').popover();
-		if (this.props.isUpdate && (this.props.field != "password" && this.props.field != "password_confirm")) 
+		if (this.props.isUpdate && ((this.props.field != "password" 
+								&& this.props.field != "password_confirm") 
+								&& this.props.field != "old_password")) 
 			this.setState({ valid : "valid" });
 	}
 	render() {
-		var type = (this.props.field == "password" || this.props.field == "password_confirm") ? "password" : "text";
+		var type = ((this.props.field == "password" 
+						|| this.props.field == "password_confirm") 
+						|| this.props.field == "old_password") ? "password" : "text";
 		return (
 			<div>
 				<div className="form-group">

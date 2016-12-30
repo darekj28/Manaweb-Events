@@ -12,6 +12,7 @@ function idToName (id) {
 }
 
 function testValid (field, value) {
+	if (!value) return "invalid";
 	switch (field) {
 		case "month_of_birth":
 			var day = $('#day_of_birth').val();
@@ -151,7 +152,7 @@ export default class SettingsSelectInput extends React.Component {
 					<select className={"setting " + this.state.valid} id={this.props.field} name={this.props.field}
 									title={idToName(this.props.field)}
 									onChange={this.handleSelect.bind(this)} onBlur={this.handleBlur.bind(this)}> 
-						<option disabled selected> -- Select -- </option>
+						<option value="" disabled selected> -- Select -- </option>
 						{options.map(function(option) {
 							return <option value={option.value}>{option.label}</option>
 						})}
