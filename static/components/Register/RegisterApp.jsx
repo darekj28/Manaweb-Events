@@ -6,6 +6,7 @@ import SettingsTextInput from '../Settings/SettingsTextInput.jsx';
 import SettingsSelectInput from '../Settings/SettingsSelectInput.jsx';
 import SettingsInputLabel from '../Settings/SettingsInputLabel.jsx';
 import AppActions from '../../actions/AppActions.jsx';
+import AppStore from '../../stores/AppStore.jsx';
 import { browserHistory } from 'react-router';
 
 function remove(array, value) {
@@ -115,13 +116,13 @@ export default class RegisterApp extends React.Component {
 		});
 	}
 	getCurrentUserInfo() {
-		$.post('/getCurrentUserInfo', {currentUser : this.state.username}, function(data) {
+		$.post('/getCurrentUserInfo', {userID : this.state.username}, function(data) {
 			AppActions.addCurrentUser(data.thisUser);
 			this.getNotifications.bind(this)();
 		}.bind(this));
 	}
 	getNotifications() {
-        $.post('/getNotifications', {currentUser : this.state.username},
+        $.post('/getNotifications', {currentUser : AppStore.getCurrentUser()},
             function(data) {
                 var notifications = [];
                 var count = 0;

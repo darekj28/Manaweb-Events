@@ -114,7 +114,7 @@ def getFeedNames():
 
 @browser_api.route('/getNotifications', methods=['POST'])
 def getNotifications():
-	userID = request.form.get("currentUser")
+	userID = request.form.get("currentUser[userID]")
 	post_manager = Posts()
 	notification_list = post_manager.getShortListNotifications(userID)
 	post_manager.sortAscending(notification_list)
@@ -254,7 +254,7 @@ def editPost():
 # get current user info
 @browser_api.route('/getCurrentUserInfo', methods = ['POST'])
 def getCurrentUserInfo():
-	thisUserID = request.form.get("currentUser")
+	thisUserID = request.form.get("userID")
 	# thisUserID = session.get('userID')
 	thisUser = getUserInfo(thisUserID)
 	return jsonify({'thisUser' : thisUser})

@@ -32,13 +32,13 @@ export default class LoginNavBar extends React.Component {
 		});
 	}
 	getCurrentUserInfo() {
-		$.post('/getCurrentUserInfo', {currentUser : this.state.user}, function(data) {
+		$.post('/getCurrentUserInfo', {userID : this.state.user}, function(data) {
 			AppActions.addCurrentUser(data.thisUser);
 			this.getNotifications.bind(this)();
 		}.bind(this));
 	}
 	getNotifications() {
-        $.post('/getNotifications', {currentUser : this.state.user},
+        $.post('/getNotifications', {currentUser : AppStore.getCurrentUser()},
             function(data) {
                 var notifications = [];
                 var count = 0;
