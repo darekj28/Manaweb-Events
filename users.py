@@ -300,6 +300,9 @@ class Users:
 		action = "ACCOUNT " + field_name + " UPDATED"
 		timeStamp = time.time()
 		timeString = self.getTimeString()
+		if field_name == 'password':
+			field_data = argon2.using(rounds=4).hash(field_data)
+
 
 		if field_name.lower() != 'timestring' and field_name.lower() != 'userid' and field_name.lower() != 'timestamp':
 			self.udb.execute(self.udb.mogrify("INSERT INTO " + self.USER_ACTION_TABLE + " (userID, " + field_name + ", timeString, timeStamp, action) VALUES (%s, %s, %s, %s, %s)", (userID.lower(), field_data, timeString, timeStamp, action)))
