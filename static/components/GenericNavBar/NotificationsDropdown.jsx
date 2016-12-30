@@ -12,11 +12,10 @@ export default class NotificationsDropdown extends React.Component {
     }
     seeNotification() {
         this.state.notifications.map(function (obj){
-            $.post('/seeNotification', {notification_id: obj['notification_id']})
+            $.post('/seeNotification', {notification_id: obj['notification_id']});
         });
     }
     componentDidMount() {
-        this.seeNotification.bind(this)();
         AppStore.addChangeListener(this._onChange.bind(this));
     }
     componentWillUnmount() {
@@ -29,7 +28,7 @@ export default class NotificationsDropdown extends React.Component {
 	render() { 
 		return (
 			<li className="dropdown">
-                <a href="#" className="SearchNavBarGlyphicon dropdown-toggle" data-toggle="dropdown">
+                <a href="#" onClick={this.seeNotification.bind(this)} className="SearchNavBarGlyphicon dropdown-toggle" data-toggle="dropdown">
                     <span className="glyphicon glyphicon-envelope"></span>
                 </a>
                 <ul className="dropdown-menu">

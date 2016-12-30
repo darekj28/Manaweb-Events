@@ -42,8 +42,8 @@ export default class App extends React.Component {
 	initializeNumUnseenPosts(){
 		$.post('getNumUnseenPosts', {feed_name: feed_name, currentUser : this.state.currentUser},
 			function(data){
-				this.setState({numUnseenPosts : data['numUnseenPosts']})
-				this.setState({initialUnseenPosts: data['numUnseenPosts']})
+				this.setState({numUnseenPosts : data['numUnseenPosts']});
+				this.setState({initialUnseenPosts: data['numUnseenPosts']});
 				this.markPostFeedAsSeen.bind(this)();
 			}.bind(this));
 	}
@@ -165,9 +165,14 @@ export default class App extends React.Component {
 		this.setState({ feed : feed });
 	}
 	componentDidMount() {
-		// this.setState({ currentUser : AppStore.getCurrentUser() });
 		AppStore.addChangeListener(this._onChange.bind(this));
-		this.refreshFeed.bind(this)();
+		if (this.state.currentUser['userID'] != null) {
+			this.refreshFeed.bind(this)();
+			this.initializeNumUnseenPosts.bind(this)();
+			if (!this.state.timer) {
+				this.setState({ timer : setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
+			}
+		}
 	}
 	componentWillUnmount() {
 		clearInterval(this.state.timer);
@@ -175,20 +180,19 @@ export default class App extends React.Component {
 	}
 	_onChange() {
 		this.setState({ currentUser : AppStore.getCurrentUser() });
+		this.refreshFeed.bind(this)();
 		this.initializeNumUnseenPosts.bind(this)();
-		if (!this.state.timer)
+		if (!this.state.timer) {
 			this.setState({ timer : setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
+		}
 	}
-
 	viewMore() {
-		
 		this.refreshFeed.bind(this)();
 		this.markPostFeedAsSeen.bind(this)();
-		this.setState({numUnseenPosts : 0})
-		this.setState({initialUnseenPosts: 0})
-		this.setState({shouldViewMore : false})
+		this.setState({numUnseenPosts : 0});
+		this.setState({initialUnseenPosts: 0});
+		this.setState({shouldViewMore : false});
 	}
-
 	render() {
 		if (this.state.currentUser['userID'] != null) {
 			var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];

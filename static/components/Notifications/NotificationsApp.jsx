@@ -10,8 +10,14 @@ export default class NotificationsApp extends React.Component {
             notifications : AppStore.getNotifications()
         };
 	}
+	seeNotification() {
+        this.state.notifications.map(function (obj){
+            $.post('/seeNotification', {notification_id: obj['notification_id']});
+        });
+    }
 	componentDidMount() {
         AppStore.addChangeListener(this._onChange.bind(this));
+        this.seeNotification.bind(this)();
     }
     componentWillUnmount() {
         AppStore.removeChangeListener(this._onChange.bind(this));
