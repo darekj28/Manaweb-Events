@@ -211,12 +211,12 @@
 		_createClass(App, [{
 			key: 'markPostFeedAsSeen',
 			value: function markPostFeedAsSeen() {
-				$.post('/markPostFeedAsSeen', { feed_name: feed_name, currentUser: this.state.currentUser.userID });
+				$.post('/markPostFeedAsSeen', { feed_name: feed_name, currentUser: this.state.currentUser });
 			}
 		}, {
 			key: 'initializeNumUnseenPosts',
 			value: function initializeNumUnseenPosts() {
-				$.post('getNumUnseenPosts', { feed_name: feed_name, currentUser: this.state.currentUser.userID }, function (data) {
+				$.post('getNumUnseenPosts', { feed_name: feed_name, currentUser: this.state.currentUser }, function (data) {
 					this.setState({ numUnseenPosts: data['numUnseenPosts'] });
 					this.setState({ initialUnseenPosts: data['numUnseenPosts'] });
 					this.markPostFeedAsSeen.bind(this)();
@@ -248,9 +248,10 @@
 		}, {
 			key: 'refreshNumUnseenPosts',
 			value: function refreshNumUnseenPosts() {
-				$.post('getNumUnseenPosts', { feed_name: feed_name, currentUser: this.state.currentUser.userID }, function (data) {
+				$.post('getNumUnseenPosts', { feed_name: feed_name, currentUser: this.state.currentUser }, function (data) {
 					var newUnseenPosts = data['numUnseenPosts'] + this.state.initialUnseenPosts;
 					this.setState({ numUnseenPosts: newUnseenPosts });
+					console.log(newUnseenPosts);
 				}.bind(this));
 			}
 		}, {
@@ -305,16 +306,20 @@
 						numberOfComments: 0,
 						currentUser: this.state.currentUser
 					};
+					this.setState({ feed: feed, post: '' });
+					$('html, body').animate({ scrollTop: 0 }, 300);
+	
+					var that = this;
 					$.ajax({
 						type: 'POST',
 						url: '/makePost',
 						data: JSON.stringify(obj, null, '\t'),
-						contentType: 'application/json;charset=UTF-8'
+						contentType: 'application/json;charset=UTF-8',
+						success: function success() {
+							that.refreshFeed.bind(that)();
+						}
 					});
-					this.setState({ feed: feed, post: '' });
-					$('html, body').animate({ scrollTop: 0 }, 300);
 				}
-				this.refreshFeed.bind(this)();
 			}
 		}, {
 			key: 'handlePostEdit',
@@ -427,6 +432,8 @@
 	
 		return App;
 	}(React.Component);
+	// 
+	
 	
 	exports.default = App;
 
@@ -11355,7 +11362,7 @@
 							React.createElement('br', null),
 							React.createElement('br', null),
 							React.createElement(_reactFacebookLogin2.default, {
-								appId: appId,
+								appId: testAppId,
 								autoLoad: false,
 								fields: 'first_name,email, last_name, name'
 								// onClick={this.handleFacebookLoginClick}

@@ -192,6 +192,7 @@ class Posts:
 		user_list = user_manager.getUserList()
 		user_manager.closeConnection()
 
+		
 		if userID in user_list:
 			for feed_name in feed_names_list:
 				initialNumUnseenPosts = self.getNumPosts(feed_name)
@@ -212,6 +213,8 @@ class Posts:
 
 		for userID in user_list: 
 			lastPost = self.getLastSeenPost(feed_name, userID)
+			print(userID)
+			print(lastPost['comment_id'])
 			lastPostInfo = self.getPostById(feed_name, lastPost['comment_id'])
 			count = 0
 			
@@ -231,7 +234,6 @@ class Posts:
 		self.db.execute(self.db.mogrify(sql, (userID,)))
 
 		query = self.db.fetchone()
-
 		output = {}
 		output['userID'] = query[0]
 		output['comment_id'] = query[1]
@@ -852,8 +854,9 @@ class Posts:
 		self.db.execute(self.db.mogrify(sql, (unique_id,)))
 		self.post_db.commit()
 
-		
+
 		self.recalculateLastPostTable(feed_name)
+
 		self.recalculateUnseenPosts(feed_name)
 
 	def deleteComment(self, feed_name, unique_id):
@@ -1045,7 +1048,15 @@ class Posts:
 		lower_id = 'darekj'
 		self.db.execute(self.db.mogrify(sql, (lower_id, poster_id)))
 
-	# def deleteUser(self, userID):
+	def deleteUserPosts(self, userID):
+		feed_names = self.getFeedNames()
+		for feed_name in feed_names:
+			allPosts = self.getPosts(feed_name)
+			for post in allPosts:
+				if post['poster_id'] == userID:
+					self.deletePost(feed_name, post['comment_id'])
+
+
 		
 
 
