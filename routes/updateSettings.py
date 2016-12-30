@@ -6,7 +6,8 @@ update_settings = Blueprint('update_settings', __name__)
 @update_settings.route('/getPreviousSettings', methods=['GET'])
 def getPreviousSettings():
 	user_manager = Users()
-	thisUser = user_manager.getInfo(session['userID'])
+	userID = request.json['currentUser']
+	thisUser = user_manager.getInfo(userID)
 	user_manager.closeConnection()
 	return jsonify({
 			'first_name' 		: thisUser['first_name'],
@@ -23,7 +24,8 @@ def getPreviousSettings():
 @update_settings.route('/updateSettings', methods=['POST'])
 def updateSettings():
 	user_manager = Users()
-	thisUser = user_manager.getInfo(session['userID'])
+	userID = request.json['currentUser']
+	thisUser = user_manager.getInfo(userID)
 	user_manager.updateInfo(session['userID'], 'first_name'	, 	request.json['first_name'])
 	user_manager.updateInfo(session['userID'], 'last_name'	, 	request.json['last_name'])
 	user_manager.updateInfo(session['userID'], 'password'	, 	request.json['password'])

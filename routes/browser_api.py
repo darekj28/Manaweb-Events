@@ -104,7 +104,8 @@ def getFeedNames():
 
 @browser_api.route('/getNotifications', methods=['POST'])
 def getNotifications():
-	userID = session.get('userID')
+	userID = request.json['currentUser']
+	# userID = session.get('userID')
 	post_manager = Posts()
 	notification_list = post_manager.getShortListNotifications(userID)
 	post_manager.sortAscending(notification_list)
@@ -115,7 +116,8 @@ def getNotifications():
 @browser_api.route('/getNumUnseenPosts', methods = ['POST'])
 def getNumUnseenPosts():
 	feed_name = request.form['feed_name']
-	userID = session['userID']
+	# userID = session['userID']
+	userID = request.form['feed_name']
 	post_manager = Posts()
 	numUnseenPosts = post_manager.getNumUnseenPosts(feed_name, userID)
 	post_manager.closeConnection()
@@ -134,7 +136,8 @@ def seeNotificaiton():
 @browser_api.route('/markPostFeedAsSeen', methods = ['POST'])
 def markPostFeedAsSeen():
 	feed_name = request.form['feed_name']
-	userID = session['userID']
+	# userID = session['userID']
+	userID = request.form['currentUser']
 	post_manager = Posts()
 	post_manager.markPostFeedAsSeen(feed_name, userID)
 	post_manager.closeConnection()
@@ -143,10 +146,11 @@ def markPostFeedAsSeen():
 
 @browser_api.route('/sendConfirmation', methods = ['POST'])
 def sendConfirmation():
-	if (session.get('userID') == None):
+	userID = reqeust.form.get('currentUser')
+	if (userID == None):
 		return redirect(url_for('login'))
 	else:
-		thisUser = getUserInfo(session['userID'])
+		thisUser = getUserInfo(userID)
 		email_confirm.sendConfirmationEmail(thisUser)
 		return render_template('confirmation.html')
 
@@ -233,14 +237,16 @@ def editPost():
 # get current user info
 @browser_api.route('/getCurrentUserInfo', methods = ['POST'])
 def getCurrentUserInfo():
-	thisUserID = session.get('userID')
+	thisUserID = request.form['currentUser']
+	# thisUserID = session.get('userID')
 	thisUser = getUserInfo(thisUserID)
 	return jsonify({'thisUser' : thisUser})
 
 @browser_api.route("/setFeedFilter", methods = ['POST'])
 def setFeedFilter():
 	if request.method == 'POST':
-		thisUser = getUserInfo(session['userID'])
+		userID = request.form['currentUser']
+		thisUser = getUserInfo(userID)
 		tradeFilter = True
 		playFilter = True
 		chillFilter = True
@@ -253,9 +259,9 @@ def setFeedFilter():
 			chillFilter = False
 
 		user_manager = Users()
-		user_manager.updateInfo(session['userID'], 'tradeFilter', tradeFilter)	
-		user_manager.updateInfo(session['userID'], 'playFilter', playFilter)	
-		user_manager.updateInfo(session['userID'], 'chillFilter', chillFilter)
+		user_manager.updateInfo(userID, 'tradeFilter', tradeFilter)	
+		user_manager.updateInfo(userID, 'playFilter', playFilter)	
+		user_manager.updateInfo(userID, 'chillFilter', chillFilter)
 		user_manager.closeConnnection()	
 		return redirect(url_for("index"))
 
@@ -273,7 +279,8 @@ def makePost():
 		comment_id = None
 		feed_name = DEFAULT_FEED		
 		post_manager = Posts()
-		post_manager.postInThread(feed_name, body = postContent, poster_id = session['userID'], 
+		poster_id = request.json['currentUser']
+		post_manager.postInThread(feed_name, body = postContent, poster_id = poster_id, 
 				isTrade = isTrade, isPlay = isPlay, isChill = isChill, comment_id = comment_id)
 		
 		post_manager.closeConnection()
@@ -302,7 +309,8 @@ def makeComment():
 		unique_id = None
 		
 		post_manager = Posts()
-		post_manager.makeComment(feed_name, comment_id, commentContent, session['userID'], unique_id = unique_id)
+		userID = request.json['currentUser']
+		post_manager.makeComment(feed_name, comment_id, commentContent, userID, unique_id = unique_id)
 		post_manager.closeConnection()	
 
 		return redirect(url_for("index"))
@@ -342,7 +350,8 @@ def reportPost():
 	unique_id = request.json['unique_id']
 	reason = request.json["reason"]
 	description = reason
-	reporting_user = session['userID']
+	reporting_user = request.json['currentUser']
+	# reporting_user = session['userID']
 	reported_user = request.json['reported_user']
 
 	
@@ -361,7 +370,8 @@ def reportComment():
 	unique_id = request.json['unique_id']
 	reason = request.json["reason"]
 	description = reason
-	reporting_user = session['userID']
+	reporting_user = request.json['currentUser']
+	# reporting_user = session['userID']
 	reported_user = request.json['reported_user']
 
 
