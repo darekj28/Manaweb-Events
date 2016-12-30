@@ -203,7 +203,8 @@
 				feed: [],
 				currentUser: _AppStore2.default.getCurrentUser(),
 				initialUnseenPosts: -1,
-				numUnseenPosts: -1
+				numUnseenPosts: -1,
+				shouldViewMore: false
 			};
 			return _this;
 		}
@@ -251,6 +252,11 @@
 				$.post('getNumUnseenPosts', { feed_name: feed_name, currentUser: this.state.currentUser }, function (data) {
 					var newUnseenPosts = data['numUnseenPosts'] + this.state.initialUnseenPosts;
 					this.setState({ numUnseenPosts: newUnseenPosts });
+					if (data['numUnseenPosts'] > 0) {
+						this.setState({ shouldViewMore: true });
+					} else {
+						this.setState({ shouldViewMore: false });
+					}
 				}.bind(this));
 			}
 		}, {
@@ -350,6 +356,7 @@
 		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
+				// this.setState({ currentUser : AppStore.getCurrentUser() });
 				_AppStore2.default.addChangeListener(this._onChange.bind(this));
 				this.refreshFeed.bind(this)();
 			}
@@ -367,9 +374,19 @@
 				if (!this.state.timer) this.setState({ timer: setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
 			}
 		}, {
+			key: 'viewMore',
+			value: function viewMore() {
+	
+				this.refreshFeed.bind(this)();
+				this.markPostFeedAsSeen.bind(this)();
+				this.setState({ numUnseenPosts: 0 });
+				this.setState({ initialUnseenPosts: 0 });
+				this.setState({ shouldViewMore: false });
+			}
+		}, {
 			key: 'render',
 			value: function render() {
-				if (this.state.currentUser['userID']) {
+				if (this.state.currentUser['userID'] != null) {
 					var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
 					return React.createElement(
 						'div',
@@ -389,7 +406,10 @@
 							React.createElement(
 								'div',
 								{ className: 'app row' },
-								React.createElement(_EventName2.default, { name: feed_name, numUnseenPosts: this.state.numUnseenPosts })
+								React.createElement(_EventName2.default, { name: feed_name, numUnseenPosts: this.state.numUnseenPosts,
+									viewMore: this.viewMore.bind(this),
+									shouldViewMore: this.state.shouldViewMore
+								})
 							),
 							React.createElement(
 								'div',
@@ -10178,24 +10198,65 @@
 				return React.createElement(
 					"div",
 					{ id: "EventName", className: "pull-left" },
-					this.props.numUnseenPosts == -1 ? React.createElement(
+					this.props.numUnseenPosts < 0 && React.createElement(
 						"h1",
 						null,
+						" ",
 						this.props.name,
 						"  "
-					) : React.createElement(
+					),
+					this.props.numUnseenPosts == 0 && React.createElement(
+						"h1",
+						null,
+						" ",
+						this.props.name,
+						"  ... youre all caught up! "
+					),
+					this.props.numUnseenPosts == 1 && !this.props.shouldViewMore && React.createElement(
 						"h1",
 						null,
 						this.props.name,
-						" ",
 						React.createElement(
 							"small",
 							null,
-							" ",
 							this.props.numUnseenPosts,
-							" unseen posts "
-						),
-						" "
+							" unseen post"
+						)
+					),
+					this.props.numUnseenPosts == 1 && this.props.shouldViewMore && React.createElement(
+						"h1",
+						null,
+						" ",
+						this.props.name,
+						React.createElement(
+							"small",
+							{ onClick: this.props.viewMore },
+							this.props.numUnseenPosts,
+							" unseen post.. Click to view"
+						)
+					),
+					this.props.numUnseenPosts > 1 && !this.props.shouldViewMore && React.createElement(
+						"h1",
+						null,
+						this.props.name,
+						React.createElement(
+							"small",
+							null,
+							this.props.numUnseenPosts,
+							" unseen posts"
+						)
+					),
+					this.props.numUnseenPosts > 1 && this.props.shouldViewMore && React.createElement(
+						"h1",
+						null,
+						" ",
+						this.props.name,
+						React.createElement(
+							"small",
+							{ onClick: this.props.viewMore },
+							this.props.numUnseenPosts,
+							" unseen posts.. Click to view"
+						)
 					)
 				);
 			}
@@ -11286,6 +11347,39 @@
 				});
 			}
 		}, {
+			key: 'getCurrentUserInfo',
+			value: function getCurrentUserInfo() {
+	
+				$.post('/getCurrentUserInfo', { userID: this.state.username }, function (data) {
+					console.log("current user info got ");
+					_AppActions2.default.addCurrentUser(data.thisUser);
+					this.getNotifications.bind(this)();
+				}.bind(this));
+			}
+		}, {
+			key: 'getNotifications',
+			value: function getNotifications() {
+				$.post('/getNotifications', { currentUser: AppStore.getCurrentUser() }, function (data) {
+					var notifications = [];
+					var count = 0;
+					data.notification_list.map(function (obj) {
+						if (!obj['seen']) count++;
+						notifications.unshift({
+							comment_id: obj['comment_id'],
+							notification_id: obj['notification_id'],
+							timeString: obj['timeString'],
+							sender_id: obj['sender_id'],
+							action: obj['action'],
+							receiver_id: obj['receiver_id'],
+							seen: obj['seen']
+						});
+					});
+					_AppActions2.default.addNotifications(notifications);
+					_AppActions2.default.addNotificationCount(String(count));
+					_reactRouter.browserHistory.push('/');
+				}.bind(this));
+			}
+		}, {
 			key: 'handleSubmit',
 			value: function handleSubmit() {
 	
@@ -11301,9 +11395,9 @@
 					url: '/facebookCreateAccount',
 					data: JSON.stringify(obj, null, '\t'),
 					contentType: 'application/json;charset=UTF-8',
-					success: function success(data) {
-						// console.log('success motha trucka');
-					}
+					success: function (data) {
+						this.getCurrentUserInfo.bind(this)();
+					}.bind(this)
 				});
 			}
 		}, {
@@ -11361,7 +11455,7 @@
 							React.createElement('br', null),
 							React.createElement('br', null),
 							React.createElement(_reactFacebookLogin2.default, {
-								appId: appId,
+								appId: testAppId,
 								autoLoad: false,
 								fields: 'first_name,email, last_name, name'
 								// onClick={this.handleFacebookLoginClick}
@@ -11392,7 +11486,7 @@
 									React.createElement(
 										'button',
 										{ className: 'btn btn-default blurButton',
-											id: 'RegisterSubmit', onClick: this.handleSubmit },
+											id: 'RegisterSubmit', onClick: this.handleSubmit.bind(this) },
 										'Let\'s go! '
 									)
 								) : React.createElement(
@@ -11439,6 +11533,10 @@
 	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 107);
 	
 	var _AppActions2 = _interopRequireDefault(_AppActions);
+	
+	var _AppStore = __webpack_require__(/*! ../../stores/AppStore.jsx */ 4);
+	
+	var _AppStore2 = _interopRequireDefault(_AppStore);
 	
 	var _reactRouter = __webpack_require__(/*! react-router */ 51);
 	
@@ -11494,7 +11592,7 @@
 		}, {
 			key: 'getCurrentUserInfo',
 			value: function getCurrentUserInfo() {
-				$.post('/getCurrentUserInfo', { currentUser: this.state.user }, function (data) {
+				$.post('/getCurrentUserInfo', { userID: this.state.user }, function (data) {
 					_AppActions2.default.addCurrentUser(data.thisUser);
 					this.getNotifications.bind(this)();
 				}.bind(this));
@@ -11502,7 +11600,7 @@
 		}, {
 			key: 'getNotifications',
 			value: function getNotifications() {
-				$.post('/getNotifications', { currentUser: this.state.user }, function (data) {
+				$.post('/getNotifications', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
 					var notifications = [];
 					var count = 0;
 					data.notification_list.map(function (obj) {
@@ -13546,9 +13644,6 @@
 		if (index === -1) array.push(value);
 		return array;
 	}
-	function isSameSet(arr1, arr2) {
-		return $(arr1).not(arr2).length === 0 && $(arr2).not(arr1).length === 0;
-	}
 	function contains(collection, item) {
 		if (collection.indexOf(item) !== -1) return true;else return false;
 	}
@@ -13616,7 +13711,11 @@
 				var valid_text_fields = this.state.valid_text_fields;
 				var valid_select_fields = this.state.valid_select_fields;
 				if (valid == "valid") this.setState({ valid_text_fields: add(valid_text_fields, field) });else this.setState({ valid_text_fields: remove(valid_text_fields, field) });
-				this.setState({ submittable: isSameSet(required_text_fields, valid_text_fields) && isSameSet(select_fields, valid_select_fields) });
+				this.setState({ submittable: required_text_fields.every(function (field) {
+						return contains(valid_text_fields, field);
+					}) && select_fields.every(function (field) {
+						return contains(valid_select_fields, field);
+					}) });
 			}
 		}, {
 			key: 'handleSelectBlur',
@@ -13624,14 +13723,18 @@
 				var valid_text_fields = this.state.valid_text_fields;
 				var valid_select_fields = this.state.valid_select_fields;
 				if (valid == "valid") this.setState({ valid_select_fields: add(valid_select_fields, field) });else this.setState({ valid_select_fields: remove(valid_select_fields, field) });
-				this.setState({ submittable: isSameSet(required_text_fields, valid_text_fields) && isSameSet(select_fields, valid_select_fields) });
+				this.setState({ submittable: required_text_fields.every(function (field) {
+						return contains(valid_text_fields, field);
+					}) && select_fields.every(function (field) {
+						return contains(valid_select_fields, field);
+					}) });
 			}
 		}, {
 			key: 'handleSubmit',
 			value: function handleSubmit() {
 				if (this.state.submittable) {
 					var password = this.state.old_password;
-					if (contains(this.valid_text_fields, "password") && contains(this.valid_text_fields, "password_confirm")) password = this.state.password;
+					if (contains(this.state.valid_text_fields, "password") && contains(this.state.valid_text_fields, "password_confirm")) password = this.state.password;
 					var obj = {
 						first_name: this.state.first_name,
 						last_name: this.state.last_name,
@@ -13650,10 +13753,10 @@
 						contentType: 'application/json;charset=UTF-8'
 					});
 					$('#UpdateSettingsSubmit').blur();
-					$('#UpdateSettingsSuccess').fadeIn(400).delay(5000).fadeOut(400);
+					$('#UpdateSettingsSuccess').fadeIn(400).delay(4000).fadeOut(400);
 					$("html, body").animate({ scrollTop: $('#SettingsApp').prop('scrollHeight') }, 600);
 				} else {
-					$('#UpdateSettingsFail').fadeIn(400).delay(5000).fadeOut(400);
+					$('#UpdateSettingsFail').fadeIn(400).delay(4000).fadeOut(400);
 					$("html, body").animate({ scrollTop: $('#SettingsApp').prop('scrollHeight') }, 600);
 				}
 			}
@@ -13875,7 +13978,7 @@
 	
 	var days = generateDays();
 	var years = generateYears();
-	var avatars = ["Ajani", "Chandra", "Elspeth", "Gideon", "Jace", "Lilianna", "Nahiri", "Nicol", "Nissa", "Ugin"];
+	var avatars = ["Ajani", "Chandra", "Elspeth", "Gideon", "Jace", "Liliana", "Nahiri", "Nicol", "Nissa", "Ugin"];
 	var months = [{ label: "January", value: 1, days: 31 }, { label: "February", value: 2, days: 29 }, { label: "March", value: 3, days: 31 }, { label: "April", value: 4, days: 30 }, { label: "May", value: 5, days: 31 }, { label: "June", value: 6, days: 30 }, { label: "July", value: 7, days: 31 }, { label: "August", value: 8, days: 31 }, { label: "September", value: 9, days: 30 }, { label: "October", value: 10, days: 31 }, { label: "November", value: 11, days: 30 }, { label: "December", value: 12, days: 31 }];
 	var avatar_list = generateAvatars(avatars);
 	
@@ -14022,6 +14125,10 @@
 	
 	var _AppActions2 = _interopRequireDefault(_AppActions);
 	
+	var _AppStore = __webpack_require__(/*! ../../stores/AppStore.jsx */ 4);
+	
+	var _AppStore2 = _interopRequireDefault(_AppStore);
+	
 	var _reactRouter = __webpack_require__(/*! react-router */ 51);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -14046,12 +14153,12 @@
 		if (index === -1) array.push(value);
 		return array;
 	}
-	function isSameSet(arr1, arr2) {
-		return $(arr1).not(arr2).length === 0 && $(arr2).not(arr1).length === 0;
+	function contains(collection, item) {
+		if (collection.indexOf(item) !== -1) return true;else return false;
 	}
-	
-	var text_fields = ["first_name", "last_name", "username", "email_address", "password", "phone_number"];
+	var text_fields = ["first_name", "last_name", "username", "email_address", "password", "password_confirm", "phone_number"];
 	var select_fields = ["month_of_birth", "day_of_birth", "year_of_birth", "avatar"];
+	var required_text_fields = ["first_name", "last_name", "username", "email_address", "password"];
 	
 	var RegisterApp = function (_React$Component) {
 		_inherits(RegisterApp, _React$Component);
@@ -14096,7 +14203,11 @@
 				var valid_text_fields = this.state.valid_text_fields;
 				var valid_select_fields = this.state.valid_select_fields;
 				if (valid == "valid") this.setState({ valid_text_fields: add(valid_text_fields, field) });else this.setState({ valid_text_fields: remove(valid_text_fields, field) });
-				this.setState({ submittable: isSameSet(text_fields, valid_text_fields) && isSameSet(select_fields, valid_select_fields) });
+				this.setState({ submittable: required_text_fields.every(function (field) {
+						return contains(valid_text_fields, field);
+					}) && select_fields.every(function (field) {
+						return contains(valid_select_fields, field);
+					}) });
 			}
 		}, {
 			key: 'handleSelectBlur',
@@ -14104,7 +14215,11 @@
 				var valid_text_fields = this.state.valid_text_fields;
 				var valid_select_fields = this.state.valid_select_fields;
 				if (valid == "valid") this.setState({ valid_select_fields: add(valid_select_fields, field) });else this.setState({ valid_select_fields: remove(valid_select_fields, field) });
-				this.setState({ submittable: isSameSet(text_fields, valid_text_fields) && isSameSet(select_fields, valid_select_fields) });
+				this.setState({ submittable: required_text_fields.every(function (field) {
+						return contains(valid_text_fields, field);
+					}) && select_fields.every(function (field) {
+						return contains(valid_select_fields, field);
+					}) });
 			}
 		}, {
 			key: 'handleSubmit',
@@ -14133,10 +14248,10 @@
 							}
 						}.bind(this)
 					});
-					$('#CreateProfileSuccess').fadeIn(400).delay(5000).fadeOut(400);
+					$('#CreateProfileSuccess').fadeIn(400).delay(4000).fadeOut(400);
 					$("html, body").animate({ scrollTop: $('#RegisterApp').prop('scrollHeight') }, 600);
 				} else {
-					$('#CreateProfileFail').fadeIn(400).delay(5000).fadeOut(400);
+					$('#CreateProfileFail').fadeIn(400).delay(4000).fadeOut(400);
 					$("html, body").animate({ scrollTop: $('#RegisterApp').prop('scrollHeight') }, 600);
 					this.enableRegister.bind(this)();
 				}
@@ -14160,7 +14275,7 @@
 		}, {
 			key: 'getCurrentUserInfo',
 			value: function getCurrentUserInfo() {
-				$.post('/getCurrentUserInfo', { currentUser: this.state.username }, function (data) {
+				$.post('/getCurrentUserInfo', { userID: this.state.username }, function (data) {
 					_AppActions2.default.addCurrentUser(data.thisUser);
 					this.getNotifications.bind(this)();
 				}.bind(this));
@@ -14168,7 +14283,7 @@
 		}, {
 			key: 'getNotifications',
 			value: function getNotifications() {
-				$.post('/getNotifications', { currentUser: this.state.username }, function (data) {
+				$.post('/getNotifications', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
 					var notifications = [];
 					var count = 0;
 					data.notification_list.map(function (obj) {

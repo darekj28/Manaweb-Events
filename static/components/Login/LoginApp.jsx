@@ -97,6 +97,38 @@ export default class LoginApp extends React.Component {
 		});
 	}
 
+	getCurrentUserInfo() {
+
+		$.post('/getCurrentUserInfo', {userID : this.state.username}, function(data) {
+			console.log("current user info got ")
+			AppActions.addCurrentUser(data.thisUser);
+			this.getNotifications.bind(this)();
+		}.bind(this));
+	}
+
+	getNotifications() {
+        $.post('/getNotifications', {currentUser : AppStore.getCurrentUser()},
+            function(data) {
+                var notifications = [];
+                var count = 0;
+                data.notification_list.map(function(obj) {
+                    if (!obj['seen']) count++; 
+                    notifications.unshift({
+                        comment_id : obj['comment_id'],
+                        notification_id : obj['notification_id'],
+                        timeString : obj['timeString'],
+                        sender_id : obj['sender_id'],
+                        action : obj['action'],
+                        receiver_id : obj['receiver_id'],
+                        seen : obj['seen']
+                    });
+                });
+                AppActions.addNotifications(notifications);
+                AppActions.addNotificationCount(String(count));
+                browserHistory.push('/');
+            }.bind(this));
+    }
+
 	handleSubmit() {
 
 		var obj = {
@@ -112,8 +144,8 @@ export default class LoginApp extends React.Component {
 			data : JSON.stringify(obj, null, '\t'),
 			contentType : 'application/json;charset=UTF-8',
 			success: function (data){
-				// console.log('success motha trucka');
-			}
+				this.getCurrentUserInfo.bind(this)();
+			}.bind(this)
 		});
 	}
 
@@ -183,7 +215,7 @@ export default class LoginApp extends React.Component {
 								this.state.submittable 
 								? 
 								<Link to="/"> <button className="btn btn-default blurButton" 
-									id="RegisterSubmit" onClick = {this.handleSubmit}> 
+									id="RegisterSubmit" onClick = {this.handleSubmit.bind(this)}> 
 										Let's go! </button>
 									</Link> 
 								:

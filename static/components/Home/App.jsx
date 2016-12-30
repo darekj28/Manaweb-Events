@@ -31,7 +31,8 @@ export default class App extends React.Component {
 			feed : [],
 			currentUser : AppStore.getCurrentUser(),
 			initialUnseenPosts : -1,
-			numUnseenPosts: -1
+			numUnseenPosts: -1,
+			shouldViewMore: false
 		};
 	}
 	markPostFeedAsSeen() {
@@ -74,6 +75,12 @@ export default class App extends React.Component {
 			function(data){
 				var newUnseenPosts = data['numUnseenPosts'] + this.state.initialUnseenPosts
 				this.setState({numUnseenPosts :  newUnseenPosts})
+				if (data['numUnseenPosts'] > 0){
+					this.setState({shouldViewMore : true})
+				}
+				else {
+					this.setState({shouldViewMore : false})
+				}
 			}.bind(this));
 	}
 
@@ -159,6 +166,7 @@ export default class App extends React.Component {
 		this.setState({ feed : feed });
 	}
 	componentDidMount() {
+		// this.setState({ currentUser : AppStore.getCurrentUser() });
 		AppStore.addChangeListener(this._onChange.bind(this));
 		this.refreshFeed.bind(this)();
 	}
@@ -172,8 +180,18 @@ export default class App extends React.Component {
 		if (!this.state.timer)
 			this.setState({ timer : setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
 	}
+
+	viewMore() {
+		
+		this.refreshFeed.bind(this)();
+		this.markPostFeedAsSeen.bind(this)();
+		this.setState({numUnseenPosts : 0})
+		this.setState({initialUnseenPosts: 0})
+		this.setState({shouldViewMore : false})
+	}
+
 	render() {
-		if (this.state.currentUser['userID']) {
+		if (this.state.currentUser['userID'] != null) {
 			var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
 			return (<div>
 					<SearchNavBar searchText={this.state.search} 
@@ -187,7 +205,10 @@ export default class App extends React.Component {
 									filters={this.state.filters}/>
 					<div className="container app-container">
 						<div className="app row">
-							<EventName name= {feed_name} numUnseenPosts = {this.state.numUnseenPosts} />
+							<EventName name= {feed_name} numUnseenPosts = {this.state.numUnseenPosts}
+							viewMore = {this.viewMore.bind(this)} 
+							shouldViewMore = {this.state.shouldViewMore}
+						 />
 						</div>
 						<div className="app row">
 							<MakePost placeholder="What's happening?" postText={this.state.post} 
