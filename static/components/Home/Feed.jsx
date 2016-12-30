@@ -65,7 +65,7 @@ export default class Feed extends React.Component {
 									handlePostEdit={this.props.handlePostEdit}/>
 					<DeletePostModal post={this.state.postInModal} 
 									handlePostDelete={this.props.handlePostDelete}/>
-					<ReportPostModal post={this.state.postInModal}/>
+					<ReportPostModal post={this.state.postInModal} currentUser={this.props.currentUser}/>
 				</div>
 			);
 	}

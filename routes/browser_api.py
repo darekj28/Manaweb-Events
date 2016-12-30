@@ -104,10 +104,10 @@ def getFeedNames():
 
 @browser_api.route('/getNotifications', methods=['POST'])
 def getNotifications():
-	userID = request.json['currentUser']
+	currentUser = request.form['currentUser']
 	# userID = session.get('userID')
 	post_manager = Posts()
-	notification_list = post_manager.getShortListNotifications(userID)
+	notification_list = post_manager.getShortListNotifications(currentUser)
 	post_manager.sortAscending(notification_list)
 	post_manager.closeConnection()
 	return jsonify({ 'notification_list' : notification_list })	
@@ -137,7 +137,7 @@ def seeNotificaiton():
 def markPostFeedAsSeen():
 	feed_name = request.form['feed_name']
 	# userID = session['userID']
-	userID = request.form['currentUser']
+	userID = request.form['currentUser']["userID"]
 	post_manager = Posts()
 	post_manager.markPostFeedAsSeen(feed_name, userID)
 	post_manager.closeConnection()

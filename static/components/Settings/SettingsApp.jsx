@@ -42,9 +42,12 @@ export default class SettingsApp extends React.Component {
 		};
 	}
 	autopopulateSettings() {
+		var obj = {currentUser : this.state.currentUser};
 		$.ajax({
-			type: 'GET',
+			type: 'POST',
 			url: '/getPreviousSettings',
+			data : JSON.stringify(obj, null, '\t'),
+		    contentType: 'application/json;charset=UTF-8',
 			success: function(user) {
 				this.setState({
 					first_name 			: user.first_name,
@@ -88,7 +91,8 @@ export default class SettingsApp extends React.Component {
 			day_of_birth 	: this.state.day_of_birth,
 			month_of_birth 	: this.state.month_of_birth,
 			year_of_birth 	: this.state.year_of_birth,
-			avatar 			: this.state.avatar
+			avatar 			: this.state.avatar,
+			currentUser 	: this.state.currentUser
 		}
 		$.ajax({
 			type: 'POST',

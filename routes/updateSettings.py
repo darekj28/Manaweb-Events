@@ -3,10 +3,10 @@ from users import Users
 
 update_settings = Blueprint('update_settings', __name__) 
 
-@update_settings.route('/getPreviousSettings', methods=['GET'])
+@update_settings.route('/getPreviousSettings', methods=['POST'])
 def getPreviousSettings():
 	user_manager = Users()
-	userID = request.json['currentUser']
+	userID = request.json['currentUser']['userID']
 	thisUser = user_manager.getInfo(userID)
 	user_manager.closeConnection()
 	return jsonify({
@@ -24,7 +24,7 @@ def getPreviousSettings():
 @update_settings.route('/updateSettings', methods=['POST'])
 def updateSettings():
 	user_manager = Users()
-	userID = request.json['currentUser']
+	userID = request.json['currentUser']['userID']
 	thisUser = user_manager.getInfo(userID)
 	user_manager.updateInfo(session['userID'], 'first_name'	, 	request.json['first_name'])
 	user_manager.updateInfo(session['userID'], 'last_name'	, 	request.json['last_name'])

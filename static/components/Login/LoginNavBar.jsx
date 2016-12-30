@@ -22,7 +22,6 @@ export default class LoginNavBar extends React.Component {
 			success : function(res) {
 				if (!res['error']) {
 					this.getCurrentUserInfo.bind(this)();
-					this.getNotifications.bind(this)();
 				}
 				else {
 					this.props.loginError(res.error);
@@ -31,12 +30,13 @@ export default class LoginNavBar extends React.Component {
 		});
 	}
 	getCurrentUserInfo() {
-		$.post('/getCurrentUserInfo', function(data) {
+		$.post('/getCurrentUserInfo', {currentUser : this.state.user}, function(data) {
 			AppActions.addCurrentUser(data.thisUser);
+			this.getNotifications.bind(this)();
 		}.bind(this));
 	}
 	getNotifications() {
-        $.post('/getNotifications', 
+        $.post('/getNotifications', {currentUser : this.state.user},
             function(data) {
                 var notifications = [];
                 var count = 0;

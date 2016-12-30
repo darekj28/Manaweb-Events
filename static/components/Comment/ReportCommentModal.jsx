@@ -4,7 +4,9 @@ export default class ReportCommentModal extends React.Component {
 	reportForSpam() {
 		var obj = {unique_id : this.props.comment.unique_id,
 					reported_user : this.props.comment.userID,
-					reason : "Spam"};
+					reason : "Spam",
+					currentUser : this.props.currentUser
+				};
 		$.ajax({
 			type : 'POST',
 			url  : '/reportComment',
@@ -15,7 +17,9 @@ export default class ReportCommentModal extends React.Component {
 	reportForInappropriate() {
 		var obj = {unique_id : this.props.comment.unique_id,
 					reported_user : this.props.comment.userID,
-					reason : "Inappropriate"};
+					reason : "Inappropriate",
+					currentUser : this.props.currentUser
+				};
 		$.ajax({
 			type : 'POST',
 			url  : '/reportComment',

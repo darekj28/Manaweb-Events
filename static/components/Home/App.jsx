@@ -35,11 +35,11 @@ export default class App extends React.Component {
 		};
 	}
 	markPostFeedAsSeen() {
-		$.post('/markPostFeedAsSeen', {feed_name: feed_name});
+		$.post('/markPostFeedAsSeen', {feed_name: feed_name, currentUser : this.state.currentUser});
 	}
 
 	initializeNumUnseenPosts(){
-		$.post('getNumUnseenPosts', {feed_name: feed_name},
+		$.post('getNumUnseenPosts', {feed_name: feed_name, currentUser : this.state.currentUser},
 			function(data){
 				this.setState({numUnseenPosts : data['numUnseenPosts']})
 				this.setState({initialUnseenPosts: data['numUnseenPosts']})
@@ -71,7 +71,7 @@ export default class App extends React.Component {
 	}
 
 	refreshNumUnseenPosts() {
-		$.post('getNumUnseenPosts', {feed_name: feed_name},
+		$.post('getNumUnseenPosts', {feed_name: feed_name, currentUser : this.state.currentUser},
 			function(data){
 				var newUnseenPosts = data['numUnseenPosts'] + this.state.initialUnseenPosts
 				this.setState({numUnseenPosts :  newUnseenPosts})
@@ -118,7 +118,8 @@ export default class App extends React.Component {
 						isTrade : contains(this.state.actions, "Trade"),
 						isPlay  : contains(this.state.actions, "Play"), 
 						isChill : contains(this.state.actions, "Chill"),
-						numberOfComments : 0
+						numberOfComments : 0,
+						currentUser : this.state.currentUser
 					};
 			$.ajax({
 				type : 'POST',

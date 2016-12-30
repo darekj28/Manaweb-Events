@@ -79,7 +79,8 @@ export default class CommentApp extends React.Component {
 				});
 
 		var obj = {commentContent : commentText, 
-					comment_id : this.state.comment_id
+					comment_id : this.state.comment_id,
+					currentUser : this.state.currentUser
 				};
 
 		$.ajax({

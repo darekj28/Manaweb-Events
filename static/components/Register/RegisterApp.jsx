@@ -103,7 +103,6 @@ export default class RegisterApp extends React.Component {
 			success : function(res) {
 				if (!res['error']) {
 					this.getCurrentUserInfo.bind(this)();
-					this.getNotifications.bind(this)();
 				}
 				else {
 					this.props.loginError(res.error);
@@ -111,6 +110,33 @@ export default class RegisterApp extends React.Component {
 			}.bind(this)
 		});
 	}
+	getCurrentUserInfo() {
+		$.post('/getCurrentUserInfo', {currentUser : this.state.user}, function(data) {
+			AppActions.addCurrentUser(data.thisUser);
+			this.getNotifications.bind(this)();
+		}.bind(this));
+	}
+	getNotifications() {
+        $.post('/getNotifications', {currentUser : this.state.user},
+            function(data) {
+                var notifications = [];
+                var count = 0;
+                data.notification_list.map(function(obj) {
+                    if (!obj['seen']) count++; 
+                    notifications.unshift({
+                        comment_id : obj['comment_id'],
+                        notification_id : obj['notification_id'],
+                        timeString : obj['timeString'],
+                        sender_id : obj['sender_id'],
+                        action : obj['action'],
+                        receiver_id : obj['receiver_id'],
+                        seen : obj['seen']
+                    });
+                });
+                AppActions.addNotifications(notifications);
+                AppActions.addNotificationCount(String(count));
+            }.bind(this));
+    }
 	render() {
 		return(
 			<div>

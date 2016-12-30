@@ -45,7 +45,7 @@ export default class CommentFeed extends React.Component {
 										handleCommentEdit={this.props.handleCommentEdit} />
 					<DeleteCommentModal comment={this.state.commentInModal} 
 										handleCommentDelete={this.props.handleCommentDelete}/>
-					<ReportCommentModal comment={this.state.commentInModal}/>
+					<ReportCommentModal comment={this.state.commentInModal} currentUser={this.props.currentUser}/>
 			</ul>);
 	}
 }
