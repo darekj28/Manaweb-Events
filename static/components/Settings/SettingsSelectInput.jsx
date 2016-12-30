@@ -148,9 +148,10 @@ export default class SettingsSelectInput extends React.Component {
 		return (
 			<div>
 				<div className="form-group">
-					<select className={"setting " + this.state.valid} data-width="fit" id={this.props.field} name={this.props.field}
-									multiple data-max-options="1" title={idToName(this.props.field)}
+					<select className={"setting " + this.state.valid} id={this.props.field} name={this.props.field}
+									title={idToName(this.props.field)}
 									onChange={this.handleSelect.bind(this)} onBlur={this.handleBlur.bind(this)}> 
+						<option disabled selected> -- Select -- </option>
 						{options.map(function(option) {
 							return <option value={option.value}>{option.label}</option>
 						})}
