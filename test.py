@@ -24,13 +24,8 @@ user_manager = Users()
 post_manager = Posts()
 
 # user_manager.deleteUser('drd')
-
-
-
-
-
-post_manager.recalculateLastPostTable('BALT')
-post_manager.recalculateUnseenPosts("BALT")
+# print(user_manager.getFacebookUsers())
+user_manager.deleteFacebookUsers()
 
 
 

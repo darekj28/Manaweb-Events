@@ -407,6 +407,28 @@ class Users:
 			return None
 
 
+	def getFacebookUsers(self):
+		sql = "SELECT * FROM user_info"
+		self.udb.execute(sql)
+		query = self.udb.fetchall()
+		
+		fb_user_list = list()
+		for item in query:
+			userInfo = self.queryToDict(item)
+			fb_id = userInfo['fb_id']
+			if fb_id != "" and fb_id != None:
+				fb_user_list.append(userInfo['userID'])
+
+		return fb_user_list
+
+	def deleteFacebookUsers(self):
+		fb_users = self.getFacebookUsers()
+		for user in fb_users:
+			self.deleteUser(user)
+
+
+
+
 	# # this is a temporary method just to update the old passwords
 	# def hashUserPasswords(self, userID, password):
 	# 	user_manager = Users()
