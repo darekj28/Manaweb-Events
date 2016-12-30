@@ -24,8 +24,16 @@ user_manager = Users()
 post_manager = Posts()
 
 # user_manager.deleteUser('drd')
-# print(user_manager.getFacebookUsers())
-user_manager.deleteFacebookUsers()
+
+fb_users = user_manager.getFacebookUsers()
+
+
+
+
+post_manager.deleteUserPosts('brovogre')
+for fb_user in fb_users:
+	post_manager.deleteUserPosts(fb_user)
+	user_manager.deleteUser(fb_user)
 
 
 

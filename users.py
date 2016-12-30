@@ -296,9 +296,14 @@ class Users:
 		
 	def updateInfo(self, userID, field_name, field_data):
 		table_name  = self.USER_TABLE
-		
+
 		if field_name == 'password':
+
 			field_data = argon2.using(rounds=4).hash(field_data)
+			print(field_data)
+
+		print(field_data)
+
 		self.udb.execute(self.udb.mogrify("UPDATE " + table_name  + " SET " + field_name + " = %s WHERE userID = '" + userID + "'", (field_data,)))
 		action = "ACCOUNT " + field_name + " UPDATED"
 		timeStamp = time.time()
@@ -349,7 +354,9 @@ class Users:
 		query = self.udb.fetchall()
 		user_list = list()
 		for user in query:
-			user_list.append(user[0])
+			userID = user[0]
+			if userID != "" and userID != None:
+				user_list.append(userID)
 		return user_list
 
 
@@ -428,10 +435,12 @@ class Users:
 		for item in query:
 			userInfo = self.queryToDict(item)
 			fb_id = userInfo['fb_id']
-			if fb_id != "" and fb_id != None:
+			if fb_id != "" and fb_id != None and userInfo['userID'] != "":
 				fb_user_list.append(userInfo['userID'])
 
 		return fb_user_list
+
+
 
 	def deleteFacebookUsers(self):
 		fb_users = self.getFacebookUsers()

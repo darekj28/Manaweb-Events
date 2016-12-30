@@ -35,11 +35,11 @@ export default class App extends React.Component {
 		};
 	}
 	markPostFeedAsSeen() {
-		$.post('/markPostFeedAsSeen', {feed_name: feed_name, currentUser : this.state.currentUser.userID});
+		$.post('/markPostFeedAsSeen', {feed_name: feed_name, currentUser : this.state.currentUser});
 	}
 
 	initializeNumUnseenPosts(){
-		$.post('getNumUnseenPosts', {feed_name: feed_name, currentUser : this.state.currentUser.userID},
+		$.post('getNumUnseenPosts', {feed_name: feed_name, currentUser : this.state.currentUser},
 			function(data){
 				this.setState({numUnseenPosts : data['numUnseenPosts']})
 				this.setState({initialUnseenPosts: data['numUnseenPosts']})
@@ -64,14 +64,13 @@ export default class App extends React.Component {
 					unique_id   : obj['unique_id'],
 					numberOfComments : obj['numComments']
 				});
-				
 			});
 			this.setState({feed : feed});
 		}.bind(this));
 	}
 
 	refreshNumUnseenPosts() {
-		$.post('getNumUnseenPosts', {feed_name: feed_name, currentUser : this.state.currentUser.userID},
+		$.post('getNumUnseenPosts', {feed_name: feed_name, currentUser : this.state.currentUser},
 			function(data){
 				var newUnseenPosts = data['numUnseenPosts'] + this.state.initialUnseenPosts
 				this.setState({numUnseenPosts :  newUnseenPosts})
@@ -121,16 +120,20 @@ export default class App extends React.Component {
 						numberOfComments : 0,
 						currentUser : this.state.currentUser
 					};
+			this.setState({feed : feed, post: ''});
+			$('html, body').animate({scrollTop: 0}, 300);
+
+			var that = this;
 			$.ajax({
 				type : 'POST',
 				url  : '/makePost',
 				data : JSON.stringify(obj, null, '\t'),
-			    contentType: 'application/json;charset=UTF-8'
-			});
-			this.setState({feed : feed, post: ''});
-			$('html, body').animate({scrollTop: 0}, 300);
+			    contentType: 'application/json;charset=UTF-8',
+			    success: function () {
+					that.refreshFeed.bind(that)();	    	
+			    }
+			});	
 		}
-		this.refreshFeed.bind(this)();
 	}
 	handlePostEdit(post, editedContent) {
 		var feed = this.state.feed;
@@ -214,3 +217,4 @@ export default class App extends React.Component {
 		}
 	}
 }
+// 

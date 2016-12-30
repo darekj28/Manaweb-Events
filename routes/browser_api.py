@@ -114,11 +114,9 @@ def getFeedNames():
 
 @browser_api.route('/getNotifications', methods=['POST'])
 def getNotifications():
-	currentUser = request.form['currentUser']
-
-	# userID = session.get('userID')
+	userID = request.form.get("currentUser")
 	post_manager = Posts()
-	notification_list = post_manager.getShortListNotifications(currentUser)
+	notification_list = post_manager.getShortListNotifications(userID)
 	post_manager.sortAscending(notification_list)
 	post_manager.closeConnection()
 	return jsonify({ 'notification_list' : notification_list })	
@@ -127,10 +125,10 @@ def getNotifications():
 @browser_api.route('/getNumUnseenPosts', methods = ['POST'])
 def getNumUnseenPosts():
 
-	if request.form.get('currentUser') != None:
+	userID = request.form.get("currentUser[userID]")
+	if userID != None:
 		feed_name = request.form['feed_name']
 		# userID = session['userID']
-		userID = request.form['currentUser']
 		post_manager = Posts()
 		numUnseenPosts = post_manager.getNumUnseenPosts(feed_name, userID)
 		post_manager.closeConnection()
@@ -150,10 +148,9 @@ def seeNotificaiton():
 
 @browser_api.route('/markPostFeedAsSeen', methods = ['POST'])
 def markPostFeedAsSeen():
-	if request.form.get('currentUser') != None:
+	userID = request.form.get("currentUser[userID]")
+	if userID != None:
 		feed_name = request.form['feed_name']
-		# userID = session['userID']
-		userID = request.form['currentUser']
 		post_manager = Posts()
 		post_manager.markPostFeedAsSeen(feed_name, userID)
 		post_manager.closeConnection()
@@ -165,7 +162,8 @@ def markPostFeedAsSeen():
 
 @browser_api.route('/sendConfirmation', methods = ['POST'])
 def sendConfirmation():
-	userID = reqeust.form.get('currentUser')
+	userID = request.form.get("currentUser[userID]")
+	
 	if (userID == None):
 		return redirect(url_for('login'))
 	else:
@@ -256,7 +254,7 @@ def editPost():
 # get current user info
 @browser_api.route('/getCurrentUserInfo', methods = ['POST'])
 def getCurrentUserInfo():
-	thisUserID = request.form['currentUser']
+	thisUserID = request.form.get("currentUser")
 	# thisUserID = session.get('userID')
 	thisUser = getUserInfo(thisUserID)
 	return jsonify({'thisUser' : thisUser})
@@ -264,7 +262,7 @@ def getCurrentUserInfo():
 @browser_api.route("/setFeedFilter", methods = ['POST'])
 def setFeedFilter():
 	if request.method == 'POST':
-		userID = request.form['currentUser']
+		userID = request.form['currentUser']['userID']
 		thisUser = getUserInfo(userID)
 		tradeFilter = True
 		playFilter = True
@@ -298,7 +296,7 @@ def makePost():
 		comment_id = None
 		feed_name = DEFAULT_FEED		
 		post_manager = Posts()
-		poster_id = request.json['currentUser']
+		poster_id = request.json['currentUser']['userID']
 		post_manager.postInThread(feed_name, body = postContent, poster_id = poster_id, 
 				isTrade = isTrade, isPlay = isPlay, isChill = isChill, comment_id = comment_id)
 		
@@ -328,7 +326,7 @@ def makeComment():
 		unique_id = None
 		
 		post_manager = Posts()
-		userID = request.json['currentUser']
+		userID = request.json['currentUser']['userID']
 		post_manager.makeComment(feed_name, comment_id, commentContent, userID, unique_id = unique_id)
 		post_manager.closeConnection()	
 
@@ -369,7 +367,7 @@ def reportPost():
 	unique_id = request.json['unique_id']
 	reason = request.json["reason"]
 	description = reason
-	reporting_user = request.json['currentUser']
+	reporting_user = request.json['currentUser']['userID']
 	# reporting_user = session['userID']
 	reported_user = request.json['reported_user']
 
@@ -389,7 +387,7 @@ def reportComment():
 	unique_id = request.json['unique_id']
 	reason = request.json["reason"]
 	description = reason
-	reporting_user = request.json['currentUser']
+	reporting_user = request.json['currentUser']['userID']
 	# reporting_user = session['userID']
 	reported_user = request.json['reported_user']
 
