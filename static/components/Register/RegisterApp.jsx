@@ -20,7 +20,7 @@ function isSameSet (arr1, arr2) {
   return $(arr1).not(arr2).length === 0 && $(arr2).not(arr1).length === 0;  
 }
 
-var text_fields = [	"first_name", "last_name", "username", "email_address", "password", "password_confirm", "phone_number" ];
+var text_fields = [	"first_name", "last_name", "username", "email_address", "password", "phone_number" ];
 var select_fields = [ "month_of_birth", "day_of_birth", "year_of_birth", "avatar" ];
 
 export default class RegisterApp extends React.Component {
@@ -44,7 +44,7 @@ export default class RegisterApp extends React.Component {
 			};
 	}
 	componentDidMount() {
-		$('#RegisterSubmit').one('click', function(e) {
+		$('#RegisterSubmit').on('click', function() {
 			$(this).blur();
 			this.handleSubmit.bind(this)();
 		}.bind(this));
@@ -88,8 +88,10 @@ export default class RegisterApp extends React.Component {
 			url : '/createProfile',
 			data : JSON.stringify(obj, null, '\t'),
 			contentType : 'application/json;charset=UTF-8',
-			success : function(data) {
-				this.login.bind(this)();
+			success : function(res) {
+				if(res['result'] == "success") {
+					this.login.bind(this)();
+				}
 			}.bind(this)
 		});
 	}
@@ -104,20 +106,17 @@ export default class RegisterApp extends React.Component {
 				if (!res['error']) {
 					this.getCurrentUserInfo.bind(this)();
 				}
-				else {
-					this.props.loginError(res.error);
-				}
 			}.bind(this)
 		});
 	}
 	getCurrentUserInfo() {
-		$.post('/getCurrentUserInfo', {currentUser : this.state.user}, function(data) {
+		$.post('/getCurrentUserInfo', {currentUser : this.state.username}, function(data) {
 			AppActions.addCurrentUser(data.thisUser);
 			this.getNotifications.bind(this)();
 		}.bind(this));
 	}
 	getNotifications() {
-        $.post('/getNotifications', {currentUser : this.state.user},
+        $.post('/getNotifications', {currentUser : this.state.username},
             function(data) {
                 var notifications = [];
                 var count = 0;
@@ -172,7 +171,7 @@ export default class RegisterApp extends React.Component {
 										Get Started! </button>
 									</Link> }
 							{!this.state.submittable && 
-								<button className="btn btn-default" id="RegisterSubmit" disabled> 
+								<button className="btn btn-default" disabled> 
 									Get Started!
 								</button>}
 						</div>

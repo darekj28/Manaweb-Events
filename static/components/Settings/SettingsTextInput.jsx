@@ -59,9 +59,11 @@ export default class SettingsTextInput extends React.Component {
 		    success : function(res) {
 		    	if (!res['error']) {
 		    		this.setState({ valid : "valid" });
+		    		this.props.handleBlur("username", "valid");
 		    	}
 		    	else {
 		    		this.setState({ valid : "invalid", warning : res['error'] });
+		    		this.props.handleBlur("username", "invalid");
 		    	}
 		    }.bind(this)
 		});
@@ -76,9 +78,11 @@ export default class SettingsTextInput extends React.Component {
 		    success : function(res) {
 		    	if (!res['error']) {
 		    		this.setState({ valid : "valid" });
+		    		this.props.handleBlur("email_address", "valid");
 		    	}
 		    	else {
 		    		this.setState({ valid : "invalid", warning : res['error'] });
+		    		this.props.handleBlur("email_address", "invalid");
 		    	}
 		    }.bind(this)
 		});
