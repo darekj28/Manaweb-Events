@@ -4,25 +4,25 @@ var AppConstants = require('../constants/AppConstants.jsx');
 var assign = require('object-assign');
 var ee = require('event-emitter');
 
-var _currentUser = (sessionStorage.CurrentUser) ? JSON.parse(sessionStorage.CurrentUser) : {};
-var _notifications = (sessionStorage.Notifications) ? JSON.parse(sessionStorage.Notifications) : [];
-var _notification_count = (sessionStorage.NotificationCount) ? JSON.parse(sessionStorage.NotificationCount) : "";
+var _currentUser = (localStorage.CurrentUser) ? JSON.parse(localStorage.CurrentUser) : {};
+var _notifications = (localStorage.Notifications) ? JSON.parse(localStorage.Notifications) : [];
+var _notification_count = (localStorage.NotificationCount) ? JSON.parse(localStorage.NotificationCount) : "";
 
 function _loadCurrentUser(data) {
   	_currentUser = data;
-  	sessionStorage.CurrentUser = JSON.stringify(_currentUser);
+  	localStorage.CurrentUser = JSON.stringify(_currentUser);
 }	
 function _removeCurrentUser(data) {
   	_currentUser = {};
-  	sessionStorage.CurrentUser = JSON.stringify(_currentUser);
+  	localStorage.CurrentUser = JSON.stringify(_currentUser);
 }
 function _addNotifications(data) {
 	_notifications = data;
-	sessionStorage.Notifications = JSON.stringify(_notifications);
+	localStorage.Notifications = JSON.stringify(_notifications);
 }
 function _addNotificationCount(data) {
 	_notification_count = data;
-	sessionStorage.NotificationCount = JSON.stringify(_notification_count);
+	localStorage.NotificationCount = JSON.stringify(_notification_count);
 }
 
 var emitter = ee({}), listener;
