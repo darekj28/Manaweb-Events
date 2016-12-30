@@ -4,6 +4,7 @@ from posts import Posts
 import validation
 import time
 import email_confirm
+from passlib.hash import argon2
 # from py2neo import authenticate, Graph, Node
 # authenticate("localhost:7474", "neo4j", "powerplay")
 # graph = Graph()
@@ -100,7 +101,7 @@ def registerEmail() :
 def verifyOldPassword() :
 	password = request.json['password']
 	user = request.json['currentUser']
-	if password == user['password'] :
+	if argon2.verify(password, user['password']) :
 		return jsonify({ 'error' : False })
 	else : 
 		return jsonify({ 'error' : "Error" })
