@@ -55,15 +55,15 @@
 	
 	var _App2 = _interopRequireDefault(_App);
 	
-	var _CommentApp = __webpack_require__(/*! ./Comment/CommentApp.jsx */ 123);
+	var _CommentApp = __webpack_require__(/*! ./Comment/CommentApp.jsx */ 125);
 	
 	var _CommentApp2 = _interopRequireDefault(_CommentApp);
 	
-	var _NotificationsApp = __webpack_require__(/*! ./Notifications/NotificationsApp.jsx */ 133);
+	var _NotificationsApp = __webpack_require__(/*! ./Notifications/NotificationsApp.jsx */ 135);
 	
 	var _NotificationsApp2 = _interopRequireDefault(_NotificationsApp);
 	
-	var _SettingsApp = __webpack_require__(/*! ./Settings/SettingsApp.jsx */ 137);
+	var _SettingsApp = __webpack_require__(/*! ./Settings/SettingsApp.jsx */ 139);
 	
 	var _SettingsApp2 = _interopRequireDefault(_SettingsApp);
 	
@@ -1457,12 +1457,18 @@
 	 * will remain to ensure logic does not differ in production.
 	 */
 	
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  if (false) {
+	var validateFormat = function validateFormat(format) {};
+	
+	if (false) {
+	  validateFormat = function validateFormat(format) {
 	    if (format === undefined) {
 	      throw new Error('invariant requires an error message argument');
 	    }
-	  }
+	  };
+	}
+	
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  validateFormat(format);
 	
 	  if (!condition) {
 	    var error;
@@ -11151,6 +11157,20 @@
 	
 	var _LoginError2 = _interopRequireDefault(_LoginError);
 	
+	var _SettingsTextInput = __webpack_require__(/*! ../Settings/SettingsTextInput.jsx */ 123);
+	
+	var _SettingsTextInput2 = _interopRequireDefault(_SettingsTextInput);
+	
+	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 124);
+	
+	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
+	
+	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 107);
+	
+	var _AppActions2 = _interopRequireDefault(_AppActions);
+	
+	var _reactRouter = __webpack_require__(/*! react-router */ 51);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -11170,7 +11190,21 @@
 	
 			var _this = _possibleConstructorReturn(this, (LoginApp.__proto__ || Object.getPrototypeOf(LoginApp)).call(this));
 	
-			_this.state = { error: '' };
+			_this.state = {
+				error: '',
+				fb_verified: false,
+				fb_first_name: "",
+				fb_last_name: "",
+				fb_email: "",
+				fb_id: "",
+				username: "",
+				submittable: false
+	
+			};
+			_this.responseFacebook = _this.responseFacebook.bind(_this);
+			_this.handleUsernameChange = _this.handleUsernameChange.bind(_this);
+			_this.handleSubmit = _this.handleSubmit.bind(_this);
+			_this.handleBlur = _this.handleBlur.bind(_this);
 			return _this;
 		}
 	
@@ -11179,14 +11213,122 @@
 			value: function loginError(err) {
 				this.setState({ error: err });
 			}
+		}, {
+			key: 'getCurrentUserInfo',
+			value: function getCurrentUserInfo() {
+				$.post('/getCurrentUserInfo', function (data) {
+					_AppActions2.default.addCurrentUser(data.thisUser);
+				}.bind(this));
+			}
+		}, {
+			key: 'getNotifications',
+			value: function getNotifications() {
+				$.post('/getNotifications', function (data) {
+					var notifications = [];
+					var count = 0;
+					data.notification_list.map(function (obj) {
+						if (!obj['seen']) count++;
+						notifications.unshift({
+							comment_id: obj['comment_id'],
+							notification_id: obj['notification_id'],
+							timeString: obj['timeString'],
+							sender_id: obj['sender_id'],
+							action: obj['action'],
+							receiver_id: obj['receiver_id'],
+							seen: obj['seen']
+						});
+					});
+					_AppActions2.default.addNotifications(notifications);
+					_AppActions2.default.addNotificationCount(String(count));
+				}.bind(this));
+			}
+	
 			// handleFacebookLoginClick() {
 	
-			// }
+			// handle the faceobok login
 	
 		}, {
 			key: 'responseFacebook',
 			value: function responseFacebook(response) {
-				console.log(response);
+	
+				if (response['id'] != null) {
+	
+					var obj = { fb_id: response['id'] };
+	
+					$.ajax({
+						type: "POST",
+						url: '/isFacebookUser',
+						data: JSON.stringify(obj, null, '\t'),
+						contentType: 'application/json;charset=UTF-8',
+						success: function (data) {
+							// if the user does not already have an account with facebook
+							if (data['result'] == 'failure') {
+								this.setState({ fb_verified: true });
+								this.setState({ fb_first_name: response['first_name'] });
+								this.setState({ fb_last_name: response['last_name'] });
+								this.setState({ fb_email: response['email'] });
+								this.setState({ fb_id: response['id'] });
+							} else {
+								// send the user to the home page
+								console.log("take me to the home page");
+								this.getNotifications.bind(this);
+								this.getCurrentUserInfo.bind(this);
+								_reactRouter.browserHistory.push('/');
+							}
+						}.bind(this)
+					});
+				}
+			}
+		}, {
+			key: 'handleUsernameChange',
+			value: function handleUsernameChange(input) {
+				var username = input.username;
+				this.setState({ username: username });
+				var obj = {
+					username: username
+				};
+				var that = this;
+	
+				$.ajax({
+					type: "POST",
+					url: '/registerUsername',
+					data: JSON.stringify(obj, null, '\t'),
+					contentType: 'application/json;charset=UTF-8',
+					success: function success(data) {
+						if (data['result'] == 'success') {
+							that.setState({ submittable: true });
+						} else {
+							that.setState({ submittable: false });
+						}
+					}
+				});
+			}
+		}, {
+			key: 'handleSubmit',
+			value: function handleSubmit() {
+	
+				var obj = {
+					first_name: this.state.fb_first_name,
+					last_name: this.state.fb_last_name,
+					username: this.state.username,
+					email: this.state.fb_email,
+					fb_id: this.state.fb_id
+				};
+				$.ajax({
+					type: "POST",
+					url: '/facebookCreateAccount',
+					data: JSON.stringify(obj, null, '\t'),
+					contentType: 'application/json;charset=UTF-8',
+					success: function success(data) {
+						// console.log('success motha trucka');
+					}
+				});
+			}
+		}, {
+			key: 'handleBlur',
+			value: function handleBlur() {
+				var x = 5;
+				// console.log("bro");
 			}
 		}, {
 			key: 'componentDidMount',
@@ -11194,6 +11336,11 @@
 				$('#SignUpButton').one("click", function () {
 					$(this).blur();
 				});
+	
+				$('#RegisterSubmit').one('click', function (e) {
+					$(this).blur();
+					// this.handleSubmit();
+				}.bind(this));
 			}
 		}, {
 			key: 'render',
@@ -11218,36 +11365,59 @@
 							)
 						),
 						React.createElement(
-							'div',
-							{ className: 'row button-row' },
+							'center',
+							null,
 							React.createElement(
-								'center',
-								null,
+								Link,
+								{ to: '/register' },
 								React.createElement(
+									'button',
+									{ className: 'btn btn-default', id: 'SignUpButton' },
+									'Create A Profile!'
+								)
+							),
+							React.createElement('br', null),
+							React.createElement('br', null),
+							React.createElement(_reactFacebookLogin2.default, {
+								appId: testAppId,
+								autoLoad: false,
+								fields: 'first_name,email, last_name, name'
+								// onClick={this.handleFacebookLoginClick}
+								, callback: this.responseFacebook,
+								icon: 'fa-facebook',
+								size: 'small',
+								textButton: 'Connect with Facebook' }),
+							React.createElement('br', null),
+							React.createElement(
+								'div',
+								null,
+								' Welcome! ',
+								this.state.fb_first_name,
+								' '
+							),
+							this.state.fb_verified && React.createElement(
+								'div',
+								null,
+								React.createElement(_SettingsInputLabel2.default, { field: 'username' }),
+								React.createElement(_SettingsTextInput2.default, { field: 'username',
+									handleTyping: this.handleUsernameChange,
+									handleBlur: this.handleBlur
+								}),
+								this.state.submittable ? React.createElement(
 									Link,
-									{ to: '/register' },
+									{ to: '/' },
+									' ',
 									React.createElement(
 										'button',
-										{ className: 'btn btn-default', id: 'SignUpButton' },
-										'Create A Profile!'
+										{ className: 'btn btn-default blurButton',
+											id: 'RegisterSubmit', onClick: this.handleSubmit },
+										'Let\'s go! '
 									)
+								) : React.createElement(
+									'button',
+									{ className: 'btn btn-default', id: 'RegisterSubmit', disabled: true },
+									'Almost there!'
 								)
-							)
-						),
-						React.createElement(
-							'div',
-							{ className: 'row button-row' },
-							React.createElement(
-								'center',
-								null,
-								React.createElement(_reactFacebookLogin2.default, {
-									appId: appId,
-									autoLoad: true,
-									fields: 'name,email'
-									// onClick={this.handleFacebookLoginClick}
-									, callback: this.responseFacebook,
-									icon: 'fa-facebook',
-									size: 'small' })
 							)
 						)
 					)
@@ -11320,7 +11490,7 @@
 			}
 		}, {
 			key: 'login',
-			value: function login(event) {
+			value: function login() {
 				var obj = { user: this.state.user, password: this.state.password };
 				$.ajax({
 					type: "POST",
@@ -11498,6 +11668,248 @@
 
 /***/ },
 /* 123 */
+/*!**********************************************************!*\
+  !*** ./static/components/Settings/SettingsTextInput.jsx ***!
+  \**********************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var React = __webpack_require__(/*! react */ 5);
+	
+	function idToName(id) {
+		var arr = id.split('_');
+		var str = "";
+		var temp;
+		for (var i = 0; i < arr.length; i++) {
+			temp = arr[i].charAt(0).toLowerCase() + arr[i].substr(1).toLowerCase();
+			str = str.concat(temp + ' ');
+		}
+		return str;
+	}
+	function testValid(field, value) {
+		switch (field) {
+			case "first_name":
+				var condition = /^[a-z ,.'-]+$/i;
+				if (!value.match(condition)) return "invalid";
+				break;
+			case "last_name":
+				var condition = /^[a-z ,.'-]+$/i;
+				if (!value.match(condition)) return "invalid";
+				break;
+			case "password":
+				var condition = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,}$/;
+				if (!value.match(condition)) return "invalid";
+				break;
+			case "password_confirm":
+				var condition = $('#password').val();
+				if (value != condition || !value) return "invalid";
+				break;
+			default:
+				return "valid";
+		}
+		return "valid";
+	}
+	function warningForField(field, value) {
+		if (!value) return "You can\'t leave this empty.";
+		switch (field) {
+			case "password_confirm":
+				return "Your passwords don\'t match.";
+			default:
+				return "Invalid " + idToName(field);
+		}
+		return "Invalid " + idToName(field);
+	}
+	
+	var SettingsTextInput = function (_React$Component) {
+		_inherits(SettingsTextInput, _React$Component);
+	
+		function SettingsTextInput(props) {
+			_classCallCheck(this, SettingsTextInput);
+	
+			var _this = _possibleConstructorReturn(this, (SettingsTextInput.__proto__ || Object.getPrototypeOf(SettingsTextInput)).call(this, props));
+	
+			_this.state = { valid: "", warning: "" };
+			return _this;
+		}
+	
+		_createClass(SettingsTextInput, [{
+			key: 'verifyUsername',
+			value: function verifyUsername(username) {
+				var obj = { username: username };
+				$.ajax({
+					type: 'POST',
+					url: '/registerUsername',
+					data: JSON.stringify(obj, null, '\t'),
+					contentType: 'application/json;charset=UTF-8',
+					success: function (res) {
+						if (!res['error']) {
+							this.setState({ valid: "valid" });
+						} else {
+							this.setState({ valid: "invalid", warning: res['error'] });
+						}
+					}.bind(this)
+				});
+			}
+		}, {
+			key: 'verifyEmail',
+			value: function verifyEmail(email_address) {
+				var obj = { email_address: email_address };
+				$.ajax({
+					type: 'POST',
+					url: '/registerEmail',
+					data: JSON.stringify(obj, null, '\t'),
+					contentType: 'application/json;charset=UTF-8',
+					success: function (res) {
+						if (!res['error']) {
+							this.setState({ valid: "valid" });
+						} else {
+							this.setState({ valid: "invalid", warning: res['error'] });
+						}
+					}.bind(this)
+				});
+			}
+		}, {
+			key: 'handleTyping',
+			value: function handleTyping(event) {
+				var obj = {};
+				obj[this.props.field] = event.target.value;
+				this.props.handleTyping(obj);
+			}
+		}, {
+			key: 'handleBlur',
+			value: function handleBlur(event) {
+				if (this.props.field == "username" || this.props.field == "email_address") {
+					switch (this.props.field) {
+						case "username":
+							this.verifyUsername.bind(this)(event.target.value);
+							break;
+						case "email_address":
+							this.verifyEmail.bind(this)(event.target.value);
+							break;
+					}
+				} else {
+					var isValid = testValid(this.props.field, event.target.value);
+					this.setState({ valid: isValid,
+						warning: warningForField(this.props.field, event.target.value) });
+				};
+				this.props.handleBlur(this.props.field, isValid);
+			}
+		}, {
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				$('#password').popover();
+				if (this.props.isUpdate && this.props.field != "password" && this.props.field != "password_confirm") this.setState({ valid: "valid" });
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				var type = this.props.field == "password" || this.props.field == "password_confirm" ? "password" : "text";
+				return React.createElement(
+					'div',
+					null,
+					React.createElement(
+						'div',
+						{ className: 'form-group' },
+						this.props.field != "password" && React.createElement('input', { className: "setting " + this.state.valid, id: this.props.field, type: type,
+							value: this.props.value,
+							onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),
+						this.props.field == "password" && React.createElement('input', { 'data-toggle': 'popover', 'data-trigger': 'focus',
+							'data-content': 'Your password must contain at least one letter and one number.',
+							className: "setting " + this.state.valid, id: this.props.field, type: type,
+							value: this.props.value, onClick: focus(),
+							onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) })
+					),
+					this.state.valid == "invalid" && React.createElement(
+						'div',
+						{ className: 'form-group warning', id: this.props.field + "_warning" },
+						this.state.warning
+					)
+				);
+			}
+		}]);
+	
+		return SettingsTextInput;
+	}(React.Component);
+	
+	exports.default = SettingsTextInput;
+
+/***/ },
+/* 124 */
+/*!***********************************************************!*\
+  !*** ./static/components/Settings/SettingsInputLabel.jsx ***!
+  \***********************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var React = __webpack_require__(/*! react */ 5);
+	function idToName(id) {
+		var arr = id.split('_');
+		var str = "";
+		var temp;
+		for (var i = 0; i < arr.length; i++) {
+			temp = arr[i].charAt(0).toUpperCase() + arr[i].substr(1).toLowerCase();
+			str = str.concat(temp + ' ');
+		}
+		return str;
+	}
+	
+	var SettingsInputLabel = function (_React$Component) {
+		_inherits(SettingsInputLabel, _React$Component);
+	
+		function SettingsInputLabel() {
+			_classCallCheck(this, SettingsInputLabel);
+	
+			return _possibleConstructorReturn(this, (SettingsInputLabel.__proto__ || Object.getPrototypeOf(SettingsInputLabel)).apply(this, arguments));
+		}
+	
+		_createClass(SettingsInputLabel, [{
+			key: 'render',
+			value: function render() {
+				return React.createElement(
+					'div',
+					{ className: 'form-group' },
+					React.createElement(
+						'label',
+						{ className: 'control-label', 'for': this.props.field },
+						idToName(this.props.field)
+					)
+				);
+			}
+		}]);
+	
+		return SettingsInputLabel;
+	}(React.Component);
+	
+	exports.default = SettingsInputLabel;
+
+/***/ },
+/* 125 */
 /*!**************************************************!*\
   !*** ./static/components/Comment/CommentApp.jsx ***!
   \**************************************************/
@@ -11511,19 +11923,19 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _CommentNavBar = __webpack_require__(/*! ./CommentNavBar.jsx */ 124);
+	var _CommentNavBar = __webpack_require__(/*! ./CommentNavBar.jsx */ 126);
 	
 	var _CommentNavBar2 = _interopRequireDefault(_CommentNavBar);
 	
-	var _CommentFeedPost = __webpack_require__(/*! ./CommentFeedPost.jsx */ 125);
+	var _CommentFeedPost = __webpack_require__(/*! ./CommentFeedPost.jsx */ 127);
 	
 	var _CommentFeedPost2 = _interopRequireDefault(_CommentFeedPost);
 	
-	var _CommentFeed = __webpack_require__(/*! ./CommentFeed.jsx */ 128);
+	var _CommentFeed = __webpack_require__(/*! ./CommentFeed.jsx */ 130);
 	
 	var _CommentFeed2 = _interopRequireDefault(_CommentFeed);
 	
-	var _MakeComment = __webpack_require__(/*! ./MakeComment.jsx */ 132);
+	var _MakeComment = __webpack_require__(/*! ./MakeComment.jsx */ 134);
 	
 	var _MakeComment2 = _interopRequireDefault(_MakeComment);
 	
@@ -11739,7 +12151,7 @@
 	exports.default = CommentApp;
 
 /***/ },
-/* 124 */
+/* 126 */
 /*!*****************************************************!*\
   !*** ./static/components/Comment/CommentNavBar.jsx ***!
   \*****************************************************/
@@ -11890,7 +12302,7 @@
 	exports.default = CommentNavBar;
 
 /***/ },
-/* 125 */
+/* 127 */
 /*!*******************************************************!*\
   !*** ./static/components/Comment/CommentFeedPost.jsx ***!
   \*******************************************************/
@@ -11904,11 +12316,11 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _CommentFeedPostHeader = __webpack_require__(/*! ./CommentFeedPostHeader.jsx */ 126);
+	var _CommentFeedPostHeader = __webpack_require__(/*! ./CommentFeedPostHeader.jsx */ 128);
 	
 	var _CommentFeedPostHeader2 = _interopRequireDefault(_CommentFeedPostHeader);
 	
-	var _CommentFeedPostBody = __webpack_require__(/*! ./CommentFeedPostBody.jsx */ 127);
+	var _CommentFeedPostBody = __webpack_require__(/*! ./CommentFeedPostBody.jsx */ 129);
 	
 	var _CommentFeedPostBody2 = _interopRequireDefault(_CommentFeedPostBody);
 	
@@ -11992,7 +12404,7 @@
 	exports.default = CommentFeedPost;
 
 /***/ },
-/* 126 */
+/* 128 */
 /*!*************************************************************!*\
   !*** ./static/components/Comment/CommentFeedPostHeader.jsx ***!
   \*************************************************************/
@@ -12112,7 +12524,7 @@
 	exports.default = CommentFeedPostHeader;
 
 /***/ },
-/* 127 */
+/* 129 */
 /*!***********************************************************!*\
   !*** ./static/components/Comment/CommentFeedPostBody.jsx ***!
   \***********************************************************/
@@ -12169,7 +12581,7 @@
 	exports.default = CommentFeedPostBody;
 
 /***/ },
-/* 128 */
+/* 130 */
 /*!***************************************************!*\
   !*** ./static/components/Comment/CommentFeed.jsx ***!
   \***************************************************/
@@ -12183,19 +12595,19 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _CommentFeedPost = __webpack_require__(/*! ./CommentFeedPost.jsx */ 125);
+	var _CommentFeedPost = __webpack_require__(/*! ./CommentFeedPost.jsx */ 127);
 	
 	var _CommentFeedPost2 = _interopRequireDefault(_CommentFeedPost);
 	
-	var _EditCommentModal = __webpack_require__(/*! ./EditCommentModal.jsx */ 129);
+	var _EditCommentModal = __webpack_require__(/*! ./EditCommentModal.jsx */ 131);
 	
 	var _EditCommentModal2 = _interopRequireDefault(_EditCommentModal);
 	
-	var _DeleteCommentModal = __webpack_require__(/*! ./DeleteCommentModal.jsx */ 130);
+	var _DeleteCommentModal = __webpack_require__(/*! ./DeleteCommentModal.jsx */ 132);
 	
 	var _DeleteCommentModal2 = _interopRequireDefault(_DeleteCommentModal);
 	
-	var _ReportCommentModal = __webpack_require__(/*! ./ReportCommentModal.jsx */ 131);
+	var _ReportCommentModal = __webpack_require__(/*! ./ReportCommentModal.jsx */ 133);
 	
 	var _ReportCommentModal2 = _interopRequireDefault(_ReportCommentModal);
 	
@@ -12269,7 +12681,7 @@
 	exports.default = CommentFeed;
 
 /***/ },
-/* 129 */
+/* 131 */
 /*!********************************************************!*\
   !*** ./static/components/Comment/EditCommentModal.jsx ***!
   \********************************************************/
@@ -12388,7 +12800,7 @@
 	exports.default = EditCommentModal;
 
 /***/ },
-/* 130 */
+/* 132 */
 /*!**********************************************************!*\
   !*** ./static/components/Comment/DeleteCommentModal.jsx ***!
   \**********************************************************/
@@ -12490,7 +12902,7 @@
 	exports.default = DeleteCommentModal;
 
 /***/ },
-/* 131 */
+/* 133 */
 /*!**********************************************************!*\
   !*** ./static/components/Comment/ReportCommentModal.jsx ***!
   \**********************************************************/
@@ -12606,7 +13018,7 @@
 	exports.default = ReportCommentModal;
 
 /***/ },
-/* 132 */
+/* 134 */
 /*!***************************************************!*\
   !*** ./static/components/Comment/MakeComment.jsx ***!
   \***************************************************/
@@ -12718,7 +13130,7 @@
 	exports.default = MakeComment;
 
 /***/ },
-/* 133 */
+/* 135 */
 /*!**************************************************************!*\
   !*** ./static/components/Notifications/NotificationsApp.jsx ***!
   \**************************************************************/
@@ -12732,11 +13144,11 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _NoSearchNavBar = __webpack_require__(/*! ../GenericNavBar/NoSearchNavBar.jsx */ 134);
+	var _NoSearchNavBar = __webpack_require__(/*! ../GenericNavBar/NoSearchNavBar.jsx */ 136);
 	
 	var _NoSearchNavBar2 = _interopRequireDefault(_NoSearchNavBar);
 	
-	var _NotificationsFeed = __webpack_require__(/*! ./NotificationsFeed.jsx */ 135);
+	var _NotificationsFeed = __webpack_require__(/*! ./NotificationsFeed.jsx */ 137);
 	
 	var _NotificationsFeed2 = _interopRequireDefault(_NotificationsFeed);
 	
@@ -12813,7 +13225,7 @@
 	exports.default = NotificationsApp;
 
 /***/ },
-/* 134 */
+/* 136 */
 /*!************************************************************!*\
   !*** ./static/components/GenericNavBar/NoSearchNavBar.jsx ***!
   \************************************************************/
@@ -12915,7 +13327,7 @@
 	exports.default = NoSearchNavBar;
 
 /***/ },
-/* 135 */
+/* 137 */
 /*!***************************************************************!*\
   !*** ./static/components/Notifications/NotificationsFeed.jsx ***!
   \***************************************************************/
@@ -12929,7 +13341,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _NotificationsFeedPost = __webpack_require__(/*! ./NotificationsFeedPost.jsx */ 136);
+	var _NotificationsFeedPost = __webpack_require__(/*! ./NotificationsFeedPost.jsx */ 138);
 	
 	var _NotificationsFeedPost2 = _interopRequireDefault(_NotificationsFeedPost);
 	
@@ -12983,7 +13395,7 @@
 	exports.default = NotificationsFeed;
 
 /***/ },
-/* 136 */
+/* 138 */
 /*!*******************************************************************!*\
   !*** ./static/components/Notifications/NotificationsFeedPost.jsx ***!
   \*******************************************************************/
@@ -13050,7 +13462,7 @@
 	exports.default = NotificationsFeedPost;
 
 /***/ },
-/* 137 */
+/* 139 */
 /*!****************************************************!*\
   !*** ./static/components/Settings/SettingsApp.jsx ***!
   \****************************************************/
@@ -13064,19 +13476,19 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _SettingsTextInput = __webpack_require__(/*! ./SettingsTextInput.jsx */ 138);
+	var _SettingsTextInput = __webpack_require__(/*! ./SettingsTextInput.jsx */ 123);
 	
 	var _SettingsTextInput2 = _interopRequireDefault(_SettingsTextInput);
 	
-	var _SettingsSelectInput = __webpack_require__(/*! ./SettingsSelectInput.jsx */ 139);
+	var _SettingsSelectInput = __webpack_require__(/*! ./SettingsSelectInput.jsx */ 140);
 	
 	var _SettingsSelectInput2 = _interopRequireDefault(_SettingsSelectInput);
 	
-	var _SettingsInputLabel = __webpack_require__(/*! ./SettingsInputLabel.jsx */ 140);
+	var _SettingsInputLabel = __webpack_require__(/*! ./SettingsInputLabel.jsx */ 124);
 	
 	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
 	
-	var _NoSearchNavBar = __webpack_require__(/*! ../GenericNavBar/NoSearchNavBar.jsx */ 134);
+	var _NoSearchNavBar = __webpack_require__(/*! ../GenericNavBar/NoSearchNavBar.jsx */ 136);
 	
 	var _NoSearchNavBar2 = _interopRequireDefault(_NoSearchNavBar);
 	
@@ -13295,187 +13707,7 @@
 	exports.default = SettingsApp;
 
 /***/ },
-/* 138 */
-/*!**********************************************************!*\
-  !*** ./static/components/Settings/SettingsTextInput.jsx ***!
-  \**********************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var React = __webpack_require__(/*! react */ 5);
-	
-	function idToName(id) {
-		var arr = id.split('_');
-		var str = "";
-		var temp;
-		for (var i = 0; i < arr.length; i++) {
-			temp = arr[i].charAt(0).toLowerCase() + arr[i].substr(1).toLowerCase();
-			str = str.concat(temp + ' ');
-		}
-		return str;
-	}
-	function testValid(field, value) {
-		switch (field) {
-			case "first_name":
-				var condition = /^[a-z ,.'-]+$/i;
-				if (!value.match(condition)) return "invalid";
-				break;
-			case "last_name":
-				var condition = /^[a-z ,.'-]+$/i;
-				if (!value.match(condition)) return "invalid";
-				break;
-			case "password":
-				var condition = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,}$/;
-				if (!value.match(condition)) return "invalid";
-				break;
-			case "password_confirm":
-				var condition = $('#password').val();
-				if (value != condition || !value) return "invalid";
-				break;
-			default:
-				return "valid";
-		}
-		return "valid";
-	}
-	function warningForField(field, value) {
-		if (!value) return "You can\'t leave this empty.";
-		switch (field) {
-			case "password_confirm":
-				return "Your passwords don\'t match.";
-			default:
-				return "Invalid " + idToName(field);
-		}
-		return "Invalid " + idToName(field);
-	}
-	
-	var SettingsTextInput = function (_React$Component) {
-		_inherits(SettingsTextInput, _React$Component);
-	
-		function SettingsTextInput(props) {
-			_classCallCheck(this, SettingsTextInput);
-	
-			var _this = _possibleConstructorReturn(this, (SettingsTextInput.__proto__ || Object.getPrototypeOf(SettingsTextInput)).call(this, props));
-	
-			_this.state = { valid: "", warning: "" };
-			return _this;
-		}
-	
-		_createClass(SettingsTextInput, [{
-			key: 'verifyUsername',
-			value: function verifyUsername(username) {
-				var obj = { username: username };
-				$.ajax({
-					type: 'POST',
-					url: '/registerUsername',
-					data: JSON.stringify(obj, null, '\t'),
-					contentType: 'application/json;charset=UTF-8',
-					success: function (res) {
-						if (!res['error']) {
-							this.setState({ valid: "valid" });
-						} else {
-							this.setState({ valid: "invalid", warning: res['error'] });
-						}
-					}.bind(this)
-				});
-			}
-		}, {
-			key: 'verifyEmail',
-			value: function verifyEmail(email_address) {
-				var obj = { email_address: email_address };
-				$.ajax({
-					type: 'POST',
-					url: '/registerEmail',
-					data: JSON.stringify(obj, null, '\t'),
-					contentType: 'application/json;charset=UTF-8',
-					success: function (res) {
-						if (!res['error']) {
-							this.setState({ valid: "valid" });
-						} else {
-							this.setState({ valid: "invalid", warning: res['error'] });
-						}
-					}.bind(this)
-				});
-			}
-		}, {
-			key: 'handleTyping',
-			value: function handleTyping(event) {
-				var obj = {};
-				obj[this.props.field] = event.target.value;
-				this.props.handleTyping(obj);
-			}
-		}, {
-			key: 'handleBlur',
-			value: function handleBlur(event) {
-				if (this.props.field == "username" || this.props.field == "email_address") {
-					switch (this.props.field) {
-						case "username":
-							this.verifyUsername.bind(this)(event.target.value);
-							break;
-						case "email_address":
-							this.verifyEmail.bind(this)(event.target.value);
-							break;
-					}
-				} else {
-					var isValid = testValid(this.props.field, event.target.value);
-					this.setState({ valid: isValid,
-						warning: warningForField(this.props.field, event.target.value) });
-				};
-				this.props.handleBlur(this.props.field, isValid);
-			}
-		}, {
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				$('#password').popover();
-				if (this.props.isUpdate && this.props.field != "password" && this.props.field != "password_confirm") this.setState({ valid: "valid" });
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				var type = this.props.field == "password" || this.props.field == "password_confirm" ? "password" : "text";
-				return React.createElement(
-					'div',
-					null,
-					React.createElement(
-						'div',
-						{ className: 'form-group' },
-						this.props.field != "password" && React.createElement('input', { className: "setting " + this.state.valid, id: this.props.field, type: type,
-							value: this.props.value,
-							onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),
-						this.props.field == "password" && React.createElement('input', { 'data-toggle': 'popover', 'data-trigger': 'focus',
-							'data-content': 'Your password must contain at least one letter and one number.',
-							className: "setting " + this.state.valid, id: this.props.field, type: type,
-							value: this.props.value, onClick: focus(),
-							onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) })
-					),
-					this.state.valid == "invalid" && React.createElement(
-						'div',
-						{ className: 'form-group warning', id: this.props.field + "_warning" },
-						this.state.warning
-					)
-				);
-			}
-		}]);
-	
-		return SettingsTextInput;
-	}(React.Component);
-	
-	exports.default = SettingsTextInput;
-
-/***/ },
-/* 139 */
+/* 140 */
 /*!************************************************************!*\
   !*** ./static/components/Settings/SettingsSelectInput.jsx ***!
   \************************************************************/
@@ -13691,68 +13923,6 @@
 	exports.default = SettingsSelectInput;
 
 /***/ },
-/* 140 */
-/*!***********************************************************!*\
-  !*** ./static/components/Settings/SettingsInputLabel.jsx ***!
-  \***********************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var React = __webpack_require__(/*! react */ 5);
-	function idToName(id) {
-		var arr = id.split('_');
-		var str = "";
-		var temp;
-		for (var i = 0; i < arr.length; i++) {
-			temp = arr[i].charAt(0).toUpperCase() + arr[i].substr(1).toLowerCase();
-			str = str.concat(temp + ' ');
-		}
-		return str;
-	}
-	
-	var SettingsInputLabel = function (_React$Component) {
-		_inherits(SettingsInputLabel, _React$Component);
-	
-		function SettingsInputLabel() {
-			_classCallCheck(this, SettingsInputLabel);
-	
-			return _possibleConstructorReturn(this, (SettingsInputLabel.__proto__ || Object.getPrototypeOf(SettingsInputLabel)).apply(this, arguments));
-		}
-	
-		_createClass(SettingsInputLabel, [{
-			key: 'render',
-			value: function render() {
-				return React.createElement(
-					'div',
-					{ className: 'form-group' },
-					React.createElement(
-						'label',
-						{ className: 'control-label', 'for': this.props.field },
-						idToName(this.props.field)
-					)
-				);
-			}
-		}]);
-	
-		return SettingsInputLabel;
-	}(React.Component);
-	
-	exports.default = SettingsInputLabel;
-
-/***/ },
 /* 141 */
 /*!****************************************************!*\
   !*** ./static/components/Register/RegisterApp.jsx ***!
@@ -13775,15 +13945,15 @@
 	
 	var _LoginError2 = _interopRequireDefault(_LoginError);
 	
-	var _SettingsTextInput = __webpack_require__(/*! ../Settings/SettingsTextInput.jsx */ 138);
+	var _SettingsTextInput = __webpack_require__(/*! ../Settings/SettingsTextInput.jsx */ 123);
 	
 	var _SettingsTextInput2 = _interopRequireDefault(_SettingsTextInput);
 	
-	var _SettingsSelectInput = __webpack_require__(/*! ../Settings/SettingsSelectInput.jsx */ 139);
+	var _SettingsSelectInput = __webpack_require__(/*! ../Settings/SettingsSelectInput.jsx */ 140);
 	
 	var _SettingsSelectInput2 = _interopRequireDefault(_SettingsSelectInput);
 	
-	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 140);
+	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 124);
 	
 	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
 	
@@ -13896,7 +14066,29 @@
 					type: "POST",
 					url: '/createProfile',
 					data: JSON.stringify(obj, null, '\t'),
-					contentType: 'application/json;charset=UTF-8'
+					contentType: 'application/json;charset=UTF-8',
+					success: function (data) {
+						this.login.bind(this)();
+					}.bind(this)
+				});
+			}
+		}, {
+			key: 'login',
+			value: function login() {
+				var obj = { user: this.state.username, password: this.state.password };
+				$.ajax({
+					type: "POST",
+					url: '/verifyAndLogin',
+					data: JSON.stringify(obj, null, '\t'),
+					contentType: 'application/json;charset=UTF-8',
+					success: function (res) {
+						if (!res['error']) {
+							this.getCurrentUserInfo.bind(this)();
+							this.getNotifications.bind(this)();
+						} else {
+							this.props.loginError(res.error);
+						}
+					}.bind(this)
 				});
 			}
 		}, {

@@ -128,6 +128,9 @@ class Posts:
 		sql = "SELECT numUnseen FROM " + table_name + " WHERE userID = %s"
 		self.db.execute(self.db.mogrify(sql, (userID,)))
 		query = self.db.fetchall()
+		if len(query) == 0:
+			self.addUserToLastSeenTables(userID)
+			return 0
 		return query[0][0]
 
 

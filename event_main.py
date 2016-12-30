@@ -93,7 +93,9 @@ def before_request():
 
 				# first make sure someone is logged in
 				if (session.get('userID') != None):
-					thisUser = getUserInfo(session['userID'])
+					user_manager = Users()
+					thisUser = user_manager.getInfo(session['userID'])
+					user_manager.closeConnection()
 					if (thisUser != None) :
 						# then check if their account was deactivated
 						if (request.endpoint != 'reactivateAccount'):
@@ -124,61 +126,12 @@ def adminLogin():
 @app.route("/", methods = ['GET'])
 def index():
 	if request.method == 'GET':
-		thisUser = getUserInfo(session['userID'])
-		# this is currently hard coded
-		post_manager = Posts()
-
-		# sets the default to BALT if empty
-		feed_name = request.args.get("feed")
-
-		if feed_name == None:
-			feed_name = "BALT"
-		
-		feed_name = feed_name.upper()
-
-		if not post_manager.isFeed(feed_name):
-			return redirect(url_for('index'))
-
-		post_manager.closeConnection()
-		
-	
 		return render_template("index.html")
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
     return render_template("index.html")
-
-@app.route("/comment", methods = ['GET'])
-def comment():
-	if request.method == 'GET':
-		
-		post_manager = Posts()
-		feed_name = request.args.get("feed")
-
-		if feed_name == None:
-			feed_name = "BALT"
-
-		feed_name = feed_name.upper()
-
-		if not post_manager.isFeed(feed_name):
-			return redirect(url_for('index'))
-
-		thisUser = getUserInfo(session['userID'])
-		comment_id = request.args.get('id')
-		if comment_id == None:
-			return redirect(url_for('index'))
-		
-
-		isRealPost = post_manager.getPostById(feed_name, comment_id)
-		if isRealPost == None:
-			return redirect(url_for('index'))
-
-		# comment_list = post_manager.getComments(feed_name, comment_id)
-		post_manager.closeConnection()
-
-		return render_template('index.html', thisUser = thisUser)
-
 
 
 @app.route("/adminTools", methods = ['GET'])
@@ -199,8 +152,6 @@ def getIdUrl(poster_id):
 	return url
 
 
-
-
 @app.route('/logout')
 def logout():
 	session.pop("logged_in", None)
@@ -208,117 +159,7 @@ def logout():
 	session.pop('userID', None)
 	return redirect(url_for('index'))
 
-@app.route('/login', methods = ['GET', 'POST'])
-def login():
-	if request.method == 'GET':
-		return render_template("index.html")
 
-	elif request.method == 'POST':
-		# if the username is not in the database return an error
-
-		userID = request.form['login_id']
-		thisUser = getUserInfo(userID)
-		# checks if the userID exists
-		if thisUser is None:
-			
-			# if not, then check if the user tried to login with email
-			email = request.form['login_id']
-			user_manager = Users()
-			thisUser = user_manager.getInfoFromEmail(email)
-			user_manager.closeConnection()
-
-			if thisUser is None:
-				error = "Login ID does not exist. Please try again."
-				return render_template("index.html", error = error)
-
-			# try logging in with email
-			elif thisUser['password'] != request.form['password']:
-				error = "Invalid password. Please try again."
-				return render_template("index.html", error = error)
-			else:
-				session['logged_in'] = True
-				session['first_name'] = thisUser['first_name']
-				session['userID'] = thisUser['userID']
-				return redirect(url_for("index"))
-
-		# try logging in with userID
-		elif thisUser['password'] != request.form['password']:
-				error = "Invalid password. Please try again."
-				return render_template("index.html", error = error)		
-
-		# otherwise log in the user successfully
-		else:
-			session['logged_in'] = True
-			session['first_name'] = thisUser['first_name']
-			session['userID'] = thisUser['userID']
-			return redirect(url_for("index"))
-
-	else:
-		return "<h2> Invalid request </h2>"
-
-
-
-@app.route('/confirmation', methods = ['GET'])
-@app.route('/confirmation/<pin>', methods = ['GET'])
-def confirmation(pin = None):
-	if (session.get('userID') is None):
-		return redirect(url_for('login'))
-
-	else:
-		thisUser = getUserInfo(session['userID])'])
-		if thisUser is None:
-			return logout()
-		elif thisUser['confirmed'] == True:
-			return redirect(url_for('index'))
-		elif pin is None:
-			return render_template('confirmation.html')
-		else:
-			if (pin == thisUser['confirmationPin']):
-				user_manager = Users()
-				user_manager.updateInfo(session['userID'], 'confirmed', True)
-				user_manager = closeConnection()
-				return redirect(url_for('index'))
-			else:
-				return render_template('confirmation.html')
-
-
-
-
-
-@app.route('/reset', methods = ['GET', 'POST'])
-def reset():
-	if request.method == 'GET':
-		return render_template("reset.html")
-	elif request.method == 'POST':
-		userName = request.form['userName']
-		password = request.form['password']
-		# if the password is correct then clear the graph
-		if password == "resetserver":
-			## clear the database
-
-			## clear all the photos 
-			# fileDir = './static/img'
-			# fileList = os.listdir(fileDir)
-			# for fileName in fileList:
-			# 	if os.path.isdir(fileDir + '/' + fileName):
-			# 		shutil.rmtree(fileDir + '/' + fileName)
-			
-			post_manager = Posts()
-			post_manager.resetDatabase()
-			post_manager.closeConnection()
-			user_manager = Users()
-			user_manager.resetDatabase()
-			user_manager.closeConnection()
-			logout()
-			makeTestAccounts()
-
-
-			return "<h1> Database successfully cleared  </h1> <a href = '/'> Click this to return home </a>"	
-
-		else: 
-			return "<h1> Nice try! </h1>"
-	else:
-		return "<h2> Something's gone wrong! </h2>"	
 		
 
 # validate account returns true if account is confirmed, activated and exists

@@ -137,7 +137,7 @@ class Users:
 		input_properties['userID'] = userID
 		input_properties['first_name'] = first_name
 		input_properties['last_name'] = last_name
-		hash_password = argon2.using(rounds=4).hash(usersPassword)
+		hash_password = argon2.using(rounds=4).hash(password)
 		input_properties['password'] = hash_password
 		input_properties['email'] = email
 		input_properties['isActive'] = isActive
@@ -363,6 +363,7 @@ class Users:
 		user_info['confirmed'] = query[18]
 		user_info['timeString'] = query[19]
 		user_info['timeStamp'] = query[20]
+		user_info['fb_id'] = query[21]
 		return user_info
 
 	def getInfoFromEmail(self, email):
@@ -393,14 +394,16 @@ class Users:
 		self.udb.execute(sql)
 
 
-	def isFacebookUser(self, fb_id):
+	def getUserInfoFromFacebookId(self, fb_id):
 		sql = "SELECT * FROM user_info WHERE fb_id = %s"
-		query = self.udb.execute(self.udb.mogrify(sql, (fb_id,)))
+		self.udb.execute(self.udb.mogrify(sql, (fb_id,)))
+		query = self.udb.fetchall()
+
 		numMatchingUsers = len(query)
 		if numMatchingUsers > 0:
-			return True
+			return self.queryToDict(query[0])
 		else:
-			return False
+			return None
 
 
 	# # this is a temporary method just to update the old passwords
