@@ -439,8 +439,8 @@ class Posts:
 		return notification_list
 
 	def getNotificationCount(self, userID) :
-		sql = "SELECT * FROM " + self.NOTIFICATION_TABLE + " WHERE receiver_id = %s AND seen = 'False'"
-		self.db.execute(self.db.mogrify(sql, (userID,)))
+		sql = "SELECT * FROM " + self.NOTIFICATION_TABLE + " WHERE receiver_id = %s AND seen = %s"
+		self.db.execute(self.db.mogrify(sql, (userID, False,)))
 		query = self.db.fetchall()
 		return len(query)
 
@@ -462,8 +462,8 @@ class Posts:
 
 
 	def markNotificationAsSeen(self, userID):
-		sql = "UPDATE " + self.NOTIFICATION_TABLE + " SET seen = 'True' WHERE receiver_id = %s"
-		self.db.execute(self.db.mogrify(sql, (userID,)))
+		sql = "UPDATE " + self.NOTIFICATION_TABLE + " SET seen = %s WHERE receiver_id = %s"
+		self.db.execute(self.db.mogrify(sql, (True, userID,)))
 		self.post_db.commit()
 
 
