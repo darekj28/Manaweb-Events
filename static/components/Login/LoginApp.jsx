@@ -8,6 +8,7 @@ import SettingsTextInput from '../Settings/SettingsTextInput.jsx';
 import SettingsInputLabel from '../Settings/SettingsInputLabel.jsx';
 import AppActions from '../../actions/AppActions.jsx';
 import { browserHistory } from 'react-router';
+import AppStore from '../../stores/AppStore.jsx';
 
 export default class LoginApp extends React.Component {
 	constructor() {
