@@ -155,7 +155,7 @@ export default class App extends React.Component {
 		this.setState({ feed : feed });
 	}
 	componentDidMount() {
-		AppStore.addChangeListener(this._onChange.bind(this));
+		AppStore.addUserChangeListener(this._onChange.bind(this));
 		if (this.state.currentUser['userID'] != null) {
 			this.refreshFeed.bind(this)();
 			if (!this.state.timer) {
@@ -165,7 +165,7 @@ export default class App extends React.Component {
 	}
 	componentWillUnmount() {
 		clearInterval(this.state.timer);
-		AppStore.removeChangeListener(this._onChange.bind(this));
+		AppStore.removeUserChangeListener(this._onChange.bind(this));
 	}
 	_onChange() {
 		this.setState({ currentUser : AppStore.getCurrentUser() });

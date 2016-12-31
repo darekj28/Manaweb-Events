@@ -24,13 +24,13 @@ export default class NotificationsDropdown extends React.Component {
             }.bind(this));
     }
     componentDidMount() {
-        AppStore.addChangeListener(this._onChange.bind(this));
+        AppStore.addNoteChangeListener(this._onChange.bind(this));
         if (!this.state.timer)
             this.setState({ timer : setInterval(this.getNotificationCount.bind(this), 10000) });
     }
     componentWillUnmount() {
         clearInterval(this.state.timer);
-        AppStore.removeChangeListener(this._onChange.bind(this));
+        AppStore.removeNoteChangeListener(this._onChange.bind(this));
     }
     _onChange() {
         this.setState({ notifications : AppStore.getNotifications(), 

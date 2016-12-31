@@ -45,37 +45,50 @@ class AppStore extends React.Component {
 	getNotificationCount() {
 		return _notification_count;
 	}
-	emitChange() {
-	  	emitter.emit('change');
+	emitUserChange() {
+	  	emitter.emit('userchange');
 	}
-	addChangeListener(callback) {
-	  	emitter.on('change', listener = callback);
+	addUserChangeListener(callback) {
+	  	emitter.on('userchange', listener = callback);
 	}
-	removeChangeListener(callback) {
-	  	emitter.off('change', callback);
+	removeUserChangeListener(callback) {
+	  	emitter.off('userchange', callback);
+	}
+	emitNoteChange() {
+	  	emitter.emit('notechange');
+	}
+	addNoteChangeListener(callback) {
+	  	emitter.on('notechange', listener = callback);
+	}
+	removeNoteChangeListener(callback) {
+	  	emitter.off('notechange', callback);
 	}
 	dispatcherCallback(payload) {
 		var action = payload.action;
 		switch(action.actionType) {
 		    case AppConstants.ADD_CURRENTUSER:
 			    _loadCurrentUser(action.data);
+			    this.emitUserChange.bind(this)();
 			    break;
 		    case AppConstants.REMOVE_CURRENTUSER:
 		    	_removeCurrentUser();
+		    	this.emitUserChange.bind(this)();
 		    	break;
 		    case AppConstants.ADD_NOTIFICATIONS:
 		    	_addNotifications(action.data);
+		    	this.emitNoteChange.bind(this)();
 		    	break;
 		    case AppConstants.ADD_NOTIFICATIONCOUNT:
 		    	_addNotificationCount(action.data);
+		    	this.emitNoteChange.bind(this)();
 		    	break;
 		    case AppConstants.DELETE_NOTIFICATIONCOUNT:
 		    	_deleteNotificationCount();
+		    	this.emitNoteChange.bind(this)();
 		    	break;
 		    default:
 		      	return true;
 		}
-		this.emitChange.bind(this)();
 		return true;
 	}
 }
