@@ -20,8 +20,9 @@ export default class NotificationsDropdown extends React.Component {
     getNotificationCount() {
         $.post('/getNotificationCount', {currentUser : AppStore.getCurrentUser()},
             function(data) {
-                if (data.count > 0) 
+                if (data.count > 0) { 
                     AppActions.addNotificationCount(data.count);
+                }
             }.bind(this));
     }
     componentDidMount() {

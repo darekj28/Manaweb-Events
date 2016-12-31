@@ -11,8 +11,9 @@ export default class NotificationsApp extends React.Component {
         };
 	}
 	seeNotification() {
-        this.state.notifications.map(function (obj){
-            $.post('/seeNotification', {notification_id: obj['notification_id']});
+		AppActions.deleteNotificationCount();
+        this.state.notifications.map(function (note){
+            $.post('/seeNotification', {notification_id: note['notification_id']});
         });
     }
 	componentDidMount() {
