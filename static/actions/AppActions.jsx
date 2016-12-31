@@ -24,6 +24,11 @@ var AppActions = {
           actionType: AppConstants.ADD_NOTIFICATIONCOUNT,
           data: data
         })
+    },
+    deleteNotificationCount: function() {
+        AppDispatcher.handleViewAction({
+          actionType: AppConstants.DELETE_NOTIFICATIONCOUNT
+        })
     }
 };
 

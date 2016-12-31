@@ -12,7 +12,7 @@ function _loadCurrentUser(data) {
   	_currentUser = data;
   	localStorage.CurrentUser = JSON.stringify(_currentUser);
 }	
-function _removeCurrentUser(data) {
+function _removeCurrentUser() {
   	_currentUser = "";
   	localStorage.CurrentUser = JSON.stringify(_currentUser);
 }
@@ -22,6 +22,10 @@ function _addNotifications(data) {
 }
 function _addNotificationCount(data) {
 	_notification_count = data;
+	localStorage.NotificationCount = JSON.stringify(_notification_count);
+}
+function _deleteNotificationCount() {
+	_notification_count = "";
 	localStorage.NotificationCount = JSON.stringify(_notification_count);
 }
 
@@ -64,6 +68,9 @@ class AppStore extends React.Component {
 		    	break;
 		    case AppConstants.ADD_NOTIFICATIONCOUNT:
 		    	_addNotificationCount(action.data);
+		    	break;
+		    case AppConstants.DELETE_NOTIFICATIONCOUNT:
+		    	_deleteNotificationCount();
 		    	break;
 		    default:
 		      	return true;
