@@ -42,9 +42,7 @@ export default class LoginNavBar extends React.Component {
         $.post('/getNotifications', {currentUser : AppStore.getCurrentUser()},
             function(data) {
                 var notifications = [];
-                var count = 0;
                 data.notification_list.map(function(obj) {
-                    if (!obj['seen']) count++; 
                     notifications.unshift({
                         comment_id : obj['comment_id'],
                         notification_id : obj['notification_id'],
