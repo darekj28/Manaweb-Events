@@ -203,11 +203,11 @@ export default class App extends React.Component {
 				  			<strong>Bro!</strong> You must select something to do before you post man!
 						</div>}
 						{this.state.numUnseenPosts > 0 &&
-						<div className="app row">
+						<div className="feed row">
 							<ViewMoreButton numUnseenPosts={this.state.numUnseenPosts} 
 											refreshFeed={this.refreshFeed.bind(this)}/>
 						</div>}
-						<div className="app row">
+						<div className="feed row">
 						<Feed currentUser={this.state.currentUser} searchText={this.state.search} 
 								filters={this.state.filters} posts={this.state.feed} 
 								actions={actions}

@@ -146,13 +146,11 @@ body {
   max-width: 85%;
 }
 .PostBottomIcon {
-  padding-right : 6px;
+  padding-right : 3px;
   top : 8px;
 }
 .CommentBottomIcon {
-  margin-left: 72px;
-  padding-right : 20px;
-  top : -5px;
+  top : -8px;
 }
 .CommentDropdown {
   border-bottom : none;
@@ -167,8 +165,8 @@ body {
   /*max-height: 55vh;*/
   /*overflow-y: auto;*/
   margin-top: 10px;
-  padding-left : 10px;
-  padding-right: 20px;
+  padding-left : 0px;
+  padding-right: 0px;
   background-color : #ffffff;
 /*  border : 1px solid #dfdfdf;
   border-radius : 4px;*/
@@ -184,13 +182,13 @@ body {
   max-width : 120vh;
   word-wrap: break-word;
   position: relative;
-  top : -26px;
+  top : -21px;
   white-space: pre-wrap;
 }
 #Feed {
   margin-top: 10px;
-  padding-left : 10px;
-  padding-right: 20px;
+  padding-left : 0px;
+  padding-right: 0px;
   /*max-height: 60vh;*/
   /*overflow-y: auto;*/
   background-color : #ffffff;
@@ -219,11 +217,14 @@ body {
   width: 60px;
   min-height : 70px;
   float: left;
+  padding-left : 10px;
   margin-top: 10px;
 }
 .PostSpace {
   padding-top: 10px;
   margin-left: 75px;
+  padding-left : 10px;
+  padding-right : 25px;
 }
 .FeedPostHeader {
   white-space : nowrap;
@@ -282,6 +283,10 @@ body {
 .app.row {
   padding-left:10px;
   padding-right:10px;
+}
+.feed.row {
+  padding-left : 0px;
+  padding-right : 0px;
 }
 #EventName {
   display : inline-block;

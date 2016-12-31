@@ -144,7 +144,7 @@ export default class CommentApp extends React.Component {
 							<MakeComment placeholder="What's up bro?" commentText={this.state.comment} 
 								onCommentChange ={this.handleTypingComment.bind(this)} onCommentSubmit={this.handleCommentSubmit.bind(this)}/>
 						</div>
-						<div className="app row">
+						<div className="feed row">
 							<CommentFeed currentUser={this.state.currentUser} searchText={this.state.search} 
 									filters={this.state.filters} 
 									handleCommentEdit={this.handleCommentEdit.bind(this)}
