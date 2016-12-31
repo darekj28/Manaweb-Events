@@ -69,7 +69,7 @@ export default class App extends React.Component {
 				this.setState({numUnseenPosts :  data['numUnseenPosts']});
 			}.bind(this));
 	}
-
+	
 	handleFilterClick(filter, isSearch) {
 		if (isSearch) {
 			var newFilters = toggle(this.state.filters, filter);

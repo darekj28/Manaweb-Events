@@ -122,6 +122,13 @@ def getNotifications():
 	post_manager.closeConnection()
 	return jsonify({ 'notification_list' : notification_list })	
 
+@browser_api.route('/getNotificationCount', methods=['POST'])
+def getNotificationCount():
+	userID = request.form.get("currentUser[userID]")
+	post_manager = Posts()
+	count = post_manager.getNotificationCount(userID)
+	post_manager.closeConnection()
+	return jsonify({ 'count' : count })
 
 @browser_api.route('/getNumUnseenPosts', methods = ['POST'])
 def getNumUnseenPosts():

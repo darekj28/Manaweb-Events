@@ -438,6 +438,12 @@ class Posts:
 		notification_list = self.notificationListToDict(query)
 		return notification_list
 
+	def getNotificationCount(self, userID) :
+		sql = "SELECT * FROM " + self.NOTIFICATION_TABLE + " WHERE receiver_id = %s AND seen = 'false'"
+		self.db.execute(self.db.mogrify(sql, (userID,)))
+		query = self.db.fetchall()
+		return len(query)
+
 	def notificationListToDict(self, query):
 		n_list = list()
 		for note in query:
@@ -456,7 +462,7 @@ class Posts:
 
 
 	def markNotificationAsSeen(self, notification_id):
-		sql = "UPDATE " + self.NOTIFICATION_TABLE + " SET seen = True WHERE notification_id = %s"
+		sql = "UPDATE " + self.NOTIFICATION_TABLE + " SET seen = true WHERE notification_id = %s"
 		self.db.execute(self.db.mogrify(sql, (notification_id,)))
 		self.post_db.commit()
 
