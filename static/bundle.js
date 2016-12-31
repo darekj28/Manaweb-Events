@@ -355,9 +355,14 @@
 		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
-				// this.setState({ currentUser : AppStore.getCurrentUser() });
 				_AppStore2.default.addChangeListener(this._onChange.bind(this));
-				this.refreshFeed.bind(this)();
+				if (this.state.currentUser['userID'] != null) {
+					this.refreshFeed.bind(this)();
+					this.initializeNumUnseenPosts.bind(this)();
+					if (!this.state.timer) {
+						this.setState({ timer: setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
+					}
+				}
 			}
 		}, {
 			key: 'componentWillUnmount',
@@ -369,13 +374,15 @@
 			key: '_onChange',
 			value: function _onChange() {
 				this.setState({ currentUser: _AppStore2.default.getCurrentUser() });
+				this.refreshFeed.bind(this)();
 				this.initializeNumUnseenPosts.bind(this)();
-				if (!this.state.timer) this.setState({ timer: setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
+				if (!this.state.timer) {
+					this.setState({ timer: setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
+				}
 			}
 		}, {
 			key: 'viewMore',
 			value: function viewMore() {
-	
 				this.refreshFeed.bind(this)();
 				this.markPostFeedAsSeen.bind(this)();
 				this.setState({ numUnseenPosts: 0 });
@@ -687,7 +694,6 @@
 	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            this.seeNotification.bind(this)();
 	            _AppStore2.default.addChangeListener(this._onChange.bind(this));
 	        }
 	    }, {
@@ -709,7 +715,7 @@
 	                { className: 'dropdown' },
 	                React.createElement(
 	                    'a',
-	                    { href: '#', className: 'SearchNavBarGlyphicon dropdown-toggle', 'data-toggle': 'dropdown' },
+	                    { href: '#', onClick: this.seeNotification.bind(this), className: 'SearchNavBarGlyphicon dropdown-toggle', 'data-toggle': 'dropdown' },
 	                    React.createElement('span', { className: 'glyphicon glyphicon-envelope' })
 	                ),
 	                React.createElement(
@@ -11454,7 +11460,7 @@
 							React.createElement('br', null),
 							React.createElement('br', null),
 							React.createElement(_reactFacebookLogin2.default, {
-								appId: appId,
+								appId: testAppId,
 								autoLoad: false,
 								fields: 'first_name,email, last_name, name'
 								// onClick={this.handleFacebookLoginClick}
@@ -13308,9 +13314,17 @@
 		}
 	
 		_createClass(NotificationsApp, [{
+			key: 'seeNotification',
+			value: function seeNotification() {
+				this.state.notifications.map(function (obj) {
+					$.post('/seeNotification', { notification_id: obj['notification_id'] });
+				});
+			}
+		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				_AppStore2.default.addChangeListener(this._onChange.bind(this));
+				this.seeNotification.bind(this)();
 			}
 		}, {
 			key: 'componentWillUnmount',

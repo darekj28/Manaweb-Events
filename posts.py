@@ -195,12 +195,17 @@ class Posts:
 		
 		if userID in user_list:
 			for feed_name in feed_names_list:
-				initialNumUnseenPosts = self.getNumPosts(feed_name)
-				sql = "INSERT INTO " + feed_name + self.SEEN_POSTS_SUFFIX + " (userID, numUnseen) VALUES (%s, %s) ON CONFLICT (userID) DO UPDATE SET userID = %s"
-				self.db.execute(self.db.mogrify(sql, (userID, initialNumUnseenPosts , userID)))
+				allPosts = self.getPosts(feed_name)
+				initialNumUnseenPosts = len(allPosts)
+				firstPost = allPosts[0]
+				sql = "INSERT INTO " + feed_name + self.SEEN_POSTS_SUFFIX + " (userID, numUnseen, last_seen_post) VALUES (%s, %s, %s) ON CONFLICT (userID) DO UPDATE SET userID = %s"
+				self.db.execute(self.db.mogrify(sql, (userID, initialNumUnseenPosts, firstPost['comment_id'], userID)))
 				self.post_db.commit()
 
 	
+
+
+
 	# this will manually recalculate the number of unseen posts 
 	# should be performed when there is a deletion of a post 
 	def recalculateUnseenPosts(self, feed_name):
@@ -213,9 +218,14 @@ class Posts:
 
 		for userID in user_list: 
 			lastPost = self.getLastSeenPost(feed_name, userID)
-			print(userID)
-			print(lastPost['comment_id'])
+
 			lastPostInfo = self.getPostById(feed_name, lastPost['comment_id'])
+
+			# gets the previous post if the current one is gone
+			for post in post_list: 
+				if lastPostInfo == None and lastPost['timeStamp'] > post['timeStamp']:
+					lastPostInfo = post
+
 			count = 0
 			
 			for post in post_list:
@@ -234,6 +244,8 @@ class Posts:
 		self.db.execute(self.db.mogrify(sql, (userID,)))
 
 		query = self.db.fetchone()
+		if query == None:
+			return self.getPostById(feed_name, self.getLastPost(feed_name))
 		output = {}
 		output['userID'] = query[0]
 		output['comment_id'] = query[1]

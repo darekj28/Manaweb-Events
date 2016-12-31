@@ -186,7 +186,7 @@ export default class LoginApp extends React.Component {
                     	<br/>
 
                     	<FacebookLogin
-						    appId= {appId}
+						    appId= {testAppId}
 						    autoLoad={false}
 						    fields="first_name,email, last_name, name"
 						    // onClick={this.handleFacebookLoginClick}
