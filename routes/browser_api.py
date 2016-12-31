@@ -45,7 +45,7 @@ def facebookCreateAccount():
 	birthDay = "1"
 	birthMonth = "1"
 	gender = "Other"
-	avatar_name = "Jace"
+	avatar_name = "jace"
 	avatar_url = '/static/avatars/' + avatar_name + '.png'
 	
 	isActive = True

@@ -30,11 +30,14 @@ fb_users = user_manager.getFacebookUsers()
 
 
 
-post_manager.deleteUserPosts('brovogre')
+# post_manager.deleteUserPosts('lily')
+# user_manager.deleteUser('lily')
 for fb_user in fb_users:
 	post_manager.deleteUserPosts(fb_user)
 	user_manager.deleteUser(fb_user)
-
+# feed_name = "BALT"
+# post_manager.recalculateLastPostTable(feed_name)
+# post_manager.recalculateUnseenPosts(feed_name)
 
 
 user_manager.closeConnection()
