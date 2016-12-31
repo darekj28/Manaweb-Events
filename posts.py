@@ -324,7 +324,7 @@ class Posts:
 		self.post_db.commit()
 
 	def createNotificationTable(self):
-		createNotificationTableCode = 'CREATE TABLE IF NOT EXISTS ' + self.NOTIFICATION_TABLE + ' (feed_name TEXT, comment_id TEXT, receiver_id TEXT, sender_id TEXT, action TEXT, seen BOOLEAN, notification_id TEXT, timeStamp FLOAT, timeString TEXT)'
+		createNotificationTableCode = 'CREATE TABLE IF NOT EXISTS ' + self.NOTIFICATION_TABLE + ' (feed_name TEXT, comment_id TEXT, receiver_id TEXT, sender_id TEXT, action TEXT, seen BOOLEAN, notification_id TEXT, timeStamp FLOAT, timeString TEXT, numUnseenActions INTEGER)'
 		self.db.execute(createNotificationTableCode)
 		addIndexCode = 'CREATE INDEX IF NOT EXISTS comment_id ON ' + self.NOTIFICATION_TABLE + ' (comment_id)'
 		self.db.execute(addIndexCode)
@@ -339,50 +339,77 @@ class Posts:
 	# adds a notification
 	# defaults to unseens
 	# stop from doing something if receiver_id = sender_id
-	def createNotification(self, feed_name, comment_id, receiver_id, sender_id, action):
+	def createNotification(self, feed_name, comment_id, receiver_id, sender_id, original_post):
 		if receiver_id != sender_id:	
 			self.createNotificationTable()
 			seen = False
 			timeStamp = time.time()
 			timeString = self.getTimeString()
+			
+			# 10 updates to “darekj (op”) “post body” - “timestamps”
+
+
+
 
 			# if the user already has an unseen notification from this thread, simply update that one
 			# if there is a previous notificaiton from the same thread, but has been seen, then create a new one
 			user_short_list = self.getShortListNotifications(receiver_id)
 			dupNotification = False
+			dupPostInfo = {}
 			for note in user_short_list:
-				if comment_id == note['comment_id'] and seen == False:
-					dupNotification = False 
+				if dupNotification == False and comment_id == note['comment_id'] and seen == False:
+					dupNotification = True
+					dupPostInfo = note
+
+
 
 			# if duped, update the previous copy in notification table and the short list
 			if dupNotification == True:
-				sql = "UPDATE " + self.NOTIFICATION_TABLE + " SET sender_id = %s, action = %s, timeString = %s, timeStamp = %s \
+				print("dup notification")
+				newUnseenActions = dupPostInfo['numUnseenActions'] + 1
+				print(newUnseenActions)
+				if original_post['poster_id'] != receiver_id:
+					action = str(newUnseenActions) + " updates have been made to " + original_post['poster_id'] + "'s \"" + original_post['body'] + "\" - " + timeString
+
+				# if the receiver is the original poster
+				else:
+					action = str(newUnseenActions) + " updates have been made your " + original_post['poster_id'] + "'s \"" + original_post['body'] + "\" - " + timeString
+
+
+				sql = "UPDATE " + self.NOTIFICATION_TABLE + " SET sender_id = %s, action = %s, timeString = %s, timeStamp = %s, numUnseenActions = %s \
 				WHERE comment_id = %s"
-				self.db.execute(self.db.mogrify(sql, (sender_id, action, timeString, timeStamp, comment_id)))
+				self.db.execute(self.db.mogrify(sql, (sender_id, action, timeString, timeStamp, newUnseenActions, comment_id, )))
 				self.post_db.commit()
 
 
 				self.createShortList(receiver_id)
-				sql = "UPDATE " + self.USER_NOTIFICATION_PREFIX + receiver_id + " SET sender_id = %s, action = %s, timeString = %s, timeStamp = %s \
+				sql = "UPDATE " + self.USER_NOTIFICATION_PREFIX + receiver_id + " SET sender_id = %s, action = %s, timeString = %s, timeStamp = %s, numUnseenActions = %s \
 				WHERE comment_id = %s"
-				self.db.execute(self.db.mogrify(sql, (sender_id, action, timeString, timeStamp, comment_id)))
+				self.db.execute(self.db.mogrify(sql, (sender_id, action, timeString, timeStamp, newUnseenActions, comment_id)))
 				self.post_db.commit()
 
 
 
 			# if not duped, add it
 			elif dupNotification == False:
+				newUnseenActions = 1
+				if original_post['poster_id'] != receiver_id:
+					action = str(newUnseenActions) + " update has been made to " + original_post['poster_id'] + "'s \"" + original_post['body'] + "\" - " + timeString
+
+				# if the receiver is the original poster
+				else:
+					action = str(newUnseenActions) + " update has been made your " + original_post['poster_id'] + "'s \"" + original_post['body'] + "\" - " + timeString
 				
 				notification_id = self.hash_notification_id(timeString)
 				self.addNotificationId(notification_id)
-				addNotificationCode = "INSERT INTO " + self.NOTIFICATION_TABLE + " (feed_name, comment_id, receiver_id, sender_id, action, seen, notification_id, timeStamp, timeString) VALUES (%s, %s,%s,%s,%s,%s, %s, %s, %s)"
-				self.db.execute(self.db.mogrify(addNotificationCode, (feed_name, comment_id, receiver_id, sender_id, action, seen, notification_id, timeStamp, timeString)))
+				addNotificationCode = "INSERT INTO " + self.NOTIFICATION_TABLE + " (feed_name, comment_id, receiver_id, sender_id, action, seen, notification_id, timeStamp, timeString, numUnseenActions) VALUES (%s, %s,%s,%s,%s,%s, %s, %s, %s, %s)"
+				self.db.execute(self.db.mogrify(addNotificationCode, (feed_name, comment_id, receiver_id, sender_id, action, seen, notification_id, timeStamp, timeString , newUnseenActions)))
 				self.post_db.commit()
 				self.addToShortList(feed_name, comment_id, receiver_id, sender_id, action, notification_id, timeStamp, timeString)
 
 	def createShortList(self, receiver_id):
 		table_name = self.USER_NOTIFICATION_PREFIX + receiver_id
-		sql = 'CREATE TABLE IF NOT EXISTS ' + table_name + ' (feed_name TEXT, comment_id TEXT, receiver_id TEXT, sender_id TEXT, action TEXT, seen BOOLEAN, notification_id TEXT, timeStamp FLOAT, timeString TEXT)'
+		sql = 'CREATE TABLE IF NOT EXISTS ' + table_name + ' (feed_name TEXT, comment_id TEXT, receiver_id TEXT, sender_id TEXT, action TEXT, seen BOOLEAN, notification_id TEXT, timeStamp FLOAT, timeString TEXT, numUnseenActions INTEGER)'
 		self.db.execute(sql)
 		addIndexCode = 'CREATE INDEX IF NOT EXISTS comment_id ON ' + self.NOTIFICATION_TABLE + ' (comment_id)'
 		self.db.execute(addIndexCode)
@@ -396,11 +423,11 @@ class Posts:
 		self.createShortList(receiver_id)
 
 		threshold = 100
-
+		numUnseenActions = 1
 		seen = False
 		table_name = self.USER_NOTIFICATION_PREFIX + receiver_id
-		sql = "INSERT INTO " + table_name + " (feed_name, comment_id, receiver_id, sender_id, action, seen, notification_id, timeStamp, timeString) VALUES (%s, %s, %s,%s,%s,%s, %s, %s, %s)"
-		self.db.execute(self.db.mogrify(sql, (feed_name, comment_id, receiver_id, sender_id, action, seen, notification_id, timeStamp, timeString)))
+		sql = "INSERT INTO " + table_name + " (feed_name, comment_id, receiver_id, sender_id, action, seen, notification_id, timeStamp, timeString, numUnseenActions) VALUES (%s, %s, %s,%s,%s,%s, %s, %s, %s, %s)"
+		self.db.execute(self.db.mogrify(sql, (feed_name, comment_id, receiver_id, sender_id, action, seen, notification_id, timeStamp, timeString, numUnseenActions)))
 		self.post_db.commit()
 
 		# then if we are at more than the threshold, remove the oldest one
@@ -439,7 +466,10 @@ class Posts:
 		return notification_list
 
 	def getNotificationCount(self, userID) :
-		sql = "SELECT * FROM " + self.NOTIFICATION_TABLE + " WHERE receiver_id = %s AND seen = %s"
+		# we could select from the regular table
+		#sql = "SELECT * FROM " + self.NOTIFICATION_TABLE + " WHERE receiver_id = %s AND seen = %s"
+		# or we could select from the short list
+		sql = "SELECT * FROM " + self.USER_NOTIFICATION_PREFIX + userID + " WHERE receiver_id = %s AND seen = %s"
 		self.db.execute(self.db.mogrify(sql, (userID, False,)))
 		query = self.db.fetchall()
 		return len(query)
@@ -457,13 +487,18 @@ class Posts:
 			this_note['notification_id'] = note[6]
 			this_note['timeStamp'] = note[7]
 			this_note['timeString'] = note[8]
+			if len(note) > 9:
+				this_note['numUnseenActions'] = note[9]
 			n_list.append(this_note)
 		return n_list
 
 
 	def markNotificationAsSeen(self, userID):
 		sql = "UPDATE " + self.NOTIFICATION_TABLE + " SET seen = %s WHERE receiver_id = %s"
-		self.db.execute(self.db.mogrify(sql, (True, userID,)))
+		#update the short list too
+		self.db.execute(self.db.mogrify(sql, (True, userID)))
+		sql = "UPDATE " + self.USER_NOTIFICATION_PREFIX + userID + " SET seen = %s WHERE receiver_id = %s"
+		self.db.execute(self.db.mogrify(sql, (True, userID)))
 		self.post_db.commit()
 
 
@@ -730,15 +765,20 @@ class Posts:
 		# add notificaiton
 		# adjust this later
 		participating_users = self.getParticipatingUsers(feed_name, comment_id)
-		user_manager = Users()
+		# user_manager = Users()
 		for userID in participating_users:
-			if userID != poster_id and userID != this_post['poster_id']:
-				action = user_manager.getInfo(poster_id)['first_name'] + " also commented on " + user_manager.getInfo(this_post['poster_id'])['first_name'] + "'s post."
-				self.createNotification(feed_name, comment_id, userID, poster_id, action)
-			elif userID != poster_id and userID == this_post['poster_id'] :
-				action = user_manager.getInfo(poster_id)['first_name'] + " commented on your post."
-				self.createNotification(feed_name, comment_id, userID, poster_id, action)
-		user_manager.closeConnection()
+			
+			# if userID != poster_id and userID != this_post['poster_id']:
+			if userID != poster_id:
+				# action = user_manager.getInfo(poster_id)['first_name'] + " also commented on " + user_manager.getInfo(this_post['poster_id'])['first_name'] + "'s post."
+				original_post = this_post
+				self.createNotification(feed_name, comment_id, userID, poster_id, original_post)
+
+			# # if you are the original poster
+			# elif userID != poster_id and userID == this_post['poster_id'] :
+			# 	# action = user_manager.getInfo(poster_id)['first_name'] + " commented on your post."
+			# 	self.createNotification(feed_name, comment_id, userID, poster_id, action)
+		# user_manager.closeConnection()
 
 
 
@@ -1078,8 +1118,9 @@ class Posts:
 					self.deletePost(feed_name, post['comment_id'])
 
 
-		
-
+	# def updateNotificationsTablesForNumActions(self, table_name):
+	# 	sql = "ALTER TABLE " + table_name + " ADD numUnseenActions INTEGER DEFAULT 1"
+	# 	self.db.execute(self.db.mogrify(sql))
 
 
 def test_posting(test_size):
