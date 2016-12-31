@@ -5,6 +5,7 @@ import MakePost from './MakePost.jsx';
 import Feed from './Feed.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 import LoginApp from '../Login/LoginApp.jsx';
+import ViewMoreButton from './ViewMoreButton.jsx';
 
 function toggle(collection, item) {
 	var idx = collection.indexOf(item);
@@ -30,25 +31,16 @@ export default class App extends React.Component {
 			post : '',
 			feed : [],
 			currentUser : AppStore.getCurrentUser(),
-			initialUnseenPosts : -1,
-			numUnseenPosts: -1,
-			shouldViewMore: false
+			numUnseenPosts: 0
 		};
 	}
+
 	markPostFeedAsSeen() {
 		$.post('/markPostFeedAsSeen', {feed_name: feed_name, currentUser : this.state.currentUser});
 	}
 
-	initializeNumUnseenPosts(){
-		$.post('getNumUnseenPosts', {feed_name: feed_name, currentUser : this.state.currentUser},
-			function(data){
-				this.setState({numUnseenPosts : data['numUnseenPosts']});
-				this.setState({initialUnseenPosts: data['numUnseenPosts']});
-				this.markPostFeedAsSeen.bind(this)();
-			}.bind(this));
-	}
-
 	refreshFeed() {
+		this.setState({ numUnseenPosts : 0 });
 		$.post('/getPosts', function(data){
 			var feed = [];
 			data.post_list.map(function(obj) {
@@ -67,20 +59,14 @@ export default class App extends React.Component {
 				});
 			});
 			this.setState({feed : feed});
+			this.markPostFeedAsSeen.bind(this)();
 		}.bind(this));
 	}
 
 	refreshNumUnseenPosts() {
-		$.post('getNumUnseenPosts', {feed_name: feed_name, currentUser : this.state.currentUser},
+		$.post('/getNumUnseenPosts', {feed_name: feed_name, currentUser : this.state.currentUser},
 			function(data){
-				var newUnseenPosts = data['numUnseenPosts'] + this.state.initialUnseenPosts
-				this.setState({numUnseenPosts :  newUnseenPosts})
-				if (data['numUnseenPosts'] > 0){
-					this.setState({shouldViewMore : true})
-				}
-				else {
-					this.setState({shouldViewMore : false})
-				}
+				this.setState({numUnseenPosts :  data['numUnseenPosts']});
 			}.bind(this));
 	}
 
@@ -96,15 +82,19 @@ export default class App extends React.Component {
 		}
 		$('html, body').animate({scrollTop: 0}, 300);
 	}
+	
 	handleFilterUser(user) {
 		if (user != this.state.userIdToFilterPosts) this.setState({ userIdToFilterPosts : user });
 		else this.setState({ userIdToFilterPosts : ''});
 	}
+
 	handleSearch(searchText) { 
 		$('html, body').animate({scrollTop: 0}, 300);
 		this.setState({search : searchText});
 	}
+	
 	handleTypingPost(postText) {this.setState({post : postText});}
+
 	handlePostSubmit(postText) {
 		var feed = this.state.feed;
 		if (this.state.actions.length == 0) this.setState({alert : true});
@@ -168,7 +158,6 @@ export default class App extends React.Component {
 		AppStore.addChangeListener(this._onChange.bind(this));
 		if (this.state.currentUser['userID'] != null) {
 			this.refreshFeed.bind(this)();
-			this.initializeNumUnseenPosts.bind(this)();
 			if (!this.state.timer) {
 				this.setState({ timer : setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
 			}
@@ -181,17 +170,9 @@ export default class App extends React.Component {
 	_onChange() {
 		this.setState({ currentUser : AppStore.getCurrentUser() });
 		this.refreshFeed.bind(this)();
-		this.initializeNumUnseenPosts.bind(this)();
 		if (!this.state.timer) {
 			this.setState({ timer : setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
 		}
-	}
-	viewMore() {
-		this.refreshFeed.bind(this)();
-		this.markPostFeedAsSeen.bind(this)();
-		this.setState({numUnseenPosts : 0});
-		this.setState({initialUnseenPosts: 0});
-		this.setState({shouldViewMore : false});
 	}
 	render() {
 		if (this.state.currentUser['userID'] != null) {
@@ -208,10 +189,7 @@ export default class App extends React.Component {
 									filters={this.state.filters}/>
 					<div className="container app-container">
 						<div className="app row">
-							<EventName name= {feed_name} numUnseenPosts = {this.state.numUnseenPosts}
-							viewMore = {this.viewMore.bind(this)} 
-							shouldViewMore = {this.state.shouldViewMore}
-						 />
+							<EventName name={feed_name} />
 						</div>
 						<div className="app row">
 							<MakePost placeholder="What's happening?" postText={this.state.post} 
@@ -223,6 +201,11 @@ export default class App extends React.Component {
 						{this.state.alert && 
 						<div className="alert alert-danger">
 				  			<strong>Bro!</strong> You must select something to do before you post man!
+						</div>}
+						{this.state.numUnseenPosts > 0 &&
+						<div className="app row">
+							<ViewMoreButton numUnseenPosts={this.state.numUnseenPosts} 
+											refreshFeed={this.refreshFeed.bind(this)}/>
 						</div>}
 						<div className="app row">
 						<Feed currentUser={this.state.currentUser} searchText={this.state.search} 

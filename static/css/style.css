@@ -85,6 +85,15 @@ body {
 #NoNewNotificationsDropdown {
   text-align: center;
 }
+#ViewMoreButton {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  color : var(--navbar);
+}
+#ViewMoreButton:hover {
+  cursor : pointer;
+  background-color : var(--light);
+}
 .blurButton:focus {
   outline : none;
 }
