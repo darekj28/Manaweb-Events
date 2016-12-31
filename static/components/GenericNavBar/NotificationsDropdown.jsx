@@ -11,11 +11,9 @@ export default class NotificationsDropdown extends React.Component {
             numUnseen : AppStore.getNotificationCount()
         };
     }
-    seeNotification() {
+    seeNotifications() {
         AppActions.deleteNotificationCount();
-        this.state.notifications.map(function (note){
-            $.post('/seeNotification', {notification_id: note['notification_id']});
-        });
+        $.post('/seeNotifications', {currentUser : AppStore.getCurrentUser()});
     }
     getNotificationCount() {
         $.post('/getNotificationCount', {currentUser : AppStore.getCurrentUser()},
@@ -41,7 +39,7 @@ export default class NotificationsDropdown extends React.Component {
 	render() { 
 		return (
 			<li className="dropdown">
-                <a href="#" onClick={this.seeNotification.bind(this)} className="SearchNavBarGlyphicon dropdown-toggle" data-toggle="dropdown">
+                <a href="#" onClick={this.seeNotifications.bind(this)} className="SearchNavBarGlyphicon dropdown-toggle" data-toggle="dropdown">
                     <span className="glyphicon glyphicon-envelope"></span>
                     {this.state.numUnseen > 0 && <span className="badge badge-notify">{this.state.numUnseen}</span>}
                 </a>

@@ -144,11 +144,11 @@ def getNumUnseenPosts():
 	else:
 		return jsonify({'numUnseenPosts': -1})
 
-@browser_api.route('/seeNotification', methods=['POST'])
-def seeNotificaiton():
-	notification_id = request.form['notification_id']
+@browser_api.route('/seeNotifications', methods=['POST'])
+def seeNotifications():
+	userID = request.form.get("currentUser[userID]")
 	post_manager = Posts()
-	post_manager.markNotificationAsSeen(notification_id)
+	post_manager.markNotificationAsSeen(userID)
 	post_manager.closeConnection()
 	return jsonify({'success' : True})
 	

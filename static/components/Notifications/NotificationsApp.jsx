@@ -10,15 +10,13 @@ export default class NotificationsApp extends React.Component {
             notifications : AppStore.getNotifications()
         };
 	}
-	seeNotification() {
+	seeNotifications() {
 		AppActions.deleteNotificationCount();
-        this.state.notifications.map(function (note){
-            $.post('/seeNotification', {notification_id: note['notification_id']});
-        });
+        $.post('/seeNotifications', {currentUser : AppStore.getCurrentUser()});
     }
 	componentDidMount() {
         AppStore.addChangeListener(this._onChange.bind(this));
-        this.seeNotification.bind(this)();
+        this.seeNotifications.bind(this)();
     }
     componentWillUnmount() {
         AppStore.removeChangeListener(this._onChange.bind(this));
