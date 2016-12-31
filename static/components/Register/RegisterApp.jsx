@@ -139,7 +139,13 @@ export default class RegisterApp extends React.Component {
                     });
                 });
                 AppActions.addNotifications(notifications);
-                AppActions.addNotificationCount(String(count));
+                this.getNotificationCount.bind(this)();
+            }.bind(this));
+    }
+    getNotificationCount() {
+    	$.post('/getNotificationCount', {currentUser : AppStore.getCurrentUser()},
+            function(data) {
+                AppActions.addNotificationCount(data.count);
                 browserHistory.push('/');
             }.bind(this));
     }
