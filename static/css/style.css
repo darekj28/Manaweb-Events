@@ -107,11 +107,14 @@ body {
   list-style-type : none;
   padding-top : 5px;
   padding-bottom : 5px;
-  border-bottom: 1px solid var(--border-gray);
+  padding-left : 0px;
+  padding-right : 0px;
 }
 #NotificationsFeed > li > a {
   text-decoration : none;
   color : var(--main-color);
+  padding-left : 0px;
+  padding-right : 0px;
   cursor : pointer;
 }
 .CommentFeedPost {
@@ -162,14 +165,10 @@ body {
   margin-top : 10px;
 }
 #CommentFeed {
-  /*max-height: 55vh;*/
-  /*overflow-y: auto;*/
   margin-top: 10px;
   padding-left : 0px;
   padding-right: 0px;
   background-color : #ffffff;
-/*  border : 1px solid #dfdfdf;
-  border-radius : 4px;*/
 }
 .FeedPostBody {
   max-width : 120vh;
@@ -189,11 +188,7 @@ body {
   margin-top: 10px;
   padding-left : 0px;
   padding-right: 0px;
-  /*max-height: 60vh;*/
-  /*overflow-y: auto;*/
   background-color : #ffffff;
-/*  border : 1px solid #dfdfdf;
-  border-radius : 4px;*/
 }
 #actionbuttons {
   margin-right: 10px;

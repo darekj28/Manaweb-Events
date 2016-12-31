@@ -726,10 +726,12 @@ class Posts:
 		participating_users = self.getParticipatingUsers(feed_name, comment_id)
 		user_manager = Users()
 		for userID in participating_users:
-			if userID != poster_id:
-				action = user_manager.getInfo(poster_id)['first_name'] + " commented on " + this_post['poster_id'] + "'s post"
+			if userID != poster_id and userID != this_post['poster_id']:
+				action = user_manager.getInfo(poster_id)['first_name'] + " also commented on " + user_manager.getInfo(this_post['poster_id'])['first_name'] + "'s post."
 				self.createNotification(feed_name, comment_id, userID, poster_id, action)
-
+			elif userID != poster_id and userID == this_post['poster_id'] :
+				action = user_manager.getInfo(poster_id)['first_name'] + " commented on your post."
+				self.createNotification(feed_name, comment_id, userID, poster_id, action)
 		user_manager.closeConnection()
 
 
