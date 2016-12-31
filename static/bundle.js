@@ -1515,12 +1515,18 @@
 	 * will remain to ensure logic does not differ in production.
 	 */
 	
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  if (false) {
+	var validateFormat = function validateFormat(format) {};
+	
+	if (false) {
+	  validateFormat = function validateFormat(format) {
 	    if (format === undefined) {
 	      throw new Error('invariant requires an error message argument');
 	    }
-	  }
+	  };
+	}
+	
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  validateFormat(format);
 	
 	  if (!condition) {
 	    var error;
@@ -14360,14 +14366,7 @@
 						});
 					});
 					_AppActions2.default.addNotifications(notifications);
-					this.getNotificationCount.bind(this)();
-				}.bind(this));
-			}
-		}, {
-			key: 'getNotificationCount',
-			value: function getNotificationCount() {
-				$.post('/getNotificationCount', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
-					_AppActions2.default.addNotificationCount(data.count);
+					_AppActions2.default.addNotificationCount(String(count));
 					_reactRouter.browserHistory.push('/');
 				}.bind(this));
 			}
@@ -14392,7 +14391,7 @@
 			value: function render() {
 				return React.createElement(
 					'div',
-					{ id: 'RegisterApp' },
+					{ id: 'SettingsApp' },
 					React.createElement(_LoginNavBar2.default, { loginError: this.loginError.bind(this) }),
 					React.createElement(
 						'div',
@@ -14417,7 +14416,9 @@
 									React.createElement(_SettingsInputLabel2.default, { field: field }),
 									React.createElement(_SettingsTextInput2.default, { field: field, value: this.state[field],
 										handleTyping: this.handleChange.bind(this),
-										handleBlur: this.handleTextBlur.bind(this) })
+										handleBlur: this.handleTextBlur.bind(this),
+										isUpdate: false
+									})
 								);
 							}, this),
 							select_fields.map(function (field) {
@@ -14428,7 +14429,9 @@
 									React.createElement(_SettingsSelectInput2.default, { field: field, value: this.state[field],
 										avatar_list: this.state.avatar_list,
 										handleSelect: this.handleChange.bind(this),
-										handleBlur: this.handleSelectBlur.bind(this) })
+										handleBlur: this.handleSelectBlur.bind(this),
+										isUpdate: false
+									})
 								);
 							}, this),
 							React.createElement('div', { id: 'avatar_container', className: 'avatar_container centered-text' }),
