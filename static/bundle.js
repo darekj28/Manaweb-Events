@@ -11549,7 +11549,7 @@
 	
 			var _this = _possibleConstructorReturn(this, (LoginNavBar.__proto__ || Object.getPrototypeOf(LoginNavBar)).call(this));
 	
-			_this.state = { user: '', password: '' };
+			_this.state = { user: '', login_password: '' };
 			return _this;
 		}
 	
@@ -11563,7 +11563,7 @@
 		}, {
 			key: 'login',
 			value: function login() {
-				var obj = { user: this.state.user, password: this.state.password };
+				var obj = { user: this.state.user, password: this.state.login_password };
 				$.ajax({
 					type: "POST",
 					url: '/verifyAndLogin',
@@ -11592,9 +11592,7 @@
 			value: function getNotifications() {
 				$.post('/getNotifications', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
 					var notifications = [];
-					var count = 0;
 					data.notification_list.map(function (obj) {
-						if (!obj['seen']) count++;
 						notifications.unshift({
 							comment_id: obj['comment_id'],
 							notification_id: obj['notification_id'],
@@ -11674,7 +11672,7 @@
 									{ className: 'form-group' },
 									React.createElement('input', { type: 'text', className: 'form-control login', id: 'user',
 										onChange: this.handleTyping.bind(this), placeholder: 'Username' }),
-									React.createElement('input', { type: 'password', className: 'form-control login', id: 'password',
+									React.createElement('input', { type: 'password', className: 'form-control login', id: 'login_password',
 										onChange: this.handleTyping.bind(this), placeholder: 'Password' }),
 									React.createElement(
 										'button',
@@ -12576,7 +12574,7 @@
 						React.createElement(
 							"div",
 							{ className: "PostFooter row" },
-							!this.props.isOriginalPost && (isAdmin || !isOP) && React.createElement(
+							!this.props.isOriginalPost && React.createElement(
 								"div",
 								{ className: "dropdown", id: "commentdropdown_" + comment.unique_id },
 								React.createElement(
@@ -14352,9 +14350,7 @@
 			value: function getNotifications() {
 				$.post('/getNotifications', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
 					var notifications = [];
-					var count = 0;
 					data.notification_list.map(function (obj) {
-						if (!obj['seen']) count++;
 						notifications.unshift({
 							comment_id: obj['comment_id'],
 							notification_id: obj['notification_id'],
@@ -14366,7 +14362,14 @@
 						});
 					});
 					_AppActions2.default.addNotifications(notifications);
-					_AppActions2.default.addNotificationCount(String(count));
+					this.getNotificationCount.bind(this)();
+				}.bind(this));
+			}
+		}, {
+			key: 'getNotificationCount',
+			value: function getNotificationCount() {
+				$.post('/getNotificationCount', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
+					_AppActions2.default.addNotificationCount(data.count);
 					_reactRouter.browserHistory.push('/');
 				}.bind(this));
 			}
@@ -14391,7 +14394,7 @@
 			value: function render() {
 				return React.createElement(
 					'div',
-					{ id: 'SettingsApp' },
+					{ id: 'RegisterApp' },
 					React.createElement(_LoginNavBar2.default, { loginError: this.loginError.bind(this) }),
 					React.createElement(
 						'div',
@@ -14416,9 +14419,7 @@
 									React.createElement(_SettingsInputLabel2.default, { field: field }),
 									React.createElement(_SettingsTextInput2.default, { field: field, value: this.state[field],
 										handleTyping: this.handleChange.bind(this),
-										handleBlur: this.handleTextBlur.bind(this),
-										isUpdate: false
-									})
+										handleBlur: this.handleTextBlur.bind(this) })
 								);
 							}, this),
 							select_fields.map(function (field) {
@@ -14429,9 +14430,7 @@
 									React.createElement(_SettingsSelectInput2.default, { field: field, value: this.state[field],
 										avatar_list: this.state.avatar_list,
 										handleSelect: this.handleChange.bind(this),
-										handleBlur: this.handleSelectBlur.bind(this),
-										isUpdate: false
-									})
+										handleBlur: this.handleSelectBlur.bind(this) })
 								);
 							}, this),
 							React.createElement('div', { id: 'avatar_container', className: 'avatar_container centered-text' }),

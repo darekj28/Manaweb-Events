@@ -7,7 +7,7 @@ import { browserHistory } from 'react-router';
 export default class LoginNavBar extends React.Component {
 	constructor() {
 		super();
-		this.state = {user : '', password : ''};
+		this.state = {user : '', login_password : ''};
 	}
 	handleTyping(event) {
 		var obj = {}; 
@@ -15,7 +15,7 @@ export default class LoginNavBar extends React.Component {
 		this.setState(obj);
 	}
 	login() {
-		var obj = { user : this.state.user, password : this.state.password };
+		var obj = { user : this.state.user, password : this.state.login_password };
 		$.ajax({
 			type: "POST",
 			url : '/verifyAndLogin',
