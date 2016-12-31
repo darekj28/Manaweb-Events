@@ -352,7 +352,7 @@ class Posts:
 			dupNotification = False
 			for note in user_short_list:
 				if comment_id == note['comment_id'] and seen == False:
-					dupNotification = True
+					dupNotification = False 
 
 			# if duped, update the previous copy in notification table and the short list
 			if dupNotification == True:
