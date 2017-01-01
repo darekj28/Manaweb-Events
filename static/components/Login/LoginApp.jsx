@@ -21,20 +21,23 @@ export default class LoginApp extends React.Component {
 			fb_email: "",
 			fb_id: "",
 			username : "",
-			submittable: false
+			submittable: false, 
+			fb_clicked: false
 
 		};
 		this.responseFacebook = this.responseFacebook.bind(this);
 		this.handleUsernameChange = this.handleUsernameChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleBlur = this.handleBlur.bind(this);
+		this.handleFacebookLoginClick = this.handleFacebookLoginClick.bind(this);
 	}
 	loginError(err) {
 		this.setState({ error : err });
 	}
 	
-
-	// handleFacebookLoginClick() {
+	handleFacebookLoginClick() {
+		this.setState({fb_clicked : true})
+	}
 		
 	// handle the faceobok login
 	responseFacebook(response) {
@@ -186,23 +189,25 @@ export default class LoginApp extends React.Component {
                     	<br/>
                     	<br/>
 
+
+
+                    { !this.state.fb_clicked  &&
+                    	<div>
                     	<FacebookLogin
 						    appId= {appId}
 						    autoLoad={false}
 						    fields="first_name,email, last_name, name"
-						    // onClick={this.handleFacebookLoginClick}
+						    onClick={this.handleFacebookLoginClick}
 						    callback={this.responseFacebook}
 						    icon="fa-facebook"
 						    size = "small"
 						    textButton = "Connect with Facebook" />
-
 						<br/>
 
 						<div> Welcome! {this.state.fb_first_name} </div>
 
 						{
 							this.state.fb_verified && 
-
 							<div>
 								<SettingsInputLabel field= "username" />
 								<SettingsTextInput field= "username" 
@@ -210,8 +215,6 @@ export default class LoginApp extends React.Component {
 											handleBlur = {this.handleBlur} 
 									/>
 							
-						
-
 							{
 								this.state.submittable 
 								? 
@@ -226,6 +229,15 @@ export default class LoginApp extends React.Component {
 							}
 							</div>
 						}
+						</div>
+					}
+
+					{
+						this.state.fb_clicked && 
+						<div>
+							Waiting for Facebook Authentication...
+						</div>
+					}
 
                 	</center>
 

@@ -11260,13 +11260,15 @@
 				fb_email: "",
 				fb_id: "",
 				username: "",
-				submittable: false
+				submittable: false,
+				fb_clicked: false
 	
 			};
 			_this.responseFacebook = _this.responseFacebook.bind(_this);
 			_this.handleUsernameChange = _this.handleUsernameChange.bind(_this);
 			_this.handleSubmit = _this.handleSubmit.bind(_this);
 			_this.handleBlur = _this.handleBlur.bind(_this);
+			_this.handleFacebookLoginClick = _this.handleFacebookLoginClick.bind(_this);
 			return _this;
 		}
 	
@@ -11275,8 +11277,11 @@
 			value: function loginError(err) {
 				this.setState({ error: err });
 			}
-	
-			// handleFacebookLoginClick() {
+		}, {
+			key: 'handleFacebookLoginClick',
+			value: function handleFacebookLoginClick() {
+				this.setState({ fb_clicked: true });
+			}
 	
 			// handle the faceobok login
 	
@@ -11444,46 +11449,55 @@
 							),
 							React.createElement('br', null),
 							React.createElement('br', null),
-							React.createElement(_reactFacebookLogin2.default, {
-								appId: appId,
-								autoLoad: false,
-								fields: 'first_name,email, last_name, name'
-								// onClick={this.handleFacebookLoginClick}
-								, callback: this.responseFacebook,
-								icon: 'fa-facebook',
-								size: 'small',
-								textButton: 'Connect with Facebook' }),
-							React.createElement('br', null),
-							React.createElement(
+							!this.state.fb_clicked && React.createElement(
 								'div',
 								null,
-								' Welcome! ',
-								this.state.fb_first_name,
-								' '
-							),
-							this.state.fb_verified && React.createElement(
-								'div',
-								null,
-								React.createElement(_SettingsInputLabel2.default, { field: 'username' }),
-								React.createElement(_SettingsTextInput2.default, { field: 'username',
-									handleTyping: this.handleUsernameChange,
-									handleBlur: this.handleBlur
-								}),
-								this.state.submittable ? React.createElement(
-									Link,
-									{ to: '/' },
-									' ',
-									React.createElement(
+								React.createElement(_reactFacebookLogin2.default, {
+									appId: appId,
+									autoLoad: false,
+									fields: 'first_name,email, last_name, name',
+									onClick: this.handleFacebookLoginClick,
+									callback: this.responseFacebook,
+									icon: 'fa-facebook',
+									size: 'small',
+									textButton: 'Connect with Facebook' }),
+								React.createElement('br', null),
+								React.createElement(
+									'div',
+									null,
+									' Welcome! ',
+									this.state.fb_first_name,
+									' '
+								),
+								this.state.fb_verified && React.createElement(
+									'div',
+									null,
+									React.createElement(_SettingsInputLabel2.default, { field: 'username' }),
+									React.createElement(_SettingsTextInput2.default, { field: 'username',
+										handleTyping: this.handleUsernameChange,
+										handleBlur: this.handleBlur
+									}),
+									this.state.submittable ? React.createElement(
+										Link,
+										{ to: '/' },
+										' ',
+										React.createElement(
+											'button',
+											{ className: 'btn btn-default blurButton',
+												id: 'RegisterSubmit', onClick: this.handleSubmit.bind(this) },
+											'Let\'s go! '
+										)
+									) : React.createElement(
 										'button',
-										{ className: 'btn btn-default blurButton',
-											id: 'RegisterSubmit', onClick: this.handleSubmit.bind(this) },
-										'Let\'s go! '
+										{ className: 'btn btn-default', id: 'RegisterSubmit', disabled: true },
+										'Almost there!'
 									)
-								) : React.createElement(
-									'button',
-									{ className: 'btn btn-default', id: 'RegisterSubmit', disabled: true },
-									'Almost there!'
 								)
+							),
+							this.state.fb_clicked && React.createElement(
+								'div',
+								null,
+								'Waiting for Facebook Authentication...'
 							)
 						)
 					)
