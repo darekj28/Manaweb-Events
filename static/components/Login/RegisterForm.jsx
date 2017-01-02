@@ -1,7 +1,5 @@
 var React = require('react');
 var Link = require('react-router').Link;
-import LoginNavBar from '../Login/LoginNavBar.jsx';
-import LoginError from '../Login/LoginError.jsx';
 import SettingsTextInput from '../Settings/SettingsTextInput.jsx';
 import SettingsSelectInput from '../Settings/SettingsSelectInput.jsx';
 import SettingsInputLabel from '../Settings/SettingsInputLabel.jsx';
@@ -29,7 +27,7 @@ var required_text_fields = [ "first_name", "last_name", "username", "email_addre
 export default class RegisterApp extends React.Component {
 	constructor() {
 		super();
-		this.state = {error : '',
+		this.state = {
 				first_name 			: '',
 				last_name  			: '',
 				username 			: '',
@@ -45,9 +43,6 @@ export default class RegisterApp extends React.Component {
 				valid_select_fields	: [],
 				submittable			: false
 			};
-	}
-	loginError(err) {
-		this.setState({ error : err });
 	}
 	handleChange(obj) { this.setState(obj); }
 
@@ -162,9 +157,7 @@ export default class RegisterApp extends React.Component {
 	render() {
 		return(
 			<div id="RegisterApp">
-				<LoginNavBar loginError={this.loginError.bind(this)}/>
 				<div className="container app-container">
-					{this.state.error && <LoginError error={this.state.error}/>}
 					<form class="form-horizontal">
 						<div className="page-header">
 							<h2> Create Your Profile </h2>

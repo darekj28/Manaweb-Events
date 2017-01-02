@@ -10,7 +10,6 @@ import App from './Home/App.jsx';
 import CommentApp from './Comment/CommentApp.jsx';
 import NotificationsApp from './Notifications/NotificationsApp.jsx';
 import SettingsApp from './Settings/SettingsApp.jsx';
-import RegisterApp from './Register/RegisterApp.jsx';
 
 class Main extends React.Component {
 	render() {
@@ -28,6 +27,5 @@ ReactDOM.render(
 	  	<Route path="comment/:comment_id" component={CommentApp}/>
 	  	<Route path="notifications" component={NotificationsApp}/>
 	  	<Route path="settings" component={SettingsApp}/>
-	  	<Route path="register" component={RegisterApp}/>
     </Route></Router>, document.getElementById('app'));
 

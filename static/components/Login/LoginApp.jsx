@@ -14,7 +14,6 @@ export default class LoginApp extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			error : '',
 			fb_verified : false,
 			fb_first_name : "",
 			fb_last_name: "",
@@ -30,9 +29,6 @@ export default class LoginApp extends React.Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleBlur = this.handleBlur.bind(this);
 		this.handleFacebookLoginClick = this.handleFacebookLoginClick.bind(this);
-	}
-	loginError(err) {
-		this.setState({ error : err });
 	}
 	
 	handleFacebookLoginClick() {
@@ -178,9 +174,8 @@ export default class LoginApp extends React.Component {
 		const testAppId = "1298398903564849"
 		return (
 			<div>
-				<LoginNavBar loginError={this.loginError.bind(this)}/>
+				<LoginNavBar/>
 				<div className="container app-container">
-					{this.state.error && <LoginError error={this.state.error}/>}
 					<h1><center>M A N A W E B</center></h1>
                     <center>
                     	<Link to="/register">

@@ -1,5 +1,7 @@
 var React = require('react');
 var Link = require('react-router').Link;
+import LoginForm from './LoginForm.jsx';
+import RegisterForm from './RegisterForm.jsx';
 import AppActions from '../../actions/AppActions.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 import { browserHistory } from 'react-router';
@@ -7,115 +9,42 @@ import { browserHistory } from 'react-router';
 export default class LoginNavBar extends React.Component {
 	constructor() {
 		super();
-		this.state = {user : '', login_password : '', ip : ""};
-		this.initializeIp = this.initializeIp.bind(this);
+		this.state = {login_register : 'login',
+						error : ""};
 	}
-	handleTyping(event) {
-		var obj = {}; 
-		obj[event.target.id] = event.target.value;
-		this.setState(obj);
+	switchMenu(event) {
+		this.setState({ login_register : event.target.id });
 	}
-	login() {
-		var obj = { user : this.state.user, password : this.state.login_password, ip : this.state.ip };
-		$.ajax({
-			type: "POST",
-			url : '/verifyAndLogin',
-			data : JSON.stringify(obj, null, '\t'),
-			contentType : 'application/json;charset=UTF-8',
-			success : function(res) {
-				if (!res['error']) {
-					this.getCurrentUserInfo.bind(this)();
-				}
-				else {
-					this.props.loginError(res.error);
-					this.enableLogin.bind(this)();
-				}
-
-			}.bind(this)
-		});
-	}
-	getCurrentUserInfo() {
-		$.post('/getCurrentUserInfo', {userID : this.state.user}, function(data) {
-			AppActions.addCurrentUser(data.thisUser);
-			this.getNotifications.bind(this)();
-		}.bind(this));
-	}
-	getNotifications() {
-        $.post('/getNotifications', {currentUser : AppStore.getCurrentUser()},
-            function(data) {
-                var notifications = [];
-                data.notification_list.map(function(obj) {
-                    notifications.unshift({
-                        comment_id : obj['comment_id'],
-                        notification_id : obj['notification_id'],
-                        timeString : obj['timeString'],
-                        sender_id : obj['sender_id'],
-                        action : obj['action'],
-                        receiver_id : obj['receiver_id'],
-                        seen : obj['seen']
-                    });
-                });
-                AppActions.addNotifications(notifications);
-                this.getNotificationCount.bind(this)();
-            }.bind(this));
-    }
-    getNotificationCount() {
-    	$.post('/getNotificationCount', {currentUser : AppStore.getCurrentUser()},
-            function(data) {
-                AppActions.addNotificationCount(data.count);
-                browserHistory.push('/');
-            }.bind(this));
-    }
-    enableLogin() {
-    	$('#LoginButton').one('click', function(e) {
-    		e.preventDefault();
-    		$(this).blur();
-    		this.login.bind(this)();
-    	}.bind(this));
-    }
-    initializeIp(){
-    	$.get('https://jsonip.com/', function(r){ 
-    		this.setState({ip: r.ip}) 
-    		console.log("after initialize ip")
-    	}.bind(this))
-    }
-    componentDidMount() {
-    	this.enableLogin.bind(this)();
-    	this.initializeIp.bind(this)();
-    }
 	render() {
 		return (
-			<nav className="navbar navbar-default" role="navigation">
-			  <div className="container">
-		       		<div className="navbar-header">
-	                 	<Link to="/" className="navbar-brand navbar-brand-logo">
-	                        <span className="glyphicon glyphicon-home"></span>
-	                  	</Link>
-	                  	<button type="button" className="SearchNavBarGlyphicon navbar-toggle" 
-	                  					data-toggle="collapse" 
-										data-target="#bs-example-navbar-collapse-1">
-				            <span className="sr-only">Toggle navigation</span>
-				            <span className="icon-bar"></span>
-				            <span className="icon-bar"></span>
-				            <span className="icon-bar"></span>
-				        </button>
-		        	</div>
-			        <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <form className="navbar-form navbar-right">
-                        	<div className="form-group">
-                            	<input type="text" className="form-control login" id="user" 
-                            	onChange={this.handleTyping.bind(this)} placeholder="Username"/>
-	                            <input type="password" className="form-control login" id="login_password" 
-	                            	onChange={this.handleTyping.bind(this)} placeholder="Password"/>
-				            	
-				            	<button className="btn btn-default form-control blurButton"
-				            					id="LoginButton"> Sign In!</button>
-
-				            </div>
-				        </form>
-			        </div>
-			  </div>
-			</nav>
+			<div>
+				<nav className="navbar navbar-default" role="navigation">
+				  <div className="container">
+			       		<div className="navbar-header">
+		                 	<Link to="/" className="navbar-brand navbar-brand-logo">
+		                        <span className="glyphicon glyphicon-home"></span>
+		                  	</Link>
+		                  	<button type="button" className="SearchNavBarGlyphicon navbar-toggle" 
+		                  		data-toggle="offcanvas" data-target="#LoginRegisterMenu">
+							    <span className="icon-bar"></span>
+							    <span className="icon-bar"></span>
+							    <span className="icon-bar"></span>
+							</button>
+			        	</div>
+				  </div>
+				</nav>
+				<nav id="LoginRegisterMenu" className="navmenu navmenu-default navmenu-fixed-right offcanvas" 
+							role="navigation">
+				  	<div className="navmenu-brand" id="login" onClick={this.switchMenu.bind(this)}>
+				  		Login</div>
+				  	<div className="navmenu-brand" id="register" onClick={this.switchMenu.bind(this)}>
+				  		Register</div>
+				  	{this.state.login_register == "login" &&
+				  		<LoginForm/>}
+				  	{this.state.login_register == "register" &&
+			  			<RegisterForm/> }
+				</nav>
+			</div>
 		)
 	}
 }
