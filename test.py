@@ -3,6 +3,7 @@ import pytz
 import os
 from posts import Posts
 from users import Users
+from security import Security
 from tasks import test
 import sqlite3 
 
@@ -22,7 +23,7 @@ celery = create_celery(app)
 
 user_manager = Users()
 post_manager = Posts()
-
+security_manager = Security()
 # user_manager.deleteUser('drd')
 
 fb_users = user_manager.getFacebookUsers()
@@ -32,9 +33,10 @@ user_list = user_manager.getUserList()
 
 # post_manager.deleteUserPosts('lily')
 # user_manager.deleteUser('lily')
-for fb_user in fb_users:
-	post_manager.deleteUserPosts(fb_user)
-	user_manager.deleteUser(fb_user)
+security_manager.createLoginAttemptTable()
+# for fb_user in fb_users:
+# 	post_manager.deleteUserPosts(fb_user)
+# 	user_manager.deleteUser(fb_user)
 # feed_name = "BALT"
 # post_manager.recalculateLastPostTable(feed_name)
 # post_manager.recalculateUnseenPosts(feed_name)
@@ -42,3 +44,4 @@ for fb_user in fb_users:
 
 user_manager.closeConnection()
 post_manager.closeConnection()
+security_manager.closeConnection()

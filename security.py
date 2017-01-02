@@ -41,11 +41,11 @@ class Security:
 	def getTimeString(self):
 		return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-	def createLoginAttemptsTable(self):
-		sql = "CREATE TALBE IF NOT EXISTS " + self.LOGIN_ATTEMPT_TABLE + " (login_id TEXT, isSuccessLogin BOOLEAN, ip TEXT, country_code TEXT, \
+	def createLoginAttemptTable(self):
+		sql = "CREATE TABLE IF NOT EXISTS " + self.LOGIN_ATTEMPT_TABLE + " (login_id TEXT, isSuccessLogin BOOLEAN, ip TEXT, country_code TEXT, \
 		city TEXT, region_code TEXT, zip_code TEXT, timeString TEXT, timeStamp FLOAT)"
 		self.db.execute(self.db.mogrify(sql))
-		addIndexCode = 'CREATE INDEX IF NOT EXISTS login_id ON ' + table_name + ' (login_id)'
+		addIndexCode = 'CREATE INDEX IF NOT EXISTS login_id ON ' + self.LOGIN_ATTEMPT_TABLE + ' (login_id)'
 		self.db.execute(addIndexCode)
 
 	def recordLoginAttempt(self, login_id, isSuccess, ip):
@@ -56,7 +56,7 @@ class Security:
 		city = location_info['city']
 		region_code = location_info['region_code']
 		zip_code = location_info['zip_code']
-		sql = "INSERT INTO " + self.LOGIN_ATTEMPT_TABLE + " (login_id, isSuccessfulLogin, ip, country_code, city, region_code, \
+		sql = "INSERT INTO " + self.LOGIN_ATTEMPT_TABLE + " (login_id, isSuccessLogin, ip, country_code, city, region_code, \
 		zip_code, timeString, timeStamp) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
 		self.db.execute(self.db.mogrify(sql, (login_id, isSuccess, ip, country_code, city, region_code,
 		zip_code, timeString, timeStamp)))
@@ -87,9 +87,9 @@ class Security:
 		return response.json()
 
 
-def test():
-	security_manager = Security()
-	print(security_manager.get_geolocation_for_ip('69.119.62.67'))
-	security_manager.closeConnection()
+# def test():
+# 	security_manager = Security()
+# 	print(security_manager.get_geolocation_for_ip('69.119.62.67'))
+# 	security_manager.closeConnection()
 
-test()
+# test()
