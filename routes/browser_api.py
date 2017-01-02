@@ -1,10 +1,12 @@
 from flask import Blueprint, jsonify, request, session, render_template, redirect, url_for
 from users import Users
 from posts import Posts
+from security import Security
 import validation
 import time
 import email_confirm
 from passlib.hash import argon2
+
 # from py2neo import authenticate, Graph, Node
 # authenticate("localhost:7474", "neo4j", "powerplay")
 # graph = Graph()
@@ -17,18 +19,12 @@ DEFAULT_FEED = "BALT"
 def isFacebookUser():
 	fb_id = request.json['fb_id']
 	user_manager = Users()
-	fbUser = user_manager.getUserInfoFromFacebookId(fb_id)
+	output = user_manager.isFacebookUser(fb_id)
 	user_manager.closeConnection()
-	output = {}
-	if fbUser == None:
-		output['result'] = 'failure'
-		output['userID'] = ""
-	else:
-		output['result'] = 'success'
-		output['fbUser'] = fbUser
+
+	if output['result'] == 'success':
 		session['logged_in'] = True
 		session['userID'] = fbUser['userID']
-
 	return jsonify(output)
 
 
@@ -72,11 +68,21 @@ def verifyAndLogin() :
 	user = request.json['user']
 	password = request.json['password']
 	res = validation.validateLogin(user, password)
+	ip = request.remote_addr
+
 	if res['result'] == 'success':
 		session['logged_in'] = True
 		session['userID'] = res['username']
+		security_manager = Security()
+		isSuccess = True
+		security_manager.recordLoginAttempt(user, isSuccess, ip)
+		security_manager.closeConnection()
 		return jsonify({ 'error' : False })
-	else : 
+	else: 
+		isSuccess = False
+		security_manager = Security()
+		security_manager.recordLoginAttempt(user, isSuccess, ip)
+		security_manager.closeConnection()
 		return jsonify({ 'error' : res['error'] })
 
 @browser_api.route('/registerUsername', methods=['POST'])

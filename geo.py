@@ -4,8 +4,6 @@ import re
 # from geopy.geocoders import Nominatim
 import time
 
-# app_key = "AIzaSyDkUdoq04Rdr0MIvgCl67vdMV7A5izOi7g"
-# gmaps = GoogleMaps(key = app_key)
 
 # given the 2 lattitude and longitude coordinates, returns the distance in miles (lattitude and longitude are numbers, not strings)
 def getDistance(lat1, lon1, lat2, lon2):
