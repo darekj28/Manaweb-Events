@@ -30,7 +30,7 @@ def createProfile():
 		phone_number 	= request.json['phone_number']
 		avatar_url 		= '/static/avatars/' + avatar_name + '.png'	
 		isActive = True	
-		confirmationPin = email_confirm.hashUserID(userID)
+		confirmationPin = email_confirm.hashString(userID)
 		confirmed = True
 		user_manager = Users()
 		user_manager.addUser(userID, first_name = first_name, last_name = last_name, password = password, email = email,  isActive = isActive,

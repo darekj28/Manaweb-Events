@@ -44,6 +44,13 @@ body {
 .login {
   margin-right : 5px;
 }
+.navbar-toggle-always {
+  float : right;
+  display: block!important;
+}
+#LoginRegisterLabel {
+  color : #fff!important;
+}
 #SignUpButton:focus {
   background-color: #fff;
 }
