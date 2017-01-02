@@ -663,7 +663,7 @@
 	        var _this = _possibleConstructorReturn(this, (NotificationsDropdown.__proto__ || Object.getPrototypeOf(NotificationsDropdown)).call(this, props));
 	
 	        _this.state = {
-	            notifications: _AppStore2.default.getNotifications(),
+	            notifications: _AppStore2.default.getNotifications().slice(0, 5),
 	            numUnseen: _AppStore2.default.getNotificationCount()
 	        };
 	        return _this;
@@ -699,7 +699,7 @@
 	    }, {
 	        key: '_onChange',
 	        value: function _onChange() {
-	            this.setState({ notifications: _AppStore2.default.getNotifications(),
+	            this.setState({ notifications: _AppStore2.default.getNotifications().slice(0, 5),
 	                numUnseen: _AppStore2.default.getNotificationCount() });
 	        }
 	    }, {
@@ -13354,6 +13354,10 @@
 	
 	var _AppStore2 = _interopRequireDefault(_AppStore);
 	
+	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 51);
+	
+	var _AppActions2 = _interopRequireDefault(_AppActions);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -13382,19 +13386,19 @@
 		_createClass(NotificationsApp, [{
 			key: 'seeNotifications',
 			value: function seeNotifications() {
-				AppActions.deleteNotificationCount();
+				_AppActions2.default.deleteNotificationCount();
 				$.post('/seeNotifications', { currentUser: _AppStore2.default.getCurrentUser() });
 			}
 		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
-				_AppStore2.default.addChangeListener(this._onChange.bind(this));
+				_AppStore2.default.addNoteChangeListener(this._onChange.bind(this));
 				this.seeNotifications.bind(this)();
 			}
 		}, {
 			key: 'componentWillUnmount',
 			value: function componentWillUnmount() {
-				_AppStore2.default.removeChangeListener(this._onChange.bind(this));
+				_AppStore2.default.removeNoteChangeListener(this._onChange.bind(this));
 			}
 		}, {
 			key: '_onChange',
@@ -13415,9 +13419,9 @@
 						this.state.currentUser['first_name'] != undefined && React.createElement(
 							'h2',
 							null,
-							name,
-							'\'s Notifications'
+							'Your Notifications'
 						),
+						React.createElement('hr', null),
 						React.createElement(
 							'div',
 							{ className: 'feed row' },
@@ -13613,7 +13617,7 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -13628,44 +13632,48 @@
 	var Link = __webpack_require__(/*! react-router */ 52).Link;
 	
 	var NotificationsFeedPost = function (_React$Component) {
-	    _inherits(NotificationsFeedPost, _React$Component);
+	  _inherits(NotificationsFeedPost, _React$Component);
 	
-	    function NotificationsFeedPost() {
-	        _classCallCheck(this, NotificationsFeedPost);
+	  function NotificationsFeedPost() {
+	    _classCallCheck(this, NotificationsFeedPost);
 	
-	        return _possibleConstructorReturn(this, (NotificationsFeedPost.__proto__ || Object.getPrototypeOf(NotificationsFeedPost)).apply(this, arguments));
+	    return _possibleConstructorReturn(this, (NotificationsFeedPost.__proto__ || Object.getPrototypeOf(NotificationsFeedPost)).apply(this, arguments));
+	  }
+	
+	  _createClass(NotificationsFeedPost, [{
+	    key: 'render',
+	    value: function render() {
+	      var note = this.props.note;
+	      return React.createElement(
+	        'li',
+	        { className: 'NotificationsFeedPost' },
+	        React.createElement(
+	          Link,
+	          { to: "/comment/" + note.comment_id },
+	          React.createElement(
+	            'div',
+	            { className: 'row' },
+	            React.createElement(
+	              'b',
+	              null,
+	              note.action
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'row' },
+	          React.createElement(
+	            'small',
+	            null,
+	            note.timeString
+	          )
+	        )
+	      );
 	    }
+	  }]);
 	
-	    _createClass(NotificationsFeedPost, [{
-	        key: 'render',
-	        value: function render() {
-	            var note = this.props.note;
-	            return React.createElement(
-	                'li',
-	                { className: 'NotificationsFeedPost' },
-	                React.createElement(
-	                    Link,
-	                    { to: "/comment/" + note.comment_id, id: 'NotificationsFeedPostLink' },
-	                    React.createElement(
-	                        'div',
-	                        { className: 'row' },
-	                        note.action
-	                    ),
-	                    React.createElement(
-	                        'div',
-	                        { className: 'row' },
-	                        React.createElement(
-	                            'small',
-	                            null,
-	                            note.timeString
-	                        )
-	                    )
-	                )
-	            );
-	        }
-	    }]);
-	
-	    return NotificationsFeedPost;
+	  return NotificationsFeedPost;
 	}(React.Component);
 	
 	exports.default = NotificationsFeedPost;

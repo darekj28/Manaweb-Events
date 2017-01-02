@@ -51,7 +51,9 @@ class Security:
 	def recordLoginAttempt(self, login_id, isSuccess, ip):
 		timeStamp = time.time()
 		timeString = self.getTimeString()
+
 		location_info = self.get_geolocation_for_ip(ip)
+
 		country_code = location_info['country_code']
 		city = location_info['city']
 		region_code = location_info['region_code']
@@ -87,9 +89,9 @@ class Security:
 		return response.json()
 
 
-# def test():
-# 	security_manager = Security()
-# 	print(security_manager.get_geolocation_for_ip('69.119.62.67'))
-# 	security_manager.closeConnection()
+def test():
+	security_manager = Security()
+	print(security_manager.get_geolocation_for_ip('10.152.233.4'))
+	security_manager.closeConnection()
 
-# test()
+test()
