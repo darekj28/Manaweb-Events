@@ -7,7 +7,7 @@ export default class NotificationsDropdown extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            notifications : AppStore.getNotifications(),
+            notifications : AppStore.getNotifications().slice(0, 5),
             numUnseen : AppStore.getNotificationCount()
         };
     }
@@ -33,7 +33,7 @@ export default class NotificationsDropdown extends React.Component {
         AppStore.removeNoteChangeListener(this._onChange.bind(this));
     }
     _onChange() {
-        this.setState({ notifications : AppStore.getNotifications(), 
+        this.setState({ notifications : AppStore.getNotifications().slice(0, 5), 
                             numUnseen : AppStore.getNotificationCount() })
     }
 	render() { 
