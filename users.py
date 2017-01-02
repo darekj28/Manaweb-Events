@@ -32,6 +32,7 @@ class Users:
 		self.USER_TABLE = "user_info"
 		self.USER_ACTION_TABLE = "user_actions" 
 		self.TEST_USER_TABLE = "test_user_info"
+		self.RECOVERY_TABLE = "recovery_table"
 
 		# this is for when we load to heroku
 		# comment this out when testing locally
@@ -98,19 +99,15 @@ class Users:
 				 avatar_name, confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
 				  isAdmin = None, phone_number = None, birthMonth = None
 				 ,birthDay = None, birthYear = None, gender = None, confirmed = None, fb_id = None):
-		
 		table_name = self.USER_TABLE
-
 		if isAdmin == None:
 			isAdmin = False
-
 		if tradeFilter == None:
 			tradeFilter = False
 		if chillFilter == None:
 			chillFilter = False
 		if playFilter == None:
 			playFilter = False
-
 		if phone_number == None:
 			phone_number = ""
 		if birthDay == None:
@@ -121,18 +118,13 @@ class Users:
 			birthYear = ""
 		if gender == None:
 			gender = ""
-
 		# default to true can switch later
 		if confirmed == None:
 			confirmed = True
-
 		if fb_id == None:
 			fb_id = ""
-
 		timeStamp = time.time()
 		timeString = self.getTimeString()
-
-
 		input_properties = {}
 		input_properties['userID'] = userID
 		input_properties['first_name'] = first_name
@@ -154,8 +146,6 @@ class Users:
 		input_properties['birthYear'] = birthYear
 		input_properties['gender'] = gender
 		input_properties['confirmed'] = confirmed
-
-
 		# if user email or userID doesn't exist create new one
 		if self.getInfo(userID) == None and self.getInfoFromEmail(email) == None:
 			self.udb.execute(self.udb.mogrify("INSERT INTO " + table_name + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
@@ -163,7 +153,6 @@ class Users:
 				  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
 				(userID.lower(), first_name, last_name, hash_password, email, isActive, avatar_url,
 				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, fb_id)))
-
 			action = "ACCOUNT CREATED"
 			if (fb_id == ""):
 				action = action + " WITH FACEBOOK"
@@ -203,10 +192,8 @@ class Users:
 				 ,birthDay = None, birthYear = None, gender = None, confirmed = None):
 		
 		table_name = self.TEST_USER_TABLE
-
 		if isAdmin == None:
 			isAdmin = False
-
 		if tradeFilter == None:
 			tradeFilter = False
 		if chillFilter == None:
@@ -229,11 +216,8 @@ class Users:
 		if confirmed == None:
 			confirmed = True
 
-
 		timeStamp = time.time()
 		timeString = self.getTimeString()
-
-
 		input_properties = {}
 		input_properties['userID'] = userID
 		input_properties['first_name'] = first_name
@@ -413,7 +397,6 @@ class Users:
 		sql = "ALTER TABLE user_info ADD " + colName + " " + colType
 		self.udb.execute(sql)
 
-
 	def getUserInfoFromFacebookId(self, fb_id):
 		sql = "SELECT * FROM user_info WHERE fb_id = %s"
 		self.udb.execute(self.udb.mogrify(sql, (fb_id,)))
@@ -425,12 +408,10 @@ class Users:
 		else:
 			return None
 
-
 	def getFacebookUsers(self):
 		sql = "SELECT * FROM user_info"
 		self.udb.execute(sql)
 		query = self.udb.fetchall()
-		
 		fb_user_list = list()
 		for item in query:
 			userInfo = self.queryToDict(item)
@@ -440,30 +421,55 @@ class Users:
 
 		return fb_user_list
 
-
-
 	def deleteFacebookUsers(self):
 		fb_users = self.getFacebookUsers()
 		for user in fb_users:
 			self.deleteUser(user)
 
+	def verifyLogin(self, login_id, password):
+		output = {}
+		email_regex = re.compile("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
+		loginIdIsEmail = email_regex.match(login_id)
+		user_manager = Users()
+		lower_login_id = login_id.lower()
+		# if the login id is an email
+		if loginIdIsEmail:
+			user_info = user_manager.getInfoFromEmail(lower_login_id)
+		# otherwise the login is a userID
+		else:
+			user_info = user_manager.getInfo(lower_login_id)
+		# user doesn't exists
+		if user_info == None:
+			output['result'] = 'failure'
+			output['error'] = "This username doesn't exist."
+		else:
+			user_manager.closeConnection()
+			password_match = argon2.verify(password, user_info['password'])
+			if password_match:
+				output['result'] = 'success'
+				output['username'] = user_info['userID']
+			else:
+				output['result'] = 'failure'
+				output['error'] = 'Login credentials incorrect.'
+		return output
+
+	def isFacebookUser(self, fb_id):
+		fbUser = self.getUserInfoFromFacebookId(fb_id)
+		output = {}
+		if fbUser == None:
+			output['result'] = 'failure'
+			output['userID'] = ""
+		else:
+			output['result'] = 'success'
+			output['fbUser'] = fbUser
+		return output 
 
 
-
-	# # this is a temporary method just to update the old passwords
-	# def hashUserPasswords(self, userID, password):
-	# 	user_manager = Users()
-	# 	thisUser = user_manager.getInfo(userID)
-	# 	# password = 	thisUser['password']
-
-	# 	hash_password = argon2.using(rounds = 4).hash(password)
-	# 	print(hash_password)
-	# 	sql = "UPDATE user_info SET password = %s WHERE userID = %s"
-	# 	self.udb.execute(self.udb.mogrify(sql, (hash_password, userID)))
+	
+	
 
 
 def test():
-
 	first_name = ['Darek', 'Eli', 'Brian', 'Luis', 'Paul', 'Mashi', 'Yuuya', 'Shouta', 'Gabby']
 	last_name = ['Johnson', 'Chang', 'Kibler', 'Scott-Vargas', 'Cheon','Scanlan', 'Watanabe', 'Yasooka', 'Spartz']
 	userID = ['darekj', 'elic', 'briank', 'luisv', 'paulc', 'mashis', 'yuuyaw', 'shoutay', 'gabbys']

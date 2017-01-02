@@ -32,22 +32,13 @@ user_list = user_manager.getUserList()
 
 # post_manager.deleteUserPosts('lily')
 # user_manager.deleteUser('lily')
-# for fb_user in fb_users:
-# 	post_manager.deleteUserPosts(fb_user)
-# 	user_manager.deleteUser(fb_user)
+for fb_user in fb_users:
+	post_manager.deleteUserPosts(fb_user)
+	user_manager.deleteUser(fb_user)
 # feed_name = "BALT"
 # post_manager.recalculateLastPostTable(feed_name)
 # post_manager.recalculateUnseenPosts(feed_name)
 
-# post_manager.updateNotificationsTablesForNumActions('notification_table')
-# try_again = False
-# for userID in user_list:
-# 	table_name = "n_" + userID
-# 	print(table_name)
-# 	if try_again == True:
-# 		post_manager.updateNotificationsTablesForNumActions(table_name)
-# 	if userID == "a3":
-# 		try_again = True
 
 user_manager.closeConnection()
 post_manager.closeConnection()

@@ -60,13 +60,16 @@ export default class LoginApp extends React.Component {
 						this.setState({fb_last_name: response['last_name']})
 						this.setState({fb_email: response['email']})
 						this.setState({fb_id : response['id']})
+						this.setState({fb_clicked: false})
 			        }
 			        else {
 			        	// send the user to the home page
 			        	// console.log("fbUser")
 			        	// console.log(response)
-			        	AppActions.addCurrentUser(data.fbUser);
-			        	browserHistory.push('/')
+
+			        	// AppActions.addCurrentUser(data.fbUser);
+			        	this.getCurrentUserInfo.bind(this)()
+			        	// browserHistory.push('/')
 			        }
 			     }.bind(this)
 			});
