@@ -114,12 +114,18 @@ body {
   padding-left : 0px;
   padding-right : 0px;
 }
+#NotificationsFeed { 
+  max-width : 92vw;
+}
 #NotificationsFeed > li > a {
   text-decoration : none;
   color : var(--main-color);
   padding-left : 0px;
   padding-right : 0px;
-  cursor : pointer;
+  white-space : normal;
+}
+#NotificationsFeed > li > a :hover {
+  color : var(--light);
 }
 .CommentFeedPost {
   list-style-type: none;

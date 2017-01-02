@@ -2,6 +2,8 @@ var React = require('react');
 import NoSearchNavBar from "../GenericNavBar/NoSearchNavBar.jsx";
 import NotificationsFeed from './NotificationsFeed.jsx';
 import AppStore from '../../stores/AppStore.jsx';
+import AppActions from '../../actions/AppActions.jsx';
+
 export default class NotificationsApp extends React.Component {
 	constructor(props) {
 		super(props);
@@ -15,11 +17,11 @@ export default class NotificationsApp extends React.Component {
         $.post('/seeNotifications', {currentUser : AppStore.getCurrentUser()});
     }
 	componentDidMount() {
-        AppStore.addChangeListener(this._onChange.bind(this));
+        AppStore.addNoteChangeListener(this._onChange.bind(this));
         this.seeNotifications.bind(this)();
     }
     componentWillUnmount() {
-        AppStore.removeChangeListener(this._onChange.bind(this));
+        AppStore.removeNoteChangeListener(this._onChange.bind(this));
     }
     _onChange() {
         this.setState({ notifications : AppStore.getNotifications() })
@@ -32,7 +34,8 @@ export default class NotificationsApp extends React.Component {
 				<div className="container app-container">
 
 					{this.state.currentUser['first_name'] != undefined && 
-						<h2>{name}'s Notifications</h2>}
+						<h2>Your Notifications</h2>}
+					<hr/>
 					<div className="feed row">
 						<NotificationsFeed notifications={this.state.notifications}/>		
 					</div>

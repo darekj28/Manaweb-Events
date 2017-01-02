@@ -5,10 +5,10 @@ export default class NotificationsFeedPost extends React.Component {
         var note = this.props.note;
 		return (
 			<li className="NotificationsFeedPost">
-                <Link to={"/comment/" + note.comment_id} id="NotificationsFeedPostLink"> 
-                    <div className="row">{note.action}</div>
-                    <div className="row"><small>{note.timeString}</small></div>
+                <Link to={"/comment/" + note.comment_id}> 
+                    <div className="row"><b>{note.action}</b></div>
                 </Link>
+                <div className="row"><small>{note.timeString}</small></div>
             </li>
 			);
 	}
