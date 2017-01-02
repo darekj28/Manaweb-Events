@@ -11566,7 +11566,8 @@
 	
 			var _this = _possibleConstructorReturn(this, (LoginNavBar.__proto__ || Object.getPrototypeOf(LoginNavBar)).call(this));
 	
-			_this.state = { user: '', login_password: '' };
+			_this.state = { user: '', login_password: '', ip: "" };
+			_this.initializeIp = _this.initializeIp.bind(_this);
 			return _this;
 		}
 	
@@ -11580,7 +11581,7 @@
 		}, {
 			key: 'login',
 			value: function login() {
-				var obj = { user: this.state.user, password: this.state.login_password };
+				var obj = { user: this.state.user, password: this.state.login_password, ip: this.state.ip };
 				$.ajax({
 					type: "POST",
 					url: '/verifyAndLogin',
@@ -11642,9 +11643,18 @@
 				}.bind(this));
 			}
 		}, {
+			key: 'initializeIp',
+			value: function initializeIp() {
+				$.get('https://jsonip.com/', function (r) {
+					this.setState({ ip: r.ip });
+					console.log("after initialize ip");
+				}.bind(this));
+			}
+		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				this.enableLogin.bind(this)();
+				this.initializeIp.bind(this)();
 			}
 		}, {
 			key: 'render',

@@ -61,15 +61,12 @@ def facebookCreateAccount():
 
 	return jsonify({'result' : 'success', 'username': userID})
 
-
-
 @browser_api.route('/verifyAndLogin', methods=['POST'])
 def verifyAndLogin() :
 	user = request.json['user']
 	password = request.json['password']
+	ip = request.json['ip']
 	res = validation.validateLogin(user, password)
-	# ip = request.remote_addr
-	ip = request.environ['REMOTE_ADDR']
 
 	if res['result'] == 'success':
 		session['logged_in'] = True
@@ -78,14 +75,12 @@ def verifyAndLogin() :
 		isSuccess = True
 		security_manager.recordLoginAttempt(user, isSuccess, ip)
 		security_manager.closeConnection()
-		print("here")
 		return jsonify({ 'error' : False })
 	else: 
 		isSuccess = False
 		security_manager = Security()
 		security_manager.recordLoginAttempt(user, isSuccess, ip)
 		security_manager.closeConnection()
-		print("here")
 		return jsonify({ 'error' : res['error'] })
 
 @browser_api.route('/registerUsername', methods=['POST'])

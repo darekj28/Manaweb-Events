@@ -7,7 +7,8 @@ import { browserHistory } from 'react-router';
 export default class LoginNavBar extends React.Component {
 	constructor() {
 		super();
-		this.state = {user : '', login_password : ''};
+		this.state = {user : '', login_password : '', ip : ""};
+		this.initializeIp = this.initializeIp.bind(this);
 	}
 	handleTyping(event) {
 		var obj = {}; 
@@ -15,7 +16,7 @@ export default class LoginNavBar extends React.Component {
 		this.setState(obj);
 	}
 	login() {
-		var obj = { user : this.state.user, password : this.state.login_password };
+		var obj = { user : this.state.user, password : this.state.login_password, ip : this.state.ip };
 		$.ajax({
 			type: "POST",
 			url : '/verifyAndLogin',
@@ -29,6 +30,7 @@ export default class LoginNavBar extends React.Component {
 					this.props.loginError(res.error);
 					this.enableLogin.bind(this)();
 				}
+
 			}.bind(this)
 		});
 	}
@@ -71,8 +73,15 @@ export default class LoginNavBar extends React.Component {
     		this.login.bind(this)();
     	}.bind(this));
     }
+    initializeIp(){
+    	$.get('https://jsonip.com/', function(r){ 
+    		this.setState({ip: r.ip}) 
+    		console.log("after initialize ip")
+    	}.bind(this))
+    }
     componentDidMount() {
     	this.enableLogin.bind(this)();
+    	this.initializeIp.bind(this)();
     }
 	render() {
 		return (
