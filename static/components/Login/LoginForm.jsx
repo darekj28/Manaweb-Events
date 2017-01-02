@@ -2,6 +2,7 @@ var React = require('react');
 import LoginError from './LoginError.jsx';
 import AppActions from '../../actions/AppActions.jsx';
 import AppStore from '../../stores/AppStore.jsx';
+import { browserHistory } from 'react-router';
 export default class LoginForm extends React.Component {
 	constructor() {
 		super();
