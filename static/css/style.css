@@ -491,14 +491,9 @@ body {
   }
 }
 
-.navbar-right {float: right !important;}
-
 @media(max-width:767px)
 {
-    .navbar-header:after {
-      clear: none;
-    }
-    .navbar-default {
+/*    .navbar-default {
       height: 58px;
-    }
+    }*/
 }
