@@ -89,6 +89,9 @@ body {
    background-color : var(--warning);
    position:relative;
 }
+.settings_avatar { 
+  margin-left : 10px;
+}
 .button-row {
   padding-top : 30px;
 }
@@ -124,6 +127,10 @@ body {
 }
 #RegisterSubmit:focus {
   background-color: #fff;
+}
+#UpdateSettingsSubmit {
+  margin-left : 10px;
+  width : 280px;
 }
 #UpdateSettingsSubmit:focus {
   background-color: #fff;

@@ -146,8 +146,7 @@ export default class SettingsTextInput extends React.Component {
 	}
 	render() {
 		var isPassword = ((this.props.field == "password" 
-						|| this.props.field == "password_confirm") 
-						|| this.props.field == "old_password");
+						|| this.props.field == "password_confirm"));
 		var type = isPassword ? "password" : "text";
 		return (
 				<div>

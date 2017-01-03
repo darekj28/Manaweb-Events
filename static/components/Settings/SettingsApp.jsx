@@ -157,7 +157,7 @@ export default class SettingsApp extends React.Component {
 															isUpdate={true}/>
 									</div>
 						}, this)}
-						<div id="avatar_container" className="avatar_container centered-text"></div>
+						<div id="avatar_container" className="avatar_container settings_avatar centered-text"></div>
 						<div className="form-group">
 							<button className="btn btn-default" id="UpdateSettingsSubmit" 
 									onClick={this.handleSubmit.bind(this)}> Update! </button>

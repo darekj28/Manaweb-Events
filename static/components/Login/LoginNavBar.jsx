@@ -55,8 +55,7 @@ export default class LoginNavBar extends React.Component {
 	}
 	initializeIp(){
     	$.get('https://jsonip.com/', function(r){ 
-    		this.setState({ip: r.ip}) 
-    		console.log("after initialize ip")
+    		this.setState({ip: r.ip});
     	}.bind(this))
     }
     // register handlers
@@ -117,7 +116,8 @@ export default class LoginNavBar extends React.Component {
 				  					handleTyping=		{this.handleTyping.bind(this)}
 				  					initializeIp=		{this.initializeIp.bind(this)}/>}
 				  	{this.state.login_register == "RegisterTab" &&
-			  			<RegisterForm first_name=		{this.state.first_name}
+			  			<RegisterForm ip=				{this.state.ip}
+			  						first_name=			{this.state.first_name}
 			  						last_name=   		{this.state.last_name}
 			  						username=    		{this.state.username}
 			  						email_address=		{this.state.email_address}

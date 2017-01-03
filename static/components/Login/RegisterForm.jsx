@@ -16,6 +16,10 @@ function contains(collection, item) {
 }
 
 export default class RegisterForm extends React.Component {
+	constructor() {
+		super();
+		this.state = {ip : ""};
+	}
 	handleSubmit() {
 		if (this.props.submittable) {
 			var obj = {
@@ -51,7 +55,7 @@ export default class RegisterForm extends React.Component {
 		}
 	}
 	login() {
-		var obj = { user : this.props.username, password : this.props.password };
+		var obj = { user : this.props.username, password : this.props.password, ip : this.props.ip };
 		$.ajax({
 			type: "POST",
 			url : '/verifyAndLogin',
@@ -105,6 +109,7 @@ export default class RegisterForm extends React.Component {
     }
     componentDidMount() {
     	this.enableRegister.bind(this)();
+    	this.initializeIp.bind(this)();
 		$('#CreateProfileSuccess').hide();
     	$('#CreateProfileFail').hide();
     }
