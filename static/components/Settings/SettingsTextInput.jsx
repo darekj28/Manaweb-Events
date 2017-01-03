@@ -146,6 +146,11 @@ export default class SettingsTextInput extends React.Component {
 						|| this.props.field == "old_password");
 		if ((this.props.isUpdate && !isPassword) || this.props.hasBeenChecked)
 			this.setState({ valid : "valid" });
+		var phones = [{ "mask": "(###) ###-####"}, { "mask": "(###) ###-##############"}];
+	    $('#phone_number').inputmask({ 
+	        mask: phones, 
+	        greedy: false, 
+	        definitions: { '#': { validator: "[0-9]", cardinality: 1}} });
 	}
 	render() {
 		var isPassword = ((this.props.field == "password" 
@@ -154,9 +159,9 @@ export default class SettingsTextInput extends React.Component {
 		var isPhoneNumber = (this.props.field == "phone_number")
 		return (
 				<div>
-					{isPhoneNumber && <input className={"setting form-control " + this.state.valid + " input-medium bfh-phone"}
+					{isPhoneNumber && <input className={"setting form-control " + this.state.valid}
 					 data-country="US"
-					 id={this.props.field} type={type} 
+					 id={this.props.field} type= "tel" 
 						value={this.props.value} placeholder={idToName(this.props.field)}
 						onChange={this.handleTyping.bind(this)} onBlur={this.handleBlur.bind(this)}/>
 					}

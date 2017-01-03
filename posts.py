@@ -330,7 +330,6 @@ class Posts:
 		self.db.execute(addIndexCode)
 		addIndexCode = 'CREATE INDEX IF NOT EXISTS receiver_id ON ' + self.NOTIFICATION_TABLE + ' (receiver_id)'
 		self.db.execute(addIndexCode)
-
 		createNotificationIdTableCode = "CREATE TABLE IF NOT EXISTS " + self.NOTIFICAITON_ID_TABLE + " (notification_id TEXT)"
 		self.db.execute(createNotificationIdTableCode)
 		addIndexCode = "CREATE INDEX IF NOT EXISTS notification_id ON " + self.NOTIFICAITON_ID_TABLE + "(notification_id)"
@@ -343,7 +342,6 @@ class Posts:
 		timeString = self.getTimeString()
 		notification_id = self.hash_notification_id(timeString)
 		action = self.formatNotificationAction(isOP, numOtherPeople, original_post, sender_id)
-		
 		self.insertNotificationIntoMain(feed_name, notification_id, timeString, timeStamp, comment_id, receiver_id, sender_id)
 		if numOtherPeople == 0 :
 			self.addToShortList(feed_name, comment_id, receiver_id, sender_id, action, notification_id, timeStamp, timeString)
@@ -398,9 +396,7 @@ class Posts:
 
 	def addToShortList(self, feed_name, comment_id, receiver_id, sender_id, action, notification_id, timeStamp, timeString):
 		# create the short_list table for this user
-
 		self.createShortList(receiver_id)
-
 		threshold = 100
 		numUnseenActions = 1
 		seen = False
@@ -1093,6 +1089,19 @@ class Posts:
 	# def updateNotificationsTablesFornumUnseenActions(self, table_name):
 	# 	sql = "ALTER TABLE " + table_name + " ADD numUnseenActions INTEGER DEFAULT 1"
 	# 	self.db.execute(self.db.mogrify(sql))
+
+	def deleteNotifications(self):
+		user_manager = Users()
+		user_list = user_manager.getUserList()
+		user_manager.closeConnection()
+
+		# delete from short lists
+		for user in user_list:
+			self.createShortList(user)
+			sql  = "DELETE FROM " + self.USER_NOTIFICATION_PREFIX + user
+			self.db.execute(sql)
+
+
 
 
 def test_posting(test_size):

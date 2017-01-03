@@ -11690,7 +11690,7 @@
 							{ className: 'container' },
 							React.createElement(
 								'div',
-								{ className: 'navbar-header' },
+								{ className: 'navbar-left' },
 								React.createElement(
 									Link,
 									{ to: '/', className: 'navbar-brand navbar-brand-logo' },
@@ -11698,13 +11698,21 @@
 								)
 							),
 							React.createElement(
-								'div',
-								{ id: 'LoginRegisterLabel', className: 'pull-right SearchNavBarGlyphicon navbar-toggle navbar-toggle-always',
-									'data-toggle': 'offcanvas', 'data-target': '#LoginRegisterMenu' },
+								'ul',
+								{ className: 'nav navbar-nav navbar-right navbar-ul' },
 								React.createElement(
-									'b',
-									null,
-									' Login \u2022 Register '
+									'li',
+									{ className: 'navbar-toggle-always' },
+									React.createElement(
+										'div',
+										{ id: 'LoginRegisterLabel', className: 'SearchNavBarGlyphicon navbar-toggle navbar-toggle-always',
+											'data-toggle': 'offcanvas', 'data-target': '#LoginRegisterMenu' },
+										React.createElement(
+											'b',
+											null,
+											' Login \u2022 Register '
+										)
+									)
 								)
 							)
 						)
@@ -11721,7 +11729,7 @@
 								{ className: "tab_label " + login_selected,
 									id: 'LoginTab', onClick: this.switchMenu.bind(this) },
 								React.createElement(
-									'h2',
+									'h3',
 									null,
 									React.createElement(
 										'b',
@@ -11735,7 +11743,7 @@
 								{ className: "tab_label " + register_selected,
 									id: 'RegisterTab', onClick: this.switchMenu.bind(this) },
 								React.createElement(
-									'h2',
+									'h3',
 									null,
 									React.createElement(
 										'b',
@@ -11942,9 +11950,13 @@
 							{ className: 'form-group' },
 							React.createElement(
 								'button',
-								{ className: 'btn btn-default form-control blurButton',
+								{ className: 'btn-login form-control blurButton',
 									id: 'LoginButton' },
-								' Sign In!'
+								React.createElement(
+									'b',
+									null,
+									'Login'
+								)
 							)
 						),
 						React.createElement(
@@ -11961,7 +11973,7 @@
 					),
 					React.createElement(
 						Link,
-						{ to: '/recovery', className: 'navbar-brand navbar-brand-logo' },
+						{ to: '/recovery', className: 'link' },
 						'Forgot your password?'
 					)
 				);
@@ -12297,9 +12309,13 @@
 							{ className: 'form-group' },
 							React.createElement(
 								'button',
-								{ className: 'btn btn-default blurButton',
+								{ className: 'btn-login form-control blurButton',
 									id: 'RegisterSubmit' },
-								'Get Started! '
+								React.createElement(
+									'b',
+									null,
+									'Get Started!'
+								)
 							)
 						),
 						React.createElement(
@@ -12512,9 +12528,14 @@
 		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
-				$('#password').popover();
+				if (this.props.isUpdate) $('#password').popover();else $('#password').popover({ placement: 'bottom' });
 				var isPassword = this.props.field == "password" || this.props.field == "password_confirm" || this.props.field == "old_password";
 				if (this.props.isUpdate && !isPassword || this.props.hasBeenChecked) this.setState({ valid: "valid" });
+				var phones = [{ "mask": "(###) ###-####" }, { "mask": "(###) ###-##############" }];
+				$('#phone_number').inputmask({
+					mask: phones,
+					greedy: false,
+					definitions: { '#': { validator: "[0-9]", cardinality: 1 } } });
 			}
 		}, {
 			key: 'render',
@@ -12525,9 +12546,9 @@
 				return React.createElement(
 					'div',
 					null,
-					isPhoneNumber && React.createElement('input', { className: "setting form-control " + this.state.valid + " input-medium bfh-phone",
+					isPhoneNumber && React.createElement('input', { className: "setting form-control " + this.state.valid,
 						'data-country': 'US',
-						id: this.props.field, type: type,
+						id: this.props.field, type: 'tel',
 						value: this.props.value, placeholder: idToName(this.props.field),
 						onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),
 					!isPassword && !isPhoneNumber && React.createElement('input', { className: "setting form-control " + this.state.valid, id: this.props.field, type: type,
