@@ -289,7 +289,6 @@ def editPost():
 # get current user info
 @browser_api.route('/getCurrentUserInfo', methods = ['POST'])
 def getCurrentUserInfo():
-	print(request.form.get("userID"))
 	thisUserID = request.form.get("userID")
 	# thisUserID = session.get('userID')
 	thisUser = getUserInfo(thisUserID)

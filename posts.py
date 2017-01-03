@@ -744,8 +744,10 @@ class Posts:
 		# adjust this later
 		participating_users = self.getParticipatingUsers(feed_name, comment_id)
 		# user_manager = Users()
+		print(participating_users)
 		for userID in participating_users:
 			if userID != poster_id:
+				print(userID)
 				self.sendNotification(feed_name, comment_id, userID, poster_id, this_post)
 
 
