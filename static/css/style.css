@@ -36,6 +36,9 @@ body {
 .tab_label {
   color : var(--verylight);
   cursor : pointer;
+  display : inline-block;
+  padding-left : 30px;
+  padding-right : 20px;
 }
 .tab_label :hover {
   color : #ffffff;
@@ -82,7 +85,7 @@ body {
 }
 #NavMenuHeader {
   background-color : var(--dark);
-  height : 140px;
+  height : 75px;
 }
 .app-container {
   padding-top : 65px;

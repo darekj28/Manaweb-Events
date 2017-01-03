@@ -105,11 +105,11 @@ export default class LoginNavBar extends React.Component {
 					<div className="container" id="NavMenuHeader">
 					  	<div className={"tab_label " + login_selected} 
 					  		id="LoginTab" onClick={this.switchMenu.bind(this)}>
-					  		<h2><b>Login</b></h2>
+					  		<h3><b>Login</b></h3>
 					  	</div>
 					  	<div className={"tab_label " + register_selected} 
 					  		id="RegisterTab" onClick={this.switchMenu.bind(this)}>
-					  		<h2><b>Register</b></h2>
+					  		<h3><b>Register</b></h3>
 					  	</div>
 					</div>
 				  	{this.state.login_register == "LoginTab" &&
