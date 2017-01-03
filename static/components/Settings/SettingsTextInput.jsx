@@ -162,6 +162,9 @@ export default class SettingsTextInput extends React.Component {
 					if ($(this).val().length === 9) {
 						$(this).val($(this).val() + '-');
 					}
+					if ($(this).val().length === 0) {
+						$(this).val("(" + $(this).val());
+					}
 				}
 				// Allow numeric (and tab, backspace, delete) keys only
 				return (key == 8 || 

@@ -12547,6 +12547,9 @@
 							if ($(this).val().length === 9) {
 								$(this).val($(this).val() + '-');
 							}
+							if ($(this).val().length === 0) {
+								$(this).val("(" + $(this).val());
+							}
 						}
 						// Allow numeric (and tab, backspace, delete) keys only
 						return key == 8 || key == 9 || key == 46 || key >= 48 && key <= 57 || key >= 96 && key <= 105;
