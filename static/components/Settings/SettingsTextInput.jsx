@@ -46,7 +46,53 @@ function warningForField(field, value) {
 	}
 	return "Invalid " + idToName(field);
 }
-
+function phoneHelper() {
+	$('#phone_number').attr('maxlength', 14);
+	$('#phone_number').keydown(function (e) {
+		var key = e.charCode || e.keyCode || 0;
+		// Auto-format- do not expose the mask as the user begins to type
+		if (key !== 8 && key !== 9) {
+			if ($(this).val().length === 4) {
+				$(this).val($(this).val() + ')');
+			}
+			if ($(this).val().length === 5) {
+				$(this).val($(this).val() + ' ');
+			}			
+			if ($(this).val().length === 9) {
+				$(this).val($(this).val() + '-');
+			}
+			if ($(this).val().length === 0) {
+				$(this).val("(" + $(this).val());
+			}
+		}
+		// Allow numeric (and tab, backspace, delete) keys only
+		return (key == 8 || 
+				key == 9 ||
+				key == 46 ||
+				(key >= 48 && key <= 57) ||
+				(key >= 96 && key <= 105));	
+		})
+	.bind('focus click', function () {
+		if ($(this).val().length === 0) {
+			$(this).val('(');
+		}
+		else {
+			var val = $(this).val();
+			$(this).val('').val(val); // Ensure cursor remains at the end
+		}
+	})
+	.blur(function () {
+		if ($(this).val() === '(') {
+			$(this).val('');
+		}
+	});
+}
+function passwordHelper(isUpdate) {
+	if (isUpdate) 
+		$('#password').popover();
+	else 
+		$('#password').popover({ placement : 'bottom' });
+}
 export default class SettingsTextInput extends React.Component {
 	constructor(props) {
 		super(props);
@@ -137,57 +183,15 @@ export default class SettingsTextInput extends React.Component {
 		this.props.handleBlur(this.props.field, isValid);
 	}
 	componentDidMount() {
-		if (this.props.isUpdate) 
-			$('#password').popover();
-		else 
-			$('#password').popover({ placement : 'bottom' });
 		var isPassword = ((this.props.field == "password" 
 						|| this.props.field == "password_confirm") 
 						|| this.props.field == "old_password");
 		if ((this.props.isUpdate && !isPassword) || this.props.hasBeenChecked)
 			this.setState({ valid : "valid" });
-
-		if (this.props.field == "phone_number"){
-			$('#phone_number').attr('maxlength', 14);
-			$('#phone_number').keydown(function (e) {
-				var key = e.charCode || e.keyCode || 0;
-				// Auto-format- do not expose the mask as the user begins to type
-				if (key !== 8 && key !== 9) {
-					if ($(this).val().length === 4) {
-						$(this).val($(this).val() + ')');
-					}
-					if ($(this).val().length === 5) {
-						$(this).val($(this).val() + ' ');
-					}			
-					if ($(this).val().length === 9) {
-						$(this).val($(this).val() + '-');
-					}
-					if ($(this).val().length === 0) {
-						$(this).val("(" + $(this).val());
-					}
-				}
-				// Allow numeric (and tab, backspace, delete) keys only
-				return (key == 8 || 
-						key == 9 ||
-						key == 46 ||
-						(key >= 48 && key <= 57) ||
-						(key >= 96 && key <= 105));	
-				})
-			.bind('focus click', function () {
-				if ($(this).val().length === 0) {
-					$(this).val('(');
-				}
-				else {
-					var val = $(this).val();
-					$(this).val('').val(val); // Ensure cursor remains at the end
-				}
-			})
-			.blur(function () {
-				if ($(this).val() === '(') {
-					$(this).val('');
-				}
-			});
-		}
+		if (this.props.field == "phone_number")
+			phoneHelper();
+		if (this.props.field == "password") 
+			passwordHelper(this.props.isUpdate);
 	}
 
 	render() {
