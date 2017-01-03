@@ -101,21 +101,16 @@ export default class LoginApp extends React.Component {
 	}
 
 	getCurrentUserInfo() {
-
-		$.post('/getCurrentUserInfo', {userID : this.state.username}, function(data) {
-			console.log("current user info got ")
+		$.post('/getCurrentUserInfo', {userID : this.state.login_user}, function(data) {
 			AppActions.addCurrentUser(data.thisUser);
 			this.getNotifications.bind(this)();
 		}.bind(this));
 	}
-
 	getNotifications() {
         $.post('/getNotifications', {currentUser : AppStore.getCurrentUser()},
             function(data) {
                 var notifications = [];
-                var count = 0;
                 data.notification_list.map(function(obj) {
-                    if (!obj['seen']) count++; 
                     notifications.unshift({
                         comment_id : obj['comment_id'],
                         notification_id : obj['notification_id'],
@@ -127,10 +122,19 @@ export default class LoginApp extends React.Component {
                     });
                 });
                 AppActions.addNotifications(notifications);
-                AppActions.addNotificationCount(String(count));
+                this.getNotificationCount.bind(this)();
+            }.bind(this));
+    }
+    
+    getNotificationCount() {
+    	$.post('/getNotificationCount', {currentUser : AppStore.getCurrentUser()},
+            function(data) {
+                AppActions.addNotificationCount(data.count);
                 browserHistory.push('/');
             }.bind(this));
     }
+
+
 
 	handleSubmit() {
 

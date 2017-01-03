@@ -6,7 +6,7 @@ import validation
 import time
 import email_confirm
 from passlib.hash import argon2
-
+import sms
 # from py2neo import authenticate, Graph, Node
 # authenticate("localhost:7474", "neo4j", "powerplay")
 # graph = Graph()
@@ -14,6 +14,37 @@ from passlib.hash import argon2
 browser_api = Blueprint('browser_api', __name__)
 DEFAULT_FEED = "BALT"
 
+@browser_api.route('/updatePassword', methods = ['POST'])
+def updatePassword():
+	username = request.json['username']
+	new_password = request.json['password']
+	user_manager = Users()
+	user_manager.updateInfo(username, 'password', new_password)
+	user_manager.closeConnection()
+	output = {}
+	output['result'] = 'success'
+	return jsonify(output)
+
+
+@browser_api.route('/sendEmailConfirmation', methods = ['POST'])
+def sendEmailConfirmation():
+	email = request.json['email']
+	confirmationCode = email_confirm.sendConfirmationEmail(email)
+	return jsonify({'result' : 'success', 'confirmationCode' : confirmationCode})
+
+@browser_api.route('/sendTextConfirmation', methods = ['POST'])
+def sendTextConfirmation():
+	phone_number = request.json['phone_number']
+	confirmationCode = sms.sendTextConfirmationPin(phone_number)
+	return jsonify({'result' : 'success', 'confirmationCode' : confirmationCode})
+
+@browser_api.route('/recoverAccount', methods = ['POST'])
+def recoverAccount():
+	recovery_input = request.json['recovery_input']
+	security_manager = Security()
+	output = security_manager.recoverAccount(recovery_input)
+	security_manager.closeConnection()
+	return jsonify(output)
 
 @browser_api.route('/isFacebookUser', methods = ['POST'])
 def isFacebookUser():
@@ -170,18 +201,6 @@ def markPostFeedAsSeen():
 		return jsonify({'success': True})
 	else: 
 		return jsonify({'success': False})
-			
-
-@browser_api.route('/sendConfirmation', methods = ['POST'])
-def sendConfirmation():
-	userID = request.form.get("currentUser[userID]")
-	
-	if (userID == None):
-		return redirect(url_for('login'))
-	else:
-		thisUser = getUserInfo(userID)
-		email_confirm.sendConfirmationEmail(thisUser)
-		return render_template('confirmation.html')
 
 # gets the posts for the current feed (defaulted to BALT for now)
 @browser_api.route('/getPosts', methods = ['POST'])

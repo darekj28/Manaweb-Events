@@ -21,6 +21,9 @@ export default class LoginNavBar extends React.Component {
 		                 	<Link to="/" className="navbar-brand navbar-brand-logo">
 		                        <span className="glyphicon glyphicon-home"></span>
 		                  	</Link>
+
+		               
+
 		                  	<div id="LoginRegisterLabel" className="SearchNavBarGlyphicon navbar-toggle navbar-toggle-always" 
 		                  		data-toggle="offcanvas" data-target="#LoginRegisterMenu">
 		                  			<b> Login &#8226; Register </b>

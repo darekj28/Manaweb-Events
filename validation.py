@@ -105,6 +105,16 @@ def validateUsername(username):
 		if not char.isalnum() and char != '_':
 			output['result'] = 'failure'
 			output['error'] = 'Username can only have alphanumeric characters or underscores.'
+
+	hasAlpha = False
+	for char in username:
+		if char.isalpha():
+			hasAlpha = True
+
+	if hasAlpha:
+		output['result'] = 'failure'
+		output['error'] = "Username must have at least 1 alphabetical character"
+
 	lower_username = username.lower()
 	for word in banned_username_words:
 		if lower_username.find(word) != -1:

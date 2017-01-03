@@ -12,14 +12,16 @@ import psycopg2
 import urllib
 from passlib.hash import argon2
 import requests
+import re
+from users import Users
 	
 
 class Security:
 	# automatically opens the connection
 	def __init__(self):				
 		self.USER_TABLE = "user_info"
-		self.RECOVERY_TABLE = "recovery_table"
 		self.LOGIN_ATTEMPT_TABLE = "login_attempt_table"
+		self.RECOVERY_HISTORY_TABLE = "recovery_history_table"
 		self.FREEGEOPIP_URL = "http://freegeoip.net/json"
 		urllib.parse.uses_netloc.append("postgres")
 		os.environ["DATABASE_URL"] = "postgres://spkgochzoicojm:y0MABz523D1H-zMqeZVvplCuC2@ec2-54-163-252-55.compute-1.amazonaws.com:5432/d15b0teu2kkhek"
@@ -85,9 +87,108 @@ class Security:
 		return response.json()
 
 
+	def recoverAccount(self, recovery_input):
+		# if email
+		# recoverAccountWithEmail(recovery_input)
+		# first check if it is an email
+		email_regex = re.compile("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
+		loginIdIsEmail = email_regex.match(recovery_input)
+		if loginIdIsEmail:
+			output = self.recoverAccountWithEmail(recovery_input)
+			return output
+		# if recovery_input has an alphabetical character then it cannot be a phone number
+		hasAlpha = False
+		for char in recovery_input:
+			if char.isalpha():
+				hasAlpha = True
+		if hasAlpha:
+			output = self.recoverAccountWithUsername(recovery_input)
+			return output
+		# otherwise we check the phone numbers
+		else:
+			output = self.recoverAccountWithText(recovery_input)
+			return output
+
+	def recoverAccountWithEmail(self, email):
+		email = email.lower()
+		user_manager = Users()
+		this_user = user_manager.getInfoFromEmail(email)
+		user_manager.closeConnection()
+		output = {}
+		if this_user == None:
+			output['result'] = 'failure'
+			output['error'] = 'This email is not registered with any user'
+		else:
+			output['result'] = 'success'
+			output['username'] = this_user['userID']
+			output['email'] = email
+			output['phone_number'] = this_user['phone_number']
+			output['method'] = 'email'
+		return output
+
+	def recoverAccountWithText(self, phone_number):
+		user_manager = Users()
+		this_user = user_manager.getInfoFromPhoneNumber(phone_number)
+		user_manager.closeConnection()
+		output = {}
+		if this_user == None:
+			output['result'] = 'failure'
+			output['error'] = 'This phone number is not registered with any user'
+		else:
+			output['result'] = 'success'
+			output['username'] = this_user['userID']
+			output['email'] = this_user['email']
+			output['phone_number'] = phone_number
+			output['method'] = 'phone_number'
+		return output
+
+
+
+	# this is to be used if they forgot their email or username
+	def recoverAccountWithUsername(self, username):
+		username = username.lower()
+		user_manager = Users()
+		this_user = user_manager.getInfo(username)
+		user_manager.closeConnection()
+		output = {}
+		if this_user == None:
+			output['result'] = 'failure'
+			output['error'] = 'Username does not exists'
+		else:
+			output['result'] = 'success'
+			output['username'] = username
+			output['email'] = this_user['email']
+			output['phone_number'] = this_user['phone_number']
+			output['method'] = 'username'
+		return output
+
+	def createRecoveryHistoryTable(self):
+		sql = "CREATE TABLE IF NOT EXISTS " + self.RECOVERY_HISTORY_TABLE + " (recovery_input TEXT, recovery_method TEXT, isValudInput BOOLEAN, ip TEXT \
+		country_code TEXT, city TEXT, region_code TEXT, zip_code TEXT, timeString TEXT, timeStamp FLOAT)"
+		self.db.execute(self.db.mogrify(sql))
+		addIndexCode = 'CREATE INDEX IF NOT EXISTS login_id ON ' + self.LOGIN_ATTEMPT_TABLE + ' (recovery_input)'
+		self.db.execute(addIndexCode)
+
+	# this method will run after the general recoverAccount method
+	# recovery method is one of email, username, or text
+	def recordRecoveryAttempt(self, recovery_input, recovery_method ,ip):
+		timeStamp = time.time()
+		timeString = self.getTimeString()
+		location_info = self.get_geolocation_for_ip(ip)
+		country_code = location_info['country_code']
+		city = location_info['city']
+		region_code = location_info['region_code']
+		zip_code = location_info['zip_code']
+		sql = "INSERT INTO " + self.LOGIN_ATTEMPT_TABLE + " (recovery_input, recovery_method, isValidInput, ip, country_code, \
+		city, region_code zip_code, timeString, timeStamp) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+		self.db.execute(self.db.mogrify(sql, (recovery_input, recovery_method, isValidInput, ip, country_code, city, region_code,
+		zip_code, timeString, timeStamp)))
+
 # def test():
 # 	security_manager = Security()
-# 	print(security_manager.get_geolocation_for_ip('10.152.233.4'))
+# 	print(security_manager.recoverAccount('darekj@gmail.com'))
+# 	print(security_manager.recoverAccount('darekj'))
+# 	print(security_manager.recoverAccount('555-555-5555'))
 # 	security_manager.closeConnection()
 
 # test()

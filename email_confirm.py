@@ -27,16 +27,12 @@ def sendConfirmationEmail(thisUser):
 	# hostName = "www.manaweb.com"
 	# confirmationURL = hostName + '/' + 'confirmation' + '/' + confirmationPin
 	# fullMessage = message + "\n" + "\n" + confirmationURL
-
 	fullMessage = "Below is your confirmation pin " + "\n"
 	fullMessage = fullMessage + " " + confirmationPin
-
-
 	msg = "From: noreply@manaweb.com <darek@manaweb.com>" + "\n"
 	msg = msg + "To: " + email + "\n"
 	msg = msg + "Subject: " + "Please Confirm" + "\n"
 	msg = msg + "\n" + fullMessage
-
 	smtpserver.ehlo()
 	smtpserver.starttls()
 	smtpserver.ehlo

@@ -33,7 +33,7 @@ user_list = user_manager.getUserList()
 
 # post_manager.deleteUserPosts('lily')
 # user_manager.deleteUser('lily')
-security_manager.createLoginAttemptTable()
+security_manager.createRecovery()
 # for fb_user in fb_users:
 # 	post_manager.deleteUserPosts(fb_user)
 # 	user_manager.deleteUser(fb_user)

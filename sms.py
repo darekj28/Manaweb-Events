@@ -16,8 +16,6 @@ client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN)
 # ) 
 
 
-
-
 def sendMessage(sender, receiver, body):
 	client.messages.create(to = receiver, from_ = sender, body = body)
 

@@ -3,6 +3,8 @@ import LoginError from './LoginError.jsx';
 import AppActions from '../../actions/AppActions.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 import { browserHistory } from 'react-router';
+var Link = require('react-router').Link;
+
 export default class LoginForm extends React.Component {
 	constructor() {
 		super();
@@ -89,7 +91,8 @@ export default class LoginForm extends React.Component {
     }
 	render() {
 		return (
-			<form>
+			<div>
+				<form>
             	<div className="form-group">
                 	<input type="text" className="form-control login" id="login_user" 
                 	onChange={this.handleTyping.bind(this)} placeholder="Username"/>
@@ -100,7 +103,14 @@ export default class LoginForm extends React.Component {
 	            	{this.state.error && 
 				  		<LoginError error={this.state.error}/>}
 	            </div>
-	        </form>
+
+
+	        	</form>
+    	   		{/* Feel free to move this Darek put this here for kicks */}
+                  	<Link to="/recovery" className="navbar-brand navbar-brand-logo">
+                        Forgot your password?
+                  	</Link>
+	        </div>
 			)
 	}
 }

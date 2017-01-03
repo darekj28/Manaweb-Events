@@ -370,6 +370,15 @@ class Users:
 		user_info['fb_id'] = query[21]
 		return user_info
 
+	def getInfoFromPhoneNumber(self, phone_number):
+		table_name = self.USER_TABLE
+		self.udb.execute("SELECT * FROM " + table_name + " WHERE phone_number = %s", (phone_number,))
+		size_test = self.udb.fetchall()
+		if len(size_test) == 0:
+			return None	
+		query = size_test[0]
+		return self.queryToDict(query)
+
 	def getInfoFromEmail(self, email):
 		table_name = self.USER_TABLE
 		self.udb.execute("SELECT * FROM " + table_name + " WHERE email = %s", (email,))
@@ -468,74 +477,6 @@ class Users:
 
 	
 
-
-def test():
-	first_name = ['Darek', 'Eli', 'Brian', 'Luis', 'Paul', 'Mashi', 'Yuuya', 'Shouta', 'Gabby']
-	last_name = ['Johnson', 'Chang', 'Kibler', 'Scott-Vargas', 'Cheon','Scanlan', 'Watanabe', 'Yasooka', 'Spartz']
-	userID = ['darekj', 'elic', 'briank', 'luisv', 'paulc', 'mashis', 'yuuyaw', 'shoutay', 'gabbys']
-	gender = ['Male','Male','Male','Male','Male','Male','Male','Male', 'Female']
-	birthYear = ['1994', '1994', '1984', '1882', '1986', '1984', '1990', '1990', '1990']
-	birthMonth = ['8','3','2','10', '9', '5', '11', '12', '2']
-	birthDay = ['28','13','11','18','29','8','4',' 10','28']
-	password = ['pass1','pass1','pass1','pass1','pass1','pass1','pass1', 'pass1', 'pass1']
-	home_zip = ['19131', '19131', '19131', '19131', '19131', '19131', '19131', '19131', '19131']
-	minAge = [10,10,10,10,10,10,10,10,10]
-	maxAge = [100,100,100,100,100,100,100,100,100]
-	desired_zip = ['19131', '19131', '19131', '19131', '19131', '19131', '19131', '19131', '19131']
-	genderPreference = ['BOTH','BOTH','BOTH','BOTH','BOTH','BOTH','BOTH','BOTH', 'BOTH']
-	maxDistance = [20,20,20,20,20,20,20,20,20]
-	bio = ['I am currently an assistant trader at Susquehanna International Group. My favorite formats are standard and sealed and my favorite color combination is UR. In 2006 I got got 4th place at Minnesota state championships playing Dragonstorm',
-	'Hi, I\'m Eli! I am a casual cello player, so sometimes my friends like to call me Celli! I just started playing Magic recently and I\'m looking forward to playing a lot!',
-	'I\'m Brian, but also known as the \'Dragon Master\'. My favorite decks are green aggro decks',
-	'I was fortuante enough to be inducted into the Pro Tour hall of fame, allowing me to pursue my dream of posting new content for young Magic players',
-	'My name is, Paul Cheon, or HAUMPH if you like. I love UB control, and looking to top 8 my first PT.',
-	'I\'m Mashi, a GP judge and co host of Channel Fireball\'s Magic TV. I love Magic and my favorite card is Pillage (unfortunately too powerful for modern of standard',
-	'My name is Yuuya Watanabe. I won the world championship in 2012 playing Jund. Last year I was inducted into the hall of fame and I am very proud. Still looking to win my first Pro Tour though!',
-	'My name is Shouta Yasooka, although some people just call me \'The Master\'. I always surprise the crowd with my \'crazy\' decks that I bring to tournaments, and sometimes it works out :)',
-	'I\'m one of the few female casters for Magic the Gathering. I love to play too!'
-	]
-	password = "pass1"
-	isActive = True
-	phone_number = "555-555-5555"
-
-	user_manager = Users()
-	user_manager.resetDatabase()
-
-
-
-	for i in range(0,9):
-		email = userID[i] + '@gmail.com'
-		confirmationPin = 'confirmationPin'
-
-		avatar_url = './static/avatars/gideon.png'
-		slash_splits = avatar_url.split('/')
-		avatar_name = slash_splits[len(slash_splits)-1].split('.')[0]
-
-		isAdmin = False
-		if userID[i] == 'darekj' or userID[i] == 'elic':
-			isAdmin = True
-
-		user_manager.addUser(userID[i], first_name = first_name[i], last_name = last_name[i], password = password, email = email,  isActive = isActive,
-			avatar_url = avatar_url, avatar_name = avatar_name, confirmationPin = confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
-			isAdmin = isAdmin, phone_number = phone_number, birthMonth = birthMonth[i], birthDay = birthDay[i], birthYear = birthYear[i],
-			gender = gender[i]) 
-		
-	
-
-
-		
-	# for user in userID:
-	# 	print(user_manager.getInfo(user))
-
-	feed_name = "BALT"
-
-	user_manager.updateInfo('darekj', 'last_name', 'jeter')
-	user_manager.updateInfo('darekj', 'chillFilter', True)
-
-	print(user_manager.getInfo('mrt'))
-	user_manager.closeConnection()
-	
-# test()
 
 
 
