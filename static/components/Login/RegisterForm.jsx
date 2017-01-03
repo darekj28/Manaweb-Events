@@ -109,7 +109,6 @@ export default class RegisterForm extends React.Component {
     }
     componentDidMount() {
     	this.enableRegister.bind(this)();
-    	this.initializeIp.bind(this)();
 		$('#CreateProfileSuccess').hide();
     	$('#CreateProfileFail').hide();
     }
