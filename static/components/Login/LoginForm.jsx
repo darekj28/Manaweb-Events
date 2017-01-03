@@ -94,15 +94,15 @@ export default class LoginForm extends React.Component {
 	                    	onChange={this.props.handleTyping} placeholder="Password"/>
 		            </div>
 		            <div className="form-group"> 
-		            	<button className="btn btn-default form-control blurButton"
-		            					id="LoginButton"> Sign In!</button>
+		            	<button className="btn-login form-control blurButton"
+		            					id="LoginButton"><b>Login</b></button>
 		            </div>
 		            <div className="alert alert-danger login_alert" id="LoginFail">
 				  		<strong>Bro!</strong> {this.state.error}
 					</div>
 	        	</form>
     	   		{/* Feel free to move this Darek put this here for kicks */}
-                  	<Link to="/recovery" className="navbar-brand navbar-brand-logo">
+                  	<Link to="/recovery" className="link">
                         Forgot your password?
                   	</Link>
 	        </div>

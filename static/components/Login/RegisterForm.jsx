@@ -135,9 +135,9 @@ export default class RegisterForm extends React.Component {
 					}, this)}
 					<div id="avatar_container" className="avatar_container centered-text"></div>
 					<div className="form-group">
-						<button className="btn btn-default blurButton" 
+						<button className="btn-login form-control blurButton" 
 								id="RegisterSubmit"> 
-									Get Started! </button>
+									<b>Get Started!</b></button>
 					</div>
 					<div className="alert alert-success login_alert" id="CreateProfileSuccess">
 					  <strong>Success!</strong> Please hold on as we redirect you.

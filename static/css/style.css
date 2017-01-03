@@ -2,6 +2,7 @@
     --verylight : #e1f2be;
     --light: #c5d6a2;
     --dark : #96bf6d;
+    --verydark : #87AB62;
     --navbar : #32535E;
     --main-color : #404040;
     --success : #5cb85c;
@@ -111,19 +112,21 @@ body {
 #SignUpButton:focus {
   background-color: #fff;
 }
-#LoginButton {
+.btn-login {
   margin-left : 10px;
   width : 280px;
+  background-color : var(--dark);
+  color : #fff;
 }
-#LoginButton:focus {
-  background-color: #fff;
+.btn-login:hover {
+  background-color: var(--verydark);
+  color : #fff;
 }
-#RegisterSubmit {
-  margin-left : 10px;
-  width : 280px;
+.link {
+  color : var(--light);
 }
-#RegisterSubmit:focus {
-  background-color: #fff;
+.link:hover {
+  color: var(--dark);
 }
 #UpdateSettingsSubmit {
   margin-left : 10px;
@@ -489,11 +492,4 @@ body {
     color: #ffffff;
     background-color: var(--dark);
   }
-}
-
-@media(max-width:767px)
-{
-/*    .navbar-default {
-      height: 58px;
-    }*/
 }
