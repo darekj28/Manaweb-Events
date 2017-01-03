@@ -1,4 +1,5 @@
 :root{
+    --verylight : #e1f2be;
     --light: #c5d6a2;
     --dark : #96bf6d;
     --navbar : #32535E;
@@ -31,6 +32,27 @@ body {
   background-color : #ffffff;
   color : var(--main-color);
 }
+.tab_label {
+  color : var(--verylight);
+  cursor : pointer;
+}
+.tab_label :hover {
+  color : #ffffff;
+}
+#LoginForm {
+  padding-top : 10px;
+}
+#RegisterForm {
+  padding-top : 10px;
+}
+.login_selected {
+  color : #ffffff!important;
+  text-decoration: underline!important;
+}
+.register_selected {
+  color : #ffffff;
+  text-decoration: underline;
+}
 .setting_label {
   width : 280px;
   margin-left : 10px;
@@ -48,13 +70,17 @@ body {
   padding-left : 10px;
   color : var(--warning);
 }
+.navmenu-fixed-right {
+   left: auto !important;
+}
 .navmenu {
   background-color : #fff;
   overflow-x : hidden;
   white-space : normal;
 }
 #NavMenuHeader {
-  background-color : var(--light);
+  background-color : var(--dark);
+  height : 140px;
 }
 .app-container {
   padding-top : 65px;
@@ -73,11 +99,14 @@ body {
   width : 270px;
 }
 .navbar-toggle-always {
-  float : right;
+  float:right;
   display: block!important;
 }
+.navbar_block {
+  display : block;
+}
 #LoginRegisterLabel {
-  color : #fff!important;
+  color : #ffffff;
 }
 #SignUpButton:focus {
   background-color: #fff;

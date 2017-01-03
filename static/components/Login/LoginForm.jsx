@@ -13,6 +13,7 @@ export default class LoginForm extends React.Component {
 	}
 	loginError(err) {
 		this.setState({ error : err });
+		$('#LoginFail').fadeIn(400).delay(4000).fadeOut(400);
 	}
 	login() {
 		var obj = { user : this.props.login_user, 
@@ -76,10 +77,11 @@ export default class LoginForm extends React.Component {
     componentDidMount() {
     	this.enableLogin.bind(this)();
     	this.props.initializeIp();
+    	$('#LoginFail').hide();
     }
 	render() {
 		return (
-			<div className="container">
+			<div id="LoginForm" className="container">
 				<form className="form-horizontal">
 	            	<div className="form-group">
 	            		<SettingsInputLabel field="username"/>
@@ -95,8 +97,9 @@ export default class LoginForm extends React.Component {
 		            	<button className="btn btn-default form-control blurButton"
 		            					id="LoginButton"> Sign In!</button>
 		            </div>
-		            {this.state.error && 
-					  		<LoginError error={this.state.error}/>}
+		            <div className="alert alert-danger login_alert" id="LoginFail">
+				  		<strong>Bro!</strong> {this.state.error}
+					</div>
 	        	</form>
     	   		{/* Feel free to move this Darek put this here for kicks */}
                   	<Link to="/recovery" className="navbar-brand navbar-brand-logo">

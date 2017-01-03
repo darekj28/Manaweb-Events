@@ -24,7 +24,7 @@ var required_text_fields = [ "first_name", "last_name", "username", "email_addre
 export default class LoginNavBar extends React.Component {
 	constructor() {
 		super();
-		this.state = {login_register 		: 'login', // specify tab
+		this.state = {	login_register 		: 'LoginTab', // specify tab
 						error 				: "",
 						login_user 			: '', // login save state
 						login_password 		: '', 
@@ -45,7 +45,7 @@ export default class LoginNavBar extends React.Component {
 						submittable			: false};
 	}
 	switchMenu(event) {
-		this.setState({ login_register : event.target.id });
+		this.setState({ login_register : event.currentTarget.id });
 	} 
 	// login handlers
 	handleTyping(event) {
@@ -79,11 +79,14 @@ export default class LoginNavBar extends React.Component {
 									  select_fields.every(field => contains(valid_select_fields, field)) });
 	}
 	render() {
+		var login_selected = this.state.login_register == "LoginTab" ? "login_selected" : "";
+		var register_selected = this.state.login_register == "RegisterTab" ? "register_selected" : "";
+	
 		return (
 			<div>
 				<nav className="navbar navbar-default" role="navigation">
 				  <div className="container">
-			       		<div className="navbar-header">
+			       		<div className="navbar-header navbar_block">
 		                 	<Link to="/" className="navbar-brand navbar-brand-logo">
 		                        <span className="glyphicon glyphicon-home"></span>
 		                  	</Link>
@@ -96,19 +99,23 @@ export default class LoginNavBar extends React.Component {
 				</nav>
 				<nav id="LoginRegisterMenu" className="navmenu navmenu-default navmenu-fixed-right offcanvas" 
 							role="navigation">
-					<div id="NavMenuHeader">
-					  	<div className="navmenu-brand" id="login" onClick={this.switchMenu.bind(this)}>
-					  		Login</div>
-					  	<div className="navmenu-brand" id="register" onClick={this.switchMenu.bind(this)}>
-					  		Register</div>
+					<div className="container" id="NavMenuHeader">
+					  	<div className={"tab_label " + login_selected} 
+					  		id="LoginTab" onClick={this.switchMenu.bind(this)}>
+					  		<h2><b>Login</b></h2>
+					  	</div>
+					  	<div className={"tab_label " + register_selected} 
+					  		id="RegisterTab" onClick={this.switchMenu.bind(this)}>
+					  		<h2><b>Register</b></h2>
+					  	</div>
 					</div>
-				  	{this.state.login_register == "login" &&
+				  	{this.state.login_register == "LoginTab" &&
 				  		<LoginForm login_user=			{this.state.login_user}
 				  					login_password=		{this.state.login_password}
 				  					ip=					{this.state.ip}
 				  					handleTyping=		{this.handleTyping.bind(this)}
 				  					initializeIp=		{this.initializeIp.bind(this)}/>}
-				  	{this.state.login_register == "register" &&
+				  	{this.state.login_register == "RegisterTab" &&
 			  			<RegisterForm first_name=		{this.state.first_name}
 			  						last_name=   		{this.state.last_name}
 			  						username=    		{this.state.username}

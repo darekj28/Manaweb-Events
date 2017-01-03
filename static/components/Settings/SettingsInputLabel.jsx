@@ -12,7 +12,7 @@ function idToName (id) {
 export default class SettingsInputLabel extends React.Component {
 	render() {
 		return (
-				<label className="setting_label" for={this.props.field}>{idToName(this.props.field)}</label>
+				<div className="setting_label"><b>{idToName(this.props.field)}</b></div>
 			);
 	}
 }
