@@ -11640,7 +11640,6 @@
 			value: function initializeIp() {
 				$.get('https://jsonip.com/', function (r) {
 					this.setState({ ip: r.ip });
-					console.log("after initialize ip");
 				}.bind(this));
 			}
 			// register handlers
@@ -11751,7 +11750,8 @@
 							ip: this.state.ip,
 							handleTyping: this.handleTyping.bind(this),
 							initializeIp: this.initializeIp.bind(this) }),
-						this.state.login_register == "RegisterTab" && React.createElement(_RegisterForm2.default, { first_name: this.state.first_name,
+						this.state.login_register == "RegisterTab" && React.createElement(_RegisterForm2.default, { ip: this.state.ip,
+							first_name: this.state.first_name,
 							last_name: this.state.last_name,
 							username: this.state.username,
 							email_address: this.state.email_address,
@@ -12192,7 +12192,7 @@
 		}, {
 			key: 'login',
 			value: function login() {
-				var obj = { user: this.props.username, password: this.props.password };
+				var obj = { user: this.props.username, password: this.props.password, ip: this.props.ip };
 				$.ajax({
 					type: "POST",
 					url: '/verifyAndLogin',
@@ -12519,7 +12519,7 @@
 		}, {
 			key: 'render',
 			value: function render() {
-				var isPassword = this.props.field == "password" || this.props.field == "password_confirm" || this.props.field == "old_password";
+				var isPassword = this.props.field == "password" || this.props.field == "password_confirm";
 				var type = isPassword ? "password" : "text";
 				var isPhoneNumber = this.props.field == "phone_number";
 				return React.createElement(
@@ -14655,7 +14655,7 @@
 										isUpdate: true })
 								);
 							}, this),
-							React.createElement('div', { id: 'avatar_container', className: 'avatar_container centered-text' }),
+							React.createElement('div', { id: 'avatar_container', className: 'avatar_container settings_avatar centered-text' }),
 							React.createElement(
 								'div',
 								{ className: 'form-group' },
