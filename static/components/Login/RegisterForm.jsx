@@ -51,7 +51,7 @@ export default class RegisterForm extends React.Component {
 		}
 	}
 	login() {
-		var obj = { user : this.props.username, password : this.props.password };
+		var obj = { user : this.props.username, password : this.props.password, ip : this.props.ip };
 		$.ajax({
 			type: "POST",
 			url : '/verifyAndLogin',
