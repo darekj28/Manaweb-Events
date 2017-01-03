@@ -11464,7 +11464,7 @@
 								'div',
 								null,
 								React.createElement(_reactFacebookLogin2.default, {
-									appId: testAppId,
+									appId: appId,
 									autoLoad: false,
 									fields: 'first_name,email, last_name, name',
 									onClick: this.handleFacebookLoginClick,

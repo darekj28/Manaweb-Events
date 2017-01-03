@@ -220,7 +220,7 @@ export default class LoginApp extends React.Component {
                     { !this.state.fb_clicked  &&
                     	<div>
                     	<FacebookLogin
-						    appId= {testAppId}
+						    appId= {appId}
 						    autoLoad={false}
 						    fields="first_name,email, last_name, name"
 						    onClick={this.handleFacebookLoginClick}
