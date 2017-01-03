@@ -30,8 +30,6 @@ fb_users = user_manager.getFacebookUsers()
 user_list = user_manager.getUserList()
 
 
-print(security_manager.formatPhoneNumberWithDashes('111-1111111'))
-
 
 
 # post_manager.deleteUserPosts('lily')
