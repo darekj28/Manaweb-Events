@@ -137,7 +137,10 @@ export default class SettingsTextInput extends React.Component {
 		this.props.handleBlur(this.props.field, isValid);
 	}
 	componentDidMount() {
-		$('#password').popover();
+		if (this.props.isUpdate) 
+			$('#password').popover();
+		else 
+			$('#password').popover({ placement : 'bottom' });
 		var isPassword = ((this.props.field == "password" 
 						|| this.props.field == "password_confirm") 
 						|| this.props.field == "old_password");
