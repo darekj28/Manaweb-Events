@@ -85,7 +85,7 @@ body {
 }
 #NavMenuHeader {
   background-color : var(--dark);
-  height : 75px;
+  height : 70px;
 }
 .app-container {
   padding-top : 65px;
@@ -476,6 +476,9 @@ body {
 }
 
 @media (max-width: 767px) {
+  .navbar-default {
+    height : 58px;
+  }
   .navbar-default .navbar-nav .open .dropdown-menu > li > a {
     color: #ffffff;
     white-space : normal;
