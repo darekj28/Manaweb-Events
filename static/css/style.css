@@ -73,6 +73,7 @@ body {
 .navmenu-fixed-right {
    left: auto !important;
 }
+
 .navmenu {
   background-color : #fff;
   overflow-x : hidden;
@@ -102,11 +103,7 @@ body {
   width : 270px;
 }
 .navbar-toggle-always {
-  float:right;
-  display: block!important;
-}
-.navbar_block {
-  display : block;
+  display: inline-block;
 }
 #LoginRegisterLabel {
   color : #ffffff;
@@ -492,4 +489,16 @@ body {
     color: #ffffff;
     background-color: var(--dark);
   }
+}
+
+.navbar-right {float: right !important;}
+
+@media(max-width:767px)
+{
+    .navbar-header:after {
+      clear: none;
+    }
+    .navbar-default {
+      height: 58px;
+    }
 }
