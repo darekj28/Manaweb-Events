@@ -77,11 +77,13 @@ export default class Recovery extends React.Component {
 		return (
 			<div>
 				<LoginNavBar loginError={this.loginError.bind(this)}/>
+
 				<div className="container app-container">
+					<div className = "col-xs-4 col-sm-offset-4">
 					{this.state.error && <LoginError error={this.state.error}/>}
                    <center>
 	                    { !this.state.show_next_step &&
-							<div className = "col-xs-4 col-sm-offset-4">
+							<div>
 								<div> Find your account by entering your username, email or phone number (no dashes for now) </div>
 									<div>
 										<input type="text" className="form-control text-center recovery_input" id="recovery_input" 
@@ -100,7 +102,7 @@ export default class Recovery extends React.Component {
 						}
 
                 	</center>
-
+                	</div>
 				</div>
 			</div>
 		);

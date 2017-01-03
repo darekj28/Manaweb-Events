@@ -14887,34 +14887,38 @@
 					React.createElement(
 						'div',
 						{ className: 'container app-container' },
-						this.state.error && React.createElement(_LoginError2.default, { error: this.state.error }),
 						React.createElement(
-							'center',
-							null,
-							!this.state.show_next_step && React.createElement(
-								'div',
-								{ className: 'col-xs-4 col-sm-offset-4' },
-								React.createElement(
+							'div',
+							{ className: 'col-xs-4 col-sm-offset-4' },
+							this.state.error && React.createElement(_LoginError2.default, { error: this.state.error }),
+							React.createElement(
+								'center',
+								null,
+								!this.state.show_next_step && React.createElement(
 									'div',
 									null,
-									' Find your account by entering your username, email or phone number (no dashes for now) '
-								),
-								React.createElement(
-									'div',
-									null,
-									React.createElement('input', { type: 'text', className: 'form-control text-center recovery_input', id: 'recovery_input',
-										onChange: this.handleRecoveryInfoChange.bind(this), placeholder: '' }),
 									React.createElement(
-										'button',
-										{ className: 'btn btn-default form-control blurButton',
-											id: 'Submit_Recovery',
-											onClick: this.handleRecoveryInfoSubmit.bind(this) },
-										' Next!'
+										'div',
+										null,
+										' Find your account by entering your username, email or phone number (no dashes for now) '
+									),
+									React.createElement(
+										'div',
+										null,
+										React.createElement('input', { type: 'text', className: 'form-control text-center recovery_input', id: 'recovery_input',
+											onChange: this.handleRecoveryInfoChange.bind(this), placeholder: '' }),
+										React.createElement(
+											'button',
+											{ className: 'btn btn-default form-control blurButton',
+												id: 'Submit_Recovery',
+												onClick: this.handleRecoveryInfoSubmit.bind(this) },
+											' Next!'
+										)
 									)
-								)
-							),
-							this.state.show_next_step && React.createElement(_SendConfirmation2.default, { recovery_output: this.state.initial_recovery_output
-							})
+								),
+								this.state.show_next_step && React.createElement(_SendConfirmation2.default, { recovery_output: this.state.initial_recovery_output
+								})
+							)
 						)
 					)
 				);
@@ -15186,96 +15190,92 @@
 							null,
 							React.createElement(
 								'div',
-								{ className: 'col-xs-4 col-sm-offset-4' },
+								null,
+								'Username is ',
+								React.createElement(
+									'strong',
+									null,
+									' ',
+									this.props.recovery_output['username'],
+									' '
+								),
+								React.createElement('br', null)
+							),
+							this.state.confirmationCode == "" && !this.state.enable_password_change && React.createElement(
+								'div',
+								{ 'class': 'form-group ' },
+								React.createElement(
+									'label',
+									{ 'class': 'control-label ', 'for': 'mRadio' },
+									' Select a recovery method '
+								),
 								React.createElement(
 									'div',
-									null,
-									'Username is ',
+									{ id: 'mRadio', 'class': 'form-control' },
 									React.createElement(
-										'strong',
+										'div',
 										null,
-										' ',
-										this.props.recovery_output['username'],
-										' '
-									),
-									React.createElement('br', null)
-								),
-								this.state.confirmationCode == "" && !this.state.enable_password_change && React.createElement(
-									'div',
-									{ 'class': 'form-group ' },
-									React.createElement(
-										'label',
-										{ 'class': 'control-label ', 'for': 'mRadio' },
-										' Select a recovery method '
-									),
-									React.createElement(
-										'div',
-										{ id: 'mRadio', 'class': 'form-control' },
 										React.createElement(
-											'div',
-											null,
-											React.createElement(
-												'label',
-												{ 'class': 'radio' },
-												React.createElement('input', { type: 'radio', id: 'email_recovery',
-													onClick: this.handleEmailSelect }),
-												'Send confirmation to ',
-												this.props.recovery_output.email
-											)
-										),
-										React.createElement('br', null),
-										React.createElement(
-											'div',
-											null,
-											React.createElement(
-												'label',
-												{ 'class': 'radio' },
-												React.createElement('input', { type: 'radio', id: 'text_recovery',
-													onClick: this.handleTextSelect }),
-												'Send confirmation to ',
-												this.props.recovery_output.phone_number
-											)
+											'label',
+											{ 'class': 'radio' },
+											React.createElement('input', { type: 'radio', id: 'email_recovery',
+												onClick: this.handleEmailSelect }),
+											'Send confirmation to ',
+											this.props.recovery_output.email
 										)
 									),
-									React.createElement('span', { 'class': 'glyphicon glyphicon-ok form-control-feedback' }),
+									React.createElement('br', null),
 									React.createElement(
 										'div',
-										{ className: 'form-group' },
+										null,
 										React.createElement(
-											'button',
-											{ className: 'btn btn-default', id: 'SendConfirmationButton',
-												onClick: this.handleSendConfirmation.bind(this) },
-											' Send confirmation! '
+											'label',
+											{ 'class': 'radio' },
+											React.createElement('input', { type: 'radio', id: 'text_recovery',
+												onClick: this.handleTextSelect }),
+											'Send confirmation to ',
+											this.props.recovery_output.phone_number
 										)
 									)
 								),
-								this.state.confirmationCode != "" && this.state.enable_password_change == false && React.createElement(
+								React.createElement('span', { 'class': 'glyphicon glyphicon-ok form-control-feedback' }),
+								React.createElement(
 									'div',
-									null,
-									React.createElement('input', { type: 'text', className: 'form-control login text-center', id: 'confirmation_code_input',
-										onChange: this.handleTyping.bind(this), placeholder: 'Enter confirmation pin' }),
+									{ className: 'form-group' },
 									React.createElement(
 										'button',
-										{ className: 'btn btn-default form-control blurButton',
-											id: 'Submit Confirmation',
-											onClick: this.handleConfirmationCodeSubmit.bind(this) },
-										' Confirm identity!'
+										{ className: 'btn btn-default', id: 'SendConfirmationButton',
+											onClick: this.handleSendConfirmation.bind(this) },
+										' Send confirmation! '
 									)
-								),
-								this.state.enable_password_change == true && React.createElement(
-									'div',
-									null,
-									React.createElement(_SettingsInputLabel2.default, { field: 'password' }),
-									React.createElement(_SettingsTextInput2.default, { field: 'password', value: this.state.password,
-										handleTyping: this.handleChange.bind(this),
-										handleBlur: this.handleTextBlur.bind(this) }),
-									this.state.valid_password && React.createElement(
-										'button',
-										{ className: 'btn btn-default form-control blurButton',
-											id: 'Submit Confirmation',
-											onClick: this.handleNewPasswordSubmit.bind(this) },
-										' Change password! '
-									)
+								)
+							),
+							this.state.confirmationCode != "" && this.state.enable_password_change == false && React.createElement(
+								'div',
+								null,
+								React.createElement('input', { type: 'text', className: 'form-control login text-center', id: 'confirmation_code_input',
+									onChange: this.handleTyping.bind(this), placeholder: 'Enter confirmation pin' }),
+								React.createElement(
+									'button',
+									{ className: 'btn btn-default form-control blurButton',
+										id: 'Submit Confirmation',
+										onClick: this.handleConfirmationCodeSubmit.bind(this) },
+									' Confirm identity!'
+								)
+							),
+							this.state.enable_password_change == true && React.createElement(
+								'div',
+								null,
+								React.createElement(_SettingsInputLabel2.default, { field: 'password' }),
+								React.createElement(_SettingsTextInput2.default, { field: 'password', value: this.state.password,
+									handleTyping: this.handleChange.bind(this),
+									handleBlur: this.handleTextBlur.bind(this) }),
+								this.state.valid_password && React.createElement(
+									'button',
+									{ className: 'btn btn-default form-control blurButton',
+										id: 'Submit Confirmation',
+										onClick: this.handleNewPasswordSubmit.bind(this) },
+									' Change password! '
 								)
 							)
 						)

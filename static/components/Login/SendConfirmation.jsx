@@ -197,7 +197,6 @@ export default class SendConfirmation extends React.Component {
 				<div className="container app-container">
                    	
                    	<center>
-                   	<div className = "col-xs-4 col-sm-offset-4">
                    	<div>
                    		Username is <strong> {this.props.recovery_output['username']} </strong>
                    		<br/>
@@ -259,7 +258,6 @@ export default class SendConfirmation extends React.Component {
 		            	</div>
 					}
 
-						</div>
                 	</center>
 
 				</div>

@@ -366,14 +366,32 @@ class Users:
 		user_info['fb_id'] = query[21]
 		return user_info
 
+	# input : (123) 456-7890, 123-456-7890
+	# output  : 1234567890
+	def formatRawPhoneNumber(self, phoneNumberWithDashes):
+		raw_phone_number = ""
+		for char in phoneNumberWithDashes:
+			if char.isdigit():
+				raw_phone_number = raw_phone_number + char
+		return raw_phone_number
+
 	def getInfoFromPhoneNumber(self, phone_number):
-		table_name = self.USER_TABLE
-		self.udb.execute("SELECT * FROM " + table_name + " WHERE phone_number = %s", (phone_number,))
-		size_test = self.udb.fetchall()
-		if len(size_test) == 0:
-			return None	
-		query = size_test[0]
-		return self.queryToDict(query)
+		user_table = self.getUserInfoTable()
+		raw_phone_number = self.formatRawPhoneNumber(phone_number)
+
+		matched_user = {}
+
+		for user in user_table.keys():
+			search_user = user_table[user]
+			search_user_phone_number = self.formatRawPhoneNumber(search_user['phone_number'])
+			if search_user_phone_number == raw_phone_number:
+				matched_user = search_user
+
+		if matched_user == {}:
+			return None
+
+		else:
+			return matched_user
 
 	def getInfoFromEmail(self, email):
 		table_name = self.USER_TABLE

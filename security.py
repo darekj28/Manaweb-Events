@@ -106,6 +106,7 @@ class Security:
 			return output
 		# otherwise we check the phone numbers
 		else:
+			raw_phone_number = self.formatRawPhoneNumber(recovery_input)
 			output = self.recoverAccountWithText(recovery_input)
 			return output
 
@@ -122,13 +123,14 @@ class Security:
 			output['result'] = 'success'
 			output['username'] = this_user['userID']
 			output['email'] = email
-			output['phone_number'] = this_user['phone_number']
+			output['phone_number'] = self.formatPhoneNumberWithDashes(this_user['phone_number'])
 			output['method'] = 'email'
 		return output
 
 	def recoverAccountWithText(self, phone_number):
 		user_manager = Users()
-		this_user = user_manager.getInfoFromPhoneNumber(phone_number)
+		formatted_phone_number = self.formatPhoneNumberWithDashes(phone_number)
+		this_user = user_manager.getInfoFromPhoneNumber(formatted_phone_number)
 		user_manager.closeConnection()
 		output = {}
 		if this_user == None:
@@ -138,11 +140,9 @@ class Security:
 			output['result'] = 'success'
 			output['username'] = this_user['userID']
 			output['email'] = this_user['email']
-			output['phone_number'] = phone_number
+			output['phone_number'] = self.formatPhoneNumberWithDashes(phone_number)
 			output['method'] = 'phone_number'
 		return output
-
-
 
 	# this is to be used if they forgot their email or username
 	def recoverAccountWithUsername(self, username):
@@ -158,7 +158,7 @@ class Security:
 			output['result'] = 'success'
 			output['username'] = username
 			output['email'] = this_user['email']
-			output['phone_number'] = this_user['phone_number']
+			output['phone_number'] = self.formatPhoneNumberWithDashes(this_user['phone_number'])
 			output['method'] = 'username'
 		return output
 
@@ -171,7 +171,7 @@ class Security:
 
 	# this method will run after the general recoverAccount method
 	# recovery method is one of email, username, or text
-	def recordRecoveryAttempt(self, recovery_input, recovery_method ,ip):
+	def recordRecoveryAttempt(self, recovery_input, recovery_method, ip):
 		timeStamp = time.time()
 		timeString = self.getTimeString()
 		location_info = self.get_geolocation_for_ip(ip)
@@ -183,6 +183,26 @@ class Security:
 		city, region_code zip_code, timeString, timeStamp) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
 		self.db.execute(self.db.mogrify(sql, (recovery_input, recovery_method, isValidInput, ip, country_code, city, region_code,
 		zip_code, timeString, timeStamp)))
+
+	# input : any string with 10 digits 
+	# output: (123) 456-7890
+	def formatPhoneNumberWithDashes(self, input_phone_number):
+		raw_phone_number = self.formatRawPhoneNumber(input_phone_number)
+		formatted_phone_number = "(" + raw_phone_number[0:3] + ") " + raw_phone_number[3:6] + "-" + raw_phone_number[6:10]
+		return formatted_phone_number
+
+	# input : (123) 456-7890, 123-456-7890
+	# output  : 1234567890
+	def formatRawPhoneNumber(self, phoneNumberWithDashes):
+		raw_phone_number = ""
+		for char in phoneNumberWithDashes:
+			if char.isdigit():
+				raw_phone_number = raw_phone_number + char
+		return raw_phone_number
+
+
+
+
 
 # def test():
 # 	security_manager = Security()
