@@ -149,9 +149,16 @@ export default class SettingsTextInput extends React.Component {
 						|| this.props.field == "password_confirm") 
 						|| this.props.field == "old_password");
 		var type = isPassword ? "password" : "text";
+		var isPhoneNumber = (this.props.field == "phone_number")
 		return (
 				<div>
-					{!isPassword && <input className={"setting form-control " + this.state.valid} id={this.props.field} type={type} 
+					{isPhoneNumber && <input className={"setting form-control " + this.state.valid + " input-medium bfh-phone"}
+					 data-country="US"
+					 id={this.props.field} type={type} 
+						value={this.props.value} placeholder={idToName(this.props.field)}
+						onChange={this.handleTyping.bind(this)} onBlur={this.handleBlur.bind(this)}/>
+					}
+					{(!isPassword && !isPhoneNumber) && <input className={"setting form-control " + this.state.valid} id={this.props.field} type={type} 
 						value={this.props.value} placeholder={idToName(this.props.field)}
 						onChange={this.handleTyping.bind(this)} onBlur={this.handleBlur.bind(this)}/>}
 					{this.props.field == "password_confirm" && <input className={"setting form-control " + this.state.valid} id={this.props.field} type={type} 

@@ -11691,21 +11691,21 @@
 							{ className: 'container' },
 							React.createElement(
 								'div',
-								{ className: 'navbar-header navbar_block' },
+								{ className: 'navbar-header' },
 								React.createElement(
 									Link,
 									{ to: '/', className: 'navbar-brand navbar-brand-logo' },
 									React.createElement('span', { className: 'glyphicon glyphicon-home' })
-								),
+								)
+							),
+							React.createElement(
+								'div',
+								{ id: 'LoginRegisterLabel', className: 'pull-right SearchNavBarGlyphicon navbar-toggle navbar-toggle-always',
+									'data-toggle': 'offcanvas', 'data-target': '#LoginRegisterMenu' },
 								React.createElement(
-									'div',
-									{ id: 'LoginRegisterLabel', className: 'SearchNavBarGlyphicon navbar-toggle navbar-toggle-always',
-										'data-toggle': 'offcanvas', 'data-target': '#LoginRegisterMenu' },
-									React.createElement(
-										'b',
-										null,
-										' Login \u2022 Register '
-									)
+									'b',
+									null,
+									' Login \u2022 Register '
 								)
 							)
 						)
@@ -12525,7 +12525,9 @@
 				return React.createElement(
 					'div',
 					null,
-					isPhoneNumber && React.createElement('input', { className: "setting form-control " + this.state.valid + " input-medium bfh-phone", 'data-country': 'US', id: this.props.field, type: type,
+					isPhoneNumber && React.createElement('input', { className: "setting form-control " + this.state.valid + " input-medium bfh-phone",
+						'data-country': 'US',
+						id: this.props.field, type: type,
 						value: this.props.value, placeholder: idToName(this.props.field),
 						onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),
 					!isPassword && !isPhoneNumber && React.createElement('input', { className: "setting form-control " + this.state.valid, id: this.props.field, type: type,
