@@ -139,7 +139,7 @@ export default class SettingsApp extends React.Component {
 							<h2> Update Settings </h2>
 						</div>
 						{text_fields.map(function(field) {
-							return <div>
+							return <div className="form-group">
 										<SettingsInputLabel field={field} />
 										<SettingsTextInput field={field} value={this.state[field]} 
 													handleTyping={this.handleChange.bind(this)} 
@@ -148,7 +148,7 @@ export default class SettingsApp extends React.Component {
 									</div>;
 						}, this)}
 						{select_fields.map(function(field) {
-							return <div>
+							return <div className="form-group">
 										<SettingsInputLabel field={field} />
 										<SettingsSelectInput field={field} value={this.state[field]}
 															avatar_list={this.state.avatar_list}

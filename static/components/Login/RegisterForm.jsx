@@ -7,74 +7,28 @@ import AppActions from '../../actions/AppActions.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 import { browserHistory } from 'react-router';
 
-function remove(array, value) {
-	var index = array.indexOf(value);
-	if (index != -1) array.splice(index, 1);
-	return array;
-}
-function add(array, value) {
-	var index = array.indexOf(value);
-	if (index === -1) array.push(value);
-	return array;
-}
+var text_fields = [	"username", "password", "password_confirm", "first_name", "last_name", "email_address", "phone_number" ];
+var select_fields = [ "month_of_birth", "day_of_birth", "year_of_birth", "avatar" ];
+
 function contains(collection, item) {
 	if(collection.indexOf(item) !== -1) return true;
 	else return false;
 }
-var text_fields = [	"first_name", "last_name", "username", "email_address", "password", "password_confirm", "phone_number" ];
-var select_fields = [ "month_of_birth", "day_of_birth", "year_of_birth", "avatar" ];
-var required_text_fields = [ "first_name", "last_name", "username", "email_address", "password" ];
-export default class RegisterApp extends React.Component {
-	constructor() {
-		super();
-		this.state = {
-				first_name 			: '',
-				last_name  			: '',
-				username 			: '',
-				email_address		: '',
-				password			: '',
-				password_confirm 	: '',
-				phone_number 		: '',
-				month_of_birth 		: '',
-				day_of_birth 		: '',
-				year_of_birth 		: '',
-				avatar 				: '',
-				valid_text_fields	: [],
-				valid_select_fields	: [],
-				submittable			: false
-			};
-	}
-	handleChange(obj) { this.setState(obj); }
 
-	handleTextBlur(field, valid) {
-		var valid_text_fields = this.state.valid_text_fields;
-		var valid_select_fields = this.state.valid_select_fields;
-		if (valid == "valid") this.setState({ valid_text_fields : add(valid_text_fields, field) });
-		else this.setState({ valid_text_fields : remove(valid_text_fields, field) });
-		this.setState({ submittable : required_text_fields.every(field => contains(valid_text_fields, field)) && 
-									  select_fields.every(field => contains(valid_select_fields, field)) });
-	}
-	handleSelectBlur(field, valid) {
-		var valid_text_fields = this.state.valid_text_fields; 
-		var valid_select_fields = this.state.valid_select_fields;
-		if (valid == "valid") this.setState({ valid_select_fields : add(valid_select_fields, field) });
-		else this.setState({ valid_select_fields : remove(valid_select_fields, field) });
-		this.setState({ submittable : required_text_fields.every(field => contains(valid_text_fields, field)) && 
-									  select_fields.every(field => contains(valid_select_fields, field)) });
-	}
+export default class RegisterForm extends React.Component {
 	handleSubmit() {
-		if (this.state.submittable) {
+		if (this.props.submittable) {
 			var obj = {
-				first_name 			: this.state.first_name		,
-				last_name			: this.state.last_name		,
-				username 			: this.state.username 		,
-				email_address		: this.state.email_address	,
-				password			: this.state.password		,
-				phone_number 		: this.state.phone_number 	,
-				month_of_birth 		: this.state.month_of_birth ,
-				day_of_birth 		: this.state.day_of_birth 	,
-				year_of_birth 		: this.state.year_of_birth 	,
-				avatar 				: this.state.avatar 			
+				first_name 			: this.props.first_name		,
+				last_name			: this.props.last_name		,
+				username 			: this.props.username 		,
+				email_address		: this.props.email_address	,
+				password			: this.props.password		,
+				phone_number 		: this.props.phone_number 	,
+				month_of_birth 		: this.props.month_of_birth ,
+				day_of_birth 		: this.props.day_of_birth 	,
+				year_of_birth 		: this.props.year_of_birth 	,
+				avatar 				: this.props.avatar 			
 			};
 			$.ajax({
 				type: "POST",
@@ -88,16 +42,16 @@ export default class RegisterApp extends React.Component {
 				}.bind(this)
 			});
 			$('#CreateProfileSuccess').fadeIn(400).delay(4000).fadeOut(400);
-			$("html, body").animate({ scrollTop: $('#RegisterApp').prop('scrollHeight') }, 600);
+			$("html, body").animate({ scrollTop: $('#LoginRegisterMenu').prop('scrollHeight') }, 600);
 		}
 		else {
 			$('#CreateProfileFail').fadeIn(400).delay(4000).fadeOut(400);
-			$("html, body").animate({ scrollTop: $('#RegisterApp').prop('scrollHeight') }, 600);
+			$("html, body").animate({ scrollTop: $('#LoginRegisterMenu').prop('scrollHeight') }, 600);
 			this.enableRegister.bind(this)();
 		}
 	}
 	login() {
-		var obj = { user : this.state.username, password : this.state.password };
+		var obj = { user : this.props.username, password : this.props.password };
 		$.ajax({
 			type: "POST",
 			url : '/verifyAndLogin',
@@ -111,7 +65,7 @@ export default class RegisterApp extends React.Component {
 		});
 	}
 	getCurrentUserInfo() {
-		$.post('/getCurrentUserInfo', {userID : this.state.username}, function(data) {
+		$.post('/getCurrentUserInfo', {userID : this.props.username}, function(data) {
 			AppActions.addCurrentUser(data.thisUser);
 			this.getNotifications.bind(this)();
 		}.bind(this));
@@ -156,43 +110,42 @@ export default class RegisterApp extends React.Component {
     }
 	render() {
 		return(
-			<div id="RegisterApp">
-				<div className="container app-container">
-					<form class="form-horizontal">
-						<div className="page-header">
-							<h2> Create Your Profile </h2>
-						</div>
-						{text_fields.map(function(field) {
-							return <div>
-										<SettingsInputLabel field={field} />
-										<SettingsTextInput field={field} value={this.state[field]} 
-													handleTyping={this.handleChange.bind(this)} 
-													handleBlur={this.handleTextBlur.bind(this)}/>
-									</div>;
-						}, this)}
-						{select_fields.map(function(field) {
-							return <div>
-										<SettingsInputLabel field={field} />
-										<SettingsSelectInput field={field} value={this.state[field]}
-															avatar_list={this.state.avatar_list}
-															handleSelect={this.handleChange.bind(this)} 
-															handleBlur={this.handleSelectBlur.bind(this)}/>
-									</div>
-						}, this)}
-						<div id="avatar_container" className="avatar_container centered-text"></div>
-						<div className="form-group">
-							<button className="btn btn-default blurButton" 
-									id="RegisterSubmit"> 
-										Get Started! </button>
-						</div>
-						<div className="alert alert-success" id="CreateProfileSuccess">
-						  <strong>Success!</strong> Please hold on as we redirect you.
-						</div>
-						<div className="alert alert-danger" id="CreateProfileFail">
-						  <strong>Bro!</strong> You need to fill out more stuff.
-						</div>
-					</form>
-				</div>	
+			<div className="container" id="RegisterForm">
+				<form className="form-horizontal">
+					{text_fields.map(function(field) {
+						var hasBeenChecked = contains(this.props.valid_text_fields, field);
+						return 	<div className="form-group">
+									<SettingsInputLabel field={field} />
+									<SettingsTextInput field={field} value={this.props[field]} 
+												handleTyping={this.props.handleChange} 
+												handleBlur={this.props.handleTextBlur}
+												hasBeenChecked={hasBeenChecked}/>
+								</div>;
+					}, this)}
+					{select_fields.map(function(field) {
+						var hasBeenChecked = contains(this.props.valid_select_fields, field);
+						return 	<div className="form-group">
+									<SettingsInputLabel field={field} />
+									<SettingsSelectInput field={field} value={this.props[field]}
+														avatar_list={this.props.avatar_list}
+														handleSelect={this.props.handleChange} 
+														handleBlur={this.props.handleSelectBlur}
+														hasBeenChecked={hasBeenChecked}/>
+								</div>
+					}, this)}
+					<div id="avatar_container" className="avatar_container centered-text"></div>
+					<div className="form-group">
+						<button className="btn btn-default blurButton" 
+								id="RegisterSubmit"> 
+									Get Started! </button>
+					</div>
+					<div className="alert alert-success login_alert" id="CreateProfileSuccess">
+					  <strong>Success!</strong> Please hold on as we redirect you.
+					</div>
+					<div className="alert alert-danger login_alert" id="CreateProfileFail">
+					  <strong>Bro!</strong> You need to fill out more stuff.
+					</div>
+				</form>
 			</div>
 			)
 	}

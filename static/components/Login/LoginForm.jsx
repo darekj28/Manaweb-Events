@@ -2,28 +2,22 @@ var React = require('react');
 import LoginError from './LoginError.jsx';
 import AppActions from '../../actions/AppActions.jsx';
 import AppStore from '../../stores/AppStore.jsx';
+import SettingsInputLabel from '../Settings/SettingsInputLabel.jsx';
 import { browserHistory } from 'react-router';
 var Link = require('react-router').Link;
 
 export default class LoginForm extends React.Component {
 	constructor() {
 		super();
-		this.state = {login_user : '', 
-						login_password : '', 
-						ip : ""};
+		this.state = {error: ""};
 	}
 	loginError(err) {
 		this.setState({ error : err });
 	}
-	handleTyping(event) {
-		var obj = {}; 
-		obj[event.target.id] = event.target.value;
-		this.setState(obj);
-	}
 	login() {
-		var obj = { user : this.state.login_user, 
-					password : this.state.login_password, 
-					ip : this.state.ip };
+		var obj = { user : this.props.login_user, 
+					password : this.props.login_password, 
+					ip : this.props.ip };
 		$.ajax({
 			type: "POST",
 			url : '/verifyAndLogin',
@@ -41,7 +35,7 @@ export default class LoginForm extends React.Component {
 		});
 	}
 	getCurrentUserInfo() {
-		$.post('/getCurrentUserInfo', {userID : this.state.login_user}, function(data) {
+		$.post('/getCurrentUserInfo', {userID : this.props.login_user}, function(data) {
 			AppActions.addCurrentUser(data.thisUser);
 			this.getNotifications.bind(this)();
 		}.bind(this));
@@ -79,32 +73,30 @@ export default class LoginForm extends React.Component {
     		this.login.bind(this)();
     	}.bind(this));
     }
-    initializeIp(){
-    	$.get('https://jsonip.com/', function(r){ 
-    		this.setState({ip: r.ip}) 
-    		console.log("after initialize ip")
-    	}.bind(this))
-    }
     componentDidMount() {
     	this.enableLogin.bind(this)();
-    	this.initializeIp.bind(this)();
+    	this.props.initializeIp();
     }
 	render() {
 		return (
-			<div>
-				<form>
-            	<div className="form-group">
-                	<input type="text" className="form-control login" id="login_user" 
-                	onChange={this.handleTyping.bind(this)} placeholder="Username"/>
-                    <input type="password" className="form-control login" id="login_password" 
-                    	onChange={this.handleTyping.bind(this)} placeholder="Password"/>
-	            	<button className="btn btn-default form-control blurButton"
-	            					id="LoginButton"> Sign In!</button>
-	            	{this.state.error && 
-				  		<LoginError error={this.state.error}/>}
-	            </div>
-
-
+			<div className="container">
+				<form className="form-horizontal">
+	            	<div className="form-group">
+	            		<SettingsInputLabel field="username"/>
+	                	<input type="text" className="form-control setting login" id="login_user" 
+	                	onChange={this.props.handleTyping} placeholder="Username"/>
+	                </div>
+	                <div className="form-group">
+	                	<SettingsInputLabel field="password"/>
+	                    <input type="password" className="form-control setting login" id="login_password" 
+	                    	onChange={this.props.handleTyping} placeholder="Password"/>
+		            </div>
+		            <div className="form-group"> 
+		            	<button className="btn btn-default form-control blurButton"
+		            					id="LoginButton"> Sign In!</button>
+		            </div>
+		            {this.state.error && 
+					  		<LoginError error={this.state.error}/>}
 	        	</form>
     	   		{/* Feel free to move this Darek put this here for kicks */}
                   	<Link to="/recovery" className="navbar-brand navbar-brand-logo">

@@ -5,10 +5,14 @@ function idToName (id) {
 	var str = "";
 	var temp;
 	for (var i = 0; i < arr.length; i++){
-		temp = arr[i].charAt(0).toLowerCase() + arr[i].substr(1).toLowerCase();
+		temp = arr[i].charAt(0).toUpperCase() + arr[i].substr(1).toLowerCase();
 		str = str.concat(temp + ' ');
 	}
 	return str;
+}
+function idToTimeLabel (id) {
+	var arr = id.split('_');
+	return arr[0].charAt(0).toUpperCase() + arr[0].substr(1).toLowerCase();
 }
 
 function testValid (field, value) {
@@ -128,7 +132,7 @@ export default class SettingsSelectInput extends React.Component {
 		if (this.props.field == "avatar") this.handleAvatarDisplay.bind(this)();
 	}
 	componentDidMount() {
-		if (this.props.isUpdate) this.setState({ valid : "valid" });
+		if (this.props.isUpdate || this.props.hasBeenChecked) this.setState({ valid : "valid" });
 	}
 	render() {
 		var options;
@@ -147,22 +151,23 @@ export default class SettingsSelectInput extends React.Component {
 				break;
 		}
 		return (
-			<div>
-				<div className="form-group">
-					<select className={"setting " + this.state.valid} id={this.props.field} name={this.props.field}
+				<div>
+					<select className={"select_setting " + this.state.valid} id={this.props.field} name={this.props.field}
 									title={idToName(this.props.field)}
 									onChange={this.handleSelect.bind(this)} onBlur={this.handleBlur.bind(this)}> 
-						<option value="" disabled selected> -- Select -- </option>
+						<option value="" disabled selected>{idToTimeLabel(this.props.field)}</option>
 						{options.map(function(option) {
 							return <option value={option.value}>{option.label}</option>
 						})}
 					</select>
-				</div>
-				{(this.state.valid == "invalid") && 
-					<div className="form-group warning" id={this.props.field + "_warning"}>
+					{(this.state.valid == "invalid") && 
+					<div className="warning" id={this.props.field + "_warning"}>
 						{this.state.warning}
 					</div>}
-			</div>
+				</div>
 			);
 	}
 }
+SettingsSelectInput.defaultProps = {
+	hasBeenChecked : false
+};

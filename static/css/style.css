@@ -31,6 +31,31 @@ body {
   background-color : #ffffff;
   color : var(--main-color);
 }
+.setting_label {
+  width : 280px;
+  margin-left : 10px;
+}
+.setting {
+  width : 280px;
+  margin-left : 10px;
+}
+.select_setting {
+  width : 140px;
+  margin-left : 10px;
+}
+.warning {
+  width : 280px;
+  padding-left : 10px;
+  color : var(--warning);
+}
+.navmenu {
+  background-color : #fff;
+  overflow-x : hidden;
+  white-space : normal;
+}
+#NavMenuHeader {
+  background-color : var(--light);
+}
 .app-container {
   padding-top : 65px;
 }
@@ -44,6 +69,9 @@ body {
 .login {
   margin-right : 5px;
 }
+.login_alert {
+  width : 270px;
+}
 .navbar-toggle-always {
   float : right;
   display: block!important;
@@ -54,8 +82,16 @@ body {
 #SignUpButton:focus {
   background-color: #fff;
 }
+#LoginButton {
+  margin-left : 10px;
+  width : 280px;
+}
 #LoginButton:focus {
   background-color: #fff;
+}
+#RegisterSubmit {
+  margin-left : 10px;
+  width : 280px;
 }
 #RegisterSubmit:focus {
   background-color: #fff;
@@ -73,12 +109,9 @@ body {
   border-color: var(--warning);
   border-style: solid;
 }
-.warning {
-  color : var(--warning);
-}
 .avatar_container {
-  width :150px;
-  height:150px;
+  width :140px;
+  height:140px;
   background-size:cover;
   border : 2px dashed var(--main-color);
   border-radius : 10px;
@@ -215,9 +248,6 @@ body {
 }
 .form-group {
   flex-grow:1;
-}
-.setting {
-  margin-left: 10px;
 }
 .Avatar {
   max-height: 48px;

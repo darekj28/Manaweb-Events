@@ -6,7 +6,7 @@ function idToName (id) {
 	var str = "";
 	var temp;
 	for (var i = 0; i < arr.length; i++){
-		temp = arr[i].charAt(0).toLowerCase() + arr[i].substr(1).toLowerCase();
+		temp = arr[i].charAt(0).toUpperCase() + arr[i].substr(1).toLowerCase();
 		str = str.concat(temp + ' ');
 	}
 	return str;
@@ -138,31 +138,38 @@ export default class SettingsTextInput extends React.Component {
 	}
 	componentDidMount() {
 		$('#password').popover();
-		if (this.props.isUpdate && ((this.props.field != "password" 
-								&& this.props.field != "password_confirm") 
-								&& this.props.field != "old_password")) 
+		var isPassword = ((this.props.field == "password" 
+						|| this.props.field == "password_confirm") 
+						|| this.props.field == "old_password");
+		if ((this.props.isUpdate && !isPassword) || this.props.hasBeenChecked)
 			this.setState({ valid : "valid" });
 	}
 	render() {
-		var type = ((this.props.field == "password" 
+		var isPassword = ((this.props.field == "password" 
 						|| this.props.field == "password_confirm") 
-						|| this.props.field == "old_password") ? "password" : "text";
+						|| this.props.field == "old_password");
+		var type = isPassword ? "password" : "text";
 		return (
-			<div>
-				<div className="form-group">
-					{this.props.field != "password" && <input className={"setting " + this.state.valid} id={this.props.field} type={type} 
-						value={this.props.value} 
+				<div>
+					{!isPassword && <input className={"setting form-control " + this.state.valid} id={this.props.field} type={type} 
+						value={this.props.value} placeholder={idToName(this.props.field)}
+						onChange={this.handleTyping.bind(this)} onBlur={this.handleBlur.bind(this)}/>}
+					{this.props.field == "password_confirm" && <input className={"setting form-control " + this.state.valid} id={this.props.field} type={type} 
+						value={this.props.value} placeholder="Re-type password"
 						onChange={this.handleTyping.bind(this)} onBlur={this.handleBlur.bind(this)}/>}
 					{this.props.field == "password" && <input data-toggle="popover" data-trigger="focus" 
 						data-content="Your password must contain at least one letter and one number."
-						className={"setting " + this.state.valid} id={this.props.field} type={type} 
-						value={this.props.value} onClick={focus()}
+						className={"setting form-control " + this.state.valid} id={this.props.field} type={type} 
+						value={this.props.value} onClick={focus()} placeholder={idToName(this.props.field)}
 						onChange={this.handleTyping.bind(this)} onBlur={this.handleBlur.bind(this)}/>}
+					{(this.state.valid == "invalid") && 
+					<div className="warning" id={this.props.field + "_warning"}>
+						{this.state.warning}
+					</div>}				
 				</div>
-				{(this.state.valid == "invalid") && <div className="form-group warning" id={this.props.field + "_warning"}>
-					{this.state.warning}
-				</div>}
-			</div>
 			);
 	}
 }
+SettingsTextInput.defaultProps = {
+	hasBeenChecked : false
+};
