@@ -205,13 +205,13 @@ export default class LoginApp extends React.Component {
 				<div className="container app-container">
 					<h1><center>M A N A W E B</center></h1>
                     <center>
-                    	{/*
+                    	
                     	<Link to="/register">
                     	<button className="btn btn-default" id="SignUpButton">
                     			Create A Profile!
                     		</button>
                     	</Link>
-						*/}
+						
                     	<br/>
                     	<br/>
 

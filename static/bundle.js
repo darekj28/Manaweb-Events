@@ -11214,11 +11214,11 @@
 	
 	var _LoginError2 = _interopRequireDefault(_LoginError);
 	
-	var _SettingsTextInput = __webpack_require__(/*! ../Settings/SettingsTextInput.jsx */ 125);
+	var _SettingsTextInput = __webpack_require__(/*! ../Settings/SettingsTextInput.jsx */ 126);
 	
 	var _SettingsTextInput2 = _interopRequireDefault(_SettingsTextInput);
 	
-	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 127);
+	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 124);
 	
 	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
 	
@@ -11458,6 +11458,15 @@
 						React.createElement(
 							'center',
 							null,
+							React.createElement(
+								Link,
+								{ to: '/register' },
+								React.createElement(
+									'button',
+									{ className: 'btn btn-default', id: 'SignUpButton' },
+									'Create A Profile!'
+								)
+							),
 							React.createElement('br', null),
 							React.createElement('br', null),
 							!this.state.fb_clicked && React.createElement(
@@ -11549,7 +11558,7 @@
 	
 	var _LoginForm2 = _interopRequireDefault(_LoginForm);
 	
-	var _RegisterForm = __webpack_require__(/*! ./RegisterForm.jsx */ 124);
+	var _RegisterForm = __webpack_require__(/*! ./RegisterForm.jsx */ 125);
 	
 	var _RegisterForm2 = _interopRequireDefault(_RegisterForm);
 	
@@ -11564,6 +11573,24 @@
 	var React = __webpack_require__(/*! react */ 5);
 	var Link = __webpack_require__(/*! react-router */ 52).Link;
 	
+	
+	function remove(array, value) {
+		var index = array.indexOf(value);
+		if (index != -1) array.splice(index, 1);
+		return array;
+	}
+	function add(array, value) {
+		var index = array.indexOf(value);
+		if (index === -1) array.push(value);
+		return array;
+	}
+	function contains(collection, item) {
+		if (collection.indexOf(item) !== -1) return true;else return false;
+	}
+	var text_fields = ["username", "password", "password_confirm", "first_name", "last_name", "email_address", "phone_number"];
+	var select_fields = ["month_of_birth", "day_of_birth", "year_of_birth", "avatar"];
+	var required_text_fields = ["first_name", "last_name", "username", "email_address", "password"];
+	
 	var LoginNavBar = function (_React$Component) {
 		_inherits(LoginNavBar, _React$Component);
 	
@@ -11572,19 +11599,87 @@
 	
 			var _this = _possibleConstructorReturn(this, (LoginNavBar.__proto__ || Object.getPrototypeOf(LoginNavBar)).call(this));
 	
-			_this.state = { login_register: 'login',
-				error: "" };
+			_this.state = { login_register: 'LoginTab', // specify tab
+				error: "",
+				login_user: '', // login save state
+				login_password: '',
+				ip: "",
+				first_name: '', // register save state
+				last_name: '',
+				username: '',
+				email_address: '',
+				password: '',
+				password_confirm: '',
+				phone_number: '',
+				month_of_birth: '',
+				day_of_birth: '',
+				year_of_birth: '',
+				avatar: '',
+				valid_text_fields: [],
+				valid_select_fields: [],
+				submittable: false };
 			return _this;
 		}
 	
 		_createClass(LoginNavBar, [{
 			key: 'switchMenu',
 			value: function switchMenu(event) {
-				this.setState({ login_register: event.target.id });
+				this.setState({ login_register: event.currentTarget.id });
+			}
+			// login handlers
+	
+		}, {
+			key: 'handleTyping',
+			value: function handleTyping(event) {
+				var obj = {};
+				obj[event.target.id] = event.target.value;
+				this.setState(obj);
+			}
+		}, {
+			key: 'initializeIp',
+			value: function initializeIp() {
+				$.get('https://jsonip.com/', function (r) {
+					this.setState({ ip: r.ip });
+					console.log("after initialize ip");
+				}.bind(this));
+			}
+			// register handlers
+	
+		}, {
+			key: 'handleChange',
+			value: function handleChange(obj) {
+				this.setState(obj);
+			}
+		}, {
+			key: 'handleTextBlur',
+			value: function handleTextBlur(field, valid) {
+				var valid_text_fields = this.state.valid_text_fields;
+				var valid_select_fields = this.state.valid_select_fields;
+				if (valid == "valid") this.setState({ valid_text_fields: add(valid_text_fields, field) });else this.setState({ valid_text_fields: remove(valid_text_fields, field) });
+				this.setState({ submittable: required_text_fields.every(function (field) {
+						return contains(valid_text_fields, field);
+					}) && select_fields.every(function (field) {
+						return contains(valid_select_fields, field);
+					}) });
+			}
+		}, {
+			key: 'handleSelectBlur',
+			value: function handleSelectBlur(field, valid) {
+				var valid_text_fields = this.state.valid_text_fields;
+				var valid_select_fields = this.state.valid_select_fields;
+				if (valid == "valid") this.setState({ valid_select_fields: add(valid_select_fields, field) });else this.setState({ valid_select_fields: remove(valid_select_fields, field) });
+				this.setState({ submittable: required_text_fields.every(function (field) {
+						return contains(valid_text_fields, field);
+					}) && select_fields.every(function (field) {
+						return contains(valid_select_fields, field);
+					}) });
 			}
 		}, {
 			key: 'render',
 			value: function render() {
+				var login_selected = this.state.login_register == "LoginTab" ? "login_selected" : "";
+				var register_selected = this.state.login_register == "RegisterTab" ? "register_selected" : "";
+	
 				return React.createElement(
 					'div',
 					null,
@@ -11596,7 +11691,7 @@
 							{ className: 'container' },
 							React.createElement(
 								'div',
-								{ className: 'navbar-header' },
+								{ className: 'navbar-header navbar_block' },
 								React.createElement(
 									Link,
 									{ to: '/', className: 'navbar-brand navbar-brand-logo' },
@@ -11621,16 +11716,58 @@
 							role: 'navigation' },
 						React.createElement(
 							'div',
-							{ className: 'navmenu-brand', id: 'login', onClick: this.switchMenu.bind(this) },
-							'Login'
+							{ className: 'container', id: 'NavMenuHeader' },
+							React.createElement(
+								'div',
+								{ className: "tab_label " + login_selected,
+									id: 'LoginTab', onClick: this.switchMenu.bind(this) },
+								React.createElement(
+									'h2',
+									null,
+									React.createElement(
+										'b',
+										null,
+										'Login'
+									)
+								)
+							),
+							React.createElement(
+								'div',
+								{ className: "tab_label " + register_selected,
+									id: 'RegisterTab', onClick: this.switchMenu.bind(this) },
+								React.createElement(
+									'h2',
+									null,
+									React.createElement(
+										'b',
+										null,
+										'Register'
+									)
+								)
+							)
 						),
-						React.createElement(
-							'div',
-							{ className: 'navmenu-brand', id: 'register', onClick: this.switchMenu.bind(this) },
-							'Register'
-						),
-						this.state.login_register == "login" && React.createElement(_LoginForm2.default, null),
-						this.state.login_register == "register" && React.createElement(_RegisterForm2.default, null)
+						this.state.login_register == "LoginTab" && React.createElement(_LoginForm2.default, { login_user: this.state.login_user,
+							login_password: this.state.login_password,
+							ip: this.state.ip,
+							handleTyping: this.handleTyping.bind(this),
+							initializeIp: this.initializeIp.bind(this) }),
+						this.state.login_register == "RegisterTab" && React.createElement(_RegisterForm2.default, { first_name: this.state.first_name,
+							last_name: this.state.last_name,
+							username: this.state.username,
+							email_address: this.state.email_address,
+							password: this.state.password,
+							password_confirm: this.state.password_confirm,
+							phone_number: this.state.phone_number,
+							month_of_birth: this.state.month_of_birth,
+							day_of_birth: this.state.day_of_birth,
+							year_of_birth: this.state.year_of_birth,
+							avatar: this.state.avatar,
+							valid_text_fields: this.state.valid_text_fields,
+							valid_select_fields: this.state.valid_select_fields,
+							submittable: this.state.submittable,
+							handleChange: this.handleChange.bind(this),
+							handleTextBlur: this.handleTextBlur.bind(this),
+							handleSelectBlur: this.handleSelectBlur.bind(this) })
 					)
 				);
 			}
@@ -11668,6 +11805,10 @@
 	
 	var _AppStore2 = _interopRequireDefault(_AppStore);
 	
+	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 124);
+	
+	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
+	
 	var _reactRouter = __webpack_require__(/*! react-router */ 52);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -11690,9 +11831,7 @@
 	
 			var _this = _possibleConstructorReturn(this, (LoginForm.__proto__ || Object.getPrototypeOf(LoginForm)).call(this));
 	
-			_this.state = { login_user: '',
-				login_password: '',
-				ip: "" };
+			_this.state = { error: "" };
 			return _this;
 		}
 	
@@ -11700,20 +11839,14 @@
 			key: 'loginError',
 			value: function loginError(err) {
 				this.setState({ error: err });
-			}
-		}, {
-			key: 'handleTyping',
-			value: function handleTyping(event) {
-				var obj = {};
-				obj[event.target.id] = event.target.value;
-				this.setState(obj);
+				$('#LoginFail').fadeIn(400).delay(4000).fadeOut(400);
 			}
 		}, {
 			key: 'login',
 			value: function login() {
-				var obj = { user: this.state.login_user,
-					password: this.state.login_password,
-					ip: this.state.ip };
+				var obj = { user: this.props.login_user,
+					password: this.props.login_password,
+					ip: this.props.ip };
 				$.ajax({
 					type: "POST",
 					url: '/verifyAndLogin',
@@ -11732,7 +11865,7 @@
 		}, {
 			key: 'getCurrentUserInfo',
 			value: function getCurrentUserInfo() {
-				$.post('/getCurrentUserInfo', { userID: this.state.login_user }, function (data) {
+				$.post('/getCurrentUserInfo', { userID: this.props.login_user }, function (data) {
 					_AppActions2.default.addCurrentUser(data.thisUser);
 					this.getNotifications.bind(this)();
 				}.bind(this));
@@ -11775,42 +11908,55 @@
 				}.bind(this));
 			}
 		}, {
-			key: 'initializeIp',
-			value: function initializeIp() {
-				$.get('https://jsonip.com/', function (r) {
-					this.setState({ ip: r.ip });
-					console.log("after initialize ip");
-				}.bind(this));
-			}
-		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				this.enableLogin.bind(this)();
-				this.initializeIp.bind(this)();
+				this.props.initializeIp();
+				$('#LoginFail').hide();
 			}
 		}, {
 			key: 'render',
 			value: function render() {
 				return React.createElement(
 					'div',
-					null,
+					{ id: 'LoginForm', className: 'container' },
 					React.createElement(
 						'form',
-						null,
+						{ className: 'form-horizontal' },
 						React.createElement(
 							'div',
 							{ className: 'form-group' },
-							React.createElement('input', { type: 'text', className: 'form-control login', id: 'login_user',
-								onChange: this.handleTyping.bind(this), placeholder: 'Username' }),
-							React.createElement('input', { type: 'password', className: 'form-control login', id: 'login_password',
-								onChange: this.handleTyping.bind(this), placeholder: 'Password' }),
+							React.createElement(_SettingsInputLabel2.default, { field: 'username' }),
+							React.createElement('input', { type: 'text', className: 'form-control setting login', id: 'login_user',
+								onChange: this.props.handleTyping, placeholder: 'Username' })
+						),
+						React.createElement(
+							'div',
+							{ className: 'form-group' },
+							React.createElement(_SettingsInputLabel2.default, { field: 'password' }),
+							React.createElement('input', { type: 'password', className: 'form-control setting login', id: 'login_password',
+								onChange: this.props.handleTyping, placeholder: 'Password' })
+						),
+						React.createElement(
+							'div',
+							{ className: 'form-group' },
 							React.createElement(
 								'button',
 								{ className: 'btn btn-default form-control blurButton',
 									id: 'LoginButton' },
 								' Sign In!'
+							)
+						),
+						React.createElement(
+							'div',
+							{ className: 'alert alert-danger login_alert', id: 'LoginFail' },
+							React.createElement(
+								'strong',
+								null,
+								'Bro!'
 							),
-							this.state.error && React.createElement(_LoginError2.default, { error: this.state.error })
+							' ',
+							this.state.error
 						)
 					),
 					React.createElement(
@@ -11864,7 +12010,7 @@
 			value: function render() {
 				return React.createElement(
 					"div",
-					{ className: "alert alert-danger" },
+					{ className: "alert alert-danger login_alert" },
 					React.createElement(
 						"strong",
 						null,
@@ -11883,6 +12029,68 @@
 
 /***/ },
 /* 124 */
+/*!***********************************************************!*\
+  !*** ./static/components/Settings/SettingsInputLabel.jsx ***!
+  \***********************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var React = __webpack_require__(/*! react */ 5);
+	function idToName(id) {
+		var arr = id.split('_');
+		var str = "";
+		var temp;
+		for (var i = 0; i < arr.length; i++) {
+			temp = arr[i].charAt(0).toUpperCase() + arr[i].substr(1).toLowerCase();
+			str = str.concat(temp + ' ');
+		}
+		return str;
+	}
+	
+	var SettingsInputLabel = function (_React$Component) {
+		_inherits(SettingsInputLabel, _React$Component);
+	
+		function SettingsInputLabel() {
+			_classCallCheck(this, SettingsInputLabel);
+	
+			return _possibleConstructorReturn(this, (SettingsInputLabel.__proto__ || Object.getPrototypeOf(SettingsInputLabel)).apply(this, arguments));
+		}
+	
+		_createClass(SettingsInputLabel, [{
+			key: 'render',
+			value: function render() {
+				return React.createElement(
+					'div',
+					{ className: 'setting_label' },
+					React.createElement(
+						'b',
+						null,
+						idToName(this.props.field)
+					)
+				);
+			}
+		}]);
+	
+		return SettingsInputLabel;
+	}(React.Component);
+	
+	exports.default = SettingsInputLabel;
+
+/***/ },
+/* 125 */
 /*!**************************************************!*\
   !*** ./static/components/Login/RegisterForm.jsx ***!
   \**************************************************/
@@ -11896,15 +12104,15 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _SettingsTextInput = __webpack_require__(/*! ../Settings/SettingsTextInput.jsx */ 125);
+	var _SettingsTextInput = __webpack_require__(/*! ../Settings/SettingsTextInput.jsx */ 126);
 	
 	var _SettingsTextInput2 = _interopRequireDefault(_SettingsTextInput);
 	
-	var _SettingsSelectInput = __webpack_require__(/*! ../Settings/SettingsSelectInput.jsx */ 126);
+	var _SettingsSelectInput = __webpack_require__(/*! ../Settings/SettingsSelectInput.jsx */ 127);
 	
 	var _SettingsSelectInput2 = _interopRequireDefault(_SettingsSelectInput);
 	
-	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 127);
+	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 124);
 	
 	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
 	
@@ -11930,94 +12138,37 @@
 	var Link = __webpack_require__(/*! react-router */ 52).Link;
 	
 	
-	function remove(array, value) {
-		var index = array.indexOf(value);
-		if (index != -1) array.splice(index, 1);
-		return array;
-	}
-	function add(array, value) {
-		var index = array.indexOf(value);
-		if (index === -1) array.push(value);
-		return array;
-	}
+	var text_fields = ["username", "password", "password_confirm", "first_name", "last_name", "email_address", "phone_number"];
+	var select_fields = ["month_of_birth", "day_of_birth", "year_of_birth", "avatar"];
+	
 	function contains(collection, item) {
 		if (collection.indexOf(item) !== -1) return true;else return false;
 	}
-	var text_fields = ["first_name", "last_name", "username", "email_address", "password", "password_confirm", "phone_number"];
-	var select_fields = ["month_of_birth", "day_of_birth", "year_of_birth", "avatar"];
-	var required_text_fields = ["first_name", "last_name", "username", "email_address", "password"];
 	
-	var RegisterApp = function (_React$Component) {
-		_inherits(RegisterApp, _React$Component);
+	var RegisterForm = function (_React$Component) {
+		_inherits(RegisterForm, _React$Component);
 	
-		function RegisterApp() {
-			_classCallCheck(this, RegisterApp);
+		function RegisterForm() {
+			_classCallCheck(this, RegisterForm);
 	
-			var _this = _possibleConstructorReturn(this, (RegisterApp.__proto__ || Object.getPrototypeOf(RegisterApp)).call(this));
-	
-			_this.state = {
-				first_name: '',
-				last_name: '',
-				username: '',
-				email_address: '',
-				password: '',
-				password_confirm: '',
-				phone_number: '',
-				month_of_birth: '',
-				day_of_birth: '',
-				year_of_birth: '',
-				avatar: '',
-				valid_text_fields: [],
-				valid_select_fields: [],
-				submittable: false
-			};
-			return _this;
+			return _possibleConstructorReturn(this, (RegisterForm.__proto__ || Object.getPrototypeOf(RegisterForm)).apply(this, arguments));
 		}
 	
-		_createClass(RegisterApp, [{
-			key: 'handleChange',
-			value: function handleChange(obj) {
-				this.setState(obj);
-			}
-		}, {
-			key: 'handleTextBlur',
-			value: function handleTextBlur(field, valid) {
-				var valid_text_fields = this.state.valid_text_fields;
-				var valid_select_fields = this.state.valid_select_fields;
-				if (valid == "valid") this.setState({ valid_text_fields: add(valid_text_fields, field) });else this.setState({ valid_text_fields: remove(valid_text_fields, field) });
-				this.setState({ submittable: required_text_fields.every(function (field) {
-						return contains(valid_text_fields, field);
-					}) && select_fields.every(function (field) {
-						return contains(valid_select_fields, field);
-					}) });
-			}
-		}, {
-			key: 'handleSelectBlur',
-			value: function handleSelectBlur(field, valid) {
-				var valid_text_fields = this.state.valid_text_fields;
-				var valid_select_fields = this.state.valid_select_fields;
-				if (valid == "valid") this.setState({ valid_select_fields: add(valid_select_fields, field) });else this.setState({ valid_select_fields: remove(valid_select_fields, field) });
-				this.setState({ submittable: required_text_fields.every(function (field) {
-						return contains(valid_text_fields, field);
-					}) && select_fields.every(function (field) {
-						return contains(valid_select_fields, field);
-					}) });
-			}
-		}, {
+		_createClass(RegisterForm, [{
 			key: 'handleSubmit',
 			value: function handleSubmit() {
-				if (this.state.submittable) {
+				if (this.props.submittable) {
 					var obj = {
-						first_name: this.state.first_name,
-						last_name: this.state.last_name,
-						username: this.state.username,
-						email_address: this.state.email_address,
-						password: this.state.password,
-						phone_number: this.state.phone_number,
-						month_of_birth: this.state.month_of_birth,
-						day_of_birth: this.state.day_of_birth,
-						year_of_birth: this.state.year_of_birth,
-						avatar: this.state.avatar
+						first_name: this.props.first_name,
+						last_name: this.props.last_name,
+						username: this.props.username,
+						email_address: this.props.email_address,
+						password: this.props.password,
+						phone_number: this.props.phone_number,
+						month_of_birth: this.props.month_of_birth,
+						day_of_birth: this.props.day_of_birth,
+						year_of_birth: this.props.year_of_birth,
+						avatar: this.props.avatar
 					};
 					$.ajax({
 						type: "POST",
@@ -12031,17 +12182,17 @@
 						}.bind(this)
 					});
 					$('#CreateProfileSuccess').fadeIn(400).delay(4000).fadeOut(400);
-					$("html, body").animate({ scrollTop: $('#RegisterApp').prop('scrollHeight') }, 600);
+					$("html, body").animate({ scrollTop: $('#LoginRegisterMenu').prop('scrollHeight') }, 600);
 				} else {
 					$('#CreateProfileFail').fadeIn(400).delay(4000).fadeOut(400);
-					$("html, body").animate({ scrollTop: $('#RegisterApp').prop('scrollHeight') }, 600);
+					$("html, body").animate({ scrollTop: $('#LoginRegisterMenu').prop('scrollHeight') }, 600);
 					this.enableRegister.bind(this)();
 				}
 			}
 		}, {
 			key: 'login',
 			value: function login() {
-				var obj = { user: this.state.username, password: this.state.password };
+				var obj = { user: this.props.username, password: this.props.password };
 				$.ajax({
 					type: "POST",
 					url: '/verifyAndLogin',
@@ -12057,7 +12208,7 @@
 		}, {
 			key: 'getCurrentUserInfo',
 			value: function getCurrentUserInfo() {
-				$.post('/getCurrentUserInfo', { userID: this.state.username }, function (data) {
+				$.post('/getCurrentUserInfo', { userID: this.props.username }, function (data) {
 					_AppActions2.default.addCurrentUser(data.thisUser);
 					this.getNotifications.bind(this)();
 				}.bind(this));
@@ -12111,87 +12262,78 @@
 			value: function render() {
 				return React.createElement(
 					'div',
-					{ id: 'RegisterApp' },
+					{ className: 'container', id: 'RegisterForm' },
 					React.createElement(
-						'div',
-						{ className: 'container app-container' },
-						React.createElement(
-							'form',
-							{ 'class': 'form-horizontal' },
-							React.createElement(
-								'div',
-								{ className: 'page-header' },
-								React.createElement(
-									'h2',
-									null,
-									' Create Your Profile '
-								)
-							),
-							text_fields.map(function (field) {
-								return React.createElement(
-									'div',
-									null,
-									React.createElement(_SettingsInputLabel2.default, { field: field }),
-									React.createElement(_SettingsTextInput2.default, { field: field, value: this.state[field],
-										handleTyping: this.handleChange.bind(this),
-										handleBlur: this.handleTextBlur.bind(this) })
-								);
-							}, this),
-							select_fields.map(function (field) {
-								return React.createElement(
-									'div',
-									null,
-									React.createElement(_SettingsInputLabel2.default, { field: field }),
-									React.createElement(_SettingsSelectInput2.default, { field: field, value: this.state[field],
-										avatar_list: this.state.avatar_list,
-										handleSelect: this.handleChange.bind(this),
-										handleBlur: this.handleSelectBlur.bind(this) })
-								);
-							}, this),
-							React.createElement('div', { id: 'avatar_container', className: 'avatar_container centered-text' }),
-							React.createElement(
+						'form',
+						{ className: 'form-horizontal' },
+						text_fields.map(function (field) {
+							var hasBeenChecked = contains(this.props.valid_text_fields, field);
+							return React.createElement(
 								'div',
 								{ className: 'form-group' },
-								React.createElement(
-									'button',
-									{ className: 'btn btn-default blurButton',
-										id: 'RegisterSubmit' },
-									'Get Started! '
-								)
-							),
-							React.createElement(
+								React.createElement(_SettingsInputLabel2.default, { field: field }),
+								React.createElement(_SettingsTextInput2.default, { field: field, value: this.props[field],
+									handleTyping: this.props.handleChange,
+									handleBlur: this.props.handleTextBlur,
+									hasBeenChecked: hasBeenChecked })
+							);
+						}, this),
+						select_fields.map(function (field) {
+							var hasBeenChecked = contains(this.props.valid_select_fields, field);
+							return React.createElement(
 								'div',
-								{ className: 'alert alert-success', id: 'CreateProfileSuccess' },
-								React.createElement(
-									'strong',
-									null,
-									'Success!'
-								),
-								' Please hold on as we redirect you.'
-							),
+								{ className: 'form-group' },
+								React.createElement(_SettingsInputLabel2.default, { field: field }),
+								React.createElement(_SettingsSelectInput2.default, { field: field, value: this.props[field],
+									avatar_list: this.props.avatar_list,
+									handleSelect: this.props.handleChange,
+									handleBlur: this.props.handleSelectBlur,
+									hasBeenChecked: hasBeenChecked })
+							);
+						}, this),
+						React.createElement('div', { id: 'avatar_container', className: 'avatar_container centered-text' }),
+						React.createElement(
+							'div',
+							{ className: 'form-group' },
 							React.createElement(
-								'div',
-								{ className: 'alert alert-danger', id: 'CreateProfileFail' },
-								React.createElement(
-									'strong',
-									null,
-									'Bro!'
-								),
-								' You need to fill out more stuff.'
+								'button',
+								{ className: 'btn btn-default blurButton',
+									id: 'RegisterSubmit' },
+								'Get Started! '
 							)
+						),
+						React.createElement(
+							'div',
+							{ className: 'alert alert-success login_alert', id: 'CreateProfileSuccess' },
+							React.createElement(
+								'strong',
+								null,
+								'Success!'
+							),
+							' Please hold on as we redirect you.'
+						),
+						React.createElement(
+							'div',
+							{ className: 'alert alert-danger login_alert', id: 'CreateProfileFail' },
+							React.createElement(
+								'strong',
+								null,
+								'Bro!'
+							),
+							' You need to fill out more stuff.'
 						)
 					)
 				);
 			}
 		}]);
 	
-		return RegisterApp;
+		return RegisterForm;
 	}(React.Component);
 	
-	exports.default = RegisterApp;
+	exports.default = RegisterForm;
 
 /***/ },
-/* 125 */
+/* 126 */
 /*!**********************************************************!*\
   !*** ./static/components/Settings/SettingsTextInput.jsx ***!
   \**********************************************************/
@@ -12225,7 +12367,7 @@
 		var str = "";
 		var temp;
 		for (var i = 0; i < arr.length; i++) {
-			temp = arr[i].charAt(0).toLowerCase() + arr[i].substr(1).toLowerCase();
+			temp = arr[i].charAt(0).toUpperCase() + arr[i].substr(1).toLowerCase();
 			str = str.concat(temp + ' ');
 		}
 		return str;
@@ -12371,30 +12513,35 @@
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				$('#password').popover();
-				if (this.props.isUpdate && this.props.field != "password" && this.props.field != "password_confirm" && this.props.field != "old_password") this.setState({ valid: "valid" });
+				var isPassword = this.props.field == "password" || this.props.field == "password_confirm" || this.props.field == "old_password";
+				if (this.props.isUpdate && !isPassword || this.props.hasBeenChecked) this.setState({ valid: "valid" });
 			}
 		}, {
 			key: 'render',
 			value: function render() {
-				var type = this.props.field == "password" || this.props.field == "password_confirm" || this.props.field == "old_password" ? "password" : "text";
+				var isPassword = this.props.field == "password" || this.props.field == "password_confirm" || this.props.field == "old_password";
+				var type = isPassword ? "password" : "text";
+				var isPhoneNumber = this.props.field == "phone_number";
 				return React.createElement(
 					'div',
 					null,
-					React.createElement(
-						'div',
-						{ className: 'form-group' },
-						this.props.field != "password" && React.createElement('input', { className: "setting " + this.state.valid, id: this.props.field, type: type,
-							value: this.props.value,
-							onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),
-						this.props.field == "password" && React.createElement('input', { 'data-toggle': 'popover', 'data-trigger': 'focus',
-							'data-content': 'Your password must contain at least one letter and one number.',
-							className: "setting " + this.state.valid, id: this.props.field, type: type,
-							value: this.props.value, onClick: focus(),
-							onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) })
-					),
+					isPhoneNumber && React.createElement('input', { className: "setting form-control " + this.state.valid + " input-medium bfh-phone", 'data-country': 'US', id: this.props.field, type: type,
+						value: this.props.value, placeholder: idToName(this.props.field),
+						onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),
+					!isPassword && !isPhoneNumber && React.createElement('input', { className: "setting form-control " + this.state.valid, id: this.props.field, type: type,
+						value: this.props.value, placeholder: idToName(this.props.field),
+						onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),
+					this.props.field == "password_confirm" && React.createElement('input', { className: "setting form-control " + this.state.valid, id: this.props.field, type: type,
+						value: this.props.value, placeholder: 'Re-type password',
+						onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),
+					this.props.field == "password" && React.createElement('input', { 'data-toggle': 'popover', 'data-trigger': 'focus',
+						'data-content': 'Your password must contain at least one letter and one number.',
+						className: "setting form-control " + this.state.valid, id: this.props.field, type: type,
+						value: this.props.value, onClick: focus(), placeholder: idToName(this.props.field),
+						onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),
 					this.state.valid == "invalid" && React.createElement(
 						'div',
-						{ className: 'form-group warning', id: this.props.field + "_warning" },
+						{ className: 'warning', id: this.props.field + "_warning" },
 						this.state.warning
 					)
 				);
@@ -12405,9 +12552,13 @@
 	}(React.Component);
 	
 	exports.default = SettingsTextInput;
+	
+	SettingsTextInput.defaultProps = {
+		hasBeenChecked: false
+	};
 
 /***/ },
-/* 126 */
+/* 127 */
 /*!************************************************************!*\
   !*** ./static/components/Settings/SettingsSelectInput.jsx ***!
   \************************************************************/
@@ -12434,10 +12585,14 @@
 		var str = "";
 		var temp;
 		for (var i = 0; i < arr.length; i++) {
-			temp = arr[i].charAt(0).toLowerCase() + arr[i].substr(1).toLowerCase();
+			temp = arr[i].charAt(0).toUpperCase() + arr[i].substr(1).toLowerCase();
 			str = str.concat(temp + ' ');
 		}
 		return str;
+	}
+	function idToTimeLabel(id) {
+		var arr = id.split('_');
+		return arr[0].charAt(0).toUpperCase() + arr[0].substr(1).toLowerCase();
 	}
 	
 	function testValid(field, value) {
@@ -12569,7 +12724,7 @@
 		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
-				if (this.props.isUpdate) this.setState({ valid: "valid" });
+				if (this.props.isUpdate || this.props.hasBeenChecked) this.setState({ valid: "valid" });
 			}
 		}, {
 			key: 'render',
@@ -12593,30 +12748,26 @@
 					'div',
 					null,
 					React.createElement(
-						'div',
-						{ className: 'form-group' },
+						'select',
+						{ className: "select_setting " + this.state.valid, id: this.props.field, name: this.props.field,
+							title: idToName(this.props.field),
+							onChange: this.handleSelect.bind(this), onBlur: this.handleBlur.bind(this) },
 						React.createElement(
-							'select',
-							{ className: "setting " + this.state.valid, id: this.props.field, name: this.props.field,
-								title: idToName(this.props.field),
-								onChange: this.handleSelect.bind(this), onBlur: this.handleBlur.bind(this) },
-							React.createElement(
+							'option',
+							{ value: '', disabled: true, selected: true },
+							idToTimeLabel(this.props.field)
+						),
+						options.map(function (option) {
+							return React.createElement(
 								'option',
-								{ value: '', disabled: true, selected: true },
-								' -- Select -- '
-							),
-							options.map(function (option) {
-								return React.createElement(
-									'option',
-									{ value: option.value },
-									option.label
-								);
-							})
-						)
+								{ value: option.value },
+								option.label
+							);
+						})
 					),
 					this.state.valid == "invalid" && React.createElement(
 						'div',
-						{ className: 'form-group warning', id: this.props.field + "_warning" },
+						{ className: 'warning', id: this.props.field + "_warning" },
 						this.state.warning
 					)
 				);
@@ -12627,68 +12778,10 @@
 	}(React.Component);
 	
 	exports.default = SettingsSelectInput;
-
-/***/ },
-/* 127 */
-/*!***********************************************************!*\
-  !*** ./static/components/Settings/SettingsInputLabel.jsx ***!
-  \***********************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
 	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var React = __webpack_require__(/*! react */ 5);
-	function idToName(id) {
-		var arr = id.split('_');
-		var str = "";
-		var temp;
-		for (var i = 0; i < arr.length; i++) {
-			temp = arr[i].charAt(0).toUpperCase() + arr[i].substr(1).toLowerCase();
-			str = str.concat(temp + ' ');
-		}
-		return str;
-	}
-	
-	var SettingsInputLabel = function (_React$Component) {
-		_inherits(SettingsInputLabel, _React$Component);
-	
-		function SettingsInputLabel() {
-			_classCallCheck(this, SettingsInputLabel);
-	
-			return _possibleConstructorReturn(this, (SettingsInputLabel.__proto__ || Object.getPrototypeOf(SettingsInputLabel)).apply(this, arguments));
-		}
-	
-		_createClass(SettingsInputLabel, [{
-			key: 'render',
-			value: function render() {
-				return React.createElement(
-					'div',
-					{ className: 'form-group' },
-					React.createElement(
-						'label',
-						{ className: 'control-label', 'for': this.props.field },
-						idToName(this.props.field)
-					)
-				);
-			}
-		}]);
-	
-		return SettingsInputLabel;
-	}(React.Component);
-	
-	exports.default = SettingsInputLabel;
+	SettingsSelectInput.defaultProps = {
+		hasBeenChecked: false
+	};
 
 /***/ },
 /* 128 */
@@ -14341,15 +14434,15 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _SettingsTextInput = __webpack_require__(/*! ./SettingsTextInput.jsx */ 125);
+	var _SettingsTextInput = __webpack_require__(/*! ./SettingsTextInput.jsx */ 126);
 	
 	var _SettingsTextInput2 = _interopRequireDefault(_SettingsTextInput);
 	
-	var _SettingsSelectInput = __webpack_require__(/*! ./SettingsSelectInput.jsx */ 126);
+	var _SettingsSelectInput = __webpack_require__(/*! ./SettingsSelectInput.jsx */ 127);
 	
 	var _SettingsSelectInput2 = _interopRequireDefault(_SettingsSelectInput);
 	
-	var _SettingsInputLabel = __webpack_require__(/*! ./SettingsInputLabel.jsx */ 127);
+	var _SettingsInputLabel = __webpack_require__(/*! ./SettingsInputLabel.jsx */ 124);
 	
 	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
 	
@@ -14540,7 +14633,7 @@
 							text_fields.map(function (field) {
 								return React.createElement(
 									'div',
-									null,
+									{ className: 'form-group' },
 									React.createElement(_SettingsInputLabel2.default, { field: field }),
 									React.createElement(_SettingsTextInput2.default, { field: field, value: this.state[field],
 										handleTyping: this.handleChange.bind(this),
@@ -14551,7 +14644,7 @@
 							select_fields.map(function (field) {
 								return React.createElement(
 									'div',
-									null,
+									{ className: 'form-group' },
 									React.createElement(_SettingsInputLabel2.default, { field: field }),
 									React.createElement(_SettingsSelectInput2.default, { field: field, value: this.state[field],
 										avatar_list: this.state.avatar_list,
@@ -14629,11 +14722,11 @@
 	
 	var _LoginError2 = _interopRequireDefault(_LoginError);
 	
-	var _SettingsTextInput = __webpack_require__(/*! ../Settings/SettingsTextInput.jsx */ 125);
+	var _SettingsTextInput = __webpack_require__(/*! ../Settings/SettingsTextInput.jsx */ 126);
 	
 	var _SettingsTextInput2 = _interopRequireDefault(_SettingsTextInput);
 	
-	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 127);
+	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 124);
 	
 	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
 	
@@ -14817,11 +14910,11 @@
 	
 	var _AppStore2 = _interopRequireDefault(_AppStore);
 	
-	var _SettingsTextInput = __webpack_require__(/*! ../Settings/SettingsTextInput.jsx */ 125);
+	var _SettingsTextInput = __webpack_require__(/*! ../Settings/SettingsTextInput.jsx */ 126);
 	
 	var _SettingsTextInput2 = _interopRequireDefault(_SettingsTextInput);
 	
-	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 127);
+	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 124);
 	
 	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
 	
