@@ -16,10 +16,6 @@ function contains(collection, item) {
 }
 
 export default class RegisterForm extends React.Component {
-	constructor() {
-		super();
-		this.state = {ip : ""};
-	}
 	handleSubmit() {
 		if (this.props.submittable) {
 			var obj = {
