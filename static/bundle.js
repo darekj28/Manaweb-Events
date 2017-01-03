@@ -11259,7 +11259,8 @@
 				fb_id: "",
 				username: "",
 				submittable: false,
-				fb_clicked: false
+				fb_clicked: false,
+				ip: ""
 	
 			};
 			_this.responseFacebook = _this.responseFacebook.bind(_this);
@@ -11305,9 +11306,21 @@
 								// console.log("fbUser")
 								// console.log(response)
 	
-								// AppActions.addCurrentUser(data.fbUser);
-								this.getCurrentUserInfo.bind(this)();
-								// browserHistory.push('/')
+	
+								var thisFbUser = data.fbUser;
+								var obj = { username: data.fbUser.userID, ip: this.state.ip };
+	
+								$.ajax({
+									type: "POST",
+									url: '/recordFacebookLogin',
+									data: JSON.stringify(obj, null, '\t'),
+									contentType: 'application/json;charset=UTF-8',
+									success: function (data) {
+										console.log(thisFbUser);
+										_AppActions2.default.addCurrentUser(thisFbUser);
+										this.getNotifications.bind(this)();
+									}.bind(this)
+								});
 							}
 						}.bind(this)
 					});
@@ -11340,8 +11353,9 @@
 		}, {
 			key: 'getCurrentUserInfo',
 			value: function getCurrentUserInfo() {
-				$.post('/getCurrentUserInfo', { userID: this.state.login_user }, function (data) {
+				$.post('/getCurrentUserInfo', { userID: this.state.username }, function (data) {
 					_AppActions2.default.addCurrentUser(data.thisUser);
+	
 					this.getNotifications.bind(this)();
 				}.bind(this));
 			}
@@ -11401,8 +11415,16 @@
 				// console.log("bro");
 			}
 		}, {
+			key: 'initializeIp',
+			value: function initializeIp() {
+				$.get('https://jsonip.com/', function (r) {
+					this.setState({ ip: r.ip });
+				}.bind(this));
+			}
+		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
+				this.initializeIp.bind(this)();
 				$('#SignUpButton').one("click", function () {
 					$(this).blur();
 				});
@@ -11436,22 +11458,13 @@
 						React.createElement(
 							'center',
 							null,
-							React.createElement(
-								Link,
-								{ to: '/register' },
-								React.createElement(
-									'button',
-									{ className: 'btn btn-default', id: 'SignUpButton' },
-									'Create A Profile!'
-								)
-							),
 							React.createElement('br', null),
 							React.createElement('br', null),
 							!this.state.fb_clicked && React.createElement(
 								'div',
 								null,
 								React.createElement(_reactFacebookLogin2.default, {
-									appId: appId,
+									appId: testAppId,
 									autoLoad: false,
 									fields: 'first_name,email, last_name, name',
 									onClick: this.handleFacebookLoginClick,
@@ -11773,7 +11786,7 @@
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				this.enableLogin.bind(this)();
-				// this.initializeIp.bind(this)();
+				this.initializeIp.bind(this)();
 			}
 		}, {
 			key: 'render',
@@ -14738,7 +14751,7 @@
 								React.createElement(
 									'div',
 									null,
-									' Find your account '
+									' Find your account by entering your username, email or phone number (no dashes for now) '
 								),
 								React.createElement(
 									'div',

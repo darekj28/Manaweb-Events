@@ -111,7 +111,7 @@ def validateUsername(username):
 		if char.isalpha():
 			hasAlpha = True
 
-	if hasAlpha:
+	if hasAlpha == False:
 		output['result'] = 'failure'
 		output['error'] = "Username must have at least 1 alphabetical character"
 

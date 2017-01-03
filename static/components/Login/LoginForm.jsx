@@ -87,7 +87,7 @@ export default class LoginForm extends React.Component {
     }
     componentDidMount() {
     	this.enableLogin.bind(this)();
-    	// this.initializeIp.bind(this)();
+    	this.initializeIp.bind(this)();
     }
 	render() {
 		return (

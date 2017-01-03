@@ -45,12 +45,12 @@ class Security:
 
 	def createLoginAttemptTable(self):
 		sql = "CREATE TABLE IF NOT EXISTS " + self.LOGIN_ATTEMPT_TABLE + " (login_id TEXT, isSuccessLogin BOOLEAN, ip TEXT, country_code TEXT, \
-		city TEXT, region_code TEXT, zip_code TEXT, timeString TEXT, timeStamp FLOAT)"
+		city TEXT, region_code TEXT, zip_code TEXT, timeString TEXT, timeStamp FLOAT, fb_login BOOLEAN)"
 		self.db.execute(self.db.mogrify(sql))
 		addIndexCode = 'CREATE INDEX IF NOT EXISTS login_id ON ' + self.LOGIN_ATTEMPT_TABLE + ' (login_id)'
 		self.db.execute(addIndexCode)
 
-	def recordLoginAttempt(self, login_id, isSuccess, ip):
+	def recordLoginAttempt(self, login_id, isSuccess, ip, fb_login):
 		timeStamp = time.time()
 		timeString = self.getTimeString()
 		location_info = self.get_geolocation_for_ip(ip)
@@ -59,9 +59,9 @@ class Security:
 		region_code = location_info['region_code']
 		zip_code = location_info['zip_code']
 		sql = "INSERT INTO " + self.LOGIN_ATTEMPT_TABLE + " (login_id, isSuccessLogin, ip, country_code, city, region_code, \
-		zip_code, timeString, timeStamp) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+		zip_code, timeString, timeStamp, fb_login) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 		self.db.execute(self.db.mogrify(sql, (login_id, isSuccess, ip, country_code, city, region_code,
-		zip_code, timeString, timeStamp)))
+		zip_code, timeString, timeStamp, fb_login)))
 
 	# given an ip address returns their json file with the following parameters
 	# ip, country_code, country_name, region_code, region_name, city, zipcode, lataitude, longitude, metro_code, area_code

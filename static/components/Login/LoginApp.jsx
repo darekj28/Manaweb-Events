@@ -21,7 +21,8 @@ export default class LoginApp extends React.Component {
 			fb_id: "",
 			username : "",
 			submittable: false, 
-			fb_clicked: false
+			fb_clicked: false,
+			ip: ""
 
 		};
 		this.responseFacebook = this.responseFacebook.bind(this);
@@ -63,9 +64,21 @@ export default class LoginApp extends React.Component {
 			        	// console.log("fbUser")
 			        	// console.log(response)
 
-			        	// AppActions.addCurrentUser(data.fbUser);
-			        	this.getCurrentUserInfo.bind(this)()
-			        	// browserHistory.push('/')
+
+			        	var thisFbUser = data.fbUser
+			        	var obj = {username : data.fbUser.userID, ip: this.state.ip}
+
+			        	$.ajax({
+			        		type: "POST",
+							url : '/recordFacebookLogin',
+							data : JSON.stringify(obj, null, '\t'),
+							contentType : 'application/json;charset=UTF-8',
+							success: function(data) {
+								console.log(thisFbUser)
+								AppActions.addCurrentUser(thisFbUser);
+			        			this.getNotifications.bind(this)()
+							}.bind(this)
+			      		  });
 			        }
 			     }.bind(this)
 			});
@@ -101,9 +114,12 @@ export default class LoginApp extends React.Component {
 	}
 
 	getCurrentUserInfo() {
-		$.post('/getCurrentUserInfo', {userID : this.state.login_user}, function(data) {
+		$.post('/getCurrentUserInfo', {userID : this.state.username}, function(data) {
 			AppActions.addCurrentUser(data.thisUser);
+			
+			
 			this.getNotifications.bind(this)();
+
 		}.bind(this));
 	}
 	getNotifications() {
@@ -161,8 +177,15 @@ export default class LoginApp extends React.Component {
 		// console.log("bro");
 	}
 
+	initializeIp(){
+    	$.get('https://jsonip.com/', function(r){ 
+    		this.setState({ip: r.ip}) 
+    	}.bind(this))
+    }
+
 
 	componentDidMount() {
+		this.initializeIp.bind(this)()
 		$('#SignUpButton').one("click", function() {
 			$(this).blur();
 		})
@@ -182,12 +205,13 @@ export default class LoginApp extends React.Component {
 				<div className="container app-container">
 					<h1><center>M A N A W E B</center></h1>
                     <center>
+                    	{/*
                     	<Link to="/register">
                     	<button className="btn btn-default" id="SignUpButton">
                     			Create A Profile!
                     		</button>
                     	</Link>
-
+						*/}
                     	<br/>
                     	<br/>
 
@@ -196,7 +220,7 @@ export default class LoginApp extends React.Component {
                     { !this.state.fb_clicked  &&
                     	<div>
                     	<FacebookLogin
-						    appId= {appId}
+						    appId= {testAppId}
 						    autoLoad={false}
 						    fields="first_name,email, last_name, name"
 						    onClick={this.handleFacebookLoginClick}

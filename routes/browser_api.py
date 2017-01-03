@@ -52,12 +52,16 @@ def isFacebookUser():
 	user_manager = Users()
 	output = user_manager.isFacebookUser(fb_id)
 	user_manager.closeConnection()
-
-	if output['result'] == 'success':
-		session['logged_in'] = True
-		session['userID'] = fbUser['userID']
 	return jsonify(output)
 
+@browser_api.route('/recordFacebookLogin', methods =['POST'])
+def recordFacebookLogin():
+	username = request.json['username']
+	ip = request.json['ip']
+	security_manager = Security()
+	security_manager.recordLoginAttempt(username, True, ip, True)
+	security_manager.closeConnection()
+	return jsonify({'result': 'success'})
 
 @browser_api.route('/facebookCreateAccount', methods = ['POST'])
 def facebookCreateAccount():
@@ -76,7 +80,7 @@ def facebookCreateAccount():
 	avatar_url = '/static/avatars/' + avatar_name + '.png'
 	
 	isActive = True
-	confirmationPin = email_confirm.hashUserID(userID)
+	confirmationPin = "placeholder pin"
 	# confirmed = False
 	confirmed = True		
 	user_manager = Users()
@@ -104,13 +108,13 @@ def verifyAndLogin() :
 		session['userID'] = res['username']
 		security_manager = Security()
 		isSuccess = True
-		security_manager.recordLoginAttempt(user, isSuccess, ip)
+		security_manager.recordLoginAttempt(user, isSuccess, ip, False)
 		security_manager.closeConnection()
 		return jsonify({ 'error' : False })
 	else: 
 		isSuccess = False
 		security_manager = Security()
-		security_manager.recordLoginAttempt(user, isSuccess, ip)
+		security_manager.recordLoginAttempt(user, isSuccess, ip, False)
 		security_manager.closeConnection()
 		return jsonify({ 'error' : res['error'] })
 
@@ -285,6 +289,7 @@ def editPost():
 # get current user info
 @browser_api.route('/getCurrentUserInfo', methods = ['POST'])
 def getCurrentUserInfo():
+	print(request.form.get("userID"))
 	thisUserID = request.form.get("userID")
 	# thisUserID = session.get('userID')
 	thisUser = getUserInfo(thisUserID)
