@@ -336,17 +336,19 @@ class Posts:
 		self.db.execute(addIndexCode)
 
 	def sendNotification(self, feed_name, comment_id, receiver_id, sender_id, original_post) :
+		user_manager = Users()
+		sender_name = user_manager.getInfo(sender_id)['first_name']
+		op_name = user_manager.getInfo(original_post['poster_id'])['first_name']
 		numOtherPeople = self.getNumberOfOtherPeople(comment_id, sender_id, receiver_id)
 		isOP = original_post['poster_id'] == receiver_id
 		timeStamp = time.time()
 		timeString = self.getTimeString()
 		notification_id = self.hash_notification_id(timeString)
-		action = self.formatNotificationAction(isOP, numOtherPeople, original_post, sender_id)
 		self.insertNotificationIntoMain(feed_name, notification_id, timeString, timeStamp, comment_id, receiver_id, sender_id)
 		if numOtherPeople == 0 :
-			self.addToShortList(feed_name, comment_id, receiver_id, sender_id, action, notification_id, timeStamp, timeString)
+			self.addToShortList(feed_name, comment_id, receiver_id, sender_id, notification_id, timeStamp, timeString, isOP, numOtherPeople, sender_name, op_name)
 		else :
-			self.updateShortList(comment_id, receiver_id, sender_id, timeString, timeStamp, action)
+			self.updateShortList(comment_id, receiver_id, sender_id, timeString, timeStamp, numOtherPeople, sender_name, op_name)
 	
 	def insertNotificationIntoMain(self, feed_name, notification_id, timeString, timeStamp, comment_id, receiver_id, sender_id) :
 		self.createNotificationTable()
@@ -366,24 +368,6 @@ class Posts:
 				other_people.append(note['sender_id'])
 		return len(other_people)
 
-	def formatNotificationAction(self, isOP, numOtherPeople, original_post, sender_id) :
-		user_manager = Users()
-		sender = user_manager.getInfo(sender_id)['first_name']
-		op = user_manager.getInfo(original_post['poster_id'])['first_name']
-		if isOP : 
-			whose = "your"
-			also = ""
-		else :
-			whose = op + "'s"
-			also = "also"
-		if numOtherPeople > 1 :
-			action = sender + " and " + str(numOtherPeople) + " other people commented on " + whose + " post."
-		elif numOtherPeople == 1:
-			action = sender + " and 1 other person commented on " + whose + " post."
-		else :
-			action = sender + " " + also + " commented on " + whose + " post."
-		return action
-
 	def createShortList(self, receiver_id):
 		table_name = self.USER_NOTIFICATION_PREFIX + receiver_id
 		sql = 'CREATE TABLE IF NOT EXISTS ' + table_name + ' (feed_name TEXT, comment_id TEXT, receiver_id TEXT, sender_id TEXT, action TEXT, seen BOOLEAN, notification_id TEXT, timeStamp FLOAT, timeString TEXT, numUnseenActions INTEGER)'
@@ -394,32 +378,31 @@ class Posts:
 		self.db.execute(addIndexCode)
 
 
-	def addToShortList(self, feed_name, comment_id, receiver_id, sender_id, action, notification_id, timeStamp, timeString):
+	def addToShortList(self, feed_name, comment_id, receiver_id, sender_id, notification_id, timeString, timeStamp, isOP, numOtherPeople, sender_name, op_name):
 		# create the short_list table for this user
 		self.createShortList(receiver_id)
-		threshold = 100
-		numUnseenActions = 1
 		seen = False
 		table_name = self.USER_NOTIFICATION_PREFIX + receiver_id
-		sql = "INSERT INTO " + table_name + " (feed_name, comment_id, receiver_id, sender_id, action, seen, notification_id, timeStamp, timeString, numUnseenActions) VALUES (%s, %s, %s,%s,%s,%s, %s, %s, %s, %s)"
-		self.db.execute(self.db.mogrify(sql, (feed_name, comment_id, receiver_id, sender_id, action, seen, notification_id, timeStamp, timeString, numUnseenActions)))
+		sql = "INSERT INTO " + table_name + " (feed_name, comment_id, receiver_id, sender_id, seen, notification_id, timeStamp, timeString, isOP, numOtherPeople, sender_name, op_name) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+		self.db.execute(self.db.mogrify(sql, (feed_name, comment_id, receiver_id, sender_id, seen, notification_id, timeStamp, timeString, isOP, numOtherPeople, sender_name, op_name)))
 		self.post_db.commit()
 
 		# then if we are at more than the threshold, remove the oldest one
 		sql = "SELECT * FROM " + table_name
 		self.db.execute(sql)
 		query = self.db.fetchall()
-		notification_list = self.notificationListToDict(query)
+		notification_list = self.shortNotificationListToDict(query)
+		threshold = 100
 		if len(notification_list) > threshold:
 			self.sortAscending(notification_list)
 			self.removeFromShortList(feed_name, receiver_id, notification_list[0]['notification_id'])
 	
-	def updateShortList(self, comment_id, receiver_id, sender_id, timeString, timeStamp, action):
+	def updateShortList(self, comment_id, receiver_id, sender_id, timeString, timeStamp, numOtherPeople, sender_name):
 		self.createShortList(receiver_id)
 		seen = False
-		sql = "UPDATE " + self.USER_NOTIFICATION_PREFIX + receiver_id + " SET sender_id = %s, action = %s, timeString = %s, timeStamp = %s, seen = %s\
+		sql = "UPDATE " + self.USER_NOTIFICATION_PREFIX + receiver_id + " SET sender_id = %s, action = %s, timeString = %s, timeStamp = %s, seen = %s, numOtherPeople = %s, sender_name = %s\
 		WHERE comment_id = %s"
-		self.db.execute(self.db.mogrify(sql, (sender_id, action, timeString, timeStamp, seen, comment_id)))
+		self.db.execute(self.db.mogrify(sql, (sender_id, action, timeString, timeStamp, seen, numOtherPeople, sender_name, comment_id)))
 		self.post_db.commit()
 
 	def removeFromShortList(self, receiver_id, notification_id):
@@ -438,7 +421,7 @@ class Posts:
 		sql = "SELECT * FROM " + table_name + " WHERE receiver_id = %s"
 		self.db.execute(self.db.mogrify(sql, (userID,)))
 		query = self.db.fetchall()
-		notification_list = self.notificationListToDict(query)
+		notification_list = self.shortNotificationListToDict(query)
 		return notification_list
 
 
@@ -472,6 +455,24 @@ class Posts:
 			n_list.append(this_note)
 		return n_list
 
+	def shortNotificationListToDict(self, query): # check this
+		n_list = list()
+		for note in query:
+			this_note = {'feed_name' 		: note[0],
+						 'comment_id'		: note[1],
+						 'receiver_id'		: note[2],
+						 'sender_id'		: note[3],
+						 'seen'				: note[4],
+						 'notification_id' 	: note[5],
+						 'timeStamp'		: note[6],
+						 'timeString'		: note[7],
+						 'isOP'				: note[8],
+						 'numOtherPeople'	: note[9],
+						 'sender_name'		: note[10],
+						 'op_name'			: note[11]
+						 }
+			n_list.append(this_note)
+		return n_list
 
 	def markNotificationAsSeen(self, userID):
 		#update the short list too

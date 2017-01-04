@@ -39,7 +39,8 @@ export default class NotificationsDropdown extends React.Component {
 	render() { 
 		return (
 			<li className="dropdown">
-                <a href="#" onClick={this.seeNotifications.bind(this)} className="SearchNavBarGlyphicon dropdown-toggle" data-toggle="dropdown">
+                <a href="#" onClick={this.seeNotifications.bind(this)} 
+                    className="SearchNavBarGlyphicon dropdown-toggle" data-toggle="dropdown">
                     <span className="glyphicon glyphicon-envelope"></span>
                     {this.state.numUnseen > 0 && <span className="badge badge-notify">{this.state.numUnseen}</span>}
                 </a>
@@ -47,12 +48,13 @@ export default class NotificationsDropdown extends React.Component {
                     {this.state.notifications.map(function(note, i) {
                         return (<li key={i}>
                                     <Link to={"/comment/" + note.comment_id}> 
-                                        {note.action + " " + note.timeString}
+                                        {this.getNotificationSyntax.bind(this)(note) + " " + note.timeString}
                                     </Link>
                                 </li>);
                     })}
                     {!this.state.notifications.length && 
-                        <li className="unclickableDropdown" id="NoNewNotificationsDropdown">No new notifications.</li>}
+                    <li className="unclickableDropdown" id="NoNewNotificationsDropdown">
+                        No new notifications.</li>}
                     <li className="divider"></li>
                     <li><Link to="/notifications"><center>See All</center></Link></li>
                 </ul>
