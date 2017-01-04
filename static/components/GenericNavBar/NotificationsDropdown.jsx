@@ -71,7 +71,7 @@ export default class NotificationsDropdown extends React.Component {
                                         {this.getNotificationSyntax.bind(this)(note) + " " + note.timeString}
                                     </Link>
                                 </li>);
-                    })}
+                    }, this)}
                     {!this.state.notifications.length && 
                     <li className="unclickableDropdown" id="NoNewNotificationsDropdown">
                         No new notifications.</li>}

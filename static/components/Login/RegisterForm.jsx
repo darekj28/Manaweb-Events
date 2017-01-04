@@ -77,12 +77,11 @@ export default class RegisterForm extends React.Component {
                 data.notification_list.map(function(obj) {
                     notifications.unshift({
                         comment_id : obj['comment_id'],
-                        notification_id : obj['notification_id'],
                         timeString : obj['timeString'],
-                        sender_id : obj['sender_id'],
-                        action : obj['action'],
-                        receiver_id : obj['receiver_id'],
-                        seen : obj['seen']
+                        isOP : obj['isOP'],
+                        numOtherPeople : obj['numOtherPeople'],
+                        sender_name : obj['sender_name'],
+                        op_name : obj['op_name']
                     });
                 });
                 AppActions.addNotifications(notifications);

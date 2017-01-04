@@ -478,9 +478,9 @@ class Posts:
 		return n_list
 
 	def markNotificationAsSeen(self, userID):
-		#update the short list too
-		sql = "UPDATE " + self.USER_NOTIFICATION_PREFIX + userID + " SET seen = %s WHERE receiver_id = %s"
-		self.db.execute(self.db.mogrify(sql, (True, userID)))
+		sql = "UPDATE " + self.USER_NOTIFICATION_PREFIX + userID + " SET seen = %s"
+		seen = True
+		self.db.execute(self.db.mogrify(sql, (seen,)))
 		self.post_db.commit()
 
 
