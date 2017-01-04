@@ -463,14 +463,16 @@ class Posts:
 						 'comment_id'		: note[1],
 						 'receiver_id'		: note[2],
 						 'sender_id'		: note[3],
-						 'seen'				: note[4],
-						 'notification_id' 	: note[5],
-						 'timeStamp'		: note[6],
-						 'timeString'		: note[7],
-						 'sender_name'		: note[8],
-						 'op_name'			: note[9],
-						 'numOtherPeople'	: note[10],
-						 'isOP'				: note[11]
+						 # 'action'			: note[4]
+						 'seen'				: note[5],
+						 'notification_id' 	: note[6],
+						 'timeStamp'		: note[7],
+						 'timeString'		: note[8],
+						 #'numUnseenActions' : note[9]
+						 'sender_name'		: note[10],
+						 'op_name'			: note[11],
+						 'numOtherPeople'	: note[12],
+						 'isOP'				: note[13]
 						 }
 			n_list.append(this_note)
 		return n_list
