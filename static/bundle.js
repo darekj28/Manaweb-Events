@@ -11974,6 +11974,11 @@
 						Link,
 						{ to: '/recovery', className: 'link' },
 						'Forgot your password?'
+					),
+					React.createElement(
+						'div',
+						null,
+						this.props.ip
 					)
 				);
 			}

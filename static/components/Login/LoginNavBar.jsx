@@ -111,7 +111,7 @@ export default class LoginNavBar extends React.Component {
 				  	{this.state.login_register == "LoginTab" &&
 				  		<LoginForm login_user=			{this.state.login_user}
 				  					login_password=		{this.state.login_password}
-				  					ip=					{this.state.ip}
+				  					ip =					{this.state.ip}
 				  					handleTyping=		{this.handleTyping.bind(this)}
 				  					initializeIp=		{this.initializeIp.bind(this)}/>}
 				  	{this.state.login_register == "RegisterTab" &&
