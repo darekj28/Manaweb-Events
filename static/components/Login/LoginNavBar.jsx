@@ -28,7 +28,7 @@ export default class LoginNavBar extends React.Component {
 						error 				: "",
 						login_user 			: '', // login save state
 						login_password 		: '', 
-						ip 					: "",
+						ip 					: "initial_ip",
 						first_name 			: '', // register save state
 						last_name  			: '',
 						username 			: '',
@@ -54,7 +54,7 @@ export default class LoginNavBar extends React.Component {
 		this.setState(obj);
 	}
 	initializeIp(){
-    	$.get('https://jsonip.com/', function(r){ 
+    	$.get('https://api.ipify.org/?format=json', function(r){ 
     		this.setState({ip: r.ip});
     	}.bind(this))
     }
@@ -111,7 +111,7 @@ export default class LoginNavBar extends React.Component {
 				  	{this.state.login_register == "LoginTab" &&
 				  		<LoginForm login_user=			{this.state.login_user}
 				  					login_password=		{this.state.login_password}
-				  					ip =					{this.state.ip}
+				  					ip =				{this.state.ip}
 				  					handleTyping=		{this.handleTyping.bind(this)}
 				  					initializeIp=		{this.initializeIp.bind(this)}/>}
 				  	{this.state.login_register == "RegisterTab" &&

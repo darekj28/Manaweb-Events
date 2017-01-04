@@ -11424,7 +11424,7 @@
 		}, {
 			key: 'initializeIp',
 			value: function initializeIp() {
-				$.get('https://jsonip.com/', function (r) {
+				$.get('https://api.ipify.org/?format=json', function (r) {
 					this.setState({ ip: r.ip });
 				}.bind(this));
 			}
@@ -11610,7 +11610,7 @@
 				error: "",
 				login_user: '', // login save state
 				login_password: '',
-				ip: "",
+				ip: "initial_ip",
 				first_name: '', // register save state
 				last_name: '',
 				username: '',
@@ -11645,7 +11645,7 @@
 		}, {
 			key: 'initializeIp',
 			value: function initializeIp() {
-				$.get('https://jsonip.com/', function (r) {
+				$.get('https://api.ipify.org/?format=json', function (r) {
 					this.setState({ ip: r.ip });
 				}.bind(this));
 			}
@@ -11974,11 +11974,6 @@
 						Link,
 						{ to: '/recovery', className: 'link' },
 						'Forgot your password?'
-					),
-					React.createElement(
-						'div',
-						null,
-						this.props.ip
 					)
 				);
 			}

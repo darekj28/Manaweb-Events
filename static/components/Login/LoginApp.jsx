@@ -178,8 +178,8 @@ export default class LoginApp extends React.Component {
 	}
 
 	initializeIp(){
-    	$.get('https://jsonip.com/', function(r){ 
-    		this.setState({ip: r.ip}) 
+    	$.get('https://api.ipify.org/?format=json', function(r){ 
+    		this.setState({ip: r.ip});
     	}.bind(this))
     }
 

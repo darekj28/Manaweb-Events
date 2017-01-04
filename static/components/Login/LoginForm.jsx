@@ -105,9 +105,6 @@ export default class LoginForm extends React.Component {
                   	<Link to="/recovery" className="link">
                         Forgot your password?
                   	</Link>
-                  	<div>
-                  		{this.props.ip}
-                  	</div>
 	        </div>
 			)
 	}
