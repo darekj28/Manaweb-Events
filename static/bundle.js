@@ -12572,7 +12572,7 @@
 		}, {
 			key: 'render',
 			value: function render() {
-				var isPassword = this.props.field == "password" || this.props.field == "password_confirm";
+				var isPassword = this.props.field == "password" || this.props.field == "password_confirm" || this.props.field == "old_password";
 				var type = isPassword ? "password" : "text";
 				var isPhoneNumber = this.props.field == "phone_number";
 				return React.createElement(
@@ -12583,10 +12583,16 @@
 						value: this.props.value,
 						onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this),
 						name: 'phone_number', maxlength: '14', placeholder: '(XXX) XXX-XXXX' }),
-					!isPassword && !isPhoneNumber && React.createElement('input', { className: "setting form-control " + this.state.valid, id: this.props.field, type: type,
+					!isPassword && !isPhoneNumber && React.createElement('input', { className: "setting form-control " + this.state.valid,
+						id: this.props.field, type: type,
 						value: this.props.value, placeholder: idToName(this.props.field),
 						onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),
-					this.props.field == "password_confirm" && React.createElement('input', { className: "setting form-control " + this.state.valid, id: this.props.field, type: type,
+					this.props.field == "old_password" && React.createElement('input', { className: "setting form-control " + this.state.valid,
+						id: this.props.field, type: type,
+						value: this.props.value, placeholder: 'Enter your old password',
+						onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),
+					this.props.field == "password_confirm" && React.createElement('input', { className: "setting form-control " + this.state.valid,
+						id: this.props.field, type: type,
 						value: this.props.value, placeholder: 'Re-type password',
 						onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),
 					this.props.field == "password" && React.createElement('input', { 'data-toggle': 'popover', 'data-trigger': 'focus',
