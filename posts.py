@@ -466,10 +466,10 @@ class Posts:
 						 'notification_id' 	: note[5],
 						 'timeStamp'		: note[6],
 						 'timeString'		: note[7],
-						 'isOP'				: note[8],
-						 'numOtherPeople'	: note[9],
-						 'sender_name'		: note[10],
-						 'op_name'			: note[11]
+						 'sender_name'		: note[8],
+						 'op_name'			: note[9],
+						 'numOtherPeople'	: note[10],
+						 'isOP'				: note[11]
 						 }
 			n_list.append(this_note)
 		return n_list
