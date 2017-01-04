@@ -26,10 +26,8 @@ post_manager = Posts()
 security_manager = Security()
 # user_manager.deleteUser('drd')
 
-fb_users = user_manager.getFacebookUsers()
+# fb_users = user_manager.getFacebookUsers()
 user_list = user_manager.getUserList()
-
-
 
 
 # post_manager.deleteUserPosts('lily')
