@@ -106,10 +106,10 @@ def verifyAndLogin() :
 	if res['result'] == 'success':
 		session['logged_in'] = True
 		session['userID'] = res['username']
-		security_manager = Security()
-		isSuccess = True
-		security_manager.recordLoginAttempt(user, isSuccess, ip, False)
-		security_manager.closeConnection()
+		# security_manager = Security()
+		# isSuccess = True
+		# security_manager.recordLoginAttempt(user, isSuccess, ip, False)
+		# security_manager.closeConnection()
 		return jsonify({ 'error' : False })
 	else: 
 		isSuccess = False

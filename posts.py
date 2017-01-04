@@ -346,9 +346,9 @@ class Posts:
 		notification_id = self.hash_notification_id(timeString)
 		self.insertNotificationIntoMain(feed_name, notification_id, timeString, timeStamp, comment_id, receiver_id, sender_id)
 		if numOtherPeople == 0 :
-			self.addToShortList(feed_name, comment_id, receiver_id, sender_id, notification_id, timeStamp, timeString, isOP, numOtherPeople, sender_name, op_name)
+			self.addToShortList(feed_name, comment_id, receiver_id, sender_id, notification_id, timeString, timeStamp, isOP, numOtherPeople, sender_name, op_name)
 		else :
-			self.updateShortList(comment_id, receiver_id, sender_id, timeString, timeStamp, numOtherPeople, sender_name, op_name)
+			self.updateShortList(comment_id, receiver_id, sender_id, timeString, timeStamp, numOtherPeople, sender_name)
 	
 	def insertNotificationIntoMain(self, feed_name, notification_id, timeString, timeStamp, comment_id, receiver_id, sender_id) :
 		self.createNotificationTable()
@@ -383,8 +383,8 @@ class Posts:
 		self.createShortList(receiver_id)
 		seen = False
 		table_name = self.USER_NOTIFICATION_PREFIX + receiver_id
-		sql = "INSERT INTO " + table_name + " (feed_name, comment_id, receiver_id, sender_id, seen, notification_id, timeStamp, timeString, isOP, numOtherPeople, sender_name, op_name) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-		self.db.execute(self.db.mogrify(sql, (feed_name, comment_id, receiver_id, sender_id, seen, notification_id, timeStamp, timeString, isOP, numOtherPeople, sender_name, op_name)))
+		sql = "INSERT INTO " + table_name + " (feed_name, comment_id, sender_id, seen, notification_id, timeStamp, timeString, isOP, numOtherPeople, sender_name, op_name) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+		self.db.execute(self.db.mogrify(sql, (feed_name, comment_id, sender_id, seen, notification_id, timeStamp, timeString, isOP, numOtherPeople, sender_name, op_name)))
 		self.post_db.commit()
 
 		# then if we are at more than the threshold, remove the oldest one
@@ -400,9 +400,9 @@ class Posts:
 	def updateShortList(self, comment_id, receiver_id, sender_id, timeString, timeStamp, numOtherPeople, sender_name):
 		self.createShortList(receiver_id)
 		seen = False
-		sql = "UPDATE " + self.USER_NOTIFICATION_PREFIX + receiver_id + " SET sender_id = %s, action = %s, timeString = %s, timeStamp = %s, seen = %s, numOtherPeople = %s, sender_name = %s\
+		sql = "UPDATE " + self.USER_NOTIFICATION_PREFIX + receiver_id + " SET sender_id = %s, timeString = %s, timeStamp = %s, seen = %s, numOtherPeople = %s, sender_name = %s\
 		WHERE comment_id = %s"
-		self.db.execute(self.db.mogrify(sql, (sender_id, action, timeString, timeStamp, seen, numOtherPeople, sender_name, comment_id)))
+		self.db.execute(self.db.mogrify(sql, (sender_id, timeString, timeStamp, seen, numOtherPeople, sender_name, comment_id)))
 		self.post_db.commit()
 
 	def removeFromShortList(self, receiver_id, notification_id):
@@ -418,8 +418,8 @@ class Posts:
 	def getShortListNotifications(self,userID):
 		self.createShortList(userID)
 		table_name = self.USER_NOTIFICATION_PREFIX + userID
-		sql = "SELECT * FROM " + table_name + " WHERE receiver_id = %s"
-		self.db.execute(self.db.mogrify(sql, (userID,)))
+		sql = "SELECT * FROM " + table_name
+		self.db.execute(self.db.mogrify(sql))
 		query = self.db.fetchall()
 		notification_list = self.shortNotificationListToDict(query)
 		return notification_list
@@ -433,8 +433,9 @@ class Posts:
 		return notification_list
 
 	def getNotificationCount(self, userID) :
-		sql = "SELECT * FROM " + self.USER_NOTIFICATION_PREFIX + userID + " WHERE receiver_id = %s AND seen = %s"
-		self.db.execute(self.db.mogrify(sql, (userID, False)))
+		sql = "SELECT * FROM " + self.USER_NOTIFICATION_PREFIX + userID + " WHERE seen = %s"
+		seen = False
+		self.db.execute(self.db.mogrify(sql, (seen,)))
 		query = self.db.fetchall()
 		return len(query)
 

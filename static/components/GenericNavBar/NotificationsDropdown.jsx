@@ -23,6 +23,26 @@ export default class NotificationsDropdown extends React.Component {
                 }
             }.bind(this));
     }
+    getNotificationSyntax(note) {
+        var whose; var also; var notification;
+        if (note.isOP) { 
+            whose = "your";
+            also = "";
+        }
+        else {
+            whose = note.op_name + "'s";
+            also = "also";
+        }
+        if (note.numOtherPeople > 1)
+            notification = note.sender_name + " and " + 
+                note.numOtherPeople + " other people commented on " + whose + " post."
+        else if (note.numOtherPeople == 1)
+            notification = note.sender_name + 
+                " and 1 other person commented on " + whose + " post."
+        else 
+            notification = note.sender_name + " " + also + " commented on " + whose + " post."
+        return notification;
+    }
     componentDidMount() {
         AppStore.addNoteChangeListener(this._onChange.bind(this));
         if (!this.state.timer)
