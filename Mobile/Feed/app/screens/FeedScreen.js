@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
+import {Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
           Alert, Image, Animated, TouchableWithoutFeedback, ScrollView} from 'react-native';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import _ from 'lodash'
@@ -71,6 +71,9 @@ class FeedScreen extends Component {
     this.initializeUsername = this.initializeUsername.bind(this);
     this.handleFilterPress = this.handleFilterPress.bind(this);
     this.handleServerPostSubmit = this.handleServerPostSubmit.bind(this);
+    this._navigateToHome = this._navigateToHome.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
+    this.handleRightAction = this.handleRightAction.bind(this)
    
   }
 
@@ -201,7 +204,8 @@ class FeedScreen extends Component {
   };
 
   handleRightAction() {
-    Alert.alert('Menu pressed')
+    // Alert.alert('Menu pressed')
+    this.handleLogout();
   }
 
   selectActivitiesAction() {
@@ -237,6 +241,18 @@ class FeedScreen extends Component {
         else {
           this.setState({"current_username" : value})
         }
+  }
+
+  handleLogout() {
+    AsyncStorage.setItem("current_username", "").then((value) => {
+        this._navigateToHome();
+      });
+  }
+
+  _navigateToHome(){
+    this.props.navigator.push({
+    href: "Start"
+    })
   }
 
 
@@ -282,6 +298,8 @@ class FeedScreen extends Component {
     return (
 
         <View style = {styles.container}>
+
+
             <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
                 <ActionBar
                     backgroundColor={'#3B373C'}

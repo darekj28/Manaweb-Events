@@ -53,10 +53,8 @@ class LoginScreen extends Component {
               this.setState({validation_output: responseData})
               this._navigateToFeed()
             })
-      
         }
         else {
-
           this.setState({ validation_output : responseData})
         }
         
