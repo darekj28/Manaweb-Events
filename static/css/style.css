@@ -467,6 +467,7 @@ body {
 .navbar-default .navbar-collapse,
 .navbar-default .navbar-form {
   border-color: #ffffff;
+  background-color : var(--navbar);
 }
 .navbar-default .navbar-link {
   color: #ffffff;
@@ -476,9 +477,6 @@ body {
 }
 
 @media (max-width: 767px) {
-  .navbar-default {
-    height : 58px;
-  }
   .navbar-default .navbar-nav .open .dropdown-menu > li > a {
     color: #ffffff;
     white-space : normal;
