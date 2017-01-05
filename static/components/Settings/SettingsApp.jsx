@@ -5,9 +5,9 @@ import SettingsInputLabel from './SettingsInputLabel.jsx';
 import NoSearchNavBar from '../GenericNavBar/NoSearchNavBar.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 
-var text_fields = [	"first_name", "last_name", "old_password", "password", "password_confirm", "phone_number" ];
+var text_fields = [	"first_name", "last_name", "old_password", "password", "phone_number" ];
 var select_fields = [ "month_of_birth", "day_of_birth", "year_of_birth", "avatar" ];
-var required_text_fields = ["first_name", "last_name", "old_password", "phone_number"];
+var required_text_fields = ["first_name", "last_name", "old_password"];
 export default class SettingsApp extends React.Component {
 	constructor(props) {
 		super(props);
@@ -17,14 +17,13 @@ export default class SettingsApp extends React.Component {
 			last_name  			: '',
 			old_password		: '',
 			password			: '',
-			password_confirm 	: '',
 			phone_number 		: '',
 			month_of_birth 		: '',
 			day_of_birth 		: '',
 			year_of_birth 		: '',
 			avatar 				: '',
-			valid_text_fields	: [	"first_name", "last_name", "phone_number" ],
-			valid_select_fields	: [ "month_of_birth", "day_of_birth", "year_of_birth", "avatar" ],
+			valid_text_fields	: [],
+			valid_select_fields	: [],
 			submittable			: false
 		};
 	}
@@ -129,18 +128,15 @@ export default class SettingsApp extends React.Component {
 										<SettingsInputLabel field={field} />
 										<SettingsTextInput field={field} value={this.state[field]} 
 													handleTyping={this.handleChange.bind(this)} 
-													handleBlur={this.handleTextBlur.bind(this)}
-													isUpdate={true} />
+													handleBlur={this.handleTextBlur.bind(this)}/>
 									</div>;
 						}, this)}
 						{select_fields.map(function(field) {
 							return <div className="form-group">
 										<SettingsInputLabel field={field}/>
 										<SettingsSelectInput field={field} value={this.state[field]}
-															avatar_list={this.state.avatar_list}
 															handleSelect={this.handleChange.bind(this)} 
-															handleBlur={this.handleSelectBlur.bind(this)}
-															isUpdate={true}/>
+															handleBlur={this.handleSelectBlur.bind(this)}/>
 									</div>
 						}, this)}
 						<div id="avatar_container" className="select_setting avatar_container centered-text"></div>

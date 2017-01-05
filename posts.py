@@ -58,9 +58,9 @@ class Posts:
 		self.post_db.close()
 
 
-	def getTimeString(self):
-		return datetime.datetime.now().strftime("%I:%M%p - %B %d, %Y")
-
+	def getTimeString(self, timeStamp):
+		res = time.strftime("%I:%M%p - %B %d, %Y", time.gmtime(timeStamp))
+		return res.lstrip("0")
 	# generates a random id
 	def id_generator(self, size=6, chars=string.ascii_uppercase + string.digits):
 		return ''.join(random.choice(chars) for _ in range(size))
@@ -146,7 +146,7 @@ class Posts:
 
 		table_name = feed_name + self.SEEN_POSTS_SUFFIX
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 		sql = "UPDATE " + table_name + " SET last_seen_post = %s, numUnseen = %s, timeStamp = %s, timeString = %s WHERE userID = %s"
 		last_seen_post = self.getPostById(feed_name, self.getLastPost(feed_name))
 		self.db.execute(self.db.mogrify(sql, (last_seen_post['comment_id'], 0, last_seen_post['timeStamp'], last_seen_post['timeString'], userID)))
@@ -309,7 +309,7 @@ class Posts:
 	def ghostFollow(self, feed_name, userID, unique_id):
 		thisItem = self.getPostById(unique_id)
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 		if thisItem != None:
 			sql = "INSERT INTO " + feed_name + " (body, poster_id, feed_name, comment_id, unique_id, timeString, timeStamp, following, ghost_following) VALUES (%s, %s, %s,%s,%s,%s,%s,%s,%s)"
 			
@@ -343,7 +343,7 @@ class Posts:
 		numNotificationsFromComment = self.getNumberOfNotificationsFromComment(comment_id, receiver_id)
 		isOP = original_post['poster_id'] == receiver_id
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 		notification_id = self.hash_notification_id(timeString)
 		self.insertNotificationIntoMain(feed_name, notification_id, timeString, timeStamp, comment_id, receiver_id, sender_id)
 		if numNotificationsFromComment == 0 :
@@ -475,7 +475,7 @@ class Posts:
 						 'seen'				: note[5],
 						 'notification_id' 	: note[6],
 						 'timeStamp'		: note[7],
-						 'timeString'		: note[8],
+						 'timeString'		: self.getTimeString(note[7]),
 						 #'numUnseenActions' : note[9]
 						 'sender_name'		: note[10],
 						 'op_name'			: note[11],
@@ -558,7 +558,7 @@ class Posts:
 	def reportPost(self, feed_name, comment_id, reason, description, reporting_user, reported_user):
 		body = self.getPostById(feed_name, comment_id)['body']
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 
 		self.db.execute(self.db.mogrify("INSERT INTO " + self.REPORT_TABLE + "(feed_name, id, body, reason, isComment, description, timeStamp, timeString, reporting_user, reported_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (feed_name, comment_id, body, reason, False, description, timeStamp, timeString, reporting_user, reported_user)))
 		self.post_db.commit()
@@ -571,7 +571,7 @@ class Posts:
 	def reportComment(self, feed_name, unique_id, reason, description, reporting_user, reported_user):
 		body = self.getCommentById(feed_name, unique_id)['body']
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 		self.db.execute(self.db.mogrify("INSERT INTO " + self.REPORT_TABLE + "(feed_name, id, body, reason, isComment, description, timeStamp, timeString, reporting_user, reported_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (feed_name, unique_id, body, reason, True, description, timeStamp, timeString, reporting_user, reported_user)))
 		self.post_db.commit()	
 		action = "REPORTED COMMENT"
@@ -683,7 +683,7 @@ class Posts:
 	# posts on a thread
 	def postInThread(self, feed_name, body, poster_id, isTrade = None, isPlay = None, isChill = None, comment_id = None):
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 
 
 		if isTrade == None:
@@ -723,7 +723,7 @@ class Posts:
 
 	def makeComment(self, feed_name, comment_id, body, poster_id, unique_id = None):
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 		comment_id = comment_id
 
 		if unique_id == None:
@@ -838,7 +838,7 @@ class Posts:
 	def updateTime(self, feed_name, unique_id):
 		table_name  = feed_name
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 		update_time_code = "UPDATE " + table_name  + " SET timeString = ?, timeStamp = ? WHERE unique_id = '" + unique_id + "'"
 		self.db.execute(self.db.mogrify(update_time_code, (timeString, timeStamp)))
 		self.post_db.commit()
@@ -848,7 +848,7 @@ class Posts:
 	def editPost(self, feed_name, unique_id, field_name, field_data):
 		table_name  = feed_name
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 		update_code = "UPDATE " + table_name  + " SET " + field_name + " = %s WHERE unique_id = '" + unique_id + "'"
 		self.db.execute(self.db.mogrify(update_code, (field_data,)))
 		self.post_db.commit()
@@ -865,7 +865,7 @@ class Posts:
 	def editComment(self, feed_name, unique_id, field_name, field_data):
 		table_name  = "c_" + feed_name
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 		update_code = "UPDATE " + table_name  + " SET " + field_name + " = %s WHERE unique_id = '" + unique_id + "'"
 		self.db.execute(self.db.mogrify(update_code, (field_data,)))
 		self.post_db.commit()
@@ -879,7 +879,7 @@ class Posts:
 
 	def deletePost(self, feed_name, unique_id):
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 		thisPost = self.getPostById(feed_name, unique_id)
 		action = "DELETE POST"
 		isComment = False
@@ -902,7 +902,7 @@ class Posts:
 
 	def deleteComment(self, feed_name, unique_id):
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 		thisComment = self.getCommentById(feed_name, unique_id)
 		action = "DELETE COMMENT"
 		isComment = True
@@ -949,7 +949,7 @@ class Posts:
 			thisPost['body'] = post[0]
 			thisPost['poster_id'] = post[1]
 			thisPost['feed_name'] = post[2]
-			thisPost['timeString'] = post[4]
+			thisPost['timeString'] = self.getTimeString(post[5])
 			thisPost['timeStamp'] = post[5]
 			thisPost['time'] = self.date_format(int(thisPost['timeStamp']))
 			thisPost['isTrade'] = post[6]
@@ -975,7 +975,7 @@ class Posts:
 			thisComment['body'] = comment[0]
 			thisComment['poster_id'] = comment[1]
 			thisComment['feed_name'] = comment[2]
-			thisComment['timeString'] = comment[4]
+			thisComment['timeString'] = self.getTimeString(post[5])
 			thisComment['timeStamp'] = comment[5]
 			thisComment['comment_id'] = comment[3]
 			thisComment['unique_id'] = comment[6]

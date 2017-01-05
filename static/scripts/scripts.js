@@ -25,7 +25,8 @@ function idToName (id) {
 	var str = "";
 	var temp;
 	for (var i = 0; i < arr.length; i++){
-		temp = arr[i].charAt(0).toUpperCase() + arr[i].substr(1).toLowerCase();
+		if (i == 0) temp = arr[i].charAt(0).toUpperCase() + arr[i].substr(1).toLowerCase();
+		else temp = arr[i].charAt(0).toLowerCase() + arr[i].substr(1).toLowerCase()
 		str = str.concat(temp + ' ');
 	}
 	return str;
@@ -46,11 +47,12 @@ function testValid (field, value) {
 			break;
 		case "password":
 			var condition = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,}$/;
+			if (value == "") return "";
 			if (!value.match(condition)) return "invalid";
 			break;
-		case "password_confirm":
-			var condition = $('#password').val();
-			if (value != condition || !value) return "invalid";
+		case "phone_number":
+			if (value == "") return "";
+			if (value.length < 14) return "invalid";
 			break;
 		case "month_of_birth":
 			var day = $('#day_of_birth').val();
@@ -79,9 +81,9 @@ function warningForField(field, value) {
 		case "password_confirm" :
 			return "Your passwords don\'t match.";
 		default :
-			return "Invalid " + idToName(field);
+			return idToName(field) + " is invalid.";
 	}
-	return "Invalid " + idToName(field);
+	return idToName(field) + " is invalid.";
 }
 function isValidMonth(day, month) {
 	var max_days;
@@ -132,4 +134,48 @@ function generateAvatars(arr) {
 		avatars.push({ label : arr[i], value : arr[i].toLowerCase() });
 	}
 	return avatars;
+}
+function phoneHelper() {
+	$('#phone_number').attr('maxlength', 14);
+	$('#phone_number').keydown(function (e) {
+		var key = e.charCode || e.keyCode || 0;
+		// Auto-format- do not expose the mask as the user begins to type
+		if (key !== 8 && key !== 9) {
+			if ($(this).val().length === 4) {
+				$(this).val($(this).val() + ')');
+			}
+			if ($(this).val().length === 5) {
+				$(this).val($(this).val() + ' ');
+			}			
+			if ($(this).val().length === 9) {
+				$(this).val($(this).val() + '-');
+			}
+			if ($(this).val().length === 0) {
+				$(this).val("(" + $(this).val());
+			}
+		}
+		// Allow numeric (and tab, backspace, delete) keys only
+		return (key == 8 || 
+				key == 9 ||
+				key == 46 ||
+				(key >= 48 && key <= 57) ||
+				(key >= 96 && key <= 105));	
+		})
+	.bind('focus click', function () {
+		if ($(this).val().length === 0) {
+			$(this).val('(');
+		}
+		else {
+			var val = $(this).val();
+			$(this).val('').val(val); // Ensure cursor remains at the end
+		}
+	})
+	.blur(function () {
+		if ($(this).val() === '(') {
+			$(this).val('');
+		}
+	});
+}
+function passwordHelper() {
+	$('#password').popover();
 }
