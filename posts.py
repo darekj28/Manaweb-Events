@@ -59,7 +59,7 @@ class Posts:
 
 
 	def getTimeString(self):
-		return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+		return datetime.datetime.now().strftime("%B %d, %Y - %I:%M%p")
 
 	# generates a random id
 	def id_generator(self, size=6, chars=string.ascii_uppercase + string.digits):
@@ -340,12 +340,13 @@ class Posts:
 		sender_name = user_manager.getInfo(sender_id)['first_name']
 		op_name = user_manager.getInfo(original_post['poster_id'])['first_name']
 		numOtherPeople = self.getNumberOfOtherPeople(comment_id, sender_id, receiver_id)
+		numNotificationsFromComment = self.getNumberOfNotificationsFromComment(comment_id, receiver_id)
 		isOP = original_post['poster_id'] == receiver_id
 		timeStamp = time.time()
 		timeString = self.getTimeString()
 		notification_id = self.hash_notification_id(timeString)
 		self.insertNotificationIntoMain(feed_name, notification_id, timeString, timeStamp, comment_id, receiver_id, sender_id)
-		if numOtherPeople == 0 :
+		if numNotificationsFromComment == 0 :
 			self.addToShortList(feed_name, comment_id, receiver_id, sender_id, notification_id, timeString, timeStamp, isOP, numOtherPeople, sender_name, op_name)
 		else :
 			self.updateShortList(comment_id, receiver_id, sender_id, timeString, timeStamp, numOtherPeople, sender_name)
@@ -367,6 +368,13 @@ class Posts:
 			if note['sender_id'] not in other_people and note['sender_id'] != sender_id:
 				other_people.append(note['sender_id'])
 		return len(other_people)
+
+	def getNumberOfNotificationsFromComment(self, comment_id, receiver_id) :
+		self.createShortList(receiver_id)
+		sql = "SELECT * FROM " + self.USER_NOTIFICATION_PREFIX + receiver_id + " WHERE comment_id = %s"
+		self.db.execute(self.db.mogrify(sql, (comment_id,)))
+		query = self.db.fetchall()
+		return len(query) 
 
 	def createShortList(self, receiver_id):
 		table_name = self.USER_NOTIFICATION_PREFIX + receiver_id

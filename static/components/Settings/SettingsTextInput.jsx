@@ -1,51 +1,6 @@
 var React = require('react');
 import AppStore from '../../stores/AppStore.jsx';
 
-function idToName (id) {
-	var arr = id.split('_');
-	var str = "";
-	var temp;
-	for (var i = 0; i < arr.length; i++){
-		temp = arr[i].charAt(0).toUpperCase() + arr[i].substr(1).toLowerCase();
-		str = str.concat(temp + ' ');
-	}
-	return str;
-}
-function testValid (field, value) {
-	switch (field) {
-		case "first_name":
-			var condition = /^[a-z ,.'-]+$/i;
-			if (!value.match(condition)) return "invalid";
-			break;
-		case "last_name":
-			var condition = /^[a-z ,.'-]+$/i;
-			if (!value.match(condition)) return "invalid";
-			break;
-		case "password":
-			var condition = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,}$/;
-			if (!value.match(condition)) return "invalid";
-			break;
-		case "password_confirm":
-			var condition = $('#password').val();
-			if (value != condition || !value) return "invalid";
-			break;
-		default :
-			return "valid";
-	}
-	return "valid";
-}
-function warningForField(field, value) {
-	if (!value) return "You can\'t leave this empty.";
-	switch (field) {
-		case "old_password" :
-			return "Your old password is incorrect.";
-		case "password_confirm" :
-			return "Your passwords don\'t match.";
-		default :
-			return "Invalid " + idToName(field);
-	}
-	return "Invalid " + idToName(field);
-}
 function phoneHelper() {
 	$('#phone_number').attr('maxlength', 14);
 	$('#phone_number').keydown(function (e) {
@@ -96,7 +51,7 @@ function passwordHelper(isUpdate) {
 export default class SettingsTextInput extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { valid : "", warning : "" };
+		this.state = { valid : "", warning : "", hasMounted : false };
 	}
 	verifyUsername(username) {
 		var obj = { username : username };
@@ -161,9 +116,10 @@ export default class SettingsTextInput extends React.Component {
 		this.props.handleTyping(obj);
 	}
 	handleBlur(event) {
-		if ((this.props.field == "username" || this.props.field == "email_address") || 
-					this.props.field == "old_password") {
-			switch (this.props.field) {
+		var field = this.props.field;
+		if ((field == "username" || field == "email_address") || 
+					field == "old_password") {
+			switch (field) {
 				case "username" :
 					this.verifyUsername.bind(this)(event.target.value);
 					break;
@@ -176,18 +132,22 @@ export default class SettingsTextInput extends React.Component {
 			}
 		}
 		else { 
-			var isValid = testValid(this.props.field, event.target.value);
+			var isValid = testValid(field, event.target.value);
 			this.setState({ valid : isValid, 
-					warning : warningForField(this.props.field, event.target.value) });
+					warning : warningForField(field, event.target.value) });
 		};
-		this.props.handleBlur(this.props.field, isValid);
+		this.props.handleBlur(field, isValid);
+	}
+	componentWillReceiveProps(nextProps) {
+		if (!this.state.hasMounted) {
+			var isValid = testValid(nextProps.field, nextProps.value); 
+			if (isValid == "valid" && this.props.field != "old_password")
+				this.setState({ valid : isValid, hasMounted : true });
+			else 
+				this.setState({ hasMounted : true });
+		}
 	}
 	componentDidMount() {
-		var isPassword = ((this.props.field == "password" 
-						|| this.props.field == "password_confirm") 
-						|| this.props.field == "old_password");
-		if ((this.props.isUpdate && !isPassword) || this.props.hasBeenChecked)
-			this.setState({ valid : "valid" });
 		if (this.props.field == "phone_number")
 			phoneHelper();
 		if (this.props.field == "password") 
@@ -195,43 +155,42 @@ export default class SettingsTextInput extends React.Component {
 	}
 
 	render() {
-		var isPassword = ((this.props.field == "password" 
-						|| this.props.field == "password_confirm")
-						|| this.props.field == "old_password");
+		var field = this.props.field;
+		var value = this.props.value;
+		var isPassword = ((field == "password" 
+						|| field == "password_confirm")
+						|| field == "old_password");
 		var type = isPassword ? "password" : "text";
-		var isPhoneNumber = (this.props.field == "phone_number");
+		var isPhoneNumber = (field == "phone_number");
 		return (
 				<div>
 					{isPhoneNumber && <input className={"setting form-control " + this.state.valid}
-					 	id={this.props.field} type= {type} 
-						value={this.props.value} 
+					 	id={field} type= {type} 
+						value={value} 
 						onChange={this.handleTyping.bind(this)} onBlur={this.handleBlur.bind(this)}
 						name = "phone_number" maxlength="14" placeholder="(XXX) XXX-XXXX"/>}
 					{(!isPassword && !isPhoneNumber) && <input className={"setting form-control " + this.state.valid} 
-						id={this.props.field} type={type} 
-						value={this.props.value} placeholder={idToName(this.props.field)}
+						id={field} type={type} 
+						value={value} placeholder={idToName(field)}
 						onChange={this.handleTyping.bind(this)} onBlur={this.handleBlur.bind(this)}/>}
-					{this.props.field == "old_password" && <input className={"setting form-control " + this.state.valid} 
-						id={this.props.field} type={type} 
-						value={this.props.value} placeholder="Enter your old password"
+					{field == "old_password" && <input className={"setting form-control " + this.state.valid} 
+						id={field} type={type} 
+						value={value} placeholder="Enter your old password"
 						onChange={this.handleTyping.bind(this)} onBlur={this.handleBlur.bind(this)}/>}
-					{this.props.field == "password_confirm" && <input className={"setting form-control " + this.state.valid} 
-						id={this.props.field} type={type} 
-						value={this.props.value} placeholder="Re-type password"
+					{field == "password_confirm" && <input className={"setting form-control " + this.state.valid} 
+						id={field} type={type} 
+						value={value} placeholder="Re-type password"
 						onChange={this.handleTyping.bind(this)} onBlur={this.handleBlur.bind(this)}/>}
-					{this.props.field == "password" && <input data-toggle="popover" data-trigger="focus" 
+					{field == "password" && <input data-toggle="popover" data-trigger="focus" 
 						data-content="Your password must contain at least one letter and one number."
-						className={"setting form-control " + this.state.valid} id={this.props.field} type={type} 
-						value={this.props.value} onClick={focus()} placeholder={idToName(this.props.field)}
+						className={"setting form-control " + this.state.valid} id={field} type={type} 
+						value={value} onClick={focus()} placeholder={idToName(field)}
 						onChange={this.handleTyping.bind(this)} onBlur={this.handleBlur.bind(this)}/>}
 					{(this.state.valid == "invalid") && 
-					<div className="warning" id={this.props.field + "_warning"}>
+					<div className="warning" id={field + "_warning"}>
 						{this.state.warning}
 					</div>}				
 				</div>
 			);
 	}
 }
-SettingsTextInput.defaultProps = {
-	hasBeenChecked : false
-};

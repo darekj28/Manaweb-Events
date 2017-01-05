@@ -1,103 +1,5 @@
 var React = require('react');
 
-function idToName (id) {
-	var arr = id.split('_');
-	var str = "";
-	var temp;
-	for (var i = 0; i < arr.length; i++){
-		temp = arr[i].charAt(0).toUpperCase() + arr[i].substr(1).toLowerCase();
-		str = str.concat(temp + ' ');
-	}
-	return str;
-}
-function idToTimeLabel (id) {
-	var arr = id.split('_');
-	return arr[0].charAt(0).toUpperCase() + arr[0].substr(1).toLowerCase();
-}
-
-function testValid (field, value) {
-	if (!value) return "invalid";
-	switch (field) {
-		case "month_of_birth":
-			var day = $('#day_of_birth').val();
-			if (day) return isValidMonth(day, value);
-		case "day_of_birth":
-			var month = $('#month_of_birth').val();
-			if (month) return isValidDay(month, value);
-		case "year_of_birth":
-			return isValidYear(value);
-		default :
-			return "valid";
-	}
-	return "valid";
-}
-
-function warningForField(field, value) {
-	if (!value) return "You can\'t leave this empty.";
-	switch (field) {
-		case "month_of_birth" :
-			return "Hmm, the month doesn\'t look right. There aren't that many days in that month.";
-		case "day_of_birth" :
-			return "Hmm, the day doesn\'t look right. Be sure to use a 1 or 2-digit number that is a day of the month.";
-		case "year_of_birth" :
-			return "Hmm, the year doesn\'t look right. Be sure to use a 4-digit number.";
-		default :
-			return "Invalid " + idToName(field);
-	}
-	return "Invalid " + idToName(field);
-}
-
-function isValidMonth(day, month) {
-	var max_days;
-	for (var i = 0; i < months.length; i++)
-		if (parseInt(month) == months[i].value)
-			max_days = months[i].days;
-	if (day <= max_days) return "valid";
-	else return "invalid";
-}
-
-function isValidDay(month, day) {
-	var max_days;
-	for (var i = 0; i < months.length; i++)
-		if (parseInt(month) == months[i].value)
-			max_days = months[i].days;
-	if (day <= max_days) return "valid";
-	else return "invalid";
-}
-
-function isValidYear(year) {
-	var high = 2006; var low = 1900;
-	if (parseInt(year) > high || parseInt(year) < low) return "invalid";
-	else return "valid";
-}
-
-function generateDays() {
-	var days = [];
-	var start = 1; var end = 31;
-	for (var i = start; i <= end; i++) {
-		days.push({ label : i, value : i});
-	}
-	return days;
-}
-
-function generateYears() {
-	var years = [];
-	var current_year = new Date().getFullYear();
-	var start = current_year - 60; var end = current_year;
-	for (var i = start; i <= end; i++) {
-		years.push({ label : i, value : i});
-	}
-	return years;
-}
-
-function generateAvatars(arr) {
-	var avatars = [];
-	for (var i = 0; i < arr.length; i++) {
-		avatars.push({ label : arr[i], value : arr[i].toLowerCase() });
-	}
-	return avatars;
-}
-
 var days = generateDays();
 var years = generateYears();
 var avatars = ["Ajani", "Chandra", "Elspeth", "Gideon", "Jace", "Liliana", "Nahiri", "Nicol", "Nissa", "Ugin"];
@@ -107,7 +9,7 @@ var avatar_list = generateAvatars(avatars);
 export default class SettingsSelectInput extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { valid : "", warning : "" };
+		this.state = { valid : "", warning : "", hasMounted : false };
 	}
 	handleSelect(event) {
 		var obj = {};
@@ -130,13 +32,21 @@ export default class SettingsSelectInput extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		$('select[name=' + nextProps.field + ']').val(nextProps.value);
 		if (this.props.field == "avatar") this.handleAvatarDisplay.bind(this)();
+		if (!this.state.hasMounted) {
+			var isValid = testValid(nextProps.field, nextProps.value); 
+			if (isValid == "valid")
+				this.setState({ valid : isValid, hasMounted : true });
+			else 
+				this.setState({ hasMounted : true });
+		}
 	}
 	componentDidMount() {
-		if (this.props.isUpdate || this.props.hasBeenChecked) this.setState({ valid : "valid" });
+		if (this.props.value) this.setState({ valid : "valid" });
 	}
 	render() {
 		var options;
-		switch (this.props.field) {
+		var field = this.props.field;
+		switch (field) {
 			case "month_of_birth" : 
 				options = months;
 				break;
@@ -152,22 +62,19 @@ export default class SettingsSelectInput extends React.Component {
 		}
 		return (
 				<div>
-					<select className={"select_setting " + this.state.valid} id={this.props.field} name={this.props.field}
-									title={idToName(this.props.field)}
+					<select className={"select_setting " + this.state.valid} id={field} name={field}
+									title={idToName(field)}
 									onChange={this.handleSelect.bind(this)} onBlur={this.handleBlur.bind(this)}> 
-						<option value="" disabled selected>{idToTimeLabel(this.props.field)}</option>
+						<option value="" disabled selected>{idToTimeLabel(field)}</option>
 						{options.map(function(option) {
 							return <option value={option.value}>{option.label}</option>
 						})}
 					</select>
 					{(this.state.valid == "invalid") && 
-					<div className="warning" id={this.props.field + "_warning"}>
+					<div className="warning" id={field + "_warning"}>
 						{this.state.warning}
 					</div>}
 				</div>
 			);
 	}
 }
-SettingsSelectInput.defaultProps = {
-	hasBeenChecked : false
-};

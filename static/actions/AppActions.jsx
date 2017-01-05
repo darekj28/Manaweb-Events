@@ -29,6 +29,12 @@ var AppActions = {
         AppDispatcher.handleViewAction({
           actionType: AppConstants.DELETE_NOTIFICATIONCOUNT
         })
+    },
+    addIp: function(data) {
+        AppDispatcher.handleViewAction({
+          actionType: AppConstants.ADD_IP,
+          data: data
+        })
     }
 };
 

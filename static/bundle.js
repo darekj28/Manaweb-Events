@@ -55,19 +55,23 @@
 	
 	var _AppStore2 = _interopRequireDefault(_AppStore);
 	
-	var _App = __webpack_require__(/*! ./Home/App.jsx */ 48);
+	var _AppActions = __webpack_require__(/*! ../actions/AppActions.jsx */ 48);
+	
+	var _AppActions2 = _interopRequireDefault(_AppActions);
+	
+	var _App = __webpack_require__(/*! ./Home/App.jsx */ 49);
 	
 	var _App2 = _interopRequireDefault(_App);
 	
-	var _CommentApp = __webpack_require__(/*! ./Comment/CommentApp.jsx */ 129);
+	var _CommentApp = __webpack_require__(/*! ./Comment/CommentApp.jsx */ 128);
 	
 	var _CommentApp2 = _interopRequireDefault(_CommentApp);
 	
-	var _NotificationsApp = __webpack_require__(/*! ./Notifications/NotificationsApp.jsx */ 139);
+	var _NotificationsApp = __webpack_require__(/*! ./Notifications/NotificationsApp.jsx */ 138);
 	
 	var _NotificationsApp2 = _interopRequireDefault(_NotificationsApp);
 	
-	var _SettingsApp = __webpack_require__(/*! ./Settings/SettingsApp.jsx */ 143);
+	var _SettingsApp = __webpack_require__(/*! ./Settings/SettingsApp.jsx */ 142);
 	
 	var _SettingsApp2 = _interopRequireDefault(_SettingsApp);
 	
@@ -117,12 +121,17 @@
 	var checkLogin = function checkLogin(nextState, replace) {
 		if (!_AppStore2.default.getCurrentUser()) replace('/');
 	};
+	var addIp = function addIp(nextState, replace) {
+		$.get('https://api.ipify.org/?format=json', function (r) {
+			_AppActions2.default.addIp(r.ip);
+		}.bind(undefined));
+	};
 	ReactDOM.render(React.createElement(
 		Router,
 		{ history: browserHistory },
 		React.createElement(
 			Route,
-			{ path: '/', component: Main },
+			{ path: '/', component: Main, onEnter: addIp },
 			React.createElement(IndexRoute, { component: _App2.default }),
 			React.createElement(Route, { path: 'comment/:comment_id', component: _CommentApp2.default, onEnter: checkLogin }),
 			React.createElement(Route, { path: 'notifications', component: _NotificationsApp2.default, onEnter: checkLogin }),
@@ -161,6 +170,7 @@
 	var _currentUser = localStorage.CurrentUser ? JSON.parse(localStorage.CurrentUser) : "";
 	var _notifications = localStorage.Notifications ? JSON.parse(localStorage.Notifications) : [];
 	var _notification_count = localStorage.NotificationCount ? JSON.parse(localStorage.NotificationCount) : "";
+	var _ip = localStorage.Ip ? JSON.parse(localStorage.Ip) : "";
 	
 	function _loadCurrentUser(data) {
 		_currentUser = data;
@@ -181,6 +191,10 @@
 	function _deleteNotificationCount() {
 		_notification_count = "";
 		localStorage.NotificationCount = JSON.stringify(_notification_count);
+	}
+	function _addIp(data) {
+		_ip = data;
+		localStorage.Ip = JSON.stringify(_ip);
 	}
 	
 	var emitter = ee({}),
@@ -212,6 +226,11 @@
 			key: 'getNotificationCount',
 			value: function getNotificationCount() {
 				return _notification_count;
+			}
+		}, {
+			key: 'getIp',
+			value: function getIp() {
+				return _ip;
 			}
 		}, {
 			key: 'emitUserChange',
@@ -267,6 +286,9 @@
 					case AppConstants.DELETE_NOTIFICATIONCOUNT:
 						_deleteNotificationCount();
 						this.emitNoteChange.bind(this)();
+						break;
+					case AppConstants.ADD_IP:
+						_addIp();
 						break;
 					default:
 						return true;
@@ -885,18 +907,12 @@
 	 * will remain to ensure logic does not differ in production.
 	 */
 	
-	var validateFormat = function validateFormat(format) {};
-	
-	if (false) {
-	  validateFormat = function validateFormat(format) {
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  if (false) {
 	    if (format === undefined) {
 	      throw new Error('invariant requires an error message argument');
 	    }
-	  };
-	}
-	
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  validateFormat(format);
+	  }
 	
 	  if (!condition) {
 	    var error;
@@ -3843,7 +3859,8 @@
 	  REMOVE_CURRENTUSER: 'REMOVE_CURRENTUSER',
 	  ADD_NOTIFICATIONS: 'ADD_NOTIFICATIONS',
 	  ADD_NOTIFICATIONCOUNT: 'ADD_NOTIFICATIONCOUNT',
-	  DELETE_NOTIFICATIONCOUNT: 'DELETE_NOTIFICATIONCOUNT'
+	  DELETE_NOTIFICATIONCOUNT: 'DELETE_NOTIFICATIONCOUNT',
+	  ADD_IP: 'ADD_IP'
 	};
 
 /***/ },
@@ -4288,6 +4305,57 @@
 
 /***/ },
 /* 48 */
+/*!***************************************!*\
+  !*** ./static/actions/AppActions.jsx ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var AppDispatcher = __webpack_require__(/*! ../dispatcher/AppDispatcher.jsx */ 29);
+	var AppConstants = __webpack_require__(/*! ../constants/AppConstants.jsx */ 32);
+	
+	var AppActions = {
+	    addCurrentUser: function addCurrentUser(data) {
+	        AppDispatcher.handleViewAction({
+	            actionType: AppConstants.ADD_CURRENTUSER,
+	            data: data
+	        });
+	    },
+	    removeCurrentUser: function removeCurrentUser() {
+	        AppDispatcher.handleViewAction({
+	            actionType: AppConstants.REMOVE_CURRENTUSER
+	        });
+	    },
+	    addNotifications: function addNotifications(data) {
+	        AppDispatcher.handleViewAction({
+	            actionType: AppConstants.ADD_NOTIFICATIONS,
+	            data: data
+	        });
+	    },
+	    addNotificationCount: function addNotificationCount(data) {
+	        AppDispatcher.handleViewAction({
+	            actionType: AppConstants.ADD_NOTIFICATIONCOUNT,
+	            data: data
+	        });
+	    },
+	    deleteNotificationCount: function deleteNotificationCount() {
+	        AppDispatcher.handleViewAction({
+	            actionType: AppConstants.DELETE_NOTIFICATIONCOUNT
+	        });
+	    },
+	    addIp: function addIp(data) {
+	        AppDispatcher.handleViewAction({
+	            actionType: AppConstants.ADD_IP,
+	            data: data
+	        });
+	    }
+	};
+	
+	module.exports = AppActions;
+
+/***/ },
+/* 49 */
 /*!****************************************!*\
   !*** ./static/components/Home/App.jsx ***!
   \****************************************/
@@ -4301,7 +4369,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _SearchNavBar = __webpack_require__(/*! ./SearchNavBar.jsx */ 49);
+	var _SearchNavBar = __webpack_require__(/*! ./SearchNavBar.jsx */ 50);
 	
 	var _SearchNavBar2 = _interopRequireDefault(_SearchNavBar);
 	
@@ -4325,7 +4393,7 @@
 	
 	var _LoginApp2 = _interopRequireDefault(_LoginApp);
 	
-	var _ViewMoreButton = __webpack_require__(/*! ./ViewMoreButton.jsx */ 128);
+	var _ViewMoreButton = __webpack_require__(/*! ./ViewMoreButton.jsx */ 127);
 	
 	var _ViewMoreButton2 = _interopRequireDefault(_ViewMoreButton);
 	
@@ -4340,15 +4408,6 @@
 	var React = __webpack_require__(/*! react */ 2);
 	
 	
-	function toggle(collection, item) {
-		var idx = collection.indexOf(item);
-		if (idx !== -1) collection.splice(idx, 1);else collection.push(item);
-		return collection;
-	}
-	
-	function contains(collection, item) {
-		if (collection.indexOf(item) !== -1) return true;else return false;
-	}
 	var feed_name = "BALT";
 	var actions = ['Play', 'Trade', 'Chill'];
 	
@@ -4605,7 +4664,7 @@
 	exports.default = App;
 
 /***/ },
-/* 49 */
+/* 50 */
 /*!*************************************************!*\
   !*** ./static/components/Home/SearchNavBar.jsx ***!
   \*************************************************/
@@ -4619,7 +4678,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _NotificationsDropdown = __webpack_require__(/*! ../GenericNavBar/NotificationsDropdown.jsx */ 50);
+	var _NotificationsDropdown = __webpack_require__(/*! ../GenericNavBar/NotificationsDropdown.jsx */ 51);
 	
 	var _NotificationsDropdown2 = _interopRequireDefault(_NotificationsDropdown);
 	
@@ -4661,24 +4720,6 @@
 			value: function componentDidMount() {
 				var searchVisible = 0;
 				$('.navbar-search-form').show();
-	
-				// $('.navbar-search-form').hide();
-				// $('[data-toggle="search"]').click(function(){
-				//        if(searchVisible == 0){
-				//            searchVisible = 1;
-				//            $(this).parent().addClass('active');
-				//            $('.navbar-search-form').fadeIn(function(){
-				//                $('.navbar-search-form input').focus();
-				//            });
-				//        } else {
-				//            searchVisible = 0;
-				//            $(this).parent().removeClass('active');
-				//            $(this).blur();
-				//            $('.navbar-search-form').fadeOut(function(){
-				//                $('.navbar-search-form input').blur();
-				//            });
-				//        } 
-				//    });
 				$('#searchInput').keypress(function (event) {
 					if (event.keyCode == 13) {
 						event.preventDefault();
@@ -4782,7 +4823,7 @@
 	exports.default = SearchNavBar;
 
 /***/ },
-/* 50 */
+/* 51 */
 /*!*******************************************************************!*\
   !*** ./static/components/GenericNavBar/NotificationsDropdown.jsx ***!
   \*******************************************************************/
@@ -4800,7 +4841,7 @@
 	
 	var _AppStore2 = _interopRequireDefault(_AppStore);
 	
-	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 51);
+	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 48);
 	
 	var _AppActions2 = _interopRequireDefault(_AppActions);
 	
@@ -4846,6 +4887,20 @@
 	            }.bind(this));
 	        }
 	    }, {
+	        key: 'getNotificationSyntax',
+	        value: function getNotificationSyntax(note) {
+	            var whose;var also;var notification;
+	            if (note.isOP) {
+	                whose = "your";
+	                also = "";
+	            } else {
+	                whose = note.op_name + "'s";
+	                also = "also";
+	            }
+	            if (note.numOtherPeople > 1) notification = note.sender_name + " and " + note.numOtherPeople + " other people commented on " + whose + " post.";else if (note.numOtherPeople == 1) notification = note.sender_name + " and 1 other person commented on " + whose + " post.";else notification = note.sender_name + " " + also + " commented on " + whose + " post.";
+	            return notification;
+	        }
+	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
 	            _AppStore2.default.addNoteChangeListener(this._onChange.bind(this));
@@ -4871,7 +4926,8 @@
 	                { className: 'dropdown' },
 	                React.createElement(
 	                    'a',
-	                    { href: '#', onClick: this.seeNotifications.bind(this), className: 'SearchNavBarGlyphicon dropdown-toggle', 'data-toggle': 'dropdown' },
+	                    { href: '#', onClick: this.seeNotifications.bind(this),
+	                        className: 'SearchNavBarGlyphicon dropdown-toggle', 'data-toggle': 'dropdown' },
 	                    React.createElement('span', { className: 'glyphicon glyphicon-envelope' }),
 	                    this.state.numUnseen > 0 && React.createElement(
 	                        'span',
@@ -4889,10 +4945,10 @@
 	                            React.createElement(
 	                                Link,
 	                                { to: "/comment/" + note.comment_id },
-	                                note.action + " " + note.timeString
+	                                this.getNotificationSyntax.bind(this)(note) + " " + note.timeString
 	                            )
 	                        );
-	                    }),
+	                    }, this),
 	                    !this.state.notifications.length && React.createElement(
 	                        'li',
 	                        { className: 'unclickableDropdown', id: 'NoNewNotificationsDropdown' },
@@ -4921,51 +4977,6 @@
 	}(React.Component);
 	
 	exports.default = NotificationsDropdown;
-
-/***/ },
-/* 51 */
-/*!***************************************!*\
-  !*** ./static/actions/AppActions.jsx ***!
-  \***************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var AppDispatcher = __webpack_require__(/*! ../dispatcher/AppDispatcher.jsx */ 29);
-	var AppConstants = __webpack_require__(/*! ../constants/AppConstants.jsx */ 32);
-	
-	var AppActions = {
-	    addCurrentUser: function addCurrentUser(data) {
-	        AppDispatcher.handleViewAction({
-	            actionType: AppConstants.ADD_CURRENTUSER,
-	            data: data
-	        });
-	    },
-	    removeCurrentUser: function removeCurrentUser() {
-	        AppDispatcher.handleViewAction({
-	            actionType: AppConstants.REMOVE_CURRENTUSER
-	        });
-	    },
-	    addNotifications: function addNotifications(data) {
-	        AppDispatcher.handleViewAction({
-	            actionType: AppConstants.ADD_NOTIFICATIONS,
-	            data: data
-	        });
-	    },
-	    addNotificationCount: function addNotificationCount(data) {
-	        AppDispatcher.handleViewAction({
-	            actionType: AppConstants.ADD_NOTIFICATIONCOUNT,
-	            data: data
-	        });
-	    },
-	    deleteNotificationCount: function deleteNotificationCount() {
-	        AppDispatcher.handleViewAction({
-	            actionType: AppConstants.DELETE_NOTIFICATIONCOUNT
-	        });
-	    }
-	};
-	
-	module.exports = AppActions;
 
 /***/ },
 /* 52 */
@@ -10041,7 +10052,7 @@
 	
 	var React = __webpack_require__(/*! react */ 2);
 	var Link = __webpack_require__(/*! react-router */ 52).Link;
-	var AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 51);
+	var AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 48);
 	
 	var AccountDropdown = function (_React$Component) {
 	  _inherits(AccountDropdown, _React$Component);
@@ -10073,8 +10084,12 @@
 	          { className: 'dropdown-menu' },
 	          this.props.currentUser['userID'] && React.createElement(
 	            'li',
-	            { className: 'unclickableDropdown', id: 'DropdownName' },
-	            this.props.name
+	            { className: 'unclickableDropdown' },
+	            React.createElement(
+	              'a',
+	              { href: '#' },
+	              this.props.name
+	            )
 	          ),
 	          React.createElement('li', { className: 'divider' }),
 	          this.props.currentUser.isAdmin && React.createElement(
@@ -11209,35 +11224,17 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _reactFacebookLogin = __webpack_require__(/*! react-facebook-login */ 120);
+	var _FacebookConnect = __webpack_require__(/*! ./FacebookConnect.jsx */ 120);
 	
-	var _reactFacebookLogin2 = _interopRequireDefault(_reactFacebookLogin);
+	var _FacebookConnect2 = _interopRequireDefault(_FacebookConnect);
 	
-	var _LoginNavBar = __webpack_require__(/*! ./LoginNavBar.jsx */ 121);
+	var _RegisterForm = __webpack_require__(/*! ./RegisterForm.jsx */ 124);
+	
+	var _RegisterForm2 = _interopRequireDefault(_RegisterForm);
+	
+	var _LoginNavBar = __webpack_require__(/*! ./LoginNavBar.jsx */ 125);
 	
 	var _LoginNavBar2 = _interopRequireDefault(_LoginNavBar);
-	
-	var _LoginError = __webpack_require__(/*! ./LoginError.jsx */ 123);
-	
-	var _LoginError2 = _interopRequireDefault(_LoginError);
-	
-	var _SettingsTextInput = __webpack_require__(/*! ../Settings/SettingsTextInput.jsx */ 126);
-	
-	var _SettingsTextInput2 = _interopRequireDefault(_SettingsTextInput);
-	
-	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 124);
-	
-	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
-	
-	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 51);
-	
-	var _AppActions2 = _interopRequireDefault(_AppActions);
-	
-	var _reactRouter = __webpack_require__(/*! react-router */ 52);
-	
-	var _AppStore = __webpack_require__(/*! ../../stores/AppStore.jsx */ 1);
-	
-	var _AppStore2 = _interopRequireDefault(_AppStore);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -11256,7 +11253,89 @@
 		function LoginApp() {
 			_classCallCheck(this, LoginApp);
 	
-			var _this = _possibleConstructorReturn(this, (LoginApp.__proto__ || Object.getPrototypeOf(LoginApp)).call(this));
+			return _possibleConstructorReturn(this, (LoginApp.__proto__ || Object.getPrototypeOf(LoginApp)).apply(this, arguments));
+		}
+	
+		_createClass(LoginApp, [{
+			key: 'render',
+			value: function render() {
+				return React.createElement(
+					'div',
+					null,
+					React.createElement(_LoginNavBar2.default, null),
+					React.createElement(
+						'div',
+						{ className: 'container app-container col-xs-12' },
+						React.createElement('div', { className: 'col-xs-6' }),
+						React.createElement(
+							'div',
+							{ className: 'col-xs-6' },
+							React.createElement(_RegisterForm2.default, null)
+						)
+					)
+				);
+			}
+		}]);
+	
+		return LoginApp;
+	}(React.Component);
+	
+	exports.default = LoginApp;
+
+/***/ },
+/* 120 */
+/*!*****************************************************!*\
+  !*** ./static/components/Login/FacebookConnect.jsx ***!
+  \*****************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _SettingsTextInput = __webpack_require__(/*! ../Settings/SettingsTextInput.jsx */ 121);
+	
+	var _SettingsTextInput2 = _interopRequireDefault(_SettingsTextInput);
+	
+	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 122);
+	
+	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
+	
+	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 48);
+	
+	var _AppActions2 = _interopRequireDefault(_AppActions);
+	
+	var _reactRouter = __webpack_require__(/*! react-router */ 52);
+	
+	var _AppStore = __webpack_require__(/*! ../../stores/AppStore.jsx */ 1);
+	
+	var _AppStore2 = _interopRequireDefault(_AppStore);
+	
+	var _reactFacebookLogin = __webpack_require__(/*! react-facebook-login */ 123);
+	
+	var _reactFacebookLogin2 = _interopRequireDefault(_reactFacebookLogin);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var React = __webpack_require__(/*! react */ 2);
+	
+	var FacebookConnect = function (_React$Component) {
+		_inherits(FacebookConnect, _React$Component);
+	
+		function FacebookConnect() {
+			_classCallCheck(this, FacebookConnect);
+	
+			var _this = _possibleConstructorReturn(this, (FacebookConnect.__proto__ || Object.getPrototypeOf(FacebookConnect)).call(this));
 	
 			_this.state = {
 				fb_verified: false,
@@ -11266,9 +11345,7 @@
 				fb_id: "",
 				username: "",
 				submittable: false,
-				fb_clicked: false,
-				ip: ""
-	
+				fb_clicked: false
 			};
 			_this.responseFacebook = _this.responseFacebook.bind(_this);
 			_this.handleUsernameChange = _this.handleUsernameChange.bind(_this);
@@ -11278,7 +11355,7 @@
 			return _this;
 		}
 	
-		_createClass(LoginApp, [{
+		_createClass(FacebookConnect, [{
 			key: 'handleFacebookLoginClick',
 			value: function handleFacebookLoginClick() {
 				this.setState({ fb_clicked: true });
@@ -11315,7 +11392,7 @@
 	
 	
 								var thisFbUser = data.fbUser;
-								var obj = { username: data.fbUser.userID, ip: this.state.ip };
+								var obj = { username: data.fbUser.userID, ip: _AppStore2.default.getIp() };
 	
 								$.ajax({
 									type: "POST",
@@ -11374,12 +11451,11 @@
 					data.notification_list.map(function (obj) {
 						notifications.unshift({
 							comment_id: obj['comment_id'],
-							notification_id: obj['notification_id'],
 							timeString: obj['timeString'],
-							sender_id: obj['sender_id'],
-							action: obj['action'],
-							receiver_id: obj['receiver_id'],
-							seen: obj['seen']
+							isOP: obj['isOP'],
+							numOtherPeople: obj['numOtherPeople'],
+							sender_name: obj['sender_name'],
+							op_name: obj['op_name']
 						});
 					});
 					_AppActions2.default.addNotifications(notifications);
@@ -11422,16 +11498,8 @@
 				// console.log("bro");
 			}
 		}, {
-			key: 'initializeIp',
-			value: function initializeIp() {
-				$.get('https://api.ipify.org/?format=json', function (r) {
-					this.setState({ ip: r.ip });
-				}.bind(this));
-			}
-		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
-				this.initializeIp.bind(this)();
 				$('#SignUpButton').one("click", function () {
 					$(this).blur();
 				});
@@ -11448,907 +11516,92 @@
 				var testAppId = "1298398903564849";
 				return React.createElement(
 					'div',
-					null,
-					React.createElement(_LoginNavBar2.default, null),
+					{ className: 'container app-container' },
 					React.createElement(
-						'div',
-						{ className: 'container app-container' },
-						React.createElement(
-							'h1',
-							null,
-							React.createElement(
-								'center',
-								null,
-								'M A N A W E B'
-							)
-						),
+						'h1',
+						null,
 						React.createElement(
 							'center',
 							null,
+							'M A N A W E B'
+						)
+					),
+					React.createElement(
+						'center',
+						null,
+						React.createElement(
+							Link,
+							{ to: '/register' },
 							React.createElement(
-								Link,
-								{ to: '/register' },
-								React.createElement(
-									'button',
-									{ className: 'btn btn-default', id: 'SignUpButton' },
-									'Create A Profile!'
-								)
-							),
-							React.createElement('br', null),
-							React.createElement('br', null),
-							!this.state.fb_clicked && React.createElement(
-								'div',
-								null,
-								React.createElement(_reactFacebookLogin2.default, {
-									appId: appId,
-									autoLoad: false,
-									fields: 'first_name,email, last_name, name',
-									onClick: this.handleFacebookLoginClick,
-									callback: this.responseFacebook,
-									icon: 'fa-facebook',
-									size: 'small',
-									textButton: 'Connect with Facebook' }),
-								React.createElement('br', null),
-								React.createElement(
-									'div',
-									null,
-									' Welcome! ',
-									this.state.fb_first_name,
-									' '
-								),
-								this.state.fb_verified && React.createElement(
-									'div',
-									null,
-									React.createElement(_SettingsInputLabel2.default, { field: 'username' }),
-									React.createElement(_SettingsTextInput2.default, { field: 'username',
-										handleTyping: this.handleUsernameChange,
-										handleBlur: this.handleBlur
-									}),
-									this.state.submittable ? React.createElement(
-										Link,
-										{ to: '/' },
-										' ',
-										React.createElement(
-											'button',
-											{ className: 'btn btn-default blurButton',
-												id: 'RegisterSubmit', onClick: this.handleSubmit.bind(this) },
-											'Let\'s go! '
-										)
-									) : React.createElement(
-										'button',
-										{ className: 'btn btn-default', id: 'RegisterSubmit', disabled: true },
-										'Almost there!'
-									)
-								)
-							),
-							this.state.fb_clicked && React.createElement(
-								'div',
-								null,
-								'Waiting for Facebook Authentication...'
+								'button',
+								{ className: 'btn btn-default', id: 'SignUpButton' },
+								'Create A Profile!'
 							)
+						),
+						React.createElement('br', null),
+						React.createElement('br', null),
+						!this.state.fb_clicked && React.createElement(
+							'div',
+							null,
+							React.createElement(_reactFacebookLogin2.default, {
+								appId: appId,
+								autoLoad: false,
+								fields: 'first_name,email, last_name, name',
+								onClick: this.handleFacebookLoginClick,
+								callback: this.responseFacebook,
+								icon: 'fa-facebook',
+								size: 'small',
+								textButton: 'Connect with Facebook' }),
+							React.createElement('br', null),
+							React.createElement(
+								'div',
+								null,
+								' Welcome! ',
+								this.state.fb_first_name,
+								' '
+							),
+							this.state.fb_verified && React.createElement(
+								'div',
+								null,
+								React.createElement(_SettingsInputLabel2.default, { field: 'username' }),
+								React.createElement(_SettingsTextInput2.default, { field: 'username',
+									handleTyping: this.handleUsernameChange,
+									handleBlur: this.handleBlur
+								}),
+								this.state.submittable ? React.createElement(
+									Link,
+									{ to: '/' },
+									' ',
+									React.createElement(
+										'button',
+										{ className: 'btn btn-default blurButton',
+											id: 'RegisterSubmit', onClick: this.handleSubmit.bind(this) },
+										'Let\'s go! '
+									)
+								) : React.createElement(
+									'button',
+									{ className: 'btn btn-default', id: 'RegisterSubmit', disabled: true },
+									'Almost there!'
+								)
+							)
+						),
+						this.state.fb_clicked && React.createElement(
+							'div',
+							null,
+							'Waiting for Facebook Authentication...'
 						)
 					)
 				);
 			}
 		}]);
 	
-		return LoginApp;
+		return FacebookConnect;
 	}(React.Component);
 	
-	exports.default = LoginApp;
-
-/***/ },
-/* 120 */
-/*!*******************************************************!*\
-  !*** ./~/react-facebook-login/dist/facebook-login.js ***!
-  \*******************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	!function(e,t){ true?module.exports=t(__webpack_require__(/*! react */ 2)):"function"==typeof define&&define.amd?define(["react"],t):"object"==typeof exports?exports.FacebookLogin=t(require("react")):e.FacebookLogin=t(e.react)}(this,function(e){return function(e){function t(n){if(o[n])return o[n].exports;var r=o[n]={exports:{},id:n,loaded:!1};return e[n].call(r.exports,r,r.exports,t),r.loaded=!0,r.exports}var o={};return t.m=e,t.c=o,t.p="",t(0)}([function(e,t,o){e.exports=o(2)},function(e,t,o){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function i(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function s(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var a=function(){function e(e,t){for(var o=0;o<t.length;o++){var n=t[o];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,o,n){return o&&e(t.prototype,o),n&&e(t,n),t}}(),c=o(6),l=n(c),p=o(4),u=n(p),f=o(3),d=n(f),y=function(e){function t(){var e,o,n,s;r(this,t);for(var a=arguments.length,c=Array(a),l=0;l<a;l++)c[l]=arguments[l];return o=n=i(this,(e=t.__proto__||Object.getPrototypeOf(t)).call.apply(e,[this].concat(c))),n.state={isSdkLoaded:!1,isProcessing:!1},n.responseApi=function(e){window.FB.api("/me",{fields:n.props.fields},function(t){Object.assign(t,e),n.props.callback(t)})},n.checkLoginAfterRefresh=function(e){"unknown"===e.status&&window.FB.login(function(e){return n.checkLoginState(e)},!0)},n.checkLoginState=function(e){n.setState({isProcessing:!1}),e.authResponse?n.responseApi(e.authResponse):n.props.callback&&n.props.callback({status:e.status})},n.checkLoginAfterRefresh=function(e){"unknown"===e.status?window.FB.login(function(e){return n.checkLoginState(e)},!0):n.checkLoginState(e)},n.click=function(){if(n.state.isSdkLoaded&&!n.state.isProcessing&&!n.props.isDisabled){n.setState({isProcessing:!0});var e=n.props,t=e.scope,o=e.appId,r=e.onClick,i=e.reAuthenticate,s=e.redirectUri,a=e.disableMobileRedirect;"function"==typeof r&&r();var c=!1;try{c=window.navigator&&window.navigator.standalone||navigator.userAgent.match("CriOS")||navigator.userAgent.match(/mobile/i)}catch(l){}var p={client_id:o,redirect_uri:s,state:"facebookdirect",scope:t};i&&(p.auth_type="reauthenticate"),c&&!a?window.location.href="//www.facebook.com/dialog/oauth?"+(0,d["default"])(p):window.FB.login(n.checkLoginState,{scope:t,auth_type:p.auth_type})}},s=o,i(n,s)}return s(t,e),a(t,[{key:"componentWillMount",value:function(){return document.getElementById("facebook-jssdk")?void this.setState({isSdkLoaded:!0}):(this.setFbAsyncInit(),void this.loadSdkAsynchronously())}},{key:"componentDidMount",value:function(){var e=document.getElementById("fb-root");e||(e=document.createElement("div"),e.id="fb-root",document.body.appendChild(e))}},{key:"setFbAsyncInit",value:function(){var e=this,t=this.props,o=t.appId,n=t.xfbml,r=t.cookie,i=t.version,s=t.autoLoad;window.fbAsyncInit=function(){window.FB.init({version:"v"+i,appId:o,xfbml:n,cookie:r}),e.setState({isSdkLoaded:!0}),(s||window.location.search.includes("facebookdirect"))&&window.FB.getLoginStatus(e.checkLoginAfterRefresh)}}},{key:"loadSdkAsynchronously",value:function(){var e=this.props.language;!function(t,o,n){var r=t.getElementsByTagName(o)[0],i=r,s=r;t.getElementById(n)||(s=t.createElement(o),s.id=n,s.src="//connect.facebook.net/"+e+"/all.js",i.parentNode.insertBefore(s,i))}(document,"script","facebook-jssdk")}},{key:"style",value:function(){var e=this.constructor.defaultProps.cssClass;return this.props.cssClass===e&&l["default"].createElement("style",{dangerouslySetInnerHTML:{__html:u["default"]}})}},{key:"containerStyle",value:function(){var e={transition:"opacity 0.5s"};return(this.state.isProcessing||!this.state.isSdkLoaded||this.props.isDisabled)&&(e.opacity=.6),Object.assign(e,this.props.containerStyle)}},{key:"render",value:function(){var e=this.props,t=e.cssClass,o=e.size,n=e.icon,r=e.textButton,i=e.buttonStyle,s="string"==typeof n;return l["default"].createElement("span",{style:this.containerStyle()},s&&l["default"].createElement("link",{rel:"stylesheet",href:"//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"}),l["default"].createElement("button",{className:t+" "+o,style:i,onClick:this.click},n&&s&&l["default"].createElement("i",{className:"fa "+n}),n&&!s&&n,r),this.style())}}]),t}(l["default"].Component);y.propTypes={isDisabled:c.PropTypes.bool,callback:c.PropTypes.func.isRequired,appId:c.PropTypes.string.isRequired,xfbml:c.PropTypes.bool,cookie:c.PropTypes.bool,reAuthenticate:c.PropTypes.bool,scope:c.PropTypes.string,redirectUri:c.PropTypes.string,textButton:c.PropTypes.string,typeButton:c.PropTypes.string,autoLoad:c.PropTypes.bool,disableMobileRedirect:c.PropTypes.bool,size:c.PropTypes.string,fields:c.PropTypes.string,cssClass:c.PropTypes.string,version:c.PropTypes.string,icon:c.PropTypes.any,language:c.PropTypes.string,onClick:c.PropTypes.func,containerStyle:c.PropTypes.object,buttonStyle:c.PropTypes.object},y.defaultProps={textButton:"Login with Facebook",typeButton:"button",redirectUri:window.location.href,scope:"public_profile,email",xfbml:!1,cookie:!1,reAuthenticate:!1,size:"metro",fields:"name",cssClass:"kep-login-facebook",version:"2.3",language:"en_US",disableMobileRedirect:!1},t["default"]=y},function(e,t,o){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}Object.defineProperty(t,"__esModule",{value:!0}),t["default"]=void 0;var r=o(1),i=n(r);t["default"]=i["default"]},function(e,t){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t["default"]=function(e){var t="";for(var o in e)""!==t&&(t+="&"),t+=o+"="+encodeURIComponent(e[o]);return t}},function(e,t,o){t=e.exports=o(5)(),t.push([e.id,".kep-login-facebook{font-family:Helvetica,sans-serif;font-weight:700;-webkit-font-smoothing:antialiased;color:#fff;cursor:pointer;display:inline-block;font-size:calc(.27548vw + 12.71074px);text-decoration:none;text-transform:uppercase;transition:background-color .3s,border-color .3s;background-color:#4c69ba;border:calc(.06887vw + .67769px) solid #4c69ba;padding:calc(.34435vw + 13.38843px) calc(.34435vw + 18.38843px)}.kep-login-facebook.small{padding:calc(.34435vw + 3.38843px) calc(.34435vw + 8.38843px)}.kep-login-facebook.medium{padding:calc(.34435vw + 8.38843px) calc(.34435vw + 13.38843px)}.kep-login-facebook.metro{border-radius:0}.kep-login-facebook .fa{margin-right:calc(.34435vw + 3.38843px)}",""]),t.locals={"kep-login-facebook":"kep-login-facebook",small:"small",medium:"medium",metro:"metro",fa:"fa"}},function(e,t){e.exports=function(){var e=[];return e.toString=function(){for(var e=[],t=0;t<this.length;t++){var o=this[t];o[2]?e.push("@media "+o[2]+"{"+o[1]+"}"):e.push(o[1])}return e.join("")},e.i=function(t,o){"string"==typeof t&&(t=[[null,t,""]]);for(var n={},r=0;r<this.length;r++){var i=this[r][0];"number"==typeof i&&(n[i]=!0)}for(r=0;r<t.length;r++){var s=t[r];"number"==typeof s[0]&&n[s[0]]||(o&&!s[2]?s[2]=o:o&&(s[2]="("+s[2]+") and ("+o+")"),e.push(s))}},e}},function(t,o){t.exports=e}])});
+	exports.default = FacebookConnect;
 
 /***/ },
 /* 121 */
-/*!*************************************************!*\
-  !*** ./static/components/Login/LoginNavBar.jsx ***!
-  \*************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _LoginForm = __webpack_require__(/*! ./LoginForm.jsx */ 122);
-	
-	var _LoginForm2 = _interopRequireDefault(_LoginForm);
-	
-	var _RegisterForm = __webpack_require__(/*! ./RegisterForm.jsx */ 125);
-	
-	var _RegisterForm2 = _interopRequireDefault(_RegisterForm);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var React = __webpack_require__(/*! react */ 2);
-	var Link = __webpack_require__(/*! react-router */ 52).Link;
-	
-	
-	function remove(array, value) {
-		var index = array.indexOf(value);
-		if (index != -1) array.splice(index, 1);
-		return array;
-	}
-	function add(array, value) {
-		var index = array.indexOf(value);
-		if (index === -1) array.push(value);
-		return array;
-	}
-	function contains(collection, item) {
-		if (collection.indexOf(item) !== -1) return true;else return false;
-	}
-	var text_fields = ["username", "password", "password_confirm", "first_name", "last_name", "email_address", "phone_number"];
-	var select_fields = ["month_of_birth", "day_of_birth", "year_of_birth", "avatar"];
-	var required_text_fields = ["first_name", "last_name", "username", "email_address", "password"];
-	
-	var LoginNavBar = function (_React$Component) {
-		_inherits(LoginNavBar, _React$Component);
-	
-		function LoginNavBar() {
-			_classCallCheck(this, LoginNavBar);
-	
-			var _this = _possibleConstructorReturn(this, (LoginNavBar.__proto__ || Object.getPrototypeOf(LoginNavBar)).call(this));
-	
-			_this.state = { login_register: 'LoginTab', // specify tab
-				error: "",
-				login_user: '', // login save state
-				login_password: '',
-				ip: "initial_ip",
-				first_name: '', // register save state
-				last_name: '',
-				username: '',
-				email_address: '',
-				password: '',
-				password_confirm: '',
-				phone_number: '',
-				month_of_birth: '',
-				day_of_birth: '',
-				year_of_birth: '',
-				avatar: '',
-				valid_text_fields: [],
-				valid_select_fields: [],
-				submittable: false };
-			return _this;
-		}
-	
-		_createClass(LoginNavBar, [{
-			key: 'switchMenu',
-			value: function switchMenu(event) {
-				this.setState({ login_register: event.currentTarget.id });
-			}
-			// login handlers
-	
-		}, {
-			key: 'handleTyping',
-			value: function handleTyping(event) {
-				var obj = {};
-				obj[event.target.id] = event.target.value;
-				this.setState(obj);
-			}
-		}, {
-			key: 'initializeIp',
-			value: function initializeIp() {
-				$.get('https://api.ipify.org/?format=json', function (r) {
-					this.setState({ ip: r.ip });
-				}.bind(this));
-			}
-			// register handlers
-	
-		}, {
-			key: 'handleChange',
-			value: function handleChange(obj) {
-				this.setState(obj);
-			}
-		}, {
-			key: 'handleTextBlur',
-			value: function handleTextBlur(field, valid) {
-				var valid_text_fields = this.state.valid_text_fields;
-				var valid_select_fields = this.state.valid_select_fields;
-				if (valid == "valid") this.setState({ valid_text_fields: add(valid_text_fields, field) });else this.setState({ valid_text_fields: remove(valid_text_fields, field) });
-				this.setState({ submittable: required_text_fields.every(function (field) {
-						return contains(valid_text_fields, field);
-					}) && select_fields.every(function (field) {
-						return contains(valid_select_fields, field);
-					}) });
-			}
-		}, {
-			key: 'handleSelectBlur',
-			value: function handleSelectBlur(field, valid) {
-				var valid_text_fields = this.state.valid_text_fields;
-				var valid_select_fields = this.state.valid_select_fields;
-				if (valid == "valid") this.setState({ valid_select_fields: add(valid_select_fields, field) });else this.setState({ valid_select_fields: remove(valid_select_fields, field) });
-				this.setState({ submittable: required_text_fields.every(function (field) {
-						return contains(valid_text_fields, field);
-					}) && select_fields.every(function (field) {
-						return contains(valid_select_fields, field);
-					}) });
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				var login_selected = this.state.login_register == "LoginTab" ? "login_selected" : "";
-				var register_selected = this.state.login_register == "RegisterTab" ? "register_selected" : "";
-	
-				return React.createElement(
-					'div',
-					null,
-					React.createElement(
-						'nav',
-						{ className: 'navbar navbar-default', role: 'navigation' },
-						React.createElement(
-							'div',
-							{ className: 'container' },
-							React.createElement(
-								'div',
-								{ className: 'navbar-left' },
-								React.createElement(
-									Link,
-									{ to: '/', className: 'navbar-brand navbar-brand-logo' },
-									React.createElement('span', { className: 'glyphicon glyphicon-home' })
-								)
-							),
-							React.createElement(
-								'button',
-								{ type: 'button', id: 'LoginRegisterLabel', className: 'SearchNavBarGlyphicon navbar-toggle navbar-toggle-always',
-									'data-toggle': 'offcanvas', 'data-target': '#LoginRegisterMenu' },
-								React.createElement(
-									'b',
-									null,
-									' Login \u2022 Register '
-								)
-							)
-						)
-					),
-					React.createElement(
-						'nav',
-						{ id: 'LoginRegisterMenu', className: 'navmenu navmenu-default navmenu-fixed-right offcanvas',
-							role: 'navigation' },
-						React.createElement(
-							'div',
-							{ className: 'container', id: 'NavMenuHeader' },
-							React.createElement(
-								'div',
-								{ className: "tab_label " + login_selected,
-									id: 'LoginTab', onClick: this.switchMenu.bind(this) },
-								React.createElement(
-									'h3',
-									null,
-									React.createElement(
-										'b',
-										null,
-										'Login'
-									)
-								)
-							),
-							React.createElement(
-								'div',
-								{ className: "tab_label " + register_selected,
-									id: 'RegisterTab', onClick: this.switchMenu.bind(this) },
-								React.createElement(
-									'h3',
-									null,
-									React.createElement(
-										'b',
-										null,
-										'Register'
-									)
-								)
-							)
-						),
-						this.state.login_register == "LoginTab" && React.createElement(_LoginForm2.default, { login_user: this.state.login_user,
-							login_password: this.state.login_password,
-							ip: this.state.ip,
-							handleTyping: this.handleTyping.bind(this),
-							initializeIp: this.initializeIp.bind(this) }),
-						this.state.login_register == "RegisterTab" && React.createElement(_RegisterForm2.default, { ip: this.state.ip,
-							first_name: this.state.first_name,
-							last_name: this.state.last_name,
-							username: this.state.username,
-							email_address: this.state.email_address,
-							password: this.state.password,
-							password_confirm: this.state.password_confirm,
-							phone_number: this.state.phone_number,
-							month_of_birth: this.state.month_of_birth,
-							day_of_birth: this.state.day_of_birth,
-							year_of_birth: this.state.year_of_birth,
-							avatar: this.state.avatar,
-							valid_text_fields: this.state.valid_text_fields,
-							valid_select_fields: this.state.valid_select_fields,
-							submittable: this.state.submittable,
-							handleChange: this.handleChange.bind(this),
-							handleTextBlur: this.handleTextBlur.bind(this),
-							handleSelectBlur: this.handleSelectBlur.bind(this) })
-					)
-				);
-			}
-		}]);
-	
-		return LoginNavBar;
-	}(React.Component);
-	
-	exports.default = LoginNavBar;
-
-/***/ },
-/* 122 */
-/*!***********************************************!*\
-  !*** ./static/components/Login/LoginForm.jsx ***!
-  \***********************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _LoginError = __webpack_require__(/*! ./LoginError.jsx */ 123);
-	
-	var _LoginError2 = _interopRequireDefault(_LoginError);
-	
-	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 51);
-	
-	var _AppActions2 = _interopRequireDefault(_AppActions);
-	
-	var _AppStore = __webpack_require__(/*! ../../stores/AppStore.jsx */ 1);
-	
-	var _AppStore2 = _interopRequireDefault(_AppStore);
-	
-	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 124);
-	
-	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
-	
-	var _reactRouter = __webpack_require__(/*! react-router */ 52);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var React = __webpack_require__(/*! react */ 2);
-	
-	var Link = __webpack_require__(/*! react-router */ 52).Link;
-	
-	var LoginForm = function (_React$Component) {
-		_inherits(LoginForm, _React$Component);
-	
-		function LoginForm() {
-			_classCallCheck(this, LoginForm);
-	
-			var _this = _possibleConstructorReturn(this, (LoginForm.__proto__ || Object.getPrototypeOf(LoginForm)).call(this));
-	
-			_this.state = { error: "" };
-			return _this;
-		}
-	
-		_createClass(LoginForm, [{
-			key: 'loginError',
-			value: function loginError(err) {
-				this.setState({ error: err });
-				$('#LoginFail').fadeIn(400).delay(4000).fadeOut(400);
-			}
-		}, {
-			key: 'login',
-			value: function login() {
-				var obj = { user: this.props.login_user,
-					password: this.props.login_password,
-					ip: this.props.ip };
-				$.ajax({
-					type: "POST",
-					url: '/verifyAndLogin',
-					data: JSON.stringify(obj, null, '\t'),
-					contentType: 'application/json;charset=UTF-8',
-					success: function (res) {
-						if (!res['error']) {
-							this.getCurrentUserInfo.bind(this)();
-						} else {
-							this.loginError.bind(this)(res.error);
-							this.enableLogin.bind(this)();
-						}
-					}.bind(this)
-				});
-			}
-		}, {
-			key: 'getCurrentUserInfo',
-			value: function getCurrentUserInfo() {
-				$.post('/getCurrentUserInfo', { userID: this.props.login_user }, function (data) {
-					_AppActions2.default.addCurrentUser(data.thisUser);
-					this.getNotifications.bind(this)();
-				}.bind(this));
-			}
-		}, {
-			key: 'getNotifications',
-			value: function getNotifications() {
-				$.post('/getNotifications', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
-					var notifications = [];
-					data.notification_list.map(function (obj) {
-						notifications.unshift({
-							comment_id: obj['comment_id'],
-							notification_id: obj['notification_id'],
-							timeString: obj['timeString'],
-							sender_id: obj['sender_id'],
-							action: obj['action'],
-							receiver_id: obj['receiver_id'],
-							seen: obj['seen']
-						});
-					});
-					_AppActions2.default.addNotifications(notifications);
-					this.getNotificationCount.bind(this)();
-				}.bind(this));
-			}
-		}, {
-			key: 'getNotificationCount',
-			value: function getNotificationCount() {
-				$.post('/getNotificationCount', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
-					_AppActions2.default.addNotificationCount(data.count);
-					_reactRouter.browserHistory.push('/');
-				}.bind(this));
-			}
-		}, {
-			key: 'enableLogin',
-			value: function enableLogin() {
-				$('#LoginButton').one('click', function (e) {
-					e.preventDefault();
-					$(this).blur();
-					this.login.bind(this)();
-				}.bind(this));
-			}
-		}, {
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				this.enableLogin.bind(this)();
-				this.props.initializeIp();
-				$('#LoginFail').hide();
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				return React.createElement(
-					'div',
-					{ id: 'LoginForm', className: 'container' },
-					React.createElement(
-						'form',
-						{ className: 'form-horizontal' },
-						React.createElement(
-							'div',
-							{ className: 'form-group' },
-							React.createElement(_SettingsInputLabel2.default, { field: 'username' }),
-							React.createElement('input', { type: 'text', className: 'form-control setting login', id: 'login_user',
-								onChange: this.props.handleTyping, placeholder: 'Username' })
-						),
-						React.createElement(
-							'div',
-							{ className: 'form-group' },
-							React.createElement(_SettingsInputLabel2.default, { field: 'password' }),
-							React.createElement('input', { type: 'password', className: 'form-control setting login', id: 'login_password',
-								onChange: this.props.handleTyping, placeholder: 'Password' })
-						),
-						React.createElement(
-							'div',
-							{ className: 'form-group' },
-							React.createElement(
-								'button',
-								{ className: 'btn-login form-control blurButton',
-									id: 'LoginButton' },
-								React.createElement(
-									'b',
-									null,
-									'Login'
-								)
-							)
-						),
-						React.createElement(
-							'div',
-							{ className: 'alert alert-danger login_alert', id: 'LoginFail' },
-							React.createElement(
-								'strong',
-								null,
-								'Bro!'
-							),
-							' ',
-							this.state.error
-						)
-					),
-					React.createElement(
-						Link,
-						{ to: '/recovery', className: 'link' },
-						'Forgot your password?'
-					)
-				);
-			}
-		}]);
-	
-		return LoginForm;
-	}(React.Component);
-	
-	exports.default = LoginForm;
-
-/***/ },
-/* 123 */
-/*!************************************************!*\
-  !*** ./static/components/Login/LoginError.jsx ***!
-  \************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var React = __webpack_require__(/*! react */ 2);
-	
-	var LoginError = function (_React$Component) {
-		_inherits(LoginError, _React$Component);
-	
-		function LoginError() {
-			_classCallCheck(this, LoginError);
-	
-			return _possibleConstructorReturn(this, (LoginError.__proto__ || Object.getPrototypeOf(LoginError)).apply(this, arguments));
-		}
-	
-		_createClass(LoginError, [{
-			key: "render",
-			value: function render() {
-				return React.createElement(
-					"div",
-					{ className: "alert alert-danger login_alert" },
-					React.createElement(
-						"strong",
-						null,
-						"Bro!"
-					),
-					" ",
-					this.props.error
-				);
-			}
-		}]);
-	
-		return LoginError;
-	}(React.Component);
-	
-	exports.default = LoginError;
-
-/***/ },
-/* 124 */
-/*!***********************************************************!*\
-  !*** ./static/components/Settings/SettingsInputLabel.jsx ***!
-  \***********************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var React = __webpack_require__(/*! react */ 2);
-	function idToName(id) {
-		var arr = id.split('_');
-		var str = "";
-		var temp;
-		for (var i = 0; i < arr.length; i++) {
-			temp = arr[i].charAt(0).toUpperCase() + arr[i].substr(1).toLowerCase();
-			str = str.concat(temp + ' ');
-		}
-		return str;
-	}
-	
-	var SettingsInputLabel = function (_React$Component) {
-		_inherits(SettingsInputLabel, _React$Component);
-	
-		function SettingsInputLabel() {
-			_classCallCheck(this, SettingsInputLabel);
-	
-			return _possibleConstructorReturn(this, (SettingsInputLabel.__proto__ || Object.getPrototypeOf(SettingsInputLabel)).apply(this, arguments));
-		}
-	
-		_createClass(SettingsInputLabel, [{
-			key: 'render',
-			value: function render() {
-				return React.createElement(
-					'div',
-					{ className: 'setting_label' },
-					React.createElement(
-						'b',
-						null,
-						idToName(this.props.field)
-					)
-				);
-			}
-		}]);
-	
-		return SettingsInputLabel;
-	}(React.Component);
-	
-	exports.default = SettingsInputLabel;
-
-/***/ },
-/* 125 */
-/*!**************************************************!*\
-  !*** ./static/components/Login/RegisterForm.jsx ***!
-  \**************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _SettingsTextInput = __webpack_require__(/*! ../Settings/SettingsTextInput.jsx */ 126);
-	
-	var _SettingsTextInput2 = _interopRequireDefault(_SettingsTextInput);
-	
-	var _SettingsSelectInput = __webpack_require__(/*! ../Settings/SettingsSelectInput.jsx */ 127);
-	
-	var _SettingsSelectInput2 = _interopRequireDefault(_SettingsSelectInput);
-	
-	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 124);
-	
-	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
-	
-	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 51);
-	
-	var _AppActions2 = _interopRequireDefault(_AppActions);
-	
-	var _AppStore = __webpack_require__(/*! ../../stores/AppStore.jsx */ 1);
-	
-	var _AppStore2 = _interopRequireDefault(_AppStore);
-	
-	var _reactRouter = __webpack_require__(/*! react-router */ 52);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var React = __webpack_require__(/*! react */ 2);
-	var Link = __webpack_require__(/*! react-router */ 52).Link;
-	
-	
-	var text_fields = ["username", "password", "password_confirm", "first_name", "last_name", "email_address", "phone_number"];
-	var select_fields = ["month_of_birth", "day_of_birth", "year_of_birth", "avatar"];
-	
-	function contains(collection, item) {
-		if (collection.indexOf(item) !== -1) return true;else return false;
-	}
-	
-	var RegisterForm = function (_React$Component) {
-		_inherits(RegisterForm, _React$Component);
-	
-		function RegisterForm() {
-			_classCallCheck(this, RegisterForm);
-	
-			return _possibleConstructorReturn(this, (RegisterForm.__proto__ || Object.getPrototypeOf(RegisterForm)).apply(this, arguments));
-		}
-	
-		_createClass(RegisterForm, [{
-			key: 'handleSubmit',
-			value: function handleSubmit() {
-				if (this.props.submittable) {
-					var obj = {
-						first_name: this.props.first_name,
-						last_name: this.props.last_name,
-						username: this.props.username,
-						email_address: this.props.email_address,
-						password: this.props.password,
-						phone_number: this.props.phone_number,
-						month_of_birth: this.props.month_of_birth,
-						day_of_birth: this.props.day_of_birth,
-						year_of_birth: this.props.year_of_birth,
-						avatar: this.props.avatar
-					};
-					$.ajax({
-						type: "POST",
-						url: '/createProfile',
-						data: JSON.stringify(obj, null, '\t'),
-						contentType: 'application/json;charset=UTF-8',
-						success: function (res) {
-							if (res['result'] == "success") {
-								this.login.bind(this)();
-							}
-						}.bind(this)
-					});
-					$('#CreateProfileSuccess').fadeIn(400).delay(4000).fadeOut(400);
-					$("html, body").animate({ scrollTop: $('#LoginRegisterMenu').prop('scrollHeight') }, 600);
-				} else {
-					$('#CreateProfileFail').fadeIn(400).delay(4000).fadeOut(400);
-					$("html, body").animate({ scrollTop: $('#LoginRegisterMenu').prop('scrollHeight') }, 600);
-					this.enableRegister.bind(this)();
-				}
-			}
-		}, {
-			key: 'login',
-			value: function login() {
-				var obj = { user: this.props.username, password: this.props.password, ip: this.props.ip };
-				$.ajax({
-					type: "POST",
-					url: '/verifyAndLogin',
-					data: JSON.stringify(obj, null, '\t'),
-					contentType: 'application/json;charset=UTF-8',
-					success: function (res) {
-						if (!res['error']) {
-							this.getCurrentUserInfo.bind(this)();
-						}
-					}.bind(this)
-				});
-			}
-		}, {
-			key: 'getCurrentUserInfo',
-			value: function getCurrentUserInfo() {
-				$.post('/getCurrentUserInfo', { userID: this.props.username }, function (data) {
-					_AppActions2.default.addCurrentUser(data.thisUser);
-					this.getNotifications.bind(this)();
-				}.bind(this));
-			}
-		}, {
-			key: 'getNotifications',
-			value: function getNotifications() {
-				$.post('/getNotifications', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
-					var notifications = [];
-					data.notification_list.map(function (obj) {
-						notifications.unshift({
-							comment_id: obj['comment_id'],
-							notification_id: obj['notification_id'],
-							timeString: obj['timeString'],
-							sender_id: obj['sender_id'],
-							action: obj['action'],
-							receiver_id: obj['receiver_id'],
-							seen: obj['seen']
-						});
-					});
-					_AppActions2.default.addNotifications(notifications);
-					this.getNotificationCount.bind(this)();
-				}.bind(this));
-			}
-		}, {
-			key: 'getNotificationCount',
-			value: function getNotificationCount() {
-				$.post('/getNotificationCount', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
-					_AppActions2.default.addNotificationCount(data.count);
-					_reactRouter.browserHistory.push('/');
-				}.bind(this));
-			}
-		}, {
-			key: 'enableRegister',
-			value: function enableRegister() {
-				$('#RegisterSubmit').one("click", function (e) {
-					e.preventDefault();
-					$(this).blur();
-					this.handleSubmit.bind(this)();
-				}.bind(this));
-			}
-		}, {
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				this.enableRegister.bind(this)();
-				$('#CreateProfileSuccess').hide();
-				$('#CreateProfileFail').hide();
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				return React.createElement(
-					'div',
-					{ className: 'container', id: 'RegisterForm' },
-					React.createElement(
-						'form',
-						{ className: 'form-horizontal' },
-						text_fields.map(function (field) {
-							var hasBeenChecked = contains(this.props.valid_text_fields, field);
-							return React.createElement(
-								'div',
-								{ className: 'form-group' },
-								React.createElement(_SettingsInputLabel2.default, { field: field }),
-								React.createElement(_SettingsTextInput2.default, { field: field, value: this.props[field],
-									handleTyping: this.props.handleChange,
-									handleBlur: this.props.handleTextBlur,
-									hasBeenChecked: hasBeenChecked })
-							);
-						}, this),
-						select_fields.map(function (field) {
-							var hasBeenChecked = contains(this.props.valid_select_fields, field);
-							return React.createElement(
-								'div',
-								{ className: 'form-group' },
-								React.createElement(_SettingsInputLabel2.default, { field: field }),
-								React.createElement(_SettingsSelectInput2.default, { field: field, value: this.props[field],
-									avatar_list: this.props.avatar_list,
-									handleSelect: this.props.handleChange,
-									handleBlur: this.props.handleSelectBlur,
-									hasBeenChecked: hasBeenChecked })
-							);
-						}, this),
-						React.createElement('div', { id: 'avatar_container', className: 'avatar_container centered-text' }),
-						React.createElement(
-							'div',
-							{ className: 'form-group' },
-							React.createElement(
-								'button',
-								{ className: 'btn-login form-control blurButton',
-									id: 'RegisterSubmit' },
-								React.createElement(
-									'b',
-									null,
-									'Get Started!'
-								)
-							)
-						),
-						React.createElement(
-							'div',
-							{ className: 'alert alert-success login_alert', id: 'CreateProfileSuccess' },
-							React.createElement(
-								'strong',
-								null,
-								'Success!'
-							),
-							' Please hold on as we redirect you.'
-						),
-						React.createElement(
-							'div',
-							{ className: 'alert alert-danger login_alert', id: 'CreateProfileFail' },
-							React.createElement(
-								'strong',
-								null,
-								'Bro!'
-							),
-							' You need to fill out more stuff.'
-						)
-					)
-				);
-			}
-		}]);
-	
-		return RegisterForm;
-	}(React.Component);
-	
-	exports.default = RegisterForm;
-
-/***/ },
-/* 126 */
 /*!**********************************************************!*\
   !*** ./static/components/Settings/SettingsTextInput.jsx ***!
   \**********************************************************/
@@ -12377,51 +11630,6 @@
 	var React = __webpack_require__(/*! react */ 2);
 	
 	
-	function idToName(id) {
-		var arr = id.split('_');
-		var str = "";
-		var temp;
-		for (var i = 0; i < arr.length; i++) {
-			temp = arr[i].charAt(0).toUpperCase() + arr[i].substr(1).toLowerCase();
-			str = str.concat(temp + ' ');
-		}
-		return str;
-	}
-	function testValid(field, value) {
-		switch (field) {
-			case "first_name":
-				var condition = /^[a-z ,.'-]+$/i;
-				if (!value.match(condition)) return "invalid";
-				break;
-			case "last_name":
-				var condition = /^[a-z ,.'-]+$/i;
-				if (!value.match(condition)) return "invalid";
-				break;
-			case "password":
-				var condition = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,}$/;
-				if (!value.match(condition)) return "invalid";
-				break;
-			case "password_confirm":
-				var condition = $('#password').val();
-				if (value != condition || !value) return "invalid";
-				break;
-			default:
-				return "valid";
-		}
-		return "valid";
-	}
-	function warningForField(field, value) {
-		if (!value) return "You can\'t leave this empty.";
-		switch (field) {
-			case "old_password":
-				return "Your old password is incorrect.";
-			case "password_confirm":
-				return "Your passwords don\'t match.";
-			default:
-				return "Invalid " + idToName(field);
-		}
-		return "Invalid " + idToName(field);
-	}
 	function phoneHelper() {
 		$('#phone_number').attr('maxlength', 14);
 		$('#phone_number').keydown(function (e) {
@@ -12468,7 +11676,7 @@
 	
 			var _this = _possibleConstructorReturn(this, (SettingsTextInput.__proto__ || Object.getPrototypeOf(SettingsTextInput)).call(this, props));
 	
-			_this.state = { valid: "", warning: "" };
+			_this.state = { valid: "", warning: "", hasMounted: false };
 			return _this;
 		}
 	
@@ -12542,8 +11750,9 @@
 		}, {
 			key: 'handleBlur',
 			value: function handleBlur(event) {
-				if (this.props.field == "username" || this.props.field == "email_address" || this.props.field == "old_password") {
-					switch (this.props.field) {
+				var field = this.props.field;
+				if (field == "username" || field == "email_address" || field == "old_password") {
+					switch (field) {
 						case "username":
 							this.verifyUsername.bind(this)(event.target.value);
 							break;
@@ -12555,54 +11764,62 @@
 							break;
 					}
 				} else {
-					var isValid = testValid(this.props.field, event.target.value);
+					var isValid = testValid(field, event.target.value);
 					this.setState({ valid: isValid,
-						warning: warningForField(this.props.field, event.target.value) });
+						warning: warningForField(field, event.target.value) });
 				};
-				this.props.handleBlur(this.props.field, isValid);
+				this.props.handleBlur(field, isValid);
+			}
+		}, {
+			key: 'componentWillReceiveProps',
+			value: function componentWillReceiveProps(nextProps) {
+				if (!this.state.hasMounted) {
+					var isValid = testValid(nextProps.field, nextProps.value);
+					if (isValid == "valid" && this.props.field != "old_password") this.setState({ valid: isValid, hasMounted: true });else this.setState({ hasMounted: true });
+				}
 			}
 		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
-				var isPassword = this.props.field == "password" || this.props.field == "password_confirm" || this.props.field == "old_password";
-				if (this.props.isUpdate && !isPassword || this.props.hasBeenChecked) this.setState({ valid: "valid" });
 				if (this.props.field == "phone_number") phoneHelper();
 				if (this.props.field == "password") passwordHelper(this.props.isUpdate);
 			}
 		}, {
 			key: 'render',
 			value: function render() {
-				var isPassword = this.props.field == "password" || this.props.field == "password_confirm" || this.props.field == "old_password";
+				var field = this.props.field;
+				var value = this.props.value;
+				var isPassword = field == "password" || field == "password_confirm" || field == "old_password";
 				var type = isPassword ? "password" : "text";
-				var isPhoneNumber = this.props.field == "phone_number";
+				var isPhoneNumber = field == "phone_number";
 				return React.createElement(
 					'div',
 					null,
 					isPhoneNumber && React.createElement('input', { className: "setting form-control " + this.state.valid,
-						id: this.props.field, type: type,
-						value: this.props.value,
+						id: field, type: type,
+						value: value,
 						onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this),
 						name: 'phone_number', maxlength: '14', placeholder: '(XXX) XXX-XXXX' }),
 					!isPassword && !isPhoneNumber && React.createElement('input', { className: "setting form-control " + this.state.valid,
-						id: this.props.field, type: type,
-						value: this.props.value, placeholder: idToName(this.props.field),
+						id: field, type: type,
+						value: value, placeholder: idToName(field),
 						onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),
-					this.props.field == "old_password" && React.createElement('input', { className: "setting form-control " + this.state.valid,
-						id: this.props.field, type: type,
-						value: this.props.value, placeholder: 'Enter your old password',
+					field == "old_password" && React.createElement('input', { className: "setting form-control " + this.state.valid,
+						id: field, type: type,
+						value: value, placeholder: 'Enter your old password',
 						onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),
-					this.props.field == "password_confirm" && React.createElement('input', { className: "setting form-control " + this.state.valid,
-						id: this.props.field, type: type,
-						value: this.props.value, placeholder: 'Re-type password',
+					field == "password_confirm" && React.createElement('input', { className: "setting form-control " + this.state.valid,
+						id: field, type: type,
+						value: value, placeholder: 'Re-type password',
 						onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),
-					this.props.field == "password" && React.createElement('input', { 'data-toggle': 'popover', 'data-trigger': 'focus',
+					field == "password" && React.createElement('input', { 'data-toggle': 'popover', 'data-trigger': 'focus',
 						'data-content': 'Your password must contain at least one letter and one number.',
-						className: "setting form-control " + this.state.valid, id: this.props.field, type: type,
-						value: this.props.value, onClick: focus(), placeholder: idToName(this.props.field),
+						className: "setting form-control " + this.state.valid, id: field, type: type,
+						value: value, onClick: focus(), placeholder: idToName(field),
 						onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),
 					this.state.valid == "invalid" && React.createElement(
 						'div',
-						{ className: 'warning', id: this.props.field + "_warning" },
+						{ className: 'warning', id: field + "_warning" },
 						this.state.warning
 					)
 				);
@@ -12613,16 +11830,12 @@
 	}(React.Component);
 	
 	exports.default = SettingsTextInput;
-	
-	SettingsTextInput.defaultProps = {
-		hasBeenChecked: false
-	};
 
 /***/ },
-/* 127 */
-/*!************************************************************!*\
-  !*** ./static/components/Settings/SettingsSelectInput.jsx ***!
-  \************************************************************/
+/* 122 */
+/*!***********************************************************!*\
+  !*** ./static/components/Settings/SettingsInputLabel.jsx ***!
+  \***********************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12641,211 +11854,556 @@
 	
 	var React = __webpack_require__(/*! react */ 2);
 	
-	function idToName(id) {
-		var arr = id.split('_');
-		var str = "";
-		var temp;
-		for (var i = 0; i < arr.length; i++) {
-			temp = arr[i].charAt(0).toUpperCase() + arr[i].substr(1).toLowerCase();
-			str = str.concat(temp + ' ');
-		}
-		return str;
-	}
-	function idToTimeLabel(id) {
-		var arr = id.split('_');
-		return arr[0].charAt(0).toUpperCase() + arr[0].substr(1).toLowerCase();
-	}
+	var SettingsInputLabel = function (_React$Component) {
+		_inherits(SettingsInputLabel, _React$Component);
 	
-	function testValid(field, value) {
-		if (!value) return "invalid";
-		switch (field) {
-			case "month_of_birth":
-				var day = $('#day_of_birth').val();
-				if (day) return isValidMonth(day, value);
-			case "day_of_birth":
-				var month = $('#month_of_birth').val();
-				if (month) return isValidDay(month, value);
-			case "year_of_birth":
-				return isValidYear(value);
-			default:
-				return "valid";
-		}
-		return "valid";
-	}
+		function SettingsInputLabel() {
+			_classCallCheck(this, SettingsInputLabel);
 	
-	function warningForField(field, value) {
-		if (!value) return "You can\'t leave this empty.";
-		switch (field) {
-			case "month_of_birth":
-				return "Hmm, the month doesn\'t look right. There aren't that many days in that month.";
-			case "day_of_birth":
-				return "Hmm, the day doesn\'t look right. Be sure to use a 1 or 2-digit number that is a day of the month.";
-			case "year_of_birth":
-				return "Hmm, the year doesn\'t look right. Be sure to use a 4-digit number.";
-			default:
-				return "Invalid " + idToName(field);
-		}
-		return "Invalid " + idToName(field);
-	}
-	
-	function isValidMonth(day, month) {
-		var max_days;
-		for (var i = 0; i < months.length; i++) {
-			if (parseInt(month) == months[i].value) max_days = months[i].days;
-		}if (day <= max_days) return "valid";else return "invalid";
-	}
-	
-	function isValidDay(month, day) {
-		var max_days;
-		for (var i = 0; i < months.length; i++) {
-			if (parseInt(month) == months[i].value) max_days = months[i].days;
-		}if (day <= max_days) return "valid";else return "invalid";
-	}
-	
-	function isValidYear(year) {
-		var high = 2006;var low = 1900;
-		if (parseInt(year) > high || parseInt(year) < low) return "invalid";else return "valid";
-	}
-	
-	function generateDays() {
-		var days = [];
-		var start = 1;var end = 31;
-		for (var i = start; i <= end; i++) {
-			days.push({ label: i, value: i });
-		}
-		return days;
-	}
-	
-	function generateYears() {
-		var years = [];
-		var current_year = new Date().getFullYear();
-		var start = current_year - 60;var end = current_year;
-		for (var i = start; i <= end; i++) {
-			years.push({ label: i, value: i });
-		}
-		return years;
-	}
-	
-	function generateAvatars(arr) {
-		var avatars = [];
-		for (var i = 0; i < arr.length; i++) {
-			avatars.push({ label: arr[i], value: arr[i].toLowerCase() });
-		}
-		return avatars;
-	}
-	
-	var days = generateDays();
-	var years = generateYears();
-	var avatars = ["Ajani", "Chandra", "Elspeth", "Gideon", "Jace", "Liliana", "Nahiri", "Nicol", "Nissa", "Ugin"];
-	var months = [{ label: "January", value: 1, days: 31 }, { label: "February", value: 2, days: 29 }, { label: "March", value: 3, days: 31 }, { label: "April", value: 4, days: 30 }, { label: "May", value: 5, days: 31 }, { label: "June", value: 6, days: 30 }, { label: "July", value: 7, days: 31 }, { label: "August", value: 8, days: 31 }, { label: "September", value: 9, days: 30 }, { label: "October", value: 10, days: 31 }, { label: "November", value: 11, days: 30 }, { label: "December", value: 12, days: 31 }];
-	var avatar_list = generateAvatars(avatars);
-	
-	var SettingsSelectInput = function (_React$Component) {
-		_inherits(SettingsSelectInput, _React$Component);
-	
-		function SettingsSelectInput(props) {
-			_classCallCheck(this, SettingsSelectInput);
-	
-			var _this = _possibleConstructorReturn(this, (SettingsSelectInput.__proto__ || Object.getPrototypeOf(SettingsSelectInput)).call(this, props));
-	
-			_this.state = { valid: "", warning: "" };
-			return _this;
+			return _possibleConstructorReturn(this, (SettingsInputLabel.__proto__ || Object.getPrototypeOf(SettingsInputLabel)).apply(this, arguments));
 		}
 	
-		_createClass(SettingsSelectInput, [{
-			key: 'handleSelect',
-			value: function handleSelect(event) {
-				var obj = {};
-				obj[this.props.field] = event.target.value;
-				this.props.handleSelect(obj);
-			}
-		}, {
-			key: 'handleBlur',
-			value: function handleBlur(event) {
-				var isValid = testValid(this.props.field, event.target.value);
-				this.setState({ valid: isValid,
-					warning: warningForField(this.props.field, event.target.value) });
-				this.props.handleBlur(this.props.field, isValid);
-			}
-		}, {
-			key: 'handleAvatarDisplay',
-			value: function handleAvatarDisplay() {
-				var av = $('#avatar').val();
-				if (av) {
-					var container = document.getElementById('avatar_container');
-					container.style.backgroundImage = 'url(static/avatars/' + av + '.png)';
-				}
-			}
-		}, {
-			key: 'componentWillReceiveProps',
-			value: function componentWillReceiveProps(nextProps) {
-				$('select[name=' + nextProps.field + ']').val(nextProps.value);
-				if (this.props.field == "avatar") this.handleAvatarDisplay.bind(this)();
-			}
-		}, {
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				if (this.props.isUpdate || this.props.hasBeenChecked) this.setState({ valid: "valid" });
-			}
-		}, {
+		_createClass(SettingsInputLabel, [{
 			key: 'render',
 			value: function render() {
-				var options;
-				switch (this.props.field) {
-					case "month_of_birth":
-						options = months;
-						break;
-					case "day_of_birth":
-						options = days;
-						break;
-					case "year_of_birth":
-						options = years;
-						break;
-					case "avatar":
-						options = avatar_list;
-						break;
-				}
 				return React.createElement(
 					'div',
 					null,
 					React.createElement(
-						'select',
-						{ className: "select_setting " + this.state.valid, id: this.props.field, name: this.props.field,
-							title: idToName(this.props.field),
-							onChange: this.handleSelect.bind(this), onBlur: this.handleBlur.bind(this) },
-						React.createElement(
-							'option',
-							{ value: '', disabled: true, selected: true },
-							idToTimeLabel(this.props.field)
-						),
-						options.map(function (option) {
-							return React.createElement(
-								'option',
-								{ value: option.value },
-								option.label
-							);
-						})
-					),
-					this.state.valid == "invalid" && React.createElement(
-						'div',
-						{ className: 'warning', id: this.props.field + "_warning" },
-						this.state.warning
+						'b',
+						null,
+						idToName(this.props.field)
 					)
 				);
 			}
 		}]);
 	
-		return SettingsSelectInput;
+		return SettingsInputLabel;
 	}(React.Component);
 	
-	exports.default = SettingsSelectInput;
-	
-	SettingsSelectInput.defaultProps = {
-		hasBeenChecked: false
-	};
+	exports.default = SettingsInputLabel;
 
 /***/ },
-/* 128 */
+/* 123 */
+/*!*******************************************************!*\
+  !*** ./~/react-facebook-login/dist/facebook-login.js ***!
+  \*******************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	!function(e,t){ true?module.exports=t(__webpack_require__(/*! react */ 2)):"function"==typeof define&&define.amd?define(["react"],t):"object"==typeof exports?exports.FacebookLogin=t(require("react")):e.FacebookLogin=t(e.react)}(this,function(e){return function(e){function t(n){if(o[n])return o[n].exports;var r=o[n]={exports:{},id:n,loaded:!1};return e[n].call(r.exports,r,r.exports,t),r.loaded=!0,r.exports}var o={};return t.m=e,t.c=o,t.p="",t(0)}([function(e,t,o){e.exports=o(2)},function(e,t,o){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}function r(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function i(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function s(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var a=function(){function e(e,t){for(var o=0;o<t.length;o++){var n=t[o];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}return function(t,o,n){return o&&e(t.prototype,o),n&&e(t,n),t}}(),c=o(6),l=n(c),p=o(4),u=n(p),f=o(3),d=n(f),y=function(e){function t(){var e,o,n,s;r(this,t);for(var a=arguments.length,c=Array(a),l=0;l<a;l++)c[l]=arguments[l];return o=n=i(this,(e=t.__proto__||Object.getPrototypeOf(t)).call.apply(e,[this].concat(c))),n.state={isSdkLoaded:!1,isProcessing:!1},n.responseApi=function(e){window.FB.api("/me",{fields:n.props.fields},function(t){Object.assign(t,e),n.props.callback(t)})},n.checkLoginAfterRefresh=function(e){"unknown"===e.status&&window.FB.login(function(e){return n.checkLoginState(e)},!0)},n.checkLoginState=function(e){n.setState({isProcessing:!1}),e.authResponse?n.responseApi(e.authResponse):n.props.callback&&n.props.callback({status:e.status})},n.checkLoginAfterRefresh=function(e){"unknown"===e.status?window.FB.login(function(e){return n.checkLoginState(e)},!0):n.checkLoginState(e)},n.click=function(){if(n.state.isSdkLoaded&&!n.state.isProcessing&&!n.props.isDisabled){n.setState({isProcessing:!0});var e=n.props,t=e.scope,o=e.appId,r=e.onClick,i=e.reAuthenticate,s=e.redirectUri,a=e.disableMobileRedirect;"function"==typeof r&&r();var c=!1;try{c=window.navigator&&window.navigator.standalone||navigator.userAgent.match("CriOS")||navigator.userAgent.match(/mobile/i)}catch(l){}var p={client_id:o,redirect_uri:s,state:"facebookdirect",scope:t};i&&(p.auth_type="reauthenticate"),c&&!a?window.location.href="//www.facebook.com/dialog/oauth?"+(0,d["default"])(p):window.FB.login(n.checkLoginState,{scope:t,auth_type:p.auth_type})}},s=o,i(n,s)}return s(t,e),a(t,[{key:"componentWillMount",value:function(){return document.getElementById("facebook-jssdk")?void this.setState({isSdkLoaded:!0}):(this.setFbAsyncInit(),void this.loadSdkAsynchronously())}},{key:"componentDidMount",value:function(){var e=document.getElementById("fb-root");e||(e=document.createElement("div"),e.id="fb-root",document.body.appendChild(e))}},{key:"setFbAsyncInit",value:function(){var e=this,t=this.props,o=t.appId,n=t.xfbml,r=t.cookie,i=t.version,s=t.autoLoad;window.fbAsyncInit=function(){window.FB.init({version:"v"+i,appId:o,xfbml:n,cookie:r}),e.setState({isSdkLoaded:!0}),(s||window.location.search.includes("facebookdirect"))&&window.FB.getLoginStatus(e.checkLoginAfterRefresh)}}},{key:"loadSdkAsynchronously",value:function(){var e=this.props.language;!function(t,o,n){var r=t.getElementsByTagName(o)[0],i=r,s=r;t.getElementById(n)||(s=t.createElement(o),s.id=n,s.src="//connect.facebook.net/"+e+"/all.js",i.parentNode.insertBefore(s,i))}(document,"script","facebook-jssdk")}},{key:"style",value:function(){var e=this.constructor.defaultProps.cssClass;return this.props.cssClass===e&&l["default"].createElement("style",{dangerouslySetInnerHTML:{__html:u["default"]}})}},{key:"containerStyle",value:function(){var e={transition:"opacity 0.5s"};return(this.state.isProcessing||!this.state.isSdkLoaded||this.props.isDisabled)&&(e.opacity=.6),Object.assign(e,this.props.containerStyle)}},{key:"render",value:function(){var e=this.props,t=e.cssClass,o=e.size,n=e.icon,r=e.textButton,i=e.buttonStyle,s="string"==typeof n;return l["default"].createElement("span",{style:this.containerStyle()},s&&l["default"].createElement("link",{rel:"stylesheet",href:"//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"}),l["default"].createElement("button",{className:t+" "+o,style:i,onClick:this.click},n&&s&&l["default"].createElement("i",{className:"fa "+n}),n&&!s&&n,r),this.style())}}]),t}(l["default"].Component);y.propTypes={isDisabled:c.PropTypes.bool,callback:c.PropTypes.func.isRequired,appId:c.PropTypes.string.isRequired,xfbml:c.PropTypes.bool,cookie:c.PropTypes.bool,reAuthenticate:c.PropTypes.bool,scope:c.PropTypes.string,redirectUri:c.PropTypes.string,textButton:c.PropTypes.string,typeButton:c.PropTypes.string,autoLoad:c.PropTypes.bool,disableMobileRedirect:c.PropTypes.bool,size:c.PropTypes.string,fields:c.PropTypes.string,cssClass:c.PropTypes.string,version:c.PropTypes.string,icon:c.PropTypes.any,language:c.PropTypes.string,onClick:c.PropTypes.func,containerStyle:c.PropTypes.object,buttonStyle:c.PropTypes.object},y.defaultProps={textButton:"Login with Facebook",typeButton:"button",redirectUri:window.location.href,scope:"public_profile,email",xfbml:!1,cookie:!1,reAuthenticate:!1,size:"metro",fields:"name",cssClass:"kep-login-facebook",version:"2.3",language:"en_US",disableMobileRedirect:!1},t["default"]=y},function(e,t,o){"use strict";function n(e){return e&&e.__esModule?e:{"default":e}}Object.defineProperty(t,"__esModule",{value:!0}),t["default"]=void 0;var r=o(1),i=n(r);t["default"]=i["default"]},function(e,t){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t["default"]=function(e){var t="";for(var o in e)""!==t&&(t+="&"),t+=o+"="+encodeURIComponent(e[o]);return t}},function(e,t,o){t=e.exports=o(5)(),t.push([e.id,".kep-login-facebook{font-family:Helvetica,sans-serif;font-weight:700;-webkit-font-smoothing:antialiased;color:#fff;cursor:pointer;display:inline-block;font-size:calc(.27548vw + 12.71074px);text-decoration:none;text-transform:uppercase;transition:background-color .3s,border-color .3s;background-color:#4c69ba;border:calc(.06887vw + .67769px) solid #4c69ba;padding:calc(.34435vw + 13.38843px) calc(.34435vw + 18.38843px)}.kep-login-facebook.small{padding:calc(.34435vw + 3.38843px) calc(.34435vw + 8.38843px)}.kep-login-facebook.medium{padding:calc(.34435vw + 8.38843px) calc(.34435vw + 13.38843px)}.kep-login-facebook.metro{border-radius:0}.kep-login-facebook .fa{margin-right:calc(.34435vw + 3.38843px)}",""]),t.locals={"kep-login-facebook":"kep-login-facebook",small:"small",medium:"medium",metro:"metro",fa:"fa"}},function(e,t){e.exports=function(){var e=[];return e.toString=function(){for(var e=[],t=0;t<this.length;t++){var o=this[t];o[2]?e.push("@media "+o[2]+"{"+o[1]+"}"):e.push(o[1])}return e.join("")},e.i=function(t,o){"string"==typeof t&&(t=[[null,t,""]]);for(var n={},r=0;r<this.length;r++){var i=this[r][0];"number"==typeof i&&(n[i]=!0)}for(r=0;r<t.length;r++){var s=t[r];"number"==typeof s[0]&&n[s[0]]||(o&&!s[2]?s[2]=o:o&&(s[2]="("+s[2]+") and ("+o+")"),e.push(s))}},e}},function(t,o){t.exports=e}])});
+
+/***/ },
+/* 124 */
+/*!**************************************************!*\
+  !*** ./static/components/Login/RegisterForm.jsx ***!
+  \**************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _SettingsTextInput = __webpack_require__(/*! ../Settings/SettingsTextInput.jsx */ 121);
+	
+	var _SettingsTextInput2 = _interopRequireDefault(_SettingsTextInput);
+	
+	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 122);
+	
+	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
+	
+	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 48);
+	
+	var _AppActions2 = _interopRequireDefault(_AppActions);
+	
+	var _AppStore = __webpack_require__(/*! ../../stores/AppStore.jsx */ 1);
+	
+	var _AppStore2 = _interopRequireDefault(_AppStore);
+	
+	var _reactRouter = __webpack_require__(/*! react-router */ 52);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var React = __webpack_require__(/*! react */ 2);
+	var Link = __webpack_require__(/*! react-router */ 52).Link;
+	
+	
+	var text_fields = ["username", "password", "first_name", "last_name", "contact"];
+	
+	var RegisterForm = function (_React$Component) {
+		_inherits(RegisterForm, _React$Component);
+	
+		function RegisterForm() {
+			_classCallCheck(this, RegisterForm);
+	
+			var _this = _possibleConstructorReturn(this, (RegisterForm.__proto__ || Object.getPrototypeOf(RegisterForm)).call(this));
+	
+			_this.state = { first_name: '',
+				last_name: '',
+				username: '',
+				contact: '',
+				password: '',
+				valid_text_fields: [],
+				submittable: false };
+			return _this;
+		}
+	
+		_createClass(RegisterForm, [{
+			key: 'handleChange',
+			value: function handleChange(obj) {
+				this.setState(obj);
+			}
+		}, {
+			key: 'handleTextBlur',
+			value: function handleTextBlur(field, valid) {
+				var valid_text_fields = this.state.valid_text_fields;
+				if (valid == "valid") this.setState({ valid_text_fields: add(valid_text_fields, field) });else this.setState({ valid_text_fields: remove(valid_text_fields, field) });
+				this.setState({ submittable: text_fields.every(function (field) {
+						return contains(valid_text_fields, field);
+					}) });
+			}
+		}, {
+			key: 'handleSubmit',
+			value: function handleSubmit() {
+				if (this.state.submittable) {
+					var obj = {
+						first_name: this.state.first_name,
+						last_name: this.state.last_name,
+						username: this.state.username,
+						email_address: this.state.email_address,
+						password: this.state.password,
+						phone_number: this.state.phone_number
+					};
+					$.ajax({
+						type: "POST",
+						url: '/createProfile',
+						data: JSON.stringify(obj, null, '\t'),
+						contentType: 'application/json;charset=UTF-8',
+						success: function (res) {
+							if (res['result'] == "success") {
+								this.login.bind(this)();
+							}
+						}.bind(this)
+					});
+					$('#CreateProfileSuccess').fadeIn(400).delay(4000).fadeOut(400);
+					$("html, body").animate({ scrollTop: $('#LoginRegisterMenu').prop('scrollHeight') }, 600);
+				} else {
+					$('#CreateProfileFail').fadeIn(400).delay(4000).fadeOut(400);
+					$("html, body").animate({ scrollTop: $('#LoginRegisterMenu').prop('scrollHeight') }, 600);
+					this.enableRegister.bind(this)();
+				}
+			}
+		}, {
+			key: 'login',
+			value: function login() {
+				var obj = { user: this.state.username, password: this.state.password, ip: _AppStore2.default.getIp() };
+				$.ajax({
+					type: "POST",
+					url: '/verifyAndLogin',
+					data: JSON.stringify(obj, null, '\t'),
+					contentType: 'application/json;charset=UTF-8',
+					success: function (res) {
+						if (!res['error']) {
+							this.getCurrentUserInfo.bind(this)();
+						}
+					}.bind(this)
+				});
+			}
+		}, {
+			key: 'getCurrentUserInfo',
+			value: function getCurrentUserInfo() {
+				$.post('/getCurrentUserInfo', { userID: this.state.username }, function (data) {
+					_AppActions2.default.addCurrentUser(data.thisUser);
+					this.getNotifications.bind(this)();
+				}.bind(this));
+			}
+		}, {
+			key: 'getNotifications',
+			value: function getNotifications() {
+				$.post('/getNotifications', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
+					var notifications = [];
+					data.notification_list.map(function (obj) {
+						notifications.unshift({
+							comment_id: obj['comment_id'],
+							timeString: obj['timeString'],
+							isOP: obj['isOP'],
+							numOtherPeople: obj['numOtherPeople'],
+							sender_name: obj['sender_name'],
+							op_name: obj['op_name']
+						});
+					});
+					_AppActions2.default.addNotifications(notifications);
+					this.getNotificationCount.bind(this)();
+				}.bind(this));
+			}
+		}, {
+			key: 'getNotificationCount',
+			value: function getNotificationCount() {
+				$.post('/getNotificationCount', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
+					_AppActions2.default.addNotificationCount(data.count);
+					_reactRouter.browserHistory.push('/');
+				}.bind(this));
+			}
+		}, {
+			key: 'enableRegister',
+			value: function enableRegister() {
+				$('#RegisterSubmit').one("click", function (e) {
+					e.preventDefault();
+					$(this).blur();
+					this.handleSubmit.bind(this)();
+				}.bind(this));
+			}
+		}, {
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				this.enableRegister.bind(this)();
+				$('#CreateProfileSuccess').hide();
+				$('#CreateProfileFail').hide();
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				return React.createElement(
+					'div',
+					{ className: 'container', id: 'RegisterForm' },
+					React.createElement(
+						'form',
+						{ className: 'form-horizontal' },
+						text_fields.map(function (field) {
+							return React.createElement(
+								'div',
+								{ className: 'form-group' },
+								React.createElement(_SettingsInputLabel2.default, { field: field }),
+								React.createElement(_SettingsTextInput2.default, { field: field, value: this.state[field],
+									handleTyping: this.handleChange.bind(this),
+									handleBlur: this.handleTextBlur.bind(this) })
+							);
+						}, this),
+						React.createElement(
+							'div',
+							{ className: 'form-group' },
+							React.createElement(
+								'button',
+								{ className: 'btn-login form-control',
+									id: 'RegisterSubmit' },
+								React.createElement(
+									'b',
+									null,
+									'Get Started!'
+								)
+							)
+						),
+						React.createElement(
+							'div',
+							{ className: 'alert alert-success login_alert', id: 'CreateProfileSuccess' },
+							React.createElement(
+								'strong',
+								null,
+								'Success!'
+							),
+							' Please hold on as we redirect you.'
+						),
+						React.createElement(
+							'div',
+							{ className: 'alert alert-danger login_alert', id: 'CreateProfileFail' },
+							React.createElement(
+								'strong',
+								null,
+								'Bro!'
+							),
+							' You need to fill out more stuff.'
+						)
+					)
+				);
+			}
+		}]);
+	
+		return RegisterForm;
+	}(React.Component);
+	
+	exports.default = RegisterForm;
+
+/***/ },
+/* 125 */
+/*!*************************************************!*\
+  !*** ./static/components/Login/LoginNavBar.jsx ***!
+  \*************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _LoginForm = __webpack_require__(/*! ./LoginForm.jsx */ 126);
+	
+	var _LoginForm2 = _interopRequireDefault(_LoginForm);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var React = __webpack_require__(/*! react */ 2);
+	var Link = __webpack_require__(/*! react-router */ 52).Link;
+	
+	var LoginNavBar = function (_React$Component) {
+		_inherits(LoginNavBar, _React$Component);
+	
+		function LoginNavBar() {
+			_classCallCheck(this, LoginNavBar);
+	
+			var _this = _possibleConstructorReturn(this, (LoginNavBar.__proto__ || Object.getPrototypeOf(LoginNavBar)).call(this));
+	
+			_this.state = { error: "" };
+			return _this;
+		}
+	
+		_createClass(LoginNavBar, [{
+			key: 'triggerError',
+			value: function triggerError(error) {
+				this.setState({ error: error });
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				return React.createElement(
+					'nav',
+					{ className: 'navbar navbar-default', role: 'navigation' },
+					React.createElement(
+						'div',
+						{ className: 'container' },
+						React.createElement(
+							'div',
+							{ className: 'navbar-header' },
+							React.createElement(
+								'div',
+								{ className: 'navbar-brand navbar-brand-logo' },
+								React.createElement('span', { className: 'glyphicon glyphicon-home' })
+							),
+							React.createElement(
+								'button',
+								{ type: 'button', id: 'LoginToggle', className: 'SearchNavBarGlyphicon navbar-toggle',
+									'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1' },
+								React.createElement(
+									'b',
+									null,
+									' Login '
+								)
+							)
+						),
+						React.createElement(
+							'div',
+							{ className: 'collapse navbar-collapse', id: 'bs-example-navbar-collapse-1' },
+							React.createElement(_LoginForm2.default, { triggerError: this.triggerError.bind(this) }),
+							this.state.error && React.createElement(LoginError, { error: this.state.error })
+						)
+					)
+				);
+			}
+		}]);
+	
+		return LoginNavBar;
+	}(React.Component);
+	
+	exports.default = LoginNavBar;
+
+/***/ },
+/* 126 */
+/*!***********************************************!*\
+  !*** ./static/components/Login/LoginForm.jsx ***!
+  \***********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 48);
+	
+	var _AppActions2 = _interopRequireDefault(_AppActions);
+	
+	var _AppStore = __webpack_require__(/*! ../../stores/AppStore.jsx */ 1);
+	
+	var _AppStore2 = _interopRequireDefault(_AppStore);
+	
+	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 122);
+	
+	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
+	
+	var _reactRouter = __webpack_require__(/*! react-router */ 52);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var React = __webpack_require__(/*! react */ 2);
+	
+	var Link = __webpack_require__(/*! react-router */ 52).Link;
+	
+	var LoginForm = function (_React$Component) {
+		_inherits(LoginForm, _React$Component);
+	
+		function LoginForm() {
+			_classCallCheck(this, LoginForm);
+	
+			var _this = _possibleConstructorReturn(this, (LoginForm.__proto__ || Object.getPrototypeOf(LoginForm)).call(this));
+	
+			_this.state = { error: '',
+				login_user: '',
+				login_password: '' };
+			return _this;
+		}
+	
+		_createClass(LoginForm, [{
+			key: 'handleTyping',
+			value: function handleTyping(event) {
+				var obj = {};
+				obj[event.target.id] = event.target.value;
+				obj["error"] = "";
+				this.setState(obj);
+			}
+		}, {
+			key: 'login',
+			value: function login() {
+				var obj = { user: this.state.login_user,
+					password: this.state.login_password,
+					ip: _AppStore2.default.getIp() };
+				$.ajax({
+					type: "POST",
+					url: '/verifyAndLogin',
+					data: JSON.stringify(obj, null, '\t'),
+					contentType: 'application/json;charset=UTF-8',
+					success: function (res) {
+						if (!res['error']) {
+							this.getCurrentUserInfo.bind(this)();
+						} else {
+							this.setState({ error: res['error'] });
+							this.enableLogin.bind(this)();
+						}
+					}.bind(this)
+				});
+			}
+		}, {
+			key: 'getCurrentUserInfo',
+			value: function getCurrentUserInfo() {
+				$.post('/getCurrentUserInfo', { userID: this.state.login_user }, function (data) {
+					_AppActions2.default.addCurrentUser(data.thisUser);
+					this.getNotifications.bind(this)();
+				}.bind(this));
+			}
+		}, {
+			key: 'getNotifications',
+			value: function getNotifications() {
+				$.post('/getNotifications', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
+					var notifications = [];
+					data.notification_list.map(function (obj) {
+						notifications.unshift({
+							comment_id: obj['comment_id'],
+							timeString: obj['timeString'],
+							isOP: obj['isOP'],
+							numOtherPeople: obj['numOtherPeople'],
+							sender_name: obj['sender_name'],
+							op_name: obj['op_name']
+						});
+					});
+					_AppActions2.default.addNotifications(notifications);
+					this.getNotificationCount.bind(this)();
+				}.bind(this));
+			}
+		}, {
+			key: 'getNotificationCount',
+			value: function getNotificationCount() {
+				$.post('/getNotificationCount', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
+					_AppActions2.default.addNotificationCount(data.count);
+					_reactRouter.browserHistory.push('/');
+				}.bind(this));
+			}
+		}, {
+			key: 'enableLogin',
+			value: function enableLogin() {
+				$('#LoginButton').one('click', function (e) {
+					e.preventDefault();
+					$(this).blur();
+					this.login.bind(this)();
+				}.bind(this));
+			}
+		}, {
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				this.enableLogin.bind(this)();
+				$('#LoginFail').hide();
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				return React.createElement(
+					'form',
+					{ className: 'navbar-form navbar-right navbar-search-form',
+						role: 'search' },
+					React.createElement(
+						'div',
+						{ className: 'form-group' },
+						React.createElement('input', { type: 'text', className: 'login form-control', id: 'login_user',
+							onChange: this.handleTyping.bind(this), placeholder: 'Username' }),
+						React.createElement('input', { type: 'password', className: 'login form-control', id: 'login_password',
+							onChange: this.handleTyping.bind(this), placeholder: 'Password' }),
+						React.createElement(
+							'button',
+							{ className: 'btn-login login form-control',
+								id: 'LoginButton' },
+							React.createElement(
+								'b',
+								null,
+								'Login'
+							)
+						),
+						this.state.error && React.createElement(
+							'div',
+							{ className: 'warning' },
+							React.createElement(
+								'strong',
+								null,
+								'Bro!'
+							),
+							' ',
+							this.state.error
+						)
+					)
+				);
+			}
+		}]);
+	
+		return LoginForm;
+	}(React.Component);
+	
+	exports.default = LoginForm;
+
+/***/ },
+/* 127 */
 /*!***************************************************!*\
   !*** ./static/components/Home/ViewMoreButton.jsx ***!
   \***************************************************/
@@ -12902,7 +12460,7 @@
 	exports.default = ViewMoreButton;
 
 /***/ },
-/* 129 */
+/* 128 */
 /*!**************************************************!*\
   !*** ./static/components/Comment/CommentApp.jsx ***!
   \**************************************************/
@@ -12916,19 +12474,19 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _CommentNavBar = __webpack_require__(/*! ./CommentNavBar.jsx */ 130);
+	var _CommentNavBar = __webpack_require__(/*! ./CommentNavBar.jsx */ 129);
 	
 	var _CommentNavBar2 = _interopRequireDefault(_CommentNavBar);
 	
-	var _CommentFeedPost = __webpack_require__(/*! ./CommentFeedPost.jsx */ 131);
+	var _CommentFeedPost = __webpack_require__(/*! ./CommentFeedPost.jsx */ 130);
 	
 	var _CommentFeedPost2 = _interopRequireDefault(_CommentFeedPost);
 	
-	var _CommentFeed = __webpack_require__(/*! ./CommentFeed.jsx */ 134);
+	var _CommentFeed = __webpack_require__(/*! ./CommentFeed.jsx */ 133);
 	
 	var _CommentFeed2 = _interopRequireDefault(_CommentFeed);
 	
-	var _MakeComment = __webpack_require__(/*! ./MakeComment.jsx */ 138);
+	var _MakeComment = __webpack_require__(/*! ./MakeComment.jsx */ 137);
 	
 	var _MakeComment2 = _interopRequireDefault(_MakeComment);
 	
@@ -13145,7 +12703,7 @@
 	exports.default = CommentApp;
 
 /***/ },
-/* 130 */
+/* 129 */
 /*!*****************************************************!*\
   !*** ./static/components/Comment/CommentNavBar.jsx ***!
   \*****************************************************/
@@ -13159,7 +12717,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _NotificationsDropdown = __webpack_require__(/*! ../GenericNavBar/NotificationsDropdown.jsx */ 50);
+	var _NotificationsDropdown = __webpack_require__(/*! ../GenericNavBar/NotificationsDropdown.jsx */ 51);
 	
 	var _NotificationsDropdown2 = _interopRequireDefault(_NotificationsDropdown);
 	
@@ -13197,25 +12755,7 @@
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				var searchVisible = 0;
-				// $('.navbar-search-form').hide();
 				$('.navbar-search-form').show();
-	
-				// $('[data-toggle="search"]').click(function(){
-				//        if(searchVisible == 0){
-				//            searchVisible = 1;
-				//            $(this).parent().addClass('active');
-				//            $('.navbar-search-form').fadeIn(function(){
-				//                $('.navbar-search-form input').focus();
-				//            });
-				//        } else {
-				//            searchVisible = 0;
-				//            $(this).parent().removeClass('active');
-				//            $(this).blur();
-				//            $('.navbar-search-form').fadeOut(function(){
-				//                $('.navbar-search-form input').blur();
-				//            });
-				//        } 
-				//    });
 				$('#searchInput').keypress(function (event) {
 					if (event.keyCode == 13) {
 						event.preventDefault();
@@ -13296,7 +12836,7 @@
 	exports.default = CommentNavBar;
 
 /***/ },
-/* 131 */
+/* 130 */
 /*!*******************************************************!*\
   !*** ./static/components/Comment/CommentFeedPost.jsx ***!
   \*******************************************************/
@@ -13310,11 +12850,11 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _CommentFeedPostHeader = __webpack_require__(/*! ./CommentFeedPostHeader.jsx */ 132);
+	var _CommentFeedPostHeader = __webpack_require__(/*! ./CommentFeedPostHeader.jsx */ 131);
 	
 	var _CommentFeedPostHeader2 = _interopRequireDefault(_CommentFeedPostHeader);
 	
-	var _CommentFeedPostBody = __webpack_require__(/*! ./CommentFeedPostBody.jsx */ 133);
+	var _CommentFeedPostBody = __webpack_require__(/*! ./CommentFeedPostBody.jsx */ 132);
 	
 	var _CommentFeedPostBody2 = _interopRequireDefault(_CommentFeedPostBody);
 	
@@ -13446,7 +12986,7 @@
 	exports.default = CommentFeedPost;
 
 /***/ },
-/* 132 */
+/* 131 */
 /*!*************************************************************!*\
   !*** ./static/components/Comment/CommentFeedPostHeader.jsx ***!
   \*************************************************************/
@@ -13520,7 +13060,7 @@
 	exports.default = CommentFeedPostHeader;
 
 /***/ },
-/* 133 */
+/* 132 */
 /*!***********************************************************!*\
   !*** ./static/components/Comment/CommentFeedPostBody.jsx ***!
   \***********************************************************/
@@ -13577,7 +13117,7 @@
 	exports.default = CommentFeedPostBody;
 
 /***/ },
-/* 134 */
+/* 133 */
 /*!***************************************************!*\
   !*** ./static/components/Comment/CommentFeed.jsx ***!
   \***************************************************/
@@ -13591,19 +13131,19 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _CommentFeedPost = __webpack_require__(/*! ./CommentFeedPost.jsx */ 131);
+	var _CommentFeedPost = __webpack_require__(/*! ./CommentFeedPost.jsx */ 130);
 	
 	var _CommentFeedPost2 = _interopRequireDefault(_CommentFeedPost);
 	
-	var _EditCommentModal = __webpack_require__(/*! ./EditCommentModal.jsx */ 135);
+	var _EditCommentModal = __webpack_require__(/*! ./EditCommentModal.jsx */ 134);
 	
 	var _EditCommentModal2 = _interopRequireDefault(_EditCommentModal);
 	
-	var _DeleteCommentModal = __webpack_require__(/*! ./DeleteCommentModal.jsx */ 136);
+	var _DeleteCommentModal = __webpack_require__(/*! ./DeleteCommentModal.jsx */ 135);
 	
 	var _DeleteCommentModal2 = _interopRequireDefault(_DeleteCommentModal);
 	
-	var _ReportCommentModal = __webpack_require__(/*! ./ReportCommentModal.jsx */ 137);
+	var _ReportCommentModal = __webpack_require__(/*! ./ReportCommentModal.jsx */ 136);
 	
 	var _ReportCommentModal2 = _interopRequireDefault(_ReportCommentModal);
 	
@@ -13677,7 +13217,7 @@
 	exports.default = CommentFeed;
 
 /***/ },
-/* 135 */
+/* 134 */
 /*!********************************************************!*\
   !*** ./static/components/Comment/EditCommentModal.jsx ***!
   \********************************************************/
@@ -13698,7 +13238,6 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(/*! react */ 2);
-	// var $ = require('jquery');
 	
 	var EditCommentModal = function (_React$Component) {
 		_inherits(EditCommentModal, _React$Component);
@@ -13796,7 +13335,7 @@
 	exports.default = EditCommentModal;
 
 /***/ },
-/* 136 */
+/* 135 */
 /*!**********************************************************!*\
   !*** ./static/components/Comment/DeleteCommentModal.jsx ***!
   \**********************************************************/
@@ -13898,7 +13437,7 @@
 	exports.default = DeleteCommentModal;
 
 /***/ },
-/* 137 */
+/* 136 */
 /*!**********************************************************!*\
   !*** ./static/components/Comment/ReportCommentModal.jsx ***!
   \**********************************************************/
@@ -13919,7 +13458,6 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(/*! react */ 2);
-	// var $ = require('jquery');
 	
 	var ReportCommentModal = function (_React$Component) {
 		_inherits(ReportCommentModal, _React$Component);
@@ -14018,7 +13556,7 @@
 	exports.default = ReportCommentModal;
 
 /***/ },
-/* 138 */
+/* 137 */
 /*!***************************************************!*\
   !*** ./static/components/Comment/MakeComment.jsx ***!
   \***************************************************/
@@ -14039,7 +13577,6 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(/*! react */ 2);
-	// var $ = require('jquery');
 	
 	var MakeComment = function (_React$Component) {
 		_inherits(MakeComment, _React$Component);
@@ -14130,7 +13667,7 @@
 	exports.default = MakeComment;
 
 /***/ },
-/* 139 */
+/* 138 */
 /*!**************************************************************!*\
   !*** ./static/components/Notifications/NotificationsApp.jsx ***!
   \**************************************************************/
@@ -14144,11 +13681,11 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _NoSearchNavBar = __webpack_require__(/*! ../GenericNavBar/NoSearchNavBar.jsx */ 140);
+	var _NoSearchNavBar = __webpack_require__(/*! ../GenericNavBar/NoSearchNavBar.jsx */ 139);
 	
 	var _NoSearchNavBar2 = _interopRequireDefault(_NoSearchNavBar);
 	
-	var _NotificationsFeed = __webpack_require__(/*! ./NotificationsFeed.jsx */ 141);
+	var _NotificationsFeed = __webpack_require__(/*! ./NotificationsFeed.jsx */ 140);
 	
 	var _NotificationsFeed2 = _interopRequireDefault(_NotificationsFeed);
 	
@@ -14156,7 +13693,7 @@
 	
 	var _AppStore2 = _interopRequireDefault(_AppStore);
 	
-	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 51);
+	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 48);
 	
 	var _AppActions2 = _interopRequireDefault(_AppActions);
 	
@@ -14240,7 +13777,7 @@
 	exports.default = NotificationsApp;
 
 /***/ },
-/* 140 */
+/* 139 */
 /*!************************************************************!*\
   !*** ./static/components/GenericNavBar/NoSearchNavBar.jsx ***!
   \************************************************************/
@@ -14254,7 +13791,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _NotificationsDropdown = __webpack_require__(/*! ./NotificationsDropdown.jsx */ 50);
+	var _NotificationsDropdown = __webpack_require__(/*! ./NotificationsDropdown.jsx */ 51);
 	
 	var _NotificationsDropdown2 = _interopRequireDefault(_NotificationsDropdown);
 	
@@ -14342,7 +13879,7 @@
 	exports.default = NoSearchNavBar;
 
 /***/ },
-/* 141 */
+/* 140 */
 /*!***************************************************************!*\
   !*** ./static/components/Notifications/NotificationsFeed.jsx ***!
   \***************************************************************/
@@ -14356,7 +13893,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _NotificationsFeedPost = __webpack_require__(/*! ./NotificationsFeedPost.jsx */ 142);
+	var _NotificationsFeedPost = __webpack_require__(/*! ./NotificationsFeedPost.jsx */ 141);
 	
 	var _NotificationsFeedPost2 = _interopRequireDefault(_NotificationsFeedPost);
 	
@@ -14410,7 +13947,7 @@
 	exports.default = NotificationsFeed;
 
 /***/ },
-/* 142 */
+/* 141 */
 /*!*******************************************************************!*\
   !*** ./static/components/Notifications/NotificationsFeedPost.jsx ***!
   \*******************************************************************/
@@ -14419,7 +13956,7 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -14434,54 +13971,68 @@
 	var Link = __webpack_require__(/*! react-router */ 52).Link;
 	
 	var NotificationsFeedPost = function (_React$Component) {
-	  _inherits(NotificationsFeedPost, _React$Component);
+	    _inherits(NotificationsFeedPost, _React$Component);
 	
-	  function NotificationsFeedPost() {
-	    _classCallCheck(this, NotificationsFeedPost);
+	    function NotificationsFeedPost() {
+	        _classCallCheck(this, NotificationsFeedPost);
 	
-	    return _possibleConstructorReturn(this, (NotificationsFeedPost.__proto__ || Object.getPrototypeOf(NotificationsFeedPost)).apply(this, arguments));
-	  }
-	
-	  _createClass(NotificationsFeedPost, [{
-	    key: 'render',
-	    value: function render() {
-	      var note = this.props.note;
-	      return React.createElement(
-	        'li',
-	        { className: 'NotificationsFeedPost' },
-	        React.createElement(
-	          Link,
-	          { to: "/comment/" + note.comment_id },
-	          React.createElement(
-	            'div',
-	            { className: 'row' },
-	            React.createElement(
-	              'b',
-	              null,
-	              note.action
-	            )
-	          )
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'row' },
-	          React.createElement(
-	            'small',
-	            null,
-	            note.timeString
-	          )
-	        )
-	      );
+	        return _possibleConstructorReturn(this, (NotificationsFeedPost.__proto__ || Object.getPrototypeOf(NotificationsFeedPost)).apply(this, arguments));
 	    }
-	  }]);
 	
-	  return NotificationsFeedPost;
+	    _createClass(NotificationsFeedPost, [{
+	        key: 'getNotificationSyntax',
+	        value: function getNotificationSyntax(note) {
+	            var whose;var also;var notification;
+	            if (note.isOP) {
+	                whose = "your";
+	                also = "";
+	            } else {
+	                whose = note.op_name + "'s";
+	                also = "also";
+	            }
+	            if (note.numOtherPeople > 1) notification = note.sender_name + " and " + note.numOtherPeople + " other people commented on " + whose + " post.";else if (note.numOtherPeople == 1) notification = note.sender_name + " and 1 other person commented on " + whose + " post.";else notification = note.sender_name + " " + also + " commented on " + whose + " post.";
+	            return notification;
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var note = this.props.note;
+	            return React.createElement(
+	                'li',
+	                { className: 'NotificationsFeedPost' },
+	                React.createElement(
+	                    Link,
+	                    { to: "/comment/" + note.comment_id },
+	                    React.createElement(
+	                        'div',
+	                        { className: 'row' },
+	                        React.createElement(
+	                            'b',
+	                            null,
+	                            this.getNotificationSyntax.bind(this)(note)
+	                        )
+	                    )
+	                ),
+	                React.createElement(
+	                    'div',
+	                    { className: 'row' },
+	                    React.createElement(
+	                        'small',
+	                        null,
+	                        note.timeString
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return NotificationsFeedPost;
 	}(React.Component);
 	
 	exports.default = NotificationsFeedPost;
 
 /***/ },
-/* 143 */
+/* 142 */
 /*!****************************************************!*\
   !*** ./static/components/Settings/SettingsApp.jsx ***!
   \****************************************************/
@@ -14495,19 +14046,19 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _SettingsTextInput = __webpack_require__(/*! ./SettingsTextInput.jsx */ 126);
+	var _SettingsTextInput = __webpack_require__(/*! ./SettingsTextInput.jsx */ 121);
 	
 	var _SettingsTextInput2 = _interopRequireDefault(_SettingsTextInput);
 	
-	var _SettingsSelectInput = __webpack_require__(/*! ./SettingsSelectInput.jsx */ 127);
+	var _SettingsSelectInput = __webpack_require__(/*! ./SettingsSelectInput.jsx */ 143);
 	
 	var _SettingsSelectInput2 = _interopRequireDefault(_SettingsSelectInput);
 	
-	var _SettingsInputLabel = __webpack_require__(/*! ./SettingsInputLabel.jsx */ 124);
+	var _SettingsInputLabel = __webpack_require__(/*! ./SettingsInputLabel.jsx */ 122);
 	
 	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
 	
-	var _NoSearchNavBar = __webpack_require__(/*! ../GenericNavBar/NoSearchNavBar.jsx */ 140);
+	var _NoSearchNavBar = __webpack_require__(/*! ../GenericNavBar/NoSearchNavBar.jsx */ 139);
 	
 	var _NoSearchNavBar2 = _interopRequireDefault(_NoSearchNavBar);
 	
@@ -14526,19 +14077,6 @@
 	var React = __webpack_require__(/*! react */ 2);
 	
 	
-	function remove(array, value) {
-		var index = array.indexOf(value);
-		if (index != -1) array.splice(index, 1);
-		return array;
-	}
-	function add(array, value) {
-		var index = array.indexOf(value);
-		if (index === -1) array.push(value);
-		return array;
-	}
-	function contains(collection, item) {
-		if (collection.indexOf(item) !== -1) return true;else return false;
-	}
 	var text_fields = ["first_name", "last_name", "old_password", "password", "password_confirm", "phone_number"];
 	var select_fields = ["month_of_birth", "day_of_birth", "year_of_birth", "avatar"];
 	var required_text_fields = ["first_name", "last_name", "old_password", "phone_number"];
@@ -14714,7 +14252,7 @@
 										isUpdate: true })
 								);
 							}, this),
-							React.createElement('div', { id: 'avatar_container', className: 'avatar_container settings_avatar centered-text' }),
+							React.createElement('div', { id: 'avatar_container', className: 'select_setting avatar_container centered-text' }),
 							React.createElement(
 								'div',
 								{ className: 'form-group' },
@@ -14728,7 +14266,7 @@
 						),
 						React.createElement(
 							'div',
-							{ className: 'alert alert-success', id: 'UpdateSettingsSuccess' },
+							{ className: 'success', id: 'UpdateSettingsSuccess' },
 							React.createElement(
 								'strong',
 								null,
@@ -14738,7 +14276,7 @@
 						),
 						React.createElement(
 							'div',
-							{ className: 'alert alert-danger', id: 'UpdateSettingsFail' },
+							{ className: 'warning', id: 'UpdateSettingsFail' },
 							React.createElement(
 								'strong',
 								null,
@@ -14757,6 +14295,140 @@
 	exports.default = SettingsApp;
 
 /***/ },
+/* 143 */
+/*!************************************************************!*\
+  !*** ./static/components/Settings/SettingsSelectInput.jsx ***!
+  \************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var React = __webpack_require__(/*! react */ 2);
+	
+	var days = generateDays();
+	var years = generateYears();
+	var avatars = ["Ajani", "Chandra", "Elspeth", "Gideon", "Jace", "Liliana", "Nahiri", "Nicol", "Nissa", "Ugin"];
+	var months = [{ label: "January", value: 1, days: 31 }, { label: "February", value: 2, days: 29 }, { label: "March", value: 3, days: 31 }, { label: "April", value: 4, days: 30 }, { label: "May", value: 5, days: 31 }, { label: "June", value: 6, days: 30 }, { label: "July", value: 7, days: 31 }, { label: "August", value: 8, days: 31 }, { label: "September", value: 9, days: 30 }, { label: "October", value: 10, days: 31 }, { label: "November", value: 11, days: 30 }, { label: "December", value: 12, days: 31 }];
+	var avatar_list = generateAvatars(avatars);
+	
+	var SettingsSelectInput = function (_React$Component) {
+		_inherits(SettingsSelectInput, _React$Component);
+	
+		function SettingsSelectInput(props) {
+			_classCallCheck(this, SettingsSelectInput);
+	
+			var _this = _possibleConstructorReturn(this, (SettingsSelectInput.__proto__ || Object.getPrototypeOf(SettingsSelectInput)).call(this, props));
+	
+			_this.state = { valid: "", warning: "", hasMounted: false };
+			return _this;
+		}
+	
+		_createClass(SettingsSelectInput, [{
+			key: "handleSelect",
+			value: function handleSelect(event) {
+				var obj = {};
+				obj[this.props.field] = event.target.value;
+				this.props.handleSelect(obj);
+			}
+		}, {
+			key: "handleBlur",
+			value: function handleBlur(event) {
+				var isValid = testValid(this.props.field, event.target.value);
+				this.setState({ valid: isValid,
+					warning: warningForField(this.props.field, event.target.value) });
+				this.props.handleBlur(this.props.field, isValid);
+			}
+		}, {
+			key: "handleAvatarDisplay",
+			value: function handleAvatarDisplay() {
+				var av = $('#avatar').val();
+				if (av) {
+					var container = document.getElementById('avatar_container');
+					container.style.backgroundImage = 'url(static/avatars/' + av + '.png)';
+				}
+			}
+		}, {
+			key: "componentWillReceiveProps",
+			value: function componentWillReceiveProps(nextProps) {
+				$('select[name=' + nextProps.field + ']').val(nextProps.value);
+				if (this.props.field == "avatar") this.handleAvatarDisplay.bind(this)();
+				if (!this.state.hasMounted) {
+					var isValid = testValid(nextProps.field, nextProps.value);
+					if (isValid == "valid") this.setState({ valid: isValid, hasMounted: true });else this.setState({ hasMounted: true });
+				}
+			}
+		}, {
+			key: "componentDidMount",
+			value: function componentDidMount() {
+				if (this.props.value) this.setState({ valid: "valid" });
+			}
+		}, {
+			key: "render",
+			value: function render() {
+				var options;
+				var field = this.props.field;
+				switch (field) {
+					case "month_of_birth":
+						options = months;
+						break;
+					case "day_of_birth":
+						options = days;
+						break;
+					case "year_of_birth":
+						options = years;
+						break;
+					case "avatar":
+						options = avatar_list;
+						break;
+				}
+				return React.createElement(
+					"div",
+					null,
+					React.createElement(
+						"select",
+						{ className: "select_setting " + this.state.valid, id: field, name: field,
+							title: idToName(field),
+							onChange: this.handleSelect.bind(this), onBlur: this.handleBlur.bind(this) },
+						React.createElement(
+							"option",
+							{ value: "", disabled: true, selected: true },
+							idToTimeLabel(field)
+						),
+						options.map(function (option) {
+							return React.createElement(
+								"option",
+								{ value: option.value },
+								option.label
+							);
+						})
+					),
+					this.state.valid == "invalid" && React.createElement(
+						"div",
+						{ className: "warning", id: field + "_warning" },
+						this.state.warning
+					)
+				);
+			}
+		}]);
+	
+		return SettingsSelectInput;
+	}(React.Component);
+	
+	exports.default = SettingsSelectInput;
+
+/***/ },
 /* 144 */
 /*!**********************************************!*\
   !*** ./static/components/Login/Recovery.jsx ***!
@@ -14771,27 +14443,23 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _reactFacebookLogin = __webpack_require__(/*! react-facebook-login */ 120);
+	var _reactFacebookLogin = __webpack_require__(/*! react-facebook-login */ 123);
 	
 	var _reactFacebookLogin2 = _interopRequireDefault(_reactFacebookLogin);
 	
-	var _LoginNavBar = __webpack_require__(/*! ./LoginNavBar.jsx */ 121);
+	var _LoginNavBar = __webpack_require__(/*! ./LoginNavBar.jsx */ 125);
 	
 	var _LoginNavBar2 = _interopRequireDefault(_LoginNavBar);
 	
-	var _LoginError = __webpack_require__(/*! ./LoginError.jsx */ 123);
-	
-	var _LoginError2 = _interopRequireDefault(_LoginError);
-	
-	var _SettingsTextInput = __webpack_require__(/*! ../Settings/SettingsTextInput.jsx */ 126);
+	var _SettingsTextInput = __webpack_require__(/*! ../Settings/SettingsTextInput.jsx */ 121);
 	
 	var _SettingsTextInput2 = _interopRequireDefault(_SettingsTextInput);
 	
-	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 124);
+	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 122);
 	
 	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
 	
-	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 51);
+	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 48);
 	
 	var _AppActions2 = _interopRequireDefault(_AppActions);
 	
@@ -14891,14 +14559,12 @@
 				return React.createElement(
 					'div',
 					null,
-					React.createElement(_LoginNavBar2.default, { loginError: this.loginError.bind(this) }),
 					React.createElement(
 						'div',
 						{ className: 'container app-container' },
 						React.createElement(
 							'div',
 							{ className: 'col-xs-4 col-sm-offset-4' },
-							this.state.error && React.createElement(_LoginError2.default, { error: this.state.error }),
 							React.createElement(
 								'center',
 								null,
@@ -14953,19 +14619,15 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _reactFacebookLogin = __webpack_require__(/*! react-facebook-login */ 120);
+	var _reactFacebookLogin = __webpack_require__(/*! react-facebook-login */ 123);
 	
 	var _reactFacebookLogin2 = _interopRequireDefault(_reactFacebookLogin);
 	
-	var _LoginNavBar = __webpack_require__(/*! ./LoginNavBar.jsx */ 121);
+	var _LoginNavBar = __webpack_require__(/*! ./LoginNavBar.jsx */ 125);
 	
 	var _LoginNavBar2 = _interopRequireDefault(_LoginNavBar);
 	
-	var _LoginError = __webpack_require__(/*! ./LoginError.jsx */ 123);
-	
-	var _LoginError2 = _interopRequireDefault(_LoginError);
-	
-	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 51);
+	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 48);
 	
 	var _AppActions2 = _interopRequireDefault(_AppActions);
 	
@@ -14975,11 +14637,11 @@
 	
 	var _AppStore2 = _interopRequireDefault(_AppStore);
 	
-	var _SettingsTextInput = __webpack_require__(/*! ../Settings/SettingsTextInput.jsx */ 126);
+	var _SettingsTextInput = __webpack_require__(/*! ../Settings/SettingsTextInput.jsx */ 121);
 	
 	var _SettingsTextInput2 = _interopRequireDefault(_SettingsTextInput);
 	
-	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 124);
+	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 122);
 	
 	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
 	

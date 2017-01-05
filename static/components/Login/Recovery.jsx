@@ -3,7 +3,6 @@ var Link = require('react-router').Link;
 import FacebookLogin from 'react-facebook-login';
 
 import LoginNavBar from './LoginNavBar.jsx';
-import LoginError from './LoginError.jsx';
 import SettingsTextInput from '../Settings/SettingsTextInput.jsx';
 import SettingsInputLabel from '../Settings/SettingsInputLabel.jsx';
 import AppActions from '../../actions/AppActions.jsx';
@@ -76,11 +75,9 @@ export default class Recovery extends React.Component {
 	render() {
 		return (
 			<div>
-				<LoginNavBar loginError={this.loginError.bind(this)}/>
 
 				<div className="container app-container">
 					<div className = "col-xs-4 col-sm-offset-4">
-					{this.state.error && <LoginError error={this.state.error}/>}
                    <center>
 	                    { !this.state.show_next_step &&
 							<div>

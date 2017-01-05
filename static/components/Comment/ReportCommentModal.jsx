@@ -1,5 +1,4 @@
 var React = require('react');
-// var $ = require('jquery');
 export default class ReportCommentModal extends React.Component {
 	reportForSpam() {
 		var obj = {unique_id : this.props.comment.unique_id,

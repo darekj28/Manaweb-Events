@@ -1,5 +1,4 @@
 var React = require('react');
-// var $ = require('jquery');
 export default class MakeComment extends React.Component {
 	componentDidMount() {
 		var messageVisible = true;

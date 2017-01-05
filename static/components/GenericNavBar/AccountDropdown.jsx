@@ -14,7 +14,8 @@ export default class AccountDropdown extends React.Component {
               </a>
               <ul className="dropdown-menu">
                 {this.props.currentUser['userID'] && 
-                  <li className="unclickableDropdown" id="DropdownName">{this.props.name}</li>}
+                  <li className="unclickableDropdown">
+                  <a href="#">{this.props.name}</a></li>}
                 <li className="divider"></li>
                 {this.props.currentUser.isAdmin && 
                   <li> <a href = "/adminTools"> Admin Tools </a> </li>}

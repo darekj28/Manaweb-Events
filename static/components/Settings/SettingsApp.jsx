@@ -5,20 +5,6 @@ import SettingsInputLabel from './SettingsInputLabel.jsx';
 import NoSearchNavBar from '../GenericNavBar/NoSearchNavBar.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 
-function remove(array, value) {
-	var index = array.indexOf(value);
-	if (index != -1) array.splice(index, 1);
-	return array;
-}
-function add(array, value) {
-	var index = array.indexOf(value);
-	if (index === -1) array.push(value);
-	return array;
-}
-function contains(collection, item) {
-	if(collection.indexOf(item) !== -1) return true;
-	else return false;
-}
 var text_fields = [	"first_name", "last_name", "old_password", "password", "password_confirm", "phone_number" ];
 var select_fields = [ "month_of_birth", "day_of_birth", "year_of_birth", "avatar" ];
 var required_text_fields = ["first_name", "last_name", "old_password", "phone_number"];
@@ -149,7 +135,7 @@ export default class SettingsApp extends React.Component {
 						}, this)}
 						{select_fields.map(function(field) {
 							return <div className="form-group">
-										<SettingsInputLabel field={field} />
+										<SettingsInputLabel field={field}/>
 										<SettingsSelectInput field={field} value={this.state[field]}
 															avatar_list={this.state.avatar_list}
 															handleSelect={this.handleChange.bind(this)} 
@@ -157,16 +143,16 @@ export default class SettingsApp extends React.Component {
 															isUpdate={true}/>
 									</div>
 						}, this)}
-						<div id="avatar_container" className="avatar_container settings_avatar centered-text"></div>
+						<div id="avatar_container" className="select_setting avatar_container centered-text"></div>
 						<div className="form-group">
 							<button className="btn btn-default" id="UpdateSettingsSubmit" 
 									onClick={this.handleSubmit.bind(this)}> Update! </button>
 						</div>
 					</form>
-					<div className="alert alert-success" id="UpdateSettingsSuccess">
+					<div className="success" id="UpdateSettingsSuccess">
 					  <strong>Success!</strong> Your settings have been updated.
 					</div>
-					<div className="alert alert-danger" id="UpdateSettingsFail">
+					<div className="warning" id="UpdateSettingsFail">
 					  <strong>Bro!</strong> You need to fill out more stuff.
 					</div>
 				</div>

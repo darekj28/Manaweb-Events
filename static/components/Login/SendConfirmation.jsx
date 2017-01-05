@@ -2,7 +2,6 @@ var React = require('react');
 var Link = require('react-router').Link;
 import FacebookLogin from 'react-facebook-login';
 import LoginNavBar from './LoginNavBar.jsx';
-import LoginError from './LoginError.jsx';
 import AppActions from '../../actions/AppActions.jsx';
 import { browserHistory } from 'react-router';
 import AppStore from '../../stores/AppStore.jsx';

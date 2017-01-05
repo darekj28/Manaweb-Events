@@ -7,17 +7,6 @@ import AppStore from '../../stores/AppStore.jsx';
 import LoginApp from '../Login/LoginApp.jsx';
 import ViewMoreButton from './ViewMoreButton.jsx';
 
-function toggle(collection, item) {
-	var idx = collection.indexOf(item);
-	if(idx !== -1) collection.splice(idx, 1);
-	else collection.push(item);
-	return collection;
-}
-
-function contains(collection, item) {
-	if(collection.indexOf(item) !== -1) return true;
-	else return false;
-}
 var feed_name = "BALT";
 var actions = ['Play', 'Trade', 'Chill'];
 export default class App extends React.Component {

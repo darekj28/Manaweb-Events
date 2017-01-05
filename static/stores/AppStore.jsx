@@ -7,6 +7,7 @@ var ee = require('event-emitter');
 var _currentUser = (localStorage.CurrentUser) ? JSON.parse(localStorage.CurrentUser) : "";
 var _notifications = (localStorage.Notifications) ? JSON.parse(localStorage.Notifications) : [];
 var _notification_count = (localStorage.NotificationCount) ? JSON.parse(localStorage.NotificationCount) : "";
+var _ip = (localStorage.Ip) ? JSON.parse(localStorage.Ip) : "";
 
 function _loadCurrentUser(data) {
   	_currentUser = data;
@@ -28,6 +29,10 @@ function _deleteNotificationCount() {
 	_notification_count = "";
 	localStorage.NotificationCount = JSON.stringify(_notification_count);
 }
+function _addIp(data) {
+	_ip = data;
+	localStorage.Ip = JSON.stringify(_ip);
+}
 
 var emitter = ee({}), listener;
 
@@ -44,6 +49,9 @@ class AppStore extends React.Component {
 	}
 	getNotificationCount() {
 		return _notification_count;
+	}
+	getIp() {
+		return _ip;
 	}
 	emitUserChange() {
 	  	emitter.emit('userchange');
@@ -85,6 +93,9 @@ class AppStore extends React.Component {
 		    case AppConstants.DELETE_NOTIFICATIONCOUNT:
 		    	_deleteNotificationCount();
 		    	this.emitNoteChange.bind(this)();
+		    	break;
+		    case AppConstants.ADD_IP:
+		    	_addIp();
 		    	break;
 		    default:
 		      	return true;
