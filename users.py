@@ -129,7 +129,10 @@ class Users:
 		input_properties['userID'] = userID
 		input_properties['first_name'] = first_name
 		input_properties['last_name'] = last_name
-		hash_password = argon2.using(rounds=4).hash(password)
+		if fb_id == "" or fb_id == None:
+			hash_password = argon2.using(rounds=4).hash(password)
+		else:
+			hash_password = "FB_DEFAULT_PASSWORD"
 		input_properties['password'] = hash_password
 		input_properties['email'] = email
 		input_properties['isActive'] = isActive
