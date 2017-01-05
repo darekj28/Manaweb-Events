@@ -4846,6 +4846,20 @@
 	            }.bind(this));
 	        }
 	    }, {
+	        key: 'getNotificationSyntax',
+	        value: function getNotificationSyntax(note) {
+	            var whose;var also;var notification;
+	            if (note.isOP) {
+	                whose = "your";
+	                also = "";
+	            } else {
+	                whose = note.op_name + "'s";
+	                also = "also";
+	            }
+	            if (note.numOtherPeople > 1) notification = note.sender_name + " and " + note.numOtherPeople + " other people commented on " + whose + " post.";else if (note.numOtherPeople == 1) notification = note.sender_name + " and 1 other person commented on " + whose + " post.";else notification = note.sender_name + " " + also + " commented on " + whose + " post.";
+	            return notification;
+	        }
+	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
 	            _AppStore2.default.addNoteChangeListener(this._onChange.bind(this));
@@ -4871,7 +4885,8 @@
 	                { className: 'dropdown' },
 	                React.createElement(
 	                    'a',
-	                    { href: '#', onClick: this.seeNotifications.bind(this), className: 'SearchNavBarGlyphicon dropdown-toggle', 'data-toggle': 'dropdown' },
+	                    { href: '#', onClick: this.seeNotifications.bind(this),
+	                        className: 'SearchNavBarGlyphicon dropdown-toggle', 'data-toggle': 'dropdown' },
 	                    React.createElement('span', { className: 'glyphicon glyphicon-envelope' }),
 	                    this.state.numUnseen > 0 && React.createElement(
 	                        'span',
@@ -4889,10 +4904,10 @@
 	                            React.createElement(
 	                                Link,
 	                                { to: "/comment/" + note.comment_id },
-	                                note.action + " " + note.timeString
+	                                this.getNotificationSyntax.bind(this)(note) + " " + note.timeString
 	                            )
 	                        );
-	                    }),
+	                    }, this),
 	                    !this.state.notifications.length && React.createElement(
 	                        'li',
 	                        { className: 'unclickableDropdown', id: 'NoNewNotificationsDropdown' },
@@ -11374,12 +11389,11 @@
 					data.notification_list.map(function (obj) {
 						notifications.unshift({
 							comment_id: obj['comment_id'],
-							notification_id: obj['notification_id'],
 							timeString: obj['timeString'],
-							sender_id: obj['sender_id'],
-							action: obj['action'],
-							receiver_id: obj['receiver_id'],
-							seen: obj['seen']
+							isOP: obj['isOP'],
+							numOtherPeople: obj['numOtherPeople'],
+							sender_name: obj['sender_name'],
+							op_name: obj['op_name']
 						});
 					});
 					_AppActions2.default.addNotifications(notifications);
@@ -11885,12 +11899,11 @@
 					data.notification_list.map(function (obj) {
 						notifications.unshift({
 							comment_id: obj['comment_id'],
-							notification_id: obj['notification_id'],
 							timeString: obj['timeString'],
-							sender_id: obj['sender_id'],
-							action: obj['action'],
-							receiver_id: obj['receiver_id'],
-							seen: obj['seen']
+							isOP: obj['isOP'],
+							numOtherPeople: obj['numOtherPeople'],
+							sender_name: obj['sender_name'],
+							op_name: obj['op_name']
 						});
 					});
 					_AppActions2.default.addNotifications(notifications);
@@ -12232,12 +12245,11 @@
 					data.notification_list.map(function (obj) {
 						notifications.unshift({
 							comment_id: obj['comment_id'],
-							notification_id: obj['notification_id'],
 							timeString: obj['timeString'],
-							sender_id: obj['sender_id'],
-							action: obj['action'],
-							receiver_id: obj['receiver_id'],
-							seen: obj['seen']
+							isOP: obj['isOP'],
+							numOtherPeople: obj['numOtherPeople'],
+							sender_name: obj['sender_name'],
+							op_name: obj['op_name']
 						});
 					});
 					_AppActions2.default.addNotifications(notifications);
@@ -14419,7 +14431,7 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -14434,48 +14446,62 @@
 	var Link = __webpack_require__(/*! react-router */ 52).Link;
 	
 	var NotificationsFeedPost = function (_React$Component) {
-	  _inherits(NotificationsFeedPost, _React$Component);
+	    _inherits(NotificationsFeedPost, _React$Component);
 	
-	  function NotificationsFeedPost() {
-	    _classCallCheck(this, NotificationsFeedPost);
+	    function NotificationsFeedPost() {
+	        _classCallCheck(this, NotificationsFeedPost);
 	
-	    return _possibleConstructorReturn(this, (NotificationsFeedPost.__proto__ || Object.getPrototypeOf(NotificationsFeedPost)).apply(this, arguments));
-	  }
-	
-	  _createClass(NotificationsFeedPost, [{
-	    key: 'render',
-	    value: function render() {
-	      var note = this.props.note;
-	      return React.createElement(
-	        'li',
-	        { className: 'NotificationsFeedPost' },
-	        React.createElement(
-	          Link,
-	          { to: "/comment/" + note.comment_id },
-	          React.createElement(
-	            'div',
-	            { className: 'row' },
-	            React.createElement(
-	              'b',
-	              null,
-	              note.action
-	            )
-	          )
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'row' },
-	          React.createElement(
-	            'small',
-	            null,
-	            note.timeString
-	          )
-	        )
-	      );
+	        return _possibleConstructorReturn(this, (NotificationsFeedPost.__proto__ || Object.getPrototypeOf(NotificationsFeedPost)).apply(this, arguments));
 	    }
-	  }]);
 	
-	  return NotificationsFeedPost;
+	    _createClass(NotificationsFeedPost, [{
+	        key: 'getNotificationSyntax',
+	        value: function getNotificationSyntax(note) {
+	            var whose;var also;var notification;
+	            if (note.isOP) {
+	                whose = "your";
+	                also = "";
+	            } else {
+	                whose = note.op_name + "'s";
+	                also = "also";
+	            }
+	            if (note.numOtherPeople > 1) notification = note.sender_name + " and " + note.numOtherPeople + " other people commented on " + whose + " post.";else if (note.numOtherPeople == 1) notification = note.sender_name + " and 1 other person commented on " + whose + " post.";else notification = note.sender_name + " " + also + " commented on " + whose + " post.";
+	            return notification;
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var note = this.props.note;
+	            return React.createElement(
+	                'li',
+	                { className: 'NotificationsFeedPost' },
+	                React.createElement(
+	                    Link,
+	                    { to: "/comment/" + note.comment_id },
+	                    React.createElement(
+	                        'div',
+	                        { className: 'row' },
+	                        React.createElement(
+	                            'b',
+	                            null,
+	                            this.getNotificationSyntax.bind(this)(note)
+	                        )
+	                    )
+	                ),
+	                React.createElement(
+	                    'div',
+	                    { className: 'row' },
+	                    React.createElement(
+	                        'small',
+	                        null,
+	                        note.timeString
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return NotificationsFeedPost;
 	}(React.Component);
 	
 	exports.default = NotificationsFeedPost;
