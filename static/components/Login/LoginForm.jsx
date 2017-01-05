@@ -18,6 +18,10 @@ export default class LoginForm extends React.Component {
 		obj["error"] = "";
 		this.setState(obj);
 	}
+	handleEnter(event) {
+		if (event.charCode == 13)
+			this.login.bind(this)();
+	}
 	login() {
 		var obj = { user : this.state.login_user, 
 					password : this.state.login_password, 
@@ -82,20 +86,20 @@ export default class LoginForm extends React.Component {
     }
 	render() {
 		return (
-			<form className="navbar-form navbar-right navbar-search-form" 
+			<div className="navbar-form navbar-right navbar-search-form" 
 				         		role="search">  	            	
 				    <div className="form-group">
 	                	<input type="text" className="login form-control" id="login_user" 
-	                	onChange={this.handleTyping.bind(this)} placeholder="Username"/>
+	                	onChange={this.handleTyping.bind(this)} onKeyPress={this.handleEnter.bind(this)} placeholder="Username"/>
 	                    <input type="password" className="login form-control" id="login_password" 
-	                    	onChange={this.handleTyping.bind(this)} placeholder="Password"/>
+	                    	onChange={this.handleTyping.bind(this)} onKeyPress={this.handleEnter.bind(this)} placeholder="Password"/>
 		            	<button className="btn-login login form-control"
 		            					id="LoginButton"><b>Login</b></button>
 		            	{this.state.error && <div className="warning">
 				  			<strong>Bro!</strong> {this.state.error}
 						</div>}
 					</div>
-	        </form>
+	        </div>
 			)
 	}
 }
