@@ -33,17 +33,13 @@ export default class SettingsSelectInput extends React.Component {
 		$('select[name=' + nextProps.field + ']').val(nextProps.value);
 		if (this.props.field == "avatar") this.handleAvatarDisplay.bind(this)();
 		if (!this.state.hasMounted) {
-			var isValid = testValid(nextProps.field, nextProps.value); 
-			if (isValid == "valid") {
-				this.setState({ valid : isValid, hasMounted : true });
-				this.props.handleBlur(nextProps.field, isValid);
+			if (nextProps.value) {
+				this.setState({ valid : "valid", hasMounted : true });
+				this.props.handleBlur(nextProps.field, "valid");
 			}
 			else 
 				this.setState({ hasMounted : true });
 		}
-	}
-	componentDidMount() {
-		if (this.props.value) this.setState({ valid : "valid" });
 	}
 	render() {
 		var options;

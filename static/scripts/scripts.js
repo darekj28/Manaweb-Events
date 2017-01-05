@@ -62,12 +62,6 @@ function testValid (field, value) {
 			if (month) return isValidDay(month, value);
 		case "year_of_birth":
 			return isValidYear(value);
-		case "month_of_birth" :
-			return "Hmm, the month doesn\'t look right. There aren't that many days in that month.";
-		case "day_of_birth" :
-			return "Hmm, the day doesn\'t look right. Be sure to use a 1 or 2-digit number that is a day of the month.";
-		case "year_of_birth" :
-			return "Hmm, the year doesn\'t look right. Be sure to use a 4-digit number.";
 		default :
 			return "valid";
 	}
@@ -80,6 +74,12 @@ function warningForField(field, value) {
 			return "Your old password is incorrect.";
 		case "password_confirm" :
 			return "Your passwords don\'t match.";
+		case "month_of_birth" :
+			return "There aren't that many days in this month.";
+		case "day_of_birth" :
+			return "There aren't this many days in that month.";
+		case "year_of_birth" :
+			return "This year looks suspicious.";
 		default :
 			return idToName(field) + " is invalid.";
 	}
@@ -179,3 +179,117 @@ function phoneHelper() {
 function passwordHelper() {
 	$('#password').popover();
 }
+$.fn.goValidate = function() {
+    var $form = this,
+        $inputs = $form.find('input:text, input:password'),
+        $selects = $form.find('select'),
+        $textAreas = $form.find('textarea');
+    
+    var validators = {
+        username: {
+            regex: /^[a-z ,.'-]{4,}$/
+        },
+        first_name: {
+            regex: /^[A-Za-z]{1,}$/
+        },
+        last_name: {
+            regex: /^[A-Za-z]{1,}$/
+        },
+        password: {
+            regex: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/
+        },
+        email_address: {
+            regex: /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/
+        },
+        phone: {
+            regex: /^[2-9]\d{2}-\d{3}-\d{4}$/,
+        }
+    };
+    var validate = function(klass, value) {
+        var isValid = true,
+            error = '';
+            
+        if (!value && /required/.test(klass)) {
+            error = 'This field is required';
+            isValid = false;
+        } else {
+            klass = klass.split(/\s/);
+            $.each(klass, function(i, k){
+                if (validators[k]) {
+                    if (value && !validators[k].regex.test(value)) {
+                        isValid = false;
+                        error = validators[k].error;
+                    }
+                }
+            });
+        }
+
+        return {
+            isValid: isValid,
+            error: error
+        }
+    };
+    var showError = function($e) {
+        var klass = $e.attr('class'),
+            value = $e.val(),
+            test = validate(klass, value);
+      
+        $e.removeClass('invalid');
+        $('#form-error').addClass('hide');
+        
+        if (!test.isValid) {
+            $e.addClass('invalid');
+            
+            if(typeof $e.data("shown") == "undefined" || $e.data("shown") == false){
+               $e.popover('show');
+            }
+            
+        }
+      else {
+        $e.popover('hide');
+      }
+    };
+   
+    $inputs.keyup(function() {
+        showError($(this));
+    });
+    $selects.change(function() {
+        showError($(this));
+    });
+    $textAreas.keyup(function() {
+        showError($(this));
+    });
+  
+    $inputs.on('shown.bs.popover', function () {
+  		$(this).data("shown",true);
+	});
+  
+    $inputs.on('hidden.bs.popover', function () {
+  		$(this).data("shown",false);
+	});
+  
+    $form.submit(function(e) {
+      
+        $inputs.each(function() { /* test each input */
+        	if ($(this).is('.required') || $(this).hasClass('invalid')) {
+            	showError($(this));
+        	}
+    	});
+    	$selects.each(function() { /* test each input */
+        	if ($(this).is('.required') || $(this).hasClass('invalid')) {
+            	showError($(this));
+        	}
+    	});
+    	$textAreas.each(function() { /* test each input */
+        	if ($(this).is('.required') || $(this).hasClass('invalid')) {
+            	showError($(this));
+        	}
+    	});
+        if ($form.find('input.invalid').length) { /* form is not valid */
+        	e.preventDefault();
+            $('#CreateProfileFail').fadeIn(400).delay(3000).fadeOut(400);
+            return false;
+        }
+    });
+    return this;
+};

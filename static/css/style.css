@@ -63,6 +63,11 @@ body {
 #SignUpButton:focus {
   background-color: #fff;
 }
+.register {
+  max-width : 380px;
+  height : 40px;
+  border-radius : 0px;
+}
 .btn-login {
   background-color : var(--dark);
   color : #fff;
@@ -84,9 +89,6 @@ body {
   background-color: #fff;
 }
 .valid {
-  border-width: 1.5px;
-  border-color: var(--success);
-  border-style: solid;
 }
 .invalid {
   border-width: 1.5px;
@@ -196,14 +198,14 @@ body {
   background-color : #ffffff;
 }
 .FeedPostBody {
-  max-width : 120vh;
+  max-width : 90vw;
   word-wrap: break-word;
   position : relative;
   top : -21px;
   white-space: pre-wrap;
 }
 .CommentFeedPostBody {
-  max-width : 120vh;
+  max-width : 90vw;
   word-wrap: break-word;
   position: relative;
   top : -21px;

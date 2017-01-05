@@ -74,7 +74,7 @@ export default class SettingsTextInput extends React.Component {
 					{field == "password" && <input data-toggle="popover" data-trigger="focus" 
 						data-content="Your password must contain at least one letter and one number."
 						className={"setting form-control " + this.state.valid} id={field} type={type} value={value} 
-						onClick={focus()} placeholder={idToName(field)}
+						onClick={focus()} placeholder="Change your password"
 						onChange={this.handleTyping.bind(this)} onBlur={this.handleBlur.bind(this)}/>}
 					{(this.state.valid == "invalid") && 
 					<div className="warning" id={field + "_warning"}>{this.state.warning}</div>}				

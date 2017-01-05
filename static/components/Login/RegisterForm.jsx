@@ -1,12 +1,11 @@
 var React = require('react');
 var Link = require('react-router').Link;
-import SettingsTextInput from '../Settings/SettingsTextInput.jsx';
-import SettingsInputLabel from '../Settings/SettingsInputLabel.jsx';
+import RegisterTextInput from './RegisterTextInput.jsx';
 import AppActions from '../../actions/AppActions.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 import { browserHistory } from 'react-router';
 
-var text_fields = [	"username", "password", "first_name", "last_name", "contact" ];
+var text_fields = ["first_name", "last_name", "username", "password", "email_address" ];
 
 export default class RegisterForm extends React.Component {
 	constructor() {
@@ -14,50 +13,77 @@ export default class RegisterForm extends React.Component {
 		this.state = { first_name 			: '', 
 						last_name  			: '',
 						username 			: '',
-						contact				: '',
+						email_address		: '',
 						password			: '',
-						valid_text_fields	: [],
-						submittable			: false };
+					};
 	}
-
-	handleChange(obj) { this.setState(obj); }
-
-	handleTextBlur(field, valid) {
-		var valid_text_fields = this.state.valid_text_fields;
-		if (valid == "valid") this.setState({ valid_text_fields : add(valid_text_fields, field) });
-		else this.setState({ valid_text_fields : remove(valid_text_fields, field) });
-		this.setState({ submittable : text_fields.every(field => contains(valid_text_fields, field)) });
+	verifyFields() {
+		if (!$('form').find('input.invalid').length)
+			this.verifyUsername.bind(this)();
+	}
+	verifyUsername() {
+		var obj = { username : this.state.username };
+		$.ajax({
+			type: 'POST',
+			url: '/registerUsername',
+			data : JSON.stringify(obj, null, '\t'),
+		    contentType: 'application/json;charset=UTF-8',
+		    success : function(res) {
+		    	if (!res['error']) {
+		    		this.verifyEmail.bind(this)();
+		    		this.setState({ username_error : "" });
+		    	}
+		    	else {
+		    		this.setState({ username_error : res['error'] });
+		    	}
+		    }.bind(this)
+		});
+	}
+	verifyEmail() {
+		var obj = { email_address : this.state.email_address };
+		$.ajax({
+			type: 'POST',
+			url: '/registerEmail',
+			data : JSON.stringify(obj, null, '\t'),
+		    contentType: 'application/json;charset=UTF-8',
+		    success : function(res) {
+		    	if (!res['error']) {
+		    		this.handleSubmit.bind(this)();
+		    		this.setState({ email_error : "" });
+		    	}
+		    	else {
+		    		this.setState({ email_error : res['error'] });
+		    	}
+		    }.bind(this)
+		});
+	}
+	handleChange(obj) {
+		if (Object.keys(obj)[0] == "username") this.setState({ username_error : "" }); 
+		if (Object.keys(obj)[0] == "email_address") this.setState({ email_error : "" }); 
+		this.setState(obj); 
 	}
 
 	handleSubmit() {
-		if (this.state.submittable) {
-			var obj = {
-				first_name 			: this.state.first_name		,
-				last_name			: this.state.last_name		,
-				username 			: this.state.username 		,
-				email_address		: this.state.email_address	,
-				password			: this.state.password		,
-				phone_number 		: this.state.phone_number		
-			};
-			$.ajax({
-				type: "POST",
-				url : '/createProfile',
-				data : JSON.stringify(obj, null, '\t'),
-				contentType : 'application/json;charset=UTF-8',
-				success : function(res) {
-					if(res['result'] == "success") {
-						this.login.bind(this)();
-					}
-				}.bind(this)
-			});
-			$('#CreateProfileSuccess').fadeIn(400).delay(4000).fadeOut(400);
-			$("html, body").animate({ scrollTop: $('#LoginRegisterMenu').prop('scrollHeight') }, 600);
-		}
-		else {
-			$('#CreateProfileFail').fadeIn(400).delay(4000).fadeOut(400);
-			$("html, body").animate({ scrollTop: $('#LoginRegisterMenu').prop('scrollHeight') }, 600);
-			this.enableRegister.bind(this)();
-		}
+		var obj = {
+			first_name 			: this.state.first_name		,
+			last_name			: this.state.last_name		,
+			username 			: this.state.username 		,
+			email_address		: this.state.email_address	,
+			password			: this.state.password		
+		};
+		$.ajax({
+			type: "POST",
+			url : '/createProfile',
+			data : JSON.stringify(obj, null, '\t'),
+			contentType : 'application/json;charset=UTF-8',
+			success : function(res) {
+				if(res['result'] == "success") {
+					this.login.bind(this)();
+				}
+			}.bind(this)
+		});
+		$("html, body").animate({ scrollTop: $('html,body').prop('scrollHeight') }, 600);
+		$('#CreateProfileSuccess').fadeIn(400).delay(3000).fadeOut(400);
 	}
 	login() {
 		var obj = { user : this.state.username, password : this.state.password, ip : AppStore.getIp() };
@@ -104,39 +130,46 @@ export default class RegisterForm extends React.Component {
                 browserHistory.push('/');
             }.bind(this));
     }
-    enableRegister() {
-    	$('#RegisterSubmit').one("click", function(e) {
+    register() {
+    	$('form').on("submit", function(e) {
 			e.preventDefault();
-			$(this).blur();
-			this.handleSubmit.bind(this)();
+			this.verifyFields.bind(this)();
 		}.bind(this));
     }
     componentDidMount() {
-    	this.enableRegister.bind(this)();
-		$('#CreateProfileSuccess').hide();
+    	this.register.bind(this)();
+    	$('#CreateProfileSuccess').hide();
     	$('#CreateProfileFail').hide();
+    	$('form').goValidate();
     }
 	render() {
+		var error = "";
+		if (this.state.username_error) error = this.state.username_error;
+		else if (this.state.email_error) error = this.state.email_error;
 		return(
 			<div className="container" id="RegisterForm">
 				<form className="form-horizontal">
+					<div><h2>Create a profile</h2></div>
 					{text_fields.map(function(field) {
-						return 	<div className="form-group">
-									<SettingsInputLabel field={field} />
-									<SettingsTextInput field={field} value={this.state[field]} 
-												handleTyping={this.handleChange.bind(this)} 
-												handleBlur={this.handleTextBlur.bind(this)}/>
+						return 	<div>
+									<RegisterTextInput field={field} value={this.state[field]} 
+												handleTyping={this.handleChange.bind(this)}
+												username_error={this.state.username_error}
+												email_error={this.state.email_error}/>
 								</div>;
 					}, this)}
 					<div className="form-group">
-						<button className="btn-login form-control" 
+						<button type="submit" className="btn-login register form-control" 
 								id="RegisterSubmit"> 
 									<b>Get Started!</b></button>
 					</div>
-					<div className="alert alert-success login_alert" id="CreateProfileSuccess">
+					{error != "" && <div className="warning">
+					   {error}
+					</div>}
+					<div className="success" id="CreateProfileSuccess">
 					  <strong>Success!</strong> Please hold on as we redirect you.
 					</div>
-					<div className="alert alert-danger login_alert" id="CreateProfileFail">
+					<div className="warning" id="CreateProfileFail">
 					  <strong>Bro!</strong> You need to fill out more stuff.
 					</div>
 				</form>

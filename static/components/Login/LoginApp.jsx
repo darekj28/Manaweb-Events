@@ -11,10 +11,7 @@ export default class LoginApp extends React.Component {
 			<div>
 				<LoginNavBar/>
 				<div className="container app-container col-xs-12">
-					<div className="col-xs-6"></div>
-					<div className="col-xs-6">
-						<RegisterForm/>
-					</div>
+					<RegisterForm/>
 				</div>
 			</div>
 		);

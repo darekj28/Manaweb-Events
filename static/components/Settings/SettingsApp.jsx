@@ -24,6 +24,8 @@ export default class SettingsApp extends React.Component {
 			avatar 				: '',
 			valid_text_fields	: [],
 			valid_select_fields	: [],
+			invalid_text_fields : [],
+			invalid_select_fields : [],
 			submittable			: false
 		};
 	}
@@ -53,26 +55,53 @@ export default class SettingsApp extends React.Component {
 	handleTextBlur(field, valid) {
 		var valid_text_fields = this.state.valid_text_fields;
 		var valid_select_fields = this.state.valid_select_fields;
-		if (valid == "valid") this.setState({ valid_text_fields : add(valid_text_fields, field) });
-		else this.setState({ valid_text_fields : remove(valid_text_fields, field) });
+		var invalid_text_fields = this.state.invalid_text_fields;
+		var invalid_select_fields = this.state.invalid_select_fields;
+		if (valid == "valid") { 
+			this.setState({ valid_text_fields : add(valid_text_fields, field) });
+			this.setState({ invalid_text_fields : remove(invalid_text_fields, field) });
+		}
+		else if (valid == "invalid") {
+			this.setState({ valid_text_fields : remove(valid_text_fields, field) });
+			this.setState({ invalid_text_fields : add(invalid_text_fields, field) });
+		}
+		else {
+			this.setState({ valid_text_fields : remove(valid_text_fields, field) });
+			this.setState({ invalid_text_fields : remove(invalid_text_fields, field) });
+		}
 		this.setState({ submittable : required_text_fields.every(field => contains(valid_text_fields, field)) && 
 									  select_fields.every(field => contains(valid_select_fields, field)) });
+		if (invalid_select_fields.length || invalid_text_fields.length)
+			this.setState({ submittable : false });
 	}
 
 	handleSelectBlur(field, valid) {
 		var valid_text_fields = this.state.valid_text_fields; 
 		var valid_select_fields = this.state.valid_select_fields;
-		if (valid == "valid") this.setState({ valid_select_fields : add(valid_select_fields, field) });
-		else this.setState({ valid_select_fields : remove(valid_select_fields, field) });
+		var invalid_text_fields = this.state.invalid_text_fields;
+		var invalid_select_fields = this.state.invalid_select_fields;
+		if (valid == "valid") { 
+			this.setState({ valid_select_fields : add(valid_select_fields, field) });
+			this.setState({ invalid_select_fields : remove(invalid_select_fields, field) });
+		}
+		else if (valid == "invalid") {
+			this.setState({ valid_select_fields : remove(valid_select_fields, field) });
+			this.setState({ invalid_select_fields : add(invalid_select_fields, field) });
+		}
+		else {
+			this.setState({ valid_select_fields : remove(valid_select_fields, field) });
+			this.setState({ invalid_select_fields : remove(invalid_select_fields, field) });
+		}
 		this.setState({ submittable : required_text_fields.every(field => contains(valid_text_fields, field)) && 
 									  select_fields.every(field => contains(valid_select_fields, field)) });
+		if (invalid_select_fields.length || invalid_text_fields.length)
+			this.setState({ submittable : false });
 	}
 
 	handleSubmit() {
 		if (this.state.submittable) {
 			var password = this.state.old_password;
-			if (contains(this.state.valid_text_fields, "password") && 
-				contains(this.state.valid_text_fields, "password_confirm"))
+			if (contains(this.state.valid_text_fields, "password"))
 				password = this.state.password;
 			var obj = {
 				first_name 		: this.state.first_name,
@@ -149,7 +178,7 @@ export default class SettingsApp extends React.Component {
 					  <strong>Success!</strong> Your settings have been updated.
 					</div>
 					<div className="warning" id="UpdateSettingsFail">
-					  <strong>Bro!</strong> You need to fill out more stuff.
+					  <strong>Bro!</strong> There's an error in your submission.
 					</div>
 				</div>
 			</div>
