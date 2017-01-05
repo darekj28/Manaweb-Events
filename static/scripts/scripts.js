@@ -235,10 +235,12 @@ $.fn.goValidate = function() {
             test = validate(klass, value);
       
         $e.removeClass('invalid');
+        $e.addClass('valid');
         $('#form-error').addClass('hide');
         
         if (!test.isValid) {
             $e.addClass('invalid');
+            $e.removeClass('valid');
             
             if(typeof $e.data("shown") == "undefined" || $e.data("shown") == false){
                $e.popover('show');

@@ -18,7 +18,8 @@ export default class RegisterForm extends React.Component {
 					};
 	}
 	verifyFields() {
-		if (!$('form').find('input.invalid').length)
+		console.log($('form').find('input.valid').length);
+		if ($('form').find('input.valid').length == 5)
 			this.verifyUsername.bind(this)();
 	}
 	verifyUsername() {

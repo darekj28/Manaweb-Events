@@ -7,13 +7,14 @@ import geo
 import os
 import smtplib
 import sqlite3
+import random
 from users import Users
 from posts import Posts
 
 create_profile = Blueprint('create_profile', __name__)
 user_db = sqlite3.connect('users/user_table.db', check_same_thread = False)
 udb = user_db.cursor()
-
+avatars = ["ajani", "chandra", "elspeth", "gideon", "jace", "liliana", "nahiri", "nicol", "nissa", "ugin"]
 @create_profile.route('/createProfile', methods = ['POST'])
 def createProfile():
 	if request.method == 'POST':
@@ -23,11 +24,11 @@ def createProfile():
 		userID 			= request.json['username']
 		password 		= request.json['password']
 		email 			= request.json['email_address']
-		birthDay 		= request.json['day_of_birth']
-		birthMonth 		= request.json['month_of_birth']
-		birthYear 		= request.json['year_of_birth']
-		avatar_name 	= request.json['avatar']
-		phone_number 	= request.json['phone_number']
+		birthDay 		= ""
+		birthMonth 		= ""
+		birthYear 		= ""
+		avatar_name 	= random.choice(avatars)
+		phone_number 	= ""
 		avatar_url 		= '/static/avatars/' + avatar_name + '.png'	
 		isActive = True	
 		confirmationPin = email_confirm.hashString(userID)

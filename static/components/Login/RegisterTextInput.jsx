@@ -41,7 +41,7 @@ export default class RegisterTextInput extends React.Component {
 		return (
 			<div className="form-group">
 				<input className={field + " register required form-control"} 
-					data-placement="bottom" data-trigger="manual" data-content={content}
+					data-placement="right" data-trigger="manual" data-content={content}
 					id={field} type={type} value={value} placeholder={idToName(field)}
 					onChange={this.handleTyping.bind(this)}/>
 			</div>
