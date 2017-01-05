@@ -59,7 +59,7 @@ class Posts:
 
 
 	def getTimeString(self):
-		return datetime.datetime.now().strftime("%B %d, %Y - %I:%M%p")
+		return datetime.datetime.now().strftime("%I:%M%p - %B %d, %Y")
 
 	# generates a random id
 	def id_generator(self, size=6, chars=string.ascii_uppercase + string.digits):
