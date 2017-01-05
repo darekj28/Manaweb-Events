@@ -64,8 +64,8 @@ body {
   background-color: #fff;
 }
 .register {
-  max-width : 380px;
-  height : 40px;
+  max-width : 45vw;
+  height : 45px;
   border-radius : 0px;
 }
 .btn-login {

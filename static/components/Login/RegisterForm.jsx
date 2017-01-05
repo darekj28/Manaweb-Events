@@ -150,7 +150,6 @@ export default class RegisterForm extends React.Component {
 		return(
 			<div className="container" id="RegisterForm">
 				<form className="form-horizontal">
-					<div><h2>Create a profile</h2></div>
 					{text_fields.map(function(field) {
 						return 	<div>
 									<RegisterTextInput field={field} value={this.state[field]} 
