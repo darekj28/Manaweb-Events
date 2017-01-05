@@ -1,4 +1,6 @@
 var React = require('react');
+var Link = require('react-router').Link;
+
 import SettingsTextInput from '../Settings/SettingsTextInput.jsx';
 import SettingsInputLabel from '../Settings/SettingsInputLabel.jsx';
 import AppActions from '../../actions/AppActions.jsx';
@@ -186,20 +188,6 @@ export default class FacebookConnect extends React.Component {
 		const testAppId = "1298398903564849"
 		return (
 			<div className="container app-container">
-					<h1><center>M A N A W E B</center></h1>
-                    <center>
-                    	
-                    	<Link to="/register">
-                    	<button className="btn btn-default" id="SignUpButton">
-                    			Create A Profile!
-                    		</button>
-                    	</Link>
-						
-                    	<br/>
-                    	<br/>
-
-
-
                     { !this.state.fb_clicked  &&
                     	<div>
                     	<FacebookLogin
@@ -247,9 +235,6 @@ export default class FacebookConnect extends React.Component {
 							Waiting for Facebook Authentication...
 						</div>
 					}
-
-                	</center>
-
 				</div>
 		)
 	}

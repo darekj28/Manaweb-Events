@@ -1,5 +1,4 @@
 var React = require('react');
-var Link = require('react-router').Link;
 
 import FacebookConnect from './FacebookConnect.jsx';
 import RegisterForm from './RegisterForm.jsx';
@@ -14,6 +13,10 @@ export default class LoginApp extends React.Component {
 					<div className="col-xs-6">
 						<div className="page-header"><h1>Create a profile</h1></div>
 						<RegisterForm/>
+						<FacebookConnect/>
+					</div>
+					<div className="col-xs-6">
+						
 					</div>
 				</div>
 			</div>
