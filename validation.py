@@ -73,7 +73,7 @@ def validateEmailOrPhone(input_string):
 	# first check if it's a phone number 
 	if '@' in input_string:
 		output = validateEmail(input_string)
-		ouput['method'] = 'email'
+		output['method'] = 'email'
 	else:
 		output = validatePhoneNumber(input_string)
 		output['method'] = "phone_number"

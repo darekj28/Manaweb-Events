@@ -140,9 +140,9 @@ def registerEmailOrPhone() :
 	email_or_phone = request.json['email_or_phone']
 	res = validation.validateEmailOrPhone(email_or_phone)
 	if res['result'] == 'success' :
-		return jsonify({ 'error' : False })
+		return jsonify({ 'method' : res['method'], 'error' : False })
 	else : 
-		return jsonify({ 'error' : res['error'] })
+		return jsonify({ 'method' : res['method'], 'error' : res['error'] })
 
 @browser_api.route('/verifyOldPassword', methods=['POST'])
 def verifyOldPassword() :

@@ -72,6 +72,7 @@ export default class RegisterForm extends React.Component {
 			email_or_phone		: email_or_phone
 		};
 		obj[email_or_phone] = this.state.email_or_phone;
+		console.log(obj);
 		$.ajax({
 			type: "POST",
 			url : '/createProfile',
