@@ -11505,7 +11505,7 @@
 						callback: this.responseFacebook.bind(this),
 						icon: 'fa-facebook',
 						size: 'small metro',
-						textButton: 'Continue with Facebook' }),
+						textButton: 'Connect with Facebook' }),
 					this.state.status == "clicked" && React.createElement(
 						'h5',
 						null,
