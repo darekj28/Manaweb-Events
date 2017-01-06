@@ -11508,7 +11508,7 @@
 						textButton: 'Connect with Facebook' }),
 					this.state.status == "clicked" && React.createElement(
 						'h5',
-						null,
+						{ style: 'display:inline-block' },
 						'Authenticating with Facebook...'
 					),
 					this.state.status == "verified" && React.createElement(
