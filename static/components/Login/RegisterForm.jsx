@@ -172,6 +172,9 @@ export default class RegisterForm extends React.Component {
 						<div className="warning" id="CreateProfileFail">
 						  <strong>Bro!</strong> You need to fill out more stuff.
 						</div>
+						<div className="register" id="Or">
+							<center>- or -</center>
+						</div>
 					</div>
 				</form>
 			</div>
