@@ -1,0 +1,13 @@
+
+getNotifications (made json)
+getNumUnseenPosts 
+markPostFeedAsSeen
+sendConfirmation (made form)
+getCurrentUserInfo (made form)
+setFeedFilter made form
+makeComment json
+makePost json
+reportPost json
+reportComment json
+getPreviousSettings json
+updateSettings json

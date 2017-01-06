@@ -12,10 +12,11 @@ import string
 import random
 import os
 import sys
-
+import re
 
 import psycopg2
 import urllib
+from passlib.hash import argon2
 
 
 			
@@ -31,6 +32,7 @@ class Users:
 		self.USER_TABLE = "user_info"
 		self.USER_ACTION_TABLE = "user_actions" 
 		self.TEST_USER_TABLE = "test_user_info"
+		self.RECOVERY_TABLE = "recovery_table"
 
 		# this is for when we load to heroku
 		# comment this out when testing locally
@@ -45,6 +47,7 @@ class Users:
 		    host=url.hostname,
 		    port=url.port
 		)
+		self.user_db.autocommit = True
 		self.udb = self.user_db.cursor()
 
 
@@ -95,20 +98,16 @@ class Users:
 	def addUser(self, userID, first_name, last_name, password, email, isActive, avatar_url,
 				 avatar_name, confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
 				  isAdmin = None, phone_number = None, birthMonth = None
-				 ,birthDay = None, birthYear = None, gender = None, confirmed = None):
-		
+				 ,birthDay = None, birthYear = None, gender = None, confirmed = None, fb_id = None):
 		table_name = self.USER_TABLE
-
 		if isAdmin == None:
 			isAdmin = False
-
 		if tradeFilter == None:
 			tradeFilter = False
 		if chillFilter == None:
 			chillFilter = False
 		if playFilter == None:
 			playFilter = False
-
 		if phone_number == None:
 			phone_number = ""
 		if birthDay == None:
@@ -119,21 +118,22 @@ class Users:
 			birthYear = ""
 		if gender == None:
 			gender = ""
-
 		# default to true can switch later
 		if confirmed == None:
 			confirmed = True
-
-
+		if fb_id == None:
+			fb_id = ""
 		timeStamp = time.time()
 		timeString = self.getTimeString()
-
-
 		input_properties = {}
 		input_properties['userID'] = userID
 		input_properties['first_name'] = first_name
 		input_properties['last_name'] = last_name
-		input_properties['password'] = password
+		if fb_id == "" or fb_id == None:
+			hash_password = argon2.using(rounds=4).hash(password)
+		else:
+			hash_password = "FB_DEFAULT_PASSWORD"
+		input_properties['password'] = hash_password
 		input_properties['email'] = email
 		input_properties['isActive'] = isActive
 		input_properties['avatar_url'] = avatar_url
@@ -149,29 +149,33 @@ class Users:
 		input_properties['birthYear'] = birthYear
 		input_properties['gender'] = gender
 		input_properties['confirmed'] = confirmed
-
-
 		# if user email or userID doesn't exist create new one
 		if self.getInfo(userID) == None and self.getInfoFromEmail(email) == None:
 			self.udb.execute(self.udb.mogrify("INSERT INTO " + table_name + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
-				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp) \
-				  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
-				(userID.lower(), first_name, last_name, password, email, isActive, avatar_url,
-				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp)))
-
+				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, fb_id) \
+				  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
+				(userID.lower(), first_name, last_name, hash_password, email, isActive, avatar_url,
+				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, fb_id)))
 			action = "ACCOUNT CREATED"
+			if (fb_id == ""):
+				action = action + " WITH FACEBOOK"
 			self.udb.execute(self.udb.mogrify("INSERT INTO " + "user_actions" + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
 				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action) \
 				  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
-				(userID.lower(), first_name, last_name, password, email, isActive, avatar_url,
+				(userID.lower(), first_name, last_name, hash_password, email, isActive, avatar_url,
 				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action)))
 
 		# otherwise simply update information
 		else: 
 			for prop in self.properties:
-				if prop != 'userID':
+				if prop == 'password':
+					hash_password = argon2.using(rounds=4).hash(password)
+					self.updateInfo(userID, prop, hash_password)
+				elif prop != 'userID' and prop != 'password':
 					self.updateInfo(userID, prop, input_properties[prop])
 
+
+			self.updateInfo(userID, 'password', hash_password)
 			self.updateInfo(userID, 'timeString', timeString)
 			self.updateInfo(userID, 'timeStamp', timeStamp)
 
@@ -179,7 +183,7 @@ class Users:
 			update_code = self.udb.mogrify("INSERT INTO " + "user_actions" + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
 				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action) \
 				  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
-				(userID.lower(), first_name, last_name, password, email, isActive, avatar_url,
+				(userID.lower(), first_name, last_name, hash_password, email, isActive, avatar_url,
 				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action))
 			self.udb.execute(update_code)
 
@@ -191,10 +195,8 @@ class Users:
 				 ,birthDay = None, birthYear = None, gender = None, confirmed = None):
 		
 		table_name = self.TEST_USER_TABLE
-
 		if isAdmin == None:
 			isAdmin = False
-
 		if tradeFilter == None:
 			tradeFilter = False
 		if chillFilter == None:
@@ -217,11 +219,8 @@ class Users:
 		if confirmed == None:
 			confirmed = True
 
-
 		timeStamp = time.time()
 		timeString = self.getTimeString()
-
-
 		input_properties = {}
 		input_properties['userID'] = userID
 		input_properties['first_name'] = first_name
@@ -262,7 +261,10 @@ class Users:
 		# otherwise simply update information
 		else: 
 			for prop in self.properties:
-				if prop != 'userID':
+				if prop == 'password':
+					hash_password = argon2.using(rounds=4).hash(password)
+					self.updateInfo(userID, prop, hash_password)
+				elif prop != 'userID' and prop != 'password':
 					self.updateInfo(userID, prop, input_properties[prop])
 
 			self.updateInfo(userID, 'timeString', timeString)
@@ -281,10 +283,16 @@ class Users:
 		
 	def updateInfo(self, userID, field_name, field_data):
 		table_name  = self.USER_TABLE
+
+		if field_name == 'password':
+			field_data = argon2.using(rounds=4).hash(field_data)
+
 		self.udb.execute(self.udb.mogrify("UPDATE " + table_name  + " SET " + field_name + " = %s WHERE userID = '" + userID + "'", (field_data,)))
 		action = "ACCOUNT " + field_name + " UPDATED"
 		timeStamp = time.time()
 		timeString = self.getTimeString()
+		
+
 
 		if field_name.lower() != 'timestring' and field_name.lower() != 'userid' and field_name.lower() != 'timestamp':
 			self.udb.execute(self.udb.mogrify("INSERT INTO " + self.USER_ACTION_TABLE + " (userID, " + field_name + ", timeString, timeStamp, action) VALUES (%s, %s, %s, %s, %s)", (userID.lower(), field_data, timeString, timeStamp, action)))
@@ -312,13 +320,14 @@ class Users:
 
 	def deleteUser(self, userID):
 		table_name = self.USER_TABLE
-		udb.execute("DELETE FROM " + table_name + " WHERE userID = %s", (userID,))
+		self.udb.execute("DELETE FROM " + table_name + " WHERE userID = %s", (userID,))
 		action = "USER " + userID + " DELETED"
 		timeStamp = time.time()
 		timeString = self.getTimeString()
 		self.udb.execute(self.udb.mogrify("INSERT INTO " + self.USER_ACTION_TABLE + " (userID, timeString, timeStamp, action) VALUES (%s, %s, %s, %s)", (userID, timeString, timeStamp, action)))
 
-		self.user_db.commit()
+		
+		
 
 
 	# returns a list of all users
@@ -328,7 +337,9 @@ class Users:
 		query = self.udb.fetchall()
 		user_list = list()
 		for user in query:
-			user_list.append(user[0])
+			userID = user[0]
+			if userID != "" and userID != None:
+				user_list.append(userID)
 		return user_list
 
 
@@ -355,7 +366,35 @@ class Users:
 		user_info['confirmed'] = query[18]
 		user_info['timeString'] = query[19]
 		user_info['timeStamp'] = query[20]
+		user_info['fb_id'] = query[21]
 		return user_info
+
+	# input : (123) 456-7890, 123-456-7890
+	# output  : 1234567890
+	def formatRawPhoneNumber(self, phoneNumberWithDashes):
+		raw_phone_number = ""
+		for char in phoneNumberWithDashes:
+			if char.isdigit():
+				raw_phone_number = raw_phone_number + char
+		return raw_phone_number
+
+	def getInfoFromPhoneNumber(self, phone_number):
+		user_table = self.getUserInfoTable()
+		raw_phone_number = self.formatRawPhoneNumber(phone_number)
+
+		matched_user = {}
+
+		for user in user_table.keys():
+			search_user = user_table[user]
+			search_user_phone_number = self.formatRawPhoneNumber(search_user['phone_number'])
+			if search_user_phone_number == raw_phone_number:
+				matched_user = search_user
+
+		if matched_user == {}:
+			return None
+
+		else:
+			return matched_user
 
 	def getInfoFromEmail(self, email):
 		table_name = self.USER_TABLE
@@ -380,80 +419,81 @@ class Users:
 		else:
 			return True
 
+	def addUserInfoColumn(self, colName, colType):
+		sql = "ALTER TABLE user_info ADD " + colName + " " + colType
+		self.udb.execute(sql)
+
+	def getUserInfoFromFacebookId(self, fb_id):
+		sql = "SELECT * FROM user_info WHERE fb_id = %s"
+		self.udb.execute(self.udb.mogrify(sql, (fb_id,)))
+		query = self.udb.fetchall()
+
+		numMatchingUsers = len(query)
+		if numMatchingUsers > 0:
+			return self.queryToDict(query[0])
+		else:
+			return None
+
+	def getFacebookUsers(self):
+		sql = "SELECT * FROM user_info"
+		self.udb.execute(sql)
+		query = self.udb.fetchall()
+		fb_user_list = list()
+		for item in query:
+			userInfo = self.queryToDict(item)
+			fb_id = userInfo['fb_id']
+			if fb_id != "" and fb_id != None and userInfo['userID'] != "":
+				fb_user_list.append(userInfo['userID'])
+
+		return fb_user_list
+
+	def deleteFacebookUsers(self):
+		fb_users = self.getFacebookUsers()
+		for user in fb_users:
+			self.deleteUser(user)
+
+	def verifyLogin(self, login_id, password):
+		output = {}
+		email_regex = re.compile("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
+		loginIdIsEmail = email_regex.match(login_id)
+		user_manager = Users()
+		lower_login_id = login_id.lower()
+		# if the login id is an email
+		if loginIdIsEmail:
+			user_info = user_manager.getInfoFromEmail(lower_login_id)
+		# otherwise the login is a userID
+		else:
+			user_info = user_manager.getInfo(lower_login_id)
+		# user doesn't exists
+		if user_info == None:
+			output['result'] = 'failure'
+			output['error'] = "This username doesn't exist."
+		else:
+			user_manager.closeConnection()
+			password_match = argon2.verify(password, user_info['password'])
+			if password_match:
+				output['result'] = 'success'
+				output['username'] = user_info['userID']
+			else:
+				output['result'] = 'failure'
+				output['error'] = 'Login credentials incorrect.'
+		return output
+
+	def isFacebookUser(self, fb_id):
+		fbUser = self.getUserInfoFromFacebookId(fb_id)
+		output = {}
+		if fbUser == None:
+			output['result'] = 'failure'
+			output['userID'] = ""
+		else:
+			output['result'] = 'success'
+			output['fbUser'] = fbUser
+		return output 
 
 
 
-
-
-
-def test():
-
-	first_name = ['Darek', 'Eli', 'Brian', 'Luis', 'Paul', 'Mashi', 'Yuuya', 'Shouta', 'Gabby']
-	last_name = ['Johnson', 'Chang', 'Kibler', 'Scott-Vargas', 'Cheon','Scanlan', 'Watanabe', 'Yasooka', 'Spartz']
-	userID = ['darekj', 'elic', 'briank', 'luisv', 'paulc', 'mashis', 'yuuyaw', 'shoutay', 'gabbys']
-	gender = ['Male','Male','Male','Male','Male','Male','Male','Male', 'Female']
-	birthYear = ['1994', '1994', '1984', '1882', '1986', '1984', '1990', '1990', '1990']
-	birthMonth = ['8','3','2','10', '9', '5', '11', '12', '2']
-	birthDay = ['28','13','11','18','29','8','4',' 10','28']
-	password = ['pass1','pass1','pass1','pass1','pass1','pass1','pass1', 'pass1', 'pass1']
-	home_zip = ['19131', '19131', '19131', '19131', '19131', '19131', '19131', '19131', '19131']
-	minAge = [10,10,10,10,10,10,10,10,10]
-	maxAge = [100,100,100,100,100,100,100,100,100]
-	desired_zip = ['19131', '19131', '19131', '19131', '19131', '19131', '19131', '19131', '19131']
-	genderPreference = ['BOTH','BOTH','BOTH','BOTH','BOTH','BOTH','BOTH','BOTH', 'BOTH']
-	maxDistance = [20,20,20,20,20,20,20,20,20]
-	bio = ['I am currently an assistant trader at Susquehanna International Group. My favorite formats are standard and sealed and my favorite color combination is UR. In 2006 I got got 4th place at Minnesota state championships playing Dragonstorm',
-	'Hi, I\'m Eli! I am a casual cello player, so sometimes my friends like to call me Celli! I just started playing Magic recently and I\'m looking forward to playing a lot!',
-	'I\'m Brian, but also known as the \'Dragon Master\'. My favorite decks are green aggro decks',
-	'I was fortuante enough to be inducted into the Pro Tour hall of fame, allowing me to pursue my dream of posting new content for young Magic players',
-	'My name is, Paul Cheon, or HAUMPH if you like. I love UB control, and looking to top 8 my first PT.',
-	'I\'m Mashi, a GP judge and co host of Channel Fireball\'s Magic TV. I love Magic and my favorite card is Pillage (unfortunately too powerful for modern of standard',
-	'My name is Yuuya Watanabe. I won the world championship in 2012 playing Jund. Last year I was inducted into the hall of fame and I am very proud. Still looking to win my first Pro Tour though!',
-	'My name is Shouta Yasooka, although some people just call me \'The Master\'. I always surprise the crowd with my \'crazy\' decks that I bring to tournaments, and sometimes it works out :)',
-	'I\'m one of the few female casters for Magic the Gathering. I love to play too!'
-	]
-	password = "pass1"
-	isActive = True
-	phone_number = "555-555-5555"
-
-	user_manager = Users()
-	user_manager.resetDatabase()
-
-
-
-	for i in range(0,9):
-		email = userID[i] + '@gmail.com'
-		confirmationPin = 'confirmationPin'
-
-		avatar_url = './static/avatars/gideon.png'
-		slash_splits = avatar_url.split('/')
-		avatar_name = slash_splits[len(slash_splits)-1].split('.')[0]
-
-		isAdmin = False
-		if userID[i] == 'darekj' or userID[i] == 'elic':
-			isAdmin = True
-
-		user_manager.addUser(userID[i], first_name = first_name[i], last_name = last_name[i], password = password, email = email,  isActive = isActive,
-			avatar_url = avatar_url, avatar_name = avatar_name, confirmationPin = confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
-			isAdmin = isAdmin, phone_number = phone_number, birthMonth = birthMonth[i], birthDay = birthDay[i], birthYear = birthYear[i],
-			gender = gender[i]) 
-		
 	
 
-
-		
-	# for user in userID:
-	# 	print(user_manager.getInfo(user))
-
-	feed_name = "BALT"
-
-	user_manager.updateInfo('darekj', 'last_name', 'jeter')
-	user_manager.updateInfo('darekj', 'chillFilter', True)
-
-	print(user_manager.getInfo('mrt'))
-	user_manager.closeConnection()
-	
-# test()
 
 
 

@@ -1,55 +1,44 @@
 var React = require('react');
 import NoSearchNavBar from "../GenericNavBar/NoSearchNavBar.jsx";
 import NotificationsFeed from './NotificationsFeed.jsx';
+import AppStore from '../../stores/AppStore.jsx';
+import AppActions from '../../actions/AppActions.jsx';
 
 export default class NotificationsApp extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			currentUser : '',
-            notifications : []
+			currentUser : AppStore.getCurrentUser(),
+            notifications : AppStore.getNotifications()
         };
-		this.getNotifications = this.getNotifications.bind(this);
-		this.getCurrentUserInfo = this.getCurrentUserInfo.bind(this);
 	}
-	getCurrentUserInfo() {
-		$.post('/getCurrentUserInfo', function(data) {
-			this.setState({currentUser : data.thisUser});
-		}.bind(this));
-	}
-	getNotifications() {
-        $.post('/getNotifications', 
-            function(data) {
-                var notifications = [];
-                var count = 0;
-                data.notification_list.map(function(obj) {
-                    if (!obj['seen']) count++; 
-                    notifications.unshift({
-                        comment_id : obj['comment_id'],
-                        notification_id : obj['notification_id'],
-                        timeString : obj['timeString'],
-                        sender_id : obj['sender_id'],
-                        action : obj['action'],
-                        receiver_id : obj['receiver_id'],
-                        seen : obj['seen']
-                    });
-                });
-                this.setState({notifications : notifications});
-            }.bind(this));
+	seeNotifications() {
+		AppActions.deleteNotificationCount();
+        $.post('/seeNotifications', {currentUser : AppStore.getCurrentUser()});
     }
 	componentDidMount() {
-		this.getNotifications();
-		this.getCurrentUserInfo();
-	}
+        AppStore.addNoteChangeListener(this._onChange.bind(this));
+        this.seeNotifications.bind(this)();
+    }
+    componentWillUnmount() {
+        AppStore.removeNoteChangeListener(this._onChange.bind(this));
+    }
+    _onChange() {
+        this.setState({ notifications : AppStore.getNotifications() })
+    }
 	render() {
 		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
 		return (
 			<div id="NotificationsApp">
 				<NoSearchNavBar currentUser={this.state.currentUser} name={name}/>
-				<div className="container">
+				<div className="container app-container">
+
 					{this.state.currentUser['first_name'] != undefined && 
-						<h2>{name}'s Notifications</h2>}
-					<NotificationsFeed notifications={this.state.notifications}/>		
+						<h2>Your Notifications</h2>}
+					<hr/>
+					<div className="feed row">
+						<NotificationsFeed notifications={this.state.notifications}/>		
+					</div>
 				</div>	
 			</div>
 		);

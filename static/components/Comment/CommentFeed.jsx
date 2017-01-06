@@ -8,8 +8,6 @@ export default class CommentFeed extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {commentInModal : ''};
-		this.filter = this.filter.bind(this);
-		this.refreshCommentDisplayedInModal = this.refreshCommentDisplayedInModal.bind(this);
 	}
 	refreshCommentDisplayedInModal(comment) {
 		this.setState({commentInModal : comment});
@@ -36,18 +34,18 @@ export default class CommentFeed extends React.Component {
 				rows.push(<CommentFeedPost key={i} comment={comment} 
 						isOP={this.props.currentUser['userID']==comment.userID}
 						isAdmin={this.props.currentUser['isAdmin']} isOriginalPost={false} 
-						refreshCommentDisplayedInModal={this.refreshCommentDisplayedInModal}/>);
+						refreshCommentDisplayedInModal={this.refreshCommentDisplayedInModal.bind(this)}/>);
 		}, this);
 		return rows;
 	}
 	render() {
-		var rows = this.filter();
+		var rows = this.filter.bind(this)();
 		return (<ul id="CommentFeed">{rows}
 					<EditCommentModal comment={this.state.commentInModal} 
 										handleCommentEdit={this.props.handleCommentEdit} />
 					<DeleteCommentModal comment={this.state.commentInModal} 
 										handleCommentDelete={this.props.handleCommentDelete}/>
-					<ReportCommentModal comment={this.state.commentInModal}/>
+					<ReportCommentModal comment={this.state.commentInModal} currentUser={this.props.currentUser}/>
 			</ul>);
 	}
 }

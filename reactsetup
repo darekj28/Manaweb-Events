@@ -1,3 +1,3 @@
 npm install --save react react-dom react-router jquery
-npm install --save-dev react react-dom react-addons-test-utils babel-core babel-loader babel-preset-es2015 babel-preset-react webpack
+npm install --save-dev react react-dom react-addons-test-utils babel-core babel-loader babel-preset-es2015 babel-preset-react webpack flux object-assign event-emitter
 node_modules/.bin/webpack -d

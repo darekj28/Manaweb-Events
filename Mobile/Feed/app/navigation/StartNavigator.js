@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {AppRegistry, StyleSheet, Text, View, ListView, TouchableOpacity, TouchableHighlight, Navigator} from 'react-native';
+import {AsyncStorage, AppRegistry, StyleSheet, Text, View, ListView, TouchableOpacity, TouchableHighlight, Navigator} from 'react-native';
 import StartScreen from '../screens/StartScreen'
 import RegisterName from '../screens/register/RegisterName'
 import RegisterPhoneNumber from '../screens/register/RegisterPhoneNumber'
@@ -22,9 +22,17 @@ import TestHTTP from '../screens/TestHTTP'
 
 class StartNavigator extends Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      current_username: ""
+    }
+    this.initializeUser = this.initializeUser.bind(this);
+  }
+
   _renderScene(route, navigator) {
   var globalNavigatorProps = {
-    navigator: navigator
+    navigator: navigator,
   }
 
   switch(route.href){
@@ -148,19 +156,45 @@ class StartNavigator extends Component {
   }
 }
 
+  async initializeUser(){
+      let value = await AsyncStorage.getItem("current_username")
+      return value;
+  }
+
+
+  componentWillMount() {
+      var current_username = this.initializeUser()
+      if (current_username == null) {
+        this.setState({current_username : ""})
+      }
+      else {
+        this.setState({current_username: current_username})
+      }
+      
+  }
 
 
   render() {
+
+    var start = ""
+    if (this.state.current_username == "") {
+      start = "Start"
+    }
+    else {
+      start = "Feed"
+    }
+
     return (
       <Navigator 
-      initialRoute = {{href: "Start"}}
+      initialRoute = {{href: start}}
       ref = "appNavigator"
       style = {styles.navigatorStyles}
       renderScene = {this._renderScene}
       configureScene={(route, routeStack) =>
       Navigator.SceneConfigs.FloatFromBottom}
-    />
-    )
+      />
+   
+   )   
   }
 }
 

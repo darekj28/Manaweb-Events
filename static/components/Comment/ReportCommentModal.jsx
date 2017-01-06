@@ -1,15 +1,11 @@
 var React = require('react');
-// var $ = require('jquery');
 export default class ReportCommentModal extends React.Component {
-	constructor(props) {
-		super(props);
-		this.reportForSpam = this.reportForSpam.bind(this);
-		this.reportForInappropriate = this.reportForInappropriate.bind(this);
-	}
 	reportForSpam() {
 		var obj = {unique_id : this.props.comment.unique_id,
 					reported_user : this.props.comment.userID,
-					reason : "Spam"};
+					reason : "Spam",
+					currentUser : this.props.currentUser
+				};
 		$.ajax({
 			type : 'POST',
 			url  : '/reportComment',
@@ -20,7 +16,9 @@ export default class ReportCommentModal extends React.Component {
 	reportForInappropriate() {
 		var obj = {unique_id : this.props.comment.unique_id,
 					reported_user : this.props.comment.userID,
-					reason : "Inappropriate"};
+					reason : "Inappropriate",
+					currentUser : this.props.currentUser
+				};
 		$.ajax({
 			type : 'POST',
 			url  : '/reportComment',
@@ -41,9 +39,9 @@ export default class ReportCommentModal extends React.Component {
 						</div>
 						<div className="modal-body" id="ReportCommentModalBody">
 							<button type="button" className="btn btn-default" data-dismiss="modal" 
-									onClick={this.reportForSpam}>Spam</button>
+									onClick={this.reportForSpam.bind(this)}>Spam</button>
 							<button type="button" className="btn btn-default" data-dismiss="modal"
-									onClick={this.reportForInappropriate}>Inappropriate</button>
+									onClick={this.reportForInappropriate.bind(this)}>Inappropriate</button>
 						</div>
 					</div>
 				</div>

@@ -1,8 +1,12 @@
 from flask import Blueprint, jsonify, request, session, render_template, redirect, url_for
 from users import Users
 from posts import Posts
+from security import Security
+import validation
 import time
 import email_confirm
+from passlib.hash import argon2
+import sms
 # from py2neo import authenticate, Graph, Node
 # authenticate("localhost:7474", "neo4j", "powerplay")
 # graph = Graph()
@@ -10,7 +14,136 @@ import email_confirm
 browser_api = Blueprint('browser_api', __name__)
 DEFAULT_FEED = "BALT"
 
+@browser_api.route('/updatePassword', methods = ['POST'])
+def updatePassword():
+	username = request.json['username']
+	new_password = request.json['password']
+	user_manager = Users()
+	user_manager.updateInfo(username, 'password', new_password)
+	user_manager.closeConnection()
+	output = {}
+	output['result'] = 'success'
+	return jsonify(output)
 
+
+@browser_api.route('/sendEmailConfirmation', methods = ['POST'])
+def sendEmailConfirmation():
+	email = request.json['email']
+	confirmationCode = email_confirm.sendConfirmationEmail(email)
+	return jsonify({'result' : 'success', 'confirmationCode' : confirmationCode})
+
+@browser_api.route('/sendTextConfirmation', methods = ['POST'])
+def sendTextConfirmation():
+	phone_number = request.json['phone_number']
+	confirmationCode = sms.sendTextConfirmationPin(phone_number)
+	return jsonify({'result' : 'success', 'confirmationCode' : confirmationCode})
+
+@browser_api.route('/recoverAccount', methods = ['POST'])
+def recoverAccount():
+	recovery_input = request.json['recovery_input']
+	security_manager = Security()
+	output = security_manager.recoverAccount(recovery_input)
+	security_manager.closeConnection()
+	return jsonify(output)
+
+@browser_api.route('/isFacebookUser', methods = ['POST'])
+def isFacebookUser():
+	fb_id = request.json['fb_id']
+	user_manager = Users()
+	output = user_manager.isFacebookUser(fb_id)
+	user_manager.closeConnection()
+	return jsonify(output)
+
+@browser_api.route('/recordFacebookLogin', methods =['POST'])
+def recordFacebookLogin():
+	username = request.json['username']
+	ip = request.json['ip']
+	security_manager = Security()
+	security_manager.recordLoginAttempt(username, True, ip, True)
+	security_manager.closeConnection()
+	return jsonify({'result': 'success'})
+
+@browser_api.route('/facebookCreateAccount', methods = ['POST'])
+def facebookCreateAccount():
+	first_name = request.json['first_name'].title()
+	last_name = request.json['last_name'].title()
+	userID = request.json['username']
+	password = "FB_DEFAULT_PASSWORD"
+	email = request.json['email']
+	fb_id = request.json['fb_id']
+	phone_number = "555-555-5555"
+	birthYear = "1994"
+	birthDay = "1"
+	birthMonth = "1"
+	gender = "Other"
+	avatar_name = "jace"
+	avatar_url = '/static/avatars/' + avatar_name + '.png'
+	
+	isActive = True
+	confirmationPin = "placeholder pin"
+	# confirmed = False
+	confirmed = True		
+	user_manager = Users()
+	user_manager.addUser(userID, first_name = first_name, last_name = last_name, password = password, email = email,  isActive = isActive,
+		avatar_url = avatar_url, avatar_name = avatar_name, confirmationPin = confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
+		isAdmin = False, phone_number = phone_number, birthMonth = birthMonth, birthDay = birthDay, birthYear = birthYear,
+		gender = gender, fb_id = fb_id) 
+
+	user_manager.closeConnection()
+
+	session['logged_in'] = True
+	session['userID'] = userID
+
+	return jsonify({'result' : 'success', 'username': userID})
+
+@browser_api.route('/verifyAndLogin', methods=['POST'])
+def verifyAndLogin() :
+	user = request.json['user']
+	password = request.json['password']
+	ip = request.json['ip']
+	res = validation.validateLogin(user, password)
+
+	if res['result'] == 'success':
+		session['logged_in'] = True
+		session['userID'] = res['username']
+		security_manager = Security()
+		isSuccess = True
+		security_manager.recordLoginAttempt(user, isSuccess, ip, False)
+		security_manager.closeConnection()
+		return jsonify({ 'error' : False })
+	else: 
+		isSuccess = False
+		security_manager = Security()
+		security_manager.recordLoginAttempt(user, isSuccess, ip, False)
+		security_manager.closeConnection()
+		return jsonify({ 'error' : res['error'] })
+
+@browser_api.route('/registerUsername', methods=['POST'])
+def registerUsername() :
+	username = request.json['username']
+	res = validation.validateUsername(username)
+	if res['result'] == 'success' :
+		return jsonify({'result': 'success', 'error' : False })
+	else : 
+		return jsonify({ 'error' : res['error'] })
+
+@browser_api.route('/registerEmail', methods=['POST'])
+def registerEmail() :
+	email_address = request.json['email_address']
+	res = validation.validateEmail(email_address)
+	if res['result'] == 'success' :
+		return jsonify({ 'error' : False })
+	else : 
+		return jsonify({ 'error' : res['error'] })
+
+@browser_api.route('/verifyOldPassword', methods=['POST'])
+def verifyOldPassword() :
+	password = request.json['password']
+	user = request.json['currentUser']
+	if argon2.verify(password, user['password']) :
+		return jsonify({ 'error' : False })
+	else : 
+		return jsonify({ 'error' : "Error" })
 
 @browser_api.route('/getFeedNames', methods = ['POST'])
 def getFeedNames():
@@ -21,28 +154,40 @@ def getFeedNames():
 
 @browser_api.route('/getNotifications', methods=['POST'])
 def getNotifications():
-	userID = session.get('userID')
+	userID = request.form.get("currentUser[userID]")
 	post_manager = Posts()
 	notification_list = post_manager.getShortListNotifications(userID)
 	post_manager.sortAscending(notification_list)
 	post_manager.closeConnection()
 	return jsonify({ 'notification_list' : notification_list })	
 
+@browser_api.route('/getNotificationCount', methods=['POST'])
+def getNotificationCount():
+	userID = request.form.get("currentUser[userID]")
+	post_manager = Posts()
+	count = post_manager.getNotificationCount(userID)
+	post_manager.closeConnection()
+	return jsonify({ 'count' : count })
 
 @browser_api.route('/getNumUnseenPosts', methods = ['POST'])
 def getNumUnseenPosts():
-	feed_name = request.form['feed_name']
-	userID = session['userID']
-	post_manager = Posts()
-	numUnseenPosts = post_manager.getNumUnseenPosts(feed_name, userID)
-	post_manager.closeConnection()
-	return jsonify({'numUnseenPosts': numUnseenPosts})
 
-@browser_api.route('/seeNotification', methods=['POST'])
-def seeNotificaiton():
-	notification_id = request.form['notification_id']
+	userID = request.form.get("currentUser[userID]")
+	if userID != None:
+		feed_name = request.form['feed_name']
+		# userID = session['userID']
+		post_manager = Posts()
+		numUnseenPosts = post_manager.getNumUnseenPosts(feed_name, userID)
+		post_manager.closeConnection()
+		return jsonify({'numUnseenPosts': numUnseenPosts})
+	else:
+		return jsonify({'numUnseenPosts': -1})
+
+@browser_api.route('/seeNotifications', methods=['POST'])
+def seeNotifications():
+	userID = request.form.get("currentUser[userID]")
 	post_manager = Posts()
-	post_manager.markNotificationAsSeen(notification_id)
+	post_manager.markNotificationAsSeen(userID)
 	post_manager.closeConnection()
 	return jsonify({'success' : True})
 	
@@ -50,22 +195,16 @@ def seeNotificaiton():
 
 @browser_api.route('/markPostFeedAsSeen', methods = ['POST'])
 def markPostFeedAsSeen():
-	feed_name = request.form['feed_name']
-	userID = session['userID']
-	post_manager = Posts()
-	post_manager.markPostFeedAsSeen(feed_name, userID)
-	post_manager.closeConnection()
-	return jsonify({'success': True})
-			
+	userID = request.form.get("currentUser[userID]")
+	if userID != None:
+		feed_name = request.form['feed_name']
+		post_manager = Posts()
+		post_manager.markPostFeedAsSeen(feed_name, userID)
+		post_manager.closeConnection()
 
-@browser_api.route('/sendConfirmation', methods = ['POST'])
-def sendConfirmation():
-	if (session.get('userID') == None):
-		return redirect(url_for('login'))
-	else:
-		thisUser = getUserInfo(session['userID'])
-		email_confirm.sendConfirmationEmail(thisUser)
-		return render_template('confirmation.html')
+		return jsonify({'success': True})
+	else: 
+		return jsonify({'success': False})
 
 # gets the posts for the current feed (defaulted to BALT for now)
 @browser_api.route('/getPosts', methods = ['POST'])
@@ -150,14 +289,16 @@ def editPost():
 # get current user info
 @browser_api.route('/getCurrentUserInfo', methods = ['POST'])
 def getCurrentUserInfo():
-	thisUserID = session.get('userID')
+	thisUserID = request.form.get("userID")
+	# thisUserID = session.get('userID')
 	thisUser = getUserInfo(thisUserID)
 	return jsonify({'thisUser' : thisUser})
 
 @browser_api.route("/setFeedFilter", methods = ['POST'])
 def setFeedFilter():
 	if request.method == 'POST':
-		thisUser = getUserInfo(session['userID'])
+		userID = request.form['currentUser']['userID']
+		thisUser = getUserInfo(userID)
 		tradeFilter = True
 		playFilter = True
 		chillFilter = True
@@ -170,9 +311,9 @@ def setFeedFilter():
 			chillFilter = False
 
 		user_manager = Users()
-		user_manager.updateInfo(session['userID'], 'tradeFilter', tradeFilter)	
-		user_manager.updateInfo(session['userID'], 'playFilter', playFilter)	
-		user_manager.updateInfo(session['userID'], 'chillFilter', chillFilter)
+		user_manager.updateInfo(userID, 'tradeFilter', tradeFilter)	
+		user_manager.updateInfo(userID, 'playFilter', playFilter)	
+		user_manager.updateInfo(userID, 'chillFilter', chillFilter)
 		user_manager.closeConnnection()	
 		return redirect(url_for("index"))
 
@@ -190,7 +331,8 @@ def makePost():
 		comment_id = None
 		feed_name = DEFAULT_FEED		
 		post_manager = Posts()
-		post_manager.postInThread(feed_name, body = postContent, poster_id = session['userID'], 
+		poster_id = request.json['currentUser']['userID']
+		post_manager.postInThread(feed_name, body = postContent, poster_id = poster_id, 
 				isTrade = isTrade, isPlay = isPlay, isChill = isChill, comment_id = comment_id)
 		
 		post_manager.closeConnection()
@@ -219,7 +361,8 @@ def makeComment():
 		unique_id = None
 		
 		post_manager = Posts()
-		post_manager.makeComment(feed_name, comment_id, commentContent, session['userID'], unique_id = unique_id)
+		userID = request.json['currentUser']['userID']
+		post_manager.makeComment(feed_name, comment_id, commentContent, userID, unique_id = unique_id)
 		post_manager.closeConnection()	
 
 		return redirect(url_for("index"))
@@ -259,12 +402,13 @@ def reportPost():
 	unique_id = request.json['unique_id']
 	reason = request.json["reason"]
 	description = reason
-	reporting_user = session['userID']
+	reporting_user = request.json['currentUser']['userID']
+	# reporting_user = session['userID']
 	reported_user = request.json['reported_user']
 
 	
 	post_manager = Posts()
-	posts.reportPost(feed_name, unique_id, reason, description, reporting_user, reported_user)
+	post_manager.reportPost(feed_name, unique_id, reason, description, reporting_user, reported_user)
 	post_manager.closeConnection()
 
 	return redirect(url_for('index'))
@@ -278,12 +422,13 @@ def reportComment():
 	unique_id = request.json['unique_id']
 	reason = request.json["reason"]
 	description = reason
-	reporting_user = session['userID']
+	reporting_user = request.json['currentUser']['userID']
+	# reporting_user = session['userID']
 	reported_user = request.json['reported_user']
 
 
 	post_manager = Posts()
-	posts.reportComment(feed_name, unique_id, reason, description, reporting_user, reported_user)
+	posts_manager.reportComment(feed_name, unique_id, reason, description, reporting_user, reported_user)
 	post_manager.closeConnection()
 
 	return redirect(url_for("index"))

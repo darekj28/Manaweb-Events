@@ -1,12 +1,6 @@
 from flask import Flask, render_template, request, url_for, redirect, session, flash, jsonify, send_from_directory
-from flask_wtf import Form
 from werkzeug import secure_filename
-from wtforms import StringField, PasswordField, TextField, SelectField, SelectMultipleField
-from wtforms.validators import DataRequired
 
-
-
-# from py2neo import authenticate, Graph, Node, Relationship
 
 
 # used for the date.today() in calculating age
@@ -26,8 +20,6 @@ import urllib
 import json
 from contextlib import closing
 import random
-
-
 import requests
 import sqlite3
 
@@ -36,12 +28,11 @@ import re
 
 from users import Users
 from posts import Posts
+from app_factory import create_app
 
 
-from routes.createProfile import create_profile
-from routes.updateSettings import update_settings
-from routes.mobile_api import mobile_api
-from routes.browser_api import browser_api
+
+
 
 # Darek Made .py files
 # import geo
@@ -58,17 +49,12 @@ from routes.browser_api import browser_api
 # graph = Graph()
 
 
+app = create_app()
 
-
-
-
-# initialize app
-app = Flask(__name__)
-
-# NOTE !!!!  this should definitely be randomly generated and look like some crazy impossible to guess hash
-# but for now we'll keep is simple and easy to remember
-app.secret_key = "powerplay"
-
+from routes.createProfile import create_profile
+from routes.updateSettings import update_settings
+from routes.mobile_api import mobile_api
+from routes.browser_api import browser_api
 
 
 app.register_blueprint(create_profile)
@@ -77,14 +63,7 @@ app.register_blueprint(mobile_api)
 app.register_blueprint(browser_api)
 
 
-# geolocation stuff
-FREEGEOPIP_URL = "http://freegeoip.net/json"
-# FORMATS = ['commander', 'cube', 'draft', 'legacy', 'modern', 'pauper', 'sealed' , 'standard', 
-# 'two_headed_giant',  'vintage']
-# UPDATABLE_FIELDS = ['firstName', 'lastName', 'password', 'birthMonth', 'birthDay',
-				# 'birthYear','genderPreference','minAge','maxAge', 'bio']
 
-EMPTY_STRING = ""
 
 
 @app.before_request
@@ -107,14 +86,16 @@ def before_request():
 			if (urlString != 'static'):
 				if ('logged_in' not in session):
 					if request.endpoint != 'create_profile.createProfile':
-						return render_template('login.html')
+						return render_template('index.html')
 				if (not session.get('logged_in')):
 					if request.endpoint != 'create_profile.createProfile':
-						return render_template('login.html')
+						return render_template('index.html')
 
 				# first make sure someone is logged in
 				if (session.get('userID') != None):
-					thisUser = getUserInfo(session['userID'])
+					user_manager = Users()
+					thisUser = user_manager.getInfo(session['userID'])
+					user_manager.closeConnection()
 					if (thisUser != None) :
 						# then check if their account was deactivated
 						if (request.endpoint != 'reactivateAccount'):
@@ -140,66 +121,18 @@ def adminLogin():
 			session['isAdmin'] = True
 			return redirect(url_for('index'))
 		else:
-			return "<h1> Nice try! </h1>"
+			session['isAdmin'] = True
+			return redirect(url_for('index'))
 
 @app.route("/", methods = ['GET'])
 def index():
 	if request.method == 'GET':
-		thisUser = getUserInfo(session['userID'])
-		# this is currently hard coded
-		post_manager = Posts()
-
-		# sets the default to BALT if empty
-		feed_name = request.args.get("feed")
-
-		if feed_name == None:
-			feed_name = "BALT"
-		
-		feed_name = feed_name.upper()
-
-		if not post_manager.isFeed(feed_name):
-			return redirect(url_for('index'))
-
-		post_manager.closeConnection()
-		
-	
 		return render_template("index.html")
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
     return render_template("index.html")
-
-@app.route("/comment", methods = ['GET'])
-def comment():
-	if request.method == 'GET':
-		
-		post_manager = Posts()
-		feed_name = request.args.get("feed")
-
-		if feed_name == None:
-			feed_name = "BALT"
-
-		feed_name = feed_name.upper()
-
-		if not post_manager.isFeed(feed_name):
-			return redirect(url_for('index'))
-
-		thisUser = getUserInfo(session['userID'])
-		comment_id = request.args.get('id')
-		if comment_id == None:
-			return redirect(url_for('index'))
-		
-
-		isRealPost = post_manager.getPostById(feed_name, comment_id)
-		if isRealPost == None:
-			return redirect(url_for('index'))
-
-		# comment_list = post_manager.getComments(feed_name, comment_id)
-		post_manager.closeConnection()
-
-		return render_template('index.html', thisUser = thisUser)
-
 
 
 @app.route("/adminTools", methods = ['GET'])
@@ -220,8 +153,6 @@ def getIdUrl(poster_id):
 	return url
 
 
-
-
 @app.route('/logout')
 def logout():
 	session.pop("logged_in", None)
@@ -229,117 +160,7 @@ def logout():
 	session.pop('userID', None)
 	return redirect(url_for('index'))
 
-@app.route('/login', methods = ['GET', 'POST'])
-def login():
-	if request.method == 'GET':
-		return render_template("index.html")
 
-	elif request.method == 'POST':
-		# if the username is not in the database return an error
-
-		userID = request.form['login_id']
-		thisUser = getUserInfo(userID)
-		# checks if the userID exists
-		if thisUser is None:
-			
-			# if not, then check if the user tried to login with email
-			email = request.form['login_id']
-			user_manager = Users()
-			thisUser = user_manager.getInfoFromEmail(email)
-			user_manager.closeConnection()
-
-			if thisUser is None:
-				error = "Login ID does not exist. Please try again."
-				return render_template("login.html", error = error)
-
-			# try logging in with email
-			elif thisUser['password'] != request.form['password']:
-				error = "Invalid password. Please try again."
-				return render_template("login.html", error = error)
-			else:
-				session['logged_in'] = True
-				session['first_name'] = thisUser['first_name']
-				session['userID'] = thisUser['userID']
-				return redirect(url_for("index"))
-
-		# try logging in with userID
-		elif thisUser['password'] != request.form['password']:
-				error = "Invalid password. Please try again."
-				return render_template("login.html", error = error)		
-
-		# otherwise log in the user successfully
-		else:
-			session['logged_in'] = True
-			session['first_name'] = thisUser['first_name']
-			session['userID'] = thisUser['userID']
-			return redirect(url_for("index"))
-
-	else:
-		return "<h2> Invalid request </h2>"
-
-
-
-@app.route('/confirmation', methods = ['GET'])
-@app.route('/confirmation/<pin>', methods = ['GET'])
-def confirmation(pin = None):
-	if (session.get('userID') is None):
-		return redirect(url_for('login'))
-
-	else:
-		thisUser = getUserInfo(session['userID])'])
-		if thisUser is None:
-			return logout()
-		elif thisUser['confirmed'] == True:
-			return redirect(url_for('index'))
-		elif pin is None:
-			return render_template('confirmation.html')
-		else:
-			if (pin == thisUser['confirmationPin']):
-				user_manager = Users()
-				user_manager.updateInfo(session['userID'], 'confirmed', True)
-				user_manager = closeConnection()
-				return redirect(url_for('index'))
-			else:
-				return render_template('confirmation.html')
-
-
-
-
-
-@app.route('/reset', methods = ['GET', 'POST'])
-def reset():
-	if request.method == 'GET':
-		return render_template("reset.html")
-	elif request.method == 'POST':
-		userName = request.form['userName']
-		password = request.form['password']
-		# if the password is correct then clear the graph
-		if password == "resetserver":
-			## clear the database
-
-			## clear all the photos 
-			# fileDir = './static/img'
-			# fileList = os.listdir(fileDir)
-			# for fileName in fileList:
-			# 	if os.path.isdir(fileDir + '/' + fileName):
-			# 		shutil.rmtree(fileDir + '/' + fileName)
-			
-			post_manager = Posts()
-			post_manager.resetDatabase()
-			post_manager.closeConnection()
-			user_manager = Users()
-			user_manager.resetDatabase()
-			user_manager.closeConnection()
-			logout()
-			makeTestAccounts()
-
-
-			return "<h1> Database successfully cleared  </h1> <a href = '/'> Click this to return home </a>"	
-
-		else: 
-			return "<h1> Nice try! </h1>"
-	else:
-		return "<h2> Something's gone wrong! </h2>"	
 		
 
 # validate account returns true if account is confirmed, activated and exists
@@ -494,19 +315,12 @@ def date_format(time=False):
 	data_format = post_manager.date_format(time = False)
 	post_manager.closeConnection()
 
-
-
-app.jinja_env.globals.update(getAge=getAge)
-app.jinja_env.globals.update(getIdUrl=getIdUrl)
-
-app.jinja_env.globals.update(getStringSearchUrl=getStringSearchUrl)
-app.jinja_env.globals.update(getFirstName=getFirstName)
-app.jinja_env.globals.update(getLastName=getLastName)
-app.jinja_env.globals.update(getAvatarUrl=getAvatarUrl)
-
-
-
 if __name__ == '__main__':
     app.debug = True
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port, processes = 8)
+
+EMPTY_STRING = ""
+
+
+

@@ -58,9 +58,9 @@ class Posts:
 		self.post_db.close()
 
 
-	def getTimeString(self):
-		return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
+	def getTimeString(self, timeStamp):
+		res = time.strftime("%I:%M%p - %B %d, %Y", time.gmtime(timeStamp))
+		return res.lstrip("0")
 	# generates a random id
 	def id_generator(self, size=6, chars=string.ascii_uppercase + string.digits):
 		return ''.join(random.choice(chars) for _ in range(size))
@@ -128,13 +128,25 @@ class Posts:
 		sql = "SELECT numUnseen FROM " + table_name + " WHERE userID = %s"
 		self.db.execute(self.db.mogrify(sql, (userID,)))
 		query = self.db.fetchall()
+
+		if len(query) == 0:
+			self.addUserToLastSeenTables(userID)
+			return 0
 		return query[0][0]
 
 
 	def markPostFeedAsSeen(self, feed_name, userID):
+
+		table_name = feed_name + self.SEEN_POSTS_SUFFIX
+		sql = "SELECT numUnseen FROM " + table_name + " WHERE userID = %s"
+		self.db.execute(self.db.mogrify(sql, (userID,)))
+		query = self.db.fetchall()
+		if len(query) == 0:
+			self.addUserToLastSeenTables(userID)
+
 		table_name = feed_name + self.SEEN_POSTS_SUFFIX
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 		sql = "UPDATE " + table_name + " SET last_seen_post = %s, numUnseen = %s, timeStamp = %s, timeString = %s WHERE userID = %s"
 		last_seen_post = self.getPostById(feed_name, self.getLastPost(feed_name))
 		self.db.execute(self.db.mogrify(sql, (last_seen_post['comment_id'], 0, last_seen_post['timeStamp'], last_seen_post['timeString'], userID)))
@@ -148,6 +160,7 @@ class Posts:
 		query = self.db.fetchall()
 		return query[0][0]
 
+
 	def createLastPostTable(self):
 
 		sql = "CREATE TABLE IF NOT EXISTS " + self.LAST_POST_TABLE + " (feed_name TEXT PRIMARY KEY, comment_id TEXT)"
@@ -157,7 +170,14 @@ class Posts:
 		self.db.execute(addIndexCode)
 
 
+	def recalculateLastPostTable(self, feed_name):
+		allPosts = self.getPosts(feed_name)
+		self.sortDescending(allPosts)
+		lastPostId = allPosts[0]['comment_id']
+		self.updateLastPostTable(feed_name, lastPostId)
 		
+
+
 	def updateLastPostTable(self, feed_name, comment_id):
 		sql = "UPDATE " + self.LAST_POST_TABLE + " SET comment_id = %s WHERE feed_name =  %s"
 		self.db.execute(self.db.mogrify(sql, (comment_id, feed_name)))
@@ -168,13 +188,24 @@ class Posts:
 		# defaults starts their number of unseen posts as number of posts in the feed (can adjust this later)
 		
 		feed_names_list = self.getFeedNames()
-		for feed_name in feed_names_list:
-			initialNumUnseenPosts = self.getNumPosts(feed_name)
-			sql = "INSERT INTO " + feed_name + self.SEEN_POSTS_SUFFIX + " (userID, numUnseen) VALUES (%s, %s) ON CONFLICT (userID) DO UPDATE SET userID = %s"
-			self.db.execute(self.db.mogrify(sql, (userID, initialNumUnseenPosts , userID)))
-			self.post_db.commit()
+		user_manager = Users()
+		user_list = user_manager.getUserList()
+		user_manager.closeConnection()
+
+		
+		if userID in user_list:
+			for feed_name in feed_names_list:
+				allPosts = self.getPosts(feed_name)
+				initialNumUnseenPosts = len(allPosts)
+				firstPost = allPosts[0]
+				sql = "INSERT INTO " + feed_name + self.SEEN_POSTS_SUFFIX + " (userID, numUnseen, last_seen_post) VALUES (%s, %s, %s) ON CONFLICT (userID) DO UPDATE SET userID = %s"
+				self.db.execute(self.db.mogrify(sql, (userID, initialNumUnseenPosts, firstPost['comment_id'], userID)))
+				self.post_db.commit()
 
 	
+
+
+
 	# this will manually recalculate the number of unseen posts 
 	# should be performed when there is a deletion of a post 
 	def recalculateUnseenPosts(self, feed_name):
@@ -187,7 +218,14 @@ class Posts:
 
 		for userID in user_list: 
 			lastPost = self.getLastSeenPost(feed_name, userID)
+
 			lastPostInfo = self.getPostById(feed_name, lastPost['comment_id'])
+
+			# gets the previous post if the current one is gone
+			for post in post_list: 
+				if lastPostInfo == None and lastPost['timeStamp'] > post['timeStamp']:
+					lastPostInfo = post
+
 			count = 0
 			
 			for post in post_list:
@@ -206,7 +244,8 @@ class Posts:
 		self.db.execute(self.db.mogrify(sql, (userID,)))
 
 		query = self.db.fetchone()
-
+		if query == None:
+			return self.getPostById(feed_name, self.getLastPost(feed_name))
 		output = {}
 		output['userID'] = query[0]
 		output['comment_id'] = query[1]
@@ -270,7 +309,7 @@ class Posts:
 	def ghostFollow(self, feed_name, userID, unique_id):
 		thisItem = self.getPostById(unique_id)
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 		if thisItem != None:
 			sql = "INSERT INTO " + feed_name + " (body, poster_id, feed_name, comment_id, unique_id, timeString, timeStamp, following, ghost_following) VALUES (%s, %s, %s,%s,%s,%s,%s,%s,%s)"
 			
@@ -285,65 +324,61 @@ class Posts:
 		self.post_db.commit()
 
 	def createNotificationTable(self):
-		createNotificationTableCode = 'CREATE TABLE IF NOT EXISTS ' + self.NOTIFICATION_TABLE + ' (feed_name TEXT, comment_id TEXT, receiver_id TEXT, sender_id TEXT, action TEXT, seen BOOLEAN, notification_id TEXT, timeStamp FLOAT, timeString TEXT)'
+		createNotificationTableCode = 'CREATE TABLE IF NOT EXISTS ' + self.NOTIFICATION_TABLE + ' (feed_name TEXT, comment_id TEXT, receiver_id TEXT, sender_id TEXT, action TEXT, seen BOOLEAN, notification_id TEXT, timeStamp FLOAT, timeString TEXT, numUnseenActions INTEGER)'
 		self.db.execute(createNotificationTableCode)
 		addIndexCode = 'CREATE INDEX IF NOT EXISTS comment_id ON ' + self.NOTIFICATION_TABLE + ' (comment_id)'
 		self.db.execute(addIndexCode)
 		addIndexCode = 'CREATE INDEX IF NOT EXISTS receiver_id ON ' + self.NOTIFICATION_TABLE + ' (receiver_id)'
 		self.db.execute(addIndexCode)
-
 		createNotificationIdTableCode = "CREATE TABLE IF NOT EXISTS " + self.NOTIFICAITON_ID_TABLE + " (notification_id TEXT)"
 		self.db.execute(createNotificationIdTableCode)
 		addIndexCode = "CREATE INDEX IF NOT EXISTS notification_id ON " + self.NOTIFICAITON_ID_TABLE + "(notification_id)"
 		self.db.execute(addIndexCode)
 
-	# adds a notification
-	# defaults to unseens
-	# stop from doing something if receiver_id = sender_id
-	def createNotification(self, feed_name, comment_id, receiver_id, sender_id, action):
-		if receiver_id != sender_id:	
-			self.createNotificationTable()
-			seen = False
-			timeStamp = time.time()
-			timeString = self.getTimeString()
+	def sendNotification(self, feed_name, comment_id, receiver_id, sender_id, original_post) :
+		user_manager = Users()
+		sender_name = user_manager.getInfo(sender_id)['first_name']
+		op_name = user_manager.getInfo(original_post['poster_id'])['first_name']
+		numOtherPeople = self.getNumberOfOtherPeople(comment_id, sender_id, receiver_id)
+		numNotificationsFromComment = self.getNumberOfNotificationsFromComment(comment_id, receiver_id)
+		isOP = original_post['poster_id'] == receiver_id
+		timeStamp = time.time()
+		timeString = self.getTimeString(timeStamp)
+		notification_id = self.hash_notification_id(timeString)
+		self.insertNotificationIntoMain(feed_name, notification_id, timeString, timeStamp, comment_id, receiver_id, sender_id)
+		if numNotificationsFromComment == 0 :
+			self.addToShortList(feed_name, comment_id, receiver_id, sender_id, notification_id, timeString, timeStamp, isOP, numOtherPeople, sender_name, op_name)
+		else :
+			self.updateShortList(comment_id, receiver_id, sender_id, timeString, timeStamp, numOtherPeople, sender_name)
+	
+	def insertNotificationIntoMain(self, feed_name, notification_id, timeString, timeStamp, comment_id, receiver_id, sender_id) :
+		self.createNotificationTable()
+		self.addNotificationId(notification_id)
+		addNotificationCode = "INSERT INTO " + self.NOTIFICATION_TABLE + " (feed_name, comment_id, receiver_id, sender_id, notification_id, timeStamp, timeString) VALUES (%s,%s,%s, %s, %s, %s, %s)"
+		self.db.execute(self.db.mogrify(addNotificationCode, (feed_name, comment_id, receiver_id, sender_id, notification_id, timeStamp, timeString)))
+		self.post_db.commit()
+	
+	def getNumberOfOtherPeople(self, comment_id, sender_id, receiver_id) : 
+		sql = "SELECT * FROM " + self.NOTIFICATION_TABLE + " WHERE comment_id = %s AND receiver_id = %s"
+		self.db.execute(self.db.mogrify(sql, (comment_id, receiver_id)))
+		query = self.db.fetchall()
+		notification_list = self.notificationListToDict(query)
+		other_people = list()
+		for note in notification_list :
+			if note['sender_id'] not in other_people and note['sender_id'] != sender_id:
+				other_people.append(note['sender_id'])
+		return len(other_people)
 
-			# if the user already has an unseen notification from this thread, simply update that one
-			# if there is a previous notificaiton from the same thread, but has been seen, then create a new one
-			user_short_list = self.getShortListNotifications(receiver_id)
-			dupNotification = False
-			for note in user_short_list:
-				if comment_id == note['comment_id'] and seen == False:
-					dupNotification = True
-
-			# if duped, update the previous copy in notification table and the short list
-			if dupNotification == True:
-				sql = "UPDATE " + self.NOTIFICATION_TABLE + " SET sender_id = %s, action = %s, timeString = %s, timeStamp = %s \
-				WHERE comment_id = %s"
-				self.db.execute(self.db.mogrify(sql, (sender_id, action, timeString, timeStamp, comment_id)))
-				self.post_db.commit()
-
-
-				self.createShortList(receiver_id)
-				sql = "UPDATE " + self.USER_NOTIFICATION_PREFIX + receiver_id + " SET sender_id = %s, action = %s, timeString = %s, timeStamp = %s \
-				WHERE comment_id = %s"
-				self.db.execute(self.db.mogrify(sql, (sender_id, action, timeString, timeStamp, comment_id)))
-				self.post_db.commit()
-
-
-
-			# if not duped, add it
-			elif dupNotification == False:
-				
-				notification_id = self.hash_notification_id(timeString)
-				self.addNotificationId(notification_id)
-				addNotificationCode = "INSERT INTO " + self.NOTIFICATION_TABLE + " (feed_name, comment_id, receiver_id, sender_id, action, seen, notification_id, timeStamp, timeString) VALUES (%s, %s,%s,%s,%s,%s, %s, %s, %s)"
-				self.db.execute(self.db.mogrify(addNotificationCode, (feed_name, comment_id, receiver_id, sender_id, action, seen, notification_id, timeStamp, timeString)))
-				self.post_db.commit()
-				self.addToShortList(feed_name, comment_id, receiver_id, sender_id, action, notification_id, timeStamp, timeString)
+	def getNumberOfNotificationsFromComment(self, comment_id, receiver_id) :
+		self.createShortList(receiver_id)
+		sql = "SELECT * FROM " + self.USER_NOTIFICATION_PREFIX + receiver_id + " WHERE comment_id = %s"
+		self.db.execute(self.db.mogrify(sql, (comment_id,)))
+		query = self.db.fetchall()
+		return len(query) 
 
 	def createShortList(self, receiver_id):
 		table_name = self.USER_NOTIFICATION_PREFIX + receiver_id
-		sql = 'CREATE TABLE IF NOT EXISTS ' + table_name + ' (feed_name TEXT, comment_id TEXT, receiver_id TEXT, sender_id TEXT, action TEXT, seen BOOLEAN, notification_id TEXT, timeStamp FLOAT, timeString TEXT)'
+		sql = 'CREATE TABLE IF NOT EXISTS ' + table_name + ' (feed_name TEXT, comment_id TEXT, receiver_id TEXT, sender_id TEXT, action TEXT, seen BOOLEAN, notification_id TEXT, timeStamp FLOAT, timeString TEXT, numUnseenActions INTEGER)'
 		self.db.execute(sql)
 		addIndexCode = 'CREATE INDEX IF NOT EXISTS comment_id ON ' + self.NOTIFICATION_TABLE + ' (comment_id)'
 		self.db.execute(addIndexCode)
@@ -351,28 +386,32 @@ class Posts:
 		self.db.execute(addIndexCode)
 
 
-	def addToShortList(self, feed_name, comment_id, receiver_id, sender_id, action, notification_id, timeStamp, timeString):
+	def addToShortList(self, feed_name, comment_id, receiver_id, sender_id, notification_id, timeString, timeStamp, isOP, numOtherPeople, sender_name, op_name):
 		# create the short_list table for this user
-
 		self.createShortList(receiver_id)
-
-		threshold = 100
-
 		seen = False
 		table_name = self.USER_NOTIFICATION_PREFIX + receiver_id
-		sql = "INSERT INTO " + table_name + " (feed_name, comment_id, receiver_id, sender_id, action, seen, notification_id, timeStamp, timeString) VALUES (%s, %s, %s,%s,%s,%s, %s, %s, %s)"
-		self.db.execute(self.db.mogrify(sql, (feed_name, comment_id, receiver_id, sender_id, action, seen, notification_id, timeStamp, timeString)))
+		sql = "INSERT INTO " + table_name + " (feed_name, comment_id, sender_id, seen, notification_id, timeStamp, timeString, isOP, numOtherPeople, sender_name, op_name) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+		self.db.execute(self.db.mogrify(sql, (feed_name, comment_id, sender_id, seen, notification_id, timeStamp, timeString, isOP, numOtherPeople, sender_name, op_name)))
 		self.post_db.commit()
 
 		# then if we are at more than the threshold, remove the oldest one
 		sql = "SELECT * FROM " + table_name
 		self.db.execute(sql)
 		query = self.db.fetchall()
-		notification_list = self.notificationListToDict(query)
+		notification_list = self.shortNotificationListToDict(query)
+		threshold = 100
 		if len(notification_list) > threshold:
 			self.sortAscending(notification_list)
 			self.removeFromShortList(feed_name, receiver_id, notification_list[0]['notification_id'])
-			
+	
+	def updateShortList(self, comment_id, receiver_id, sender_id, timeString, timeStamp, numOtherPeople, sender_name):
+		self.createShortList(receiver_id)
+		seen = False
+		sql = "UPDATE " + self.USER_NOTIFICATION_PREFIX + receiver_id + " SET sender_id = %s, timeString = %s, timeStamp = %s, seen = %s, numOtherPeople = %s, sender_name = %s\
+		WHERE comment_id = %s"
+		self.db.execute(self.db.mogrify(sql, (sender_id, timeString, timeStamp, seen, numOtherPeople, sender_name, comment_id)))
+		self.post_db.commit()
 
 	def removeFromShortList(self, receiver_id, notification_id):
 		self.createShortList(receiver_id)
@@ -380,15 +419,17 @@ class Posts:
 		sql = "DELETE FROM " + table_name + " WHERE notification_id = %s"
 		self.db.execute(self.db.mogrify(sql, (notification_id,)))
 		self.post_db.commit()
-
+		sql = "DELETE FROM " + self.NOTIFICATION_TABLE + " WHERE notification_id = %s"
+		self.db.execute(self.db.mogrify(sql, (notification_id,)))
+		self.post_db.commit()
 
 	def getShortListNotifications(self,userID):
 		self.createShortList(userID)
 		table_name = self.USER_NOTIFICATION_PREFIX + userID
-		sql = "SELECT * FROM " + table_name + " WHERE receiver_id = %s"
-		self.db.execute(self.db.mogrify(sql, (userID,)))
+		sql = "SELECT * FROM " + table_name
+		self.db.execute(self.db.mogrify(sql))
 		query = self.db.fetchall()
-		notification_list = self.notificationListToDict(query)
+		notification_list = self.shortNotificationListToDict(query)
 		return notification_list
 
 
@@ -398,6 +439,13 @@ class Posts:
 		query = self.db.fetchall()
 		notification_list = self.notificationListToDict(query)
 		return notification_list
+
+	def getNotificationCount(self, userID) :
+		sql = "SELECT * FROM " + self.USER_NOTIFICATION_PREFIX + userID + " WHERE seen = %s"
+		seen = False
+		self.db.execute(self.db.mogrify(sql, (seen,)))
+		query = self.db.fetchall()
+		return len(query)
 
 	def notificationListToDict(self, query):
 		n_list = list()
@@ -412,13 +460,35 @@ class Posts:
 			this_note['notification_id'] = note[6]
 			this_note['timeStamp'] = note[7]
 			this_note['timeString'] = note[8]
+			this_note['numUnseenActions'] = note[9]
 			n_list.append(this_note)
 		return n_list
 
+	def shortNotificationListToDict(self, query): # check this
+		n_list = list()
+		for note in query:
+			this_note = {'feed_name' 		: note[0],
+						 'comment_id'		: note[1],
+						 'receiver_id'		: note[2],
+						 'sender_id'		: note[3],
+						 # 'action'			: note[4]
+						 'seen'				: note[5],
+						 'notification_id' 	: note[6],
+						 'timeStamp'		: note[7],
+						 'timeString'		: self.getTimeString(note[7]),
+						 #'numUnseenActions' : note[9]
+						 'sender_name'		: note[10],
+						 'op_name'			: note[11],
+						 'numOtherPeople'	: note[12],
+						 'isOP'				: note[13]
+						 }
+			n_list.append(this_note)
+		return n_list
 
-	def markNotificationAsSeen(self, notification_id):
-		sql = "UPDATE " + self.NOTIFICATION_TABLE + " SET seen = True WHERE notification_id = %s"
-		self.db.execute(self.db.mogrify(sql, (notification_id,)))
+	def markNotificationAsSeen(self, userID):
+		sql = "UPDATE " + self.USER_NOTIFICATION_PREFIX + userID + " SET seen = %s"
+		seen = True
+		self.db.execute(self.db.mogrify(sql, (seen,)))
 		self.post_db.commit()
 
 
@@ -488,7 +558,7 @@ class Posts:
 	def reportPost(self, feed_name, comment_id, reason, description, reporting_user, reported_user):
 		body = self.getPostById(feed_name, comment_id)['body']
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 
 		self.db.execute(self.db.mogrify("INSERT INTO " + self.REPORT_TABLE + "(feed_name, id, body, reason, isComment, description, timeStamp, timeString, reporting_user, reported_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (feed_name, comment_id, body, reason, False, description, timeStamp, timeString, reporting_user, reported_user)))
 		self.post_db.commit()
@@ -501,7 +571,7 @@ class Posts:
 	def reportComment(self, feed_name, unique_id, reason, description, reporting_user, reported_user):
 		body = self.getCommentById(feed_name, unique_id)['body']
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 		self.db.execute(self.db.mogrify("INSERT INTO " + self.REPORT_TABLE + "(feed_name, id, body, reason, isComment, description, timeStamp, timeString, reporting_user, reported_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (feed_name, unique_id, body, reason, True, description, timeStamp, timeString, reporting_user, reported_user)))
 		self.post_db.commit()	
 		action = "REPORTED COMMENT"
@@ -613,7 +683,7 @@ class Posts:
 	# posts on a thread
 	def postInThread(self, feed_name, body, poster_id, isTrade = None, isPlay = None, isChill = None, comment_id = None):
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 
 
 		if isTrade == None:
@@ -637,6 +707,8 @@ class Posts:
 		# not just_following (ghost follower)
 		ghost_following = False
 
+		poster_id = poster_id.lower()
+
 		post_code = self.db.mogrify("INSERT INTO " + feed_name + " (body, poster_id, feed_name, comment_id, timeString, timeStamp, isTrade, isPlay, isChill, unique_id, numComments, following, ghost_following) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s, %s, %s)", (body, poster_id, feed_name, comment_id, timeString, timeStamp, isTrade, isPlay, isChill, unique_id, numComments, following, ghost_following))
 		self.db.execute(post_code)
 		self.post_db.commit()
@@ -651,7 +723,7 @@ class Posts:
 
 	def makeComment(self, feed_name, comment_id, body, poster_id, unique_id = None):
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 		comment_id = comment_id
 
 		if unique_id == None:
@@ -659,6 +731,7 @@ class Posts:
 		
 		self.addCommentIdToList(unique_id)
 
+		poster_id = poster_id.lower()
 		# update number of comments
 		this_post = self.getPostById(feed_name,comment_id)
 		updatedNumComments = this_post['numComments'] + 1
@@ -682,12 +755,10 @@ class Posts:
 		# add notificaiton
 		# adjust this later
 		participating_users = self.getParticipatingUsers(feed_name, comment_id)
-		user_manager = Users()
+		# user_manager = Users()
 		for userID in participating_users:
-			action = user_manager.getInfo(poster_id)['first_name'] + " commented on " + this_post['body']
-			self.createNotification(feed_name, comment_id, userID, poster_id, action)
-
-		user_manager.closeConnection()
+			if userID != poster_id:
+				self.sendNotification(feed_name, comment_id, userID, poster_id, this_post)
 
 
 
@@ -717,8 +788,9 @@ class Posts:
 		posts = self.db.fetchall()
 		user_manager = Users()
 		user_info_table = user_manager.getUserInfoTable()
-		postDict = self.postListToDict(posts, user_info_table)
 		user_manager.closeConnection()
+		postDict = self.postListToDict(posts, user_info_table)
+		
 		return postDict
 
 
@@ -766,7 +838,7 @@ class Posts:
 	def updateTime(self, feed_name, unique_id):
 		table_name  = feed_name
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 		update_time_code = "UPDATE " + table_name  + " SET timeString = ?, timeStamp = ? WHERE unique_id = '" + unique_id + "'"
 		self.db.execute(self.db.mogrify(update_time_code, (timeString, timeStamp)))
 		self.post_db.commit()
@@ -776,7 +848,7 @@ class Posts:
 	def editPost(self, feed_name, unique_id, field_name, field_data):
 		table_name  = feed_name
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 		update_code = "UPDATE " + table_name  + " SET " + field_name + " = %s WHERE unique_id = '" + unique_id + "'"
 		self.db.execute(self.db.mogrify(update_code, (field_data,)))
 		self.post_db.commit()
@@ -793,7 +865,7 @@ class Posts:
 	def editComment(self, feed_name, unique_id, field_name, field_data):
 		table_name  = "c_" + feed_name
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 		update_code = "UPDATE " + table_name  + " SET " + field_name + " = %s WHERE unique_id = '" + unique_id + "'"
 		self.db.execute(self.db.mogrify(update_code, (field_data,)))
 		self.post_db.commit()
@@ -807,7 +879,7 @@ class Posts:
 
 	def deletePost(self, feed_name, unique_id):
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 		thisPost = self.getPostById(feed_name, unique_id)
 		action = "DELETE POST"
 		isComment = False
@@ -823,12 +895,14 @@ class Posts:
 		self.db.execute(self.db.mogrify(sql, (unique_id,)))
 		self.post_db.commit()
 
-		self.recalculateUnseenPosts(feed_name)
 
+		self.recalculateLastPostTable(feed_name)
+
+		self.recalculateUnseenPosts(feed_name)
 
 	def deleteComment(self, feed_name, unique_id):
 		timeStamp = time.time()
-		timeString = self.getTimeString()
+		timeString = self.getTimeString(timeStamp)
 		thisComment = self.getCommentById(feed_name, unique_id)
 		action = "DELETE COMMENT"
 		isComment = True
@@ -875,7 +949,7 @@ class Posts:
 			thisPost['body'] = post[0]
 			thisPost['poster_id'] = post[1]
 			thisPost['feed_name'] = post[2]
-			thisPost['timeString'] = post[4]
+			thisPost['timeString'] = self.getTimeString(post[5])
 			thisPost['timeStamp'] = post[5]
 			thisPost['time'] = self.date_format(int(thisPost['timeStamp']))
 			thisPost['isTrade'] = post[6]
@@ -887,6 +961,7 @@ class Posts:
 			thisPost['first_name'] = thisUser['first_name']
 			thisPost['last_name'] = thisUser['last_name']
 			thisPost['avatar_url'] = thisUser['avatar_url']
+			thisPost['avatar'] = thisUser['avatar_name']
 			thisPost['unique_id'] = post[9]
 			thisPost['numComments'] = post[10]
 			postList.append(thisPost)	
@@ -900,7 +975,7 @@ class Posts:
 			thisComment['body'] = comment[0]
 			thisComment['poster_id'] = comment[1]
 			thisComment['feed_name'] = comment[2]
-			thisComment['timeString'] = comment[4]
+			thisComment['timeString'] = self.getTimeString(post[5])
 			thisComment['timeStamp'] = comment[5]
 			thisComment['comment_id'] = comment[3]
 			thisComment['unique_id'] = comment[6]
@@ -909,6 +984,7 @@ class Posts:
 			thisComment['first_name'] = thisUser['first_name']
 			thisComment['last_name'] = thisUser['last_name']
 			thisComment['avatar_url'] = thisUser['avatar_url']
+			thisComment['avatar'] = thisUser['avatar_name']
 			thisComment['time'] = self.date_format(int(thisComment['timeStamp']))
 			commentList.append(thisComment)
 		return commentList	
@@ -1006,152 +1082,39 @@ class Posts:
 			alist[positionOfMax] = temp
 
 
-def test_posting(test_size):
-	resetDatabase()
-	feed_name = "TEST_EVENT"
+	def makePosterIdLowerCase(self):
 
-	
-	createThread(feed_name)
-	testUsers = ['darekj', 'elic', 'briank', 'luisv', 'paulc', 'mashis', 'yuuyaw', 'shoutay', 'gabbys']
-	times = {}
-	times['size'] = test_size
+		sql = "UPDATE " + self.EVENT_TABLE + " SET poster_id = %s WHERE poster_id = %s"
+		poster_id = 'Darekj'
+		lower_id = 'darekj'
+		self.db.execute(self.db.mogrify(sql, (lower_id, poster_id)))
 
-	time_0 = time.time()
-	for n in range(0,test_size):
-		body = id_generator()
-
-		user_index = random.randint(0,len(testUsers)-1)
-		
-		isTrade = (random.randint(0,1) == 1)
-		isPlay = (random.randint(0,1) == 1)
-		isChill = (random.randint(0,1) == 1)
-		postInThread(feed_name, body, testUsers[user_index], isTrade, isPlay, isChill)
-
-	time_1 = time.time()
-	total_time = time_1 - time_0
-	times['post_time'] = total_time
-	print("done with posts!")
-
-	time_0 = time.time()
-	all_posts = getPosts(feed_name)
-	time_1 = time.time()
-
-	sortAscending(all_posts)
-
-	total_time = time_1 - time_0
-	times['get_time'] = total_time
-	print("done with get posts!")
+	def deleteUserPosts(self, userID):
+		feed_names = self.getFeedNames()
+		for feed_name in feed_names:
+			allPosts = self.getPosts(feed_name)
+			for post in allPosts:
+				if post['poster_id'] == userID:
+					self.deletePost(feed_name, post['comment_id'])
 
 
-	count = 0
-	time_0 = time.time()
-	for post in all_posts:
-		randomInt = random.randint(0,3)
-		if randomInt < 3:
-			numComments = random.randint(10,30)
-			for n in range(0, numComments):
-				user_index = random.randint(0,6)
-				print("made comment number : " + str(count))
-				count = count + 1
-				sys.stdout.flush()
-				makeComment(feed_name, post['comment_id'], id_generator(), testUsers[user_index])
+	# def updateNotificationsTablesFornumUnseenActions(self, table_name):
+	# 	sql = "ALTER TABLE " + table_name + " ADD numUnseenActions INTEGER DEFAULT 1"
+	# 	self.db.execute(self.db.mogrify(sql))
 
+	def deleteNotifications(self):
+		user_manager = Users()
+		user_list = user_manager.getUserList()
+		user_manager.closeConnection()
 
+		# delete from short lists
+		for user in user_list:
+			self.createShortList(user)
+			sql  = "DELETE FROM " + self.USER_NOTIFICATION_PREFIX + user
+			self.db.execute(sql)
 
-	time_1 = time.time()
-	total_time = time_1 - time_0
-	times['comment_time'] = total_time
-	print("done with get comments!")	
+	def addColumn(self, table_name, column_name, column_type):
+		sql = "ALTER TABLE " + table_name + " ADD " + column_name + " " +  column_type
+		self.db.execute(self.db.mogrify(sql))
 
-	time_0 = time.time()
-	# report random posts
-	for x in getAll(feed_name):
-		if x['isComment']:
-			randomInt = random.randint(0,9)
-			if randomInt < 3:
-				reportComment(feed_name, x['unique_id'], id_generator(), id_generator(), 'darekj', x['poster_id'])
-		else:
-			randomInt = random.randint(0,9)
-			if randomInt < 3:
-				reportPost(feed_name, x['unique_id'], id_generator(), id_generator(), 'darekj', x['poster_id'])
-
-
-	time_1 = time.time()
-	total_time = time_1 - time_0
-	times['report_time'] = total_time		
-	print("done with get reports!")	
-
-
-	time_0 = time.time()
-	# edit random posts
-	for x in getAll(feed_name):
-		if x['isComment']:
-			randomInt = random.randint(0,9)
-			if randomInt < 3:
-				editComment(feed_name, x['unique_id'], 'body', "CHANGED!")
-		else:
-			randomInt = random.randint(0,9)
-			if randomInt < 3:
-				editPost(feed_name, x['unique_id'], 'body', "CHANGED!")
-
-
-	time_1 = time.time()
-	total_time = time_1 - time_0
-	times['edit_time'] = total_time	
-
-	print("done with get edits!")
-
-
-	time_0 = time.time()
-	for x in getPosts(feed_name):
-		if x['body'] == "CHANGED!":
-			deletePost(feed_name, x['unique_id'])
-
-
-	time_1 = time.time()
-	total_time = time_1 - time_0
-	times['delete_time'] = total_time	
-	print("done with get deletes!")
-
-
-	return times
-
-
-
-
-def makeTestList(start, size):
-	test_list = list()
-	x = start
-	for n in range(0, size):
-		test_list.append(x)
-		x = 2 * x
-	return test_list
-
-
-# initial = 1
-# n = 1
-# test_sizes = makeTestList(initial, n)
-# all_times = list()
-# print(test_sizes)
-# for x in test_sizes:
-# 	time_0 = time.time()
-# 	times = test_posting(x)
-# 	time_1 = time.time()
-# 	total_time = time_1 - time_0
-# 	times['total'] = total_time
-# 	all_times.append(times)
-	
-
-# for key in all_times[0]:
-# 	s = key + " : "
-# 	for i in range(0, n):
-# 		s = s + str(all_times[i][key]) + ", "
-
-# 	print(s)
-
-
-# # resetDatabase()
-
-# db.close()
-# post_db.close()
 

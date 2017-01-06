@@ -24,28 +24,28 @@ def sendConfirmationEmail(thisUser):
 	receiver = email
 	message = "Please confirm your account by clicking the following link "
 	# will change to manaweb.com when online
-	hostName = "127.0.0.1:5000"
-
-	confirmationURL = hostName + '/' + 'confirmation' + '/' + confirmationPin
-	fullMessage = message + "\n" + "\n" + confirmationURL
-
+	# hostName = "www.manaweb.com"
+	# confirmationURL = hostName + '/' + 'confirmation' + '/' + confirmationPin
+	# fullMessage = message + "\n" + "\n" + confirmationURL
+	fullMessage = "Below is your confirmation pin " + "\n"
+	fullMessage = fullMessage + " " + confirmationPin
 	msg = "From: noreply@manaweb.com <darek@manaweb.com>" + "\n"
 	msg = msg + "To: " + email + "\n"
 	msg = msg + "Subject: " + "Please Confirm" + "\n"
 	msg = msg + "\n" + fullMessage
-
 	smtpserver.ehlo()
 	smtpserver.starttls()
 	smtpserver.ehlo
 	smtpserver.login(sender, passW)
 	smtpserver.sendmail(sender, receiver, msg)
 	smtpserver.close()
+	return confirmationPin
 
-
-def hashUserID(userID):
-	hash_id = abs(hash(userID))
-	hex_hash_id = hex(hash_id)
+def hashString(s):
+	hash_id = abs(hash(s))
+	# hex_hash_id = hex(hash_id)
+	hex_hash_id = str(hash_id)
 	confirmationPin = ""
 	for i in range(2,len(hex_hash_id)):
 		confirmationPin = confirmationPin + hex_hash_id[i]
-	return confirmationPin[0:4]
+	return confirmationPin[0:5].upper()

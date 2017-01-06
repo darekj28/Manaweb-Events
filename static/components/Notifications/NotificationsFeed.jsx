@@ -2,10 +2,6 @@ var React = require('react');
 import NotificationsFeedPost from "./NotificationsFeedPost.jsx";
 
 export default class NotificationsFeed extends React.Component {
-    constructor(props) {
-        super(props);
-        this.addNotificationsToFeed = this.addNotificationsToFeed.bind(this);
-    }
     addNotificationsToFeed() {
         var notes = [];
         this.props.notifications.map(function(note, i) {
@@ -15,8 +11,10 @@ export default class NotificationsFeed extends React.Component {
     }
 	render() {
 		return (
-			<ul>
-				{this.addNotificationsToFeed()}
+			<ul id="NotificationsFeed">
+				{this.addNotificationsToFeed.bind(this)()}
+				{!this.props.notifications.length && 
+					<li id="NoNewNotifications">No new notifications.</li>}
 			</ul>
 			);
 	}

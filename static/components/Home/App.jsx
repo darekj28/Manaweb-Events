@@ -3,64 +3,33 @@ import SearchNavBar from './SearchNavBar.jsx';
 import EventName from './EventName.jsx';
 import MakePost from './MakePost.jsx';
 import Feed from './Feed.jsx';
-// var $ = require('jquery');
+import AppStore from '../../stores/AppStore.jsx';
+import LoginApp from '../Login/LoginApp.jsx';
+import ViewMoreButton from './ViewMoreButton.jsx';
 
-function toggle(collection, item) {
-	var idx = collection.indexOf(item);
-	if(idx !== -1) collection.splice(idx, 1);
-	else collection.push(item);
-	return collection;
-}
-
-function contains(collection, item) {
-	if(collection.indexOf(item) !== -1) return true;
-	else return false;
-}
 var feed_name = "BALT";
-var actions = ['Trade', 'Play', 'Chill'];
+var actions = ['Play', 'Trade', 'Chill'];
 export default class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			filters : ['Trade', 'Play', 'Chill'],
+			filters : ['Play', 'Trade', 'Chill'],
 			actions : [],
 			search : '',
 			userIdToFilterPosts : '',
 			post : '',
 			feed : [],
-			currentUser : {},
-			numUnseenPosts : -1
+			currentUser : AppStore.getCurrentUser(),
+			numUnseenPosts: 0
 		};
-		this.handleFilterClick = this.handleFilterClick.bind(this);
-		this.handleFilterUser = this.handleFilterUser.bind(this);
-		this.handleSearch = this.handleSearch.bind(this);
-		this.handleTypingPost = this.handleTypingPost.bind(this);
-		this.handlePostSubmit = this.handlePostSubmit.bind(this);
-		this.handlePostEdit = this.handlePostEdit.bind(this);
-		this.handlePostDelete = this.handlePostDelete.bind(this);
-		this.getCurrentUserInfo = this.getCurrentUserInfo.bind(this);
-		this.markPostFeedAsSeen = this.markPostFeedAsSeen.bind(this);
-		this.setNumUnseenPosts = this.setNumUnseenPosts.bind(this);
-		this.refreshFeed = this.refreshFeed.bind(this);
-	}
-	getCurrentUserInfo() {
-		$.post('/getCurrentUserInfo', function(data) {
-			this.setState({currentUser : data.thisUser});
-		}.bind(this));
 	}
 
 	markPostFeedAsSeen() {
-		$.post('/markPostFeedAsSeen', {feed_name: feed_name});
-	}
-
-	setNumUnseenPosts(){
-		$.post('getNumUnseenPosts', {feed_name: feed_name},
-			function(data){
-				this.setState({numUnseenPosts : data['numUnseenPosts']})
-			}.bind(this));
+		$.post('/markPostFeedAsSeen', {feed_name: feed_name, currentUser : this.state.currentUser});
 	}
 
 	refreshFeed() {
+		this.setState({ numUnseenPosts : 0 });
 		$.post('/getPosts', function(data){
 			var feed = [];
 			data.post_list.map(function(obj) {
@@ -77,12 +46,19 @@ export default class App extends React.Component {
 					unique_id   : obj['unique_id'],
 					numberOfComments : obj['numComments']
 				});
-				
 			});
 			this.setState({feed : feed});
+			this.markPostFeedAsSeen.bind(this)();
 		}.bind(this));
 	}
 
+	refreshNumUnseenPosts() {
+		$.post('/getNumUnseenPosts', {feed_name: feed_name, currentUser : this.state.currentUser},
+			function(data){
+				this.setState({numUnseenPosts :  data['numUnseenPosts']});
+			}.bind(this));
+	}
+	
 	handleFilterClick(filter, isSearch) {
 		if (isSearch) {
 			var newFilters = toggle(this.state.filters, filter);
@@ -95,15 +71,19 @@ export default class App extends React.Component {
 		}
 		$('html, body').animate({scrollTop: 0}, 300);
 	}
+	
 	handleFilterUser(user) {
 		if (user != this.state.userIdToFilterPosts) this.setState({ userIdToFilterPosts : user });
 		else this.setState({ userIdToFilterPosts : ''});
 	}
+
 	handleSearch(searchText) { 
 		$('html, body').animate({scrollTop: 0}, 300);
 		this.setState({search : searchText});
 	}
+	
 	handleTypingPost(postText) {this.setState({post : postText});}
+
 	handlePostSubmit(postText) {
 		var feed = this.state.feed;
 		if (this.state.actions.length == 0) this.setState({alert : true});
@@ -123,18 +103,22 @@ export default class App extends React.Component {
 						isTrade : contains(this.state.actions, "Trade"),
 						isPlay  : contains(this.state.actions, "Play"), 
 						isChill : contains(this.state.actions, "Chill"),
-						numberOfComments : 0
+						numberOfComments : 0,
+						currentUser : this.state.currentUser
 					};
+			this.setState({feed : feed, post: ''});
+			$('html, body').animate({scrollTop: 0}, 300);
+
 			$.ajax({
 				type : 'POST',
 				url  : '/makePost',
 				data : JSON.stringify(obj, null, '\t'),
-			    contentType: 'application/json;charset=UTF-8'
-			});
-			this.setState({feed : feed, post: ''});
-			$('html, body').animate({scrollTop: 0}, 300);
+			    contentType: 'application/json;charset=UTF-8',
+			    success: function () {
+					this.refreshFeed.bind(this)();	    	
+			    }.bind(this)
+			});	
 		}
-		this.refreshFeed();
 	}
 	handlePostEdit(post, editedContent) {
 		var feed = this.state.feed;
@@ -160,51 +144,74 @@ export default class App extends React.Component {
 		this.setState({ feed : feed });
 	}
 	componentDidMount() {
-		this.refreshFeed();
-		this.markPostFeedAsSeen();
-		this.getCurrentUserInfo();
-		this.setNumUnseenPosts();
+		AppStore.addUserChangeListener(this._onChange.bind(this));
+		if (this.state.currentUser['userID'] != null) {
+			this.refreshFeed.bind(this)();
+			if (!this.state.timer) {
+				this.setState({ timer : setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
+			}
+		}
+	}
+	componentWillUnmount() {
+		clearInterval(this.state.timer);
+		AppStore.removeUserChangeListener(this._onChange.bind(this));
+	}
+	_onChange() {
+		this.setState({ currentUser : AppStore.getCurrentUser() });
+		if (!this.state.currentUser)
+			clearInterval(this.state.timer);
+		this.refreshFeed.bind(this)();
+		if (!this.state.timer)
+			this.setState({ timer : setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
 	}
 	render() {
-		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
-		var alert;
-		if ((this.state.alert)) {
-			alert = <div className="alert alert-danger">
-			  			<strong>Bro!</strong> You must select something to do before you post man!
-					</div>;
-		}
-		return (<div>
+		if (this.state.currentUser['userID'] != null) {
+			var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
+			return (<div>
 					<SearchNavBar searchText={this.state.search} 
-									onSearch={this.handleSearch} 
-									onClick={this.handleFilterClick} 
+									onSearch={this.handleSearch.bind(this)} 
 									actions={actions} 
 									name={name} 
 									currentUser={this.state.currentUser}
-									handleFilterClick={this.handleFilterClick} 
-									handleFilterUser={this.handleFilterUser}
+									handleFilterClick={this.handleFilterClick.bind(this)} 
+									handleFilterUser={this.handleFilterUser.bind(this)}
 									userIdToFilterPosts={this.state.userIdToFilterPosts} 
 									filters={this.state.filters}/>
-					<div className="container">
+					<div className="container app-container">
 						<div className="app row">
-							<EventName name= {feed_name} numUnseenPosts = {this.state.numUnseenPosts} />
+							<EventName name={feed_name} />
 						</div>
 						<div className="app row">
 							<MakePost placeholder="What's happening?" postText={this.state.post} 
-									onClick={this.handleFilterClick}
-									onPostChange={this.handleTypingPost} 
-									onPostSubmit={this.handlePostSubmit} 
+									onClick={this.handleFilterClick.bind(this)}
+									onPostChange={this.handleTypingPost.bind(this)} 
+									onPostSubmit={this.handlePostSubmit.bind(this)} 
 									actions={actions}/>
 						</div>
-						{alert}
-						<div className="app row">
+						{this.state.alert && 
+						<div className="alert alert-danger">
+				  			<strong>Bro!</strong> You must select something to do before you post man!
+						</div>}
+						{this.state.numUnseenPosts > 0 &&
+						<div className="feed row">
+							<ViewMoreButton numUnseenPosts={this.state.numUnseenPosts} 
+											refreshFeed={this.refreshFeed.bind(this)}/>
+						</div>}
+						<div className="feed row">
 						<Feed currentUser={this.state.currentUser} searchText={this.state.search} 
-								filters={this.state.filters} posts={this.state.feed} actions={actions}
-								handleFilterUser={this.handleFilterUser}
+								filters={this.state.filters} posts={this.state.feed} 
+								actions={actions}
+								handleFilterUser={this.handleFilterUser.bind(this)}
 								userIdToFilterPosts={this.state.userIdToFilterPosts}
-								handlePostEdit={this.handlePostEdit}
-								handlePostDelete={this.handlePostDelete} />
+								handlePostEdit={this.handlePostEdit.bind(this)}
+								handlePostDelete={this.handlePostDelete.bind(this)} />
 						</div>
 					</div>
 				</div>);
+		}
+		else {
+			return <LoginApp/>;
+		}
 	}
 }
+// 

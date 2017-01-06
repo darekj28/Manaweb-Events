@@ -4,48 +4,19 @@
 
 from users import Users
 import re
+from passlib.hash import argon2
 
 banned_username_words = ['admin', 'manaweb']
 
 
 def validateLogin(login_id, password):
-	output = {}
-	email_regex = re.compile("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
-	loginIdIsEmail = email_regex.match(login_id)
 	user_manager = Users()
-
-	lower_login_id = login_id.lower()
-	# if the login id is an email
-	if loginIdIsEmail:
-		user_info = user_manager.getInfoFromEmail(lower_login_id)
-	
-	# otherwise the login is a userID
-	else:
-		user_info = user_manager.getInfo(lower_login_id)
-
+	output = user_manager.verifyLogin(login_id, password)
 	user_manager.closeConnection()
-
-	# user doesn't exists
-	if user_info == None:
-		output['result'] = 'failure'
-		output['error'] = "This login id doesn't exists"
-
-	elif user_info['password'] != password:
-		output['result'] = 'failure'
-		output['error'] = 'login credentials incorrect'
-
-
-	else:
-		output['result'] = 'success'
-		output['username'] = user_info['userID']
-
-		
 	return output
-
 
 def validateName(name):
 	length = len(name)
-	
 	output = {}
 	output['result'] = 'success'
 	# we invalidate a name if it contains non letters
@@ -92,7 +63,6 @@ def validatePassword(password, password_confirm):
 	elif password.lower() == password:
 		output['result'] = 'failure'
 		output['error'] = 'Passwords must contain at least one uppercase character'
-
 	else:
 		digitCheck = False
 		for char in password:
@@ -101,7 +71,6 @@ def validatePassword(password, password_confirm):
 		if digitCheck == False:
 			output['result'] = 'failure'
 			output['error'] = 'Passwords must contain at least one digit'
-
 	return output
 
 def validateEmail(email):
@@ -112,49 +81,51 @@ def validateEmail(email):
 	isMatch = email_regex.match(email)
 	if not isMatch:
 		output['result'] = 'failure'
-		output['error'] = 'invalid email address'
+		output['error'] = 'Invalid email address.'
 
 	user_manager = Users()
 	isEmailTaken = user_manager.isEmailTaken(email)
 	user_manager.closeConnection()
 	if isEmailTaken:
 		output['result'] = 'failure'
-		output['error'] = 'This email is already in use'
-
+		output['error'] = 'This email is already in use.'
 	return output
 
 def validateUsername(username):
 	output = {}
 	output['result']  = 'success'
-
-
 	length = len(username)
 	if length < 2:
 		output['result'] = 'failure'
-		output['error'] = 'Username must be at least 2 characters'
-
+		output['error'] = 'Username must be at least 2 characters.'
 	if length > 15:
-		output['result'] = 'faulure'
-		output['error'] = 'Username cannot be 15 or more characters'
-
+		output['result'] = 'failure'
+		output['error'] = 'Username cannot be 15 or more characters.'
 	for char in username:
 		if not char.isalnum() and char != '_':
 			output['result'] = 'failure'
-			output['error'] = 'Username can only have alphanumeric and underscores'
+			output['error'] = 'Username can only have alphanumeric characters or underscores.'
+
+	hasAlpha = False
+	for char in username:
+		if char.isalpha():
+			hasAlpha = True
+
+	if hasAlpha == False:
+		output['result'] = 'failure'
+		output['error'] = "Username must have at least 1 alphabetical character"
 
 	lower_username = username.lower()
 	for word in banned_username_words:
 		if lower_username.find(word) != -1:
 			output['result'] = 'failure'
-			output['error'] = word + " cannot be part of a username"
-
+			output['error'] = "Inappropriate."
 	user_manager = Users()
 	isUsernameTaken = user_manager.isUsernameTaken(username.lower())
 	user_manager.closeConnection()
 	if isUsernameTaken:
 		output['result'] = 'failure'
-		output['error'] = 'This username is already in use'
-
+		output['error'] = 'This username is already in use.'
 	return output
 
 def isSuccess(output_dict):

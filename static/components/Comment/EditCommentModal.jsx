@@ -1,11 +1,8 @@
 var React = require('react');
-// var $ = require('jquery');
 export default class EditCommentModal extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {commentContent : this.props.comment.commentContent};
-		this.handleCommentEditChange = this.handleCommentEditChange.bind(this);
-		this.handleCommentEditSubmit = this.handleCommentEditSubmit.bind(this);
 	}
 	handleCommentEditChange(e) {
 		this.setState({ commentContent : e.target.value});
@@ -40,11 +37,11 @@ export default class EditCommentModal extends React.Component {
 						<div className="modal-body" id="EditCommentModalBody">
 							<textarea className="form-control EditFeedCommentBody" id="FeedCommentBody" 
 									value={this.state.commentContent} 
-									onChange={this.handleCommentEditChange}></textarea>
+									onChange={this.handleCommentEditChange.bind(this)}></textarea>
 						</div>
 						<div className="modal-footer">
 							<button id="ecm_submit" type="button" className="btn btn-default" data-dismiss="modal" 
-									onClick={this.handleCommentEditSubmit}>Submit</button>
+									onClick={this.handleCommentEditSubmit.bind(this)}>Submit</button>
 						</div>
 					</div>
 				</div>

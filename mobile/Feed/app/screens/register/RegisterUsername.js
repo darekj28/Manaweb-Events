@@ -51,7 +51,7 @@ class RegisterUsername extends Component {
         password : this.props.password,
         email : this.props.email,
         username: this.state.username,
-        first_name: this.props.first_name,
+        first_name: this.props.first_name ,
         last_name: this.props.last_name,
         password: this.props.password,
         phone_number : this.props.phone_number

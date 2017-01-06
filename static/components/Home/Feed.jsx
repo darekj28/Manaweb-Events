@@ -8,8 +8,6 @@ export default class Feed extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = { postInModal : '' };
-		this.filter= this.filter.bind(this);
-		this.refreshPostDisplayedInModal = this.refreshPostDisplayedInModal.bind(this);
 	}
 	refreshPostDisplayedInModal(post) {
 		this.setState({ postInModal : post});
@@ -53,19 +51,21 @@ export default class Feed extends React.Component {
 				rows.push(<FeedPost key={i} post={post} 
 						isOP={this.props.currentUser['userID'] == post.userID}
 						isAdmin={this.props.currentUser['isAdmin']} 
-						refreshPostDisplayedInModal={this.refreshPostDisplayedInModal}
+						refreshPostDisplayedInModal={this.refreshPostDisplayedInModal.bind(this)}
 						handleFilterUser={this.props.handleFilterUser}/>);
 		}, this);
 		return rows;
 	}
 	render() {
-		var rows = this.filter();
+		var rows = this.filter.bind(this)();
 		return (
 				<div>
 					<ul id="Feed" > {rows} </ul>
-					<EditPostModal post={this.state.postInModal} handlePostEdit={this.props.handlePostEdit}/>
-					<DeletePostModal post={this.state.postInModal} handlePostDelete={this.props.handlePostDelete}/>
-					<ReportPostModal post={this.state.postInModal}/>
+					<EditPostModal post={this.state.postInModal} 
+									handlePostEdit={this.props.handlePostEdit}/>
+					<DeletePostModal post={this.state.postInModal} 
+									handlePostDelete={this.props.handlePostDelete}/>
+					<ReportPostModal post={this.state.postInModal} currentUser={this.props.currentUser}/>
 				</div>
 			);
 	}

@@ -3,19 +3,14 @@ export default class FilterButton extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {isSelected : this.props.selected};
-		this.handleClick = this.handleClick.bind(this);
 	}
 	handleClick() {
 		this.setState({ isSelected : !this.state.isSelected });
 		this.props.onClick(this.props.name, this.props.isSearch);
 	}
-
 	componentDidMount() {
-		$(document).ready(function(){
-		    $('[data-toggle="tooltip"]').tooltip(); 
-		});
+		$('[data-toggle="tooltip"]').tooltip(); 
 	}
-
 	render() {
 		var icon;
 		var selected = this.state.isSelected ? "icon-success" : "icon-danger";
@@ -32,11 +27,17 @@ export default class FilterButton extends React.Component {
 			default : 
 				alert('Invalid action.');
 		}
-		return(<a className="input-group-addon" data-toggle="tooltip" title= {this.props.name}>
-			<span className={icon + " filterButton " + selected}
-					onClick={this.handleClick}>
+		if (!this.props.isSearch)
+			return(<a className="input-group-addon" data-container="body" data-toggle="tooltip" title={this.props.name}>
+					<span className={icon + " filterButton " + selected} onClick={this.handleClick.bind(this)}>
 					</span>
-			</a>);
+				</a>)
+		else return(<a className="input-group-addon" data-container="body" data-toggle="tooltip" title={this.props.name}
+					 data-placement="bottom">
+					<span className={icon + " filterButton " + selected} onClick={this.handleClick.bind(this)}>
+					</span>
+				</a>
+			);
 	}
 }
 

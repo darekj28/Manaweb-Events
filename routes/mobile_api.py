@@ -6,9 +6,15 @@ import email_confirm
 import sms
 import validation
 
+# from tasks import asyncGetPosts
+# from tasks import test
+
+
+
 
 mobile_api = Blueprint('mobile_api', __name__)
 DEFAULT_FEED = "BALT"
+
 
 
 @mobile_api.route('/mobileCreateProfile', methods = ['POST'])
@@ -44,7 +50,7 @@ def mobileCreateProfile():
 
 	user_manager.closeConnection()
 
-	return jsonify({'result' : 'success'})
+	return jsonify({'result' : 'success', 'username': userID})
 	# return jsonify({'response': "success!" })
 
 	# post_manager = Posts()
@@ -99,9 +105,68 @@ def mobileUsernameValidation():
 	return jsonify(validator_output)
 
 
-@mobile_api.route('/testMobileApi', methods = ['POST'])
-def testMobileApi():
-	data = {'output' : request.json.get('test')}
-	return jsonify(data)
+@mobile_api.route('/mobileGetCurrentUserInfo', methods = ['POST'])
+def mobileGetCurrentUserInfo():
+	thisUserID = request.json['userID']
+	user_manager = Users()
+	thisUser = user_manager.getInfo(thisUserID)
+	user_manager.closeConnection()
+	return jsonify({'result' : 'success', 'thisUser' : thisUser})
+
+@mobile_api.route('/mobileGetPosts', methods = ['POST'])
+def mobileGetPosts():
+	# feed_name = request.form['feed_name']
+	feed_name = "BALT"
+	post_manager = Posts()
+	post_list = post_manager.getPosts(feed_name)
+	post_manager.sortAscending(post_list)
+	post_manager.closeConnection()
+	return jsonify({'result' : 'success', 'post_list' : post_list})
+
+
+@mobile_api.route('/mobileMakePost', methods = ['POST'])
+def mobileMakePost():
+	postContent = request.json['postContent']
+	isTrade		= request.json['isTrade']
+	isPlay 		= request.json['isPlay']
+	isChill		= request.json['isChill']
+	poster_id = request.json['userID']
+	comment_id = None
+	feed_name = DEFAULT_FEED		
+	post_manager = Posts()
+	post_manager.postInThread(feed_name, body = postContent, poster_id = poster_id, 
+			isTrade = isTrade, isPlay = isPlay, isChill = isChill, comment_id = comment_id)
+	
+	post_manager.closeConnection()
+
+	return jsonify({'result' : 'success'})
+
+
+# @mobile_api.route('/status/<task_id>')
+# def taskStatus(task_id):
+#     task = test.AsyncResult(task_id)
+#     if task.state == 'PENDING':
+#         # job did not start yet
+#         response = {
+#             'state': task.state,
+#             'status': 'Pending...'
+#         }
+#     elif task.state != 'FAILURE':
+#         response = {
+#             'state': task.state,
+#             'current': task.info.get('answer', 0),
+#         }
+#         if 'result' in task.info:
+#             response['result'] = task.info['result']
+#     else:
+#         # something went wrong in the background job
+#         response = {
+#             'state': task.state,
+#             'current': 1,
+#             'total': 1,
+#             'status': str(task.info),  # this is the exception raised
+#         }
+#     return jsonify(response)
+
 
 

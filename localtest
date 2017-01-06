@@ -1,4 +1,2 @@
-npm -g webpack
-webpack -d
-npm test
+sh reactsetup
 python3 event_main.py
