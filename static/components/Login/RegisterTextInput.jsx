@@ -5,17 +5,6 @@ export default class RegisterTextInput extends React.Component {
 		obj[this.props.field] = event.target.value;
 		this.props.handleTyping(obj);
 	}
-	handleBlur(event) {
-		var field = this.props.field;
-		if (field == "username")
-			this.verifyUsername.bind(this)(event.target.value);
-		else if (field == "email")
-			this.verifyEmail.bind(this)(event.target.value);
-	}
-	componentDidMount() {
-		if (this.props.field == "password") 
-			passwordHelper();
-	}
 	render() {
 		var field = this.props.field, value = this.props.value, placeholder = idToName(field);
 		var isPassword = (field == "password");
@@ -30,9 +19,6 @@ export default class RegisterTextInput extends React.Component {
 				break;
 			case "password" :
 				content = "Must contain at least one number and one letter"
-				break;
-			case "email" :
-				content = "Give a valid e-mail address (e.g. user@gmail.com)";
 				break;
 			case "username" : 
 				content = "At least 2 characters";

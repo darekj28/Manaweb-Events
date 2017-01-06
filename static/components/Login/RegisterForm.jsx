@@ -5,7 +5,7 @@ import AppActions from '../../actions/AppActions.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 import { browserHistory } from 'react-router';
 
-var text_fields = ["first_name", "last_name", "username", "password", "email" ];
+var text_fields = ["first_name", "last_name", "username", "password", "email_or_phone" ];
 
 export default class RegisterForm extends React.Component {
 	constructor() {
@@ -13,7 +13,7 @@ export default class RegisterForm extends React.Component {
 		this.state = { first_name 			: '', 
 						last_name  			: '',
 						username 			: '',
-						email				: '',
+						email_or_phone		: '',
 						password			: '',
 					};
 	}
@@ -40,7 +40,7 @@ export default class RegisterForm extends React.Component {
 		});
 	}
 	verifyEmail() {
-		var obj = { email_address : this.state.email };
+		var obj = { email_or_phone : this.state.email_or_phone };
 		$.ajax({
 			type: 'POST',
 			url: '/registerEmail',
@@ -59,7 +59,7 @@ export default class RegisterForm extends React.Component {
 	}
 	handleChange(obj) {
 		if (Object.keys(obj)[0] == "username") this.setState({ username_error : "" }); 
-		if (Object.keys(obj)[0] == "email") this.setState({ email_error : "" }); 
+		if (Object.keys(obj)[0] == "email_or_phone") this.setState({ email_error : "" }); 
 		this.setState(obj); 
 	}
 
@@ -68,7 +68,7 @@ export default class RegisterForm extends React.Component {
 			first_name 			: this.state.first_name		,
 			last_name			: this.state.last_name		,
 			username 			: this.state.username 		,
-			email_address		: this.state.email	,
+			email_or_phone		: this.state.email_or_phone	,
 			password			: this.state.password		
 		};
 		$.ajax({
@@ -152,9 +152,7 @@ export default class RegisterForm extends React.Component {
 					{text_fields.map(function(field) {
 						return 	<div>
 									<RegisterTextInput field={field} value={this.state[field]} 
-												handleTyping={this.handleChange.bind(this)}
-												username_error={this.state.username_error}
-												email_error={this.state.email_error}/>
+												handleTyping={this.handleChange.bind(this)}/>
 								</div>;
 					}, this)}
 					<div className="form-group">
