@@ -11,7 +11,8 @@ export default class LoginApp extends React.Component {
 				<LoginNavBar/>
 				<div className="container app-container register-container col-xs-12">
 					<div className="col-xs-6">
-						<img id="Logo" src="static/logo.png"></img>
+						{/* <img id="Logo" src="static/logo.png"></img> */}
+						<img id="Logo" src="static/img/gatewatch.jpg"></img>
 					</div>
 					<div className="col-xs-6">
 						<div className="page-header"><h3><b>Create an account</b></h3></div>

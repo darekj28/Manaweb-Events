@@ -55,19 +55,20 @@ def validatePhoneNumber(phone_number):
 			isSuccess = False
 		if raw_phone_number[3] == "1" and raw_phone_number[3] == "1":
 			isSuccess = False
+	elif len(raw_phone_number) != 10 and len(raw_phone_number) != 11:
+		isSuccess = False
+
 	if isSuccess == False:
 		output['result'] = 'failure'
 		output['error'] = 'Invalid phone number.'
 
-
-	isMatching = True
-
 	user_manager = Users()
-	user_manager.getInfoFromPhoneNumber(raw_phone_number)
+	this_user = user_manager.getInfoFromPhoneNumber(raw_phone_number)
 	user_manager.closeConnection()
-
+	if isSuccess and this_user == None:
+		output['result'] = 'failure'
+		output['error'] = 'This phone number is already registered'
 	return output
-
 
 def validateEmailOrPhone(input_string):
 	# first check if it's a phone number 
