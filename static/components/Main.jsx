@@ -26,9 +26,9 @@ const checkLogin = (nextState, replace) => {
         replace(`/`);
 }
 const addIp = (nextState, replace) => {
-	$.get('https://api.ipify.org/?format=json', function(r){ 
-    	AppActions.addIp(r.ip);
-    }.bind(this));
+	// $.get('https://api.ipify.org/?format=json', function(r){ 
+ //    	AppActions.addIp(r.ip);
+ //    }.bind(this));
 }
 ReactDOM.render(
 	<Router history={browserHistory}>
