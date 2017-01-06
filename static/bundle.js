@@ -907,18 +907,12 @@
 	 * will remain to ensure logic does not differ in production.
 	 */
 	
-	var validateFormat = function validateFormat(format) {};
-	
-	if (false) {
-	  validateFormat = function validateFormat(format) {
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  if (false) {
 	    if (format === undefined) {
 	      throw new Error('invariant requires an error message argument');
 	    }
-	  };
-	}
-	
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  validateFormat(format);
+	  }
 	
 	  if (!condition) {
 	    var error;
@@ -11920,6 +11914,15 @@
 									'Bro!'
 								),
 								' You need to fill out more stuff.'
+							),
+							React.createElement(
+								'div',
+								{ className: 'register', id: 'Or' },
+								React.createElement(
+									'center',
+									null,
+									'- or -'
+								)
 							)
 						)
 					)
