@@ -34,6 +34,7 @@ body {
   font-family : "open";
   background-color : #ffffff;
   color : var(--main-color);
+  overflow-x : hidden;
 }
 button.kep-login-facebook{
   width : 350px;
@@ -88,8 +89,8 @@ button.kep-login-facebook:hover{
   background-color: #fff;
 }
 .register {
-  width : 350px;
-  height : 34px;
+  max-width : 350px;
+  max-height : 34px;
 }
 .btn-login {
   background-color : var(--light);
