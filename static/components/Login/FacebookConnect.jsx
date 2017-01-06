@@ -1,13 +1,11 @@
 var React = require('react');
 var Link = require('react-router').Link;
-
 import SettingsTextInput from '../Settings/SettingsTextInput.jsx';
 import SettingsInputLabel from '../Settings/SettingsInputLabel.jsx';
 import AppActions from '../../actions/AppActions.jsx';
 import { browserHistory } from 'react-router';
 import AppStore from '../../stores/AppStore.jsx';
 import FacebookLogin from 'react-facebook-login';
-
 export default class FacebookConnect extends React.Component {
 		constructor() {
 		super();
@@ -21,11 +19,6 @@ export default class FacebookConnect extends React.Component {
 			submittable: false, 
 			fb_clicked: false
 		};
-		this.responseFacebook = this.responseFacebook.bind(this);
-		this.handleUsernameChange = this.handleUsernameChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-		this.handleBlur = this.handleBlur.bind(this);
-		this.handleFacebookLoginClick = this.handleFacebookLoginClick.bind(this);
 	}
 	
 	handleFacebookLoginClick() {
@@ -34,18 +27,15 @@ export default class FacebookConnect extends React.Component {
 		
 	// handle the faceobok login
 	responseFacebook(response) {
-
 		if (response['id'] != null){
-
 			var obj = {fb_id : response['id']}
-
 			$.ajax({
 				type: "POST",
 				url : '/isFacebookUser',
 				data : JSON.stringify(obj, null, '\t'),
 				contentType : 'application/json;charset=UTF-8',
 				success: function(data)          
-			     {   
+			    {   
 			     	// if the user does not already have an account with facebook
 			        if (data['result'] == 'failure') {
 			        	this.setState({fb_verified : true})
@@ -57,13 +47,8 @@ export default class FacebookConnect extends React.Component {
 			        }
 			        else {
 			        	// send the user to the home page
-			        	// console.log("fbUser")
-			        	// console.log(response)
-
-
 			        	var thisFbUser = data.fbUser
 			        	var obj = {username : data.fbUser.userID, ip: AppStore.getIp()}
-
 			        	$.ajax({
 			        		type: "POST",
 							url : '/recordFacebookLogin',
@@ -74,16 +59,13 @@ export default class FacebookConnect extends React.Component {
 								AppActions.addCurrentUser(thisFbUser);
 			        			this.getNotifications.bind(this)()
 							}.bind(this)
-			      		  });
+			      		});
 			        }
-			     }.bind(this)
+			    }.bind(this)
 			});
 			
 		}
 	}
-
-
-
 	handleUsernameChange(input) { 
 		var username = input.username
 		this.setState({username : username});
@@ -91,7 +73,6 @@ export default class FacebookConnect extends React.Component {
 			username : username
 		};
 		var that = this;
-
 		$.ajax({
 			type: "POST",
 			url : '/registerUsername',
@@ -108,14 +89,10 @@ export default class FacebookConnect extends React.Component {
 		     }
 		});
 	}
-
 	getCurrentUserInfo() {
 		$.post('/getCurrentUserInfo', {userID : this.state.username}, function(data) {
 			AppActions.addCurrentUser(data.thisUser);
-			
-			
 			this.getNotifications.bind(this)();
-
 		}.bind(this));
 	}
 	getNotifications() {
@@ -144,11 +121,7 @@ export default class FacebookConnect extends React.Component {
                 browserHistory.push('/');
             }.bind(this));
     }
-
-
-
 	handleSubmit() {
-
 		var obj = {
 			first_name 			: this.state.fb_first_name			,
 			last_name			: this.state.fb_last_name			,
@@ -166,76 +139,46 @@ export default class FacebookConnect extends React.Component {
 			}.bind(this)
 		});
 	}
-
-	handleBlur() {
-		var x = 5;
-		// console.log("bro");
-	}
-
-
-	componentDidMount() {
-		$('#SignUpButton').one("click", function() {
-			$(this).blur();
-		})
-
-		$('#RegisterSubmit').one('click', function(e) {
-			$(this).blur();
-			// this.handleSubmit();
-		}.bind(this));
-	}
 	render() {
 		const appId = "1138002282937846"
 		const testAppId = "1298398903564849"
 		return (
 			<div className="container app-container">
-                    { !this.state.fb_clicked  &&
-                    	<div>
-                    	<FacebookLogin
-						    appId= {appId}
-						    autoLoad={false}
-						    fields="first_name,email, last_name, name"
-						    onClick={this.handleFacebookLoginClick}
-						    callback={this.responseFacebook}
-						    icon="fa-facebook"
-						    size = "small"
-						    textButton = "Connect with Facebook" />
-						<br/>
-
-						<div> Welcome! {this.state.fb_first_name} </div>
-
-						{
-							this.state.fb_verified && 
-							<div>
-								<SettingsInputLabel field= "username" />
-								<SettingsTextInput field= "username" 
-											handleTyping={this.handleUsernameChange}
-											handleBlur = {this.handleBlur} 
-									/>
-							
-							{
-								this.state.submittable 
-								? 
-								<Link to="/"> <button className="btn btn-default blurButton" 
-									id="RegisterSubmit" onClick = {this.handleSubmit.bind(this)}> 
-										Let's go! </button>
-									</Link> 
-								:
-								<button className="btn btn-default" id="RegisterSubmit" disabled> 
-									Almost there!
-								</button>
-							}
+                { !this.state.fb_clicked  &&
+                	<div>
+                	<FacebookLogin
+					    appId= {appId}
+					    autoLoad={false}
+					    fields="first_name,email, last_name, name"
+					    onClick={this.handleFacebookLoginClick.bind(this)}
+					    callback={this.responseFacebook.bind(this)}
+					    icon="fa-facebook"
+					    size = "small"
+					    textButton = "Connect with Facebook" />
+					<div> Welcome! {this.state.fb_first_name} </div>
+					{this.state.fb_verified && 
+						<div>
+							<RegisterTextInput field="username" value={this.state.username}
+										handleTyping={this.handleUsernameChange.bind(this)}/>
+						{this.state.submittable ? 
+							<Link to="/"> <button className="btn btn-default blurButton" 
+								id="RegisterSubmit" onClick = {this.handleSubmit.bind(this)}> 
+									Let's go! </button>
+							</Link> :
+							<div> 
+								Almost there!
 							</div>
 						}
 						</div>
 					}
-
-					{
-						this.state.fb_clicked && 
-						<div>
-							Waiting for Facebook Authentication...
-						</div>
-					}
-				</div>
+					</div>
+				}
+				{this.state.fb_clicked && 
+					<div>
+						Waiting for Facebook Authentication...
+					</div>
+				}
+			</div>
 		)
 	}
 }
