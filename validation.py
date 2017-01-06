@@ -57,7 +57,7 @@ def validatePhoneNumber(phone_number):
 			isSuccess = False
 	if isSuccess == False:
 		output['result'] = 'failure'
-		output['error'] = 'Invalid phone number'
+		output['error'] = 'Invalid phone number.'
 
 
 	isMatching = True

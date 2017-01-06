@@ -6,7 +6,7 @@ $.fn.goValidate = function() {
     
     var validators = {
         username: {
-            regex: /^[a-z ,.'-]{2,15}$/
+            regex: /^[A-Za-z0-9]{2,15}$/
         },
         first_name: {
             regex: /^[A-Za-z]{1,20}$/

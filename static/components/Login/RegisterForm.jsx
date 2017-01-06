@@ -162,14 +162,16 @@ export default class RegisterForm extends React.Component {
 									<b>Create an account</b>
 						</button>
 					</div>
-					{error != "" && <div className="warning">
-					   {error}
-					</div>}
-					<div className="success" id="CreateProfileSuccess">
-					  <strong>Success!</strong> Please hold on as we redirect you.
-					</div>
-					<div className="warning" id="CreateProfileFail">
-					  <strong>Bro!</strong> You need to fill out more stuff.
+					<div className="form-group">
+						{error != "" && <div className="warning">
+						   {error}
+						</div>}
+						<div className="success" id="CreateProfileSuccess">
+						  <strong>Success!</strong> Please hold on as we redirect you.
+						</div>
+						<div className="warning" id="CreateProfileFail">
+						  <strong>Bro!</strong> You need to fill out more stuff.
+						</div>
 					</div>
 				</form>
 			</div>
