@@ -17,7 +17,7 @@ $.fn.goValidate = function() {
         password: {
             regex: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/
         },
-        email_address: {
+        email: {
             regex: /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/
         },
         phone: {

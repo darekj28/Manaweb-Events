@@ -9,7 +9,7 @@ export default class RegisterTextInput extends React.Component {
 		var field = this.props.field;
 		if (field == "username")
 			this.verifyUsername.bind(this)(event.target.value);
-		else if (field == "email_address")
+		else if (field == "email")
 			this.verifyEmail.bind(this)(event.target.value);
 	}
 	componentDidMount() {
@@ -31,7 +31,7 @@ export default class RegisterTextInput extends React.Component {
 			case "password" :
 				content = "At least 6 characters and contain at least one number and one letter."
 				break;
-			case "email_address" :
+			case "email" :
 				content = "Give a valid e-mail address";
 				break;
 			case "username" : 
