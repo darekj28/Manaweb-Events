@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {AsyncStorage, AppRegistry, StyleSheet, Text, View, ListView, TouchableOpacity, TouchableHighlight, Navigator} from 'react-native';
+import {ViewContainer, AsyncStorage, AppRegistry, StyleSheet, Text, View, ListView, TouchableOpacity, TouchableHighlight, Navigator} from 'react-native';
 import StartScreen from '../screens/StartScreen'
 import RegisterName from '../screens/register/RegisterName'
 import RegisterPhoneNumber from '../screens/register/RegisterPhoneNumber'
@@ -25,7 +25,8 @@ class StartNavigator extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      current_username: ""
+      current_username: "",
+      isLoading: true
     }
     this.initializeUser = this.initializeUser.bind(this);
   }
@@ -158,32 +159,36 @@ class StartNavigator extends Component {
 
   async initializeUser(){
       let value = await AsyncStorage.getItem("current_username")
+      this.setState({current_username : value})
+      this.setState({isLoading : false})
       return value;
   }
 
 
   componentWillMount() {
-      var current_username = this.initializeUser()
-      if (current_username == null) {
-        this.setState({current_username : ""})
-      }
-      else {
-        this.setState({current_username: current_username})
-      }
+      this.initializeUser()
       
   }
 
 
   render() {
-
     var start = ""
-    if (this.state.current_username == "") {
+    if (this.state.current_username == "" || this.state.current_username == null) {
       start = "Start"
     }
     else {
       start = "Feed"
     }
 
+    if (this.state.isLoading) {
+      return (
+            <Text textAlignVertical = "center" textAlignHorizontal = "center">
+              Loading still...
+            </Text>
+        )
+    }
+
+    else {
     return (
       <Navigator 
       initialRoute = {{href: start}}
@@ -193,8 +198,9 @@ class StartNavigator extends Component {
       configureScene={(route, routeStack) =>
       Navigator.SceneConfigs.FloatFromBottom}
       />
-   
-   )   
+   ) 
+
+   }  
   }
 }
 

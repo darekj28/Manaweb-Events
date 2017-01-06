@@ -318,6 +318,10 @@ class FeedScreen extends Component {
               {this.state.post_actions}
             </Text>
             */}
+            <Text>
+              {this.state.current_username}
+
+            </Text>
           
 
             <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
