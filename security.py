@@ -198,6 +198,10 @@ class Security:
 		for char in phoneNumberWithDashes:
 			if char.isdigit():
 				raw_phone_number = raw_phone_number + char
+
+		if len(raw_phone_number) == 11:
+			raw_phone_number = raw_phone_number[1:]
+			
 		return raw_phone_number
 
 

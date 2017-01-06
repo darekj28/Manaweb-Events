@@ -38,9 +38,45 @@ def validateName(name):
 def validatePhoneNumber(phone_number):
 	output = {}
 	output['result']  = 'success'
-	if len(phone_number) != 10:
+	isSuccess = True
+	raw_phone_number = ""
+	for char in phone_number:
+		if char.isdigit():
+			raw_phone_number = raw_phone_number + char 
+	if len(raw_phone_number) == 10:
+		if raw_phone_number[0] == "1" or raw_phone_number[3] == "1":
+			isSuccess = False
+		if raw_phone_number[1] == "1" and raw_phone_number[2] == "1":
+			isSuccess = False
+	elif len(raw_phone_number) == 11:
+		if raw_phone_number[0] != "1":
+			isSuccess = False
+		if raw_phone_number[1] == "1" or raw_phone_number[4] == "1":
+			isSuccess = False
+		if raw_phone_number[3] == "1" and raw_phone_number[3] == "1":
+			isSuccess = False
+	if isSuccess == False:
 		output['result'] = 'failure'
-		output['error'] = "phone number invalid legnth"
+		output['error'] = 'Invalid phone number'
+
+
+	isMatching = True
+
+	user_manager = Users()
+	user_manager.getInfoFromPhoneNumber(raw_phone_number)
+	user_manager.closeConnection()
+
+	return output
+
+
+def validateEmailOrPhone(input_string):
+	# first check if it's a phone number 
+	if '@' in input_string:
+		output = validateEmail(input_string)
+		ouput['method'] = 'email'
+	else:
+		output = validatePhoneNumber(input_string)
+		output['method'] = "phone_number"
 
 	return output
 
