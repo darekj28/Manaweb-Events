@@ -5,6 +5,7 @@ import re
 import time
 
 
+
 # given the 2 lattitude and longitude coordinates, returns the distance in miles (lattitude and longitude are numbers, not strings)
 def getDistance(lat1, lon1, lat2, lon2):
 	# radius of the Earth in miles

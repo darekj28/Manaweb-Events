@@ -11274,6 +11274,11 @@
 						React.createElement(
 							'div',
 							{ className: 'col-xs-6' },
+							React.createElement('img', { id: 'Logo', src: 'static/logo.png' })
+						),
+						React.createElement(
+							'div',
+							{ className: 'col-xs-6' },
 							React.createElement(
 								'div',
 								{ className: 'page-header' },
@@ -11287,7 +11292,18 @@
 									)
 								)
 							),
+<<<<<<< HEAD
+							React.createElement(_RegisterForm2.default, null),
+							React.createElement(_FacebookConnect2.default, null)
+						),
+						React.createElement(
+							'div',
+							{ className: 'col-xs-6' },
+							React.createElement('img', { style: 'background-size: 100%',
+								src: 'http://orig07.deviantart.net/f9bb/f/2016/011/c/3/call_the_gatewatch_by_yefumm-d9nn500.jpg' })
+=======
 							React.createElement(_RegisterForm2.default, null)
+>>>>>>> a027834c1cb84708ec6e4ab880e84ebd86b68ced
 						)
 					)
 				);

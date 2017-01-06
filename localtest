@@ -1,2 +1,2 @@
-sh reactsetup
+node_modules/.bin/webpack -d
 python3 event_main.py

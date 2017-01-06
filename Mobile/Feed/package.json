@@ -13,6 +13,7 @@
     "react-native": "0.38.1",
     "react-native-datepicker": "^1.4.3",
     "react-native-dismiss-keyboard": "^1.0.0",
+    "react-native-fbsdk": "^0.4.0",
     "react-native-gifted-spinner": "^0.1.0",
     "react-native-modal-dropdown": "^0.4.0",
     "react-native-modal-picker": "0.0.16",

@@ -5,6 +5,14 @@
  * @flow
  */
 
+
+const FBSDK = require('react-native-fbsdk');
+const {
+  LoginButton,
+  AccessToken
+} = FBSDK;
+
+
 import React from 'react';
 import {Component} from 'react'
 import {AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput, Button} from 'react-native';
@@ -13,6 +21,7 @@ import ViewContainer from '../components/ViewContainer';
 import HomeStatusBar from '../components/HomeStatusBar';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import FbLogin from '../components/FbLogin';
 
 
 
@@ -99,17 +108,13 @@ class StartScreen extends Component {
 
 			        <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToFeed()}>
                 <Text style = {styles.buttonText}>
-                  Testing button. Go to feed page
+                  Testing button. Go to feed page (for lurkers)
                 </Text>
               </TouchableHighlight>
 
 
-              <TouchableHighlight style = {styles.button} onPress = {this.handleLogout}>
-                <Text style = {styles.buttonText}>
-                  Logout
-                </Text>
-              </TouchableHighlight>
 
+              <FbLogin/>
       </View>
     )
   }
