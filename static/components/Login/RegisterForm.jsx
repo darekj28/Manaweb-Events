@@ -30,7 +30,7 @@ export default class RegisterForm extends React.Component {
 		    contentType: 'application/json;charset=UTF-8',
 		    success : function(res) {
 		    	if (!res['error']) {
-		    		this.verifyEmail.bind(this)();
+		    		this.verifyEmailOrPhone.bind(this)();
 		    		this.setState({ username_error : "" });
 		    	}
 		    	else {
@@ -39,16 +39,16 @@ export default class RegisterForm extends React.Component {
 		    }.bind(this)
 		});
 	}
-	verifyEmail() {
+	verifyEmailOrPhone() {
 		var obj = { email_or_phone : this.state.email_or_phone };
 		$.ajax({
 			type: 'POST',
-			url: '/registerEmail',
+			url: '/registerEmailOrPhone',
 			data : JSON.stringify(obj, null, '\t'),
 		    contentType: 'application/json;charset=UTF-8',
 		    success : function(res) {
 		    	if (!res['error']) {
-		    		this.handleSubmit.bind(this)();
+		    		this.handleSubmit.bind(this)(res['method']);
 		    		this.setState({ email_error : "" });
 		    	}
 		    	else {
@@ -63,14 +63,15 @@ export default class RegisterForm extends React.Component {
 		this.setState(obj); 
 	}
 
-	handleSubmit() {
+	handleSubmit(email_or_phone) {
 		var obj = {
 			first_name 			: this.state.first_name		,
 			last_name			: this.state.last_name		,
 			username 			: this.state.username 		,
-			email_or_phone		: this.state.email_or_phone	,
-			password			: this.state.password		
+			password			: this.state.password		,
+			email_or_phone		: email_or_phone
 		};
+		obj[email_or_phone] = this.state.email_or_phone;
 		$.ajax({
 			type: "POST",
 			url : '/createProfile',

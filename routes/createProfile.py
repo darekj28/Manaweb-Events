@@ -18,17 +18,21 @@ avatars = ["ajani", "chandra", "elspeth", "gideon", "jace", "liliana", "nahiri",
 @create_profile.route('/createProfile', methods = ['POST'])
 def createProfile():
 	if request.method == 'POST':
+		if request.json['email_or_phone'] == "email" :
+			email = request.json['email']
+			phone_number = ""
+		elif request.json['email_or_phone'] == "phone_number" :
+			phone_number = request.json['phone_number']
+			email = ""
 		# read the form data and save it
 		first_name 		= request.json['first_name']
 		last_name 		= request.json['last_name']
 		userID 			= request.json['username']
 		password 		= request.json['password']
-		email 			= request.json['email_address']
 		birthDay 		= ""
 		birthMonth 		= ""
 		birthYear 		= ""
 		avatar_name 	= random.choice(avatars)
-		phone_number 	= ""
 		avatar_url 		= '/static/avatars/' + avatar_name + '.png'	
 		isActive = True	
 		confirmationPin = email_confirm.hashString(userID)

@@ -135,10 +135,10 @@ def registerUsername() :
 	else : 
 		return jsonify({ 'error' : res['error'] })
 
-@browser_api.route('/registerEmail', methods=['POST'])
-def registerEmail() :
-	email_address = request.json['email_address']
-	res = validation.validateEmail(email_address)
+@browser_api.route('/registerEmailOrPhone', methods=['POST'])
+def registerEmailOrPhone() :
+	email_or_phone = request.json['email_or_phone']
+	res = validation.validateEmailOrPhone(email_or_phone)
 	if res['result'] == 'success' :
 		return jsonify({ 'error' : False })
 	else : 
