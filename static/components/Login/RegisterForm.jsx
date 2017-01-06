@@ -152,7 +152,7 @@ export default class RegisterForm extends React.Component {
 		if (this.state.username_error) error = this.state.username_error;
 		else if (this.state.email_error) error = this.state.email_error;
 		return(
-			<div className="container" id="RegisterForm">
+			<div className="container col-xs-6" id="RegisterForm">
 				<form className="form-horizontal" id="register_form">
 					{text_fields.map(function(field) {
 						return 	<div>
