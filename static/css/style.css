@@ -33,6 +33,10 @@ body {
   background-color : #ffffff;
   color : var(--main-color);
 }
+#Logo {
+  width : 40vw;
+  height : 60vh;
+}
 #LoginToggle {
   color : #fff;
 }
