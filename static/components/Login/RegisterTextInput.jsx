@@ -17,11 +17,11 @@ export default class RegisterTextInput extends React.Component {
 			passwordHelper();
 	}
 	render() {
-		var field = this.props.field, value = this.props.value;
+		var field = this.props.field, value = this.props.value, placeholder = idToName(field);
 		var isPassword = (field == "password");
 		var type = isPassword ? "password" : "text";
 		var content;
-		switch(this.props.field) {
+		switch(field) {
 			case "first_name" :
 				content = "Must contain only letters";
 				break;
@@ -35,14 +35,14 @@ export default class RegisterTextInput extends React.Component {
 				content = "Give a valid e-mail address (e.g. user@gmail.com)";
 				break;
 			case "username" : 
-				content = "At least 4 characters long";
+				content = "At least 2 characters";
 				break;
 		}
 		return (
 			<div className="form-group">
 				<input className={field + " register required form-control"} 
 					data-placement="left" data-trigger="manual" data-content={content}
-					id={field} type={type} value={value} placeholder={idToName(field)}
+					id={field} type={type} value={value} placeholder={placeholder}
 					onChange={this.handleTyping.bind(this)}/>
 			</div>
 			);

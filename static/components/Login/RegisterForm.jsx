@@ -13,12 +13,11 @@ export default class RegisterForm extends React.Component {
 		this.state = { first_name 			: '', 
 						last_name  			: '',
 						username 			: '',
-						email		: '',
+						email				: '',
 						password			: '',
 					};
 	}
 	verifyFields() {
-		console.log($('form').find('input.valid').length);
 		if ($('form').find('input.valid').length == 5)
 			this.verifyUsername.bind(this)();
 	}
@@ -161,7 +160,8 @@ export default class RegisterForm extends React.Component {
 					<div className="form-group">
 						<button type="submit" className="btn-login register form-control" 
 								id="RegisterSubmit"> 
-									<b>Create an account</b></button>
+									<b>Create an account</b>
+						</button>
 					</div>
 					{error != "" && <div className="warning">
 					   {error}

@@ -6,16 +6,16 @@ $.fn.goValidate = function() {
     
     var validators = {
         username: {
-            regex: /^[a-z ,.'-]{4,}$/
+            regex: /^[a-z ,.'-]{2,15}$/
         },
         first_name: {
-            regex: /^[A-Za-z]{1,}$/
+            regex: /^[A-Za-z]{1,20}$/
         },
         last_name: {
-            regex: /^[A-Za-z]{1,}$/
+            regex: /^[A-Za-z]{1,20}$/
         },
         password: {
-            regex: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,}$/
+            regex: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,20}$/
         },
         email: {
             regex: /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/
