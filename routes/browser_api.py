@@ -5,6 +5,7 @@ from security import Security
 import validation
 import time
 import email_confirm
+import random
 from passlib.hash import argon2
 import sms
 # from py2neo import authenticate, Graph, Node
@@ -13,6 +14,7 @@ import sms
 
 browser_api = Blueprint('browser_api', __name__)
 DEFAULT_FEED = "BALT"
+avatars = ["ajani", "chandra", "elspeth", "gideon", "jace", "liliana", "nahiri", "nicol", "nissa", "ugin"]
 
 @browser_api.route('/updatePassword', methods = ['POST'])
 def updatePassword():
@@ -71,12 +73,12 @@ def facebookCreateAccount():
 	password = "FB_DEFAULT_PASSWORD"
 	email = request.json['email']
 	fb_id = request.json['fb_id']
-	phone_number = "555-555-5555"
-	birthYear = "1994"
-	birthDay = "1"
-	birthMonth = "1"
-	gender = "Other"
-	avatar_name = "jace"
+	phone_number = ""
+	birthYear = ""
+	birthDay = ""
+	birthMonth = ""
+	gender = ""
+	avatar_name = random.choice(avatars)
 	avatar_url = '/static/avatars/' + avatar_name + '.png'
 	
 	isActive = True
