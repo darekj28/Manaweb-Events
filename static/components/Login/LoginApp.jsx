@@ -9,14 +9,14 @@ export default class LoginApp extends React.Component {
 		return (
 			<div>
 				<LoginNavBar/>
-				<div className="container app-container col-xs-12">
+				<div className="container app-container register-container col-xs-12">
 					<div className="col-xs-6">
 						<img id="Logo" src="static/logo.png"></img>
+						<FacebookConnect/>
 					</div>
 					<div className="col-xs-6">
-						<div className="page-header"><h1>Create a profile</h1></div>
+						<div className="page-header"><h3><b>Create an account</b></h3></div>
 						<RegisterForm/>
-						<FacebookConnect/>
 					</div>	
 				</div>
 			</div>

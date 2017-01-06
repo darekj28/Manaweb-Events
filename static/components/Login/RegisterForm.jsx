@@ -5,7 +5,7 @@ import AppActions from '../../actions/AppActions.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 import { browserHistory } from 'react-router';
 
-var text_fields = ["first_name", "last_name", "username", "password", "email_address" ];
+var text_fields = ["first_name", "last_name", "username", "password", "email" ];
 
 export default class RegisterForm extends React.Component {
 	constructor() {
@@ -13,7 +13,7 @@ export default class RegisterForm extends React.Component {
 		this.state = { first_name 			: '', 
 						last_name  			: '',
 						username 			: '',
-						email_address		: '',
+						email		: '',
 						password			: '',
 					};
 	}
@@ -41,7 +41,7 @@ export default class RegisterForm extends React.Component {
 		});
 	}
 	verifyEmail() {
-		var obj = { email_address : this.state.email_address };
+		var obj = { email_address : this.state.email };
 		$.ajax({
 			type: 'POST',
 			url: '/registerEmail',
@@ -60,7 +60,7 @@ export default class RegisterForm extends React.Component {
 	}
 	handleChange(obj) {
 		if (Object.keys(obj)[0] == "username") this.setState({ username_error : "" }); 
-		if (Object.keys(obj)[0] == "email_address") this.setState({ email_error : "" }); 
+		if (Object.keys(obj)[0] == "email") this.setState({ email_error : "" }); 
 		this.setState(obj); 
 	}
 
@@ -69,7 +69,7 @@ export default class RegisterForm extends React.Component {
 			first_name 			: this.state.first_name		,
 			last_name			: this.state.last_name		,
 			username 			: this.state.username 		,
-			email_address		: this.state.email_address	,
+			email_address		: this.state.email	,
 			password			: this.state.password		
 		};
 		$.ajax({
@@ -161,7 +161,7 @@ export default class RegisterForm extends React.Component {
 					<div className="form-group">
 						<button type="submit" className="btn-login register form-control" 
 								id="RegisterSubmit"> 
-									<b>Get Started!</b></button>
+									<b>Create an account</b></button>
 					</div>
 					{error != "" && <div className="warning">
 					   {error}

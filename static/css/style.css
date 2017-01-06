@@ -1,10 +1,8 @@
 :root{
-    --verylight : #e1f2be;
-    --light: #c5d6a2;
-    --dark : #96bf6d;
-    --verydark : #87AB62;
-    --navbar : #32535E;
-    --main-color : #404040;
+    --light: #16a79d;
+    --dark : #13968D;
+    --navbar : #4d505b;
+    --main-color : #353D41;
     --success : #5cb85c;
     --warning : #d9534f;
     --border-gray : #dbdbdb;
@@ -12,6 +10,10 @@
 @font-face {
   font-family: 'Aqua';
   src: url('aqua.ttf');
+}
+@font-face {
+  font-family: 'open';
+  src: url('OpenSans-Light.ttf');
 }
 @font-face {
   font-family: 'museo_sans500';
@@ -29,7 +31,7 @@
   src : url('Raleway-Regular.ttf');
 }
 body {
-  font-family : "HelveticaNeue-Light";
+  font-family : "open";
   background-color : #ffffff;
   color : var(--main-color);
 }
@@ -60,6 +62,9 @@ body {
 .app-container {
   padding-top : 65px;
 }
+.register-container {
+  padding-top : 130px;
+}
 .badge-notify{
    background-color : var(--warning);
    position:relative;
@@ -68,16 +73,15 @@ body {
   background-color: #fff;
 }
 .register {
-  max-width : 45vw;
-  height : 45px;
-  border-radius : 0px;
+  max-width : 350px;
+  height : 34px;
 }
 .btn-login {
-  background-color : var(--dark);
+  background-color : var(--light);
   color : #fff;
 }
 .btn-login:hover {
-  background-color: var(--verydark);
+  background-color: var(--dark);
   color : #fff;
 }
 .link {

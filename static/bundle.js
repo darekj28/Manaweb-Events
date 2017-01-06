@@ -907,18 +907,12 @@
 	 * will remain to ensure logic does not differ in production.
 	 */
 	
-	var validateFormat = function validateFormat(format) {};
-	
-	if (false) {
-	  validateFormat = function validateFormat(format) {
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  if (false) {
 	    if (format === undefined) {
 	      throw new Error('invariant requires an error message argument');
 	    }
-	  };
-	}
-	
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  validateFormat(format);
+	  }
 	
 	  if (!condition) {
 	    var error;
@@ -11270,7 +11264,13 @@
 					React.createElement(_LoginNavBar2.default, null),
 					React.createElement(
 						'div',
-						{ className: 'container app-container col-xs-12' },
+						{ className: 'container app-container register-container col-xs-12' },
+						React.createElement(
+							'div',
+							{ className: 'col-xs-6' },
+							React.createElement('img', { id: 'Logo', src: 'static/logo.png' }),
+							React.createElement(_FacebookConnect2.default, null)
+						),
 						React.createElement(
 							'div',
 							{ className: 'col-xs-6' },
@@ -11283,11 +11283,16 @@
 								'div',
 								{ className: 'page-header' },
 								React.createElement(
-									'h1',
+									'h3',
 									null,
-									'Create a profile'
+									React.createElement(
+										'b',
+										null,
+										'Create an account'
+									)
 								)
 							),
+<<<<<<< HEAD
 							React.createElement(_RegisterForm2.default, null),
 							React.createElement(_FacebookConnect2.default, null)
 						),
@@ -11296,6 +11301,9 @@
 							{ className: 'col-xs-6' },
 							React.createElement('img', { style: 'background-size: 100%',
 								src: 'http://orig07.deviantart.net/f9bb/f/2016/011/c/3/call_the_gatewatch_by_yefumm-d9nn500.jpg' })
+=======
+							React.createElement(_RegisterForm2.default, null)
+>>>>>>> a027834c1cb84708ec6e4ab880e84ebd86b68ced
 						)
 					)
 				);
@@ -11373,11 +11381,6 @@
 				submittable: false,
 				fb_clicked: false
 			};
-			_this.responseFacebook = _this.responseFacebook.bind(_this);
-			_this.handleUsernameChange = _this.handleUsernameChange.bind(_this);
-			_this.handleSubmit = _this.handleSubmit.bind(_this);
-			_this.handleBlur = _this.handleBlur.bind(_this);
-			_this.handleFacebookLoginClick = _this.handleFacebookLoginClick.bind(_this);
 			return _this;
 		}
 	
@@ -11392,11 +11395,8 @@
 		}, {
 			key: 'responseFacebook',
 			value: function responseFacebook(response) {
-	
 				if (response['id'] != null) {
-	
 					var obj = { fb_id: response['id'] };
-	
 					$.ajax({
 						type: "POST",
 						url: '/isFacebookUser',
@@ -11413,13 +11413,8 @@
 								this.setState({ fb_clicked: false });
 							} else {
 								// send the user to the home page
-								// console.log("fbUser")
-								// console.log(response)
-	
-	
 								var thisFbUser = data.fbUser;
 								var obj = { username: data.fbUser.userID, ip: _AppStore2.default.getIp() };
-	
 								$.ajax({
 									type: "POST",
 									url: '/recordFacebookLogin',
@@ -11445,7 +11440,6 @@
 					username: username
 				};
 				var that = this;
-	
 				$.ajax({
 					type: "POST",
 					url: '/registerUsername',
@@ -11465,7 +11459,6 @@
 			value: function getCurrentUserInfo() {
 				$.post('/getCurrentUserInfo', { userID: this.state.username }, function (data) {
 					_AppActions2.default.addCurrentUser(data.thisUser);
-	
 					this.getNotifications.bind(this)();
 				}.bind(this));
 			}
@@ -11499,7 +11492,6 @@
 		}, {
 			key: 'handleSubmit',
 			value: function handleSubmit() {
-	
 				var obj = {
 					first_name: this.state.fb_first_name,
 					last_name: this.state.fb_last_name,
@@ -11518,24 +11510,6 @@
 				});
 			}
 		}, {
-			key: 'handleBlur',
-			value: function handleBlur() {
-				var x = 5;
-				// console.log("bro");
-			}
-		}, {
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				$('#SignUpButton').one("click", function () {
-					$(this).blur();
-				});
-	
-				$('#RegisterSubmit').one('click', function (e) {
-					$(this).blur();
-					// this.handleSubmit();
-				}.bind(this));
-			}
-		}, {
 			key: 'render',
 			value: function render() {
 				var appId = "1138002282937846";
@@ -11550,12 +11524,11 @@
 							appId: appId,
 							autoLoad: false,
 							fields: 'first_name,email, last_name, name',
-							onClick: this.handleFacebookLoginClick,
-							callback: this.responseFacebook,
+							onClick: this.handleFacebookLoginClick.bind(this),
+							callback: this.responseFacebook.bind(this),
 							icon: 'fa-facebook',
 							size: 'small',
 							textButton: 'Connect with Facebook' }),
-						React.createElement('br', null),
 						React.createElement(
 							'div',
 							null,
@@ -11566,11 +11539,8 @@
 						this.state.fb_verified && React.createElement(
 							'div',
 							null,
-							React.createElement(_SettingsInputLabel2.default, { field: 'username' }),
-							React.createElement(_SettingsTextInput2.default, { field: 'username',
-								handleTyping: this.handleUsernameChange,
-								handleBlur: this.handleBlur
-							}),
+							React.createElement(RegisterTextInput, { field: 'username', value: this.state.username,
+								handleTyping: this.handleUsernameChange.bind(this) }),
 							this.state.submittable ? React.createElement(
 								Link,
 								{ to: '/' },
@@ -11582,8 +11552,8 @@
 									'Let\'s go! '
 								)
 							) : React.createElement(
-								'button',
-								{ className: 'btn btn-default', id: 'RegisterSubmit', disabled: true },
+								'div',
+								null,
 								'Almost there!'
 							)
 						)
@@ -11834,7 +11804,7 @@
 	var Link = __webpack_require__(/*! react-router */ 52).Link;
 	
 	
-	var text_fields = ["first_name", "last_name", "username", "password", "email_address"];
+	var text_fields = ["first_name", "last_name", "username", "password", "email"];
 	
 	var RegisterForm = function (_React$Component) {
 		_inherits(RegisterForm, _React$Component);
@@ -11847,7 +11817,7 @@
 			_this.state = { first_name: '',
 				last_name: '',
 				username: '',
-				email_address: '',
+				email: '',
 				password: ''
 			};
 			return _this;
@@ -11881,7 +11851,7 @@
 		}, {
 			key: 'verifyEmail',
 			value: function verifyEmail() {
-				var obj = { email_address: this.state.email_address };
+				var obj = { email_address: this.state.email };
 				$.ajax({
 					type: 'POST',
 					url: '/registerEmail',
@@ -11901,7 +11871,7 @@
 			key: 'handleChange',
 			value: function handleChange(obj) {
 				if (Object.keys(obj)[0] == "username") this.setState({ username_error: "" });
-				if (Object.keys(obj)[0] == "email_address") this.setState({ email_error: "" });
+				if (Object.keys(obj)[0] == "email") this.setState({ email_error: "" });
 				this.setState(obj);
 			}
 		}, {
@@ -11911,7 +11881,7 @@
 					first_name: this.state.first_name,
 					last_name: this.state.last_name,
 					username: this.state.username,
-					email_address: this.state.email_address,
+					email_address: this.state.email,
 					password: this.state.password
 				};
 				$.ajax({
@@ -12026,7 +11996,7 @@
 								React.createElement(
 									'b',
 									null,
-									'Get Started!'
+									'Create an account'
 								)
 							)
 						),
@@ -12108,7 +12078,7 @@
 			key: "handleBlur",
 			value: function handleBlur(event) {
 				var field = this.props.field;
-				if (field == "username") this.verifyUsername.bind(this)(event.target.value);else if (field == "email_address") this.verifyEmail.bind(this)(event.target.value);
+				if (field == "username") this.verifyUsername.bind(this)(event.target.value);else if (field == "email") this.verifyEmail.bind(this)(event.target.value);
 			}
 		}, {
 			key: "componentDidMount",
@@ -12125,16 +12095,16 @@
 				var content;
 				switch (this.props.field) {
 					case "first_name":
-						content = "At least 1 character and only contain letters";
+						content = "Must contain only letters";
 						break;
 					case "last_name":
-						content = "At least 1 character and only contain letters";
+						content = "Must contain only letters";
 						break;
 					case "password":
-						content = "At least 6 characters and contain at least one number and one letter.";
+						content = "Must contain at least one number and one letter";
 						break;
-					case "email_address":
-						content = "Give a valid e-mail address";
+					case "email":
+						content = "Give a valid e-mail address (e.g. user@gmail.com)";
 						break;
 					case "username":
 						content = "At least 4 characters long";
@@ -12144,7 +12114,7 @@
 					"div",
 					{ className: "form-group" },
 					React.createElement("input", { className: field + " register required form-control",
-						"data-placement": "right", "data-trigger": "manual", "data-content": content,
+						"data-placement": "left", "data-trigger": "manual", "data-content": content,
 						id: field, type: type, value: value, placeholder: idToName(field),
 						onChange: this.handleTyping.bind(this) })
 				);
