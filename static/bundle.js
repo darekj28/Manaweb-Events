@@ -122,9 +122,9 @@
 		if (!_AppStore2.default.getCurrentUser()) replace('/');
 	};
 	var addIp = function addIp(nextState, replace) {
-		$.get('https://api.ipify.org/?format=json', function (r) {
-			_AppActions2.default.addIp(r.ip);
-		}.bind(undefined));
+		// $.get('https://api.ipify.org/?format=json', function(r){ 
+		//    	AppActions.addIp(r.ip);
+		//    }.bind(this));
 	};
 	ReactDOM.render(React.createElement(
 		Router,
