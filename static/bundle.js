@@ -11753,7 +11753,10 @@
 			key: 'handleChange',
 			value: function handleChange(obj) {
 				if (Object.keys(obj)[0] == "username") this.setState({ username_error: "" });
-				if (Object.keys(obj)[0] == "email_or_phone") this.setState({ email_error: "" });
+				if (Object.keys(obj)[0] == "email_or_phone") {
+					this.verifyEmailOrPhone.bind(this)();
+					this.setState({ email_error: "" });
+				}
 				this.setState(obj);
 			}
 		}, {
