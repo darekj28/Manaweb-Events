@@ -27,6 +27,12 @@ def updatePassword():
 	output['result'] = 'success'
 	return jsonify(output)
 
+@browser_api.route('/verifyEmailOrPhone', methods = ['POST'])
+def verifyEmailOrPhone():
+	emailOrPhone = request.json['emailOrPhone']
+	output = validation.validateEmailOrPhone(emailOrPhone)
+	return output
+
 
 @browser_api.route('/sendEmailConfirmation', methods = ['POST'])
 def sendEmailConfirmation():
