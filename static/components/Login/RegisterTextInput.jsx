@@ -23,16 +23,16 @@ export default class RegisterTextInput extends React.Component {
 		var content;
 		switch(this.props.field) {
 			case "first_name" :
-				content = "At least 1 character and only contain letters";
+				content = "Must contain only letters";
 				break;
 			case "last_name" :
-				content = "At least 1 character and only contain letters";
+				content = "Must contain only letters";
 				break;
 			case "password" :
-				content = "At least 6 characters and contain at least one number and one letter."
+				content = "Must contain at least one number and one letter"
 				break;
 			case "email" :
-				content = "Give a valid e-mail address";
+				content = "Give a valid e-mail address (e.g. user@gmail.com)";
 				break;
 			case "username" : 
 				content = "At least 4 characters long";
@@ -41,7 +41,7 @@ export default class RegisterTextInput extends React.Component {
 		return (
 			<div className="form-group">
 				<input className={field + " register required form-control"} 
-					data-placement="right" data-trigger="manual" data-content={content}
+					data-placement="left" data-trigger="manual" data-content={content}
 					id={field} type={type} value={value} placeholder={idToName(field)}
 					onChange={this.handleTyping.bind(this)}/>
 			</div>
