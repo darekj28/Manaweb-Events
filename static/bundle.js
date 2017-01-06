@@ -11494,6 +11494,9 @@
 			value: function render() {
 				var appId = "1138002282937846";
 				var testAppId = "1298398903564849";
+	
+				var loadingStyle = {
+					display: 'inline-block' };
 				return React.createElement(
 					'div',
 					null,
@@ -11507,8 +11510,8 @@
 						size: 'small metro',
 						textButton: 'Connect with Facebook' }),
 					this.state.status == "clicked" && React.createElement(
-						'h5',
-						{ style: 'display:inline-block' },
+						'div',
+						{ style: loadingStyle },
 						'Authenticating with Facebook...'
 					),
 					this.state.status == "verified" && React.createElement(
