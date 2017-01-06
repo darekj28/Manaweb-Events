@@ -144,15 +144,15 @@ export default class FacebookConnect extends React.Component {
 		return (
 			<div>
                 {this.state.status == "start" &&
-                	<FacebookLogin
-					    appId= {testAppId}
-					    autoLoad={false}
-					    fields="first_name,email, last_name, name"
-					    onClick={this.handleFacebookLoginClick.bind(this)}
-					    callback={this.responseFacebook.bind(this)}
-					    icon="fa-facebook"
-					    size = "small"
-					    textButton = "Continue with Facebook" />}
+                <FacebookLogin
+				    appId= {appId}
+				    autoLoad={false}
+				    fields="first_name,email, last_name, name"
+				    onClick={this.handleFacebookLoginClick.bind(this)}
+				    callback={this.responseFacebook.bind(this)}
+				    icon="fa-facebook"
+				    size = "small metro"
+				    textButton = "Continue with Facebook" />}
 				{this.state.status == "clicked" && 
 				<h5>
 					Authenticating with Facebook...
