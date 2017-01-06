@@ -141,6 +141,10 @@ export default class FacebookConnect extends React.Component {
 	render() {
 		const appId = "1138002282937846"
 		const testAppId = "1298398903564849"
+
+		const loadingStyle = {
+		  display: 'inline-block', // note the capital 'W' here
+		};
 		return (
 			<div>
                 {this.state.status == "start" &&
@@ -154,9 +158,9 @@ export default class FacebookConnect extends React.Component {
 				    size = "small metro"
 				    textButton = "Connect with Facebook" />}
 				{this.state.status == "clicked" && 
-				<h5 style = "display:inline-block">
+				<div style = {loadingStyle}>
 					Authenticating with Facebook...
-				</h5>
+				</div>
 				}
 				{this.state.status == "verified" && 
 				<div>
