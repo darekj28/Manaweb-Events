@@ -5,7 +5,7 @@ import AppActions from '../../actions/AppActions.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 import { browserHistory } from 'react-router';
 
-var text_fields = ["first_name", "last_name", "username", "password", "email_or_phone" ];
+var text_fields = ["first_name", "last_name", "email_or_phone", "username", "password" ];
 
 export default class RegisterForm extends React.Component {
 	constructor() {
@@ -18,7 +18,7 @@ export default class RegisterForm extends React.Component {
 					};
 	}
 	verifyFields() {
-		if ($('form').find('input.valid').length == 5)
+		if ($('#register_form').find('input.valid').length == 5)
 			this.verifyUsername.bind(this)();
 	}
 	verifyUsername() {
@@ -132,7 +132,7 @@ export default class RegisterForm extends React.Component {
             }.bind(this));
     }
     register() {
-    	$('form').on("submit", function(e) {
+    	$('#register_form').on("submit", function(e) {
 			e.preventDefault();
 			this.verifyFields.bind(this)();
 		}.bind(this));
@@ -141,7 +141,7 @@ export default class RegisterForm extends React.Component {
     	this.register.bind(this)();
     	$('#CreateProfileSuccess').hide();
     	$('#CreateProfileFail').hide();
-    	$('form').goValidate();
+    	$('#register_form').goValidate();
     }
 	render() {
 		var error = "";
@@ -149,7 +149,7 @@ export default class RegisterForm extends React.Component {
 		else if (this.state.email_error) error = this.state.email_error;
 		return(
 			<div className="container" id="RegisterForm">
-				<form className="form-horizontal">
+				<form className="form-horizontal" id="register_form">
 					{text_fields.map(function(field) {
 						return 	<div>
 									<RegisterTextInput field={field} value={this.state[field]} 
@@ -157,8 +157,7 @@ export default class RegisterForm extends React.Component {
 								</div>;
 					}, this)}
 					<div className="form-group">
-						<button type="submit" className="btn-login register form-control" 
-								id="RegisterSubmit"> 
+						<button type="submit" className="btn-login register form-control"> 
 									<b>Create an account</b>
 						</button>
 					</div>

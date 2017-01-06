@@ -17,11 +17,8 @@ $.fn.goValidate = function() {
         password: {
             regex: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,20}$/
         },
-        email: {
-            regex: /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/
-        },
-        phone: {
-            regex: /^[2-9]\d{2}-\d{3}-\d{4}$/,
+        email_or_phone: {
+            regex: /^.*$/
         }
     };
     var validate = function(klass, value) {
@@ -90,7 +87,6 @@ $.fn.goValidate = function() {
 	});
   
     $form.submit(function(e) {
-      
         $inputs.each(function() { /* test each input */
         	if ($(this).is('.required') || $(this).hasClass('invalid')) {
             	showError($(this));
