@@ -36,7 +36,7 @@ def createProfile():
 		avatar_url 		= '/static/avatars/' + avatar_name + '.png'	
 		isActive = True	
 		confirmationPin = email_confirm.hashString(userID)
-		confirmed = True
+		confirmed = False
 		user_manager = Users()
 		user_manager.addUser(userID, first_name = first_name, last_name = last_name, password = password, email = email,  isActive = isActive,
 			avatar_url = avatar_url, avatar_name = avatar_name, confirmationPin = confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,

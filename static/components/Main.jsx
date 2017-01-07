@@ -27,9 +27,8 @@ const checkLogin = (nextState, replace) => {
 	var thisUser = AppStore.getCurrentUser()
 	if (!thisUser)
         replace(`/`);
-    else if (thisUser.confirmed == false) {
-    	console.log(thisUser.confirmed)
-    	replace(`/confirm`)
+    else if (!thisUser.confirmed) {
+    	replace(`/confirm`);
     }
 }
 const addIp = (nextState, replace) => {
