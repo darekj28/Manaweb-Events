@@ -32,7 +32,7 @@ export default class RegisterForm extends React.Component {
 		    	if (!res['error']) {
 		    		this.setState({ username_error : "" });
 		    	}
-		    	else {
+		    	else if (this.state.username != "") {
 		    		this.setState({ username_error : res['error'] });
 		    	}
 		    }.bind(this)
@@ -59,10 +59,10 @@ export default class RegisterForm extends React.Component {
 			data : JSON.stringify(obj, null, '\t'),
 		    contentType: 'application/json;charset=UTF-8',
 		    success : function(res) {
-		    	if (!res['error']) {
+		    	if (!res['error']){
 		    		this.setState({ email_error : "" });
 		    	}
-		    	else {
+		    	else if (this.state.email_or_phone != ""){
 		    		this.setState({ email_error : res['error'] });
 		    	}
 		    }.bind(this)
