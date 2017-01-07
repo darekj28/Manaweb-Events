@@ -7,12 +7,16 @@ const PROFILE_HEIGHT = 40
 const PROFILE_WIDTH = 40
 
 var profileImages = {
-    nissa: require('./static/avatars/prof1.png'),
-    chandra: require('./static/avatars/prof2.png'),
-    elspeth: require('./static/avatars/prof3.png'),
-    nicol: require('./static/avatars/prof1.png'),
-    ugin: require('./static/avatars/prof2.png'),
-    jace: require('./static/avatars/prof3.png'),
+    nissa: require('./static/avatars/nissa.png'),
+    chandra: require('./static/avatars/chandra.png'),
+    elspeth: require('./static/avatars/elspeth.png'),
+    nicol: require('./static/avatars/nicol.png'),
+    ugin: require('./static/avatars/ugin.png'),
+    jace: require('./static/avatars/jace.png'),
+    liliana: require('./static/avatars/liliana.png'),
+    ajani: require('./static/avatars/ajani.png'),
+    nahiri: require('./static/avatars/nahiri.png'),
+    gideon: require('./static/avatars/gideon.png'),
 };
 
 export default class FeedBox extends Component {
@@ -38,10 +42,10 @@ export default class FeedBox extends Component {
                 {post.avatar == 'nicol' && <Image  style={styles.profile_image} source={profileImages.nicol} />}
                 {post.avatar == 'ugin' && <Image  style={styles.profile_image} source={profileImages.ugin} />}
                 {post.avatar == 'jace' && <Image  style={styles.profile_image} source={profileImages.jace} />}
-                {post.avatar == 'liliana' && <Image  style={styles.profile_image} source={profileImages.nissa} />}
-                {post.avatar == 'ajani' && <Image  style={styles.profile_image} source={profileImages.nissa} />}
-                {post.avatar == 'nahiri' && <Image  style={styles.profile_image} source={profileImages.nissa} />}
-                {post.avatar == 'gideon' && <Image  style={styles.profile_image} source={profileImages.nissa} />}
+                {post.avatar == 'liliana' && <Image  style={styles.profile_image} source={profileImages.liliana} />}
+                {post.avatar == 'ajani' && <Image  style={styles.profile_image} source={profileImages.ajani} />}
+                {post.avatar == 'nahiri' && <Image  style={styles.profile_image} source={profileImages.nahiri} />}
+                {post.avatar == 'gideon' && <Image  style={styles.profile_image} source={profileImages.gideon} />}
 
 
                     <Text style = {styles.text_name}>
