@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
+import {AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
           Alert, Image, Animated, TouchableWithoutFeedback, ScrollView} from 'react-native';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import _ from 'lodash'
@@ -26,6 +26,7 @@ const ACTIVITY_BAR_COLOR = 'black'
 const POST_MESSAGE_HEIGHT_SHORT = 50
 const POST_MESSAGE_HEIGHT_TALL = 150
 const ANIMATE_DURATION = 700
+const avatar_list = ['nissa', 'chandra', 'elspeth', 'nicol', 'ugin', 'jace', 'liliana', 'ajani', 'nahiri', 'gideon']
 
 function contains(collection, item) {
   if(collection.indexOf(item) !== -1) return true;
@@ -64,15 +65,9 @@ class FeedScreen extends Component {
     this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
     this.postMessagePressed = this.postMessagePressed.bind(this)
     this._activities = FeedScreen.populateActivities()
-    this.refreshScreen = this.refreshScreen.bind(this);
-    this.initializeUserInfo = this.initializeUserInfo.bind(this);
-    this.handlePostSubmit = this.handlePostSubmit.bind(this);
     this.handlePostTyping = this.handlePostTyping.bind(this);
-    this.initializeUsername = this.initializeUsername.bind(this);
     this.handleFilterPress = this.handleFilterPress.bind(this);
-    this.handleServerPostSubmit = this.handleServerPostSubmit.bind(this);
     this._navigateToHome = this._navigateToHome.bind(this);
-    this.handleLogout = this.handleLogout.bind(this);
     this.handleRightAction = this.handleRightAction.bind(this)
 
   }
@@ -80,6 +75,14 @@ class FeedScreen extends Component {
 
   handlePostTyping (newPostContent) {
     this.setState({newPostContent : newPostContent})
+  }
+
+  handleRightAction() {
+
+  }
+
+  handlePostSubmit() {
+      Alert.alert('Sending up to the server')
   }
 
 
@@ -95,118 +98,9 @@ class FeedScreen extends Component {
     // $('html, body').animate({scrollTop: 0}, 300);
   }
 
-    // updates feed then sends the post to the server
-    handlePostSubmit(newPostContent){
-      var feed = this.state.feed;
-
-      if (this.state.post_actions.length == 0) {
-        this.setState({alert : true});
-      }
-
-      else {
-        this.setState({alert : false});
-        feed.unshift({
-              postContent: newPostContent,
-              avatar  : this.state.currentUser['avatar_name'],
-              name    : this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
-              userID  : this.state.currentUser['userID'],
-              time  : "just now",
-              isTrade : contains(this.state.post_actions, "Trade"),
-              isPlay  : contains(this.state.post_actions, "Play"),
-              isChill : contains(this.state.post_actions, "Chill"),
-              numberOfComments : 0,
-            });
-        setTimeout(function (){
-          this.handleServerPostSubmit(newPostContent);
-          }.bind(this), 1000)
-     }
-    }
-
-
-
-    // sends the post to the server and refreshes the page
-    async handleServerPostSubmit (newPostContent) {
-
-      let url = "https://manaweb-events.herokuapp.com"
-      let test_url = "http://0.0.0.0:5000"
-      let response = await fetch(url + "/mobileMakePost", {method: "POST",
-            headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-        body:
-        JSON.stringify(
-         {
-          postContent : newPostContent,
-          userID : this.state.currentUser['userID'],
-          numberOfComments : 0,
-          isTrade : contains(this.state.post_actions, "Trade"),
-          isPlay  : contains(this.state.post_actions, "Play"),
-          isChill : contains(this.state.post_actions, "Chill"),
-        })
-      })
-      let responseData = await response.json();
-      if (responseData['result'] == 'success') {
-        this.setState({newPostContent : ""})
-        this.refreshScreen(false);
-      }
-      else {
-        this.setState({newPostContent: 'failure...'})
-      }
-    }
-
-  async refreshScreen(initialize) {
-    let url = "https://manaweb-events.herokuapp.com"
-    let test_url = "http://0.0.0.0:5000"
-    let response = await fetch(url + "/mobileGetPosts", {method: "POST",
-          headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      body:
-      JSON.stringify(
-       {
-        feed_name: "BALT"
-      })
-    })
-    let responseData = await response.json();
-
-    if (responseData['result'] == 'success'){
-      if (responseData.post_list.length > 0) {
-          var feed = []
-          for (var i = 0; i < responseData['post_list'].length; i++) {
-            var obj = responseData['post_list'][i]
-            feed.unshift({
-              postContent : obj['body'],
-              avatar    : obj['avatar'],
-              name    : obj['first_name'] + ' ' + obj['last_name'],
-              userID    : obj['poster_id'],
-              time      : obj['time'],
-              isTrade   : obj['isTrade'],
-              isPlay    : obj['isPlay'],
-              isChill   : obj['isChill'],
-              comment_id  : obj['comment_id'],
-              unique_id   : obj['unique_id'],
-              numberOfComments : obj['numComments']
-            })
-          }
-          this.setState({feed: feed})
-         }
-      if (initialize == true){
-         this.initializeUserInfo();
-       }
-    }
-  }
-
-
   handleTitlePress() {
     Alert.alert('Manaweb is pressed');
   };
-
-  handleRightAction() {
-    // Alert.alert('Menu pressed')
-    this.handleLogout();
-  }
 
   selectActivitiesAction() {
     // Alert.alert('Select which activity')
@@ -233,55 +127,10 @@ class FeedScreen extends Component {
       }
   }
 
-  async initializeUsername(){
-     let value = await AsyncStorage.getItem("current_username")
-        if (value == null) {
-          this.setState({"current_username" : ""})
-        }
-        else {
-          this.setState({"current_username" : value})
-        }
-  }
-
-  handleLogout() {
-    AsyncStorage.setItem("current_username", "").then((value) => {
-        this._navigateToHome();
-      });
-  }
-
   _navigateToHome(){
     this.props.navigator.push({
     href: "Start"
     })
-  }
-
-
-  async initializeUserInfo(){
-    let url = "https://manaweb-events.herokuapp.com"
-    let test_url = "http://0.0.0.0:5000"
-    let response = await fetch(url + "/mobileGetCurrentUserInfo", {method: "POST",
-    headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      body:
-      JSON.stringify(
-       {
-        userID: this.state.current_username
-      })
-    })
-    let responseData = await response.json()
-
-    if (responseData['result'] == 'success') {
-      this.setState({currentUser: responseData['thisUser']})
-    }
-  }
-
-  componentWillMount() {
-      this.initializeUsername().done();
-      this.refreshScreen(true).done();
-      // this.refreshScreen(true);
-
   }
 
 
@@ -313,13 +162,6 @@ class FeedScreen extends Component {
                 />
             </TouchableWithoutFeedback>
 
-            {/*
-            <Text>
-              {this.state.post_actions}
-            </Text>
-            */}
-
-
             <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
                 <View style = {styles.containerHorizontal}>
                     <View style = {{flex: 0.85}}>
@@ -350,11 +192,7 @@ class FeedScreen extends Component {
                     onClick={(event) => this.postMessagePressed()}
                     animateDuration={ANIMATE_DURATION}
                     post_message_expanded={this.state.post_message_expanded}
-                    handleFilterPress = {this.handleFilterPress}
-                    newPostContent = {this.state.newPostContent}
-                    handlePostTyping = {this.handlePostTyping}
                     handlePostSubmit = {this.handlePostSubmit}
-                    newPostContent = {this.state.newPostContent}
                     >
                 </PostMessageBox>
             </Animated.View>
@@ -392,23 +230,30 @@ class FeedScreen extends Component {
   }
 }
 
-var messages = ['This is my first message',
-'This is my second message',
-'This is my third message',
-'This is my fourth message',
-'This is my fifth message',
-'This is my sixth message',
-'This is my seventh message',
-'This is my eigth message',
-'This is my ninth message',
-'This is my tenth message'
+var messages = ['This is my first message. This is some random amount of characters to fill up space so that it goes to the second or third line',
+'This is my second message. This is some random amount of characters to fill up space so that it goes to the second or third line',
+'This is my third message. This is some random amount of characters to fill up space so that it goes to the second or third line',
+'This is my fourth message. This is some random amount of characters to fill up space so that it goes to the second or third line',
+'This is my fifth message. This is some random amount of characters to fill up space so that it goes to the second or third line',
+'This is my sixth message. This is some random amount of characters to fill up space so that it goes to the second or third line',
+'This is my seventh message. This is some random amount of characters to fill up space so that it goes to the second or third line',
+'This is my eigth message. This is some random amount of characters to fill up space so that it goes to the second or third line',
+'This is my ninth message. This is some random amount of characters to fill up space so that it goes to the second or third line',
+'This is my tenth message. This is some random amount of characters to fill up space so that it goes to the second or third line'
 ]
 
 var createFeedRow = (message, i) =>
     <FeedBox
         key={i}
-        message={message}
-        image_ID = { i%3 }/>;
+        post = {{postContent: message.substr(0, 20 + i*423 % 40),
+                isTrade: i * 123 % 40 < 20,
+                isPlay: i * 5234 % 400 < 200,
+                isChill: i * 4123 % 240 < 120,
+                userID: 'blobblob',
+                name: 'Bob Blob',
+                avatar: avatar_list[i % 10]
+            }}
+            />;
 
 const styles = StyleSheet.create({
   container: {
