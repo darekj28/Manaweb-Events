@@ -12,6 +12,8 @@ import CommentApp from './Comment/CommentApp.jsx';
 import NotificationsApp from './Notifications/NotificationsApp.jsx';
 import SettingsApp from './Settings/SettingsApp.jsx';
 import Recovery from './Login/Recovery.jsx';
+import Confirm from './Login/Confirm.jsx';
+
 
 class Main extends React.Component {
 	render() {
@@ -22,8 +24,13 @@ class Main extends React.Component {
 	}
 }
 const checkLogin = (nextState, replace) => {
-	if (!AppStore.getCurrentUser())
+	var thisUser = AppStore.getCurrentUser()
+	if (!thisUser)
         replace(`/`);
+    else if (thisUser.confirmed == false) {
+    	console.log(thisUser.confirmed)
+    	replace(`/confirm`)
+    }
 }
 const addIp = (nextState, replace) => {
 	// $.get('https://api.ipify.org/?format=json', function(r){ 
@@ -38,5 +45,6 @@ ReactDOM.render(
 	  	<Route path="notifications" component={NotificationsApp} onEnter={checkLogin}/>
 	  	<Route path="settings" component={SettingsApp} onEnter={checkLogin}/>
 	  	<Route path="recovery" component={Recovery}/>
+	  	<Route path ="confirm" component = {Confirm} />
     </Route></Router>, document.getElementById('app'));
 
