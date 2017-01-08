@@ -22,13 +22,15 @@ def sendMessage(sender, receiver, body):
 def sendTextConfirmationPin(user_phone_number):
 	message_template = "Your confirmation pin is : " 
 	timeStamp = time.time()
-	confirmationPin = hashString(str(timeStamp))
+	confirmationPin = generatePin()
 	message = message_template + confirmationPin
 	# we comment this out so Dareks phone doesn't get spammed
 	raw_phone_number = formatRawPhoneNumber(user_phone_number)
 	sendMessage(Twilio_Number, raw_phone_number, message)
 	return confirmationPin
 
+def generatePin():
+	return hashString(str(time.time()))
 
 def hashString(s):
 	hash_id = abs(hash(s))
