@@ -124,8 +124,7 @@
 	
 	var checkLogin = function checkLogin(nextState, replace) {
 		var thisUser = _AppStore2.default.getCurrentUser();
-		if (!thisUser) replace('/');else if (thisUser.confirmed == false) {
-			console.log(thisUser.confirmed);
+		if (!thisUser) replace('/');else if (!thisUser.confirmed) {
 			replace('/confirm');
 		}
 	};
@@ -11507,7 +11506,7 @@
 					'div',
 					null,
 					this.state.status == "start" && React.createElement(_reactFacebookLogin2.default, {
-						appId: testAppId,
+						appId: appId,
 						autoLoad: false,
 						fields: 'first_name,email, last_name, name',
 						onClick: this.handleFacebookLoginClick.bind(this),
@@ -11627,7 +11626,10 @@
 						content = "Must contain at least one number and one letter";
 						break;
 					case "username":
-						content = "At least 2 characters";
+						content = "Must be at least 2 characters";
+						break;
+					case "email_or_phone":
+						content = "Must be a valid email or phone number";
 						break;
 				}
 				return React.createElement(
@@ -11721,6 +11723,24 @@
 				if ($('#register_form').find('input.valid').length == 5) this.verifyUsername.bind(this)();
 			}
 		}, {
+			key: 'checkUsername',
+			value: function checkUsername() {
+				var obj = { username: this.state.username };
+				$.ajax({
+					type: 'POST',
+					url: '/registerUsername',
+					data: JSON.stringify(obj, null, '\t'),
+					contentType: 'application/json;charset=UTF-8',
+					success: function (res) {
+						if (!res['error']) {
+							this.setState({ username_error: "" });
+						} else if (this.state.username != "") {
+							this.setState({ username_error: res['error'] });
+						}
+					}.bind(this)
+				});
+			}
+		}, {
 			key: 'verifyUsername',
 			value: function verifyUsername() {
 				var obj = { username: this.state.username };
@@ -11730,12 +11750,7 @@
 					data: JSON.stringify(obj, null, '\t'),
 					contentType: 'application/json;charset=UTF-8',
 					success: function (res) {
-						if (!res['error']) {
-							this.verifyEmailOrPhone.bind(this)();
-							this.setState({ username_error: "" });
-						} else {
-							this.setState({ username_error: res['error'] });
-						}
+						if (!res['error']) this.verifyEmailOrPhone.bind(this)();
 					}.bind(this)
 				});
 			}
@@ -11751,7 +11766,7 @@
 					success: function (res) {
 						if (!res['error']) {
 							this.setState({ email_error: "" });
-						} else {
+						} else if (this.state.email_or_phone != "") {
 							this.setState({ email_error: res['error'] });
 						}
 					}.bind(this)
@@ -11767,12 +11782,7 @@
 					data: JSON.stringify(obj, null, '\t'),
 					contentType: 'application/json;charset=UTF-8',
 					success: function (res) {
-						if (!res['error']) {
-							this.handleSubmit.bind(this)(res['method']);
-							this.setState({ email_error: "" });
-						} else {
-							this.setState({ email_error: res['error'] });
-						}
+						if (!res['error']) this.handleSubmit.bind(this)(res['method']);
 					}.bind(this)
 				});
 			}
@@ -11780,10 +11790,7 @@
 			key: 'handleChange',
 			value: function handleChange(obj) {
 				if (Object.keys(obj)[0] == "username") this.setState({ username_error: "" });
-				if (Object.keys(obj)[0] == "email_or_phone") {
-					this.checkEmailOrPhone.bind(this)();
-					this.setState({ email_error: "" });
-				}
+				if (Object.keys(obj)[0] == "email_or_phone") this.setState({ email_error: "" });
 				this.setState(obj);
 			}
 		}, {
@@ -11876,6 +11883,12 @@
 				this.register.bind(this)();
 				$('#CreateProfileSuccess').hide();
 				$('#CreateProfileFail').hide();
+				$('#email_or_phone').blur(function () {
+					this.checkEmailOrPhone.bind(this)();
+				}.bind(this));
+				$('#username').blur(function () {
+					this.checkUsername.bind(this)();
+				}.bind(this));
 				$('#register_form').goValidate();
 			}
 		}, {
