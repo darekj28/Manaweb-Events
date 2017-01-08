@@ -10,6 +10,7 @@ import RegisterEmail from '../screens/register/RegisterEmail'
 import RegisterPassword from '../screens/register/RegisterPassword'
 import LoginScreen from '../screens/LoginScreen'
 import FeedScreen from '../screens/FeedScreen'
+import MenuScreen from '../screens/MenuScreen'
 
 
 
@@ -29,7 +30,7 @@ class StartNavigator extends Component {
   switch(route.href){
     case "Register":
       return (
-        <RegisterName  
+        <RegisterName
           {...globalNavigatorProps} />
         )
 
@@ -38,7 +39,7 @@ class StartNavigator extends Component {
       return (
 
           <LoginScreen
-              {...globalNavigatorProps} 
+              {...globalNavigatorProps}
              />
 
         )
@@ -52,7 +53,7 @@ class StartNavigator extends Component {
 
     case "RegisterName":
       return (
-        <RegisterName 
+        <RegisterName
           {...globalNavigatorProps} />
         )
 
@@ -61,30 +62,38 @@ class StartNavigator extends Component {
       return (
 
           <RegisterId first_name = {route.first_name} last_name = {route.last_name}
-             {...globalNavigatorProps} 
+             {...globalNavigatorProps}
              />
         )
 
     case "RegisterEmail":
       return (
           <RegisterEmail first_name = {route.first_name} last_name = {route.last_name} userID = {route.userID}
-             {...globalNavigatorProps} 
+             {...globalNavigatorProps}
              />
         )
     case "RegisterPassword":
       return (
           <RegisterPassword first_name = {route.first_name} last_name = {route.last_name} userID = {route.userID} email = {route.email}
-             {...globalNavigatorProps} 
+             {...globalNavigatorProps}
              />
         )
-		
+
 	case "Feed":
       return (
           <FeedScreen
-              {...globalNavigatorProps} 
+              {...globalNavigatorProps}
              />
 
         )
+
+    case "Menu":
+          return (
+              <MenuScreen
+                  {...globalNavigatorProps}
+                 />
+
+            )
 
 
     default:
@@ -98,7 +107,7 @@ class StartNavigator extends Component {
 
   render() {
     return (
-      <Navigator 
+      <Navigator
       initialRoute = {{href: "Start"}}
       ref = "appNavigator"
       style = {styles.navigatorStyles}
@@ -111,9 +120,7 @@ class StartNavigator extends Component {
 }
 
 const styles = StyleSheet.create({
-  
+
 });
 
 module.exports = StartNavigator;
-
-

@@ -43,6 +43,12 @@ class RegisterId extends Component {
     })
   }
 
+  _navigateToMenu() {
+    this.props.navigator.push({
+    href: "Menu",
+    })
+  }
+
   render() {
     return (
       <View style = {styles.container}>
@@ -59,9 +65,15 @@ class RegisterId extends Component {
                 </Text>
               </TouchableHighlight>
 
-			        <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToFeed()}>
+              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToFeed()}>
                 <Text style = {styles.buttonText}>
                   Testing button. Go to feed page
+                </Text>
+              </TouchableHighlight>
+
+              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToMenu()}>
+                <Text style = {styles.buttonText}>
+                  Testing button. Go to menu page
                 </Text>
               </TouchableHighlight>
 
