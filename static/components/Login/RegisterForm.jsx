@@ -159,7 +159,7 @@ export default class RegisterForm extends React.Component {
     	$.post('/getNotificationCount', {currentUser : AppStore.getCurrentUser()},
             function(data) {
                 AppActions.addNotificationCount(data.count);
-                browserHistory.push('/confirm');
+                browserHistory.push('/');
             }.bind(this));
     }
     register() {

@@ -44,13 +44,6 @@ export default class LoginForm extends React.Component {
 	}
 	getCurrentUserInfo() {
 		$.post('/getCurrentUserInfo', {userID : this.state.login_user}, function(data) {
-			if (data.confirmed == false){
-				browserHistory.push('/confirm')
-			}
-			else {
-				AppActions.addCurrentUser(data.thisUser);
-				this.getNotifications.bind(this)();	
-			}
 			if (!data.confirmed) 
 				browserHistory.push('/confirm');
 			else {
@@ -81,12 +74,7 @@ export default class LoginForm extends React.Component {
     	$.post('/getNotificationCount', {currentUser : AppStore.getCurrentUser()},
             function(data) {
                 AppActions.addNotificationCount(data.count);
-                if (data.confirmed == true) {
-                	browserHistory.push('/');
-                }
-                else {
-                	browserHistory.push('/confirm')
-                }
+                browserHistory.push('/');
             }.bind(this));
     }
     enableLogin() {
