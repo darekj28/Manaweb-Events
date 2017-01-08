@@ -51,6 +51,12 @@ export default class LoginForm extends React.Component {
 				AppActions.addCurrentUser(data.thisUser);
 				this.getNotifications.bind(this)();	
 			}
+			if (!data.confirmed) 
+				browserHistory.push('/confirm');
+			else {
+				AppActions.addCurrentUser(data.thisUser);
+				this.getNotifications.bind(this)();
+			}
 		}.bind(this));
 	}
 	getNotifications() {

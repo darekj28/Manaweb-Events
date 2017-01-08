@@ -40,6 +40,9 @@ export default class RegisterForm extends React.Component {
 	}
 	verifyUsername() {
 		var obj = { username : this.state.username };
+	}
+	verifyEmail() {
+		var obj = { email_or_phone : this.state.email_or_phone };
 		$.ajax({
 			type: 'POST',
 			url: '/registerUsername',
@@ -126,8 +129,12 @@ export default class RegisterForm extends React.Component {
 	}
 	getCurrentUserInfo() {
 		$.post('/getCurrentUserInfo', {userID : this.state.username}, function(data) {
-			AppActions.addCurrentUser(data.thisUser);
-			this.getNotifications.bind(this)();
+			if (!data.confirmed) 
+				browserHistory.push('/confirm');
+			else {
+				AppActions.addCurrentUser(data.thisUser);
+				this.getNotifications.bind(this)();
+			}
 		}.bind(this));
 	}
 	getNotifications() {

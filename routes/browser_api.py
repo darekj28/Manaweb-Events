@@ -93,7 +93,7 @@ def facebookCreateAccount():
 	confirmed = True		
 	user_manager = Users()
 	user_manager.addUser(userID, first_name = first_name, last_name = last_name, password = password, email = email,  isActive = isActive,
-		avatar_url = avatar_url, avatar_name = avatar_name, confirmationPin = confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
+		avatar_url = avatar_url, avatar_name = avatar_name, confirmed=confirmed, confirmationPin = confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
 		isAdmin = False, phone_number = phone_number, birthMonth = birthMonth, birthDay = birthDay, birthYear = birthYear,
 		gender = gender, fb_id = fb_id) 
 
@@ -114,10 +114,10 @@ def verifyAndLogin() :
 	if res['result'] == 'success':
 		session['logged_in'] = True
 		session['userID'] = res['username']
-		# security_manager = Security()
-		# isSuccess = True
-		# security_manager.recordLoginAttempt(user, isSuccess, ip, False)
-		# security_manager.closeConnection()
+		security_manager = Security()
+		isSuccess = True
+		security_manager.recordLoginAttempt(user, isSuccess, ip, False)
+		security_manager.closeConnection()
 		return jsonify({ 'error' : False })
 	else: 
 		isSuccess = False
