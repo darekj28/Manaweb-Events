@@ -107,7 +107,7 @@ def before_request():
 							if request.endpoint.split('/')[0] == 'logout':
 								return logout()
 							if request.endpoint.split('/')[0] != 'confirmation':
-								return render_template('confirmation.html')
+								return render_template('index.html')
 
 
 
