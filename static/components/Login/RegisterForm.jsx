@@ -18,6 +18,7 @@ export default class RegisterForm extends React.Component {
 					};
 	}
 	verifyFields() {
+		console.log("yo");
 		if ($('#register_form').find('input.valid').length == 5)
 			this.verifyUsername.bind(this)();
 	}
@@ -40,9 +41,6 @@ export default class RegisterForm extends React.Component {
 	}
 	verifyUsername() {
 		var obj = { username : this.state.username };
-	}
-	verifyEmail() {
-		var obj = { email_or_phone : this.state.email_or_phone };
 		$.ajax({
 			type: 'POST',
 			url: '/registerUsername',
