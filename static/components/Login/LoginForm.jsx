@@ -44,8 +44,13 @@ export default class LoginForm extends React.Component {
 	}
 	getCurrentUserInfo() {
 		$.post('/getCurrentUserInfo', {userID : this.state.login_user}, function(data) {
-			AppActions.addCurrentUser(data.thisUser);
-			this.getNotifications.bind(this)();
+			if (data.confirmed == false){
+				browserHistory.push('/confirm')
+			}
+			else {
+				AppActions.addCurrentUser(data.thisUser);
+				this.getNotifications.bind(this)();	
+			}
 		}.bind(this));
 	}
 	getNotifications() {
@@ -70,7 +75,12 @@ export default class LoginForm extends React.Component {
     	$.post('/getNotificationCount', {currentUser : AppStore.getCurrentUser()},
             function(data) {
                 AppActions.addNotificationCount(data.count);
-                browserHistory.push('/');
+                if (data.confirmed == true) {
+                	browserHistory.push('/');
+                }
+                else {
+                	browserHistory.push('/confirm')
+                }
             }.bind(this));
     }
     enableLogin() {

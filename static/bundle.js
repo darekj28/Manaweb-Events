@@ -124,7 +124,14 @@
 	
 	var checkLogin = function checkLogin(nextState, replace) {
 		var thisUser = _AppStore2.default.getCurrentUser();
-		if (!thisUser) replace('/');else if (!thisUser.confirmed) {
+		if (!thisUser) replace('/');else if (thisUser.confirmed == false) {
+			replace('/confirm');
+		}
+	};
+	
+	var checkConfirmed = function checkConfirmed(nextState, replace) {
+		var thisUser = _AppStore2.default.getCurrentUser();
+		if (thisUser.confirmed == false) {
 			replace('/confirm');
 		}
 	};
@@ -138,8 +145,8 @@
 		{ history: browserHistory },
 		React.createElement(
 			Route,
-			{ path: '/', component: Main, onEnter: addIp },
-			React.createElement(IndexRoute, { component: _App2.default }),
+			{ path: '/', component: Main },
+			React.createElement(IndexRoute, { component: _App2.default, onEnter: checkConfirmed }),
 			React.createElement(Route, { path: 'comment/:comment_id', component: _CommentApp2.default, onEnter: checkLogin }),
 			React.createElement(Route, { path: 'notifications', component: _NotificationsApp2.default, onEnter: checkLogin }),
 			React.createElement(Route, { path: 'settings', component: _SettingsApp2.default, onEnter: checkLogin }),
@@ -11866,7 +11873,7 @@
 			value: function getNotificationCount() {
 				$.post('/getNotificationCount', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
 					_AppActions2.default.addNotificationCount(data.count);
-					_reactRouter.browserHistory.push('/');
+					_reactRouter.browserHistory.push('/confirm');
 				}.bind(this));
 			}
 		}, {
@@ -12155,8 +12162,12 @@
 			key: 'getCurrentUserInfo',
 			value: function getCurrentUserInfo() {
 				$.post('/getCurrentUserInfo', { userID: this.state.login_user }, function (data) {
-					_AppActions2.default.addCurrentUser(data.thisUser);
-					this.getNotifications.bind(this)();
+					if (data.confirmed == false) {
+						_reactRouter.browserHistory.push('/');
+					} else {
+						_AppActions2.default.addCurrentUser(data.thisUser);
+						this.getNotifications.bind(this)();
+					}
 				}.bind(this));
 			}
 		}, {
@@ -12183,7 +12194,11 @@
 			value: function getNotificationCount() {
 				$.post('/getNotificationCount', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
 					_AppActions2.default.addNotificationCount(data.count);
-					_reactRouter.browserHistory.push('/');
+					if (data.confirmed == true) {
+						_reactRouter.browserHistory.push('/');
+					} else {
+						_reactRouter.browserHistory.push('/confirm');
+					}
 				}.bind(this));
 			}
 		}, {

@@ -27,7 +27,14 @@ const checkLogin = (nextState, replace) => {
 	var thisUser = AppStore.getCurrentUser()
 	if (!thisUser)
         replace(`/`);
-    else if (!thisUser.confirmed) {
+    else if (thisUser.confirmed == false) {
+    	replace(`/confirm`);
+    }
+}
+
+const checkConfirmed = (nextState, replace) => {
+	var thisUser = AppStore.getCurrentUser()
+	if (thisUser.confirmed == false) {
     	replace(`/confirm`);
     }
 }
@@ -38,8 +45,8 @@ const addIp = (nextState, replace) => {
 }
 ReactDOM.render(
 	<Router history={browserHistory}>
-	<Route path="/" component={Main} onEnter={addIp}>
-		<IndexRoute component={App}/>
+	<Route path="/" component={Main}>
+		<IndexRoute component={App} onEnter = {checkConfirmed}/>
 	  	<Route path="comment/:comment_id" component={CommentApp} onEnter={checkLogin}/>
 	  	<Route path="notifications" component={NotificationsApp} onEnter={checkLogin}/>
 	  	<Route path="settings" component={SettingsApp} onEnter={checkLogin}/>
