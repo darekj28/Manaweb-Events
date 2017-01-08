@@ -126,8 +126,12 @@ export default class RegisterForm extends React.Component {
 	}
 	getCurrentUserInfo() {
 		$.post('/getCurrentUserInfo', {userID : this.state.username}, function(data) {
-			AppActions.addCurrentUser(data.thisUser);
-			this.getNotifications.bind(this)();
+			if (!data.confirmed) 
+				browserHistory.push('/confirm');
+			else {
+				AppActions.addCurrentUser(data.thisUser);
+				this.getNotifications.bind(this)();
+			}
 		}.bind(this));
 	}
 	getNotifications() {

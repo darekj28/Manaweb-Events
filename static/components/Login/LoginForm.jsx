@@ -44,8 +44,12 @@ export default class LoginForm extends React.Component {
 	}
 	getCurrentUserInfo() {
 		$.post('/getCurrentUserInfo', {userID : this.state.login_user}, function(data) {
-			AppActions.addCurrentUser(data.thisUser);
-			this.getNotifications.bind(this)();
+			if (!data.confirmed) 
+				browserHistory.push('/confirm');
+			else {
+				AppActions.addCurrentUser(data.thisUser);
+				this.getNotifications.bind(this)();
+			}
 		}.bind(this));
 	}
 	getNotifications() {
