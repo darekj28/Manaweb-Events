@@ -18,7 +18,6 @@ export default class RegisterForm extends React.Component {
 					};
 	}
 	verifyFields() {
-		console.log("yo");
 		if ($('#register_form').find('input.valid').length == 5)
 			this.verifyUsername.bind(this)();
 	}
@@ -127,7 +126,7 @@ export default class RegisterForm extends React.Component {
 	}
 	getCurrentUserInfo() {
 		$.post('/getCurrentUserInfo', {userID : this.state.username}, function(data) {
-			if (!data.confirmed) 
+			if (!data.thisUser.confirmed) 
 				browserHistory.push('/confirm');
 			else {
 				AppActions.addCurrentUser(data.thisUser);
