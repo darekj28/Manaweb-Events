@@ -128,13 +128,6 @@
 			replace('/confirm');
 		}
 	};
-	
-	var checkConfirmed = function checkConfirmed(nextState, replace) {
-		var thisUser = _AppStore2.default.getCurrentUser();
-		if (thisUser.confirmed == false) {
-			replace('/confirm');
-		}
-	};
 	var addIp = function addIp(nextState, replace) {
 		// $.get('https://api.ipify.org/?format=json', function(r){ 
 		//    	AppActions.addIp(r.ip);
@@ -146,7 +139,7 @@
 		React.createElement(
 			Route,
 			{ path: '/', component: Main },
-			React.createElement(IndexRoute, { component: _App2.default, onEnter: checkConfirmed }),
+			React.createElement(IndexRoute, { component: _App2.default }),
 			React.createElement(Route, { path: 'comment/:comment_id', component: _CommentApp2.default, onEnter: checkLogin }),
 			React.createElement(Route, { path: 'notifications', component: _NotificationsApp2.default, onEnter: checkLogin }),
 			React.createElement(Route, { path: 'settings', component: _SettingsApp2.default, onEnter: checkLogin }),
@@ -11277,11 +11270,7 @@
 						React.createElement(
 							'div',
 							{ className: 'col-xs-6' },
-<<<<<<< Updated upstream
 							React.createElement('img', { id: 'Logo', src: 'static/img/gatewatch.jpg' })
-=======
-							React.createElement('img', { id: 'Logo', src: 'static/logo.png' })
->>>>>>> Stashed changes
 						),
 						React.createElement(
 							'div',
@@ -11517,26 +11506,14 @@
 					'div',
 					null,
 					this.state.status == "start" && React.createElement(_reactFacebookLogin2.default, {
-<<<<<<< HEAD
 						appId: appId,
-=======
-<<<<<<< Updated upstream
-						appId: testAppId,
-=======
-						appId: appId,
->>>>>>> Stashed changes
->>>>>>> f5aa69e64d467b30c29d11d16725f01543d98502
 						autoLoad: false,
 						fields: 'first_name,email, last_name, name',
 						onClick: this.handleFacebookLoginClick.bind(this),
 						callback: this.responseFacebook.bind(this),
 						icon: 'fa-facebook',
 						size: 'small metro',
-<<<<<<< Updated upstream
 						textButton: 'Connect with Facebook' }),
-=======
-						textButton: 'Continue with Facebook' }),
->>>>>>> Stashed changes
 					this.state.status == "clicked" && React.createElement(
 						'h5',
 						null,
@@ -11630,20 +11607,6 @@
 				this.props.handleTyping(obj);
 			}
 		}, {
-<<<<<<< Updated upstream
-=======
-			key: "handleBlur",
-			value: function handleBlur(event) {
-				var field = this.props.field;
-				if (field == "username") this.verifyUsername.bind(this)(event.target.value);else if (field == "email") this.verifyEmail.bind(this)(event.target.value);
-			}
-		}, {
-			key: "componentDidMount",
-			value: function componentDidMount() {
-				if (this.props.field == "password") passwordHelper();
-			}
-		}, {
->>>>>>> Stashed changes
 			key: "render",
 			value: function render() {
 				var field = this.props.field,
@@ -11662,12 +11625,6 @@
 					case "password":
 						content = "Must contain at least one number and one letter";
 						break;
-<<<<<<< Updated upstream
-=======
-					case "email":
-						content = "Give a valid e-mail address (e.g. user@gmail.com)";
-						break;
->>>>>>> Stashed changes
 					case "username":
 						content = "Must be at least 2 characters";
 						break;
@@ -11741,11 +11698,7 @@
 	var Link = __webpack_require__(/*! react-router */ 52).Link;
 	
 	
-<<<<<<< Updated upstream
 	var text_fields = ["first_name", "last_name", "email_or_phone", "username", "password"];
-=======
-	var text_fields = ["first_name", "last_name", "username", "password", "email"];
->>>>>>> Stashed changes
 	
 	var RegisterForm = function (_React$Component) {
 		_inherits(RegisterForm, _React$Component);
@@ -11767,11 +11720,7 @@
 		_createClass(RegisterForm, [{
 			key: 'verifyFields',
 			value: function verifyFields() {
-<<<<<<< Updated upstream
 				if ($('#register_form').find('input.valid').length == 5) this.verifyUsername.bind(this)();
-=======
-				if ($('form').find('input.valid').length == 5) this.verifyUsername.bind(this)();
->>>>>>> Stashed changes
 			}
 		}, {
 			key: 'checkUsername',
@@ -11889,8 +11838,10 @@
 			key: 'getCurrentUserInfo',
 			value: function getCurrentUserInfo() {
 				$.post('/getCurrentUserInfo', { userID: this.state.username }, function (data) {
-					_AppActions2.default.addCurrentUser(data.thisUser);
-					this.getNotifications.bind(this)();
+					if (!data.thisUser.confirmed) _reactRouter.browserHistory.push('/confirm');else {
+						_AppActions2.default.addCurrentUser(data.thisUser);
+						this.getNotifications.bind(this)();
+					}
 				}.bind(this));
 			}
 		}, {
@@ -11917,7 +11868,7 @@
 			value: function getNotificationCount() {
 				$.post('/getNotificationCount', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
 					_AppActions2.default.addNotificationCount(data.count);
-					_reactRouter.browserHistory.push('/confirm');
+					_reactRouter.browserHistory.push('/');
 				}.bind(this));
 			}
 		}, {
@@ -11966,12 +11917,7 @@
 							{ className: 'form-group' },
 							React.createElement(
 								'button',
-<<<<<<< Updated upstream
 								{ type: 'submit', className: 'btn-login register form-control' },
-=======
-								{ type: 'submit', className: 'btn-login register form-control',
-									id: 'RegisterSubmit' },
->>>>>>> Stashed changes
 								React.createElement(
 									'b',
 									null,
@@ -11979,7 +11925,6 @@
 								)
 							)
 						),
-<<<<<<< Updated upstream
 						React.createElement(
 							'div',
 							{ className: 'form-group' },
@@ -12017,32 +11962,6 @@
 									'- or -'
 								)
 							)
-=======
-						error != "" && React.createElement(
-							'div',
-							{ className: 'warning' },
-							error
-						),
-						React.createElement(
-							'div',
-							{ className: 'success', id: 'CreateProfileSuccess' },
-							React.createElement(
-								'strong',
-								null,
-								'Success!'
-							),
-							' Please hold on as we redirect you.'
-						),
-						React.createElement(
-							'div',
-							{ className: 'warning', id: 'CreateProfileFail' },
-							React.createElement(
-								'strong',
-								null,
-								'Bro!'
-							),
-							' You need to fill out more stuff.'
->>>>>>> Stashed changes
 						)
 					)
 				);
@@ -12238,9 +12157,7 @@
 			key: 'getCurrentUserInfo',
 			value: function getCurrentUserInfo() {
 				$.post('/getCurrentUserInfo', { userID: this.state.login_user }, function (data) {
-					if (data.confirmed == false) {
-						_reactRouter.browserHistory.push('/');
-					} else {
+					if (!data.thisUser.confirmed) _reactRouter.browserHistory.push('/confirm');else {
 						_AppActions2.default.addCurrentUser(data.thisUser);
 						this.getNotifications.bind(this)();
 					}
@@ -12270,11 +12187,7 @@
 			value: function getNotificationCount() {
 				$.post('/getNotificationCount', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
 					_AppActions2.default.addNotificationCount(data.count);
-					if (data.confirmed == true) {
-						_reactRouter.browserHistory.push('/');
-					} else {
-						_reactRouter.browserHistory.push('/confirm');
-					}
+					_reactRouter.browserHistory.push('/');
 				}.bind(this));
 			}
 		}, {
@@ -14302,136 +14215,6 @@
 	}(React.Component);
 	
 	exports.default = SettingsApp;
-
-/***/ },
-/* 143 */
-/*!**********************************************************!*\
-  !*** ./static/components/Settings/SettingsTextInput.jsx ***!
-  \**********************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _AppStore = __webpack_require__(/*! ../../stores/AppStore.jsx */ 1);
-	
-	var _AppStore2 = _interopRequireDefault(_AppStore);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var React = __webpack_require__(/*! react */ 2);
-	
-	var SettingsTextInput = function (_React$Component) {
-		_inherits(SettingsTextInput, _React$Component);
-	
-		function SettingsTextInput(props) {
-			_classCallCheck(this, SettingsTextInput);
-	
-			var _this = _possibleConstructorReturn(this, (SettingsTextInput.__proto__ || Object.getPrototypeOf(SettingsTextInput)).call(this, props));
-	
-			_this.state = { valid: "", warning: "", hasMounted: false };
-			return _this;
-		}
-	
-		_createClass(SettingsTextInput, [{
-			key: 'verifyOldPassword',
-			value: function verifyOldPassword(password) {
-				var obj = { password: password, currentUser: _AppStore2.default.getCurrentUser() };
-				$.ajax({
-					type: 'POST',
-					url: '/verifyOldPassword',
-					data: JSON.stringify(obj, null, '\t'),
-					contentType: 'application/json;charset=UTF-8',
-					success: function (res) {
-						if (!res['error']) {
-							this.setState({ valid: "valid" });
-							this.props.handleBlur("old_password", "valid");
-						} else {
-							this.setState({ valid: "invalid",
-								warning: warningForField("old_password", password) });
-							this.props.handleBlur("old_password", "invalid");
-						}
-					}.bind(this)
-				});
-			}
-		}, {
-			key: 'handleTyping',
-			value: function handleTyping(event) {
-				var obj = {};
-				obj[this.props.field] = event.target.value;
-				this.props.handleTyping(obj);
-			}
-		}, {
-			key: 'handleBlur',
-			value: function handleBlur(event) {
-				var field = this.props.field;
-				if (field == "old_password") this.verifyOldPassword.bind(this)(event.target.value);else {
-					var isValid = testValid(field, event.target.value);
-					this.setState({ valid: isValid,
-						warning: warningForField(field, event.target.value) });
-				};
-				this.props.handleBlur(field, isValid);
-			}
-		}, {
-			key: 'componentWillReceiveProps',
-			value: function componentWillReceiveProps(nextProps) {
-				if (!this.state.hasMounted) {
-					var isValid = testValid(nextProps.field, nextProps.value);
-					if (isValid == "valid" && nextProps.field != "old_password") {
-						this.setState({ valid: isValid, hasMounted: true });
-						this.props.handleBlur(nextProps.field, isValid);
-					} else this.setState({ hasMounted: true });
-				}
-			}
-		}, {
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				if (this.props.field == "phone_number") phoneHelper();
-				if (this.props.field == "password") passwordHelper();
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				var field = this.props.field;
-				var value = this.props.value;
-				var isPassword = field == "password" || field == "old_password";
-				var type = isPassword ? "password" : "text";
-				var placeholder = field == "old_password" ? "Enter your old password" : idToName(field);
-				return React.createElement(
-					'div',
-					null,
-					field != "password" && React.createElement('input', { className: "setting form-control " + this.state.valid,
-						id: field, type: type, value: value, placeholder: placeholder,
-						onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),
-					field == "password" && React.createElement('input', { 'data-toggle': 'popover', 'data-trigger': 'focus',
-						'data-content': 'Your password must contain at least one letter and one number.',
-						className: "setting form-control " + this.state.valid, id: field, type: type, value: value,
-						onClick: focus(), placeholder: 'Change your password',
-						onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),
-					this.state.valid == "invalid" && React.createElement(
-						'div',
-						{ className: 'warning', id: field + "_warning" },
-						this.state.warning
-					)
-				);
-			}
-		}]);
-	
-		return SettingsTextInput;
-	}(React.Component);
-	
-	exports.default = SettingsTextInput;
 
 /***/ },
 /* 143 */
