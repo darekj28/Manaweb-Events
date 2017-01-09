@@ -13,11 +13,16 @@ import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FeedScreen from './FeedScreen'
 
-const BOTTOM_BAR_PROPORTION = 0.1
+const BOTTOM_BAR_PROPORTION = 0.07
 const ANIMATE_DURATION = 100
 
 var image_res = {
-    home: require('../static/menuScreen/home.png')
+    // Do these have copyright? https://thenounproject.com/term/message-notification/23246/
+    // https://www.iconfinder.com/icons/126572/home_house_icon
+    // http://www.endlessicons.com/free-icons/setting-icon/
+    home: require('../static/menuScreen/home.png'),
+    setting: require('../static/menuScreen/setting.png'),
+    notification: require('../static/menuScreen/notification.png')
 }
 
 class MenuScreen extends Component {
@@ -37,17 +42,13 @@ class MenuScreen extends Component {
       this.setState({show_panel3: show3})
   }
 
-  // _onPanel2Pressed () {
-  //     this.setState({show_panel1: false})
-  //     this.setState({show_panel2: true})
-  //     this.setState({show_panel3: false})
-  // }
-  //
-  // _onPanel3Pressed () {
-  //     this.setState({show_panel1: false})
-  //     this.setState({show_panel2: false})
-  //     this.setState({show_panel3: true})
-  // }
+  _imageWrapper(highlighted) {
+      if (highlighted) {
+          return {flex: 1, justifyContent: 'center', backgroundColor: '#9AD1D4'}
+      } else {
+          return {flex: 1, justifyContent: 'center', backgroundColor: '#C2F9BB'}
+      }
+  }
 
   render() {
       return (
@@ -69,21 +70,21 @@ class MenuScreen extends Component {
               }
               </View>
 
-              <View style = {{backgroundColor: 'bisque', flex: BOTTOM_BAR_PROPORTION, flexDirection:'row'}}>
+              <View style = {{flex: BOTTOM_BAR_PROPORTION, flexDirection:'row'}}>
                   <TouchableHighlight
-                      style = {styles.menu_image_wrapper}
+                      style = {this._imageWrapper(this.state.show_panel1)}
                       onPress={() => this._onPanel1Pressed(true, false, false)}>
                         <Image  style={styles.menu_image} source={image_res.home} />
                   </TouchableHighlight>
                   <TouchableHighlight
-                      style = {styles.menu_image_wrapper}
+                      style = {this._imageWrapper(this.state.show_panel2)}
                       onPress={() => this._onPanel1Pressed(false, true, false)}>
-                        <Image  style={styles.menu_image} source={image_res.home} />
+                        <Image  style={styles.menu_image} source={image_res.setting} />
                   </TouchableHighlight>
                   <TouchableHighlight
-                      style = {styles.menu_image_wrapper}
+                      style = {this._imageWrapper(this.state.show_panel3)}
                       onPress={() => this._onPanel1Pressed(false, false, true)}>
-                        <Image  style={styles.menu_image} source={image_res.home} />
+                        <Image  style={styles.menu_image} source={image_res.notification} />
                   </TouchableHighlight>
               </View>
           </View>
@@ -97,14 +98,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   menu_image: {
-      width: 20,
-      height: 20,
+      width: 30,
+      height: 30,
       alignSelf: 'center'
   },
-  menu_image_wrapper: {
-      flex: 1,
-      justifyContent: 'center',
-  }
 });
 
 module.exports = MenuScreen
