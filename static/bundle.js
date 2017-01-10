@@ -178,9 +178,7 @@
 	var _currentUser = localStorage.CurrentUser ? JSON.parse(localStorage.CurrentUser) : "";
 	var _notifications = localStorage.Notifications ? JSON.parse(localStorage.Notifications) : [];
 	var _notification_count = localStorage.NotificationCount ? JSON.parse(localStorage.NotificationCount) : "";
-	var _ip = localStorage.Ip ? JSON.parse(localStorage.Ip) : "";
-	// var _ip = localStorage.Ip 
-	
+	if (localStorage.Ip != null) var _ip = localStorage.Ip ? JSON.parse(localStorage.Ip) : "";else var _ip = "";
 	
 	function _loadCurrentUser(data) {
 		_currentUser = data;
@@ -10983,7 +10981,7 @@
 								{ className: 'modal-footer' },
 								React.createElement(
 									'button',
-									{ id: 'epm_submit', type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal',
+									{ id: 'epm_submit', type: 'button', className: 'btn btn-default modal-button', 'data-dismiss': 'modal',
 										onClick: this.handlePostEditSubmit.bind(this) },
 									'Submit'
 								)
@@ -11078,13 +11076,13 @@
 								{ className: 'modal-body', id: 'DeletePostModalBody' },
 								React.createElement(
 									'button',
-									{ id: 'dpm_yes', type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal',
+									{ id: 'dpm_yes', type: 'button', className: 'btn btn-default modal-button', 'data-dismiss': 'modal',
 										onClick: this.handlePostDelete.bind(this) },
 									'Yes'
 								),
 								React.createElement(
 									'button',
-									{ id: 'dpm_no', type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
+									{ id: 'dpm_no', type: 'button', className: 'btn btn-default modal-button', 'data-dismiss': 'modal' },
 									'No'
 								)
 							)
@@ -11196,13 +11194,13 @@
 								{ className: 'modal-body', id: 'ReportPostModalBody' },
 								React.createElement(
 									'button',
-									{ type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal',
+									{ type: 'button', className: 'btn btn-default modal-button', 'data-dismiss': 'modal',
 										onClick: this.reportForSpam.bind(this) },
 									'Spam'
 								),
 								React.createElement(
 									'button',
-									{ type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal',
+									{ type: 'button', className: 'btn btn-default modal-button', 'data-dismiss': 'modal',
 										onClick: this.reportForInappropriate.bind(this) },
 									'Inappropriate'
 								)
@@ -12147,6 +12145,7 @@
 		}, {
 			key: 'login',
 			value: function login() {
+				console.log(_AppStore2.default.getIp());
 				var obj = { user: this.state.login_user,
 					password: this.state.login_password,
 					ip: _AppStore2.default.getIp() };
@@ -12351,7 +12350,7 @@
 			value: function render() {
 				return React.createElement(
 					"div",
-					{ className: "footer" },
+					{ className: "navbar-fixed-bottom" },
 					React.createElement(
 						"center",
 						null,
@@ -13287,7 +13286,7 @@
 								{ className: 'modal-footer' },
 								React.createElement(
 									'button',
-									{ id: 'ecm_submit', type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal',
+									{ id: 'ecm_submit', type: 'button', className: 'btn btn-default modal-button', 'data-dismiss': 'modal',
 										onClick: this.handleCommentEditSubmit.bind(this) },
 									'Submit'
 								)
@@ -13384,13 +13383,13 @@
 								{ className: 'modal-body', id: 'DeleteCommentModalBody' },
 								React.createElement(
 									'button',
-									{ id: 'dcm_yes', type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal',
+									{ id: 'dcm_yes', type: 'button', className: 'btn btn-default modal-button', 'data-dismiss': 'modal',
 										onClick: this.handleCommentDelete.bind(this) },
 									'Yes'
 								),
 								React.createElement(
 									'button',
-									{ id: 'dcm_no', type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
+									{ id: 'dcm_no', type: 'button', className: 'btn btn-default modal-button', 'data-dismiss': 'modal' },
 									'No'
 								)
 							)
@@ -13502,13 +13501,13 @@
 								{ className: 'modal-body', id: 'ReportCommentModalBody' },
 								React.createElement(
 									'button',
-									{ type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal',
+									{ type: 'button', className: 'btn btn-default modal-button', 'data-dismiss': 'modal',
 										onClick: this.reportForSpam.bind(this) },
 									'Spam'
 								),
 								React.createElement(
 									'button',
-									{ type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal',
+									{ type: 'button', className: 'btn btn-default modal-button', 'data-dismiss': 'modal',
 										onClick: this.reportForInappropriate.bind(this) },
 									'Inappropriate'
 								)

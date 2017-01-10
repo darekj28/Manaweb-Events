@@ -23,6 +23,7 @@ export default class LoginForm extends React.Component {
 			this.login.bind(this)();
 	}
 	login() {
+		console.log(AppStore.getIp())
 		var obj = { user : this.state.login_user, 
 					password : this.state.login_password, 
 					ip : AppStore.getIp() };
