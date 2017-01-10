@@ -108,7 +108,7 @@ def facebookCreateAccount():
 def verifyAndLogin() :
 	user = request.json['user']
 	password = request.json['password']
-	# ip = request.json['ip']
+	ip = request.json['ip']
 	res = validation.validateLogin(user, password)
 
 	if res['result'] == 'success':
