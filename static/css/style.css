@@ -39,7 +39,6 @@ body {
 button.kep-login-facebook{
   width : 350px;
   height : 40px;
-  font-size : 12!important;
   text-transform : none;
   border : 1px solid var(--border-gray)!important;
   border-radius : 4px!important;
@@ -47,12 +46,21 @@ button.kep-login-facebook{
 button.kep-login-facebook:hover{
   background-color : #365899;
 }
+.footer {
+  background-color: var(--navbar);
+  color : #fff;
+  position : absolute;
+  bottom : 0px;
+  width : 100%;
+  font-size : 12px;
+}
+
 #Or {
   padding-top : 8px;
 }
 #Logo {
   width : 40vw;
-  height : 40vw;
+  height : 70vh;
 }
 #LoginToggle {
   color : #fff;

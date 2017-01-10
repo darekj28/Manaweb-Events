@@ -4,6 +4,7 @@ import CommentFeedPost from "./CommentFeedPost.jsx";
 import CommentFeed from "./CommentFeed.jsx";
 import MakeComment from "./MakeComment.jsx";
 import AppStore from '../../stores/AppStore.jsx';
+import Footer from '../Footer.jsx';
 
 export default class CommentApp extends React.Component {
 	constructor(props) {
@@ -152,6 +153,7 @@ export default class CommentApp extends React.Component {
 									comments={this.state.feed} />
 						</div>
 					</div>
+					<Footer/>
 				</div>);
 	}
 }

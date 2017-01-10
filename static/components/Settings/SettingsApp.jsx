@@ -4,6 +4,7 @@ import SettingsSelectInput from './SettingsSelectInput.jsx';
 import SettingsInputLabel from './SettingsInputLabel.jsx';
 import NoSearchNavBar from '../GenericNavBar/NoSearchNavBar.jsx';
 import AppStore from '../../stores/AppStore.jsx';
+import Footer from '../Footer.jsx';
 
 var text_fields = [	"first_name", "last_name", "old_password", "password", "phone_number" ];
 var select_fields = [ "month_of_birth", "day_of_birth", "year_of_birth", "avatar" ];
@@ -181,6 +182,7 @@ export default class SettingsApp extends React.Component {
 					  <strong>Bro!</strong> There's an error in your submission.
 					</div>
 				</div>
+				<Footer/>
 			</div>
 			);
 	}
