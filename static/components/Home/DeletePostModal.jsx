@@ -22,9 +22,9 @@ export default class DeletePostModal extends React.Component {
 							<h4 className="modal-title">Are you sure you want to delete?</h4>
 						</div>
 						<div className="modal-body" id="DeletePostModalBody">
-							<button id="dpm_yes" type="button" className="btn btn-default" data-dismiss="modal" 
+							<button id="dpm_yes" type="button" className="btn btn-default modal-button" data-dismiss="modal" 
 									onClick={this.handlePostDelete.bind(this)}>Yes</button>
-							<button id="dpm_no" type="button" className="btn btn-default" data-dismiss="modal">No</button>
+							<button id="dpm_no" type="button" className="btn btn-default modal-button" data-dismiss="modal">No</button>
 						</div>
 					</div>
 				</div>
