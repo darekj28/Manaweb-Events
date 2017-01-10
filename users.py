@@ -479,6 +479,7 @@ class Users:
 			if password_match:
 				output['result'] = 'success'
 				output['username'] = user_info['userID']
+				output['current_user'] = user_info
 			else:
 				output['result'] = 'failure'
 				output['error'] = 'Login credentials incorrect.'
