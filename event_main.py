@@ -66,12 +66,12 @@ app.register_blueprint(browser_api)
 @app.after_request
 def add_header(response):
 	"""
-    Add headers to both force latest IE rendering engine or Chrome Frame,
-    and also to cache the rendered page for 10 minutes.
-    """
-    response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
-    response.headers['Cache-Control'] = 'public, max-age=0'
-    return response
+	Add headers to both force latest IE rendering engine or Chrome Frame,
+	and also to cache the rendered page for 10 minutes.
+	"""
+	response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
+	response.headers['Cache-Control'] = 'public, max-age=0'
+	return response
 
 
 @app.before_request
