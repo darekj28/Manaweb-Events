@@ -31,7 +31,7 @@ function _deleteNotificationCount() {
 }
 function _addIp(data) {
 	_ip = data;
-	localStorage.Ip = JSON.stringify(_ip);
+	// localStorage.Ip = JSON.stringify(_ip);
 }
 
 var emitter = ee({}), listener;
