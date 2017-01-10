@@ -5,6 +5,12 @@
  * @flow
  */
 
+const FBSDK = require('react-native-fbsdk');
+const {
+  GraphRequest,
+  GraphRequestManager,
+} = FBSDK;
+
 import React from 'react';
 import {Component} from 'react'
 import {AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
@@ -18,12 +24,16 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 
-class RegisterUsername extends Component {
+class FbCreate extends Component {
   constructor(props) {
     super(props)
     this.state = {
       username : "",
-      validation_output: {'error' : "invalid email"}
+      validation_output: {'error' : "invalid email"},
+      first_name : "",
+      last_name : "",
+      email : "",
+      fb_id : ""
     }
 
     this.handleUsernameSubmit = this.handleUsernameSubmit.bind(this);
@@ -40,7 +50,7 @@ class RegisterUsername extends Component {
     var test_url = "http://0.0.0.0:5000"
 
 
-    fetch(url + "/mobileCreateProfile", {method: "POST",
+    fetch(test_url + "/mobileFacebookCreateAccount", {method: "POST",
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -48,20 +58,21 @@ class RegisterUsername extends Component {
       body: 
       JSON.stringify(
        {
-        password : this.props.password,
-        email : this.props.email,
+        email : this.state.email,
         username: this.state.username,
-        first_name: this.props.first_name ,
-        last_name: this.props.last_name,
-        password: this.props.password,
-        phone_number : this.props.phone_number
+        first_name: this.state.first_name ,
+        last_name: this.state.last_name,
+        fb_id: this.props.fb_id
+        // password: this.props.password,
+        // phone_number : this.props.phone_number
       })
     })
     .then((response) => response.json())
     .then((responseData) => {
         
         if (responseData['result'] == 'success') {
-            AsyncStorage.setItem("current_user", responseData['current_user']);
+            AsyncStorage.setItem("fb_token", this.props.fb_token)
+            AsyncStorage.setItem("current_username", responseData['current_user']['userID']);
         }
         this._navigateToFeed()
     })
@@ -103,13 +114,61 @@ class RegisterUsername extends Component {
   _navigateToFeed() {
     this.props.navigator.push({
     href: "Feed",
-    username : this.state.username
     })
+  }
+
+  pullFacebookInfo(){
+    const infoRequest = new GraphRequest(
+          '/me',
+          {
+            parameters: {
+              fields: {
+                string: 'email,name,first_name,last_name' // what you want to get
+              },
+              access_token: {
+                string: this.props.fb_token.toString() // put your accessToken here
+              }
+            }
+          },
+          this.handleFacebookPull.bind(this) // make sure you define _responseInfoCallback in same class
+        );
+    new GraphRequestManager().addRequest(infoRequest).start();
+  }
+
+  handleFacebookPull(error: ?Object, result: ?Object) {
+    if (error) {
+      alert('Error fetching data: ' + error.toString());
+      console.log(Object.keys(error));// print all enumerable 
+      console.log(error.errorMessage); // print error message
+      // error.toString() will not work correctly in this case
+      // so let use JSON.stringify()
+      // meow_json = JSON.stringify(error); // error object => json 
+      // console.log(meow_json); // print JSON 
+    } else {
+      // alert('Success fetching data: ' + result);
+      this.setState({email : result.email})
+      this.setState({first_name : result.first_name})
+      this.setState({last_name : result.last_name})
+
+      console.log(result.toString())
+      console.log(Object.keys(result)); 
+      // meow_json = JSON.stringify(result); // result => JSON
+      // console.log(meow_json); // print JSON
+    } 
+  }
+
+
+  componentDidMount() {
+      this.pullFacebookInfo.bind(this)()
   }
 
   render() {
     return (
       <View style = {styles.container}>
+              <Text>
+                Welcome {this.state.first_name}!
+              </Text>
+
               <TouchableOpacity onPress = {() => this.props.navigator.pop()}>
                 <Icon name = "chevron-left" size = {30} />
               </TouchableOpacity>
@@ -117,7 +176,7 @@ class RegisterUsername extends Component {
                <TextInput
               onChangeText = {this.handleUsernameChange}
               style = {styles.input} 
-              placeholder = "Choose a username"
+              placeholder = "Select a username"
               />
 
               <TouchableHighlight style = {styles.button} onPress = {this.handleUsernameSubmit}>
@@ -175,4 +234,4 @@ const styles = StyleSheet.create({
 
 });
 
-module.exports = RegisterUsername
+module.exports = FbCreate

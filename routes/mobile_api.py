@@ -1,10 +1,12 @@
 from flask import Blueprint, jsonify, request, session, render_template, redirect, url_for, Response
 from users import Users
 from posts import Posts
+from security import Security
 import time
 import email_confirm
 import sms
 import validation
+import random
 
 # from tasks import asyncGetPosts
 # from tasks import test
@@ -14,8 +16,39 @@ import validation
 
 mobile_api = Blueprint('mobile_api', __name__)
 DEFAULT_FEED = "BALT"
+avatars = ["ajani", "chandra", "elspeth", "gideon", "jace", "liliana", "nahiri", "nicol", "nissa", "ugin"]
 
 
+@mobile_api.route('/mobileFacebookCreateAccount', methods = ['POST'])
+def mobileFacebookCreateAccount():
+	first_name = request.json['first_name'].title()
+	last_name = request.json['last_name'].title()
+	userID = request.json['username']
+	password = "FB_DEFAULT_PASSWORD"
+	email = request.json['email']
+	fb_id = request.json['fb_id']
+	phone_number = ""
+	birthYear = ""
+	birthDay = ""
+	birthMonth = ""
+	gender = ""
+	avatar_name = random.choice(avatars)
+	avatar_url = '/static/avatars/' + avatar_name + '.png'
+	isActive = True
+	confirmationPin = "placeholder pin"
+	# confirmed = False
+	confirmed = True		
+	user_manager = Users()
+	user_manager.addUser(userID, first_name = first_name, last_name = last_name, password = password, email = email,  isActive = isActive,
+		avatar_url = avatar_url, avatar_name = avatar_name, confirmed=confirmed, confirmationPin = confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
+		isAdmin = False, phone_number = phone_number, birthMonth = birthMonth, birthDay = birthDay, birthYear = birthYear,
+		gender = gender, fb_id = fb_id) 
+	current_user = user_manager.getInfo(userID)
+	user_manager.closeConnection()
+	session['logged_in'] = True
+	session['userID'] = userID
+
+	return jsonify({'result' : 'success', 'current_user': current_user})
 
 @mobile_api.route('/mobileCreateProfile', methods = ['POST'])
 def mobileCreateProfile():
@@ -68,6 +101,12 @@ def mobileLogin():
 	login_id = request.json['login_id']
 	password = request.json['password']
 	validator_output = validation.validateLogin(login_id, password)
+	if validator_output['result'] == 'success':
+		user_manager = Users()
+		current_user = user_manager.getInfo(validator_output['username'])
+		output['current_user'] = current_user
+		user_manager.closeConnection()
+
 	return jsonify(validator_output)
 
 
@@ -121,7 +160,6 @@ def mobileGetCurrentUserInfo():
 
 @mobile_api.route('/mobileGetUserInfoFromFacebookId', methods = ['POST'])
 def mobileGetUserInfoFromFacebookId():
-	print(request.json)
 	fb_id = request.json['fb_id']
 	user_manager = Users()
 	thisUser = user_manager.getUserInfoFromFacebookId(fb_id)
@@ -132,6 +170,8 @@ def mobileGetUserInfoFromFacebookId():
 		output['result'] = 'failure'
 	else:
 		output['result'] = 'success'
+
+	output['current_username'] = thisUser['userID']
 
 	return jsonify(output)
 

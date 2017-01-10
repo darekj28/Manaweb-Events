@@ -7,8 +7,8 @@ var ee = require('event-emitter');
 var _currentUser = (localStorage.CurrentUser) ? JSON.parse(localStorage.CurrentUser) : "";
 var _notifications = (localStorage.Notifications) ? JSON.parse(localStorage.Notifications) : [];
 var _notification_count = (localStorage.NotificationCount) ? JSON.parse(localStorage.NotificationCount) : "";
-// var _ip = (localStorage.Ip) ? JSON.parse(localStorage.Ip) : "";
-var _ip = localStorage.Ip 
+var _ip = (localStorage.Ip) ? JSON.parse(localStorage.Ip) : "";
+// var _ip = localStorage.Ip 
 
 
 function _loadCurrentUser(data) {
@@ -33,7 +33,8 @@ function _deleteNotificationCount() {
 }
 function _addIp(data) {
 	_ip = data;
-	localStorage.Ip = JSON.stringify(_ip);
+	if (_ip != null)
+		localStorage.Ip = JSON.stringify(_ip);
 }
 
 var emitter = ee({}), listener;
