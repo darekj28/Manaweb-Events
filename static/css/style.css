@@ -85,9 +85,6 @@ button.kep-login-facebook:hover{
    background-color : var(--warning);
    position:relative;
 }
-#SignUpButton:focus {
-  background-color: #fff;
-}
 .register {
   max-width : 350px;
   max-height : 34px;
@@ -113,6 +110,10 @@ button.kep-login-facebook:hover{
 }
 #UpdateSettingsSubmit:hover {
   background-color: var(--dark);
+  color : #fff;
+}
+#UpdateSettingsSubmit:focus {
+  background-color: var(--light);
   color : #fff;
 }
 
@@ -333,6 +334,10 @@ button.kep-login-facebook:hover{
 }
 .modal-button:hover {
   background-color: var(--dark);
+  color : #fff;
+}
+.modal-button:focus {
+  background-color: var(--light);
   color : #fff;
 }
 .app.row {
