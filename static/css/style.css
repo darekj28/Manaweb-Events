@@ -108,10 +108,14 @@ button.kep-login-facebook:hover{
 }
 #UpdateSettingsSubmit {
   width : 280px;
+  background-color : var(--light);
+  color : #fff;
 }
-#UpdateSettingsSubmit:focus {
-  background-color: #fff;
+#UpdateSettingsSubmit:hover {
+  background-color: var(--dark);
+  color : #fff;
 }
+
 .invalid {
   border-width: 1.5px;
   border-color: var(--warning);
@@ -189,6 +193,7 @@ button.kep-login-facebook:hover{
   margin-top : 8px;
   max-width : 20px;
   width: 10px;
+  cursor:pointer;
 }
 .Post {
   list-style-type: none;
@@ -209,6 +214,7 @@ button.kep-login-facebook:hover{
   margin-top : 13px;
   max-width : 20px;
   width: 10px;
+  cursor : pointer;
 }
 .alert {
   margin-top : 10px;
@@ -318,6 +324,16 @@ button.kep-login-facebook:hover{
 }
 .AppGlyphicon {
   color:var(--light);
+}
+.modal-button {
+  width : 200px;
+  border-radius : 0px;
+  background-color : var(--light);
+  color : #fff;
+}
+.modal-button:hover {
+  background-color: var(--dark);
+  color : #fff;
 }
 .app.row {
   padding-left:10px;
