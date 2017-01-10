@@ -251,7 +251,8 @@ var createFeedRow = (message, i) =>
                 isChill: i * 4123 % 240 < 120,
                 userID: 'blobblob',
                 name: 'Bob Blob',
-                avatar: avatar_list[i % 10]
+                avatar: avatar_list[i % 10],
+                timestamp: (i + 1) + 'd'
             }}
             />;
 
