@@ -46,14 +46,6 @@ button.kep-login-facebook{
 button.kep-login-facebook:hover{
   background-color : #365899;
 }
-.footer {
-  background-color: var(--navbar);
-  color : #fff;
-  position : absolute;
-  bottom : 0px;
-  width : 100%;
-  font-size : 12px;
-}
 
 #Or {
   padding-top : 8px;
