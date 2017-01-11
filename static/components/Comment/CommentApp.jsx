@@ -153,7 +153,6 @@ export default class CommentApp extends React.Component {
 									comments={this.state.feed} />
 						</div>
 					</div>
-					<Footer/>
 				</div>);
 	}
 }

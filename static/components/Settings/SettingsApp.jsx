@@ -182,7 +182,6 @@ export default class SettingsApp extends React.Component {
 					  <strong>Bro!</strong> There's an error in your submission.
 					</div>
 				</div>
-				<Footer/>
 			</div>
 			);
 	}

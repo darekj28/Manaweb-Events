@@ -41,7 +41,6 @@ export default class NotificationsApp extends React.Component {
 						<NotificationsFeed notifications={this.state.notifications}/>		
 					</div>
 				</div>	
-				<Footer/>
 			</div>
 		);
 	}
