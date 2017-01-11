@@ -106,11 +106,11 @@ class StartScreen extends Component {
                 </Text>
               </TouchableHighlight>
 
-			        <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToFeed()}>
+			       {/* <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToFeed()}>
                 <Text style = {styles.buttonText}>
                   Testing button. Go to feed page (for lurkers)
                 </Text>
-              </TouchableHighlight>
+              </TouchableHighlight> */}
 
 
 

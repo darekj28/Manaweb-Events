@@ -104,7 +104,7 @@ def mobileLogin():
 	if validator_output['result'] == 'success':
 		user_manager = Users()
 		current_user = user_manager.getInfo(validator_output['username'])
-		output['current_user'] = current_user
+		validator_output['current_user'] = current_user
 		user_manager.closeConnection()
 
 	return jsonify(validator_output)
