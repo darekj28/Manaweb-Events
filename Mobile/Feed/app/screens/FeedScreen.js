@@ -5,6 +5,12 @@
  * @flow
  */
 
+
+const FBSDK = require('react-native-fbsdk');
+const {
+  LoginManager,
+} = FBSDK;
+
 import React from 'react';
 import {Component} from 'react'
 import {Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
@@ -57,7 +63,7 @@ class FeedScreen extends Component {
       post_message_height: new Animated.Value(50),
       current_username: "",
       feed: [],
-      currentUser: {'userID' : 'not initialized'},
+      current_user: {'userID' : 'not initialized'},
       newPostContent: "",
       test: ""
     }
@@ -65,10 +71,10 @@ class FeedScreen extends Component {
     this.postMessagePressed = this.postMessagePressed.bind(this)
     this._activities = FeedScreen.populateActivities()
     this.refreshScreen = this.refreshScreen.bind(this);
-    this.initializeUserInfo = this.initializeUserInfo.bind(this);
+    // this.initializeUserInfo = this.initializeUserInfo.bind(this);
     this.handlePostSubmit = this.handlePostSubmit.bind(this);
     this.handlePostTyping = this.handlePostTyping.bind(this);
-    this.initializeUsername = this.initializeUsername.bind(this);
+    this.initializeUser = this.initializeUser.bind(this);
     this.handleFilterPress = this.handleFilterPress.bind(this);
     this.handleServerPostSubmit = this.handleServerPostSubmit.bind(this);
     this._navigateToHome = this._navigateToHome.bind(this);
@@ -105,12 +111,14 @@ class FeedScreen extends Component {
 
       else {
         this.setState({alert : false});
-        feed.unshift({
-              postContent: newPostContent,
-              avatar  : this.state.currentUser['avatar_name'],
-              name    : this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
-              userID  : this.state.currentUser['userID'],
-              time  : "just now",
+
+        feed.unshift({ 
+              postContent: newPostContent, 
+              avatar  : this.state.current_user['avatar_name'], 
+              name    : this.state.current_user['first_name'] + " " + this.state.current_user['last_name'],
+              userID  : this.state.current_user['userID'], 
+              time  : "just now", 
+
               isTrade : contains(this.state.post_actions, "Trade"),
               isPlay  : contains(this.state.post_actions, "Play"),
               isChill : contains(this.state.post_actions, "Chill"),
@@ -138,7 +146,7 @@ class FeedScreen extends Component {
         JSON.stringify(
          {
           postContent : newPostContent,
-          userID : this.state.currentUser['userID'],
+          userID : this.state.current_user['userID'],
           numberOfComments : 0,
           isTrade : contains(this.state.post_actions, "Trade"),
           isPlay  : contains(this.state.post_actions, "Play"),
@@ -192,9 +200,6 @@ class FeedScreen extends Component {
           }
           this.setState({feed: feed})
          }
-      if (initialize == true){
-         this.initializeUserInfo();
-       }
     }
   }
 
@@ -233,19 +238,20 @@ class FeedScreen extends Component {
       }
   }
 
-  async initializeUsername(){
+  async initializeUser(){
      let value = await AsyncStorage.getItem("current_username")
-        if (value == null) {
-          this.setState({"current_username" : ""})
-        }
-        else {
+     console.log(value)
+        if (value != null) {
           this.setState({"current_username" : value})
+
         }
   }
 
   handleLogout() {
     AsyncStorage.setItem("current_username", "").then((value) => {
-        this._navigateToHome();
+
+          LoginManager.logOut()
+          this._navigateToHome();  
       });
   }
 
@@ -256,29 +262,9 @@ class FeedScreen extends Component {
   }
 
 
-  async initializeUserInfo(){
-    let url = "https://manaweb-events.herokuapp.com"
-    let test_url = "http://0.0.0.0:5000"
-    let response = await fetch(url + "/mobileGetCurrentUserInfo", {method: "POST",
-    headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      body:
-      JSON.stringify(
-       {
-        userID: this.state.current_username
-      })
-    })
-    let responseData = await response.json()
-
-    if (responseData['result'] == 'success') {
-      this.setState({currentUser: responseData['thisUser']})
-    }
-  }
 
   componentWillMount() {
-      this.initializeUsername().done();
+      this.initializeUser().done();
       this.refreshScreen(true).done();
       // this.refreshScreen(true);
 
@@ -361,16 +347,8 @@ class FeedScreen extends Component {
 
             <View style={{flex:1}}>
 
-            {/* <Feed posts = {this.state.feed} currentUser = {this.state.currentUser}/> */}
-            <ScrollView
-           // ref={(scrollView) => { _scrollView = scrollView; }}
-           automaticallyAdjustContentInsets={false}
-           onScroll={() => {}}
-           scrollEventThrottle={200}
-           onPress={() => {Alert.alert('Scroll clicked')}}
-           >
-             {messages.map(createFeedRow)}
-           </ScrollView>
+            <Feed posts = {this.state.feed} currentUser = {this.state.current_user}/>
+
             </View>
 
         </View>

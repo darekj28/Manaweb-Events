@@ -218,15 +218,19 @@ class Posts:
 
 		for userID in user_list: 
 			lastPost = self.getLastSeenPost(feed_name, userID)
-
 			lastPostInfo = self.getPostById(feed_name, lastPost['comment_id'])
 
 			# gets the previous post if the current one is gone
 			for post in post_list: 
-				if lastPostInfo == None and lastPost['timeStamp'] > post['timeStamp']:
+				if lastPostInfo == None and lastPost['timeStamp'] > post['timeStamp']:	
 					lastPostInfo = post
 
+			if lastPostInfo == None:
+				lastPostInfo = post_list[0]
+
 			count = 0
+
+			
 			
 			for post in post_list:
 				if post['timeStamp'] > lastPostInfo['timeStamp'] and post['poster_id'] != userID:
@@ -904,6 +908,8 @@ class Posts:
 		timeStamp = time.time()
 		timeString = self.getTimeString(timeStamp)
 		thisComment = self.getCommentById(feed_name, unique_id)
+		if thisComment == None:
+			return
 		action = "DELETE COMMENT"
 		isComment = True
 		self.updateAdminTable(thisComment['feed_name'], thisComment['body'], thisComment['poster_id'], action , thisComment['unique_id'], timeString, timeStamp, isComment)
@@ -975,7 +981,7 @@ class Posts:
 			thisComment['body'] = comment[0]
 			thisComment['poster_id'] = comment[1]
 			thisComment['feed_name'] = comment[2]
-			thisComment['timeString'] = self.getTimeString(post[5])
+			thisComment['timeString'] = self.getTimeString(comment[5])
 			thisComment['timeStamp'] = comment[5]
 			thisComment['comment_id'] = comment[3]
 			thisComment['unique_id'] = comment[6]
@@ -1094,8 +1100,15 @@ class Posts:
 		for feed_name in feed_names:
 			allPosts = self.getPosts(feed_name)
 			for post in allPosts:
+				thisPostComments = self.getComments(feed_name, post['comment_id'])
+				for comment in thisPostComments:
+					if comment['poster_id'] == userID:
+						self.deleteComment(feed_name, comment['unique_id'])
 				if post['poster_id'] == userID:
 					self.deletePost(feed_name, post['comment_id'])
+
+
+
 
 
 	# def updateNotificationsTablesFornumUnseenActions(self, table_name):

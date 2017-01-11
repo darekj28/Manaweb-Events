@@ -93,6 +93,6 @@
       <string>fbshareextension</string>
     </array>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>So users can see themselves! </string>
+    <string>Manaweb photo use</string>
   </dict>
 </plist>

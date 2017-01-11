@@ -27,17 +27,8 @@ post_manager = Posts()
 security_manager = Security()
 # user_manager.deleteUser('drd')
 
-# fb_users = user_manager.getFacebookUsers()
+fb_users = user_manager.getFacebookUsers()
 # user_list = user_manager.getUserList()
-
-
-print(validation.validateEmailOrPhone("darekj@gmail.com"))
-print(validation.validateEmailOrPhone("michaelyang@princeton.edu"))
-print(validation.validateEmailOrPhone("1234567890"))
-print(validation.validateEmailOrPhone("123-456-7890"))
-print(validation.validateEmailOrPhone("+1(123) 456- 7890"))
-print(validation.validateEmailOrPhone("+1(223) 456- 7890"))
-print(validation.validateEmailOrPhone("+1   (612) 456- 7890"))
 
 
 
@@ -45,12 +36,15 @@ print(validation.validateEmailOrPhone("+1   (612) 456- 7890"))
 # user_manager.deleteUser('lily')
 # security_manager.createRecovery()
 # post_manager.deleteNotifications()
-# for fb_user in fb_users:
-# 	post_manager.deleteUserPosts(fb_user)
-# 	user_manager.deleteUser(fb_user)
+user_manager.deleteUser("uglybro")
 # feed_name = "BALT"
 # post_manager.recalculateLastPostTable(feed_name)
 # post_manager.recalculateUnseenPosts(feed_name)
+
+# for fb_user in fb_users:
+# 	post_manager.deleteUserPosts(fb_user)
+# 	user_manager.deleteUser(fb_user)
+
 
 
 user_manager.closeConnection()

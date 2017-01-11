@@ -48,7 +48,7 @@ class LoginScreen extends Component {
     .then((response) => response.json())
     .then((responseData) => {
         if (responseData['result'] == 'success') {
-            AsyncStorage.setItem("current_username", responseData['username']).then((value) => {
+            AsyncStorage.setItem("current_username", responseData['current_user']['userID']).then((value) => {
               this.setState({username: responseData['username']})
               this.setState({validation_output: responseData})
               this._navigateToFeed()

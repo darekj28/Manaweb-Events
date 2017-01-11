@@ -61,7 +61,7 @@ class RegisterUsername extends Component {
     .then((responseData) => {
         
         if (responseData['result'] == 'success') {
-            AsyncStorage.setItem("username", this.props.username);
+            AsyncStorage.setItem("current_user", responseData['current_user']);
         }
         this._navigateToFeed()
     })

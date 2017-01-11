@@ -21,7 +21,7 @@ export default class RegisterForm extends React.Component {
 		if ($('#register_form').find('input.valid').length == 5)
 			this.verifyUsername.bind(this)();
 	}
-	verifyUsername() {
+	checkUsername() {
 		var obj = { username : this.state.username };
 		$.ajax({
 			type: 'POST',
@@ -30,11 +30,40 @@ export default class RegisterForm extends React.Component {
 		    contentType: 'application/json;charset=UTF-8',
 		    success : function(res) {
 		    	if (!res['error']) {
-		    		this.verifyEmailOrPhone.bind(this)();
 		    		this.setState({ username_error : "" });
 		    	}
-		    	else {
+		    	else if (this.state.username != "") {
 		    		this.setState({ username_error : res['error'] });
+		    	}
+		    }.bind(this)
+		});
+	}
+	verifyUsername() {
+		var obj = { username : this.state.username };
+		$.ajax({
+			type: 'POST',
+			url: '/registerUsername',
+			data : JSON.stringify(obj, null, '\t'),
+		    contentType: 'application/json;charset=UTF-8',
+		    success : function(res) {
+		    	if (!res['error'])
+		    		this.verifyEmailOrPhone.bind(this)();
+		    }.bind(this)
+		});
+	}
+	checkEmailOrPhone() {
+		var obj = { email_or_phone : this.state.email_or_phone };
+		$.ajax({
+			type: 'POST',
+			url: '/registerEmailOrPhone',
+			data : JSON.stringify(obj, null, '\t'),
+		    contentType: 'application/json;charset=UTF-8',
+		    success : function(res) {
+		    	if (!res['error']){
+		    		this.setState({ email_error : "" });
+		    	}
+		    	else if (this.state.email_or_phone != ""){
+		    		this.setState({ email_error : res['error'] });
 		    	}
 		    }.bind(this)
 		});
@@ -47,22 +76,14 @@ export default class RegisterForm extends React.Component {
 			data : JSON.stringify(obj, null, '\t'),
 		    contentType: 'application/json;charset=UTF-8',
 		    success : function(res) {
-		    	if (!res['error']) {
+		    	if (!res['error'])
 		    		this.handleSubmit.bind(this)(res['method']);
-		    		this.setState({ email_error : "" });
-		    	}
-		    	else {
-		    		this.setState({ email_error : res['error'] });
-		    	}
 		    }.bind(this)
 		});
 	}
 	handleChange(obj) {
 		if (Object.keys(obj)[0] == "username") this.setState({ username_error : "" }); 
-		if (Object.keys(obj)[0] == "email_or_phone") {
-			this.verifyEmailOrPhone.bind(this)();
-			this.setState({ email_error : "" }); 
-		}
+		if (Object.keys(obj)[0] == "email_or_phone") this.setState({ email_error : "" }); 
 		this.setState(obj); 
 	}
 
@@ -105,8 +126,12 @@ export default class RegisterForm extends React.Component {
 	}
 	getCurrentUserInfo() {
 		$.post('/getCurrentUserInfo', {userID : this.state.username}, function(data) {
-			AppActions.addCurrentUser(data.thisUser);
-			this.getNotifications.bind(this)();
+			if (!data.thisUser.confirmed) 
+				browserHistory.push('/confirm');
+			else {
+				AppActions.addCurrentUser(data.thisUser);
+				this.getNotifications.bind(this)();
+			}
 		}.bind(this));
 	}
 	getNotifications() {
@@ -144,6 +169,12 @@ export default class RegisterForm extends React.Component {
     	this.register.bind(this)();
     	$('#CreateProfileSuccess').hide();
     	$('#CreateProfileFail').hide();
+    	$('#email_or_phone').blur(function() {
+    		this.checkEmailOrPhone.bind(this)();
+    	}.bind(this));
+    	$('#username').blur(function() {
+    		this.checkUsername.bind(this)();
+    	}.bind(this));
     	$('#register_form').goValidate();
     }
 	render() {

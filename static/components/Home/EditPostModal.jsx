@@ -40,7 +40,7 @@ export default class EditPostModal extends React.Component {
 									onChange={this.handlePostEditChange.bind(this)}></textarea>
 						</div>
 						<div className="modal-footer">
-							<button id="epm_submit" type="button" className="btn btn-default" data-dismiss="modal" 
+							<button id="epm_submit" type="button" className="btn btn-default modal-button" data-dismiss="modal" 
 									onClick={this.handlePostEditSubmit.bind(this)}>Submit</button>
 						</div>
 					</div>

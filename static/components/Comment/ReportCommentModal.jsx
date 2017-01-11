@@ -38,9 +38,9 @@ export default class ReportCommentModal extends React.Component {
 							<h4 className="modal-title">Report for :</h4>
 						</div>
 						<div className="modal-body" id="ReportCommentModalBody">
-							<button type="button" className="btn btn-default" data-dismiss="modal" 
+							<button type="button" className="btn btn-default modal-button" data-dismiss="modal" 
 									onClick={this.reportForSpam.bind(this)}>Spam</button>
-							<button type="button" className="btn btn-default" data-dismiss="modal"
+							<button type="button" className="btn btn-default modal-button" data-dismiss="modal"
 									onClick={this.reportForInappropriate.bind(this)}>Inappropriate</button>
 						</div>
 					</div>

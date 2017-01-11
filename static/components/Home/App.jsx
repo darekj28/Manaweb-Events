@@ -6,6 +6,7 @@ import Feed from './Feed.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 import LoginApp from '../Login/LoginApp.jsx';
 import ViewMoreButton from './ViewMoreButton.jsx';
+import Footer from '../Footer.jsx';
 
 var feed_name = "BALT";
 var actions = ['Play', 'Trade', 'Chill'];
@@ -207,6 +208,7 @@ export default class App extends React.Component {
 								handlePostDelete={this.handlePostDelete.bind(this)} />
 						</div>
 					</div>
+					<Footer/>
 				</div>);
 		}
 		else {

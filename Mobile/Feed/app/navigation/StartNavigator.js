@@ -16,6 +16,7 @@ import RegisterPassword from '../screens/register/RegisterPassword'
 import LoginScreen from '../screens/LoginScreen'
 import FeedScreen from '../screens/FeedScreen'
 
+import FbCreate from '../screens/register/FbCreate'
 import TestHTTP from '../screens/TestHTTP'
 
 
@@ -135,9 +136,11 @@ class StartNavigator extends Component {
 
         )
 
-      case "TestHTTP":
+  case "FbCreate":
       return (
-          <TestHTTP
+          <FbCreate
+              fb_token = {route.fb_token}
+              fb_id = {route.fb_id}
               {...globalNavigatorProps} 
              />
 

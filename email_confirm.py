@@ -1,8 +1,9 @@
 import smtplib
 from py2neo import authenticate, Graph, Node, Relationship
 from users import Users
+import time
 
-def sendConfirmationEmail(thisUser):
+def sendConfirmationEmail(email):
 	#to send from temporary gmail 
 	"""
 	sender = "manaweb.noreply@gmail.com"
@@ -10,11 +11,7 @@ def sendConfirmationEmail(thisUser):
 	smtpserver = smtplib.SMTP('smtp.gmail.com', 587)
 	"""
 
-	
-	userID = thisUser['userID']	
-	email = thisUser['email']
-
-	confirmationPin = thisUser['confirmationPin']
+	confirmationPin = generatePin()
 	
 	# to send from manaweb
 	sender = 'darek@manaweb.com'
@@ -41,6 +38,8 @@ def sendConfirmationEmail(thisUser):
 	smtpserver.close()
 	return confirmationPin
 
+def generatePin():
+	return hashString(str(time.time()))
 def hashString(s):
 	hash_id = abs(hash(s))
 	# hex_hash_id = hex(hash_id)

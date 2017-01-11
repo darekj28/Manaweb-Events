@@ -21,7 +21,7 @@ import ViewContainer from '../components/ViewContainer';
 import HomeStatusBar from '../components/HomeStatusBar';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import FbLogin from '../components/FbLogin';
+import FacebookLogin from '../components/FacebookLogin';
 
 
 
@@ -114,7 +114,7 @@ class StartScreen extends Component {
 
 
 
-              <FbLogin/>
+              <FacebookLogin navigator = {this.props.navigator}/>
       </View>
     )
   }

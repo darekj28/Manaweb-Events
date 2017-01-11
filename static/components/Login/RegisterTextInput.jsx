@@ -21,7 +21,10 @@ export default class RegisterTextInput extends React.Component {
 				content = "Must contain at least one number and one letter"
 				break;
 			case "username" : 
-				content = "At least 2 characters";
+				content = "Must be at least 2 characters";
+				break;
+			case "email_or_phone" :
+				content = "Must be a valid email or phone number";
 				break;
 		}
 		return (
