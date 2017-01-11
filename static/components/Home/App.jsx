@@ -6,6 +6,7 @@ import Feed from './Feed.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 import LoginApp from '../Login/LoginApp.jsx';
 import ViewMoreButton from './ViewMoreButton.jsx';
+import ExtendFeedButton from './ExtendFeedButton.jsx';
 import Footer from '../Footer.jsx';
 
 var feed_name = "BALT";
@@ -21,7 +22,9 @@ export default class App extends React.Component {
 			post : '',
 			feed : [],
 			currentUser : AppStore.getCurrentUser(),
-			numUnseenPosts: 0
+			numUnseenPosts: 0,
+			numMorePosts : 0,
+			numShownPosts : 50
 		};
 	}
 
@@ -30,7 +33,7 @@ export default class App extends React.Component {
 	}
 
 	refreshFeed() {
-		this.setState({ numUnseenPosts : 0 });
+		this.setState({ numUnseenPosts : 0, numShownPosts : this.state.numShownPosts + this.state.numUnseenPosts });
 		$.post('/getPosts', function(data){
 			var feed = [];
 			data.post_list.map(function(obj) {
@@ -48,11 +51,15 @@ export default class App extends React.Component {
 					numberOfComments : obj['numComments']
 				});
 			});
-			this.setState({feed : feed});
+			this.setState({feed : feed.slice(0, this.state.numShownPosts),
+							numMorePosts : (feed.length - this.state.numShownPosts >= 50 ? 50 : feed.length - this.state.numShownPosts)});
 			this.markPostFeedAsSeen.bind(this)();
 		}.bind(this));
 	}
-
+	extendFeed() {
+		this.setState({ numShownPosts : (this.state.numShownPosts + 50) },
+				this.refreshFeed.bind(this));;
+	}
 	refreshNumUnseenPosts() {
 		$.post('/getNumUnseenPosts', {feed_name: feed_name, currentUser : this.state.currentUser},
 			function(data){
@@ -207,6 +214,11 @@ export default class App extends React.Component {
 								handlePostEdit={this.handlePostEdit.bind(this)}
 								handlePostDelete={this.handlePostDelete.bind(this)} />
 						</div>
+						{this.state.numMorePosts > 0 &&
+							<div className="feed row">
+							<ExtendFeedButton numMorePosts={this.state.numMorePosts}
+							extendFeed={this.extendFeed.bind(this)}/>
+						</div>}
 					</div>
 					<Footer/>
 				</div>);

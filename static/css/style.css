@@ -46,7 +46,10 @@ button.kep-login-facebook{
 button.kep-login-facebook:hover{
   background-color : #365899;
 }
-
+.footer {
+  color : var(--border-gray);
+  z-index : -1;
+}
 #Or {
   padding-top : 8px;
 }
@@ -139,14 +142,14 @@ button.kep-login-facebook:hover{
 #NoNewNotificationsDropdown {
   text-align: center;
 }
-#ViewMoreButton {
+.add-to-feed {
   padding-top: 8px;
   padding-bottom: 8px;
   color : var(--navbar);
-}
-#ViewMoreButton:hover {
+  z-index : 100;0!important}
+.add-to-feed:hover {
   cursor : pointer;
-  background-color : var(--light);
+  background-color : var(--border-gray);
 }
 .popover-title { 
   display: none; 
