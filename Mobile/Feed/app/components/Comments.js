@@ -12,9 +12,8 @@ export default class Comments extends React.Component {
 	}
 	filter() {
 		var feed = [];
-		var c = {foo : 0};
 		this.props.comments.map(function(comment, i) {
-			feed.push(<CommentBox key={i} comment={comment} comment_id={this.props.comment_id}/>)
+			feed.push(<CommentBox key={i} comment={comment}/>)
 		}, this);
 		return feed;
 	}
