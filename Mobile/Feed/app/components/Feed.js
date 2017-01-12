@@ -63,6 +63,8 @@ export default class Feed extends Component {
       // if ((!doesPostMatchFilter() || !doesPostMatchSearch()) || !doesPostMatchSelectedUser())
       //   return;
       // else 
+      if (!doesPostMatchFilter() || !doesPostMatchSearch()) return;
+      else if (i < 10)
         rows.push(<FeedBox key={i} post = {post} 
             image_ID = {i % 3}
             // isOP={this.props.currentUser['userID'] == post.userID}

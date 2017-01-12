@@ -54,6 +54,7 @@ class FeedScreen extends Component {
     super(props)
     this.state = {
       filters : ['Trade', 'Play', 'Chill'],
+      filter_enable: [true, true, true],
       post_actions : [],
       alert: false,
       search : '',
@@ -65,6 +66,7 @@ class FeedScreen extends Component {
       feed: [],
       current_user: {'userID' : 'not initialized'},
       newPostContent: "",
+      searchText : "",
       test: ""
     }
     this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
@@ -100,7 +102,18 @@ class FeedScreen extends Component {
     // scroll to top
     // $('html, body').animate({scrollTop: 0}, 300);
   }
-
+    handleFeedFilterPress(index) {
+      var filters = ['Trade', 'Play', 'Chill']
+      var this_filter = filters[index]
+      var newFilters = toggle(this.state.filters, this_filter);
+      this.setState({filters : newFilters});
+      var newFilter = this.state.filter_enable
+      newFilter[index] = !newFilter[index]
+      this.setState({filter_enable: newFilter})
+    }
+    handleSearch(text) {
+      this.setState({ searchText : text });
+    }
     // updates feed then sends the post to the server
     handlePostSubmit(newPostContent){
       var feed = this.state.feed;
@@ -241,6 +254,7 @@ class FeedScreen extends Component {
   async initializeUser(){
      let value = await AsyncStorage.getItem("current_username")
      console.log(value)
+     // add mobile get current user
         if (value != null) {
           this.setState({"current_username" : value})
 
@@ -260,8 +274,25 @@ class FeedScreen extends Component {
     href: "Start"
     })
   }
+  imageStyle(index) {
+        if (!this.state.filter_enable[index]) {
+            return {
+                marginLeft: 8,
+                marginRight: 8,
+                width: 30,
+                height: 30,
+                tintColor: 'red'
+            }
+        } else {
+            return {
+                marginLeft: 8,
+                marginRight: 8,
+                width: 30,
+                height: 30,
+            }
+        }
 
-
+    }
 
   componentWillMount() {
       this.initializeUser().done();
@@ -279,7 +310,9 @@ class FeedScreen extends Component {
               Bro! You must select something to do before you post man!
               </Text>;
     }
-
+    let filterIcon1 = require('../components/res/icon1.png')
+    let filterIcon2 = require('../components/res/icon2.png')
+    let filterIcon3 = require('../components/res/icon3.png')
     let dropdownIcon = require('./res/down_arrow.png')
     return (
 
@@ -305,7 +338,6 @@ class FeedScreen extends Component {
             </Text>
             */}
 
-
             <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
                 <View style = {styles.containerHorizontal}>
                     <View style = {{flex: 0.85}}>
@@ -330,7 +362,16 @@ class FeedScreen extends Component {
                     </View>
                 </View>
             </TouchableWithoutFeedback>
-
+            <TextInput
+                style = {styles.text_input}
+                autoFocus = {true}
+                multiline = {false}
+                numberOfLines = {1}
+                underlineColorAndroid={"transparent"}
+                onChangeText={this.handleSearch.bind(this)}
+                placeholder={'Search...'}
+                value = {this.state.searchText}
+            />
             <Animated.View style = {{flexDirection:'row', height: this.state.post_message_height}}>
                 <PostMessageBox
                     onClick={(event) => this.postMessagePressed()}
@@ -344,12 +385,28 @@ class FeedScreen extends Component {
                     >
                 </PostMessageBox>
             </Animated.View>
+            <View style = {{flex: 0.85, zIndex :10000, flexDirection:'row'}}>
+                <TouchableHighlight onPress={() => this.handleFeedFilterPress.bind(this)(0)}>
+                    <Image  style={this.imageStyle.bind(this)(0)}
+                        source={filterIcon1}>
+                    </Image>
+                </TouchableHighlight>
 
-            <View style={{flex:1}}>
+                <TouchableHighlight onPress={() => this.handleFeedFilterPress.bind(this)(1)}>
+                    <Image  style={this.imageStyle.bind(this)(1)}
+                        source={filterIcon2}>
+                    </Image>
+                </TouchableHighlight>
 
-            <Feed posts = {this.state.feed} currentUser = {this.state.current_user}/>
-
+                <TouchableHighlight onPress={() => this.handleFeedFilterPress.bind(this)(2)}>
+                    <Image  style={this.imageStyle.bind(this)(2)}
+                        source={filterIcon3}>
+                    </Image>
+                </TouchableHighlight>
             </View>
+            <Feed posts = {this.state.feed} searchText = {this.state.searchText} filters = {this.state.filters} currentUser = {this.state.current_user}/>
+
+            
 
         </View>
 
@@ -447,6 +504,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#6A85B1',
     height: 300,
   },
+  text_input: {
+      flex: 1,
+      fontSize: 20,
+      zIndex : 10000
+  }
 });
 
 module.exports = FeedScreen
