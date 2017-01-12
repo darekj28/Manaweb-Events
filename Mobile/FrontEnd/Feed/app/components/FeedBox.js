@@ -77,7 +77,7 @@ export default class FeedBox extends Component {
                 <View style={{flex: 0.5, flexDirection:'row'}}>
                     <View style={{width: PROFILE_WIDTH}}>
                     </View>
-                    <View style={{flexDirection:'column'}}>
+                    <View style={{flexDirection:'column', flexWrap: 'wrap',alignItems: 'flex-start', marginRight: 30}}>
 
                     <TouchableHighlight onPress={() => Alert.alert('Pressed')}>
                         <Text style = {styles.text_message} numberOfLines={5}>
