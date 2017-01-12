@@ -14,14 +14,21 @@ export default class FeedBox extends Component {
         this.state = {
         };
     }
-
+    _navigateToComment() {
+      this.props.navigator.push({
+        href: "Comment",
+        username : this.props.username,
+        comment_id : this.props.post['comment_id']
+      })
+    }
     render() {
       const avatar_prefix = './res/'
       const avatar_extension = '.png'
       const post = this.props.post
       avatar_list = ['nissa', 'chandra', 'elspeth', 'nicol', 'ugin', 'jace', 'liliana', 'ajani', 'nahiri', 'gideon']
         return (
-            <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#000000',
+            <TouchableWithoutFeedback onPress={this._navigateToComment.bind(this)}>
+              <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#000000',
                 borderBottomWidth: 1}}>
                 <View style={{flex: 1, flexDirection:'row', justifyContent: 'flex-start'}}>
                       
@@ -59,7 +66,8 @@ export default class FeedBox extends Component {
                         {post.postContent} 
                     </Text>
                 </View>
-            </View>
+              </View>
+            </TouchableWithoutFeedback>
         );
     }
 }

@@ -404,7 +404,8 @@ class FeedScreen extends Component {
                     </Image>
                 </TouchableHighlight>
             </View>
-            <Feed posts = {this.state.feed} searchText = {this.state.searchText} filters = {this.state.filters} currentUser = {this.state.current_user}/>
+            <Feed posts = {this.state.feed} searchText = {this.state.searchText} filters = {this.state.filters} currentUser = {this.state.current_user}
+                navigator = {this.props.navigator} username = {this.state.current_username}/>
 
             
 

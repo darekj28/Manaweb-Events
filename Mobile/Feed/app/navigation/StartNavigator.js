@@ -15,7 +15,7 @@ import RegisterPassword from '../screens/register/RegisterPassword'
 
 import LoginScreen from '../screens/LoginScreen'
 import FeedScreen from '../screens/FeedScreen'
-
+import CommentScreen from '../screens/CommentScreen'
 import FbCreate from '../screens/register/FbCreate'
 import TestHTTP from '../screens/TestHTTP'
 
@@ -133,9 +133,13 @@ class StartNavigator extends Component {
           <FeedScreen
               {...globalNavigatorProps} 
              />
-
         )
-
+  case "Comment":
+    return (
+      <CommentScreen username={route.username}
+      comment_id={route.comment_id}
+      {...globalNavigatorProps}/>
+      )
   case "FbCreate":
       return (
           <FbCreate

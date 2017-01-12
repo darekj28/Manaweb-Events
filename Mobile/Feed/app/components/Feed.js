@@ -64,9 +64,9 @@ export default class Feed extends Component {
       //   return;
       // else 
       if (!doesPostMatchFilter() || !doesPostMatchSearch()) return;
-      else if (i < 10)
+      else if (i < 5)
         rows.push(<FeedBox key={i} post = {post} 
-            image_ID = {i % 3}
+            image_ID = {i % 3} navigator = {this.props.navigator} username = {this.props.username}
             // isOP={this.props.currentUser['userID'] == post.userID}
             // isAdmin={this.props.currentUser['isAdmin']} 
             // refreshPostDisplayedInModal={this.refreshPostDisplayedInModal}
