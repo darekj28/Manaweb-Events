@@ -25,8 +25,7 @@ class Feed extends Component {
   render() {
     return (
         <View style = {styles.contianer}>
-          <StartNavigator 
-          />
+          <StartNavigator /> 
         </View>
 
       )

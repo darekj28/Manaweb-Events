@@ -12737,8 +12737,7 @@
 								handleCommentDelete: this.handleCommentDelete.bind(this),
 								comments: this.state.feed })
 						)
-					),
-					React.createElement(_Footer2.default, null)
+					)
 				);
 			}
 		}]);
@@ -13816,8 +13815,7 @@
 							{ className: 'feed row' },
 							React.createElement(_NotificationsFeed2.default, { notifications: this.state.notifications })
 						)
-					),
-					React.createElement(_Footer2.default, null)
+					)
 				);
 			}
 		}]);
@@ -14361,8 +14359,7 @@
 							),
 							' There\'s an error in your submission.'
 						)
-					),
-					React.createElement(_Footer2.default, null)
+					)
 				);
 			}
 		}]);

@@ -65,7 +65,7 @@ def validatePhoneNumber(phone_number):
 	user_manager = Users()
 	this_user = user_manager.getInfoFromPhoneNumber(raw_phone_number)
 	user_manager.closeConnection()
-	if isSuccess and this_user == None:
+	if isSuccess and this_user != None:
 		output['result'] = 'failure'
 		output['error'] = 'This phone number is already registered.'
 	return output
