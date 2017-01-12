@@ -74,14 +74,22 @@ export default class FeedBox extends Component {
                     </View>
 
                 </View>
-                <View style={{flex: 1, flexDirection:'row'}}>
+                <View style={{flex: 0.5, flexDirection:'row'}}>
                     <View style={{width: PROFILE_WIDTH}}>
                     </View>
+                    <View style={{flexDirection:'column'}}>
+
                     <TouchableHighlight onPress={() => Alert.alert('Pressed')}>
-                        <Text style = {styles.text_message}>
+                        <Text style = {styles.text_message} numberOfLines={5}>
                             {post.postContent}
                         </Text>
                     </TouchableHighlight>
+                    </View>
+                    {/* <View style={{backgroundColor: 'pink', width: PROFILE_WIDTH}}>
+                        <Text>
+                            {'hi'}
+                        </Text>
+                    </View> */}
                 </View>
             </View>
         );
@@ -118,10 +126,10 @@ const styles = StyleSheet.create({
       marginLeft: 2,
   },
   text_message: {
-    flex: 1,
     fontSize: 18,
     textAlignVertical: 'top',
-    marginLeft: 4
+    marginLeft: 4,
+    flex: 0.8
   },
   profile_image: {
     width: PROFILE_WIDTH,
