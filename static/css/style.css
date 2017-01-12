@@ -5,6 +5,7 @@
     --main-color : #353D41;
     --success : #5cb85c;
     --warning : #d9534f;
+    --error : #f44336;
     --border-gray : #e5e5e5;
 }
 @font-face {
@@ -85,7 +86,7 @@ button.kep-login-facebook:hover{
   padding-top : 130px;
 }
 .badge-notify{
-   background-color : var(--warning);
+   background-color : var(--error);
    position:relative;
 }
 .register {
