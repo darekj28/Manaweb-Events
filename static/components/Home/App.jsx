@@ -220,7 +220,6 @@ export default class App extends React.Component {
 							extendFeed={this.extendFeed.bind(this)}/>
 						</div>}
 					</div>
-					<Footer/>
 				</div>);
 		}
 		else {
