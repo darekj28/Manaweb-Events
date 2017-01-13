@@ -3,7 +3,7 @@ import FilterButton from "./FilterButton.jsx";
 
 export default class MakePost extends React.Component {
 	componentDidMount() {
-		$('#SubmitButtonPost').click(function() {
+		$('.post-button').click(function() {
 			$(this).blur();
 		});
 		$('#MessagePost').hide();
@@ -32,9 +32,9 @@ export default class MakePost extends React.Component {
 					{this.props.actions.map(function(action, i) {
 						return <FilterButton key={i} onClick={this.props.onClick} selected={false} name={action}/>;
 					}, this)}
-					<div className="SubmitButton input-group-addon"
+					<div className="input-group-addon"
 							onClick={this.handlePostSubmit.bind(this)}>
-						<span className="AppGlyphicon"><h4><b>POST!</b></h4></span>
+						<button className="btn post-button">POST!</button>
 					</div>	
 				</div>
 			</div>);

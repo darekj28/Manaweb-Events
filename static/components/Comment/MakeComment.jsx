@@ -3,7 +3,7 @@ export default class MakeComment extends React.Component {
 	componentDidMount() {
 		var messageVisible = true;
 		var that = this;
-		$('#SubmitButtonComment').click(function() {
+		$('.post-button').click(function() {
 			$(this).blur();
 		});
 		$('#CommentPost').hide();
@@ -31,7 +31,7 @@ export default class MakeComment extends React.Component {
 							onChange={this.handleCommentChange.bind(this)}></textarea>
 					<div className="SubmitButton input-group-addon"
 							onClick={this.handleCommentSubmit.bind(this)}>
-						<span className="AppGlyphicon"><h4><b>POST!</b></h4></span>
+						<button className="btn post-button">COMMENT!</button>
 					</div>
 				</div>
 			</div>);
