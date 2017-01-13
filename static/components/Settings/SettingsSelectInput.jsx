@@ -60,7 +60,7 @@ export default class SettingsSelectInput extends React.Component {
 		}
 		return (
 				<div>
-					<select className={"select_setting " + this.state.valid} id={field} name={field}
+					<select className={"select_setting form-control " + this.state.valid} id={field} name={field}
 									title={idToName(field)}
 									onChange={this.handleSelect.bind(this)} onBlur={this.handleBlur.bind(this)}> 
 						<option value="" disabled selected>{idToTimeLabel(field)}</option>
