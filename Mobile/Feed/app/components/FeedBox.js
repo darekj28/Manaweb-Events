@@ -62,7 +62,7 @@ export default class FeedBox extends Component {
                         &#8226; {post.time}
                     </Text>
                     <View style={{flex: 1}}/>
-                    <View style={{flex: 0, margin: 1}}>
+                    <View style={{flex: 0, margin: 1, flexDirection : "row"}}>
                         { post.isTrade && <Image  style={styles.filter}
                                 source={filterIcon1}>
                             </Image> }
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   filter : {
     width : 16,
     height : 16,
-    marginRight : 8,
+    marginRight : 6,
     marginTop : 6,
     tintColor : 'silver'
   }
