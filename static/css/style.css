@@ -367,7 +367,7 @@ button.kep-login-facebook:hover{
 }
 .tooltip {
   overflow : visible;
-  font-family : "HelveticaNeue-Light";
+  font-family : "open";
 }
 .input-group.input-group-unstyled input.form-control {
     -webkit-border-radius: 4px;
