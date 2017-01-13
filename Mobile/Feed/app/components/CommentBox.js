@@ -44,18 +44,18 @@ export default class CommentBox extends React.Component {
 const styles = StyleSheet.create({
   text_name: {
       flex: 0,
-      fontSize: 18,
+      fontSize: 16,
       fontWeight: 'bold',
       textAlignVertical: 'top',
-      marginLeft: 4,
-      marginTop: 2
+      marginLeft: 8,
+      marginTop: 6
   },
   text_userID: {
       flex: 0,
-      fontSize: 18,
+      fontSize: 16,
       textAlignVertical: 'top',
       marginLeft: 4,
-      marginTop: 2,
+      marginTop: 6,
       color: 'silver'
   },
   text_feed_type: {
@@ -72,14 +72,16 @@ const styles = StyleSheet.create({
   },
   text_message: {
     flex: 1,
-    fontSize: 18,
+    fontSize: 16,
     textAlignVertical: 'top',
-    marginLeft: 4
+    marginLeft: 16,
+    marginBottom : 30
   },
   profile_image: {
     width: PROFILE_WIDTH,
     height: PROFILE_HEIGHT,
-    marginTop: 2,
-    marginLeft: 2
-  },
+    marginTop: 8,
+    marginLeft: 8,
+    borderRadius : 4
+  }
 });
