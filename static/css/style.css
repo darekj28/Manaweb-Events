@@ -63,6 +63,10 @@ button.kep-login-facebook:hover{
 .app-container {
   padding-top : 65px;
 }
+.navbar-container {
+  padding-left : 5px;
+  padding-right : 5px;
+}
 .register-container {
   padding-top : 130px;
 }

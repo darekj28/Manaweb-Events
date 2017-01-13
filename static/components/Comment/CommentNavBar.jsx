@@ -23,7 +23,7 @@ export default class CommentNavBar extends React.Component {
 	render() {
 		return (
 			<nav className="navbar navbar-default" role="navigation">
-				<div className="container">
+				<div className="navbar-container">
 					<div className="navbar-header">
 						<button type="button" className="SearchNavBarGlyphicon navbar-toggle" data-toggle="collapse" 
 										data-target="#bs-example-navbar-collapse-1">
