@@ -6,6 +6,8 @@ import ModalDropdown from 'react-native-modal-dropdown';
 
 const PROFILE_HEIGHT = 40
 const PROFILE_WIDTH = 40
+const COMMENT_HEIGHT = 30
+const DOT_WIDTH = 30
 const DROP_DOWN_OPTIONS = ['Report Post']
 
 var profileImages = {
@@ -38,20 +40,14 @@ export default class FeedBox extends Component {
 
     _dropdown_renderRow(rowData, rowID, highlighted) {
       return (
-        <TouchableHighlight underlayColor='cornflowerblue'>
+        <TouchableHighlight underlayColor='silver'>
           <View style={styles.dropdown_row}>
-            <Text style={[styles.dropdown_row_text, highlighted && {color: 'mediumaquamarine'}]}>
+            <Text style={[styles.dropdown_row_text, highlighted && {color: 'black'}]}>
               {DROP_DOWN_OPTIONS}
             </Text>
           </View>
         </TouchableHighlight>
       );
-    }
-
-    _dropdown_3_adjustFrame(style) {
-        style.top -= 15;
-        style.left += 150;
-        return style;
     }
 
     render() {
@@ -118,20 +114,21 @@ export default class FeedBox extends Component {
                         <View style = {{flex: 1}}>
                         </View>
 
-                        <ModalDropdown  style={styles.dropdown_bar}
+                        <ModalDropdown
                                         defaultIndex={0}
                                         defaultValue={DROP_DOWN_OPTIONS[0]}
                                         dropdownStyle={styles.dropdown_box}
                                         options={DROP_DOWN_OPTIONS}
-                                        onSelect={(idx, value) => this.setState({activity_index: idx})}
-                                        adjustFrame={style => this._dropdown_3_adjustFrame(style)}
-                                        renderRow={this._dropdown_renderRow.bind(this)}>
+                                        onSelect={(idx, value) => {Alert.alert('Report post pressed')}}
+                                        renderRow={this._dropdown_renderRow.bind(this)}
+                                        renderSeparator = {
+                                            (sectionID, rowID, adjacentRowHighlighted) =>
+                                            {/*This removes default gray line*/}}>
 
                                         <Image  style={styles.dropdown_image}
                                                 source={otherImages.more}>
                                         </Image>
                         </ModalDropdown>
-                        {/* <Image  style={styles.comments_image} source={otherImages.more} /> */}
                     </View>
                 </View>
             </View>
@@ -191,36 +188,33 @@ const styles = StyleSheet.create({
       tintColor: 'green'
   },
   comments_image: {
-      width: 30,
-      height: 30,
+      width: COMMENT_HEIGHT,
+      height: COMMENT_HEIGHT,
       tintColor: 'mediumseagreen'
   },
-  dropdown_bar: {
-    borderWidth: 0,
-    height: 30,
-    justifyContent: 'center',
-    backgroundColor: 'blue',
-  },
   dropdown_box: {
-    borderColor: 'black',
+    borderColor: 'gray',
+    paddingTop: 2,
+    paddingBottom: 2,
+    paddingRight: 10,
+    paddingLeft: 3,
+    height: 35,
     borderWidth: 2,
-    borderRadius: 0,
-    alignSelf: 'flex-end'
+    borderRadius: 4,
   },
   dropdown_row: {
     flex: 0,
     flexDirection: 'row',
-    alignItems: 'center',
   },
   dropdown_row_text: {
     marginHorizontal: 4,
     fontSize: 16,
-    color: 'navy',
+    color: 'gray',
     textAlignVertical: 'center',
   },
   dropdown_image: {
-    width: 30,
-    height: 30,
+    width: DOT_WIDTH,
+    height: DOT_WIDTH / 2,
     tintColor: 'mediumseagreen',
   },
 });
