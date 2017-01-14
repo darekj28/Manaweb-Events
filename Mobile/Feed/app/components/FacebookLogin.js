@@ -34,8 +34,7 @@ class FacebookLogin extends Component {
       current_username: "",
       fb_token : "",
       fb_id : "",
-      thisUser: {},
-      just_logged_out: false
+      thisUser: {}
     }
     this._navigateToFeed = this._navigateToFeed.bind(this);
     // this._navigateToFbCreateAccount = this._navigateToFbCreateAccount.bind(this)
@@ -135,11 +134,7 @@ componentDidMount() {
   render() {
     var _this = this;
     return (
-      <View style = {styles.container}>
-
-        
-
-        <FBLogin style={{ marginBottom: 10, }}
+        <FBLogin style={styles.fb_button}
         ref={(fbLogin) => { this.fbLogin = fbLogin }}
         permissions={["public_profile" , "email", "user_friends"]}
         loginBehavior={FBLoginManager.LoginBehaviors.Native}
@@ -151,14 +146,6 @@ componentDidMount() {
         onCancel={this.onCancel.bind(this)}
         onPermissionsMissing={this.onPermissionsMissing.bind(this)}
       />
-      
-          <Text>
-            Fb id  : {this.state.fb_id} 
-          </Text>
-          <Text>
-            Fb AccessToken : {this.state.fb_token} 
-          </Text>
-      </View>
     )
   }
 
@@ -166,38 +153,13 @@ componentDidMount() {
 }
 
 const styles = StyleSheet.create({
-  input : {
-    color : "coral",
-    height: 35,
-    marginTop: 10,
-    padding : 4,
-    fontSize : 18,
-    borderWidth : 1,
-    borderColor : "#48bbec",
-    marginLeft : 20,
-    marginRight : 35
+  fb_button : {
+    marginBottom: 10,
+    alignItems : "center",
+    marginTop : 10,
+    borderRadius: 5,
+    padding: 4,
   },
-  container: {
-    flex:1,
-    justifyContent: 'flex-start',
-    padding : 10,
-    paddingTop: 40
-  },
-  button :{
-    height: 35,
-    marginTop: 10,
-    padding : 4,
-    borderWidth : 1,
-    borderColor : "#48bbec",
-    marginLeft : 20,
-    marginRight : 35,
-    backgroundColor: "black"
-  },
-  buttonText : {
-    justifyContent: "center",
-    alignItems: "center",
-    color: "white"
-  }
 
 });
 

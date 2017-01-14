@@ -108,68 +108,58 @@ export default class RegisterName extends Component {
 
   render() {
     return (
-      <View style = {styles.container}>
 
-              <TouchableOpacity onPress = {() => this.props.navigator.pop()}>
+      <View style = {styles.container}>
+              <TouchableOpacity style = {styles.back_button} onPress = {() => this.props.navigator.pop()}>
                 <Icon name = "chevron-left" size = {30} />
               </TouchableOpacity>
 
-              <Text style = {styles.welcome}>
-                What is your name?
-              </Text>
-
-              <ScrollView 
-                scrollEnabled={false}
-              >
-               <TextInput
-                onChangeText = {this.handleFirstNameChange}
-                style = {styles.input} placeholder = "First Name"
-                maxLength = {20}
-              />
-
-              {
-                this.state.first_name_validation_output['result'] == 'failure' && 
-                <Text> 
-                  {this.state.first_name_validation_output['error']}
-                  </Text>
-              }
-
-               <TextInput
-              onChangeText = {this.handleLastNameChange}
-              style = {styles.input} placeholder = "Last Name"
-              maxLength = {20}
-              />
-
-              {
-                this.state.last_name_validation_output['result'] == 'failure' && 
-                <Text> 
-                  {this.state.last_name_validation_output['error']}
-                  </Text>
-              }
-
-              
-
-              <TouchableHighlight style = {styles.button} onPress = {this.submitFullName}>
-                <Text style = {styles.buttonText}>
-                  Next!
+              <View style = {styles.user_input_container} > 
+                <Text style = {styles.instructions_text}>
+                  What is your name?
                 </Text>
-              </TouchableHighlight>
 
-              </ScrollView>
+                
+                <TextInput
+                  onChangeText = {this.handleFirstNameChange}
+                  style = {styles.input_text} placeholder = "First Name"
+                  maxLength = {20}
+                />
 
-              {/* For testing the state changes
-                <Text>
-                  {this.state.first_name} !!
-               </Text>
-                */}
+                {
+                  this.state.first_name_validation_output['result'] == 'failure' && 
+                  <Text style = {styles.error}> 
+                    {this.state.first_name_validation_output['error']}
+                    </Text>
+                }
 
+                 <TextInput
+                onChangeText = {this.handleLastNameChange}
+                style = {styles.input_text} placeholder = "Last Name"
+                maxLength = {20}
+                />
 
-              
+                {
+                  this.state.last_name_validation_output['result'] == 'failure' && 
+                  <Text style = {styles.error}> 
+                    {this.state.last_name_validation_output['error']}
+                  </Text>
+                }
+             
 
-              
-           
+              </View>
 
-      </View>
+              <View style = {styles.bottom_padding}>
+
+                   <TouchableHighlight style = {styles.register_button} onPress = {this.submitFullName}>
+                  <Text style = {styles.register_buttonText}>
+                    Next!
+                  </Text>
+                </TouchableHighlight>
+              </View>
+
+          </View>
+      
     )
   }
 
@@ -177,45 +167,65 @@ export default class RegisterName extends Component {
 }
 
 const styles = StyleSheet.create({
-  input : {
-    color : "black",
-    height: 35,
-    marginTop: 10,
-    padding : 4,
-    fontSize : 18,
-    borderWidth : 1,
-    borderColor : "#48bbec",
-    marginLeft : 20,
-    marginRight : 35
-  },
   container: {
-    flex:1,
-    justifyContent: 'flex-start',
+    flex: 1,
+    flexDirection : "column",
+    justifyContent: 'center',
     padding : 10,
-    paddingTop: 40
+    paddingTop: 40,
+    backgroundColor: "white",
+    alignItems: 'center'
   },
-  button :{
-    height: 35,
-    marginTop: 10,
-    padding : 4,
-    borderWidth : 1,
-    borderColor : "#48bbec",
-    marginLeft : 20,
-    marginRight : 35,
-    justifyContent : "center",
-    backgroundColor: "black"
+  back_button: {
+    flex : 0.1,
+    alignSelf: "flex-start"
   },
-  buttonText : {
-    justifyContent: "center",
-    alignItems: "center",
-    color : 'white'
+  user_input_container : {
+    flex: 0.4,
+    justifyContent : "space-between"
   },
 
-  welcome : {
-    backgroundColor :'skyblue',
-    justifyContent: 'center',
-    marginRight : 35,
-    marginLeft: 20
+  instructions_text : {
+    padding: 20,
+    color : "black"
+  },
+  register_button :{
+    marginTop: 10,
+    padding : 4,
+    borderWidth : 1,
+    borderColor : "skyblue",
+    backgroundColor: "skyblue",
+    borderRadius: 5,
+  },
+  error : { 
+    padding: 20,
+    color : "black"
+  },
+  register_buttonText : {
+    justifyContent: "center",
+    alignItems: "center",
+    color: "white",
+  },
+
+  input_text: {
+    flex: 1,
+    color: "black",
+    // height: 35,
+    // marginTop: 10,
+    padding : 4,
+    // fontSize : 18,
+    // borderWidth : 1,
+    // borderColor : "#48bbec",
+    // marginLeft : 20,
+    // marginRight : 35,
+    // alignSelf: "center"
+  },
+
+  bottom_padding : {
+    flexDirection : "column",
+    flex :0.6,
+    backgroundColor : "white",
+    alignItems: "flex-end"
   }
 
 });

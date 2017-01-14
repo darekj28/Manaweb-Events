@@ -80,7 +80,7 @@ class StartScreen extends Component {
     return (
       <View style = {styles.container}>
 
-              {
+              {/*
                 this.state.current_username == "" ?
                 <Text>
                   No one is logged in right now..please login!
@@ -90,21 +90,50 @@ class StartScreen extends Component {
                   Logged in as user {this.state.current_username} !!
                 </Text>
                 
-              }
-          
+              */}
+              <View style = {styles.logo_box}>
+                <Text style = {styles.logo}> 
+                  Logo here!
+                </Text>
+              </View>
 
-              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToLogin()}>
-                <Text style = {styles.buttonText}>
+
+              <View style = {styles.welcome_box}>
+
+
+              <Text style = {styles.welcome_text}> 
+                Welcome to Manaweb!
+              </Text>
+
+              <Text style = {styles.description_text}>
+                  See what's happening in the Magic world now!
+              </Text>
+
+              </View>
+
+
+              <View style = {styles.padding}/>
+
+              <View style = {styles.button_box}>
+
+              <TouchableHighlight style = {styles.register_button} onPress = {(event) => this._navigateToRegisterName()}>
+                <Text style = {styles.register_buttonText}>
+                  Register!
+                </Text>
+              </TouchableHighlight>
+
+              <TouchableHighlight style = {styles.login_button} onPress = {(event) => this._navigateToLogin()}>
+                <Text style = {styles.login_buttonText}>
                   Login!
                 </Text>
               </TouchableHighlight>
 
 
-              <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToRegisterName()}>
-                <Text style = {styles.buttonText}>
-                  Register!
-                </Text>
-              </TouchableHighlight>
+              <FacebookLogin navigator = {this.props.navigator}/>
+              </View>
+
+
+              <View style = {styles.bottom_padding} />
 
 			       {/* <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToFeed()}>
                 <Text style = {styles.buttonText}>
@@ -114,48 +143,87 @@ class StartScreen extends Component {
 
 
 
-              <FacebookLogin navigator = {this.props.navigator}/>
+ 
       </View>
     )
   }
-
-
 }
 
 const styles = StyleSheet.create({
-  input : {
-    color : "coral",
-    height: 35,
-    marginTop: 10,
-    padding : 4,
-    fontSize : 18,
-    borderWidth : 1,
-    borderColor : "#48bbec",
-    marginLeft : 20,
-    marginRight : 35
-  },
+  
   container: {
-    flex:1,
-    justifyContent: 'flex-start',
+    flex: 1,
+    flexDirection : "column",
+    justifyContent: 'center',
     padding : 10,
-    paddingTop: 40
+    paddingTop: 40,
+    backgroundColor: "skyblue",
+    alignItems: 'center'
   },
-  button :{
-    height: 35,
+    logo_box: { 
+    flex: 0.2
+  },
+
+  logo : {
+    color: "white"
+  },
+
+  welcome_box: {
+    flex: 0.45,
+    justifyContent: "center",
+  },
+
+  padding_box : {
+    flex: 0.3
+  },
+
+  button_box: {
+    flex: 0.45,
+    justifyContent: "flex-end"
+  },
+  welcome_text : {
+    color : "white",
+    padding : 20,
+    fontSize : 40
+
+  },
+
+  description_text : {
+    color : "white",
+    padding: 20,
+    fontSize: 20
+  },
+  register_button :{
     marginTop: 10,
     padding : 4,
     borderWidth : 1,
-    borderColor : "#48bbec",
-    marginLeft : 20,
-    marginRight : 35,
-    backgroundColor: "black"
+    borderColor : "skyblue",
+    backgroundColor: "white",
+    borderRadius: 5,
+    alignItems : "center",
   },
-  buttonText : {
+  register_buttonText : {
+    justifyContent: "center",
+    alignItems: "center",
+    color: "skyblue",
+  },
+  login_button :{
+    marginTop: 10,
+    padding : 4,
+    borderWidth : 1,
+    borderColor : "skyblue",
+    backgroundColor: "skyblue",
+    borderRadius: 5,
+    alignItems : "center"
+  },
+  login_buttonText : {
     justifyContent: "center",
     alignItems: "center",
     color: "white"
+  },
+  bottom_padding : {
+    flex : 0.05
   }
-
 });
 
 module.exports = StartScreen
