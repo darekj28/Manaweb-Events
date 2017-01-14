@@ -2,9 +2,13 @@ import React from 'react';
 import {Component} from 'react'
 import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
         TouchableWithoutFeedback, Alert, Image, Animated} from 'react-native';
+import ModalDropdown from 'react-native-modal-dropdown';
 
 const PROFILE_HEIGHT = 40
 const PROFILE_WIDTH = 40
+const COMMENT_HEIGHT = 30
+const DOT_WIDTH = 30
+const DROP_DOWN_OPTIONS = ['Report Post']
 
 var profileImages = {
     nissa: require('./static/avatars/nissa.png'),
@@ -32,6 +36,18 @@ export default class FeedBox extends Component {
         super(props);
         this.state = {
         };
+    }
+
+    _dropdown_renderRow(rowData, rowID, highlighted) {
+      return (
+        <TouchableHighlight underlayColor='silver'>
+          <View style={styles.dropdown_row}>
+            <Text style={[styles.dropdown_row_text, highlighted && {color: 'black'}]}>
+              {DROP_DOWN_OPTIONS}
+            </Text>
+          </View>
+        </TouchableHighlight>
+      );
     }
 
     render() {
@@ -98,7 +114,21 @@ export default class FeedBox extends Component {
                         <View style = {{flex: 1}}>
                         </View>
 
-                        <Image  style={styles.comments_image} source={otherImages.more} />
+                        <ModalDropdown
+                                        defaultIndex={0}
+                                        defaultValue={DROP_DOWN_OPTIONS[0]}
+                                        dropdownStyle={styles.dropdown_box}
+                                        options={DROP_DOWN_OPTIONS}
+                                        onSelect={(idx, value) => {Alert.alert('Report post pressed')}}
+                                        renderRow={this._dropdown_renderRow.bind(this)}
+                                        renderSeparator = {
+                                            (sectionID, rowID, adjacentRowHighlighted) =>
+                                            {/*This removes default gray line*/}}>
+
+                                        <Image  style={styles.dropdown_image}
+                                                source={otherImages.more}>
+                                        </Image>
+                        </ModalDropdown>
                     </View>
                 </View>
             </View>
@@ -158,8 +188,33 @@ const styles = StyleSheet.create({
       tintColor: 'green'
   },
   comments_image: {
-      width: 30,
-      height: 30,
+      width: COMMENT_HEIGHT,
+      height: COMMENT_HEIGHT,
       tintColor: 'mediumseagreen'
-  }
+  },
+  dropdown_box: {
+    borderColor: 'gray',
+    paddingTop: 2,
+    paddingBottom: 2,
+    paddingRight: 10,
+    paddingLeft: 3,
+    height: 35,
+    borderWidth: 2,
+    borderRadius: 4,
+  },
+  dropdown_row: {
+    flex: 0,
+    flexDirection: 'row',
+  },
+  dropdown_row_text: {
+    marginHorizontal: 4,
+    fontSize: 16,
+    color: 'gray',
+    textAlignVertical: 'center',
+  },
+  dropdown_image: {
+    width: DOT_WIDTH,
+    height: DOT_WIDTH / 2,
+    tintColor: 'mediumseagreen',
+  },
 });
