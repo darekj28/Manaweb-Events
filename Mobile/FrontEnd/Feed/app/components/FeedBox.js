@@ -2,9 +2,11 @@ import React from 'react';
 import {Component} from 'react'
 import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
         TouchableWithoutFeedback, Alert, Image, Animated} from 'react-native';
+import ModalDropdown from 'react-native-modal-dropdown';
 
 const PROFILE_HEIGHT = 40
 const PROFILE_WIDTH = 40
+const DROP_DOWN_OPTIONS = ['Report Post']
 
 var profileImages = {
     nissa: require('./static/avatars/nissa.png'),
@@ -32,6 +34,24 @@ export default class FeedBox extends Component {
         super(props);
         this.state = {
         };
+    }
+
+    _dropdown_renderRow(rowData, rowID, highlighted) {
+      return (
+        <TouchableHighlight underlayColor='cornflowerblue'>
+          <View style={styles.dropdown_row}>
+            <Text style={[styles.dropdown_row_text, highlighted && {color: 'mediumaquamarine'}]}>
+              {DROP_DOWN_OPTIONS}
+            </Text>
+          </View>
+        </TouchableHighlight>
+      );
+    }
+
+    _dropdown_3_adjustFrame(style) {
+        style.top -= 15;
+        style.left += 150;
+        return style;
     }
 
     render() {
@@ -98,7 +118,20 @@ export default class FeedBox extends Component {
                         <View style = {{flex: 1}}>
                         </View>
 
-                        <Image  style={styles.comments_image} source={otherImages.more} />
+                        <ModalDropdown  style={styles.dropdown_bar}
+                                        defaultIndex={0}
+                                        defaultValue={DROP_DOWN_OPTIONS[0]}
+                                        dropdownStyle={styles.dropdown_box}
+                                        options={DROP_DOWN_OPTIONS}
+                                        onSelect={(idx, value) => this.setState({activity_index: idx})}
+                                        adjustFrame={style => this._dropdown_3_adjustFrame(style)}
+                                        renderRow={this._dropdown_renderRow.bind(this)}>
+
+                                        <Image  style={styles.dropdown_image}
+                                                source={otherImages.more}>
+                                        </Image>
+                        </ModalDropdown>
+                        {/* <Image  style={styles.comments_image} source={otherImages.more} /> */}
                     </View>
                 </View>
             </View>
@@ -161,5 +194,33 @@ const styles = StyleSheet.create({
       width: 30,
       height: 30,
       tintColor: 'mediumseagreen'
-  }
+  },
+  dropdown_bar: {
+    borderWidth: 0,
+    height: 30,
+    justifyContent: 'center',
+    backgroundColor: 'blue',
+  },
+  dropdown_box: {
+    borderColor: 'black',
+    borderWidth: 2,
+    borderRadius: 0,
+    alignSelf: 'flex-end'
+  },
+  dropdown_row: {
+    flex: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  dropdown_row_text: {
+    marginHorizontal: 4,
+    fontSize: 16,
+    color: 'navy',
+    textAlignVertical: 'center',
+  },
+  dropdown_image: {
+    width: 30,
+    height: 30,
+    tintColor: 'mediumseagreen',
+  },
 });
