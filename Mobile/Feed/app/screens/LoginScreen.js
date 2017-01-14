@@ -24,6 +24,7 @@ class LoginScreen extends Component {
       username: "",
       validation_output: {result : "nothing yet"},
       show_password: false,
+      behavior: ''
     }
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
@@ -71,7 +72,7 @@ class LoginScreen extends Component {
 
   _navigateToFeed() {
     this.props.navigator.push({
-    href: "Menu"
+    href: "Feed"
     })
   }
 
