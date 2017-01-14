@@ -32,9 +32,10 @@ export default class FeedBox extends Component {
       let filterIcon1 = require('./res/icon1.png')
         let filterIcon2 = require('./res/icon2.png')
         let filterIcon3 = require('./res/icon3.png')
+        let commentIcon = require('./res/comments.png')
         return (
             <TouchableWithoutFeedback onPress={this._navigateToComment.bind(this)}>
-              <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#dbdbdb',
+              <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#e5e5e5',
                 borderBottomWidth: 1}}>
                 <View style={{flex: 1, flexDirection:'row', justifyContent: 'flex-start'}}>
                       
@@ -82,6 +83,10 @@ export default class FeedBox extends Component {
                         {post.postContent} 
                     </Text>
                 </View>
+                <View style={{flexDirection : 'row'}}>
+                  <Image style={styles.commentIcon} source={commentIcon}/>
+                  <Text style={{marginTop : 2, marginLeft : 4, color : '#80CCEE'}}>{post.numberOfComments}</Text>
+                </View>
               </View>
             </TouchableWithoutFeedback>
         );
@@ -95,7 +100,8 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       textAlignVertical: 'top',
       marginLeft: 8,
-      marginTop: 6
+      marginTop: 6,
+      color : '#353D41'
   },
   text_userID: {
       flex: 0,
@@ -122,7 +128,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlignVertical: 'top',
     marginLeft: 16,
-    marginBottom : 30
+    marginBottom : 20,
+    color : '#353D41'
   },
   profile_image: {
     width: PROFILE_WIDTH,
@@ -132,10 +139,16 @@ const styles = StyleSheet.create({
     borderRadius : 4
   },
   filter : {
-    width : 16,
-    height : 16,
-    marginRight : 6,
-    marginTop : 6,
-    tintColor : 'silver'
+    width : 20,
+    height : 20,
+    marginRight : 2,
+    marginTop : 4,
+    tintColor : '#353D41'
+  },
+  commentIcon : {
+    width : 28,
+    height : 28,
+    marginLeft : 54,
+    tintColor : '#80ccee'
   }
 });

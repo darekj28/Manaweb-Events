@@ -284,7 +284,7 @@ class FeedScreen extends Component {
                 marginRight: 8,
                 width: 30,
                 height: 30,
-                tintColor: 'red'
+                tintColor: '#d9534f'
             }
         } else {
             return {
@@ -292,6 +292,7 @@ class FeedScreen extends Component {
                 marginRight: 8,
                 width: 30,
                 height: 30,
+                tintColor : '#5cb85c'
             }
         }
 

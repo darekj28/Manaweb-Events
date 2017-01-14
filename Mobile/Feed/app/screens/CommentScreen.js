@@ -40,38 +40,42 @@ export default class CommentScreen extends React.Component {
 	handlePostSubmit() {
 
 	}
-	async getComments() {
+	getComments() {
 		let url = "https://manaweb-events.herokuapp.com"
 	    let test_url = "http://0.0.0.0:5000"
-	    let response = await fetch(url + "/mobileGetComments", 
+	    fetch(url + "/mobileGetComments", 
 	    	{method: "POST",
 	          	headers: {
 	          		'Accept': 'application/json',
-	          		'Content-Type': 'application/json',
+	          		'Content-Type': 'application/json'
 	        	},
-	      	body: JSON.stringify({ comment_id : this.props.comment_id })
+	      		body: JSON.stringify({ comment_id : this.props.comment_id })
 	    	}
-	    );
-	    let responseData = await response.json();
-	    if (responseData['result'] == 'success'){
-	      	if (responseData.comment_list.length > 0) {
-	          	var feed = []
-	          	for (var i = 0; i < responseData['comment_list'].length; i++) {
-	            	var obj = responseData['comment_list'][i]
-	            		feed.unshift({
-	              		commentContent : obj['body'],
-						avatar 		: obj['avatar_url'],
-						name 		: obj['first_name'] + ' ' + obj['last_name'],
-						userID 		: obj['poster_id'],
-						time  		: obj['time'],
-						comment_id  : obj['comment_id'],
-						unique_id	: obj['unique_id'],
-						timeString  : obj['timeString']
-	            	})
-	          	}
-	          	this.setState({comments: feed})
-	        }
-	    }
+	    ).then((response) => response.json())
+	    .then((responseData) => {
+		    if (responseData['result'] == 'success'){
+		      	if (responseData.comment_list.length > 0) {
+		          	var feed = []
+		          	for (var i = 0; i < responseData['comment_list'].length; i++) {
+		            	var obj = responseData['comment_list'][i]
+		            		feed.unshift({
+		              		commentContent : obj['body'],
+							avatar 		: obj['avatar_url'],
+							name 		: obj['first_name'] + ' ' + obj['last_name'],
+							userID 		: obj['poster_id'],
+							time  		: obj['time'],
+							comment_id  : obj['comment_id'],
+							unique_id	: obj['unique_id'],
+							timeString  : obj['timeString']
+		            	})
+		          	}
+		          	this.setState({comments: feed})
+		        }
+		    }
+		})
+		.catch((error) => {
+			console.log(error);
+		});
 	}
 
 	getPostById() {
