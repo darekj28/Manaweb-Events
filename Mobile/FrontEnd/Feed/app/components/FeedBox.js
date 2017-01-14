@@ -19,6 +19,14 @@ var profileImages = {
     gideon: require('./static/avatars/gideon.png'),
 };
 
+var otherImages = {
+    filter1: require('./res/icon1.png'),
+    filter2: require('./res/icon2.png'),
+    filter3: require('./res/icon3.png'),
+    comments: require('./res/comments.png'),
+    more: require('./res/dots.png'),
+}
+
 export default class FeedBox extends Component {
     constructor(props) {
         super(props);
@@ -65,13 +73,13 @@ export default class FeedBox extends Component {
 
                         <View style={{flex: 0, margin: 1, flexDirection: 'row'}}>
                             { post.isTrade &&
-                                <Image  style={styles.feed_filter_image} source={require('./res/icon1.png')} />
+                                <Image  style={styles.feed_filter_image} source={otherImages.filter1} />
                             }
                             { post.isPlay &&
-                                <Image  style={styles.feed_filter_image} source={require('./res/icon2.png')} />
+                                <Image  style={styles.feed_filter_image} source={otherImages.filter2} />
                             }
                             { post.isChill &&
-                                <Image  style={styles.feed_filter_image} source={require('./res/icon3.png')} />
+                                <Image  style={styles.feed_filter_image} source={otherImages.filter3} />
                             }
                         </View>
                     </View>
@@ -83,10 +91,14 @@ export default class FeedBox extends Component {
                     </TouchableHighlight>
 
                     <View style={{flex: 1, flexDirection:'row'}}>
-                        <Image  style={styles.comments_image} source={require('./res/comments.png')} />
+                        <Image  style={styles.comments_image} source={otherImages.comments} />
                         <Text style = {{color: 'mediumseagreen'}}>
                             {5}
                         </Text>
+                        <View style = {{flex: 1}}>
+                        </View>
+
+                        <Image  style={styles.comments_image} source={otherImages.more} />
                     </View>
                 </View>
             </View>
