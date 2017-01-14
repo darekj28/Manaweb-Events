@@ -114,6 +114,9 @@ class FeedScreen extends Component {
     handleSearch(text) {
       this.setState({ searchText : text });
     }
+    handleFilterUser(userIdToFilterPosts) {
+      this.setState({ userIdToFilterPosts : userIdToFilterPosts})
+    }
     // updates feed then sends the post to the server
     handlePostSubmit(newPostContent){
       var feed = this.state.feed;
@@ -386,25 +389,27 @@ class FeedScreen extends Component {
                 </PostMessageBox>
             </Animated.View>
             <View style = {{flex: 0.85, zIndex :10000, flexDirection:'row'}}>
-                <TouchableHighlight onPress={() => this.handleFeedFilterPress.bind(this)(0)}>
+                <TouchableWithoutFeedback onPress={() => this.handleFeedFilterPress.bind(this)(0)}>
                     <Image  style={this.imageStyle.bind(this)(0)}
                         source={filterIcon1}>
                     </Image>
-                </TouchableHighlight>
+                </TouchableWithoutFeedback>
 
-                <TouchableHighlight onPress={() => this.handleFeedFilterPress.bind(this)(1)}>
+                <TouchableWithoutFeedback onPress={() => this.handleFeedFilterPress.bind(this)(1)}>
                     <Image  style={this.imageStyle.bind(this)(1)}
                         source={filterIcon2}>
                     </Image>
-                </TouchableHighlight>
+                </TouchableWithoutFeedback>
 
-                <TouchableHighlight onPress={() => this.handleFeedFilterPress.bind(this)(2)}>
+                <TouchableWithoutFeedback onPress={() => this.handleFeedFilterPress.bind(this)(2)}>
                     <Image  style={this.imageStyle.bind(this)(2)}
                         source={filterIcon3}>
                     </Image>
-                </TouchableHighlight>
+                </TouchableWithoutFeedback>
             </View>
-            <Feed posts = {this.state.feed} searchText = {this.state.searchText} filters = {this.state.filters} currentUser = {this.state.current_user}
+            <Feed posts = {this.state.feed} searchText = {this.state.searchText} filters = {this.state.filters} 
+            userIdToFilterPosts={this.state.userIdToFilterPosts} handleFilterUser={this.handleFilterUser.bind(this)} 
+            currentUser = {this.state.current_user}
                 navigator = {this.props.navigator} username = {this.state.current_username}/>
 
             

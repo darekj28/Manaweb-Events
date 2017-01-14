@@ -21,14 +21,20 @@ export default class FeedBox extends Component {
         comment_id : this.props.post['comment_id']
       })
     }
+    handleFilterUser() {
+      this.props.handleFilterUser(this.props.post['userID']);
+    }
     render() {
       const avatar_prefix = './res/'
       const avatar_extension = '.png'
       const post = this.props.post
       avatar_list = ['nissa', 'chandra', 'elspeth', 'nicol', 'ugin', 'jace', 'liliana', 'ajani', 'nahiri', 'gideon']
+      let filterIcon1 = require('./res/icon1.png')
+        let filterIcon2 = require('./res/icon2.png')
+        let filterIcon3 = require('./res/icon3.png')
         return (
             <TouchableWithoutFeedback onPress={this._navigateToComment.bind(this)}>
-              <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#000000',
+              <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#dbdbdb',
                 borderBottomWidth: 1}}>
                 <View style={{flex: 1, flexDirection:'row', justifyContent: 'flex-start'}}>
                       
@@ -44,18 +50,28 @@ export default class FeedBox extends Component {
                 {post.avatar == 'gideon' && <Image  style={styles.profile_image} source={require('../static/avatars/gideon.png')} />}
 
 
-                    <Text style = {styles.text_name}>
+                    <TouchableHighlight onPress={this.handleFilterUser.bind(this)}>
+                      <Text style = {styles.text_name}>
                         {post.name}
-                    </Text>
-
+                      </Text>
+                    </TouchableHighlight>
                     <Text style = {styles.text_userID}>
-                        {post.userID}
+                        @{post.userID}
+                    </Text>
+                    <Text style = {styles.text_userID}>
+                        &#8226; {post.time}
                     </Text>
                     <View style={{flex: 1}}/>
-                    <View style={{flex: 0, margin: 1}}>
-                        { post.isTrade && <Text style = {styles.text_feed_type}> Trade </Text> }
-                        { post.isPlay && <Text style = {styles.text_feed_type}> Play </Text> }
-                        { post.isChill && <Text style = {styles.text_feed_type}> Chill </Text> }
+                    <View style={{flex: 0, margin: 1, flexDirection : "row"}}>
+                        { post.isTrade && <Image  style={styles.filter}
+                                source={filterIcon1}>
+                            </Image> }
+                        { post.isPlay && <Image  style={styles.filter}
+                                source={filterIcon2}>
+                            </Image> }
+                        { post.isChill && <Image  style={styles.filter}
+                                source={filterIcon3}>
+                            </Image> }
                     </View>
                     
                 </View>
@@ -75,18 +91,18 @@ export default class FeedBox extends Component {
 const styles = StyleSheet.create({
   text_name: {
       flex: 0,
-      fontSize: 18,
+      fontSize: 16,
       fontWeight: 'bold',
       textAlignVertical: 'top',
-      marginLeft: 4,
-      marginTop: 2
+      marginLeft: 8,
+      marginTop: 6
   },
   text_userID: {
       flex: 0,
-      fontSize: 18,
+      fontSize: 16,
       textAlignVertical: 'top',
       marginLeft: 4,
-      marginTop: 2,
+      marginTop: 6,
       color: 'silver'
   },
   text_feed_type: {
@@ -103,14 +119,23 @@ const styles = StyleSheet.create({
   },
   text_message: {
     flex: 1,
-    fontSize: 18,
+    fontSize: 16,
     textAlignVertical: 'top',
-    marginLeft: 4
+    marginLeft: 16,
+    marginBottom : 30
   },
   profile_image: {
     width: PROFILE_WIDTH,
     height: PROFILE_HEIGHT,
-    marginTop: 2,
-    marginLeft: 2
+    marginTop: 8,
+    marginLeft: 8,
+    borderRadius : 4
   },
+  filter : {
+    width : 16,
+    height : 16,
+    marginRight : 6,
+    marginTop : 6,
+    tintColor : 'silver'
+  }
 });

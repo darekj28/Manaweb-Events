@@ -19,6 +19,14 @@ var profileImages = {
     gideon: require('./static/avatars/gideon.png'),
 };
 
+var otherImages = {
+    filter1: require('./res/icon1.png'),
+    filter2: require('./res/icon2.png'),
+    filter3: require('./res/icon3.png'),
+    comments: require('./res/comments.png'),
+    more: require('./res/dots.png'),
+}
+
 export default class FeedBox extends Component {
     constructor(props) {
         super(props);
@@ -32,56 +40,66 @@ export default class FeedBox extends Component {
       const post = this.props.post
       avatar_list = ['nissa', 'chandra', 'elspeth', 'nicol', 'ugin', 'jace', 'liliana', 'ajani', 'nahiri', 'gideon']
         return (
-            <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: 'silver',
+            <View style={{flex:1, flexDirection: 'row', justifyContent: 'flex-start', borderBottomColor: 'silver',
                 borderBottomWidth: 1}}>
-                <View style={{flex: 1, flexDirection:'row', justifyContent: 'flex-start'}}>
-
-                {post.avatar =='nissa' && <Image  style={styles.profile_image} source={profileImages.nissa} />}
-                {post.avatar == 'chandra' && <Image  style={styles.profile_image} source={profileImages.chandra} />}
-                {post.avatar == 'elspeth' && <Image  style={styles.profile_image} source={profileImages.elspeth} />}
-                {post.avatar == 'nicol' && <Image  style={styles.profile_image} source={profileImages.nicol} />}
-                {post.avatar == 'ugin' && <Image  style={styles.profile_image} source={profileImages.ugin} />}
-                {post.avatar == 'jace' && <Image  style={styles.profile_image} source={profileImages.jace} />}
-                {post.avatar == 'liliana' && <Image  style={styles.profile_image} source={profileImages.liliana} />}
-                {post.avatar == 'ajani' && <Image  style={styles.profile_image} source={profileImages.ajani} />}
-                {post.avatar == 'nahiri' && <Image  style={styles.profile_image} source={profileImages.nahiri} />}
-                {post.avatar == 'gideon' && <Image  style={styles.profile_image} source={profileImages.gideon} />}
-
-
-                    <Text style = {styles.text_name}>
-                        {post.name}
-                    </Text>
-
-                    <Text style = {styles.text_userID}>
-                        {'@' + post.userID}
-                    </Text>
-                    <Text style = {styles.text_userID}>
-                        {'\u22c5' + post.timestamp}
-                    </Text>
-                    <View style={{flex: 1}}/>
-                    <View style={{flex: 0, margin: 1, flexDirection: 'row'}}>
-                        { post.isTrade &&
-                            // <View  style={{flex: 1, borderWidth: 1, borderColor: 'black', backgroundColor: 'aqua'}}>
-                                <Image  style={styles.feed_filter_image} source={require('./res/icon1.png')} />
-                            // </View>
-                        }
-                        { post.isPlay &&
-                            <Image  style={styles.feed_filter_image} source={require('./res/icon2.png')} />
-                        }
-                        { post.isChill &&
-                            <Image  style={styles.feed_filter_image} source={require('./res/icon3.png')} />
-                        }
-                    </View>
-
+                <View style={{flex: 0, justifyContent: 'flex-start'}}>
+                    {post.avatar =='nissa' && <Image  style={styles.profile_image} source={profileImages.nissa} />}
+                    {post.avatar == 'chandra' && <Image  style={styles.profile_image} source={profileImages.chandra} />}
+                    {post.avatar == 'elspeth' && <Image  style={styles.profile_image} source={profileImages.elspeth} />}
+                    {post.avatar == 'nicol' && <Image  style={styles.profile_image} source={profileImages.nicol} />}
+                    {post.avatar == 'ugin' && <Image  style={styles.profile_image} source={profileImages.ugin} />}
+                    {post.avatar == 'jace' && <Image  style={styles.profile_image} source={profileImages.jace} />}
+                    {post.avatar == 'liliana' && <Image  style={styles.profile_image} source={profileImages.liliana} />}
+                    {post.avatar == 'ajani' && <Image  style={styles.profile_image} source={profileImages.ajani} />}
+                    {post.avatar == 'nahiri' && <Image  style={styles.profile_image} source={profileImages.nahiri} />}
+                    {post.avatar == 'gideon' && <Image  style={styles.profile_image} source={profileImages.gideon} />}
                 </View>
-                <View style={{flex: 1, flexDirection:'row'}}>
-                    <View style={{width: PROFILE_WIDTH}}>
+
+
+                <View style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-start'}}>
+                    <View style={{flex: 1, height: PROFILE_HEIGHT, flexDirection: 'row', justifyContent: 'flex-start'}}>
+                        <Text style = {styles.text_name}>
+                            {post.name}
+                        </Text>
+
+                        <Text style = {styles.text_userID}>
+                            {'@' + post.userID}
+                        </Text>
+                        <Text style = {styles.text_userID}>
+                            {'\u22c5' + post.timestamp}
+                        </Text>
+                        <View style={{flex: 1}}>
+                        </View>
+
+                        <View style={{flex: 0, margin: 1, flexDirection: 'row'}}>
+                            { post.isTrade &&
+                                <Image  style={styles.feed_filter_image} source={otherImages.filter1} />
+                            }
+                            { post.isPlay &&
+                                <Image  style={styles.feed_filter_image} source={otherImages.filter2} />
+                            }
+                            { post.isChill &&
+                                <Image  style={styles.feed_filter_image} source={otherImages.filter3} />
+                            }
+                        </View>
                     </View>
+
                     <TouchableHighlight onPress={() => Alert.alert('Pressed')}>
-                        <Text style = {styles.text_message}>
+                        <Text style = {styles.text_message} numberOfLines={5}>
                             {post.postContent}
                         </Text>
                     </TouchableHighlight>
+
+                    <View style={{flex: 1, flexDirection:'row'}}>
+                        <Image  style={styles.comments_image} source={otherImages.comments} />
+                        <Text style = {{color: 'mediumseagreen'}}>
+                            {5}
+                        </Text>
+                        <View style = {{flex: 1}}>
+                        </View>
+
+                        <Image  style={styles.comments_image} source={otherImages.more} />
+                    </View>
                 </View>
             </View>
         );
@@ -118,10 +136,10 @@ const styles = StyleSheet.create({
       marginLeft: 2,
   },
   text_message: {
-    flex: 1,
     fontSize: 18,
     textAlignVertical: 'top',
-    marginLeft: 4
+    marginLeft: 4,
+    flex: 0.8
   },
   profile_image: {
     width: PROFILE_WIDTH,
@@ -138,5 +156,10 @@ const styles = StyleSheet.create({
       borderColor: '#333333',
       marginTop: 2,
       tintColor: 'green'
+  },
+  comments_image: {
+      width: 30,
+      height: 30,
+      tintColor: 'mediumseagreen'
   }
 });

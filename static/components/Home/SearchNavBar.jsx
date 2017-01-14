@@ -31,7 +31,7 @@ export default class SearchNavBar extends React.Component {
 	render() {
 		return (
 			<nav className="navbar navbar-default" role="navigation">
-				<div className="container">
+				<div className="navbar-container">
 					<div className="navbar-header">
 						<button type="button" className="SearchNavBarGlyphicon navbar-toggle" 
 										data-toggle="collapse" 
@@ -60,7 +60,7 @@ export default class SearchNavBar extends React.Component {
 				                      <input type="text" value={this.props.searchText} 
 				                      			ref={(input) => this.searchText = input} 
 				                      			id="searchInput" className="form-control" 
-				                      			placeholder="Search..." 
+				                      			placeholder="Search posts..." 
 				                      			onChange={this.handleSearch.bind(this)}/>
 				                      <div className = "input-group-addon"></div>
 								  	  {this.props.actions.map(function(action, i) {

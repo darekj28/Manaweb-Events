@@ -68,7 +68,8 @@ export default class NotificationsDropdown extends React.Component {
                     {this.state.notifications.map(function(note, i) {
                         return (<li key={i}>
                                     <Link to={"/comment/" + note.comment_id}> 
-                                        {this.getNotificationSyntax.bind(this)(note) + " " + note.timeString}
+                                        <b>{this.getNotificationSyntax.bind(this)(note)}</b> 
+                                        <small>{" " + note.timeString}</small>
                                     </Link>
                                 </li>);
                     }, this)}

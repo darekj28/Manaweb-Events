@@ -60,12 +60,10 @@ export default class Feed extends Component {
         }
         else return true;
       }
-      // if ((!doesPostMatchFilter() || !doesPostMatchSearch()) || !doesPostMatchSelectedUser())
-      //   return;
-      // else 
-      if (!doesPostMatchFilter() || !doesPostMatchSearch()) return;
+      if ((!doesPostMatchFilter() || !doesPostMatchSearch()) || !doesPostMatchSelectedUser())
+        return;
       else if (i < 5)
-        rows.push(<FeedBox key={i} post = {post} 
+        rows.push(<FeedBox key={i} post = {post} handleFilterUser={this.props.handleFilterUser}
             image_ID = {i % 3} navigator = {this.props.navigator} username = {this.props.username}
             // isOP={this.props.currentUser['userID'] == post.userID}
             // isAdmin={this.props.currentUser['isAdmin']} 
