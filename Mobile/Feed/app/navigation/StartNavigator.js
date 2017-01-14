@@ -10,11 +10,10 @@ import RegisterEmail from '../screens/register/RegisterEmail'
 import RegisterUsername from '../screens/register/RegisterUsername'
 import RegisterConfirmCode from '../screens/register/RegisterConfirmCode'
 import RegisterPassword from '../screens/register/RegisterPassword'
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-
-
+import MenuScreen from '../screens/MenuScreen'
 import LoginScreen from '../screens/LoginScreen'
-import FeedScreen from '../screens/FeedScreen'
 import CommentScreen from '../screens/CommentScreen'
 import FbCreate from '../screens/register/FbCreate'
 import TestHTTP from '../screens/TestHTTP'
@@ -128,9 +127,9 @@ class StartNavigator extends Component {
     
 
 		
-	case "Feed":
+	case "Menu":
       return (
-          <FeedScreen
+          <MenuScreen
               {...globalNavigatorProps} 
              />
         )
@@ -184,7 +183,7 @@ class StartNavigator extends Component {
       start = "Start"
     }
     else {
-      start = "Feed"
+      start = "Menu"
     }
 
     if (this.state.isLoading) {

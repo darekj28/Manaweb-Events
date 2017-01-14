@@ -102,7 +102,7 @@ class RegisterUsername extends Component {
 
   _navigateToFeed() {
     this.props.navigator.push({
-    href: "Feed",
+    href: "Menu",
     username : this.state.username
     })
   }

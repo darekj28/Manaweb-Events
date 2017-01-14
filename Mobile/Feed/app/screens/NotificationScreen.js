@@ -9,9 +9,7 @@ export default class NotificationScreen extends React.Component {
 	render() {
 		return (
 			<View style = {styles.container}>
-              <TouchableOpacity onPress = {() => this.props.navigator.pop()}>
-                <Icon name = "chevron-left" size = {30} />
-              </TouchableOpacity>
+      <Text>Notifications</Text>
             </View>
 			)
 	}

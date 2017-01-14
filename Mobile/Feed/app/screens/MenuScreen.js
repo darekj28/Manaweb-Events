@@ -12,7 +12,8 @@ import {AppRegistry,StyleSheet,View,TouchableOpacity,TouchableHighlight,
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FeedScreen from './FeedScreen'
-
+import SettingScreen from './SettingScreen'
+import NotificationScreen from './NotificationScreen'
 const MENU_ICON_SIZE = 23
 const BOTTOM_BAR_PROPORTION = 0.09
 const HIGHLIGHTED_COLOR = '#8AC1C4'
@@ -74,16 +75,18 @@ class MenuScreen extends Component {
               <View style = {{flex: 1 - BOTTOM_BAR_PROPORTION, flexDirection:'row'}}>
                   { this.state.show_panel1 &&
                       <View style = {{flex: 1}}>
-                          <FeedScreen></FeedScreen>
+                          <FeedScreen navigator={this.props.navigator}></FeedScreen>
                       </View>
                   }
                   { this.state.show_panel2 &&
-                  <View style = {{backgroundColor: 'black', flex: 1}}>
+                  <View style = {{backgroundColor: 'white', flex: 1}}>
+                    <SettingScreen/>
                   </View>
                     }
 
                   { this.state.show_panel3 &&
-                  <View style = {{backgroundColor: 'red', flex: 1}}>
+                  <View style = {{backgroundColor: 'white', flex: 1}}>
+                    <NotificationScreen/>
                   </View>
               }
               </View>
