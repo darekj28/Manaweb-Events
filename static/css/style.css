@@ -1,6 +1,6 @@
 :root{
-    --light: #16a79d;
-    --dark : #13968D;
+    --light: #80CCEE;
+    --dark : #66A3BE;
     --navbar : #4d505b;
     --main-color : #353D41;
     --success : #5cb85c;
@@ -22,16 +22,17 @@ button.kep-login-facebook{
   width : 350px;
   height : 40px;
   text-transform : none;
-  border : 1px solid var(--border-gray)!important;
   border-radius : 4px!important;
 }
 button.kep-login-facebook:hover{
   background-color : #365899;
 }
+.edit-post {
+  resize : vertical;
+}
 .post-button {
   color : #fff;
   background-color : var(--light);
-  border : 1px solid var(--light);
 }
 .post-button:hover {
   color : #fff;
@@ -72,6 +73,10 @@ button.kep-login-facebook:hover{
 .app-container {
   padding-top : 65px;
 }
+.navbar-container {
+  padding-left : 20px;
+  padding-right : 20px;
+}
 .register-container {
   padding-top : 130px;
 }
@@ -86,6 +91,7 @@ button.kep-login-facebook:hover{
 .btn-login {
   background-color : var(--light);
   color : #fff;
+  border : none;
 }
 .btn-login:hover {
   background-color: var(--dark);
@@ -394,61 +400,65 @@ button.kep-login-facebook:hover{
     margin-top : 2px;
 }
 .navbar-default {
-  background-color: var(--navbar);
+  background-color: #fff;
   border-radius : 0px;
   position : fixed;
   width : 100%;
   z-index : 500;
 }
 .navbar-default .navbar-brand {
-  color: #ffffff;
+  color: var(--light);
 }
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {
-  color: var(--light);
+  color: var(--dark);
 }
 .navbar-default .navbar-text {
-  color: #ffffff;
+  color: var(--light);
 }
 .navbar-default .navbar-nav > li > a {
-  color: #ffffff;
+  color: var(--light);
 }
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
-  color: var(--light);
+  color: var(--dark);
 }
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
   color: #ffffff;
-  background-color: var(--dark);
+  background-color: var(--light);
 }
 .navbar-default .navbar-nav > .open > a,
 .navbar-default .navbar-nav > .open > a:hover,
 .navbar-default .navbar-nav > .open > a:focus {
   color: #ffffff;
-  background-color: var(--dark);
+  background-color: var(--light);
 }
 .navbar-default .navbar-toggle {
-  border-color: var(--dark);
+  color : var(--light)!important;
+  border-color: var(--light);
 }
 .navbar-default .navbar-toggle:hover,
 .navbar-default .navbar-toggle:focus {
-  background-color: var(--dark);
+  color : #fff!important;
+  background-color: var(--light);
 }
 .navbar-default .navbar-toggle .icon-bar {
-  background-color: #ffffff;
+  background-color: var(--light);
+}
+.navbar-default .navbar-toggle:hover .icon-bar {
+  background-color: #fff;
 }
 .navbar-default .navbar-collapse,
 .navbar-default .navbar-form {
-  border-color: #ffffff;
-  background-color : var(--navbar);
+  border-color: var(--light);
 }
 .navbar-default .navbar-link {
-  color: #ffffff;
+  color: var(--light);
 }
 .navbar-default .navbar-link:hover {
-  color: var(--light);
+  color: #ffffff;
 }
 
 @media (max-width: 767px) {
@@ -456,23 +466,28 @@ button.kep-login-facebook:hover{
     width : auto;
     height : auto;
   }
+  .navbar-container {
+    padding-left : 0px;
+    padding-right : 0px;
+  }
   .navbar-default .navbar-nav .open .dropdown-menu > li > a {
-    color: #ffffff;
+    color: var(--main-color);    
     white-space : normal;
   }
   .navbar-default .navbar-nav .open .dropdown-menu > li {
-    color: #ffffff;
-  }
-  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
     color: var(--light);
   }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
+    color: var(--dark);
+  }
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
-    color: #ffffff;
+    color: var(--dark);
   }
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
     color: #ffffff;
-    background-color: var(--dark);
+    background-color: var(--light);
   }
 }
+

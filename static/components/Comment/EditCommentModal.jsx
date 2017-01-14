@@ -35,7 +35,7 @@ export default class EditCommentModal extends React.Component {
 							<h4 className="modal-title">Edit Comment</h4>
 						</div>
 						<div className="modal-body" id="EditCommentModalBody">
-							<textarea className="form-control EditFeedCommentBody" id="FeedCommentBody" 
+							<textarea className="form-control edit-post" id="FeedCommentBody" 
 									value={this.state.commentContent} 
 									onChange={this.handleCommentEditChange.bind(this)}></textarea>
 						</div>

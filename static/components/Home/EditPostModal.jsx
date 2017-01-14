@@ -35,7 +35,7 @@ export default class EditPostModal extends React.Component {
 							<h4 className="modal-title">Edit Post</h4>
 						</div>
 						<div className="modal-body" id="EditPostModalBody">
-							<textarea className="form-control EditFeedPostBody" id="FeedPostBody" 
+							<textarea className="form-control edit-post" id="FeedPostBody" 
 									value={this.state.postContent} 
 									onChange={this.handlePostEditChange.bind(this)}></textarea>
 						</div>
