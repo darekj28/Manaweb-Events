@@ -25,17 +25,26 @@ export default class CommentBox extends React.Component {
                         {comment.name}
                     </Text>
                     <Text style = {styles.text_userID}>
-                        {comment.userID}
+                        @{comment.userID}
                     </Text>
+                    {!this.props.isOriginalPost && <Text style = {styles.text_time}>
+                        &#8226; {comment.time}
+                    </Text>}
+                    {this.props.isOriginalPost && <Text style={styles.text_time}>
+                        &#8226; {comment.timeString}
+                    </Text>}
                     <View style={{flex: 1}}/>
                     
                 </View>
                 <View style={{flex: 1, flexDirection:'row'}}>
                     <View style={{width: PROFILE_WIDTH}}>
                     </View>
-                    <Text style = {styles.text_message}>
-                        {comment.commentContent} 
-                    </Text>
+                    {!this.props.isOriginalPost && <Text style = {styles.text_message}>
+                        {comment.postContent} 
+                    </Text>}
+                    {this.props.isOriginalPost && <Text style = {styles.original_post}>
+                        {comment.postContent}
+                    </Text>}
                 </View>
             </View>
 			);
@@ -48,7 +57,8 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       textAlignVertical: 'top',
       marginLeft: 8,
-      marginTop: 6
+      marginTop: 6,
+      color : '#353D41'
   },
   text_userID: {
       flex: 0,
@@ -58,24 +68,21 @@ const styles = StyleSheet.create({
       marginTop: 6,
       color: 'silver'
   },
-  text_feed_type: {
+  text_time: {
+      flex: 1,
       fontSize: 16,
-      flex: 0,
       textAlignVertical: 'top',
-      color: 'silver',
-      borderColor: 'silver',
-      borderWidth: 2,
-      borderRadius: 1,
-      marginTop: 1,
-      marginRight: 3,
-      marginLeft: 2,
+      marginLeft: 4,
+      marginTop: 6,
+      color: 'silver'
   },
   text_message: {
     flex: 1,
     fontSize: 16,
     textAlignVertical: 'top',
     marginLeft: 16,
-    marginBottom : 30
+    marginBottom : 30,
+    color : '#353D41'
   },
   profile_image: {
     width: PROFILE_WIDTH,
@@ -83,5 +90,12 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginLeft: 8,
     borderRadius : 4
+  },
+  original_post : {
+    flex: 1,
+    fontSize: 20,
+    textAlignVertical: 'top',
+    marginLeft: 16,
+    marginBottom : 30
   }
 });

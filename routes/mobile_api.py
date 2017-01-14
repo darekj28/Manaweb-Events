@@ -187,13 +187,22 @@ def mobileGetPosts():
 
 @mobile_api.route('/mobileGetComments', methods = ['POST'])
 def mobileGetComments():
-	feed_name = "BALT"
+	feed_name = DEFAULT_FEED
 	comment_id = request.json['comment_id']
 	post_manager = Posts()
 	comment_list = post_manager.getComments(feed_name, comment_id)
 	post_manager.sortAscending(comment_list)
 	post_manager.closeConnection()
-	return jsonify({ 'result' : 'success', 'comment_list' : comment_list })	
+	return jsonify({ 'comment_list' : comment_list })	
+
+@mobile_api.route('/mobileGetPostById', methods = ['POST'])
+def mobileGetPostById():
+	feed_name = DEFAULT_FEED
+	comment_id = request.json['comment_id']
+	post_manager = Posts()
+	this_post = post_manager.getPostById(feed_name, comment_id)
+	post_manager.closeConnection()
+	return jsonify({ 'post' : this_post })
 
 @mobile_api.route('/mobileMakePost', methods = ['POST'])
 def mobileMakePost():
