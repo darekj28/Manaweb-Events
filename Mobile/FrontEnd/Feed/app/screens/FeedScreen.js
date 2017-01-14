@@ -245,7 +245,7 @@ var messages = ['This is my first message. This is some random amount of charact
 var createFeedRow = (message, i) =>
     <FeedBox
         key={i}
-        post = {{postContent: message.substr(0, 20 + i*423 % 40),
+        post = {{postContent: message.substr(0, 40 + i*423 % 40),
                 isTrade: i * 123 % 40 < 20,
                 isPlay: i * 5234 % 400 < 200,
                 isChill: i * 4123 % 240 < 120,
