@@ -20,7 +20,8 @@ export default class CommentScreen extends React.Component {
       		post_message_height: new Animated.Value(50),
 			comments : [],
 			original_post : {},
-			newPostContent: ""
+			newPostContent: "",
+			current_user: {'userID' : 'not initialized'}
 		}
 	}
 	handlePostTyping(newPostContent) {
@@ -38,7 +39,35 @@ export default class CommentScreen extends React.Component {
 	      ).start();
 	}
 	handlePostSubmit() {
-
+		let url = "https://manaweb-events.herokuapp.com"
+	    let test_url = "http://0.0.0.0:5000"
+	    fetch(test_url + "/mobileMakeComment", 
+	    	{method: "POST",
+	          	headers: {
+	          		'Accept': 'application/json',
+	          		'Content-Type': 'application/json'
+	        	},
+	      		body: JSON.stringify({ comment_id : this.props.comment_id,
+	      		current_user : this.state.current_user,
+	      		commentContent : this.state.newPostContent })
+	    	}
+	    ).then((response) => response.json())
+	    .then((responseData) => {
+		    if (responseData['result'] == 'success') {
+		    	var feed = this.state.comments;
+		    	feed.push({ commentContent: this.state.newPostContent, 
+					avatar  : this.state.currentUser['avatar_url'], 
+					name    : this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
+					userID  : this.state.currentUser['userID'], 
+					time	: "just now", 
+					comment_id : this.state.comment_id
+				});
+		    	this.setState({ comments: feed, newPostContent : '' });	
+		    }
+		})
+		.catch((error) => {
+			console.log(error);
+		});
 	}
 	getComments() {
 		let url = "https://manaweb-events.herokuapp.com"

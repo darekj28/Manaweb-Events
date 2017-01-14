@@ -221,6 +221,19 @@ def mobileMakePost():
 
 	return jsonify({'result' : 'success'})
 
+@mobile_api.route("/mobileMakeComment", methods = ['POST'])
+def mobileMakeComment():
+	feed_name = DEFAULT_FEED
+	comment_id = request.json['comment_id']
+	commentContent = request.json['commentContent']
+	# unique_id = request.json['unique_id']
+	unique_id = None
+	post_manager = Posts()
+	userID = request.json['currentUser']['userID']
+	post_manager.makeComment(feed_name, comment_id, commentContent, userID, unique_id = unique_id)
+	post_manager.closeConnection()	
+
+	return jsonify({ 'result' : 'success'})
 
 # @mobile_api.route('/status/<task_id>')
 # def taskStatus(task_id):
