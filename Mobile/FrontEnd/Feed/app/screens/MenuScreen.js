@@ -8,13 +8,15 @@
 import React from 'react';
 import {Component} from 'react'
 import {AppRegistry,StyleSheet,View,TouchableOpacity,TouchableHighlight,
-          Alert, Animated, TouchableWithoutFeedback, Image, Easing} from 'react-native';
+          Alert, Animated, TouchableWithoutFeedback, Image, Easing, Text} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FeedScreen from './FeedScreen'
 
-const BOTTOM_BAR_PROPORTION = 0.07
-const ANIMATE_DURATION = 100
+const MENU_ICON_SIZE = 23
+const BOTTOM_BAR_PROPORTION = 0.09
+const HIGHLIGHTED_COLOR = '#8AC1C4'
+const DEFAULT_COLOR = 'silver'
 
 var image_res = {
     // Do these have copyright? https://thenounproject.com/term/message-notification/23246/
@@ -42,11 +44,27 @@ class MenuScreen extends Component {
       this.setState({show_panel3: show3})
   }
 
-  _imageWrapper(highlighted) {
+  _imageWrapperStyle(highlighted) {
       if (highlighted) {
-          return {flex: 1, justifyContent: 'center', backgroundColor: '#9AD1D4'}
+          return {flex: 1, justifyContent: 'center', alignSelf: 'center'}
       } else {
-          return {flex: 1, justifyContent: 'center', backgroundColor: '#C2F9BB'}
+          return {flex: 1, justifyContent: 'center', alignSelf: 'center'}
+      }
+  }
+
+  _imageStyle(highlighted) {
+      if (highlighted) {
+          return {width: MENU_ICON_SIZE, height: MENU_ICON_SIZE, alignSelf: 'center', tintColor: HIGHLIGHTED_COLOR}
+      } else {
+          return {width: MENU_ICON_SIZE, height: MENU_ICON_SIZE, alignSelf: 'center', tintColor: DEFAULT_COLOR}
+      }
+  }
+
+  _textStyle(highlighted) {
+      if (highlighted) {
+          return {color: HIGHLIGHTED_COLOR, fontWeight: 'bold', alignSelf: 'center'}
+      } else {
+          return {color: DEFAULT_COLOR, fontWeight: 'bold', alignSelf: 'center'}
       }
   }
 
@@ -70,21 +88,36 @@ class MenuScreen extends Component {
               }
               </View>
 
-              <View style = {{flex: BOTTOM_BAR_PROPORTION, flexDirection:'row'}}>
+              <View style = {{flex: BOTTOM_BAR_PROPORTION, flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
                   <TouchableHighlight
-                      style = {this._imageWrapper(this.state.show_panel1)}
+                      style = {this._imageWrapperStyle(this.state.show_panel1)}
                       onPress={() => this._onPanel1Pressed(true, false, false)}>
-                        <Image  style={styles.menu_image} source={image_res.home} />
+                      <View style = {{flex: 1}}>
+                          <Image  style={this._imageStyle(this.state.show_panel1)} source={image_res.home} />
+                          <Text style = {this._textStyle(this.state.show_panel1)}>
+                              {'Home'}
+                          </Text>
+                      </View>
                   </TouchableHighlight>
                   <TouchableHighlight
-                      style = {this._imageWrapper(this.state.show_panel2)}
+                      style = {this._imageWrapperStyle(this.state.show_panel2)}
                       onPress={() => this._onPanel1Pressed(false, true, false)}>
-                        <Image  style={styles.menu_image} source={image_res.setting} />
+                      <View style = {{flex: 1}}>
+                        <Image  style={this._imageStyle(this.state.show_panel2)} source={image_res.setting} />
+                        <Text style = {this._textStyle(this.state.show_panel2)}>
+                            {'Setting'}
+                        </Text>
+                    </View>
                   </TouchableHighlight>
                   <TouchableHighlight
-                      style = {this._imageWrapper(this.state.show_panel3)}
+                      style = {this._imageWrapperStyle(this.state.show_panel3)}
                       onPress={() => this._onPanel1Pressed(false, false, true)}>
-                        <Image  style={styles.menu_image} source={image_res.notification} />
+                      <View style = {{flex: 1}}>
+                        <Image  style={this._imageStyle(this.state.show_panel3)} source={image_res.notification} />
+                        <Text style = {this._textStyle(this.state.show_panel3)}>
+                            {'Notification'}
+                        </Text>
+                    </View>
                   </TouchableHighlight>
               </View>
           </View>
@@ -96,12 +129,7 @@ const styles = StyleSheet.create({
   container: {
     flex:1,
     justifyContent: 'flex-start',
-  },
-  menu_image: {
-      width: 30,
-      height: 30,
-      alignSelf: 'center'
-  },
+  }
 });
 
 module.exports = MenuScreen
