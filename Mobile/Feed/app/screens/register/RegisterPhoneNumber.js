@@ -62,14 +62,19 @@ class RegisterPhoneNumber extends Component {
 
   // handle the submission of the phone number
   handlePhoneNumberSubmit(){  
+    if (this.state.validation_output['result'] == 'success'){
     Alert.alert(
       "We will send a verification code to " + this.state.phone_number,
       "SMS fees may apply",
       [
         {text: 'Edit', style: 'cancel'},
         {text: 'OK', onPress: () => this.sendConfirmationPin()}
-      ]
-    )
+      ]) 
+    }
+
+    // else {
+    //   alert(this.state.validation_output['error'])
+    // }
     // if (this.state.validation_output['result'] == 'success')
     //   this.sendConfirmationPin(this.state.phone_number);
     // else 
@@ -123,7 +128,6 @@ class RegisterPhoneNumber extends Component {
         new_phone_number = "(" + phone_number.substring(0,3) + ") " + phone_number.substring(3, 6) + "-" + phone_number.substring(6, length)
       }
 
-       
       this.setState({phone_number : new_phone_number});  
       this.validatePhoneNumber(phone_number);
 
@@ -146,18 +150,14 @@ class RegisterPhoneNumber extends Component {
   getErrorMessage() {
     var error_message = "";
     if (this.state.validation_output.error != "" && this.state.validation_output.error != null) {
-      error_message == this.state.validation_output.error;
+      error_message = this.state.validation_output.error;
     }
-
-
     if (error_message != "" && error_message != null) {
-      alert("bro")
       return (
               <Text style = {styles.error_text}>
                     {error_message}
               </Text>
         )
-
     }
     else return;
   }
@@ -167,7 +167,7 @@ class RegisterPhoneNumber extends Component {
     var error_message = this.getErrorMessage.bind(this)();
     return (
 
-              <View style = {styles.container}>
+          <View style = {styles.container}>
           <View style = {styles.top_bar}>
               <TouchableOpacity style = {styles.back_button}
                 onPress = {() => this.props.navigator.pop()}>
@@ -208,12 +208,25 @@ class RegisterPhoneNumber extends Component {
               
             </View>
 
-            <View style = {styles.error_box}>
-                <Text> {this.state.validation_output.error} </Text>
-                { //error_message 
-                }
-            </View>
 
+            <View style = {styles.error_box}>
+                {error_message }
+            </View>            
+
+            
+            <View style = {styles.bottom_bar}>
+
+              <Text style = {styles.recovery_text}>
+                {/* Forgot your password? */}
+              </Text>
+
+              <TouchableHighlight style = {styles.next} onPress = {this.handlePhoneNumberSubmit.bind(this)}>
+                <Text style = {styles.next_text}>
+                  Next!
+                </Text>
+              </TouchableHighlight>
+
+            </View>
 
             <View style = {styles.padding} />
 

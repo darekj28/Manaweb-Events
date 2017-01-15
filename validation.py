@@ -42,7 +42,9 @@ def validatePhoneNumber(phone_number):
 	raw_phone_number = ""
 	for char in phone_number:
 		if char.isdigit():
-			raw_phone_number = raw_phone_number + char 
+			raw_phone_number = raw_phone_number + char
+		else:
+			isSuccess = False
 	if len(raw_phone_number) == 10:
 		if raw_phone_number[0] == "1" or raw_phone_number[3] == "1":
 			isSuccess = False

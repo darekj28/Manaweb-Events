@@ -23,7 +23,7 @@ class RegisterEmail extends Component {
     super(props)
     this.state = {
       email : "",
-      validation_output: {'error' : "invalid email"}
+      validation_output: {'error' : ""}
     }
 
     this.handleEmailSubmit = this.handleEmailSubmit.bind(this);
@@ -64,6 +64,10 @@ class RegisterEmail extends Component {
     .done();
   }
 
+  clearEmail() {
+    this.setState({email : ""})
+  }
+
   _navigateToRegisterUsername() {
     this.props.navigator.push({
     href: "RegisterUsername",
@@ -75,33 +79,80 @@ class RegisterEmail extends Component {
     })
   }
 
+  getErrorMessage() {
+    var error_message = "";
+    if (this.state.validation_output.error != "" && this.state.validation_output.error != null) {
+      error_message = this.state.validation_output.error;
+      return (
+          <Text style = {styles.error_message}>
+            {error_message}
+            </Text>
+        )
+    }
+    else return;
+  }
+
+
   render() {
+    var error_message = this.getErrorMessage.bind(this)();
     return (
-      <View style = {styles.container}>
-              <TouchableOpacity onPress = {() => this.props.navigator.pop()}>
-                <Icon name = "chevron-left" size = {30} />
+       <View style = {styles.container}>
+          <View style = {styles.top_bar}>
+              <TouchableOpacity style = {styles.back_button}
+                onPress = {() => this.props.navigator.pop()}>
+                <Icon name = "chevron-left" size = {20}/>
               </TouchableOpacity>
 
+              <Text style = {styles.logo}> 
+                Logo
+              </Text> 
+
+              <View style = {styles.cog_box}>
+                <Icon name = "cog" size = {20} style = {styles.cog}/> 
+              </View>
+            </View>
+
+            <View style = {styles.instruction_box}> 
+              <Text style = {styles.instruction_text}>
+                What's yo e-mail?
+              </Text>
+            </View>
+
+            <View style = {styles.input_box}> 
+              
                <TextInput
-              onChangeText = {this.handleEmailChange}
-              keyboardType = "email-address"
-              style = {styles.input} 
-              placeholder = "Enter your e-mail"
+                onChangeText = {this.handleEmailChange}
+                style = {styles.input_text} placeholder = "Email"
+                value = {this.state.email}
               />
 
-              <TouchableHighlight style = {styles.button} onPress = {this.handleEmailSubmit}>
-                <Text style = {styles.buttonText}>
+              { this.state.email != "" &&
+              <View style = {styles.clear_button}>
+                <Icon name = "close" size = {20} onPress = {this.clearEmail.bind(this)}/>
+              </View>
+              }
+            </View>
+
+            <View style = {styles.error_box}>
+                {error_message}
+            </View>
+
+            <View style = {styles.bottom_bar}>
+
+              <Text style = {styles.recovery_text}>
+                {/* Forgot your password? */}
+              </Text>
+
+              <TouchableHighlight style = {styles.next} onPress = {this.handleEmailSubmit.bind(this)}>
+                <Text style = {styles.next_text}>
                   Next!
                 </Text>
               </TouchableHighlight>
 
-              {
-                this.state.validation_output['result'] == 'failure' && 
-                <Text> 
-                  {this.state.validation_output['error']}
-                  </Text>
-              }
-      </View>
+            </View>
+
+            <View style = {styles.padding} />
+          </View>
     )
   }
 
@@ -109,38 +160,107 @@ class RegisterEmail extends Component {
 }
 
 const styles = StyleSheet.create({
-  input : {
-    color : "coral",
-    height: 35,
-    marginTop: 10,
-    padding : 4,
-    fontSize : 18,
-    borderWidth : 1,
-    borderColor : "#48bbec",
-    marginLeft : 20,
-    marginRight : 35
-  },
-  container: {
-    flex:1,
-    justifyContent: 'flex-start',
+ container: {
+    flex: 1,
+    flexDirection : "column",
+    justifyContent: 'space-between',
     padding : 10,
-    paddingTop: 40
+    paddingTop: 40,
+    backgroundColor: "white",
+    alignItems: 'flex-start'
   },
-  button :{
-    height: 35,
-    marginTop: 10,
-    padding : 4,
+
+
+  top_bar : {
+    flex : 0.1,
+    flexDirection : "row",
+    justifyContent: "space-around",
+  },
+
+  back_button :{
+    flex : 1,
+  },
+
+  back_button_text: {
+
+  },
+
+  logo: {
+    flex : 1,
+    textAlign: "center"
+  },
+
+  cog_box: {
+    flex:1,
+    flexDirection : "row",
+    justifyContent : "flex-end"
+  },
+  // cog : {
+  // },
+
+  instruction_box :{
+    flex : 0.075,
+  },
+
+  instruction_text : {
+    fontSize : 16
+  },
+
+  input_box: {
+    flexDirection : "row",
+    flex: 0.075,
+    borderColor: "skyblue",
     borderWidth : 1,
-    borderColor : "#48bbec",
-    marginLeft : 20,
-    marginRight : 35,
-    backgroundColor: "black"
+    borderRadius : 5
+    // backgroundColor: "skyblue"
   },
-  buttonText : {
-    justifyContent: "center",
-    alignItems: "center",
-    color: "white"
-  }
+
+  input_text :{
+    flex: 0.65,
+  },
+
+  clear_button : {
+    flex: 0.05,
+    justifyContent: "center"
+  },
+
+  error_box : {
+    flex: 0.05,
+    flexDirection : "column"
+  },
+
+  error_text : {
+
+  },
+
+  padding : {
+    flex: 0.60,
+    backgroundColor : "white"
+  },
+
+
+  bottom_bar : {
+    flex : 0.05,
+    // backgroundColor : "purple",
+    flexDirection: "row",
+    justifyContent : "space-between"
+  },
+
+  recovery_text: {
+    flex: 0.75
+  },
+
+  next : {
+    flex: 0.25,
+
+  },
+
+  next_text : {
+    borderColor : "skyblue",
+    borderWidth : 1,
+    borderRadius : 5,
+    textAlign : "center"
+  },
 
 });
 

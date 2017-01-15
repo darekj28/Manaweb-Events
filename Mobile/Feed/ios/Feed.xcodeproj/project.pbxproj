@@ -142,6 +142,13 @@
 			remoteGlobalIDString = 2D2A28201D9B03D100D4039D;
 			remoteInfo = "RCTAnimation-tvOS";
 		};
+		E540932C1E2B168200826995 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E5BB6E951E26ACD3006CFB13 /* RCTPushNotification.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E540931D1E29F56B00826995;
+			remoteInfo = "RCTPushNotification-tvOS";
+		};
 		E577AE0C1E0C540E001C74D0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 00C302BB1ABCB91800DB3ED1 /* RCTImage.xcodeproj */;
@@ -204,13 +211,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RCTPushNotification;
-		};
-		E5BB6EA81E26ACD3006CFB13 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E5BB6E951E26ACD3006CFB13 /* RCTPushNotification.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2DD0EFE61DA8533A00B0C975;
-			remoteInfo = "RCTPushNotification-tvOS";
 		};
 		E5D2B1801E1F72A000DC2072 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -523,7 +523,7 @@
 			isa = PBXGroup;
 			children = (
 				E5BB6EA71E26ACD3006CFB13 /* libRCTPushNotification.a */,
-				E5BB6EA91E26ACD3006CFB13 /* libRCTPushNotification-tvOS.a */,
+				E540932D1E2B168200826995 /* libRCTPushNotification-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -586,10 +586,11 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = BN8BQ6HEZV;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = KB52LWCZZ5;
+						DevelopmentTeam = BN8BQ6HEZV;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -767,6 +768,13 @@
 			remoteRef = E516B1B01E13561100639167 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		E540932D1E2B168200826995 /* libRCTPushNotification-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRCTPushNotification-tvOS.a";
+			remoteRef = E540932C1E2B168200826995 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		E577AE0D1E0C540E001C74D0 /* libRCTImage-tvOS.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -828,13 +836,6 @@
 			fileType = archive.ar;
 			path = libRCTPushNotification.a;
 			remoteRef = E5BB6EA61E26ACD3006CFB13 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E5BB6EA91E26ACD3006CFB13 /* libRCTPushNotification-tvOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libRCTPushNotification-tvOS.a";
-			remoteRef = E5BB6EA81E26ACD3006CFB13 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		E5D2B1811E1F72A000DC2072 /* libRCTFBSDK.a */ = {
@@ -936,6 +937,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = BN8BQ6HEZV;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -959,6 +961,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = BN8BQ6HEZV;
 				INFOPLIST_FILE = FeedTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -980,7 +983,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = KB52LWCZZ5;
+				DEVELOPMENT_TEAM = BN8BQ6HEZV;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1015,7 +1018,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = KB52LWCZZ5;
+				DEVELOPMENT_TEAM = BN8BQ6HEZV;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
