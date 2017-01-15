@@ -114,6 +114,7 @@ def mobileLogin():
 @mobile_api.route('/mobileTextConfirmation', methods = ['POST'])
 def mobileTextConfirmation():
 	phone_number = request.json['phone_number']
+	print(phone_number)
 	confirmationPin = sms.sendTextConfirmationPin(phone_number)
 	return jsonify({'confirmationPin' : confirmationPin})
 
@@ -170,8 +171,9 @@ def mobileGetUserInfoFromFacebookId():
 		output['result'] = 'failure'
 	else:
 		output['result'] = 'success'
+		output['current_username'] = thisUser['userID']
 
-	output['current_username'] = thisUser['userID']
+	
 
 	return jsonify(output)
 
