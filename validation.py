@@ -65,10 +65,11 @@ def validatePhoneNumber(phone_number):
 	user_manager = Users()
 	this_user = user_manager.getInfoFromPhoneNumber(raw_phone_number)
 	user_manager.closeConnection()
-	if isSuccess and this_user != None:
+	if this_user != None:
 		output['result'] = 'failure'
 		output['error'] = 'This phone number is already registered.'
 	return output
+
 
 def validateEmailOrPhone(input_string):
 	# first check if it's a phone number 

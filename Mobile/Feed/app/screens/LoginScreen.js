@@ -149,7 +149,7 @@ class LoginScreen extends Component {
 
             <View style = {styles.padding} />
 
-            <KeyboardAvoidingView style = {styles.bottom_bar}>
+            <View style = {styles.bottom_bar}>
               <Text style = {styles.recovery_text}>
                 Forgot your password?
               </Text>
@@ -160,7 +160,7 @@ class LoginScreen extends Component {
                 </Text>
               </TouchableHighlight>
 
-            </KeyboardAvoidingView>
+            </View>
 
             {/*
 

@@ -23,8 +23,8 @@ export default class RegisterName extends Component {
     this.state = {
       first_name : "",
       last_name : "",
-      first_name_validation_output : {error: "Please enter a non blank first name"},
-      last_name_validation_output : {error: "Please enter a non blank last name"}
+      first_name_validation_output : {error: ""},
+      last_name_validation_output : {error: ""}
     }
     this.validateFirstName = this.validateFirstName.bind(this);
     this.validateLastName = this.validateLastName.bind(this);
@@ -106,57 +106,118 @@ export default class RegisterName extends Component {
     this.validateLastName(last_name);
   }
 
-  render() {
-    return (
+  clearFirstName() {
+    this.setState({first_name : ""})
+  }
 
-      <View style = {styles.container}>
-              <TouchableOpacity style = {styles.back_button} onPress = {() => this.props.navigator.pop()}>
-                <Icon name = "chevron-left" size = {30} />
+  clearLastName() {
+    this.setState({last_name : ""})
+  }
+
+  getErrorMessage() {
+    var error_message = "";
+    if (this.state.last_name_validation_output.error != "" && this.state.last_name_validation_output != null) {
+      error_message = this.state.last_name_validation_output.error
+    } 
+    else if (this.state.first_name_validation_output.error != "" && this.state.first_name_validation_output != null) {
+      error_message = this.state.first_name_validation_output.error
+    } 
+
+    if (this.state.first_name == "" || this.state.last_name == "") {
+      error_message = "Names must not be blank!"
+    }
+
+    if (!(error_message == "" || error_message == null)) {
+      return (
+              <Text style = {styles.error_text}>
+                    {error_message}
+              </Text>
+        )
+    }
+
+    else return ;
+      
+  }
+
+  render() {
+    var error_message = this.getErrorMessage.bind(this)();
+    return (
+        <View style = {styles.container}>
+          <View style = {styles.top_bar}>
+              <TouchableOpacity style = {styles.back_button}
+                onPress = {() => this.props.navigator.pop()}>
+                <Icon name = "chevron-left" size = {20}/>
               </TouchableOpacity>
 
-              <View style = {styles.user_input_container} > 
-                <Text style = {styles.instructions_text}>
-                  What is your name?
-                </Text>
+              <Text style = {styles.logo}> 
+                Logo
+              </Text> 
 
-                
-                <TextInput
+              <View style = {styles.cog_box}>
+                <Icon name = "cog" size = {20} style = {styles.cog}/> 
+              </View>
+            </View>
+
+            <View style = {styles.instruction_box}> 
+              <Text style = {styles.instruction_text}>
+                What is your name?
+              </Text>
+            </View>
+
+            <View style = {styles.input_box}> 
+              <TextInput
                   onChangeText = {this.handleFirstNameChange}
                   style = {styles.input_text} placeholder = "First Name"
                   maxLength = {20}
+                  value = {this.state.first_name}
                 />
 
-                {
-                  this.state.first_name_validation_output['result'] == 'failure' && 
-                  <Text style = {styles.error}> 
-                    {this.state.first_name_validation_output['error']}
-                    </Text>
-                }
+              { this.state.first_name != "" &&
+              <View style = {styles.clear_button}>
+                <Icon name = "close" size = {20} onPress = {this.clearFirstName.bind(this)}/>
+              </View>
+              }
+              
+            </View>
 
-                 <TextInput
+            <View style = {styles.input_box}> 
+              
+              <TextInput
                 onChangeText = {this.handleLastNameChange}
                 style = {styles.input_text} placeholder = "Last Name"
                 maxLength = {20}
+                value = {this.state.last_name}
                 />
-
-                {
-                  this.state.last_name_validation_output['result'] == 'failure' && 
-                  <Text style = {styles.error}> 
-                    {this.state.last_name_validation_output['error']}
-                  </Text>
-                }
-             
-
+              
+              { this.state.last_name != "" &&
+              <View style = {styles.clear_button}>
+                <Icon name = "close" size = {20} onPress = {this.clearLastName.bind(this)}/>
               </View>
+              }
 
-              <View style = {styles.bottom_padding}>
+            </View>
 
-                   <TouchableHighlight style = {styles.register_button} onPress = {this.submitFullName}>
-                  <Text style = {styles.register_buttonText}>
-                    Next!
-                  </Text>
-                </TouchableHighlight>
-              </View>
+            <View style = {styles.error_box}>
+                {error_message}
+            </View>
+
+            <View style = {styles.padding} />
+
+
+
+            <View style = {styles.bottom_bar}>
+
+              <Text style = {styles.recovery_text}>
+                {/* Forgot your password? */}
+              </Text>
+
+              <TouchableHighlight style = {styles.next} onPress = {this._navigateToRegisterPhoneNumber.bind(this)}>
+                <Text style = {styles.next_text}>
+                  Next!
+                </Text>
+              </TouchableHighlight>
+
+            </View>
 
           </View>
       
@@ -170,63 +231,104 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection : "column",
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     padding : 10,
     paddingTop: 40,
     backgroundColor: "white",
-    alignItems: 'center'
+    alignItems: 'flex-start'
   },
-  back_button: {
+
+
+  top_bar : {
     flex : 0.1,
-    alignSelf: "flex-start"
+    flexDirection : "row",
+    justifyContent: "space-around",
   },
-  user_input_container : {
-    flex: 0.4,
+
+  back_button :{
+    flex : 1,
+  },
+
+  back_button_text: {
+
+  },
+
+  logo: {
+    flex : 1,
+    textAlign: "center"
+  },
+
+  cog_box: {
+    flex:1,
+    flexDirection : "row",
+    justifyContent : "flex-end"
+  },
+  // cog : {
+  // },
+
+  instruction_box :{
+    flex : 0.075,
+  },
+
+  instruction_text : {
+    fontSize : 16
+  },
+
+  input_box: {
+    flexDirection : "row",
+    flex: 0.075,
+    borderColor: "skyblue",
+    borderWidth : 1,
+    borderRadius : 5
+    // backgroundColor: "skyblue"
+  },
+
+  input_text :{
+    flex: 0.65,
+  },
+
+  clear_button : {
+    flex: 0.05,
+    justifyContent: "center"
+  },
+
+  error_box : {
+    flex: 0.05,
+    flexDirection : "column"
+  },
+
+  error_text : {
+
+  },
+
+  padding : {
+    flex: 0.60,
+    backgroundColor : "white"
+  },
+
+
+  bottom_bar : {
+    flex : 0.05,
+    // backgroundColor : "purple",
+    flexDirection: "row",
     justifyContent : "space-between"
   },
 
-  instructions_text : {
-    padding: 20,
-    color : "black"
+  recovery_text: {
+    flex: 0.75
   },
-  register_button :{
-    marginTop: 10,
-    padding : 4,
-    borderWidth : 1,
+
+  next : {
+    flex: 0.25,
+
+  },
+
+  next_text : {
     borderColor : "skyblue",
-    backgroundColor: "skyblue",
-    borderRadius: 5,
+    borderWidth : 1,
+    borderRadius : 5,
+    textAlign : "center"
   },
-  error : { 
-    padding: 20,
-    color : "black"
-  },
-  register_buttonText : {
-    justifyContent: "center",
-    alignItems: "center",
-    color: "white",
-  },
-
-  input_text: {
-    flex: 1,
-    color: "black",
-    // height: 35,
-    // marginTop: 10,
-    padding : 4,
-    // fontSize : 18,
-    // borderWidth : 1,
-    // borderColor : "#48bbec",
-    // marginLeft : 20,
-    // marginRight : 35,
-    // alignSelf: "center"
-  },
-
-  bottom_padding : {
-    flexDirection : "column",
-    flex :0.6,
-    backgroundColor : "white",
-    alignItems: "flex-end"
-  }
 
 });
 

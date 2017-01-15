@@ -23,6 +23,7 @@ class RegisterPhoneNumber extends Component {
     super(props)
     this.state = {
       phone_number : "",
+      raw_phone_number: "",
       validation_output: {'error' : "invalid phone number"},
       confirmationPin : "not set yet",
       length : 0
@@ -102,16 +103,34 @@ class RegisterPhoneNumber extends Component {
   
 
   handlePhoneNumberChange(phone_number) {
-      this.setState({phone_number: phone_number});
+      this.setState({raw_phone_number : phone_number})
       var length = phone_number.length
       this.setState({length : length})
-      // var length = phone_number.length
-      // this.setState({length : length})
-      // if (length == 3)
-      //   var new_phone_number = this.state.phone_number + "-";
-      //   this.setState({phone_number : new_phone_number});
+      var new_phone_number = "";
+      if (length < 3) {
+        new_phone_number = "(" + phone_number;
+      }
+
+      if (length == 3) {
+        new_phone_number = "(" + phone_number + ") "
+      }
+
+      if (length > 3 && length < 6) {
+        new_phone_number = "(" + phone_number.substring(0,3) + ") " + phone_number.substring(3, length)
+      }
+
+      if (length >= 6) {
+        new_phone_number = "(" + phone_number.substring(0,3) + ") " + phone_number.substring(3, 6) + "-" + phone_number.substring(6, length)
+      }
+
+       
+      this.setState({phone_number : new_phone_number});  
       this.validatePhoneNumber(phone_number);
 
+  }
+
+  clearPhoneNumber() {
+    this.setState({phone_number: ""})
   }
 
   _navigateToConfirmCode() {
@@ -124,60 +143,83 @@ class RegisterPhoneNumber extends Component {
     })
   }
 
-  render() {
-    return (
-      <View style = {styles.container}>
+  getErrorMessage() {
+    var error_message = "";
+    if (this.state.validation_output.error != "" && this.state.validation_output.error != null) {
+      error_message == this.state.validation_output.error;
+    }
 
-              <TouchableOpacity onPress = {() => this.props.navigator.pop()}>
-                <Icon name = "chevron-left" size = {20} />
+
+    if (error_message != "" && error_message != null) {
+      alert("bro")
+      return (
+              <Text style = {styles.error_text}>
+                    {error_message}
+              </Text>
+        )
+
+    }
+    else return;
+  }
+
+
+  render() {
+    var error_message = this.getErrorMessage.bind(this)();
+    return (
+
+              <View style = {styles.container}>
+          <View style = {styles.top_bar}>
+              <TouchableOpacity style = {styles.back_button}
+                onPress = {() => this.props.navigator.pop()}>
+                <Icon name = "chevron-left" size = {20}/>
               </TouchableOpacity>
 
-              <ScrollView 
-                scrollEnabled={false}
-              >
+              <Text style = {styles.logo}> 
+                Logo
+              </Text> 
+
+              <View style = {styles.cog_box}>
+                <Icon name = "cog" size = {20} style = {styles.cog}/> 
+              </View>
+            </View>
+
+            <View style = {styles.instruction_box}> 
+              <Text style = {styles.instruction_text}>
+                Enter your phone number
+              </Text>
+            </View>
+
+            <View style = {styles.input_box}> 
+              
                <TextInput
                 onChangeText = {this.handlePhoneNumberChange}
-                style = {styles.input} placeholder = "Phone Number"
+                style = {styles.input_text} placeholder = "Phone Number"
                 keyboardType = "number-pad"
                 dataDetectorTypes = "phoneNumber"
-                maxLength = {11}
+                maxLength = {10}
+                value = {this.state.raw_phone_number}
               />
 
-              
-
-
-
-              <TouchableHighlight style = {styles.button} onPress = {this.handlePhoneNumberSubmit}>
-                <Text style = {styles.buttonText}>
-                  Next!
-                </Text>
-              </TouchableHighlight>
-
-
-               {
-                this.state.validation_output['result'] == 'failure' && 
-                <Text> 
-                  {this.state.validation_output['error']}
-                  </Text>
+              { this.state.phone_number != "" &&
+              <View style = {styles.clear_button}>
+                <Icon name = "close" size = {20} onPress = {this.clearPhoneNumber.bind(this)}/>
+              </View>
               }
+              
+            </View>
 
-              <Text>
-                (For testing) Phone number length:   {this.state.length} !!
-              </Text>
-
-              <Text>
-              The current phone number state:    {this.state.phone_number} !!!
-              </Text>
-
-              <Text>
-              The current confirmation pin state : {this.state.confirmationPin}
-              </Text>
-
-              </ScrollView>
+            <View style = {styles.error_box}>
+                <Text> {this.state.validation_output.error} </Text>
+                { //error_message 
+                }
+            </View>
 
 
+            <View style = {styles.padding} />
 
-      </View>
+            
+
+          </View>
     )
   }
 
@@ -185,38 +227,107 @@ class RegisterPhoneNumber extends Component {
 }
 
 const styles = StyleSheet.create({
-  input : {
-    color : "coral",
-    height: 35,
-    marginTop: 10,
-    padding : 4,
-    fontSize : 18,
-    borderWidth : 1,
-    borderColor : "#48bbec",
-    marginLeft : 20,
-    marginRight : 35
-  },
   container: {
-    flex:1,
-    justifyContent: 'flex-start',
+    flex: 1,
+    flexDirection : "column",
+    justifyContent: 'space-between',
     padding : 10,
-    paddingTop: 40
+    paddingTop: 40,
+    backgroundColor: "white",
+    alignItems: 'flex-start'
   },
-  button :{
-    height: 35,
-    marginTop: 10,
-    padding : 4,
+
+
+  top_bar : {
+    flex : 0.1,
+    flexDirection : "row",
+    justifyContent: "space-around",
+  },
+
+  back_button :{
+    flex : 1,
+  },
+
+  back_button_text: {
+
+  },
+
+  logo: {
+    flex : 1,
+    textAlign: "center"
+  },
+
+  cog_box: {
+    flex:1,
+    flexDirection : "row",
+    justifyContent : "flex-end"
+  },
+  // cog : {
+  // },
+
+  instruction_box :{
+    flex : 0.075,
+  },
+
+  instruction_text : {
+    fontSize : 16
+  },
+
+  input_box: {
+    flexDirection : "row",
+    flex: 0.075,
+    borderColor: "skyblue",
     borderWidth : 1,
-    borderColor : "#48bbec",
-    marginLeft : 20,
-    marginRight : 35,
-    backgroundColor: "black"
+    borderRadius : 5
+    // backgroundColor: "skyblue"
   },
-  buttonText : {
-    justifyContent: "center",
-    alignItems: "center",
-    color: "white"
-  }
+
+  input_text :{
+    flex: 0.65,
+  },
+
+  clear_button : {
+    flex: 0.05,
+    justifyContent: "center"
+  },
+
+  show_password_box : {
+    flex : 0.05,
+    // backgroundColor : "orange",
+    justifyContent: "flex-end"
+  },
+
+  show_password_text : {
+
+  },
+
+  padding : {
+    flex: 0.65,
+    backgroundColor : "white"
+  },
+
+  bottom_bar : {
+    flex : 0.05,
+    // backgroundColor : "purple",
+    flexDirection: "row",
+    justifyContent : "space-between"
+  },
+
+  recovery_text: {
+    flex: 0.75
+  },
+
+  next : {
+    flex: 0.25,
+
+  },
+
+  next_text : {
+    borderColor : "skyblue",
+    borderWidth : 1,
+    borderRadius : 5,
+    textAlign : "center"
+  },
 
 });
 
