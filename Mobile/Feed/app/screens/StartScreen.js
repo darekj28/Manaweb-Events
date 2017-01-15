@@ -55,7 +55,7 @@ class StartScreen extends Component {
 
   _navigateToFeed() {
     this.props.navigator.push({
-    href: "Feed",
+    href: "Menu",
     })
   }
 
