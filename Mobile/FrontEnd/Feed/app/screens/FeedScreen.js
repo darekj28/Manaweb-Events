@@ -20,8 +20,11 @@ import ModalDropdown from 'react-native-modal-dropdown'; // https://github.com/s
 import PostMessageBox from '../components/PostMessageBox'
 import FeedBox from '../components/FeedBox'
 import Feed from '../components/Feed'
+import LogoAndSearchBar from '../components/LogoAndSearchBar'
 
 const ACTIVITY_BAR_HEIGHT = 40
+const SEARCH_BAR_HEIGHT = 45
+const SEARCH_BAR_COLOR = "#5EB75D"
 const ACTIVITY_BAR_COLOR = 'black'
 const POST_MESSAGE_HEIGHT_SHORT = 50
 const POST_MESSAGE_HEIGHT_TALL = 150
@@ -150,16 +153,9 @@ class FeedScreen extends Component {
 
 
             <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
-                <ActionBar
-                    backgroundColor={'#3B373C'}
-                    leftIconName={'none'}
-                    title={'Manaweb'}
-                    titleStyle={styles.titleTextLarge}
-                    onTitlePress={this.handleTitlePress}
-                    onRightPress={this.handleRightAction}
-                    onLeftPress = {() => {}}
-                    rightIconName={'menu'}
-                />
+                <View style = {{height: SEARCH_BAR_HEIGHT}}>
+                    <LogoAndSearchBar color = {SEARCH_BAR_COLOR}></LogoAndSearchBar>
+                </View>
             </TouchableWithoutFeedback>
 
             <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
