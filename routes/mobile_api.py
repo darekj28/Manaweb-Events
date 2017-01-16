@@ -234,6 +234,15 @@ def mobileMakeComment():
 
 	return jsonify({ 'result' : 'success'})
 
+@mobile_api.route('/mobileGetNotifications', methods=['POST'])
+def mobileGetNotifications():
+	userID = request.form.get("currentUser[userID]")
+	post_manager = Posts()
+	notification_list = post_manager.getShortListNotifications(userID)
+	post_manager.sortAscending(notification_list)
+	post_manager.closeConnection()
+	return jsonify({ 'notification_list' : notification_list })	
+
 @mobile_api.route('/mobileUpdateSettings', methods=['POST'])
 def mobileUpdateSettings():
 	user_manager = Users()
