@@ -254,13 +254,14 @@ class FeedScreen extends Component {
       }
   }
 
-  async initializeUser(){
-     let value = await AsyncStorage.getItem("current_username")
-     console.log(value)
+  initializeUser(){
+      AsyncStorage.getItem("current_username").then((value) => {
      // add mobile get current user
         if (value != null) {
           this.setState({"current_username" : value})
         }
+        this.refreshScreen(true).done();
+      });
   }
 
   handleLogout() {
@@ -298,8 +299,7 @@ class FeedScreen extends Component {
     }
 
   componentWillMount() {
-      this.initializeUser().done();
-      this.refreshScreen(true).done();
+      this.initializeUser();
       // this.refreshScreen(true);
 
   }

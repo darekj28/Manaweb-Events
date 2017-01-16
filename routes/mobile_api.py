@@ -234,6 +234,25 @@ def mobileMakeComment():
 
 	return jsonify({ 'result' : 'success'})
 
+@mobile_api.route('/mobileUpdateSettings', methods=['POST'])
+def mobileUpdateSettings():
+	user_manager = Users()
+	username = request.json['username']
+	first_name = request.json['first_name']
+	last_name = request.json['last_name']
+	email = request.json['email']
+	# phone_number = request.json['phone_number']
+	# password = request.json['password']
+	# new_password = request.json['new_password']
+	user_manager.updateInfo(username, 'first_name', first_name)
+	user_manager.updateInfo(username, 'last_name', last_name)
+	user_manager.updateInfo(username, 'email', email)
+	user_manager.closeConnection()
+	output = {}
+	output['result'] = 'success'
+	return jsonify(output)
+
+
 # @mobile_api.route('/status/<task_id>')
 # def taskStatus(task_id):
 #     task = test.AsyncResult(task_id)

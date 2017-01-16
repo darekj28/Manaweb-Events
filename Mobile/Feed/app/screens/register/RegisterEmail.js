@@ -211,12 +211,13 @@ const styles = StyleSheet.create({
     flex: 0.075,
     borderColor: "skyblue",
     borderWidth : 1,
-    borderRadius : 5
+    borderRadius : 5,
     // backgroundColor: "skyblue"
   },
 
   input_text :{
     flex: 0.65,
+    alignSelf: "stretch"
   },
 
   clear_button : {

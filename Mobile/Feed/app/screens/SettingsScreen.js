@@ -11,12 +11,13 @@ import {AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity
 
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Dimensions from 'Dimensions';
 
 
 
 
 
-class RegisterUsername extends Component {
+class SettingsScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -30,6 +31,7 @@ class RegisterUsername extends Component {
       last_name_validation: {},
       email_validation : {},
       phone_number_validation : {},
+      // password coming soon
     }
   }
 
@@ -89,7 +91,7 @@ class RegisterUsername extends Component {
     })
     .then((response) => response.json())
     .then((responseData) => {
-      this.setState({validation_output : responseData})
+      this.setState({email_validation_output : responseData})
     })
     .done();
   }
@@ -141,14 +143,93 @@ class RegisterUsername extends Component {
     })
   }
 
+  // makes the fetch request to submit the new settings
+  submitNewSettings() {
+    var canSubmit = this.errorCheck.bind(this)();
+    if (canSubmit) {
+      var url = "https://manaweb-events.herokuapp.com"
+      var test_url = "http://0.0.0.0:5000"
+      fetch(url + "/mobileUpdateSettings", {method: "POST",
+      headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          }, 
+        body: 
+        JSON.stringify(
+         {
+          username: this.state.current_username,
+          first_name : this.state.first_name,
+          last_name : this.state.last_name,
+          email : this.state.email,
+        })
+      })
+      .then((response) => response.json())
+      .then((responseData) => {
+        var thisUser = responseData.thisUser;
+        this.setState({first_name : thisUser.first_name})
+        this.setState({last_name : thisUser.last_name})
+        this.setState({email : thisUser.email})
+        this.setState({phone_number : thisUser.phone_number})
+        this.initializeUserName().bind(this)
+        alert("Settings Updated")
+      }).done();
+    }
+  }
+
+  // checks if we can submit the output, i.e. no errors
+  errorCheck() {
+      var canSubmit = true;
+      if (this.state.first_name_validation.result != 'success') canSubmit = false;
+      if (this.state.last_name_validation.result != 'success') canSubmit = false;
+      if (this.state.email_validation.result != 'success') canSubmit = false;
+      return canSubmit;
+  }
+
+  getErrorMessage(field){
+    var validation_output_dict = {}
+    validation_output_dict['first_name'] = this.state.first_name_validation;
+    validation_output_dict['last_name'] = this.state.last_name_validation;
+    validation_output_dict['email'] = this.state.email_validation;
+    var this_validation_output = validation_output_dict[field]
+    if (this_validation_output.result != 'success') {
+      return (
+                  <Text style = {styles.error_text}>
+                       {this_validation_output.error}
+                  </Text>
+        )
+    }
+    else return;
+  }
+
   componentWillMount() {
     this.initializeUserName.bind(this)();
     // initialize all the states to previous values
   }
 
   render() {
+    var first_name_error = this.getErrorMessage.bind(this)('first_name')
+    var last_name_error = this.getErrorMessage.bind(this)('last_name')
+    var email_error = this.getErrorMessage.bind(this)('email')
+
     return (
         <View style = {styles.container}>
+            <View style = {styles.top_bar}>
+              <TouchableOpacity style = {styles.back_button}
+                // onPress = {() => this.props.navigator.pop()}
+                >
+                <Icon name = "chevron-left" size = {20}/>
+              </TouchableOpacity>
+
+              <Text style = {styles.logo}> 
+                Logo
+              </Text> 
+
+              <View style = {styles.cog_box}>
+                <Icon name = "cog" size = {20} style = {styles.cog}/> 
+              </View>
+            </View>
+
+
               <View style = {styles.input_box}>
                   <Text style = {styles.instruction_text}>
                     First Name
@@ -160,9 +241,8 @@ class RegisterUsername extends Component {
                       onChangeText = {this.handleFirstNameChange.bind(this)}
                       value = {this.state.first_name}
                   />  
-                  <Text style = {styles.error_text}>
-                      First Name Error Message
-                  </Text>
+
+                   {first_name_error}
               </View> 
 
               <View style = {styles.input_box}>
@@ -176,9 +256,7 @@ class RegisterUsername extends Component {
                       onChangeText = {this.handleLastNameChange.bind(this)}
                       value = {this.state.last_name}
                   />  
-                  <Text style = {styles.error_text}>
-                      Last Name Error Message
-                  </Text>
+                  {last_name_error}
               </View>   
 
                <View style = {styles.input_box}> 
@@ -190,10 +268,20 @@ class RegisterUsername extends Component {
                   style = {styles.input_text} placeholder = "Email"
                   value = {this.state.email}
                 />
-                <Text style = {styles.error_text}>
-                      Email Error Message
-                  </Text>
+                 {email_error}
               </View>
+
+              <TouchableOpacity 
+                style = {styles.submit_settings_box}>
+
+                <Text style = {styles.submit_settings_text}>
+                    Update Settings!
+                </Text>
+              </TouchableOpacity>
+
+
+
+
         </View>
     )
   }
@@ -201,6 +289,7 @@ class RegisterUsername extends Component {
 
 }
 
+let winSize = Dimensions.get('window')
 const styles = StyleSheet.create({
  container: {
     flex: 1,
@@ -249,11 +338,12 @@ const styles = StyleSheet.create({
   },
 
   input_box: {
-    flexDirection : "row",
-    flex: 0.075,
+    flexDirection : "column",
+    flex: 0.1,
     borderColor: "skyblue",
     borderWidth : 1,
-    borderRadius : 5
+    borderRadius : 5,
+    width : winSize.width * 0.95
     // backgroundColor: "skyblue"
   },
 
@@ -275,34 +365,15 @@ const styles = StyleSheet.create({
 
   },
 
-  padding : {
-    flex: 0.60,
-    backgroundColor : "white"
+  submit_settings_box : {
+    flex:  0.1
   },
 
+  submit_settings_text : {
 
-  bottom_bar : {
-    flex : 0.05,
-    // backgroundColor : "purple",
-    flexDirection: "row",
-    justifyContent : "space-between"
-  },
+  }
 
-  recovery_text: {
-    flex: 0.75
-  },
 
-  next : {
-    flex: 0.25,
-
-  },
-
-  next_text : {
-    borderColor : "skyblue",
-    borderWidth : 1,
-    borderRadius : 5,
-    textAlign : "center"
-  },
 });
 
-module.exports = RegisterUsername
+module.exports = SettingsScreen
