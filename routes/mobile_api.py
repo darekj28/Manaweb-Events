@@ -258,7 +258,7 @@ def mobileUpdateSettings():
 	user_manager.updateInfo(username, 'last_name', last_name)
 	user_manager.updateInfo(username, 'email', email)
 	user_manager.updateInfo(username, 'avatar_name', avatar)
-	user_manager.updateInfo(session['userID'], 'avatar_url'	, 	'/static/avatars/' + avatar + '.png')
+	user_manager.updateInfo(username, 'avatar_url'	, 	'/static/avatars/' + avatar + '.png')
 	user_manager.closeConnection()
 	output = {}
 	output['result'] = 'success'
