@@ -12,7 +12,7 @@ import {AppRegistry,StyleSheet,View,TouchableOpacity,TouchableHighlight,
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FeedScreen from './FeedScreen'
-import SettingScreen from './SettingScreen'
+import SettingsScreen from './SettingsScreen'
 import NotificationScreen from './NotificationScreen'
 const MENU_ICON_SIZE = 23
 const BOTTOM_BAR_PROPORTION = 0.09
@@ -24,7 +24,7 @@ var image_res = {
     // https://www.iconfinder.com/icons/126572/home_house_icon
     // http://www.endlessicons.com/free-icons/setting-icon/
     home: require('../static/menuScreen/home.png'),
-    setting: require('../static/menuScreen/setting.png'),
+    settings: require('../static/menuScreen/setting.png'),
     notification: require('../static/menuScreen/notification.png')
 }
 
@@ -80,7 +80,7 @@ class MenuScreen extends Component {
                   }
                   { this.state.show_panel2 &&
                   <View style = {{backgroundColor: 'white', flex: 1}}>
-                    <SettingScreen/>
+                    <SettingsScreen/>
                   </View>
                     }
 
@@ -106,7 +106,7 @@ class MenuScreen extends Component {
                       style = {this._imageWrapperStyle(this.state.show_panel2)}
                       onPress={() => this._onPanel1Pressed(false, true, false)}>
                       <View style = {{flex: 1}}>
-                        <Image  style={this._imageStyle(this.state.show_panel2)} source={image_res.setting} />
+                        <Image  style={this._imageStyle(this.state.show_panel2)} source={image_res.settings} />
                         <Text style = {this._textStyle(this.state.show_panel2)}>
                             {'Setting'}
                         </Text>

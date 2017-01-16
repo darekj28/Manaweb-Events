@@ -11,12 +11,12 @@ import RegisterUsername from '../screens/register/RegisterUsername'
 import RegisterConfirmCode from '../screens/register/RegisterConfirmCode'
 import RegisterPassword from '../screens/register/RegisterPassword'
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 import MenuScreen from '../screens/MenuScreen'
 import LoginScreen from '../screens/LoginScreen'
 import CommentScreen from '../screens/CommentScreen'
 import FbCreate from '../screens/register/FbCreate'
 import TestHTTP from '../screens/TestHTTP'
+import SettingsScreen from '../screens/SettingsScreen'
 
 
 
@@ -124,9 +124,12 @@ class StartNavigator extends Component {
         )
       */}
 
-    
-
-		
+    case "Settings":
+      return (
+          <SettingsScreen 
+          {...globalNavigatorProps}
+          />
+        )
 	case "Menu":
       return (
           <MenuScreen

@@ -260,7 +260,6 @@ class FeedScreen extends Component {
      // add mobile get current user
         if (value != null) {
           this.setState({"current_username" : value})
-
         }
   }
 

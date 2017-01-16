@@ -153,7 +153,7 @@ def mobileUsernameValidation():
 
 @mobile_api.route('/mobileGetCurrentUserInfo', methods = ['POST'])
 def mobileGetCurrentUserInfo():
-	thisUserID = request.json['userID']
+	thisUserID = request.json['username']
 	user_manager = Users()
 	thisUser = user_manager.getInfo(thisUserID)
 	user_manager.closeConnection()
@@ -172,9 +172,6 @@ def mobileGetUserInfoFromFacebookId():
 	else:
 		output['result'] = 'success'
 		output['current_username'] = thisUser['userID']
-
-	
-
 	return jsonify(output)
 
 @mobile_api.route('/mobileGetPosts', methods = ['POST'])

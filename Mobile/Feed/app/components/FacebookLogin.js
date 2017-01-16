@@ -47,7 +47,7 @@ class FacebookLogin extends Component {
 async loadCurrentUser(fb_id){
       let url = "https://manaweb-events.herokuapp.com"
       let test_url = "http://0.0.0.0:5000"
-      let response = await fetch(test_url + "/mobileGetUserInfoFromFacebookId", {method: "POST",
+      let response = await fetch(url + "/mobileGetUserInfoFromFacebookId", {method: "POST",
             headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
