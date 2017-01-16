@@ -21,11 +21,12 @@ import PostMessageBox from '../components/PostMessageBox'
 import FeedBox from '../components/FeedBox'
 import Feed from '../components/Feed'
 import LogoAndSearchBar from '../components/LogoAndSearchBar'
+import ActivityAndFilterBar from '../components/ActivityAndFilterBar'
 
-const ACTIVITY_BAR_HEIGHT = 40
 const SEARCH_BAR_HEIGHT = 45
 const SEARCH_BAR_COLOR = "#5EB75D"
-const ACTIVITY_BAR_COLOR = 'black'
+const ACTIVITY_BAR_HEIGHT = 40
+const ACTIVITY_BAR_COLOR = "#6B6054"
 const POST_MESSAGE_HEIGHT_SHORT = 50
 const POST_MESSAGE_HEIGHT_TALL = 150
 const ANIMATE_DURATION = 700
@@ -159,27 +160,12 @@ class FeedScreen extends Component {
             </TouchableWithoutFeedback>
 
             <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
-                <View style = {styles.containerHorizontal}>
-                    <View style = {{flex: 0.85}}>
-                        <Text style = {styles.activity_text}>
-                            {this._activities[this.state.activity_index]}
-                        </Text>
-                    </View>
-
-                    <View style = {{flex: 0.15}}>
-                        <ModalDropdown  style={styles.dropdown_bar}
-                                        defaultIndex={0}
-                                        defaultValue={this._activities[0]}
-                                        dropdownStyle={styles.dropdown_box}
-                                        options={this._activities}
-                                        onSelect={(idx, value) => this.setState({activity_index: idx})}
-                                        renderRow={this._dropdown_renderRow.bind(this)}>
-
-                                        <Image  style={styles.dropdown_image}
-                                                source={dropdownIcon}>
-                                        </Image>
-                        </ModalDropdown>
-                    </View>
+                <View style = {{height: SEARCH_BAR_HEIGHT}}>
+                    <ActivityAndFilterBar
+                        color = {ACTIVITY_BAR_COLOR}
+                        activityText = {'Baltimore'}
+                        >
+                    </ActivityAndFilterBar>
                 </View>
             </TouchableWithoutFeedback>
 
@@ -273,15 +259,6 @@ const styles = StyleSheet.create({
     height: ACTIVITY_BAR_HEIGHT,
     justifyContent: 'center',
     backgroundColor: ACTIVITY_BAR_COLOR,
-  },
-  activity_text: {
-    height: ACTIVITY_BAR_HEIGHT,
-    fontSize: 25,
-    color: 'white',
-    textAlign: 'left',
-    textAlignVertical: 'center',
-    backgroundColor: ACTIVITY_BAR_COLOR,
-    justifyContent: 'center'
   },
   dropdown_box: {
     borderColor: 'black',
