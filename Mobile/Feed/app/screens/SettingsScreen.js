@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {Image, Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -297,6 +297,20 @@ class SettingsScreen extends Component {
     // initialize all the states to previous values
   }
 
+  getAvatarImage(avatar) {
+    if (avatar =='nissa') return ( <Image  style={styles.avatar_image} source={require('../static/avatars/nissa.png')} />)
+    if (avatar == 'chandra') return (<Image  style={styles.avatar_image} source={require('../static/avatars/chandra.png')} />)
+    if (avatar == 'elspeth') return (<Image  style={styles.avatar_image} source={require('../static/avatars/elspeth.png')} />)
+    if (avatar == 'nicol') return (<Image  style={styles.avatar_image} source={require('../static/avatars/nicol.png')} />)
+    if (avatar == 'ugin') return (<Image  style={styles.avatar_image} source={require('../static/avatars/ugin.png')} />)
+    if (avatar == 'jace') return  (<Image  style={styles.avatar_image} source={require('../static/avatars/jace.png')} />)
+    if (avatar == 'liliana') return (<Image  style={styles.avatar_image} source={require('../static/avatars/liliana.png')} />)
+    if (avatar == 'ajani') return (<Image  style={styles.avatar_image} source={require('../static/avatars/ajani.png')} />)
+    if (avatar == 'nahiri') return (<Image  style={styles.avatar_image} source={require('../static/avatars/nahiri.png')} />)
+    if (avatar == 'gideon') return (<Image  style={styles.avatar_image} source={require('../static/avatars/gideon.png')} />)
+    return;
+  }
+
   render() {
     var first_name_error = this.getErrorMessage.bind(this)('first_name')
     var last_name_error = this.getErrorMessage.bind(this)('last_name')
@@ -305,6 +319,7 @@ class SettingsScreen extends Component {
     var picker_list = this.generateAvatarPickerList.bind(this)()
     var currentAvatar = this.state.avatar
     var currentAvatarLabel = currentAvatar.charAt(0).toUpperCase() + currentAvatar.slice(1);
+    var avatarImage = this.getAvatarImage.bind(this)(this.state.avatar)
     return (
         <View style = {styles.container}>
               <Modal 
@@ -397,20 +412,27 @@ class SettingsScreen extends Component {
                  {phone_number_error}
               </View>
 
-              <View style = {styles.input_box}>
-                <Text style = {styles.instruction_text}> 
+              <View style = {styles.avatar_box}>
+                <View style = {styles.avatar_text_column}>
+                <Text style = {styles.avatar_text}> 
                     Avatar
                 </Text>
-
-                <TouchableOpacity style = {styles.toggle_picker} onPress = {this.togglePicker.bind(this)}>
-                    <Text style = {styles.input_text}> 
+                <TouchableOpacity style = {styles.toggle_picker_row} onPress = {this.togglePicker.bind(this)}>
+                    <Text style = {styles.current_avatar_text}> 
                       {currentAvatarLabel}
                      </Text>
-                     <Icon name = "chevron-right" size = {20} />
+                     {/* <Icon name = "chevron-right" size = {20} style= {styles.toggle_picker} /> */}
                 </TouchableOpacity>
-              </View>
+                </View>
 
-               
+                <View style = {styles.avatar_image_container}>
+                      {avatarImage
+                      }
+                </View>
+                
+
+
+              </View>
 
               <TouchableOpacity 
                 style = {styles.submit_settings_box}
@@ -418,8 +440,8 @@ class SettingsScreen extends Component {
                 <Text style = {styles.submit_settings_text}>
                     Update Settings!
                 </Text>
-              </TouchableOpacity>     
-        </View>
+              </TouchableOpacity>    
+          </View> 
     )
   }
 
@@ -512,12 +534,51 @@ const styles = StyleSheet.create({
   },
 
   avatar_box: {
-    flex : 0.1
+    flexDirection : "row",
+    flex: 0.1,
+    borderColor: "skyblue",
+    borderWidth : 1,
+    borderRadius : 5,
+    width : winSize.width * 0.95,
+
+  },
+
+  avatar_text_column : {
+    flex : 0.5
+  },
+
+  avatar_row: {
+    flexDirection : "row",
+    flex: 0.5
+  },
+
+  toggle_picker_row : {
+    flexDirection : "row",
+    flex: 0.5
   },
 
   toggle_picker : {
-    flexDirection : "row",
-    flex: 0.1
+    flex : 1
+  },
+
+  current_avatar_text: {
+    flex: 1
+  },
+
+  avatar_image_container : {
+    flex : 0.5,
+    padding : 10,
+  },
+
+  avatar_text: {
+    flex: 0.5
+  },
+
+  avatar_image : {
+    flex: 1,
+    width : null,
+    height : null,
+    resizeMode : "contain"
   }
 
 
