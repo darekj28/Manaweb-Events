@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -15,22 +15,26 @@ import Dimensions from 'Dimensions';
 
 
 
-
+const avatar_list = ['nissa', 'chandra', 'elspeth', 'nicol', 'ugin', 'jace', 'liliana', 'ajani', 'nahiri', 'gideon']
 
 class SettingsScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
+
       current_username: "",
       current_user: {},
       first_name : "",
       last_name : "",
       email : "",
       phone_number: "",
-      first_name_validation: {},
-      last_name_validation: {},
-      email_validation : {},
-      phone_number_validation : {},
+      raw_phone_number : "",
+      avatar : "",
+      first_name_validation: {result : 'success'},
+      last_name_validation: {result : 'success'},
+      email_validation : {result : 'success'},
+      phone_number_validation : {result : 'success'},
+      display_picker : false
       // password coming soon
     }
   }
@@ -91,14 +95,43 @@ class SettingsScreen extends Component {
     })
     .then((response) => response.json())
     .then((responseData) => {
-      this.setState({email_validation_output : responseData})
+      this.setState({email_validation : responseData})
+    })
+    .done();
+  }
+
+
+  validatePhoneNumber(phone_number) {
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
+    fetch(url + "/mobilePhoneNumberValidation", {method: "POST",
+    headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, 
+      body: 
+      JSON.stringify(
+       {
+        phone_number : phone_number
+      })
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+      this.setState({validation_output : responseData})
     })
     .done();
   }
 
   handleEmailChange(email) {
     this.setState({email : email})
-    this.validateEmail(email);
+    if (email == this.state.current_user.email){
+      ouput = {}
+      output['result'] = 'success'
+      this.setState({email_validation : output})
+    }
+    else {
+      this.validateEmail.bind(this)(email);
+    }
   }
 
   handleFirstNameChange(first_name) {
@@ -109,6 +142,50 @@ class SettingsScreen extends Component {
   handleLastNameChange(last_name) {
     this.setState({last_name: last_name}) 
     this.validateLastName(last_name);
+  }
+
+  handlePhoneNumberChange(phone_number) {
+      var raw_phone_number = ""
+      for (var i = 0; i < phone_number.length; i++) {
+        var c = phone_number[i]
+        if (!isNaN(c) && c != " "){
+            raw_phone_number = raw_phone_number + c;
+          }
+      }
+      this.setState({raw_phone_number : raw_phone_number})
+      var length = raw_phone_number.length
+      this.setState({length : length})
+      var new_phone_number = "";
+      if (length > 0 && length <= 3) {
+        new_phone_number = "(" + raw_phone_number;
+      }
+      if (length == 4) {
+        new_phone_number = "(" + raw_phone_number.substring(0,3) + ") " + raw_phone_number.substring(3,4)
+      }
+
+      if (length > 4 && length <= 6) {
+        new_phone_number = "(" + raw_phone_number.substring(0,3) + ") " + raw_phone_number.substring(3, length)
+      }
+
+      if (length > 6) {
+        new_phone_number = "(" + raw_phone_number.substring(0,3) + ") " + raw_phone_number.substring(3, 6) + "-" + raw_phone_number.substring(6, length)
+      }
+      this.setState({phone_number : new_phone_number});  
+      this.validatePhoneNumber(phone_number);
+  }
+
+  handleAvatarChange(avatar) {
+    this.setState({avatar: avatar})
+  }
+
+  generateAvatarPickerList() {
+    picker_list = [];
+    for (var i = 0; i < avatar_list.length; i++) {
+        var avatar = avatar_list[i]
+        var label = avatar.charAt(0).toUpperCase() + avatar.slice(1);
+        picker_list.push(<Picker.Item key = {i} label= {label} value = {avatar} />)
+    }
+    return picker_list
   }
 
   initializeUserInformation(){
@@ -132,6 +209,9 @@ class SettingsScreen extends Component {
       this.setState({last_name : thisUser.last_name})
       this.setState({email : thisUser.email})
       this.setState({phone_number : thisUser.phone_number})
+      this.setState({avatar : thisUser.avatar_name})
+      this.setState({current_user : responseData.thisUser})
+      
     }).done();
 
   }
@@ -161,16 +241,13 @@ class SettingsScreen extends Component {
           first_name : this.state.first_name,
           last_name : this.state.last_name,
           email : this.state.email,
+          phone_number : this.state.phone_number,
+          avatar : this.state.avatar
         })
       })
       .then((response) => response.json())
       .then((responseData) => {
-        var thisUser = responseData.thisUser;
-        this.setState({first_name : thisUser.first_name})
-        this.setState({last_name : thisUser.last_name})
-        this.setState({email : thisUser.email})
-        this.setState({phone_number : thisUser.phone_number})
-        this.initializeUserName().bind(this)
+        this.initializeUserName.bind(this)();
         alert("Settings Updated")
       }).done();
     }
@@ -179,10 +256,23 @@ class SettingsScreen extends Component {
   // checks if we can submit the output, i.e. no errors
   errorCheck() {
       var canSubmit = true;
-      if (this.state.first_name_validation.result != 'success') canSubmit = false;
-      if (this.state.last_name_validation.result != 'success') canSubmit = false;
-      if (this.state.email_validation.result != 'success') canSubmit = false;
+      if (this.state.first_name_validation.result != 'success') {
+        alert('first_name');
+         canSubmit = false;
+      }
+      if (this.state.last_name_validation.result != 'success') {
+        alert("last_name")
+        canSubmit = false;
+      }
+      if (this.state.email_validation.result != 'success') {
+        alert("email")
+        canSubmit = false;
+      }
       return canSubmit;
+  }
+
+  togglePicker() {
+    this.setState({display_picker : !this.state.display_picker})
   }
 
   getErrorMessage(field){
@@ -190,6 +280,7 @@ class SettingsScreen extends Component {
     validation_output_dict['first_name'] = this.state.first_name_validation;
     validation_output_dict['last_name'] = this.state.last_name_validation;
     validation_output_dict['email'] = this.state.email_validation;
+    validation_output_dict['phone_number'] = this.state.phone_number_validation
     var this_validation_output = validation_output_dict[field]
     if (this_validation_output.result != 'success') {
       return (
@@ -210,9 +301,29 @@ class SettingsScreen extends Component {
     var first_name_error = this.getErrorMessage.bind(this)('first_name')
     var last_name_error = this.getErrorMessage.bind(this)('last_name')
     var email_error = this.getErrorMessage.bind(this)('email')
-
+    var phone_number_error = this.getErrorMessage.bind(this)('phone_number')
+    var picker_list = this.generateAvatarPickerList.bind(this)()
+    var currentAvatar = this.state.avatar
+    var currentAvatarLabel = currentAvatar.charAt(0).toUpperCase() + currentAvatar.slice(1);
     return (
         <View style = {styles.container}>
+              <Modal 
+              visible={this.state.display_picker}
+              animationType={"slide"}
+              transparent={false}
+                >
+                 <Picker
+                  selectedValue={this.state.avatar}
+                  onValueChange={this.handleAvatarChange.bind(this)}>
+                      {picker_list}
+                </Picker> 
+                <TouchableHighlight onPress = {this.togglePicker.bind(this)}>
+                  <Text>
+                    Return
+                  </Text>
+                </TouchableHighlight>
+              </Modal>
+
             <View style = {styles.top_bar}>
               <TouchableOpacity style = {styles.back_button}
                 // onPress = {() => this.props.navigator.pop()}
@@ -271,17 +382,43 @@ class SettingsScreen extends Component {
                  {email_error}
               </View>
 
-              <TouchableOpacity 
-                style = {styles.submit_settings_box}>
+              <View style = {styles.input_box}> 
+                <Text style = {styles.instruction_text}>
+                    Phone Number
+                  </Text>
+                 <TextInput
+                  onChangeText = {this.handlePhoneNumberChange.bind(this)}
+                  style = {styles.input_text} placeholder = "Phone Number"
+                  value = {this.state.phone_number}
+                  keyboardType = "number-pad"
+                  dataDetectorTypes = "phoneNumber"
+                  maxLength = {14}
+                />
+                 {phone_number_error}
+              </View>
 
+              <View style = {styles.input_box}>
+                <Text style = {styles.instruction_text}> 
+                    Avatar
+                </Text>
+
+                <TouchableOpacity style = {styles.toggle_picker} onPress = {this.togglePicker.bind(this)}>
+                    <Text style = {styles.input_text}> 
+                      {currentAvatarLabel}
+                     </Text>
+                     <Icon name = "chevron-right" size = {20} />
+                </TouchableOpacity>
+              </View>
+
+               
+
+              <TouchableOpacity 
+                style = {styles.submit_settings_box}
+                onPress = {this.submitNewSettings.bind(this)}>
                 <Text style = {styles.submit_settings_text}>
                     Update Settings!
                 </Text>
-              </TouchableOpacity>
-
-
-
-
+              </TouchableOpacity>     
         </View>
     )
   }
@@ -366,11 +503,21 @@ const styles = StyleSheet.create({
   },
 
   submit_settings_box : {
-    flex:  0.1
+    flex:  0.1, 
+    flexDirection : "column",
+    justifyContent: "center",
   },
 
   submit_settings_text : {
+  },
 
+  avatar_box: {
+    flex : 0.1
+  },
+
+  toggle_picker : {
+    flexDirection : "row",
+    flex: 0.1
   }
 
 

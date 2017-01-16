@@ -41,7 +41,7 @@ export default class CommentScreen extends React.Component {
 	handlePostSubmit() {
 		let url = "https://manaweb-events.herokuapp.com"
 	    let test_url = "http://0.0.0.0:5000"
-	    fetch(test_url + "/mobileMakeComment", 
+	    fetch(url + "/mobileMakeComment", 
 	    	{method: "POST",
 	          	headers: {
 	          		'Accept': 'application/json',
@@ -72,7 +72,7 @@ export default class CommentScreen extends React.Component {
 	getComments() {
 		let url = "https://manaweb-events.herokuapp.com"
 	    let test_url = "http://0.0.0.0:5000"
-	    fetch(test_url + "/mobileGetComments", 
+	    fetch(url + "/mobileGetComments", 
 	    	{method: "POST",
 	          	headers: {
 	          		'Accept': 'application/json',
@@ -109,7 +109,7 @@ export default class CommentScreen extends React.Component {
 	getPostById() {
 		let url = "https://manaweb-events.herokuapp.com"
 	    let test_url = "http://0.0.0.0:5000"
-	    fetch(test_url + "/mobileGetPostById", 
+	    fetch(url + "/mobileGetPostById", 
 	    	{method: "POST",
 	          	headers: {
 	          		'Accept': 'application/json',

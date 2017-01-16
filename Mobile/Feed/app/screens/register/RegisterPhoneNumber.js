@@ -108,26 +108,31 @@ class RegisterPhoneNumber extends Component {
   
 
   handlePhoneNumberChange(phone_number) {
-      this.setState({raw_phone_number : phone_number})
-      var length = phone_number.length
+     var raw_phone_number = ""
+      for (var i = 0; i < phone_number.length; i++) {
+        var c = phone_number[i]
+        if (!isNaN(c) && c != " "){
+            raw_phone_number = raw_phone_number + c;
+          }
+      }
+      this.setState({raw_phone_number : raw_phone_number})
+      var length = raw_phone_number.length
       this.setState({length : length})
       var new_phone_number = "";
-      if (length < 3) {
-        new_phone_number = "(" + phone_number;
+      if (length > 0 && length <= 3) {
+        new_phone_number = "(" + raw_phone_number;
+      }
+      if (length == 4) {
+        new_phone_number = "(" + raw_phone_number.substring(0,3) + ") " + raw_phone_number.substring(3,4)
       }
 
-      if (length == 3) {
-        new_phone_number = "(" + phone_number + ") "
+      if (length > 4 && length <= 6) {
+        new_phone_number = "(" + raw_phone_number.substring(0,3) + ") " + raw_phone_number.substring(3, length)
       }
 
-      if (length > 3 && length < 6) {
-        new_phone_number = "(" + phone_number.substring(0,3) + ") " + phone_number.substring(3, length)
+      if (length > 6) {
+        new_phone_number = "(" + raw_phone_number.substring(0,3) + ") " + raw_phone_number.substring(3, 6) + "-" + raw_phone_number.substring(6, length)
       }
-
-      if (length >= 6) {
-        new_phone_number = "(" + phone_number.substring(0,3) + ") " + phone_number.substring(3, 6) + "-" + phone_number.substring(6, length)
-      }
-
       this.setState({phone_number : new_phone_number});  
       this.validatePhoneNumber(phone_number);
 
@@ -196,7 +201,7 @@ class RegisterPhoneNumber extends Component {
                 style = {styles.input_text} placeholder = "Phone Number"
                 keyboardType = "number-pad"
                 dataDetectorTypes = "phoneNumber"
-                maxLength = {10}
+                maxLength = {14}
                 value = {this.state.raw_phone_number}
               />
 
