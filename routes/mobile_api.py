@@ -250,12 +250,15 @@ def mobileUpdateSettings():
 	first_name = request.json['first_name']
 	last_name = request.json['last_name']
 	email = request.json['email']
+	avatar = request.json['avatar']
 	# phone_number = request.json['phone_number']
 	# password = request.json['password']
 	# new_password = request.json['new_password']
 	user_manager.updateInfo(username, 'first_name', first_name)
 	user_manager.updateInfo(username, 'last_name', last_name)
 	user_manager.updateInfo(username, 'email', email)
+	user_manager.updateInfo(username, 'avatar_name', avatar)
+	user_manager.updateInfo(session['userID'], 'avatar_url'	, 	'/static/avatars/' + avatar + '.png')
 	user_manager.closeConnection()
 	output = {}
 	output['result'] = 'success'
