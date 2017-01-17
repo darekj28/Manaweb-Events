@@ -10,9 +10,17 @@ import Notifications from '../components/Notifications'
 export default class NotificationScreen extends React.Component {
   constructor(props) {
       super(props);
-      this.state = {current_user : {userID : "not initialized"},
-      current_username : '',
+      this.state = {current_username : '',
                   notifications : []};
+  }
+  initializeUser(){
+      AsyncStorage.getItem("current_username").then((value) => {
+        if (value) this.setState({ current_username : value })
+        this.getNotifications.bind(this)();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
   getNotifications() {
       let url = "https://manaweb-events.herokuapp.com"
@@ -23,7 +31,7 @@ export default class NotificationScreen extends React.Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ comment_id : this.state.current_user })
+            body: JSON.stringify({ username : this.state.current_username })
         }
       ).then((response) => response.json())
       .then((responseData) => {
@@ -48,7 +56,7 @@ export default class NotificationScreen extends React.Component {
     });
   }
   componentDidMount() {
-    this.getNotifications.bind(this)();
+    this.initializeUser.bind(this)();
   }
   render() {
 		return (

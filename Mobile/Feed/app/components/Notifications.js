@@ -14,9 +14,9 @@ export default class Notifications extends React.Component {
 	render() {
 		return (
 			<View>
-				{this.props.notifications.map(function(note) {
-					return (<NotificationBox note={note} username={this.props.username} navigator={this.props.navigator}/>);	
-				})}
+				{this.props.notifications.map(function(note, i) {
+					return (<NotificationBox key={i} note={note} username={this.props.username} navigator={this.props.navigator}/>);	
+				}, this)}
 			</View>
 			)
 	}

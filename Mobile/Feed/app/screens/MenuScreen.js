@@ -86,7 +86,7 @@ class MenuScreen extends Component {
 
                   { this.state.show_panel3 &&
                   <View style = {{backgroundColor: 'white', flex: 1}}>
-                    <NotificationScreen/>
+                    <NotificationScreen navigator={this.props.navigator}/>
                   </View>
               }
               </View>

@@ -29,13 +29,13 @@ export default class NotificationBox extends React.Component {
             notification = note.sender_name + " " + also + " commented on " + whose + " post."
         return notification;
     }
-    _navigateToComment() {
-      this.props.navigator.push({
-        href: "Comment",
-        username : this.props.username,
-        comment_id : this.props.note['comment_id']
-      })
-    }
+  _navigateToComment() {
+    this.props.navigator.push({
+      href: "Comment",
+      username : this.props.username,
+      comment_id : this.props.note['comment_id']
+    })
+  }
 	render() {
 		var note = this.props.note;
 		return(

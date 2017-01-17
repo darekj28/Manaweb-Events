@@ -236,7 +236,7 @@ def mobileMakeComment():
 
 @mobile_api.route('/mobileGetNotifications', methods=['POST'])
 def mobileGetNotifications():
-	userID = request.form.get("currentUser[userID]")
+	userID = request.json['username']
 	post_manager = Posts()
 	notification_list = post_manager.getShortListNotifications(userID)
 	post_manager.sortAscending(notification_list)
