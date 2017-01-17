@@ -61,7 +61,9 @@ export default class NotificationScreen extends React.Component {
   render() {
 		return (
 			<View style = {styles.container}>
-        <Text>Your notifications</Text>
+        <View style = {{borderBottomColor: '#000000', borderBottomWidth: 5}}>
+            <Text style={styles.title}>Your Notifications</Text>
+        </View>
         <Notifications notifications={this.state.notifications} username={this.state.current_username} navigator={this.props.navigator}/>
       </View>
 			)
@@ -73,5 +75,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     padding : 10,
     paddingTop: 40
+  },
+  title : {
+    fontSize : 20
   }
 });

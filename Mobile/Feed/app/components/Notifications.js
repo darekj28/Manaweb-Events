@@ -13,11 +13,15 @@ export default class Notifications extends React.Component {
 	}
 	render() {
 		return (
-			<View>
+			<ScrollView            
+			automaticallyAdjustContentInsets={false}
+            onScroll={() => {}}
+            scrollEventThrottle={200}
+            onPress={() => {Alert.alert('Scroll clicked')}}>
 				{this.props.notifications.map(function(note, i) {
 					return (<NotificationBox key={i} note={note} username={this.props.username} navigator={this.props.navigator}/>);	
 				}, this)}
-			</View>
+			</ScrollView>
 			)
 	}
 }
