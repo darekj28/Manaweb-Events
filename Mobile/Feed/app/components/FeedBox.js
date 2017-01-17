@@ -17,8 +17,9 @@ export default class FeedBox extends Component {
     _navigateToComment() {
       this.props.navigator.push({
         href: "Comment",
-        username : this.props.username,
-        comment_id : this.props.post['comment_id']
+        current_username : this.props.current_username,
+        comment_id : this.props.post['comment_id'],
+        current_user: this.props.current_user
       })
     }
     handleFilterUser() {

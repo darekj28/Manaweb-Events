@@ -47,18 +47,20 @@ export default class CommentScreen extends React.Component {
 	          		'Accept': 'application/json',
 	          		'Content-Type': 'application/json'
 	        	},
-	      		body: JSON.stringify({ comment_id : this.props.comment_id,
-	      		current_user : this.state.current_user,
-	      		commentContent : this.state.newPostContent })
+	      		body: JSON.stringify({ 
+	      			comment_id : this.props.comment_id,
+	      			username : this.props.current_username,
+	      			commentContent : this.state.newPostContent
+	      		 })
 	    	}
 	    ).then((response) => response.json())
 	    .then((responseData) => {
 		    if (responseData['result'] == 'success') {
 		    	var feed = this.state.comments;
 		    	feed.push({ commentContent: this.state.newPostContent, 
-					avatar  : this.state.currentUser['avatar_url'], 
-					name    : this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
-					userID  : this.state.currentUser['userID'], 
+					avatar  : this.state.current_user['avatar_url'], 
+					name    : this.state.current_user['first_name'] + " " + this.state.current_user['last_name'],
+					userID  : this.state.current_user['userID'], 
 					time	: "just now", 
 					comment_id : this.state.comment_id
 				});
@@ -78,7 +80,10 @@ export default class CommentScreen extends React.Component {
 	          		'Accept': 'application/json',
 	          		'Content-Type': 'application/json'
 	        	},
-	      		body: JSON.stringify({ comment_id : this.props.comment_id })
+	      		body: JSON.stringify({ comment_id : this.props.comment_id,
+	      			username : this.state.current_user.userID,
+	      			commentContent : this.state.newPostContent
+	      		 })
 	    	}
 	    ).then((response) => response.json())
 	    .then((responseData) => {
@@ -136,6 +141,7 @@ export default class CommentScreen extends React.Component {
 	componentDidMount() {
 		this.getComments.bind(this)();
 		this.getPostById.bind(this)();
+		this.setState({current_user : this.props.current_user})
 	}
 	render() {
 		return (

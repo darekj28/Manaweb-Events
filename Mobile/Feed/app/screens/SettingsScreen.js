@@ -214,40 +214,7 @@ class SettingsScreen extends Component {
     return picker_list
   }
 
-  initializeUserInformation(){
-    var url = "https://manaweb-events.herokuapp.com"
-    var test_url = "http://0.0.0.0:5000"
-    fetch(url + "/mobileGetCurrentUserInfo", {method: "POST",
-    headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, 
-      body: 
-      JSON.stringify(
-       {
-        username: this.state.current_username
-      })
-    })
-    .then((response) => response.json())
-    .then((responseData) => {
-      var thisUser = responseData.thisUser;
-      this.setState({first_name : thisUser.first_name})
-      this.setState({last_name : thisUser.last_name})
-      this.setState({email : thisUser.email})
-      this.setState({phone_number : thisUser.phone_number})
-      this.setState({avatar : thisUser.avatar_name})
-      this.setState({current_user : responseData.thisUser})
-      
-    }).done();
 
-  }
-
-  initializeUserName(){
-    AsyncStorage.getItem("current_username").then((value) => {
-      this.setState({current_username: value});
-      this.initializeUserInformation.bind(this)()
-    })
-  }
 
   // makes the fetch request to submit the new settings
   submitNewSettings() {
@@ -255,7 +222,7 @@ class SettingsScreen extends Component {
     if (canSubmit) {
       var url = "https://manaweb-events.herokuapp.com"
       var test_url = "http://0.0.0.0:5000"
-      fetch(url + "/mobileUpdateSettings", {method: "POST",
+      fetch(test_url + "/mobileUpdateSettings", {method: "POST",
       headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -273,7 +240,7 @@ class SettingsScreen extends Component {
       })
       .then((response) => response.json())
       .then((responseData) => {
-        this.initializeUserName.bind(this)();
+        this.props.refreshInfo.bind(this)();
         alert("Settings Updated")
       }).done();
     }
@@ -290,7 +257,7 @@ class SettingsScreen extends Component {
       if (this.state.email_validation.result != 'success') {
         canSubmit = false;
       }
-      if (this.state.phone_number.result != 'success') {
+      if (this.state.phone_number_validation.result != 'success') {
         canSubmit = false;
       }
       return canSubmit;
@@ -577,9 +544,19 @@ class SettingsScreen extends Component {
     return input_element
   }
 
+  initializeUserInfo(){
+    this.setState({current_username : this.props.current_user.userID})
+    this.setState({current_user : this.props.current_user})
+    this.setState({first_name : this.props.current_user.first_name})
+    this.setState({last_name : this.props.current_user.last_name})
+    this.setState({email : this.props.current_user.email})
+    this.setState({phone_number : this.props.current_user.phone_number})
+    this.setState({avatar : this.props.current_user.avatar_name})
+  }
+
   componentDidMount() {
-    this.initializeUserName.bind(this)();
     // initialize all the states to previous values
+    this.initializeUserInfo.bind(this)();
   }
 
   render() {
@@ -593,7 +570,7 @@ class SettingsScreen extends Component {
 
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     var data = [first_name_input, last_name_input, email_input, phone_number_input
-                , avatar_input, password_link]
+                ,avatar_input, password_link]
     var dataSource = ds.cloneWithRows(data)
     return (
         <View style = {styles.container}>

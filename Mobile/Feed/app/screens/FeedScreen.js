@@ -75,14 +75,11 @@ class FeedScreen extends Component {
     this.postMessagePressed = this.postMessagePressed.bind(this)
     this._activities = FeedScreen.populateActivities()
     this.refreshScreen = this.refreshScreen.bind(this);
-    // this.initializeUserInfo = this.initializeUserInfo.bind(this);
     this.handlePostSubmit = this.handlePostSubmit.bind(this);
     this.handlePostTyping = this.handlePostTyping.bind(this);
-    this.initializeUser = this.initializeUser.bind(this);
     this.handleFilterPress = this.handleFilterPress.bind(this);
     this.handleServerPostSubmit = this.handleServerPostSubmit.bind(this);
     this._navigateToHome = this._navigateToHome.bind(this);
-    this.handleLogout = this.handleLogout.bind(this);
     this.handleRightAction = this.handleRightAction.bind(this)
 
   }
@@ -197,6 +194,7 @@ class FeedScreen extends Component {
     let responseData = await response.json();
 
     if (responseData['result'] == 'success'){
+      this.setState({loading: false})
       if (responseData.post_list.length > 0) {
           var feed = []
           for (var i = 0; i < responseData['post_list'].length; i++) {
@@ -217,7 +215,6 @@ class FeedScreen extends Component {
           }
           this.setState({feed: feed})
          }
-         this.setState({loading: false})
     }
   }
 
@@ -228,7 +225,7 @@ class FeedScreen extends Component {
 
   handleRightAction() {
     // Alert.alert('Menu pressed')
-    this.handleLogout();
+    this.props.handleLogout.bind(this)();
   }
 
   selectActivitiesAction() {
@@ -256,23 +253,6 @@ class FeedScreen extends Component {
       }
   }
 
-  initializeUser(){
-      AsyncStorage.getItem("current_username").then((value) => {
-     // add mobile get current user
-        if (value != null) {
-          this.setState({"current_username" : value})
-        }
-        this.refreshScreen(true).done();
-      });
-  }
-
-  handleLogout() {
-    AsyncStorage.setItem("current_username", "").then((value) => {
-          LoginManager.logOut()
-          this._navigateToHome();  
-      });
-  }
-
   _navigateToHome(){
     this.props.navigator.push({
     href: "Start"
@@ -296,19 +276,21 @@ class FeedScreen extends Component {
                 tintColor : '#5cb85c'
             }
         }
-
     }
 
-  componentDidMount() {
-      this.initializeUser();
-      // this.refreshScreen(true);
+  initializeUserInfo(){
+      this.setState({current_user : this.props.current_user})
+      this.setState({current_username : this.props.current_user.userID})
+   
+  }
 
+  componentDidMount() {
+      this.initializeUserInfo.bind(this)();
+      this.refreshScreen.bind(this)(true);
   }
 
 
   render() {
-
-
     var alert;
     if ((this.state.alert)) {
       alert = <Text>
@@ -320,12 +302,10 @@ class FeedScreen extends Component {
     let filterIcon3 = require('../components/res/icon3.png')
     let dropdownIcon = require('./res/down_arrow.png')
     return (
-
-
-
         <View style = {styles.container}>
 
            <Spinner visible={this.state.loading} textContent= "Loading..." textStyle={{color: '#FFF'}} />
+           
             <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
                 <ActionBar
                     backgroundColor={'#3B373C'}
@@ -333,7 +313,7 @@ class FeedScreen extends Component {
                     title={'Manaweb'}
                     titleStyle={styles.titleTextLarge}
                     onTitlePress={this.handleTitlePress}
-                    onRightPress={this.handleRightAction}
+                    onRightPress={this.handleRightAction.bind(this)}
                     onLeftPress = {() => {}}
                     rightIconName={'menu'}
                 />
@@ -413,11 +393,8 @@ class FeedScreen extends Component {
             </View>
             <Feed posts = {this.state.feed} searchText = {this.state.searchText} filters = {this.state.filters} 
             userIdToFilterPosts={this.state.userIdToFilterPosts} handleFilterUser={this.handleFilterUser.bind(this)} 
-            currentUser = {this.state.current_user}
-                navigator = {this.props.navigator} username = {this.state.current_username}/>
-
-            
-
+            current_user = {this.props.current_user}
+                navigator = {this.props.navigator} current_username = {this.props.current_user.userID}/>
         </View>
 
     )

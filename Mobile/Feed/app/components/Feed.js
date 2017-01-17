@@ -62,9 +62,10 @@ export default class Feed extends Component {
       }
       if ((!doesPostMatchFilter() || !doesPostMatchSearch()) || !doesPostMatchSelectedUser())
         return;
-      else if (i < 5)
+      else // if (i < 5)
         rows.push(<FeedBox key={i} post = {post} handleFilterUser={this.props.handleFilterUser}
-            image_ID = {i % 3} navigator = {this.props.navigator} username = {this.props.username}
+            image_ID = {i % 3} navigator = {this.props.navigator} current_username = {this.props.current_username}
+            current_user = {this.props.current_user}
             // isOP={this.props.currentUser['userID'] == post.userID}
             // isAdmin={this.props.currentUser['isAdmin']} 
             // refreshPostDisplayedInModal={this.refreshPostDisplayedInModal}
@@ -74,14 +75,29 @@ export default class Feed extends Component {
     return rows;
   }
 
+  // for some reason this needs to go here
+  listViewRenderRow(input_element){
+    return input_element
+  }
+
   componentDidMount(){
     this.setState({posts: this.props.posts})
   }
 
   render() {
     var feed = this.filter()
+    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    var dataSource = ds.cloneWithRows(feed)
     return (
-             <ScrollView
+              <ListView 
+                  style={styles.list_container}
+                  dataSource={dataSource}
+                  renderRow={this.listViewRenderRow.bind(this)}
+                  enableEmptySections = {true}
+                  />
+
+
+          /*   <ScrollView
             // ref={(scrollView) => { _scrollView = scrollView; }}
             automaticallyAdjustContentInsets={false}
             onScroll={() => {}}
@@ -89,7 +105,8 @@ export default class Feed extends Component {
             onPress={() => {Alert.alert('Scroll clicked')}}
             >
               {feed}
-            </ScrollView>
+            </ScrollView> */
+          
         
     ) 
   }
@@ -98,7 +115,8 @@ export default class Feed extends Component {
 }
 
 const styles = StyleSheet.create({
+  list_container : {
 
-
+  },
 });
 

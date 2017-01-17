@@ -57,6 +57,7 @@ class LoginScreen extends Component {
             })
         }
         else {
+          alert("Invalid Credentials")
           this.setState({ validation_output : responseData})
         }
         

@@ -25,7 +25,6 @@ class StartNavigator extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      current_username: "",
       isLoading: true
     }
     this.initializeUser = this.initializeUser.bind(this);
@@ -138,7 +137,7 @@ class StartNavigator extends Component {
         )
   case "Comment":
     return (
-      <CommentScreen username={route.username}
+      <CommentScreen current_username={route.current_username}
       comment_id={route.comment_id}
       {...globalNavigatorProps}/>
       )

@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {AppRegistry,StyleSheet,View,TouchableOpacity,TouchableHighlight,
+import {AsyncStorage, AppRegistry,StyleSheet,View,TouchableOpacity,TouchableHighlight,
           Alert, Animated, TouchableWithoutFeedback, Image, Easing, Text} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -35,6 +35,8 @@ class MenuScreen extends Component {
         show_panel1: true,
         show_panel2: false,
         show_panel3: false,
+        current_user : {},
+        current_username : ""
     }
     this._onPanel1Pressed = this._onPanel1Pressed.bind(this)
   }
@@ -68,18 +70,64 @@ class MenuScreen extends Component {
           return {color: DEFAULT_COLOR, fontWeight: 'bold', alignSelf: 'center'}
       }
   }
+
+  initializeUserInformation(current_username){
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
+    fetch(url + "/mobileGetCurrentUserInfo", {method: "POST",
+    headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, 
+      body: 
+      JSON.stringify(
+       {
+        username: current_username
+      })
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+
+      var thisUser = responseData.thisUser;
+      this.setState({current_user : thisUser})
+    }).done();
+  }
+
+  initializeUserName(){
+    AsyncStorage.getItem("current_username").then((current_username) => {
+      this.setState({current_username: current_username});
+      this.initializeUserInformation.bind(this)(current_username)
+    })
+  }
+
+  handleLogout() {
+    AsyncStorage.setItem("current_username", "").then((value) => {
+          LoginManager.logOut()
+          this._navigateToHome();  
+      });
+  }
+
+  componentDidMount() {
+    this.initializeUserName.bind(this)();
+
+  }
+
   render() {
       return (
           <View style = {styles.container}>
               <View style = {{flex: 1 - BOTTOM_BAR_PROPORTION, flexDirection:'row'}}>
                   { this.state.show_panel1 &&
                       <View style = {{flex: 1}}>
-                          <FeedScreen navigator={this.props.navigator}></FeedScreen>
+                          <FeedScreen navigator={this.props.navigator}
+                                current_user = {this.state.current_user}
+                                handleLogout = {this.handleLogout.bind(this)}
+                            />
                       </View>
                   }
                   { this.state.show_panel2 &&
                   <View style = {{backgroundColor: 'white', flex: 1}}>
-                    <SettingsScreen/>
+                    <SettingsScreen current_user = {this.state.current_user} 
+                          refreshInfo = {this.initializeUserName.bind(this)}/>
                   </View>
                     }
 

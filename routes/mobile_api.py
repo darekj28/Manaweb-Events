@@ -225,11 +225,13 @@ def mobileMakeComment():
 	feed_name = DEFAULT_FEED
 	comment_id = request.json['comment_id']
 	commentContent = request.json['commentContent']
-	# unique_id = request.json['unique_id']
 	unique_id = None
 	post_manager = Posts()
-	userID = request.json['currentUser']['userID']
-	post_manager.makeComment(feed_name, comment_id, commentContent, userID, unique_id = unique_id)
+	userID = request.json['username']
+	if userID != None and userID != "":
+		post_manager.makeComment(feed_name, comment_id, commentContent, userID, unique_id = unique_id)
+	else:
+		print(userID)
 	post_manager.closeConnection()	
 
 	return jsonify({ 'result' : 'success'})
