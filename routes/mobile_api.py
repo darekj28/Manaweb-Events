@@ -243,7 +243,7 @@ def mobileGetNotifications():
 	post_manager.closeConnection()
 	return jsonify({ 'notification_list' : notification_list })	
 
-@browser_api.route('/mobileGetNotificationCount', methods=['POST'])
+@mobile_api.route('/mobileGetNotificationCount', methods=['POST'])
 def mobileGetNotificationCount():
 	userID = request.json['username']
 	post_manager = Posts()
