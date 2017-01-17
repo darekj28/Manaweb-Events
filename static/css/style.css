@@ -36,6 +36,9 @@ button.kep-login-facebook:hover{
 #LoginButton {
   border-radius : 0px 4px 4px 0px;
 }
+.notification-hr {
+  width : 95%;
+}
 .edit-post {
   resize : vertical;
 }

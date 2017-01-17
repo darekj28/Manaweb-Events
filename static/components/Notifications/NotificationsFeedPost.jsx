@@ -30,7 +30,7 @@ export default class NotificationsFeedPost extends React.Component {
                         <b>{this.getNotificationSyntax.bind(this)(note)}</b>
                     </div>
                 </Link>
-                <div className="row"><small>{note.timeString}</small></div>
+                <div className="row"><small>{note.timeString}</small><hr className="notification-hr"/></div>
             </li>
 			);
 	}
