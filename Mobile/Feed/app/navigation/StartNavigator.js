@@ -138,7 +138,7 @@ class StartNavigator extends Component {
   case "Comment":
     return (
       <CommentScreen current_username={route.current_username}
-      comment_id={route.comment_id}
+      comment_id={route.comment_id} current_user = {route.current_user}
       {...globalNavigatorProps}/>
       )
   case "FbCreate":

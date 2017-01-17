@@ -151,7 +151,7 @@ class FeedScreen extends Component {
     async handleServerPostSubmit (newPostContent) {
       let url = "https://manaweb-events.herokuapp.com"
       let test_url = "http://0.0.0.0:5000"
-      let response = await fetch(test_url + "/mobileMakePost", {method: "POST",
+      let response = await fetch(url + "/mobileMakePost", {method: "POST",
             headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -180,7 +180,7 @@ class FeedScreen extends Component {
   async refreshScreen() {
     let url = "https://manaweb-events.herokuapp.com"
     let test_url = "http://0.0.0.0:5000"
-    let response = await fetch(test_url + "/mobileGetPosts", {method: "POST",
+    let response = await fetch(url + "/mobileGetPosts", {method: "POST",
           headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',

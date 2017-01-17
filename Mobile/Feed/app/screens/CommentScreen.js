@@ -38,7 +38,7 @@ export default class CommentScreen extends React.Component {
 	          this.state.post_message_height, {toValue: final, duration: ANIMATE_DURATION}
 	      ).start();
 	}
-	handlePostSubmit() {
+	handleCommentSubmit() {
 		let url = "https://manaweb-events.herokuapp.com"
 	    let test_url = "http://0.0.0.0:5000"
 	    fetch(url + "/mobileMakeComment", 
@@ -57,10 +57,11 @@ export default class CommentScreen extends React.Component {
 	    .then((responseData) => {
 		    if (responseData['result'] == 'success') {
 		    	var feed = this.state.comments;
-		    	feed.push({ commentContent: this.state.newPostContent, 
-					avatar  : this.state.current_user['avatar_url'], 
-					name    : this.state.current_user['first_name'] + " " + this.state.current_user['last_name'],
-					userID  : this.state.current_user['userID'], 
+		    	feed.push({ 
+		    		postContent: this.state.newPostContent, 
+					avatar  : this.props.current_user['avatar_name'], 
+					name    : this.props.current_user['first_name'] + " " + this.props.current_user['last_name'],
+					userID  : this.props.current_user['userID'], 
 					time	: "just now", 
 					comment_id : this.state.comment_id
 				});
@@ -81,7 +82,7 @@ export default class CommentScreen extends React.Component {
 	          		'Content-Type': 'application/json'
 	        	},
 	      		body: JSON.stringify({ comment_id : this.props.comment_id,
-	      			username : this.state.current_user.userID,
+	      			username : this.props.current_user.userID,
 	      			commentContent : this.state.newPostContent
 	      		 })
 	    	}
@@ -155,7 +156,7 @@ export default class CommentScreen extends React.Component {
                     post_message_expanded={this.state.post_message_expanded}
                     newPostContent = {this.state.newPostContent}
                     handlePostTyping = {this.handlePostTyping.bind(this)}
-                    handlePostSubmit = {this.handlePostSubmit.bind(this)}/>
+                    handlePostSubmit = {this.handleCommentSubmit.bind(this)}/>
               <Comments comments={this.state.comments} comment_id={this.props.comment_id}/>
             </View>
 			);
