@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {Image, Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {Alert, Image, Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -30,12 +30,16 @@ class SettingsScreen extends Component {
       phone_number: "",
       raw_phone_number : "",
       avatar : "",
+      old_password : "",
+      new_password: "",
       first_name_validation: {result : 'success'},
       last_name_validation: {result : 'success'},
       email_validation : {result : 'success'},
       phone_number_validation : {result : 'success'},
-      display_picker : false
-      // password coming soon
+      new_password_validation : {result: 'success'},
+      old_password_validation : {result : 'failure'},
+      display_avatar_picker : false,
+      display_password_change : false
     }
   }
 
@@ -118,6 +122,30 @@ class SettingsScreen extends Component {
     .then((response) => response.json())
     .then((responseData) => {
       this.setState({validation_output : responseData})
+    })
+    .done();
+  }
+
+
+  // validates the new password, right now we don't have them type in their new password twice
+  validateNewPassword(new_password) {
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
+    fetch(url + "/mobilePasswordValidation", {method: "POST",
+    headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, 
+      body: 
+      JSON.stringify(
+       {
+        password: new_password,
+        password_confirm: new_password
+      })
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+      this.setState({new_password_validation : responseData})
     })
     .done();
   }
@@ -250,35 +278,37 @@ class SettingsScreen extends Component {
       }).done();
     }
   }
-
   // checks if we can submit the output, i.e. no errors
   errorCheck() {
       var canSubmit = true;
       if (this.state.first_name_validation.result != 'success') {
-        alert('first_name');
          canSubmit = false;
       }
       if (this.state.last_name_validation.result != 'success') {
-        alert("last_name")
         canSubmit = false;
       }
       if (this.state.email_validation.result != 'success') {
-        alert("email")
+        canSubmit = false;
+      }
+      if (this.state.phone_number.result != 'success') {
         canSubmit = false;
       }
       return canSubmit;
   }
-
-  togglePicker() {
-    this.setState({display_picker : !this.state.display_picker})
+  toggleAvatarPicker() {
+    this.setState({display_avatar_picker : !this.state.display_avatar_picker})
   }
-
+  togglePasswordModal() {
+    this.setState({display_password_change : !this.state.display_password_change})
+  }
   getErrorMessage(field){
     var validation_output_dict = {}
     validation_output_dict['first_name'] = this.state.first_name_validation;
     validation_output_dict['last_name'] = this.state.last_name_validation;
     validation_output_dict['email'] = this.state.email_validation;
     validation_output_dict['phone_number'] = this.state.phone_number_validation
+    validation_output_dict['new_password'] = this.state.new_password_validation
+    validation_output_dict['old_password'] = this.state.old_password_validation
     var this_validation_output = validation_output_dict[field]
     if (this_validation_output.result != 'success') {
       return (
@@ -289,12 +319,6 @@ class SettingsScreen extends Component {
     }
     else return;
   }
-
-  componentWillMount() {
-    this.initializeUserName.bind(this)();
-    // initialize all the states to previous values
-  }
-
   getAvatarImage(avatar) {
     if (avatar =='nissa') return ( <Image  style={styles.avatar_image} source={require('../static/avatars/nissa.png')} />)
     if (avatar == 'chandra') return (<Image  style={styles.avatar_image} source={require('../static/avatars/chandra.png')} />)
@@ -308,8 +332,6 @@ class SettingsScreen extends Component {
     if (avatar == 'gideon') return (<Image  style={styles.avatar_image} source={require('../static/avatars/gideon.png')} />)
     return;
   }
-
-
   generateFirstNameInput() {
     var first_name_error = this.getErrorMessage.bind(this)('first_name')
     return (
@@ -347,7 +369,6 @@ class SettingsScreen extends Component {
               </View>  
       )
   }
-
   generateEmailInput() {
     var email_error = this.getErrorMessage.bind(this)('email')
     return(
@@ -364,7 +385,6 @@ class SettingsScreen extends Component {
           </View>
       )
   }
-
   generatePhoneNumberInput() {
     var phone_number_error = this.getErrorMessage.bind(this)('phone_number')
     return (
@@ -384,7 +404,6 @@ class SettingsScreen extends Component {
           </View>
       )
   }
-
   generateAvatarInput() {
     var picker_list = this.generateAvatarPickerList.bind(this)()
     var currentAvatar = this.state.avatar
@@ -396,7 +415,7 @@ class SettingsScreen extends Component {
                 <Text style = {styles.avatar_text}> 
                     Avatar
                 </Text>
-                <TouchableOpacity style = {styles.toggle_picker_row} onPress = {this.togglePicker.bind(this)}>
+                <TouchableOpacity style = {styles.toggle_picker_row} onPress = {this.toggleAvatarPicker.bind(this)}>
                     <Text style = {styles.current_avatar_text}> 
                       {currentAvatarLabel}
                      </Text>
@@ -409,29 +428,177 @@ class SettingsScreen extends Component {
               </View>
       )
   }
+  validateOldPassword(old_password) {
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
+    fetch(url + "/mobileCheckPassword", {method: "POST",
+    headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, 
+      body: 
+      JSON.stringify(
+       {
+        username : this.state.current_username,
+        password: old_password
+        
+      })
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+      this.setState({old_password_validation : responseData})
+    })
+    .done();
+  }
+
+  handleOldPasswordChange(old_password) {
+    this.setState({old_password : old_password})
+    this.validateOldPassword.bind(this)(old_password)
+  }
+
+  handleNewPasswordChange(new_password){
+    this.setState({new_password: new_password})
+    this.validateNewPassword.bind(this)(new_password)
+  }
+  updatePassword(){
+    if (this.state.old_password_validation.result != 'success') {
+      alert("Current password is invalid")
+    }
+    else if (this.state.new_password_validation.result != 'success') {
+      alert("New password is of invalid form : " + this.state.new_password_validation.error)
+    }
+    else {
+      var url = "https://manaweb-events.herokuapp.com"
+      var test_url = "http://0.0.0.0:5000"
+      fetch(url + "/mobileUpdatePassword", {method: "POST",
+      headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          }, 
+        body: 
+        JSON.stringify(
+         {
+          username: this.state.current_username,
+          password: this.state.new_password
+        })
+      })
+      .then((response) => response.json())
+      .then((responseData) => {
+        // this.togglePasswordModal.bind(this)();
+        Alert.alert(
+          "Password Succesfully Updated!",
+          "Returning To Previous Settings",
+          [
+            {text: 'OK', onPress: () => this.togglePasswordModal.bind(this)()}
+          ])
+      }).done();
+    }
+  }
+
+  generatePasswordModal() {
+    var old_password_input = this.generateOldPasswordInput.bind(this)()
+    var new_password_input = this.generateNewPasswordInput.bind(this)()
+
+    return  (
+          <Modal
+            visible={this.state.display_password_change}
+              animationType={"slide"}
+              transparent={false}
+              >
+                 {old_password_input}
+                 {new_password_input} 
+
+                 <TouchableOpacity 
+                style = {styles.password_modal_button}
+                 onPress = {this.togglePasswordModal.bind(this)}>
+                  <Text style = {styles.input_text}>
+                    Return 
+                  </Text>
+                 </TouchableOpacity>
+                 <TouchableOpacity style = {styles.password_modal_button} 
+                 onPress = {this.updatePassword.bind(this)}>
+                  <Text style = {styles.input_text}>
+                    Click to Update Password  
+                  </Text>
+                 </TouchableOpacity>
+          </Modal>
+      )
+  }
+
+  generatePasswordLink() {
+      return (
+            <View style = {styles.input_box}>
+                <TouchableOpacity style = {styles.toggle_picker_row} onPress = {this.togglePasswordModal.bind(this)}>
+                    <Text style = {styles.input_text}> 
+                       Click To Update Password
+                     </Text>
+                </TouchableOpacity>
+              </View>
+        )
+  }
+
+  generateOldPasswordInput() {
+    var old_password_error = this.getErrorMessage.bind(this)('old_password')
+    return  (<View style = {styles.password_box}> 
+                <Text style = {styles.instruction_text}>
+                    Confirm your current password first
+                  </Text>
+                 <TextInput
+                  onChangeText = {this.handleOldPasswordChange.bind(this)}
+                  style = {styles.input_text} placeholder = "Current Password"
+                  secureTextEntry = {true}
+                  maxLength = {20}
+                />
+                 {old_password_error}
+             </View>
+          )
+  }
+
+  generateNewPasswordInput() {
+    var new_password_error = this.getErrorMessage.bind(this)('new_password')
+    return  (<View style = {styles.password_box}> 
+                <Text style = {styles.instruction_text}>
+                    Your new password
+                  </Text>
+                 <TextInput
+                  onChangeText = {this.handleNewPasswordChange.bind(this)}
+                  style = {styles.input_text} placeholder = "New Password"
+                  secureTextEntry = {true}
+                  maxLength = {20}
+                />
+                 {new_password_error}
+             </View>
+          )
+  }
+
 
   // for some reason this needs to go here
   listViewRenderRow(input_element){
     return input_element
   }
 
-  render() {
+  componentDidMount() {
+    this.initializeUserName.bind(this)();
+    // initialize all the states to previous values
+  }
 
+  render() {
     var first_name_input = this.generateFirstNameInput.bind(this)()
     var last_name_input = this.generateLastNameInput.bind(this)()
     var email_input = this.generateEmailInput.bind(this)()
     var phone_number_input = this.generatePhoneNumberInput.bind(this)()
     var avatar_input = this.generateAvatarInput.bind(this)()
+    var password_modal  = this.generatePasswordModal.bind(this)()
+    var password_link = this.generatePasswordLink.bind(this)()
 
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    const items = ['first_name', 'last_name', 'email', 'phone_number', 'avatar']
-    var data = [first_name_input, last_name_input, email_input, phone_number_input, avatar_input]
+    var data = [first_name_input, last_name_input, email_input, phone_number_input
+                , avatar_input, password_link]
     var dataSource = ds.cloneWithRows(data)
-    
     return (
         <View style = {styles.container}>
               <Modal 
-              visible={this.state.display_picker}
+              visible={this.state.display_avatar_picker}
               animationType={"slide"}
               transparent={false}
                 >
@@ -440,12 +607,17 @@ class SettingsScreen extends Component {
                   onValueChange={this.handleAvatarChange.bind(this)}>
                       {picker_list}
                 </Picker> 
-                <TouchableHighlight onPress = {this.togglePicker.bind(this)}>
+                <TouchableHighlight onPress = {this.toggleAvatarPicker.bind(this)}>
                   <Text>
                     Return
                   </Text>
                 </TouchableHighlight>
               </Modal>
+
+              {password_modal}
+
+
+
 
             <View style = {styles.top_bar}>
               <TouchableOpacity style = {styles.back_button}
@@ -619,6 +791,27 @@ const styles = StyleSheet.create({
     width : null,
     height : null,
     resizeMode : "contain"
+  },
+
+  password_box: {
+    flexDirection : "column",
+    borderColor: "skyblue",
+    borderWidth : 1,
+    borderRadius : 5,
+    padding: 20,
+    width : winSize.width * 0.95,
+    height: winSize.height * 0.25
+    // backgroundColor: "skyblue"
+  },
+
+  password_modal_button : {
+    borderColor: "skyblue",
+    borderWidth : 1,
+    borderRadius : 5,
+    padding: 20,
+    width : winSize.width * 0.95,
+    height: winSize.height * 0.10
+
   }
 
 

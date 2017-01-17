@@ -7,5 +7,6 @@ npm install --save rc-menu react react-dom react-native react-native-dismiss-key
 npm install —-save react-native-facebook-login
 npm install —-save react-native-fbsdk
 npm install react-native-modal-picker --save
+npm install --save react-native-loading-spinner-overlay@latest
 
 react-native run-ios

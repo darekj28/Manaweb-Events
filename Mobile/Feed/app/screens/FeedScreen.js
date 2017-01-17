@@ -11,9 +11,10 @@ const {
   LoginManager,
 } = FBSDK;
 
+import Spinner from 'react-native-loading-spinner-overlay';
 import React from 'react';
 import {Component} from 'react'
-import {Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
+import {ActivityIndicator, Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
           Alert, Image, Animated, TouchableWithoutFeedback, ScrollView} from 'react-native';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import _ from 'lodash'
@@ -67,7 +68,8 @@ class FeedScreen extends Component {
       current_user: {'userID' : 'not initialized'},
       newPostContent: "",
       searchText : "",
-      test: ""
+      test: "",
+      loading: true
     }
     this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
     this.postMessagePressed = this.postMessagePressed.bind(this)
@@ -150,7 +152,6 @@ class FeedScreen extends Component {
 
     // sends the post to the server and refreshes the page
     async handleServerPostSubmit (newPostContent) {
-
       let url = "https://manaweb-events.herokuapp.com"
       let test_url = "http://0.0.0.0:5000"
       let response = await fetch(url + "/mobileMakePost", {method: "POST",
@@ -216,6 +217,7 @@ class FeedScreen extends Component {
           }
           this.setState({feed: feed})
          }
+         this.setState({loading: false})
     }
   }
 
@@ -266,7 +268,6 @@ class FeedScreen extends Component {
 
   handleLogout() {
     AsyncStorage.setItem("current_username", "").then((value) => {
-
           LoginManager.logOut()
           this._navigateToHome();  
       });
@@ -298,7 +299,7 @@ class FeedScreen extends Component {
 
     }
 
-  componentWillMount() {
+  componentDidMount() {
       this.initializeUser();
       // this.refreshScreen(true);
 
@@ -306,6 +307,7 @@ class FeedScreen extends Component {
 
 
   render() {
+
 
     var alert;
     if ((this.state.alert)) {
@@ -319,9 +321,11 @@ class FeedScreen extends Component {
     let dropdownIcon = require('./res/down_arrow.png')
     return (
 
+
+
         <View style = {styles.container}>
 
-
+           <Spinner visible={this.state.loading} textContent= "Loading..." textStyle={{color: '#FFF'}} />
             <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
                 <ActionBar
                     backgroundColor={'#3B373C'}

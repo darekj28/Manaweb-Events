@@ -382,6 +382,7 @@ class Users:
 		user_info = self.getInfo(userID)
 		password_match = argon2.verify(password, user_info['password'])
 		output = {}
+
 		if password_match:
 			output['result'] = 'success'
 		else:

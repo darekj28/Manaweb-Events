@@ -273,6 +273,17 @@ def mobileCheckPassword():
 	user_manager.closeConnection()
 	return jsonify(output)
 
+@mobile_api.route('/mobileUpdatePassword', methods = ['POST'])
+def mobileUpdatePassword():
+	user_manager = Users()
+	username = request.json['username']
+	password = request.json['password']
+	user_manager.updateInfo(username, 'password', password)
+	user_manager.closeConnection()
+	output = {}
+	output['result'] = 'success'
+	return jsonify(output)
+
 
 # @mobile_api.route('/status/<task_id>')
 # def taskStatus(task_id):
