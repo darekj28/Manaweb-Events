@@ -14067,7 +14067,8 @@
 	                        'small',
 	                        null,
 	                        note.timeString
-	                    )
+	                    ),
+	                    React.createElement('hr', { className: 'notification-hr' })
 	                )
 	            );
 	        }

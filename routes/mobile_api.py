@@ -209,7 +209,7 @@ def mobileMakePost():
 	isTrade		= request.json['isTrade']
 	isPlay 		= request.json['isPlay']
 	isChill		= request.json['isChill']
-	poster_id = request.json['userID']
+	poster_id = request.json['username']
 	comment_id = None
 	feed_name = DEFAULT_FEED		
 	post_manager = Posts()

@@ -129,9 +129,9 @@ class FeedScreen extends Component {
 
         feed.unshift({ 
               postContent: newPostContent, 
-              avatar  : this.state.current_user['avatar_name'], 
-              name    : this.state.current_user['first_name'] + " " + this.state.current_user['last_name'],
-              userID  : this.state.current_user['userID'], 
+              avatar  : this.props.current_user['avatar_name'], 
+              name    : this.props.current_user['first_name'] + " " + this.props.current_user['last_name'],
+              userID  : this.props.current_user['userID'], 
               time  : "just now", 
 
               isTrade : contains(this.state.post_actions, "Trade"),
@@ -151,7 +151,7 @@ class FeedScreen extends Component {
     async handleServerPostSubmit (newPostContent) {
       let url = "https://manaweb-events.herokuapp.com"
       let test_url = "http://0.0.0.0:5000"
-      let response = await fetch(url + "/mobileMakePost", {method: "POST",
+      let response = await fetch(test_url + "/mobileMakePost", {method: "POST",
             headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -160,7 +160,7 @@ class FeedScreen extends Component {
         JSON.stringify(
          {
           postContent : newPostContent,
-          userID : this.state.current_user['userID'],
+          username : this.props.current_user.userID,
           numberOfComments : 0,
           isTrade : contains(this.state.post_actions, "Trade"),
           isPlay  : contains(this.state.post_actions, "Play"),
@@ -170,17 +170,17 @@ class FeedScreen extends Component {
       let responseData = await response.json();
       if (responseData['result'] == 'success') {
         this.setState({newPostContent : ""})
-        this.refreshScreen(false);
+        this.refreshScreen.bind(this)();
       }
       else {
         this.setState({newPostContent: 'failure...'})
       }
     }
 
-  async refreshScreen(initialize) {
+  async refreshScreen() {
     let url = "https://manaweb-events.herokuapp.com"
     let test_url = "http://0.0.0.0:5000"
-    let response = await fetch(url + "/mobileGetPosts", {method: "POST",
+    let response = await fetch(test_url + "/mobileGetPosts", {method: "POST",
           headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -286,7 +286,7 @@ class FeedScreen extends Component {
 
   componentDidMount() {
       this.initializeUserInfo.bind(this)();
-      this.refreshScreen.bind(this)(true);
+      this.refreshScreen.bind(this)();
   }
 
 

@@ -91,7 +91,7 @@ export default class CommentScreen extends React.Component {
 	          	var feed = []
 	          	for (var i = 0; i < responseData['comment_list'].length; i++) {
 	            	var obj = responseData['comment_list'][i]
-	            		feed.unshift({
+	            		feed.push({
 	              		postContent : obj['body'],
 						avatar 		: obj['avatar'],
 						name 		: obj['first_name'] + ' ' + obj['last_name'],

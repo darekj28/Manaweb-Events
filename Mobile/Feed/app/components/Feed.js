@@ -62,6 +62,7 @@ export default class Feed extends Component {
       }
       if ((!doesPostMatchFilter() || !doesPostMatchSearch()) || !doesPostMatchSelectedUser())
         return;
+
       else // if (i < 5)
         rows.push(<FeedBox key={i} post = {post} handleFilterUser={this.props.handleFilterUser}
             image_ID = {i % 3} navigator = {this.props.navigator} current_username = {this.props.current_username}
