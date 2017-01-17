@@ -243,6 +243,22 @@ def mobileGetNotifications():
 	post_manager.closeConnection()
 	return jsonify({ 'notification_list' : notification_list })	
 
+@browser_api.route('/mobileGetNotificationCount', methods=['POST'])
+def mobileGetNotificationCount():
+	userID = request.json['username']
+	post_manager = Posts()
+	count = post_manager.getNotificationCount(userID)
+	post_manager.closeConnection()
+	return jsonify({ 'count' : count })
+
+@mobile_api.route('/mobileSeeNotifications', methods=["POST"])
+def mobileSeeNotifications():
+	userID = request.json['username']
+	post_manager = Posts()
+	post_manager.markNotificationAsSeen(userID)
+	post_manager.closeConnection()
+	return jsonify({'success' : True})
+
 @mobile_api.route('/mobileUpdateSettings', methods=['POST'])
 def mobileUpdateSettings():
 	user_manager = Users()

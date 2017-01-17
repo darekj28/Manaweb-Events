@@ -68,7 +68,6 @@ class MenuScreen extends Component {
           return {color: DEFAULT_COLOR, fontWeight: 'bold', alignSelf: 'center'}
       }
   }
-
   render() {
       return (
           <View style = {styles.container}>

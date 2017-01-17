@@ -7,6 +7,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Notifications from '../components/Notifications'
 
+let url = "https://manaweb-events.herokuapp.com"
+let test_url = "http://0.0.0.0:5000"
 export default class NotificationScreen extends React.Component {
   constructor(props) {
       super(props);
@@ -17,14 +19,12 @@ export default class NotificationScreen extends React.Component {
       AsyncStorage.getItem("current_username").then((value) => {
         if (value) this.setState({ current_username : value })
         this.getNotifications.bind(this)();
-      })
-      .catch((error) => {
+        this.seeNotifications.bind(this)();
+      }).catch((error) => {
         console.log(error);
       });
   }
   getNotifications() {
-      let url = "https://manaweb-events.herokuapp.com"
-      let test_url = "http://0.0.0.0:5000"
       fetch(test_url + "/mobileGetNotifications", 
         {method: "POST",
               headers: {
@@ -52,6 +52,19 @@ export default class NotificationScreen extends React.Component {
           }    
     })
     .catch((error) => {
+      console.log(error);
+    });
+  }
+  seeNotifications() {
+    fetch(test_url + "/mobileSeeNotifications", 
+        {method: "POST",
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username : this.state.current_username })
+        }
+      ).catch((error) => {
       console.log(error);
     });
   }
