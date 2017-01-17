@@ -18,10 +18,6 @@ import psycopg2
 import urllib
 from passlib.hash import argon2
 
-
-			
-	
-
 class Users:
 	# automatically opens the connection
 	def __init__(self):
@@ -188,116 +184,18 @@ class Users:
 			self.udb.execute(update_code)
 
 		self.user_db.commit()
-
-	def addTestUser(self, userID, first_name, last_name, password, email, isActive, avatar_url,
-				 avatar_name, confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
-				  isAdmin = None, phone_number = None, birthMonth = None
-				 ,birthDay = None, birthYear = None, gender = None, confirmed = None):
-		
-		table_name = self.TEST_USER_TABLE
-		if isAdmin == None:
-			isAdmin = False
-		if tradeFilter == None:
-			tradeFilter = False
-		if chillFilter == None:
-			chillFilter = False
-		if playFilter == None:
-			playFilter = False
-
-		if phone_number == None:
-			phone_number = ""
-		if birthDay == None:
-			birthDay = ""
-		if birthMonth == None:
-			birthMonth = ""
-		if birthYear == None:
-			birthYear = ""
-		if gender == None:
-			gender = ""
-
-		# default to true can switch later
-		if confirmed == None:
-			confirmed = True
-
-		timeStamp = time.time()
-		timeString = self.getTimeString()
-		input_properties = {}
-		input_properties['userID'] = userID
-		input_properties['first_name'] = first_name
-		input_properties['last_name'] = last_name
-		input_properties['password'] = password
-		input_properties['email'] = email
-		input_properties['isActive'] = isActive
-		input_properties['avatar_url'] = avatar_url
-		input_properties['avatar_name'] = avatar_name
-		input_properties['confirmationPin'] = confirmationPin
-		input_properties['tradeFilter'] = tradeFilter
-		input_properties['playFilter'] = playFilter
-		input_properties['chillFilter'] = chillFilter
-		input_properties['isAdmin'] = isAdmin
-		input_properties['phone_number'] = phone_number
-		input_properties['birthMonth'] = birthMonth
-		input_properties['birthDay'] = birthDay
-		input_properties['birthYear'] = birthYear
-		input_properties['gender'] = gender
-		input_properties['confirmed'] = confirmed
-
-
-		# if user email or userID doesn't exist create new one
-		if self.getInfo(userID) == None and self.getInfoFromEmail(email) == None:
-			self.udb.execute(self.udb.mogrify("INSERT INTO " + table_name + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
-				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp) \
-				  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
-				(userID.lower(), first_name, last_name, password, email, isActive, avatar_url,
-				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp)))
-
-			action = "ACCOUNT CREATED"
-			self.udb.execute(self.udb.mogrify("INSERT INTO " + "test_user_actions" + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
-				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action) \
-				  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
-				(userID.lower(), first_name, last_name, password, email, isActive, avatar_url,
-				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action)))
-
-		# otherwise simply update information
-		else: 
-			for prop in self.properties:
-				if prop == 'password':
-					hash_password = argon2.using(rounds=4).hash(password)
-					self.updateInfo(userID, prop, hash_password)
-				elif prop != 'userID' and prop != 'password':
-					self.updateInfo(userID, prop, input_properties[prop])
-
-			self.updateInfo(userID, 'timeString', timeString)
-			self.updateInfo(userID, 'timeStamp', timeStamp)
-
-			action = "ACCOUNT SETTINGS CHANGED"
-			update_code = self.udb.mogrify("INSERT INTO " + "test_user_actions" + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
-				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action) \
-				  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
-				(userID.lower(), first_name, last_name, password, email, isActive, avatar_url,
-				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action))
-			self.udb.execute(update_code)
-
-		self.user_db.commit()
-
 		
 	def updateInfo(self, userID, field_name, field_data):
 		table_name  = self.USER_TABLE
-
 		if field_name == 'password':
 			field_data = argon2.using(rounds=4).hash(field_data)
-
 		self.udb.execute(self.udb.mogrify("UPDATE " + table_name  + " SET " + field_name + " = %s WHERE userID = '" + userID + "'", (field_data,)))
 		action = "ACCOUNT " + field_name + " UPDATED"
 		timeStamp = time.time()
 		timeString = self.getTimeString()
-		
-
-
 		if field_name.lower() != 'timestring' and field_name.lower() != 'userid' and field_name.lower() != 'timestamp':
 			self.udb.execute(self.udb.mogrify("INSERT INTO " + self.USER_ACTION_TABLE + " (userID, " + field_name + ", timeString, timeStamp, action) VALUES (%s, %s, %s, %s, %s)", (userID.lower(), field_data, timeString, timeStamp, action)))
 		self.user_db.commit()
-
 
 	def getInfo(self, userID):
 		search_id = userID.lower()
@@ -326,10 +224,6 @@ class Users:
 		timeString = self.getTimeString()
 		self.udb.execute(self.udb.mogrify("INSERT INTO " + self.USER_ACTION_TABLE + " (userID, timeString, timeStamp, action) VALUES (%s, %s, %s, %s)", (userID, timeString, timeStamp, action)))
 
-		
-		
-
-
 	# returns a list of all users
 	def getUserList(self):
 		sql = "SELECT userID FROM " + self.USER_TABLE
@@ -341,7 +235,6 @@ class Users:
 			if userID != "" and userID != None:
 				user_list.append(userID)
 		return user_list
-
 
 	def queryToDict(self, query):
 		user_info = {}
@@ -483,6 +376,17 @@ class Users:
 			else:
 				output['result'] = 'failure'
 				output['error'] = 'Login credentials incorrect.'
+		return output
+
+	def checkPassword(self, userID, password):
+		user_info = self.getInfo(userID)
+		password_match = argon2.verify(password, user_info['password'])
+		output = {}
+		if password_match:
+			output['result'] = 'success'
+		else:
+			output['result'] = 'failure'
+			output['error'] = 'Invalid Password'
 		return output
 
 	def isFacebookUser(self, fb_id):

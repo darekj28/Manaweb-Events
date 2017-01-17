@@ -162,11 +162,9 @@ class SettingsScreen extends Component {
       if (length == 4) {
         new_phone_number = "(" + raw_phone_number.substring(0,3) + ") " + raw_phone_number.substring(3,4)
       }
-
       if (length > 4 && length <= 6) {
         new_phone_number = "(" + raw_phone_number.substring(0,3) + ") " + raw_phone_number.substring(3, length)
       }
-
       if (length > 6) {
         new_phone_number = "(" + raw_phone_number.substring(0,3) + ") " + raw_phone_number.substring(3, 6) + "-" + raw_phone_number.substring(6, length)
       }
@@ -311,15 +309,125 @@ class SettingsScreen extends Component {
     return;
   }
 
-  render() {
+
+  generateFirstNameInput() {
     var first_name_error = this.getErrorMessage.bind(this)('first_name')
+    return (
+          <View style = {styles.input_box}>
+                  <Text style = {styles.instruction_text}>
+                    First Name
+                  </Text>
+                  <TextInput 
+                      style = {styles.input_text}
+                      placeholder = "First Name" 
+                      maxLength = {20}
+                      onChangeText = {this.handleFirstNameChange.bind(this)}
+                      value = {this.state.first_name}
+                  />  
+                   {first_name_error}
+              </View> 
+      )
+  }
+
+  generateLastNameInput(){
     var last_name_error = this.getErrorMessage.bind(this)('last_name')
+    return (
+      <View style = {styles.input_box}>
+                  <Text style = {styles.instruction_text}>
+                    Last Name
+                  </Text>
+                  <TextInput 
+                      style = {styles.input_text}
+                      placeholder = "Last Name" 
+                      maxLength = {20}
+                      onChangeText = {this.handleLastNameChange.bind(this)}
+                      value = {this.state.last_name}
+                  />  
+                  {last_name_error}
+              </View>  
+      )
+  }
+
+  generateEmailInput() {
     var email_error = this.getErrorMessage.bind(this)('email')
+    return(
+        <View style = {styles.input_box}> 
+                <Text style = {styles.instruction_text}>
+                    Email
+                  </Text>
+                 <TextInput
+                  onChangeText = {this.handleEmailChange.bind(this)}
+                  style = {styles.input_text} placeholder = "Email"
+                  value = {this.state.email}
+                />
+                 {email_error}
+          </View>
+      )
+  }
+
+  generatePhoneNumberInput() {
     var phone_number_error = this.getErrorMessage.bind(this)('phone_number')
+    return (
+          <View style = {styles.input_box}> 
+                <Text style = {styles.instruction_text}>
+                    Phone Number
+                  </Text>
+                 <TextInput
+                  onChangeText = {this.handlePhoneNumberChange.bind(this)}
+                  style = {styles.input_text} placeholder = "Phone Number"
+                  value = {this.state.phone_number}
+                  keyboardType = "number-pad"
+                  dataDetectorTypes = "phoneNumber"
+                  maxLength = {14}
+                />
+                 {phone_number_error}
+          </View>
+      )
+  }
+
+  generateAvatarInput() {
     var picker_list = this.generateAvatarPickerList.bind(this)()
     var currentAvatar = this.state.avatar
     var currentAvatarLabel = currentAvatar.charAt(0).toUpperCase() + currentAvatar.slice(1);
     var avatarImage = this.getAvatarImage.bind(this)(this.state.avatar)
+    return (
+               <View style = {styles.avatar_box}>
+                <View style = {styles.avatar_text_column}>
+                <Text style = {styles.avatar_text}> 
+                    Avatar
+                </Text>
+                <TouchableOpacity style = {styles.toggle_picker_row} onPress = {this.togglePicker.bind(this)}>
+                    <Text style = {styles.current_avatar_text}> 
+                      {currentAvatarLabel}
+                     </Text>
+                </TouchableOpacity>
+                </View>
+
+                <View style = {styles.avatar_image_container}>
+                      {avatarImage}
+                </View>
+              </View>
+      )
+  }
+
+  // for some reason this needs to go here
+  listViewRenderRow(input_element){
+    return input_element
+  }
+
+  render() {
+
+    var first_name_input = this.generateFirstNameInput.bind(this)()
+    var last_name_input = this.generateLastNameInput.bind(this)()
+    var email_input = this.generateEmailInput.bind(this)()
+    var phone_number_input = this.generatePhoneNumberInput.bind(this)()
+    var avatar_input = this.generateAvatarInput.bind(this)()
+
+    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    const items = ['first_name', 'last_name', 'email', 'phone_number', 'avatar']
+    var data = [first_name_input, last_name_input, email_input, phone_number_input, avatar_input]
+    var dataSource = ds.cloneWithRows(data)
+    
     return (
         <View style = {styles.container}>
               <Modal 
@@ -356,83 +464,11 @@ class SettingsScreen extends Component {
             </View>
 
 
-              <View style = {styles.input_box}>
-                  <Text style = {styles.instruction_text}>
-                    First Name
-                  </Text>
-                  <TextInput 
-                      style = {styles.input_text}
-                      placeholder = "First Name" 
-                      maxLength = {20}
-                      onChangeText = {this.handleFirstNameChange.bind(this)}
-                      value = {this.state.first_name}
-                  />  
-
-                   {first_name_error}
-              </View> 
-
-              <View style = {styles.input_box}>
-                  <Text style = {styles.instruction_text}>
-                    Last Name
-                  </Text>
-                  <TextInput 
-                      style = {styles.input_text}
-                      placeholder = "Last Name" 
-                      maxLength = {20}
-                      onChangeText = {this.handleLastNameChange.bind(this)}
-                      value = {this.state.last_name}
-                  />  
-                  {last_name_error}
-              </View>   
-
-               <View style = {styles.input_box}> 
-                <Text style = {styles.instruction_text}>
-                    Email
-                  </Text>
-                 <TextInput
-                  onChangeText = {this.handleEmailChange.bind(this)}
-                  style = {styles.input_text} placeholder = "Email"
-                  value = {this.state.email}
+                <ListView
+                  style={styles.list_container}
+                  dataSource={dataSource}
+                  renderRow={this.listViewRenderRow.bind(this)}
                 />
-                 {email_error}
-              </View>
-
-              <View style = {styles.input_box}> 
-                <Text style = {styles.instruction_text}>
-                    Phone Number
-                  </Text>
-                 <TextInput
-                  onChangeText = {this.handlePhoneNumberChange.bind(this)}
-                  style = {styles.input_text} placeholder = "Phone Number"
-                  value = {this.state.phone_number}
-                  keyboardType = "number-pad"
-                  dataDetectorTypes = "phoneNumber"
-                  maxLength = {14}
-                />
-                 {phone_number_error}
-              </View>
-
-              <View style = {styles.avatar_box}>
-                <View style = {styles.avatar_text_column}>
-                <Text style = {styles.avatar_text}> 
-                    Avatar
-                </Text>
-                <TouchableOpacity style = {styles.toggle_picker_row} onPress = {this.togglePicker.bind(this)}>
-                    <Text style = {styles.current_avatar_text}> 
-                      {currentAvatarLabel}
-                     </Text>
-                     {/* <Icon name = "chevron-right" size = {20} style= {styles.toggle_picker} /> */}
-                </TouchableOpacity>
-                </View>
-
-                <View style = {styles.avatar_image_container}>
-                      {avatarImage
-                      }
-                </View>
-                
-
-
-              </View>
 
               <TouchableOpacity 
                 style = {styles.submit_settings_box}
@@ -467,6 +503,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
 
+  list_container: {
+    flex : 0.6,
+    
+  },
+
   back_button :{
     flex : 1,
   },
@@ -498,11 +539,11 @@ const styles = StyleSheet.create({
 
   input_box: {
     flexDirection : "column",
-    flex: 0.1,
     borderColor: "skyblue",
     borderWidth : 1,
     borderRadius : 5,
-    width : winSize.width * 0.95
+    width : winSize.width * 0.95,
+    height: winSize.height * 0.15
     // backgroundColor: "skyblue"
   },
 
@@ -535,12 +576,11 @@ const styles = StyleSheet.create({
 
   avatar_box: {
     flexDirection : "row",
-    flex: 0.1,
     borderColor: "skyblue",
     borderWidth : 1,
     borderRadius : 5,
     width : winSize.width * 0.95,
-
+    height: winSize.height * 0.25
   },
 
   avatar_text_column : {

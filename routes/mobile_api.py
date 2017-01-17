@@ -264,6 +264,15 @@ def mobileUpdateSettings():
 	output['result'] = 'success'
 	return jsonify(output)
 
+@mobile_api.route('/mobileCheckPassword', methods = ['POST'])
+def mobileCheckPassword():
+	user_manager = Users()
+	username = request.json['username']
+	password = request.json['password']
+	output = user_manager.checkPassword(username, password)
+	user_manager.closeConnection()
+	return jsonify(output)
+
 
 # @mobile_api.route('/status/<task_id>')
 # def taskStatus(task_id):
