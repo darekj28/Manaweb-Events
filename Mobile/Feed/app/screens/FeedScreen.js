@@ -328,7 +328,9 @@ class FeedScreen extends Component {
 
            <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
                <View style = {{height: SEARCH_BAR_HEIGHT}}>
-                   <LogoAndSearchBar color = {SEARCH_BAR_COLOR}></LogoAndSearchBar>
+                   <LogoAndSearchBar color = {SEARCH_BAR_COLOR} searchText={this.state.searchText}
+                      onChange={this.handleSearch.bind(this)}>
+                    </LogoAndSearchBar>
                </View>
            </TouchableWithoutFeedback>
 
@@ -344,17 +346,6 @@ class FeedScreen extends Component {
                    </ActivityAndFilterBar>
                </View>
            </TouchableWithoutFeedback>
-
-            <TextInput
-                style = {styles.text_input}
-                autoFocus = {true}
-                multiline = {false}
-                numberOfLines = {1}
-                underlineColorAndroid={"transparent"}
-                onChangeText={this.handleSearch.bind(this)}
-                placeholder={'Search...'}
-                value = {this.state.searchText}
-            />
             <Animated.View style = {{flexDirection:'row', height: this.state.post_message_height}}>
                 <PostMessageBox
                     onClick={(event) => this.postMessagePressed()}
@@ -471,8 +462,7 @@ const styles = StyleSheet.create({
   },
   text_input: {
       flex: 1,
-      fontSize: 20,
-      zIndex : 10000
+      fontSize: 20
   }
 });
 

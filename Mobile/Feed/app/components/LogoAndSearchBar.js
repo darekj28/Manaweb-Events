@@ -25,6 +25,8 @@ export default class LogoAndSearchBar extends Component {
                     <View style = {styles.search_input_wrapper}>
                         <TextInput
                             style = {styles.search_input}
+                            value = {this.props.searchText}
+                            onChangeText={this.props.onChange}
                             autoFocus = {false}
                             multiline = {false}
                             numberOfLines = {1}
@@ -47,7 +49,7 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 25,
         padding: 2,
-        textAlignVertical: 'center',
+        textAlignVertical: 'center'
     },
     search_input_wrapper: {
         flexDirection: 'column',
