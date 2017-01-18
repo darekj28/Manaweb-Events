@@ -16,7 +16,7 @@ import SettingsScreen from './SettingsScreen'
 import NotificationScreen from './NotificationScreen'
 const MENU_ICON_SIZE = 23
 const BOTTOM_BAR_PROPORTION = 0.09
-const HIGHLIGHTED_COLOR = '#8AC1C4'
+const HIGHLIGHTED_COLOR = '#A348A4'
 const DEFAULT_COLOR = 'silver'
 
 var image_res = {
@@ -78,8 +78,8 @@ class MenuScreen extends Component {
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-        }, 
-      body: 
+        },
+      body:
       JSON.stringify(
        {
         username: current_username
@@ -103,7 +103,7 @@ class MenuScreen extends Component {
   handleLogout() {
     AsyncStorage.setItem("current_username", "").then((value) => {
           LoginManager.logOut()
-          this._navigateToHome();  
+          this._navigateToHome();
       });
   }
 
@@ -125,14 +125,14 @@ class MenuScreen extends Component {
                   }
                   { this.state.show_panel2 &&
                   <View style = {{backgroundColor: 'white', flex: 1}}>
-                    <SettingsScreen current_user = {this.state.current_user} 
+                    <SettingsScreen current_user = {this.state.current_user}
                           refreshInfo = {this.initializeUserName.bind(this)}/>
                   </View>
                     }
 
                   { this.state.show_panel3 &&
                   <View style = {{backgroundColor: 'white', flex: 1}}>
-                    <NotificationScreen current_user = {this.state.current_user} 
+                    <NotificationScreen current_user = {this.state.current_user}
                     current_username = {this.state.current_username}
                     navigator={this.props.navigator}/>
                   </View>

@@ -27,9 +27,13 @@ import ModalDropdown from 'react-native-modal-dropdown'; // https://github.com/s
 import PostMessageBox from '../components/PostMessageBox'
 import FeedBox from '../components/FeedBox'
 import Feed from '../components/Feed'
+import LogoAndSearchBar from '../components/LogoAndSearchBar'
+import ActivityAndFilterBar from '../components/ActivityAndFilterBar'
 
+const SEARCH_BAR_HEIGHT = 45
+const SEARCH_BAR_COLOR = "#90D7ED"
 const ACTIVITY_BAR_HEIGHT = 40
-const ACTIVITY_BAR_COLOR = 'black'
+const ACTIVITY_BAR_COLOR = "#2f4f4f"
 const POST_MESSAGE_HEIGHT_SHORT = 50
 const POST_MESSAGE_HEIGHT_TALL = 150
 const ANIMATE_DURATION = 700
@@ -47,9 +51,6 @@ function toggle(collection, item) {
 }
 
 class FeedScreen extends Component {
-  static populateActivities() {
-     return ['SCG Atlanta', 'Activity 2', 'Activity 3', 'Activity 4']
-  }
 
   constructor(props) {
     super(props)
@@ -73,7 +74,6 @@ class FeedScreen extends Component {
     }
     this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
     this.postMessagePressed = this.postMessagePressed.bind(this)
-    this._activities = FeedScreen.populateActivities()
     this.refreshScreen = this.refreshScreen.bind(this);
     this.handlePostSubmit = this.handlePostSubmit.bind(this);
     this.handlePostTyping = this.handlePostTyping.bind(this);
@@ -127,12 +127,12 @@ class FeedScreen extends Component {
       else {
         this.setState({alert : false});
 
-        feed.unshift({ 
-              postContent: newPostContent, 
-              avatar  : this.props.current_user['avatar_name'], 
+        feed.unshift({
+              postContent: newPostContent,
+              avatar  : this.props.current_user['avatar_name'],
               name    : this.props.current_user['first_name'] + " " + this.props.current_user['last_name'],
-              userID  : this.props.current_user['userID'], 
-              time  : "just now", 
+              userID  : this.props.current_user['userID'],
+              time  : "just now",
 
               isTrade : contains(this.state.post_actions, "Trade"),
               isPlay  : contains(this.state.post_actions, "Play"),
@@ -281,7 +281,7 @@ class FeedScreen extends Component {
   initializeUserInfo(){
       this.setState({current_user : this.props.current_user})
       this.setState({current_username : this.props.current_user.userID})
-   
+
   }
 
   componentDidMount() {
@@ -305,50 +305,23 @@ class FeedScreen extends Component {
         <View style = {styles.container}>
 
            <Spinner visible={this.state.loading} textContent= "Loading..." textStyle={{color: '#FFF'}} />
-           
-            <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
-                <ActionBar
-                    backgroundColor={'#3B373C'}
-                    leftIconName={'none'}
-                    title={'Manaweb'}
-                    titleStyle={styles.titleTextLarge}
-                    onTitlePress={this.handleTitlePress}
-                    onRightPress={this.handleRightAction.bind(this)}
-                    onLeftPress = {() => {}}
-                    rightIconName={'menu'}
-                />
-            </TouchableWithoutFeedback>
 
-            {/*
-            <Text>
-              {this.state.post_actions}
-            </Text>
-            */}
+           <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
+               <View style = {{height: SEARCH_BAR_HEIGHT}}>
+                   <LogoAndSearchBar color = {SEARCH_BAR_COLOR}></LogoAndSearchBar>
+               </View>
+           </TouchableWithoutFeedback>
 
-            <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
-                <View style = {styles.containerHorizontal}>
-                    <View style = {{flex: 0.85}}>
-                        <Text style = {styles.activity_text}>
-                            {this._activities[this.state.activity_index]}
-                        </Text>
-                    </View>
+           <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
+               <View style = {{height: SEARCH_BAR_HEIGHT}}>
+                   <ActivityAndFilterBar
+                       color = {ACTIVITY_BAR_COLOR}
+                       activityText = {'Baltimore'}
+                       >
+                   </ActivityAndFilterBar>
+               </View>
+           </TouchableWithoutFeedback>
 
-                    <View style = {{flex: 0.15}}>
-                        <ModalDropdown  style={styles.dropdown_bar}
-                                        defaultIndex={0}
-                                        defaultValue={this._activities[0]}
-                                        dropdownStyle={styles.dropdown_box}
-                                        options={this._activities}
-                                        onSelect={(idx, value) => this.setState({activity_index: idx})}
-                                        renderRow={this._dropdown_renderRow.bind(this)}>
-
-                                        <Image  style={styles.dropdown_image}
-                                                source={dropdownIcon}>
-                                        </Image>
-                        </ModalDropdown>
-                    </View>
-                </View>
-            </TouchableWithoutFeedback>
             <TextInput
                 style = {styles.text_input}
                 autoFocus = {true}
@@ -391,8 +364,8 @@ class FeedScreen extends Component {
                     </Image>
                 </TouchableWithoutFeedback>
             </View>
-            <Feed posts = {this.state.feed} searchText = {this.state.searchText} filters = {this.state.filters} 
-            userIdToFilterPosts={this.state.userIdToFilterPosts} handleFilterUser={this.handleFilterUser.bind(this)} 
+            <Feed posts = {this.state.feed} searchText = {this.state.searchText} filters = {this.state.filters}
+            userIdToFilterPosts={this.state.userIdToFilterPosts} handleFilterUser={this.handleFilterUser.bind(this)}
             current_user = {this.props.current_user}
                 navigator = {this.props.navigator} current_username = {this.props.current_user.userID}/>
         </View>
