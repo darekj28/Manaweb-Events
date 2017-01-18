@@ -103,13 +103,29 @@ class FeedScreen extends Component {
     }
 
     handleFeedFilterPress(index) {
+        var newFilter = this.state.filter_enable
+        var allFeedsWillBeOff = true
+        for (var i = 0; i < newFilter.length; i++) {
+            if (i == index && !newFilter[i]) {
+                allFeedsWillBeOff = false
+            }
+            if (i != index && newFilter[i]) {
+                allFeedsWillBeOff = false
+            }
+        }
+        if (allFeedsWillBeOff) {
+            Alert.alert('Don\'t filter out all the feeds.')
+            return
+        }
+
+        newFilter[index] = !newFilter[index]
+        this.setState({filter_enable: newFilter})
+
         var filters = ['Trade', 'Play', 'Chill']
         var this_filter = filters[index]
         var newFilters = toggle(this.state.filters, this_filter);
         this.setState({filters : newFilters});
-        var newFilter = this.state.filter_enable
-        newFilter[index] = !newFilter[index]
-        this.setState({filter_enable: newFilter})
+
     }
 
     handleSearch(text) {
@@ -352,7 +368,7 @@ class FeedScreen extends Component {
                     >
                 </PostMessageBox>
             </Animated.View>
-            
+
             <Feed posts = {this.state.feed} searchText = {this.state.searchText} filters = {this.state.filters}
             userIdToFilterPosts={this.state.userIdToFilterPosts} handleFilterUser={this.handleFilterUser.bind(this)}
             current_user = {this.props.current_user}
