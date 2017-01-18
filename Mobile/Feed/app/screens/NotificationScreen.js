@@ -72,15 +72,17 @@ export default class NotificationScreen extends React.Component {
     this.initializeUser.bind(this)();
   }
   render() {
-		return (
-			<View style = {styles.container}>
+    return (
+      <View style = {styles.container}>
         <View style = {{borderBottomColor: '#000000', borderBottomWidth: 5}}>
             <Text style={styles.title}>Your Notifications</Text>
         </View>
-        <Notifications notifications={this.state.notifications} username={this.state.current_username} navigator={this.props.navigator}/>
+        <Notifications current_user = {this.props.current_user}
+           current_username = {this.props.current_username}
+          notifications={this.state.notifications} navigator={this.props.navigator}/>
       </View>
-			)
-	}
+      )
+  }
 }
 const styles = StyleSheet.create({
   container: {

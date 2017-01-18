@@ -32,8 +32,10 @@ export default class NotificationBox extends React.Component {
   _navigateToComment() {
     this.props.navigator.push({
       href: "Comment",
-      username : this.props.username,
-      comment_id : this.props.note['comment_id']
+      current_username : this.props.current_username,
+      comment_id : this.props.note['comment_id'],
+      current_user : this.props.current_user
+
     })
   }
 	render() {

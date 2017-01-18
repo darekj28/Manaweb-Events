@@ -19,7 +19,10 @@ export default class Notifications extends React.Component {
             scrollEventThrottle={200}
             onPress={() => {Alert.alert('Scroll clicked')}}>
 				{this.props.notifications.map(function(note, i) {
-					return (<NotificationBox key={i} note={note} username={this.props.username} navigator={this.props.navigator}/>);	
+					return (<NotificationBox key={i} note={note} 
+						current_username = {this.props.current_username} 
+						current_user = {this.props.current_user}
+						navigator = {this.props.navigator}/>);	
 				}, this)}
 			</ScrollView>
 			)

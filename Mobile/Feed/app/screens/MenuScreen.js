@@ -109,7 +109,6 @@ class MenuScreen extends Component {
 
   componentDidMount() {
     this.initializeUserName.bind(this)();
-
   }
 
   render() {
@@ -133,7 +132,9 @@ class MenuScreen extends Component {
 
                   { this.state.show_panel3 &&
                   <View style = {{backgroundColor: 'white', flex: 1}}>
-                    <NotificationScreen navigator={this.props.navigator}/>
+                    <NotificationScreen current_user = {this.state.current_user} 
+                    current_username = {this.state.current_username}
+                    navigator={this.props.navigator}/>
                   </View>
               }
               </View>
