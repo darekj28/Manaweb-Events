@@ -42,8 +42,8 @@ export default class NotificationBox extends React.Component {
 		var note = this.props.note;
 		return(
 			<TouchableWithoutFeedback onPress={this._navigateToComment.bind(this)}>
-				<View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#000000',
-	                borderBottomWidth: 1}}>
+        <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#000000',
+                  borderBottomWidth: 1}}>
                 <View style={{flex: 1, flexDirection:'row', justifyContent: 'flex-start'}}>
 	                <View style={{flex: 1, flexDirection:'row'}}>
 	                    <Text style = {styles.text_message}>

@@ -25,7 +25,7 @@ export default class NotificationScreen extends React.Component {
       });
   }
   getNotifications() {
-      fetch(test_url + "/mobileGetNotifications", 
+      fetch(url + "/mobileGetNotifications", 
         {method: "POST",
               headers: {
                 'Accept': 'application/json',
@@ -56,7 +56,7 @@ export default class NotificationScreen extends React.Component {
     });
   }
   seeNotifications() {
-    fetch(test_url + "/mobileSeeNotifications", 
+    fetch(url + "/mobileSeeNotifications", 
         {method: "POST",
               headers: {
                 'Accept': 'application/json',
