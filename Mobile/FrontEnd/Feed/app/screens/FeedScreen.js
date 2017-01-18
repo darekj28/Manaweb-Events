@@ -24,9 +24,9 @@ import LogoAndSearchBar from '../components/LogoAndSearchBar'
 import ActivityAndFilterBar from '../components/ActivityAndFilterBar'
 
 const SEARCH_BAR_HEIGHT = 45
-const SEARCH_BAR_COLOR = "#5EB75D"
+const SEARCH_BAR_COLOR = "#90D7ED"
 const ACTIVITY_BAR_HEIGHT = 40
-const ACTIVITY_BAR_COLOR = "#6B6054"
+const ACTIVITY_BAR_COLOR = "#2f4f4f"
 const POST_MESSAGE_HEIGHT_SHORT = 50
 const POST_MESSAGE_HEIGHT_TALL = 150
 const ANIMATE_DURATION = 700

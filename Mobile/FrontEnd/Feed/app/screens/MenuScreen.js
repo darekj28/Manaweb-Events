@@ -15,7 +15,7 @@ import FeedScreen from './FeedScreen'
 
 const MENU_ICON_SIZE = 23
 const BOTTOM_BAR_PROPORTION = 0.09
-const HIGHLIGHTED_COLOR = '#8AC1C4'
+const HIGHLIGHTED_COLOR = '#A348A4'
 const DEFAULT_COLOR = 'silver'
 
 var image_res = {
