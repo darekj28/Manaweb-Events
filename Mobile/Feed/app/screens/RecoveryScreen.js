@@ -15,6 +15,9 @@ export default class RecoveryScreen extends React.Component {
 	handleChange(input) {
 		this.setState({ email_or_phone : input });
 	}
+	handleSubmit() {
+
+	}
 	render() {
 		return (
 			<View style={styles.container}>
@@ -26,6 +29,12 @@ export default class RecoveryScreen extends React.Component {
 	                style={styles.input_text}
 	                placeholder="Email or phone number"/>
 	            </View>
+	            <TouchableHighlight style = {styles.submit} onPress = {this.handleSubmit.bind(this)}>
+                	<Text style = {styles.submit_text}>
+                  	Login!
+                	</Text>
+                </TouchableHighlight>
+
 			</View>
 			)
 	}
@@ -49,6 +58,14 @@ const styles = StyleSheet.create({
   },
   input_text :{
     flex: 0.65,
+  },
+  submit : {
+    flex: 0.25,
+  },
+  submit_text : {
+    borderColor : "skyblue",
+    borderWidth : 1,
+    borderRadius : 5,
+    textAlign : "center"
   }
-
 });
