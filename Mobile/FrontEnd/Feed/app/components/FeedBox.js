@@ -108,7 +108,7 @@ export default class FeedBox extends Component {
 
                     <View style={{flex: 1, flexDirection:'row'}}>
                         <Image  style={styles.comments_image} source={otherImages.comments} />
-                        <Text style = {{color: 'mediumseagreen'}}>
+                        <Text style = {{color: '#90D7ED'}}>
                             {5}
                         </Text>
                         <View style = {{flex: 1}}>
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   comments_image: {
       width: COMMENT_HEIGHT,
       height: COMMENT_HEIGHT,
-      tintColor: 'mediumseagreen'
+      tintColor: '#90D7ED'
   },
   dropdown_box: {
     borderColor: 'gray',
@@ -215,6 +215,6 @@ const styles = StyleSheet.create({
   dropdown_image: {
     width: DOT_WIDTH,
     height: DOT_WIDTH / 2,
-    tintColor: 'mediumseagreen',
+    tintColor: '#90D7ED',
   },
 });
