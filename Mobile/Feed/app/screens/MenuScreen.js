@@ -5,6 +5,11 @@
  * @flow
  */
 
+const FBSDK = require('react-native-fbsdk');
+const {
+  LoginManager,
+} = FBSDK;
+
 import React from 'react';
 import {Component} from 'react'
 import {AsyncStorage, AppRegistry,StyleSheet,View,TouchableOpacity,TouchableHighlight,
@@ -107,6 +112,12 @@ class MenuScreen extends Component {
       });
   }
 
+  _navigateToHome(){
+    this.props.navigator.push({
+    href: "Start"
+    })
+  }
+
   componentDidMount() {
     this.initializeUserName.bind(this)();
   }
@@ -126,7 +137,10 @@ class MenuScreen extends Component {
                   { this.state.show_panel2 &&
                   <View style = {{backgroundColor: 'white', flex: 1}}>
                     <SettingsScreen current_user = {this.state.current_user}
-                          refreshInfo = {this.initializeUserName.bind(this)}/>
+                          refreshInfo = {this.initializeUserName.bind(this)}
+                          handleLogout = {this.handleLogout.bind(this)}
+                          navigator = {this.props.navigator}
+                          />
                   </View>
                     }
 

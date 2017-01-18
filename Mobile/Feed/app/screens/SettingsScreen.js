@@ -539,6 +539,21 @@ class SettingsScreen extends Component {
   }
 
 
+  generateLogoutButton(){
+    return (
+      <View style = {styles.input_box}>
+        <TouchableOpacity
+         onPress = {this.props.handleLogout}
+         style = {styles.logout_button}>
+          <Text>
+            Logout!
+          </Text>
+         </TouchableOpacity>
+        </View>
+      )
+  }
+
+
   // for some reason this needs to go here
   listViewRenderRow(input_element){
     return input_element
@@ -567,10 +582,11 @@ class SettingsScreen extends Component {
     var avatar_input = this.generateAvatarInput.bind(this)()
     var password_modal  = this.generatePasswordModal.bind(this)()
     var password_link = this.generatePasswordLink.bind(this)()
+    var logout_button = this.generateLogoutButton.bind(this)()
 
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     var data = [first_name_input, last_name_input, email_input, phone_number_input
-                ,avatar_input, password_link]
+                ,avatar_input, password_link, logout_button]
     var dataSource = ds.cloneWithRows(data)
     return (
         <View style = {styles.container}>
@@ -788,8 +804,11 @@ const styles = StyleSheet.create({
     padding: 20,
     width : winSize.width * 0.95,
     height: winSize.height * 0.10
+  },
 
-  }
+  logout_button: {
+
+  },
 
 
 });
