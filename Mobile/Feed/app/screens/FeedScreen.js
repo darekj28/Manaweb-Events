@@ -52,70 +52,74 @@ function toggle(collection, item) {
 
 class FeedScreen extends Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      filters : ['Trade', 'Play', 'Chill'],
-      filter_enable: [true, true, true],
-      post_actions : [],
-      alert: false,
-      search : '',
-      userIdToFilterPosts : '',
-      activity_index: 0,
-      post_message_expanded: false,
-      post_message_height: new Animated.Value(50),
-      current_username: "",
-      feed: [],
-      current_user: {'userID' : 'not initialized'},
-      newPostContent: "",
-      searchText : "",
-      test: "",
-      loading: true
+    constructor(props) {
+        super(props)
+        this.state = {
+            filters : ['Trade', 'Play', 'Chill'],
+            filter_enable: [true, true, true],
+            post_actions : [],
+            alert: false,
+            search : '',
+            userIdToFilterPosts : '',
+            activity_index: 0,
+            post_message_expanded: false,
+            post_message_height: new Animated.Value(50),
+            current_username: "",
+            feed: [],
+            current_user: {'userID' : 'not initialized'},
+            newPostContent: "",
+            searchText : "",
+            test: "",
+            loading: true
+        }
+        this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
+        this.postMessagePressed = this.postMessagePressed.bind(this)
+        this.refreshScreen = this.refreshScreen.bind(this);
+        this.handlePostSubmit = this.handlePostSubmit.bind(this);
+        this.handlePostTyping = this.handlePostTyping.bind(this);
+        this.handleFilterPress = this.handleFilterPress.bind(this);
+        this.handleServerPostSubmit = this.handleServerPostSubmit.bind(this);
+        this._navigateToHome = this._navigateToHome.bind(this);
+        this.handleRightAction = this.handleRightAction.bind(this)
+
     }
-    this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
-    this.postMessagePressed = this.postMessagePressed.bind(this)
-    this.refreshScreen = this.refreshScreen.bind(this);
-    this.handlePostSubmit = this.handlePostSubmit.bind(this);
-    this.handlePostTyping = this.handlePostTyping.bind(this);
-    this.handleFilterPress = this.handleFilterPress.bind(this);
-    this.handleServerPostSubmit = this.handleServerPostSubmit.bind(this);
-    this._navigateToHome = this._navigateToHome.bind(this);
-    this.handleRightAction = this.handleRightAction.bind(this)
-
-  }
 
 
-  handlePostTyping (newPostContent) {
-    this.setState({newPostContent : newPostContent})
-  }
+    handlePostTyping (newPostContent) {
+        this.setState({newPostContent : newPostContent})
+    }
 
 
-  handleFilterPress(index) {
-      var filters = ['Trade', 'Play', 'Chill']
-      var this_filter = filters[index]
-      var newFilters = toggle(this.state.post_actions, this_filter);
-      this.setState({post_actions : newFilters});
+    handleFilterPress(index) {
+        var filters = ['Trade', 'Play', 'Chill']
+        var this_filter = filters[index]
+        var newFilters = toggle(this.state.post_actions, this_filter);
+        this.setState({post_actions : newFilters});
 
-      // make an alert
-      if (this.state.post_actions.length != 0) this.setState({alert : false});
-    // scroll to top
-    // $('html, body').animate({scrollTop: 0}, 300);
-  }
+        // make an alert
+        if (this.state.post_actions.length != 0) this.setState({alert : false});
+        // scroll to top
+        // $('html, body').animate({scrollTop: 0}, 300);
+    }
+
     handleFeedFilterPress(index) {
-      var filters = ['Trade', 'Play', 'Chill']
-      var this_filter = filters[index]
-      var newFilters = toggle(this.state.filters, this_filter);
-      this.setState({filters : newFilters});
-      var newFilter = this.state.filter_enable
-      newFilter[index] = !newFilter[index]
-      this.setState({filter_enable: newFilter})
+        var filters = ['Trade', 'Play', 'Chill']
+        var this_filter = filters[index]
+        var newFilters = toggle(this.state.filters, this_filter);
+        this.setState({filters : newFilters});
+        var newFilter = this.state.filter_enable
+        newFilter[index] = !newFilter[index]
+        this.setState({filter_enable: newFilter})
     }
+
     handleSearch(text) {
       this.setState({ searchText : text });
     }
+
     handleFilterUser(userIdToFilterPosts) {
       this.setState({ userIdToFilterPosts : userIdToFilterPosts})
     }
+
     // updates feed then sends the post to the server
     handlePostSubmit(newPostContent){
       var feed = this.state.feed;
@@ -317,6 +321,9 @@ class FeedScreen extends Component {
                    <ActivityAndFilterBar
                        color = {ACTIVITY_BAR_COLOR}
                        activityText = {'Baltimore'}
+                       filter_enable = {this.state.filter_enable}
+                       filterText = {this.state.filters}
+                       onFilterChange = {this.handleFeedFilterPress.bind(this)}
                        >
                    </ActivityAndFilterBar>
                </View>
@@ -345,25 +352,7 @@ class FeedScreen extends Component {
                     >
                 </PostMessageBox>
             </Animated.View>
-            <View style = {{flex: 0.85, zIndex :10000, flexDirection:'row'}}>
-                <TouchableWithoutFeedback onPress={() => this.handleFeedFilterPress.bind(this)(0)}>
-                    <Image  style={this.imageStyle.bind(this)(0)}
-                        source={filterIcon1}>
-                    </Image>
-                </TouchableWithoutFeedback>
-
-                <TouchableWithoutFeedback onPress={() => this.handleFeedFilterPress.bind(this)(1)}>
-                    <Image  style={this.imageStyle.bind(this)(1)}
-                        source={filterIcon2}>
-                    </Image>
-                </TouchableWithoutFeedback>
-
-                <TouchableWithoutFeedback onPress={() => this.handleFeedFilterPress.bind(this)(2)}>
-                    <Image  style={this.imageStyle.bind(this)(2)}
-                        source={filterIcon3}>
-                    </Image>
-                </TouchableWithoutFeedback>
-            </View>
+            
             <Feed posts = {this.state.feed} searchText = {this.state.searchText} filters = {this.state.filters}
             userIdToFilterPosts={this.state.userIdToFilterPosts} handleFilterUser={this.handleFilterUser.bind(this)}
             current_user = {this.props.current_user}

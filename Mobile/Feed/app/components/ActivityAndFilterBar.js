@@ -1,11 +1,13 @@
 import React from 'react';
 import {Component} from 'react'
-import { AppRegistry,StyleSheet,Text,View, TextInput, Alert, Image} from 'react-native';
+import { AppRegistry,StyleSheet,Text,View, TextInput, Alert, Image, TouchableHighlight} from 'react-native';
 
 
 var titleIcon = require('./res/logo4.png')
 const FILTER_HEIGHT = 25
 const ACTIVITY_PROPORTION = 0.55
+
+const FILTER_NAMES = ['Trade', 'Play', 'Chill']
 
 var filters = {
     trade: require('./res/icon1.png'),
@@ -20,8 +22,32 @@ export default class LogoAndSearchBar extends Component {
         };
     }
 
-    render() {
+    imageStyle(index) {
+        if (!this.props.filter_enable[index]) {
+            return {
+                height: FILTER_HEIGHT,
+                width: FILTER_HEIGHT,
+                tintColor: '#d9534f'
+            }
+        } else {
+            return {
+                height: FILTER_HEIGHT,
+                width: FILTER_HEIGHT,
+                tintColor : '#5cb85c'
+            }
+        }
+    }
 
+    filterText(index) {
+        if (this.props.filter_enable[index]) {
+            return FILTER_NAMES[index]
+        } else {
+            return ''
+        }
+    }
+
+
+    render() {
         return (
             <View style={{flex:1, flexDirection: 'row', backgroundColor: this.props.color, alignItems:'center'}}>
                 <View style={{flex: ACTIVITY_PROPORTION, margin: 5}}>
@@ -29,26 +55,36 @@ export default class LogoAndSearchBar extends Component {
                         {this.props.activityText}
                     </Text>
                 </View>
+
                 <View style={{flex: 0, flexDirection: 'row'}}>
-                    <View style = {styles.filter_wrapper}>
-                        <Image  style={styles.filter_image} source={filters.trade} />
-                        <Text style = {styles.filter_text}>
-                            {'Trade'}
-                        </Text>
-                    </View>
-                    <View style = {styles.filter_wrapper}>
-                        <Image  style={styles.filter_image} source={filters.play} />
-                        <Text style = {styles.filter_text}>
-                            {'Play'}
-                        </Text>
-                    </View>
-                    <View style = {styles.filter_wrapper}>
-                        <Image  style={styles.filter_image} source={filters.chill} />
-                        <Text style = {styles.filter_text}>
-                            {'Chill'}
-                        </Text>
-                    </View>
+                    <TouchableHighlight onPress={() => this.props.onFilterChange(0)}>
+                        <View style = {styles.filter_wrapper}>
+                            <Image  style={this.imageStyle.bind(this)(0)} source={filters.trade} />
+                            <Text style = {styles.filter_text}>
+                                {this.filterText.bind(this)(0)}
+                            </Text>
+                        </View>
+                    </TouchableHighlight>
+
+                    <TouchableHighlight onPress={() => this.props.onFilterChange(1)}>
+                        <View style = {styles.filter_wrapper}>
+                            <Image  style={this.imageStyle.bind(this)(1)} source={filters.play} />
+                            <Text style = {styles.filter_text}>
+                                {this.filterText.bind(this)(1)}
+                            </Text>
+                        </View>
+                    </TouchableHighlight>
+
+                    <TouchableHighlight onPress={() => this.props.onFilterChange(2)}>
+                        <View style = {styles.filter_wrapper}>
+                            <Image  style={this.imageStyle.bind(this)(2)} source={filters.chill} />
+                            <Text style = {styles.filter_text}>
+                                {this.filterText.bind(this)(2)}
+                            </Text>
+                        </View>
+                    </TouchableHighlight>
                 </View>
+
             </View>
         );
     }
@@ -77,5 +113,6 @@ const styles = StyleSheet.create({
     },
     filter_text: {
       color: 'white',
+      fontSize: 12
     },
 });
