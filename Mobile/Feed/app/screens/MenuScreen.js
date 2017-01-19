@@ -19,6 +19,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import FeedScreen from './FeedScreen'
 import SettingsScreen from './SettingsScreen'
 import NotificationScreen from './NotificationScreen'
+import Spinner from 'react-native-loading-spinner-overlay';
 const MENU_ICON_SIZE = 23
 const BOTTOM_BAR_PROPORTION = 0.09
 const HIGHLIGHTED_COLOR = '#A348A4'
@@ -41,7 +42,8 @@ class MenuScreen extends Component {
         show_panel2: false,
         show_panel3: false,
         current_user : {},
-        current_username : ""
+        current_username : "",
+        isLoading: true
     }
     this._onPanel1Pressed = this._onPanel1Pressed.bind(this)
   }
@@ -95,6 +97,7 @@ class MenuScreen extends Component {
 
       var thisUser = responseData.thisUser;
       this.setState({current_user : thisUser})
+      this.setState({isLoading: false})
     }).done();
   }
 
@@ -140,6 +143,7 @@ class MenuScreen extends Component {
                           refreshInfo = {this.initializeUserName.bind(this)}
                           handleLogout = {this.handleLogout.bind(this)}
                           navigator = {this.props.navigator}
+                          isLoading = {this.state.isLoading}
                           />
                   </View>
                     }

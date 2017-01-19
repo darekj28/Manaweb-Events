@@ -11,10 +11,6 @@ import {TouchaleWithoutFeedback, KeyboardAvoidingView, AsyncStorage, AppRegistry
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-
-
-
-
 class LoginScreen extends Component {
   constructor(props) {
     super(props)
