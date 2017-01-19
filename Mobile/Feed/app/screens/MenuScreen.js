@@ -154,7 +154,7 @@ class MenuScreen extends Component {
               </View>
 
               <View style = {{flex: BOTTOM_BAR_PROPORTION, flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
-                  <TouchableHighlight
+                  <TouchableWithoutFeedback
                       style = {this._imageWrapperStyle(this.state.show_panel1)}
                       onPress={() => this._onPanel1Pressed(true, false, false)}>
                       <View style = {{flex: 1}}>
@@ -163,8 +163,8 @@ class MenuScreen extends Component {
                               {'Home'}
                           </Text>
                       </View>
-                  </TouchableHighlight>
-                  <TouchableHighlight
+                  </TouchableWithoutFeedback>
+                  <TouchableWithoutFeedback
                       style = {this._imageWrapperStyle(this.state.show_panel2)}
                       onPress={() => this._onPanel1Pressed(false, true, false)}>
                       <View style = {{flex: 1}}>
@@ -173,8 +173,8 @@ class MenuScreen extends Component {
                             {'Setting'}
                         </Text>
                     </View>
-                  </TouchableHighlight>
-                  <TouchableHighlight
+                  </TouchableWithoutFeedback>
+                  <TouchableWithoutFeedback
                       style = {this._imageWrapperStyle(this.state.show_panel3)}
                       onPress={() => this._onPanel1Pressed(false, false, true)}>
                       <View style = {{flex: 1}}>
@@ -183,7 +183,7 @@ class MenuScreen extends Component {
                             {'Notification'}
                         </Text>
                     </View>
-                  </TouchableHighlight>
+                  </TouchableWithoutFeedback>
               </View>
           </View>
       );

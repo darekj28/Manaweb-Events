@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {KeyboardAvoidingView, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {TouchaleWithoutFeedback, KeyboardAvoidingView, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -155,11 +155,11 @@ class LoginScreen extends Component {
                 Forgot your password?
               </Text>
 
-              <TouchableHighlight style = {styles.login_submit} onPress = {this.handleLoginSubmit}>
+              <TouchaleWithoutFeedback style = {styles.login_submit} onPress = {this.handleLoginSubmit}>
                 <Text style = {styles.login_submit_text}>
                   Login!
                 </Text>
-              </TouchableHighlight>
+              </TouchaleWithoutFeedback>
 
             </View>
 

@@ -83,13 +83,9 @@ class FeedScreen extends Component {
         this.handleRightAction = this.handleRightAction.bind(this)
 
     }
-
-
     handlePostTyping (newPostContent) {
         this.setState({newPostContent : newPostContent})
     }
-
-
     handleFilterPress(index) {
         var filters = ['Trade', 'Play', 'Chill']
         var this_filter = filters[index]
@@ -101,7 +97,6 @@ class FeedScreen extends Component {
         // scroll to top
         // $('html, body').animate({scrollTop: 0}, 300);
     }
-
     handleFeedFilterPress(index) {
         var newFilter = this.state.filter_enable
         var allFeedsWillBeOff = true
@@ -125,17 +120,13 @@ class FeedScreen extends Component {
         var this_filter = filters[index]
         var newFilters = toggle(this.state.filters, this_filter);
         this.setState({filters : newFilters});
-
     }
-
     handleSearch(text) {
       this.setState({ searchText : text });
     }
-
     handleFilterUser(userIdToFilterPosts) {
       this.setState({ userIdToFilterPosts : userIdToFilterPosts})
     }
-
     // updates feed then sends the post to the server
     handlePostSubmit(newPostContent){
       var feed = this.state.feed;
@@ -143,7 +134,6 @@ class FeedScreen extends Component {
       if (this.state.post_actions.length == 0) {
         this.setState({alert : true});
       }
-
       else {
         this.setState({alert : false});
 
@@ -164,9 +154,6 @@ class FeedScreen extends Component {
           }.bind(this), 1000)
      }
     }
-
-
-
     // sends the post to the server and refreshes the page
     async handleServerPostSubmit (newPostContent) {
       let url = "https://manaweb-events.herokuapp.com"
@@ -197,10 +184,10 @@ class FeedScreen extends Component {
       }
     }
 
-  async refreshScreen() {
-    let url = "https://manaweb-events.herokuapp.com"
-    let test_url = "http://0.0.0.0:5000"
-    let response = await fetch(url + "/mobileGetPosts", {method: "POST",
+  refreshScreen() {
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
+    fetch(url + "/mobileGetPosts", {method: "POST",
           headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -211,8 +198,8 @@ class FeedScreen extends Component {
         feed_name: "BALT"
       })
     })
-    let responseData = await response.json();
-
+    .then((response) => response.json())
+    .then((responseData) => {
     if (responseData['result'] == 'success'){
       this.setState({loading: false})
       if (responseData.post_list.length > 0) {
@@ -235,7 +222,8 @@ class FeedScreen extends Component {
           }
           this.setState({feed: feed})
          }
-    }
+      }
+    }).done()
   }
 
 
