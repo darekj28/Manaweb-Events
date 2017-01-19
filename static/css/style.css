@@ -58,8 +58,8 @@ button.kep-login-facebook:hover{
   padding-top : 8px;
 }
 #Logo {
-  width : 40vw;
-  height : 70vh;
+  width : 35vw;
+  height : 50vh;
 }
 #LoginToggle {
   color : #fff;
@@ -81,10 +81,6 @@ button.kep-login-facebook:hover{
 }
 .app-container {
   padding-top : 65px;
-}
-.navbar-container {
-  padding-left : 20px;
-  padding-right : 20px;
 }
 .register-container {
   padding-top : 130px;
@@ -480,10 +476,6 @@ button.kep-login-facebook:hover{
   }
   #LoginButton {
     border-radius: 0px 0px 4px 4px;
-  }
-  .navbar-container {
-    padding-left : 0px;
-    padding-right : 0px;
   }
   .navbar-default .navbar-nav .open .dropdown-menu > li > a {
     color: var(--main-color);    

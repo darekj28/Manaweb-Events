@@ -12,7 +12,7 @@ export default class LoginNavBar extends React.Component {
 	render() {
 		return (
 			<nav className="navbar navbar-default" role="navigation">
-				  <div className="navbar-container">
+				  <div className="container navbar-container">
 			       		<div className="navbar-header">
 		                 	<div className="navbar-brand navbar-brand-logo">
 		                        <span className="glyphicon glyphicon-home"></span>

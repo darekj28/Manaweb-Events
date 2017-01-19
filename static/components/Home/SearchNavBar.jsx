@@ -31,7 +31,7 @@ export default class SearchNavBar extends React.Component {
 	render() {
 		return (
 			<nav className="navbar navbar-default" role="navigation">
-				<div className="navbar-container">
+				<div className="container navbar-container">
 					<div className="navbar-header">
 						<button type="button" className="SearchNavBarGlyphicon navbar-toggle" 
 										data-toggle="collapse" 
