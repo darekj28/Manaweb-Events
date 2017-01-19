@@ -17,6 +17,7 @@ import CommentScreen from '../screens/CommentScreen'
 import FbCreate from '../screens/register/FbCreate'
 import TestHTTP from '../screens/TestHTTP'
 import SettingsScreen from '../screens/SettingsScreen'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 
@@ -36,39 +37,29 @@ class StartNavigator extends Component {
   }
 
   switch(route.href){
-
-
-
     case "Login":
       return (
-
           <LoginScreen
               {...globalNavigatorProps} 
              />
-
         )
-
     case "Start":
       return (
             <StartScreen
               {...globalNavigatorProps}
             />
         )
-
-
     case "RegisterName":
       return (
         <RegisterName 
           {...globalNavigatorProps} />
         )
-
      case "RegisterPhoneNumber":
       return (
           <RegisterPhoneNumber first_name = {route.first_name} last_name = {route.last_name}
              {...globalNavigatorProps} 
              />
         )
-
     case "RegisterConfirmCode":
       return (
           <RegisterConfirmCode first_name = {route.first_name} last_name = {route.last_name} 
@@ -76,8 +67,6 @@ class StartNavigator extends Component {
              {...globalNavigatorProps} 
              />
         )
-
-  
     case "RegisterPassword":
       return (
           <RegisterPassword first_name = {route.first_name} last_name = {route.last_name} 
@@ -85,7 +74,6 @@ class StartNavigator extends Component {
              {...globalNavigatorProps} 
              />
         )
-
     case "RegisterEmail":
       return (
           <RegisterEmail first_name = {route.first_name} last_name = {route.last_name}
@@ -93,92 +81,66 @@ class StartNavigator extends Component {
              {...globalNavigatorProps} 
              />
         )
-
-
     case "RegisterUsername":
       return (
-
           <RegisterUsername first_name = {route.first_name} last_name = {route.last_name}
            phone_number = {route.phone_number} password = {route.password} email = {route.email}
              {...globalNavigatorProps} 
              />
         )
-
-      {/* We shall see if we still use these
-
-    case "RegisterBirthday":
-      return (
-          <RegisterBirthday first_name = {route.first_name} last_name = {route.last_name} userID = {route.userID} email = {route.email} password = {route.password}
-             {...globalNavigatorProps} 
-             />
-        )
-
-
-    case "RegisterGenderAvatar":
-      return (
-          <RegisterGenderAvatar first_name = {route.first_name} last_name = {route.last_name} userID = {route.userID} email = {route.email} password = {route.password} 
-            birth_month = {route.birth_month} birth_day = {route.birth_day} birth_year = {route.birth_year}
-             {...globalNavigatorProps} 
-             />
-        )
-      */}
-
     case "Settings":
       return (
           <SettingsScreen 
           {...globalNavigatorProps}
           />
         )
-	case "Menu":
+	 case "Menu":
       return (
           <MenuScreen
               {...globalNavigatorProps} 
              />
         )
-  case "Comment":
-    return (
-      <CommentScreen current_username={route.current_username}
-      comment_id={route.comment_id} current_user = {route.current_user}
-      {...globalNavigatorProps}/>
-      )
-  case "FbCreate":
+    case "Comment":
       return (
-          <FbCreate
-              fb_token = {route.fb_token}
-              fb_id = {route.fb_id}
-              {...globalNavigatorProps} 
-             />
-
+        <CommentScreen current_username={route.current_username}
+        comment_id={route.comment_id} current_user = {route.current_user}
+        {...globalNavigatorProps}/>
         )
-
-
+    case "FbCreate":
+        return (
+            <FbCreate
+                fb_token = {route.fb_token}
+                fb_id = {route.fb_id}
+                {...globalNavigatorProps} 
+               />
+          )
    default:
         return (
           <ViewContainer>
           <TouchableOpacity onPress = {() => this.props.navigator.pop()}>
                 <Icon name = "chevron-left" size = {30} />
               </TouchableOpacity>
-
           <Text> {'BRO! DO NOT GO TO THIS ROUTE ${route}'} </Text>
           </ViewContainer>
         )
   }
 }
 
-  async initializeUser(){
-      let value = await AsyncStorage.getItem("current_username")
-      this.setState({current_username : value})
-      this.setState({isLoading : false})
-      return value;
+  initializeUser(){
+      var value = AsyncStorage.getItem("current_username").then((value) => {
+        if (value != null){
+           this.setState({current_username : value})
+            this.setState({isLoading : false})
+        }
+        else {
+          this.setState({current_username : ""})
+          this.setState({isLoading: false})
+        }
+      }).done()
   }
-
-
   componentWillMount() {
-      this.initializeUser()
-      
+      this.initializeUser.bind(this)()   
   }
-
-
   render() {
     var start = ""
     if (this.state.current_username == "" || this.state.current_username == null) {
@@ -187,25 +149,23 @@ class StartNavigator extends Component {
     else {
       start = "Menu"
     }
-
     if (this.state.isLoading) {
       return (
-            <Text textAlignVertical = "center" textAlignHorizontal = "center">
-              Loading still...
-            </Text>
+          <View>
+              <Spinner visible={this.state.isLoading} textContent= "Loading..." textStyle={{color: '#FFF'}} />
+          </View>
         )
     }
-
     else {
-    return (
-      <Navigator 
-      initialRoute = {{href: start}}
-      ref = "appNavigator"
-      style = {styles.navigatorStyles}
-      renderScene = {this._renderScene}
-      configureScene={(route, routeStack) =>
-      Navigator.SceneConfigs.FloatFromBottom}
-      />
+      return (
+        <Navigator 
+        initialRoute = {{href: start}}
+        ref = "appNavigator"
+        style = {styles.navigatorStyles}
+        renderScene = {this._renderScene}
+        configureScene={(route, routeStack) =>
+        Navigator.SceneConfigs.FloatFromBottom}
+        />
    ) 
 
    }  

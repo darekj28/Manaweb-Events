@@ -83,13 +83,9 @@ class FeedScreen extends Component {
         this.handleRightAction = this.handleRightAction.bind(this)
 
     }
-
-
     handlePostTyping (newPostContent) {
         this.setState({newPostContent : newPostContent})
     }
-
-
     handleFilterPress(index) {
         var filters = ['Trade', 'Play', 'Chill']
         var this_filter = filters[index]
@@ -101,7 +97,6 @@ class FeedScreen extends Component {
         // scroll to top
         // $('html, body').animate({scrollTop: 0}, 300);
     }
-
     handleFeedFilterPress(index) {
         var newFilter = this.state.filter_enable
         var allFeedsWillBeOff = true
@@ -117,25 +112,19 @@ class FeedScreen extends Component {
             Alert.alert('Don\'t filter out all the feeds.')
             return
         }
-
         newFilter[index] = !newFilter[index]
         this.setState({filter_enable: newFilter})
-
         var filters = ['Trade', 'Play', 'Chill']
         var this_filter = filters[index]
         var newFilters = toggle(this.state.filters, this_filter);
         this.setState({filters : newFilters});
-
     }
-
     handleSearch(text) {
       this.setState({ searchText : text });
     }
-
     handleFilterUser(userIdToFilterPosts) {
       this.setState({ userIdToFilterPosts : userIdToFilterPosts})
     }
-
     // updates feed then sends the post to the server
     handlePostSubmit(newPostContent){
       var feed = this.state.feed;
@@ -143,7 +132,6 @@ class FeedScreen extends Component {
       if (this.state.post_actions.length == 0) {
         this.setState({alert : true});
       }
-
       else {
         this.setState({alert : false});
 
@@ -164,14 +152,11 @@ class FeedScreen extends Component {
           }.bind(this), 1000)
      }
     }
-
-
-
     // sends the post to the server and refreshes the page
-    async handleServerPostSubmit (newPostContent) {
-      let url = "https://manaweb-events.herokuapp.com"
-      let test_url = "http://0.0.0.0:5000"
-      let response = await fetch(url + "/mobileMakePost", {method: "POST",
+    handleServerPostSubmit (newPostContent) {
+      var url = "https://manaweb-events.herokuapp.com"
+      var test_url = "http://0.0.0.0:5000"
+      fetch(url + "/mobileMakePost", {method: "POST",
             headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -186,21 +171,23 @@ class FeedScreen extends Component {
           isPlay  : contains(this.state.post_actions, "Play"),
           isChill : contains(this.state.post_actions, "Chill"),
         })
-      })
-      let responseData = await response.json();
-      if (responseData['result'] == 'success') {
-        this.setState({newPostContent : ""})
-        this.refreshScreen.bind(this)();
-      }
-      else {
-        this.setState({newPostContent: 'failure...'})
-      }
+      }).then((response) => response.json())
+        .then((responseData) => {
+    
+          if (responseData['result'] == 'success') {
+            this.setState({newPostContent : ""})
+            this.refreshScreen.bind(this)();
+          }
+          else {
+            this.setState({newPostContent: 'failure...'})
+          }
+        }).done()
     }
 
-  async refreshScreen() {
-    let url = "https://manaweb-events.herokuapp.com"
-    let test_url = "http://0.0.0.0:5000"
-    let response = await fetch(url + "/mobileGetPosts", {method: "POST",
+  refreshScreen() {
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
+    fetch(url + "/mobileGetPosts", {method: "POST",
           headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -211,8 +198,8 @@ class FeedScreen extends Component {
         feed_name: "BALT"
       })
     })
-    let responseData = await response.json();
-
+    .then((response) => response.json())
+    .then((responseData) => {
     if (responseData['result'] == 'success'){
       this.setState({loading: false})
       if (responseData.post_list.length > 0) {
@@ -235,24 +222,19 @@ class FeedScreen extends Component {
           }
           this.setState({feed: feed})
          }
-    }
+      }
+    }).done()
+
   }
-
-
   handleTitlePress() {
     Alert.alert('Manaweb is pressed');
   };
-
   handleRightAction() {
-    // Alert.alert('Menu pressed')
     this.props.handleLogout.bind(this)();
   }
-
   selectActivitiesAction() {
-    // Alert.alert('Select which activity')
     this.setState({select_activity: !this.state.select_activity})
   }
-
   postMessagePressed() {
       let initial = this.state.post_message_expanded ? POST_MESSAGE_HEIGHT_TALL : POST_MESSAGE_HEIGHT_SHORT
       let final = this.state.post_message_expanded ? POST_MESSAGE_HEIGHT_SHORT : POST_MESSAGE_HEIGHT_TALL
@@ -272,7 +254,6 @@ class FeedScreen extends Component {
           this.postMessagePressed()
       }
   }
-
   _navigateToHome(){
     this.props.navigator.push({
     href: "Start"
@@ -297,19 +278,15 @@ class FeedScreen extends Component {
             }
         }
     }
-
   initializeUserInfo(){
       this.setState({current_user : this.props.current_user})
       this.setState({current_username : this.props.current_user.userID})
 
   }
-
   componentDidMount() {
       this.initializeUserInfo.bind(this)();
       this.refreshScreen.bind(this)();
   }
-
-
   render() {
     var alert;
     if ((this.state.alert)) {

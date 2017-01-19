@@ -859,7 +859,8 @@ const styles = StyleSheet.create({
     borderRadius : 5,
     width : winSize.width * 0.925,
     height: winSize.height * 0.15
-  }
+  },
+
 
 });
 

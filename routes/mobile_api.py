@@ -182,7 +182,12 @@ def mobileGetPosts():
 	post_list = post_manager.getPosts(feed_name)
 	post_manager.sortAscending(post_list)
 	post_manager.closeConnection()
-	return jsonify({'result' : 'success', 'post_list' : post_list})
+	# modified_post_list = post_list[0:5]
+	# output = {'result' : 'success', 'post_list' : modified_post_list}
+	output = {'result' : 'success', 'post_list' : post_list}
+
+
+	return jsonify(output)
 
 @mobile_api.route('/mobileGetComments', methods = ['POST'])
 def mobileGetComments():
