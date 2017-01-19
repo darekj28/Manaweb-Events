@@ -19,16 +19,20 @@ def validateName(name):
 	length = len(name)
 	output = {}
 	output['result'] = 'success'
-	# we invalidate a name if it contains non letters
-	if not name.isalpha():
-		output['result'] =  'failure'
-		output['error'] = 'Names can only be letters'
+
 
 	# invalidate if the name is 0 letters
-	elif length == 0:
+	if length == 0:
 		output['result'] =  'failure'
 		output['error'] = 'Names cannot be empty'
 
+
+	# we invalidate a name if it contains non letters
+	elif not name.isalpha():
+		output['result'] =  'failure'
+		output['error'] = 'Names can only be letters'
+
+	
 	# invalidate if more than 12 letters
 	elif length > 19:
 		output['result'] =  'failure'
