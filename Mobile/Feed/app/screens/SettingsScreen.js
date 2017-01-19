@@ -279,9 +279,11 @@ class SettingsScreen extends Component {
     var this_validation_output = validation_output_dict[field]
     if (this_validation_output.result != 'success') {
       return (
+                <View style = {styles.error_box}>
                   <Text style = {styles.error_text}>
                        {this_validation_output.error}
                   </Text>
+                  </View>
         )
     }
     else return;
@@ -299,78 +301,7 @@ class SettingsScreen extends Component {
     if (avatar == 'gideon') return (<Image  style={styles.avatar_image} source={require('../static/avatars/gideon.png')} />)
     return;
   }
-  generateFirstNameInput() {
-    var first_name_error = this.getErrorMessage.bind(this)('first_name')
-    return (
-          <View style = {styles.input_box}>
-                  <Text style = {styles.instruction_text}>
-                    First Name
-                  </Text>
-                  <TextInput 
-                      style = {styles.input_text}
-                      placeholder = "First Name" 
-                      maxLength = {20}
-                      onChangeText = {this.handleFirstNameChange.bind(this)}
-                      value = {this.state.first_name}
-                  />  
-                   {first_name_error}
-              </View> 
-      )
-  }
 
-  generateLastNameInput(){
-    var last_name_error = this.getErrorMessage.bind(this)('last_name')
-    return (
-      <View style = {styles.input_box}>
-                  <Text style = {styles.instruction_text}>
-                    Last Name
-                  </Text>
-                  <TextInput 
-                      style = {styles.input_text}
-                      placeholder = "Last Name" 
-                      maxLength = {20}
-                      onChangeText = {this.handleLastNameChange.bind(this)}
-                      value = {this.state.last_name}
-                  />  
-                  {last_name_error}
-              </View>  
-      )
-  }
-  generateEmailInput() {
-    var email_error = this.getErrorMessage.bind(this)('email')
-    return(
-        <View style = {styles.input_box}> 
-                <Text style = {styles.instruction_text}>
-                    Email
-                  </Text>
-                 <TextInput
-                  onChangeText = {this.handleEmailChange.bind(this)}
-                  style = {styles.input_text} placeholder = "Email"
-                  value = {this.state.email}
-                />
-                 {email_error}
-          </View>
-      )
-  }
-  generatePhoneNumberInput() {
-    var phone_number_error = this.getErrorMessage.bind(this)('phone_number')
-    return (
-          <View style = {styles.input_box}> 
-                <Text style = {styles.instruction_text}>
-                    Phone Number
-                  </Text>
-                 <TextInput
-                  onChangeText = {this.handlePhoneNumberChange.bind(this)}
-                  style = {styles.input_text} placeholder = "Phone Number"
-                  value = {this.state.phone_number}
-                  keyboardType = "number-pad"
-                  dataDetectorTypes = "phoneNumber"
-                  maxLength = {14}
-                />
-                 {phone_number_error}
-          </View>
-      )
-  }
   generateAvatarInput() {
     var picker_list = this.generateAvatarPickerList.bind(this)()
     var currentAvatar = this.state.avatar
@@ -646,11 +577,136 @@ class SettingsScreen extends Component {
     )
   }
 
+  generateFirstNameInput() {
+    var first_name_error = this.getErrorMessage.bind(this)('first_name')
+    return (
+          <View style = {styles.input_box}>
+              <View style = {styles.input_top_row}>
+                  <View style = {styles.instruction_box}>
+                    <TextInput style = {styles.instruction_text} editable = {false} value = "First Name"/>
+                  </View>
+                  <View style = {styles.user_input_container}>
+                  <TextInput 
+                      style = {styles.input_text}
+                      placeholder = "First Name" 
+                      maxLength = {20}
+                      onChangeText = {this.handleFirstNameChange.bind(this)}
+                      value = {this.state.first_name}
+                  /> 
+                  </View> 
+                </View>
+                   {first_name_error}
+              </View> 
+      )
+  }
 
+    generateLastNameInput(){
+    var last_name_error = this.getErrorMessage.bind(this)('last_name')
+    return (
+               <View style = {styles.input_box}>
+                  <View style = {styles.input_top_row}>
+                    <View style = {styles.instruction_box}>
+                    <TextInput style = {styles.instruction_text} editable = {false} value = "Last Name"/>
+                    </View>
+
+                    <View style = {styles.user_input_container}>
+                  <TextInput 
+                      style = {styles.input_text}
+                      placeholder = "Last Name" 
+                      maxLength = {20}
+                      onChangeText = {this.handleLastNameChange.bind(this)}
+                      value = {this.state.last_name}
+                  />  
+                  </View>
+                  </View>
+                  {last_name_error}
+              </View>  
+      )
+  }
+  generateEmailInput() {
+    var email_error = this.getErrorMessage.bind(this)('email')
+    return(
+               <View style = {styles.input_box}>
+                  <View style = {styles.input_top_row}>
+                    <View style = {styles.instruction_box}>
+                    <TextInput style = {styles.instruction_text} editable = {false} value = "Email"/>
+                    </View>
+
+                    <View style = {styles.user_input_container}>
+                  <TextInput
+                  onChangeText = {this.handleEmailChange.bind(this)}
+                  style = {styles.input_text} placeholder = "Email"
+                  value = {this.state.email}
+                />
+                  </View>
+                  </View>
+                  {email_error}
+              </View>  
+      )
+  }
+  generatePhoneNumberInput() {
+    var phone_number_error = this.getErrorMessage.bind(this)('phone_number')
+    return (
+               <View style = {styles.input_box}>
+                  <View style = {styles.input_top_row}>
+                    <View style = {styles.instruction_box}>
+                    <TextInput style = {styles.instruction_text} editable = {false} value = "Phone Number"/>
+                    </View>
+
+                    <View style = {styles.user_input_container}>
+                  <TextInput
+                  onChangeText = {this.handlePhoneNumberChange.bind(this)}
+                  style = {styles.input_text} placeholder = "Phone Number"
+                  value = {this.state.phone_number}
+                  keyboardType = "number-pad"
+                  dataDetectorTypes = "phoneNumber"
+                  maxLength = {14}
+                />
+                  </View>
+                  </View>
+                  {phone_number_error}
+              </View>  
+      )
+  }
 }
+
 
 let winSize = Dimensions.get('window')
 const styles = StyleSheet.create({
+  input_box :{ 
+    flexDirection : "column",
+    width : winSize.width * 0.925,
+    height: winSize.height * 0.15,
+    borderRadius : 5,
+    borderColor: "skyblue",
+    padding: 5,
+    borderWidth : 2
+  },
+  input_top_row : {
+    flexDirection: "row",
+    flex: 0.5,
+    backgroundColor: "skyblue"
+  },
+  instruction_box: {
+    flex : 0.4,
+    flexDirection: "column",
+    padding : 5
+
+  },
+  instruction_text : {
+      flex: 1
+  },
+  user_input_container:{
+    flex: 0.6,
+    backgroundColor : "coral",
+    flexDirection: "column"
+
+  },
+  input_text: {
+    flex: 1,
+    padding : 5
+
+  },
  container: {
     flex: 1,
     flexDirection : "column",
@@ -660,85 +716,75 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     alignItems: 'flex-start'
   },
-
-
   top_bar : {
     flex : 0.1,
     flexDirection : "row",
     justifyContent: "space-around",
   },
-
   list_container: {
     flex : 0.6,
-    
   },
-
   back_button :{
     flex : 1,
   },
-
   back_button_text: {
-
   },
-
   logo: {
     flex : 1,
     textAlign: "center"
   },
-
   cog_box: {
     flex:1,
     flexDirection : "row",
     justifyContent : "flex-end"
   },
-  // cog : {
+  // instruction_box :{
+  //   flex : 0.3,
+  // },
+  // instruction_text : {
+  //   fontSize : 16
   // },
 
-  instruction_box :{
-    flex : 0.075,
-  },
-
-  instruction_text : {
-    fontSize : 16
-  },
-
-  input_box: {
-    flexDirection : "column",
-    borderColor: "skyblue",
-    borderWidth : 1,
-    borderRadius : 5,
-    width : winSize.width * 0.95,
-    height: winSize.height * 0.15
-    // backgroundColor: "skyblue"
-  },
-
-  input_text :{
-    flex: 0.65,
-  },
-
+  // input_box: {
+  //   flexDirection : "column",
+  //   borderColor: "skyblue",
+  //   borderWidth : 1,
+  //   borderRadius : 5,
+  //   width : winSize.width * 0.95,
+  //   height: winSize.height * 0.15,
+  //   justifyContent: "flex-start"
+  //   // backgroundColor: "skyblue"
+  // },
+  // input_text :{
+  //   flex: 0.6,
+  //   backgroundColor: "coral",
+  //   padding : 8,
+  //   alignSelf: "flex-start"
+  // },
+  // input_top_row: {
+  //   flexDirection: "row",
+  //   flex : 0.5,
+  //   // backgroundColor: "skyblue"
+  // },
   clear_button : {
     flex: 0.05,
     justifyContent: "center"
   },
-
   error_box : {
-    flex: 0.05,
-    flexDirection : "column"
+    flex: 0.5,
+    flexDirection : "row",
+    backgroundColor: "teal"
   },
-
   error_text : {
-
+    color : "red"
   },
-
   submit_settings_box : {
     flex:  0.1, 
     flexDirection : "column",
     justifyContent: "center",
   },
-
   submit_settings_text : {
   },
-
   avatar_box: {
     flexDirection : "row",
     borderColor: "skyblue",
@@ -747,45 +793,36 @@ const styles = StyleSheet.create({
     width : winSize.width * 0.95,
     height: winSize.height * 0.25
   },
-
   avatar_text_column : {
     flex : 0.5
   },
-
   avatar_row: {
     flexDirection : "row",
     flex: 0.5
   },
-
   toggle_picker_row : {
     flexDirection : "row",
     flex: 0.5
   },
-
   toggle_picker : {
     flex : 1
   },
-
   current_avatar_text: {
     flex: 1
   },
-
   avatar_image_container : {
     flex : 0.5,
     padding : 10,
   },
-
   avatar_text: {
     flex: 0.5
   },
-
   avatar_image : {
     flex: 1,
     width : null,
     height : null,
     resizeMode : "contain"
   },
-
   password_box: {
     flexDirection : "column",
     borderColor: "skyblue",
@@ -796,7 +833,6 @@ const styles = StyleSheet.create({
     height: winSize.height * 0.25
     // backgroundColor: "skyblue"
   },
-
   password_modal_button : {
     borderColor: "skyblue",
     borderWidth : 1,
@@ -805,12 +841,8 @@ const styles = StyleSheet.create({
     width : winSize.width * 0.95,
     height: winSize.height * 0.10
   },
-
   logout_button: {
-
   },
-
-
 });
 
 module.exports = SettingsScreen

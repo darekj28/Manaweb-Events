@@ -6,7 +6,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {ScrollView, Alert, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {Image, ScrollView, Alert, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 
 import ViewContainer from '../../components/ViewContainer';
 import HomeStatusBar from '../../components/HomeStatusBar';
@@ -122,11 +122,10 @@ export default class RegisterName extends Component {
     else if (this.state.first_name_validation_output.error != "" && this.state.first_name_validation_output != null) {
       error_message = this.state.first_name_validation_output.error
     } 
-
-    if (this.state.first_name == "" || this.state.last_name == "") {
-      error_message = "Names must not be blank!"
+    else if (this.state.first_name == "" && this.state.last_name == "") {
+      error_message = ""
+      // error_message = "Names must not be blank!"
     }
-
     if (!(error_message == "" || error_message == null)) {
       return (
               <Text style = {styles.error_text}>
@@ -134,9 +133,7 @@ export default class RegisterName extends Component {
               </Text>
         )
     }
-
-    else return ;
-      
+    else return null; 
   }
 
   render() {
@@ -149,14 +146,18 @@ export default class RegisterName extends Component {
                 <Icon name = "chevron-left" size = {20}/>
               </TouchableOpacity>
 
-              <Text style = {styles.logo}> 
-                Logo
-              </Text> 
+              <Image
+                style={styles.logo}
+                source={require('../../static/favicon-32x32.png')}
+              />
+             
 
               <View style = {styles.cog_box}>
                 <Icon name = "cog" size = {20} style = {styles.cog}/> 
               </View>
-            </View>
+          </View>
+
+          <View style = {styles.small_padding}/>
 
             <View style = {styles.instruction_box}> 
               <Text style = {styles.instruction_text}>
@@ -164,60 +165,73 @@ export default class RegisterName extends Component {
               </Text>
             </View>
 
-            <View style = {styles.input_box}> 
-              <TextInput
-                  onChangeText = {this.handleFirstNameChange}
-                  style = {styles.input_text} placeholder = "First Name"
+            <View style = {styles.name_row}>
+              <View style = {styles.input_box}> 
+                <TextInput
+                    onChangeText = {this.handleFirstNameChange}
+                    style = {styles.input_text} placeholder = "First Name"
+                    maxLength = {20}
+                    value = {this.state.first_name}
+                  />
+
+                { this.state.first_name != "" &&
+                <View style = {styles.clear_button}>
+                  <Icon name = "close" size = {20} onPress = {this.clearFirstName.bind(this)}/>
+                </View>
+                }
+                
+              </View>
+
+              <View style = {styles.col_padding}/>
+
+              <View style = {styles.input_box}> 
+                
+                <TextInput
+                  onChangeText = {this.handleLastNameChange}
+                  style = {styles.input_text} placeholder = "Last Name"
                   maxLength = {20}
-                  value = {this.state.first_name}
-                />
+                  value = {this.state.last_name}
+                  />
+                
+                { this.state.last_name != "" &&
+                <View style = {styles.clear_button}>
+                  <Icon name = "close" size = {20} onPress = {this.clearLastName.bind(this)}/>
+                </View>
+                }
 
-              { this.state.first_name != "" &&
-              <View style = {styles.clear_button}>
-                <Icon name = "close" size = {20} onPress = {this.clearFirstName.bind(this)}/>
               </View>
-              }
-              
             </View>
 
-            <View style = {styles.input_box}> 
-              
-              <TextInput
-                onChangeText = {this.handleLastNameChange}
-                style = {styles.input_text} placeholder = "Last Name"
-                maxLength = {20}
-                value = {this.state.last_name}
-                />
-              
-              { this.state.last_name != "" &&
-              <View style = {styles.clear_button}>
-                <Icon name = "close" size = {20} onPress = {this.clearLastName.bind(this)}/>
-              </View>
-              }
+            <View style = {styles.small_padding}/>
 
-            </View>
 
-            <View style = {styles.error_box}>
+            
+           { error_message != null &&
+              <View style = {styles.error_box}>
                 {error_message}
             </View>
+          }
 
-            <View style = {styles.padding} />
+          {error_message != null &&
+            <View style = {styles.small_padding}/>
+          }
 
+            
 
-
-            <View style = {styles.bottom_bar}>
-
-              <Text style = {styles.recovery_text}>
-                {/* Forgot your password? */}
-              </Text>
-
+            <View style = {styles.next_button}>
               <TouchableHighlight style = {styles.next} onPress = {this._navigateToRegisterPhoneNumber.bind(this)}>
                 <Text style = {styles.next_text}>
                   Next!
                 </Text>
               </TouchableHighlight>
-
             </View>
+
+
+            <View style = {styles.padding} />
+
+
+
+            
 
           </View>
       
@@ -235,14 +249,15 @@ const styles = StyleSheet.create({
     padding : 10,
     paddingTop: 40,
     backgroundColor: "white",
-    alignItems: 'flex-start'
   },
 
 
   top_bar : {
-    flex : 0.1,
+    flex : 0.05,
     flexDirection : "row",
     justifyContent: "space-around",
+    // backgroundColor: "coral",
+    alignItems: "center"
   },
 
   back_button :{
@@ -255,7 +270,7 @@ const styles = StyleSheet.create({
 
   logo: {
     flex : 1,
-    textAlign: "center"
+    resizeMode: "contain"
   },
 
   cog_box: {
@@ -271,7 +286,7 @@ const styles = StyleSheet.create({
   },
 
   instruction_text : {
-    fontSize : 16
+    fontSize : 24
   },
 
   input_box: {
@@ -285,24 +300,27 @@ const styles = StyleSheet.create({
 
   input_text :{
     flex: 0.65,
+    padding: 5
   },
 
   clear_button : {
-    flex: 0.05,
+    flex: 0.1,
     justifyContent: "center"
   },
 
   error_box : {
     flex: 0.05,
-    flexDirection : "column"
+    flexDirection : "column",
   },
 
   error_text : {
-
+    color : "red",
+    fontSize : 20,
+    alignSelf: "center"
   },
 
   padding : {
-    flex: 0.60,
+    flex: 0.45,
     backgroundColor : "white"
   },
 
@@ -318,17 +336,33 @@ const styles = StyleSheet.create({
     flex: 0.75
   },
 
-  next : {
-    flex: 0.25,
-
+  next_button : {
+    flex: 0.075,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   next_text : {
     borderColor : "skyblue",
     borderWidth : 1,
     borderRadius : 5,
+    padding: 8,
     textAlign : "center"
   },
+
+  name_row: {
+    flexDirection: "row",
+    flex : 0.075,
+  },
+
+  small_padding : {
+    flex : 0.025,
+  },
+
+  col_padding: {
+    flex: 0.0015
+  }
 
 });
 
