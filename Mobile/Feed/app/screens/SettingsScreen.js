@@ -326,6 +326,96 @@ class SettingsScreen extends Component {
               </View>
       )
   }
+    generateFirstNameInput() {
+    var first_name_error = this.getErrorMessage.bind(this)('first_name')
+    return (
+          <View style = {styles.input_box}>
+              <View style = {styles.input_top_row}>
+                  <View style = {styles.instruction_box}>
+                    <TextInput style = {styles.instruction_text} editable = {false} value = "First Name"/>
+                  </View>
+                  <View style = {styles.user_input_container}>
+                  <TextInput 
+                      style = {styles.input_text}
+                      placeholder = "First Name" 
+                      maxLength = {20}
+                      onChangeText = {this.handleFirstNameChange.bind(this)}
+                      value = {this.state.first_name}
+                  /> 
+                  </View> 
+                </View>
+                   {first_name_error}
+              </View> 
+      )
+  }
+    generateLastNameInput(){
+    var last_name_error = this.getErrorMessage.bind(this)('last_name')
+    return (
+               <View style = {styles.input_box}>
+                  <View style = {styles.input_top_row}>
+                    <View style = {styles.instruction_box}>
+                    <TextInput style = {styles.instruction_text} editable = {false} value = "Last Name"/>
+                    </View>
+
+                    <View style = {styles.user_input_container}>
+                  <TextInput 
+                      style = {styles.input_text}
+                      placeholder = "Last Name" 
+                      maxLength = {20}
+                      onChangeText = {this.handleLastNameChange.bind(this)}
+                      value = {this.state.last_name}
+                  />  
+                  </View>
+                  </View>
+                  {last_name_error}
+              </View>  
+      )
+  }
+  generateEmailInput() {
+    var email_error = this.getErrorMessage.bind(this)('email')
+    return(
+               <View style = {styles.input_box}>
+                  <View style = {styles.input_top_row}>
+                    <View style = {styles.instruction_box}>
+                    <TextInput style = {styles.instruction_text} editable = {false} value = "Email"/>
+                    </View>
+
+                    <View style = {styles.user_input_container}>
+                  <TextInput
+                  onChangeText = {this.handleEmailChange.bind(this)}
+                  style = {styles.input_text} placeholder = "Email"
+                  value = {this.state.email}
+                />
+                  </View>
+                  </View>
+                  {email_error}
+              </View>  
+      )
+  }
+  generatePhoneNumberInput() {
+    var phone_number_error = this.getErrorMessage.bind(this)('phone_number')
+    return (
+               <View style = {styles.input_box}>
+                  <View style = {styles.input_top_row}>
+                    <View style = {styles.instruction_box}>
+                    <TextInput style = {styles.instruction_text} editable = {false} value = "Phone Number"/>
+                    </View>
+
+                    <View style = {styles.user_input_container}>
+                  <TextInput
+                  onChangeText = {this.handlePhoneNumberChange.bind(this)}
+                  style = {styles.input_text} placeholder = "Phone Number"
+                  value = {this.state.phone_number}
+                  keyboardType = "number-pad"
+                  dataDetectorTypes = "phoneNumber"
+                  maxLength = {14}
+                />
+                  </View>
+                  </View>
+                  {phone_number_error}
+              </View>  
+      )
+  }
   validateOldPassword(old_password) {
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
@@ -472,11 +562,11 @@ class SettingsScreen extends Component {
 
   generateLogoutButton(){
     return (
-      <View style = {styles.input_box}>
+      <View style = {styles.logout_box}>
         <TouchableOpacity
          onPress = {this.props.handleLogout}
          style = {styles.logout_button}>
-          <Text>
+          <Text style = {styles.logout_text}>
             Logout!
           </Text>
          </TouchableOpacity>
@@ -575,98 +665,6 @@ class SettingsScreen extends Component {
               </TouchableOpacity>    
           </View> 
     )
-  }
-
-  generateFirstNameInput() {
-    var first_name_error = this.getErrorMessage.bind(this)('first_name')
-    return (
-          <View style = {styles.input_box}>
-              <View style = {styles.input_top_row}>
-                  <View style = {styles.instruction_box}>
-                    <TextInput style = {styles.instruction_text} editable = {false} value = "First Name"/>
-                  </View>
-                  <View style = {styles.user_input_container}>
-                  <TextInput 
-                      style = {styles.input_text}
-                      placeholder = "First Name" 
-                      maxLength = {20}
-                      onChangeText = {this.handleFirstNameChange.bind(this)}
-                      value = {this.state.first_name}
-                  /> 
-                  </View> 
-                </View>
-                   {first_name_error}
-              </View> 
-      )
-  }
-
-    generateLastNameInput(){
-    var last_name_error = this.getErrorMessage.bind(this)('last_name')
-    return (
-               <View style = {styles.input_box}>
-                  <View style = {styles.input_top_row}>
-                    <View style = {styles.instruction_box}>
-                    <TextInput style = {styles.instruction_text} editable = {false} value = "Last Name"/>
-                    </View>
-
-                    <View style = {styles.user_input_container}>
-                  <TextInput 
-                      style = {styles.input_text}
-                      placeholder = "Last Name" 
-                      maxLength = {20}
-                      onChangeText = {this.handleLastNameChange.bind(this)}
-                      value = {this.state.last_name}
-                  />  
-                  </View>
-                  </View>
-                  {last_name_error}
-              </View>  
-      )
-  }
-  generateEmailInput() {
-    var email_error = this.getErrorMessage.bind(this)('email')
-    return(
-               <View style = {styles.input_box}>
-                  <View style = {styles.input_top_row}>
-                    <View style = {styles.instruction_box}>
-                    <TextInput style = {styles.instruction_text} editable = {false} value = "Email"/>
-                    </View>
-
-                    <View style = {styles.user_input_container}>
-                  <TextInput
-                  onChangeText = {this.handleEmailChange.bind(this)}
-                  style = {styles.input_text} placeholder = "Email"
-                  value = {this.state.email}
-                />
-                  </View>
-                  </View>
-                  {email_error}
-              </View>  
-      )
-  }
-  generatePhoneNumberInput() {
-    var phone_number_error = this.getErrorMessage.bind(this)('phone_number')
-    return (
-               <View style = {styles.input_box}>
-                  <View style = {styles.input_top_row}>
-                    <View style = {styles.instruction_box}>
-                    <TextInput style = {styles.instruction_text} editable = {false} value = "Phone Number"/>
-                    </View>
-
-                    <View style = {styles.user_input_container}>
-                  <TextInput
-                  onChangeText = {this.handlePhoneNumberChange.bind(this)}
-                  style = {styles.input_text} placeholder = "Phone Number"
-                  value = {this.state.phone_number}
-                  keyboardType = "number-pad"
-                  dataDetectorTypes = "phoneNumber"
-                  maxLength = {14}
-                />
-                  </View>
-                  </View>
-                  {phone_number_error}
-              </View>  
-      )
   }
 }
 
@@ -829,7 +827,7 @@ const styles = StyleSheet.create({
     borderWidth : 1,
     borderRadius : 5,
     padding: 20,
-    width : winSize.width * 0.95,
+    width : winSize.width * 0.925,
     height: winSize.height * 0.25
     // backgroundColor: "skyblue"
   },
@@ -838,11 +836,31 @@ const styles = StyleSheet.create({
     borderWidth : 1,
     borderRadius : 5,
     padding: 20,
-    width : winSize.width * 0.95,
+    width : winSize.width * 0.925,
     height: winSize.height * 0.10
   },
   logout_button: {
+    backgroundColor: "orange",
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center"
+
   },
+  logout_text: {
+    fontSize: 36,
+    textAlign: "center",
+    textAlignVertical: "center"
+  },
+  logout_box: {
+    flexDirection: "row",
+    borderColor: "skyblue",
+    borderWidth : 1,
+    borderRadius : 5,
+    width : winSize.width * 0.925,
+    height: winSize.height * 0.15
+  }
+
 });
 
 module.exports = SettingsScreen
