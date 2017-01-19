@@ -59,8 +59,11 @@ class Posts:
 
 
 	def getTimeString(self, timeStamp):
-		res = time.strftime("%I:%M%p - %B %d, %Y", time.gmtime(timeStamp))
-		return res.lstrip("0")
+		clock = time.strftime("%I:%M%p", time.gmtime(timeStamp))
+		month = time.strftime("%B", time.gmtime(timeStamp))[:3]
+		day = time.strftime("%d", time.gmtime(timeStamp))
+		year = time.strftime("%Y", time.gmtime(timeStamp))
+		return clock.lstrip("0") + " - " + day + " " + month + " " + year 
 	# generates a random id
 	def id_generator(self, size=6, chars=string.ascii_uppercase + string.digits):
 		return ''.join(random.choice(chars) for _ in range(size))
