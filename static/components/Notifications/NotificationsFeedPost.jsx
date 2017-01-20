@@ -9,7 +9,7 @@ export default class NotificationsFeedPost extends React.Component {
         }
         else {
             whose = note.op_name + "'s";
-            also = "also";
+            also = " also";
         }
         if (note.numOtherPeople > 1)
             notification = note.sender_name + " and " + 
@@ -18,7 +18,7 @@ export default class NotificationsFeedPost extends React.Component {
             notification = note.sender_name + 
                 " and 1 other person commented on " + whose + " post."
         else 
-            notification = note.sender_name + " " + also + " commented on " + whose + " post."
+            notification = note.sender_name + also + " commented on " + whose + " post."
         return notification;
     }
 	render() {
