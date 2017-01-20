@@ -119,37 +119,39 @@ class FeedScreen extends Component {
         this.setState({filters : newFilters});
     }
     handleSearch(text) {
-      this.setState({ searchText : text });
+        this.setState({ searchText : text });
     }
     handleFilterUser(userIdToFilterPosts) {
-      this.setState({ userIdToFilterPosts : userIdToFilterPosts})
+        if (userIdToFilterPosts == this.state.userIdToFilterPosts) 
+            this.setState({userIdToFilterPosts : ""});
+        else this.setState({ userIdToFilterPosts : userIdToFilterPosts});
     }
     // updates feed then sends the post to the server
     handlePostSubmit(newPostContent){
-      var feed = this.state.feed;
+        var feed = this.state.feed;
 
-      if (this.state.post_actions.length == 0) {
-        this.setState({alert : true});
-      }
-      else {
-        this.setState({alert : false});
+        if (this.state.post_actions.length == 0) {
+          this.setState({alert : true});
+        }
+        else {
+          this.setState({alert : false});
 
-        feed.unshift({
-              postContent: newPostContent,
-              avatar  : this.props.current_user['avatar_name'],
-              name    : this.props.current_user['first_name'] + " " + this.props.current_user['last_name'],
-              userID  : this.props.current_user['userID'],
-              time  : "just now",
+          feed.unshift({
+                postContent: newPostContent,
+                avatar  : this.props.current_user['avatar_name'],
+                name    : this.props.current_user['first_name'] + " " + this.props.current_user['last_name'],
+                userID  : this.props.current_user['userID'],
+                time  : "just now",
 
-              isTrade : contains(this.state.post_actions, "Trade"),
-              isPlay  : contains(this.state.post_actions, "Play"),
-              isChill : contains(this.state.post_actions, "Chill"),
-              numberOfComments : 0,
-            });
-        setTimeout(function (){
-          this.handleServerPostSubmit(newPostContent);
-          }.bind(this), 1000)
-     }
+                isTrade : contains(this.state.post_actions, "Trade"),
+                isPlay  : contains(this.state.post_actions, "Play"),
+                isChill : contains(this.state.post_actions, "Chill"),
+                numberOfComments : 0,
+              });
+          setTimeout(function (){
+            this.handleServerPostSubmit(newPostContent);
+            }.bind(this), 1000)
+        }    
     }
     // sends the post to the server and refreshes the page
     handleServerPostSubmit (newPostContent) {
