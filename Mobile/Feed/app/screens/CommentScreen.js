@@ -147,26 +147,30 @@ export default class CommentScreen extends React.Component {
 	render() {
 		return (
 			<View style = {styles.container}>
-              <TouchableOpacity onPress = {() => this.props.navigator.pop()}>
-                <Icon name = "chevron-left" size = {30} />
-              </TouchableOpacity>
-              <CommentBox comment={this.state.original_post} isOriginalPost={true}/> 
-              <MakeCommentBox onClick={(event) => this.postMessagePressed.bind(this)()}
+				<View style = {styles.topbar}>
+	              	<TouchableOpacity onPress = {() => this.props.navigator.pop()}>
+	                	<Icon name = "chevron-left" size = {20} />
+	              	</TouchableOpacity>
+	            </View>
+              	<CommentBox comment={this.state.original_post} isOriginalPost={true}/> 
+              	<MakeCommentBox onClick={(event) => this.postMessagePressed.bind(this)()}
              		animateDuration={ANIMATE_DURATION}
                     post_message_expanded={this.state.post_message_expanded}
                     newPostContent = {this.state.newPostContent}
                     handlePostTyping = {this.handlePostTyping.bind(this)}
                     handlePostSubmit = {this.handleCommentSubmit.bind(this)}/>
-              <Comments comments={this.state.comments} comment_id={this.props.comment_id}/>
+              	<Comments comments={this.state.comments} comment_id={this.props.comment_id}/>
             </View>
 			);
 	}
 }
 const styles = StyleSheet.create({
-  container: {
-    flex:1,
-    justifyContent: 'flex-start',
-    padding : 10,
-    paddingTop: 40
-  }
+    container: {
+      	flex:1,
+      	justifyContent: 'flex-start',
+      	paddingTop: 40
+    },
+    topbar : {
+    	padding : 10
+    }
 });

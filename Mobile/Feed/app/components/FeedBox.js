@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
         color: '#90D7ED',
         fontSize: 14,
         fontWeight: 'bold',
-        textAlignVertical: 'top',
+        textAlignVertical: 'top'
     },
     text_userID: {
         flex: 0,
@@ -228,5 +228,5 @@ const styles = StyleSheet.create({
         tintColor: '#90D7ED',
         marginRight : 6,
         marginTop : 2
-    },
+    }
 });
