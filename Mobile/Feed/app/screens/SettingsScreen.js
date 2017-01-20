@@ -627,12 +627,7 @@ class SettingsScreen extends Component {
                   </Text>
                 </TouchableHighlight>
               </Modal>
-
               {password_modal}
-
-
-
-
             <View style = {styles.top_bar}>
               <TouchableOpacity style = {styles.back_button}
                 // onPress = {() => this.props.navigator.pop()}
@@ -648,14 +643,11 @@ class SettingsScreen extends Component {
                 <Icon name = "cog" size = {20} style = {styles.cog}/> 
               </View>
             </View>
-
-
                 <ListView
                   style={styles.list_container}
                   dataSource={dataSource}
                   renderRow={this.listViewRenderRow.bind(this)}
                 />
-
               <TouchableOpacity 
                 style = {styles.submit_settings_box}
                 onPress = {this.submitNewSettings.bind(this)}>

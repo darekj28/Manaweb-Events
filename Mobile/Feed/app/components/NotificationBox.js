@@ -38,42 +38,69 @@ export default class NotificationBox extends React.Component {
 
     })
   }
+
+  // removes year
+  trimTimeString(string){
+    var len = string.length
+    var trimString = string.substring(0, len - 6)
+    return trimString
+
+  }
+
 	render() {
 		var note = this.props.note;
+    var container_style;
+    if (note.seen) container_style = styles.notification_container;
+    else container_style = styles.unseen_notification_container;
+    // this will let us change the style if 
 		return(
 			<TouchableWithoutFeedback onPress={this._navigateToComment.bind(this)}>
-        <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#000000',
-                  borderBottomWidth: 1}}>
-                <View style={{flex: 1, flexDirection:'row', justifyContent: 'flex-start'}}>
-	                <View style={{flex: 1, flexDirection:'row'}}>
+            <View style = {container_style}>
 	                    <Text style = {styles.text_message}>
 	                        {this.getNotificationSyntax.bind(this)(note)} 
 	                    </Text>
 	                     <Text style = {styles.text_time}>
-	                        {note.timeString}
+	                        {this.trimTimeString(note.timeString)}
 	                    </Text>
-	                </View>
-                  </View>
 	            </View>
-            </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
 			);
 	}
 }
 const styles = StyleSheet.create({
+  notification_container :{
+    flexDirection : "row",
+    flex:1,
+    justifyContent: 'flex-start', 
+    borderBottomColor: '#000000',
+    borderBottomWidth: 1
+  },
   text_time: {
-      flex: 1,
+      flex: .33,
       fontSize: 16,
       textAlignVertical: 'top',
       marginLeft: 4,
-      marginTop: 6,
-      color: 'silver'
+      marginTop: 8,
+      marginBottom: 8,
+      color: 'silver',
+      padding : 8
   },
   text_message: {
-    flex: 1,
+    flex: 0.67,
     fontSize: 16,
     textAlignVertical: 'top',
-    marginLeft: 16,
-    marginBottom : 30,
-    color : '#353D41'
+    marginLeft: 4,
+    marginTop : 8,
+    marginBottom : 8,
+    color : '#353D41',
+    padding: 8
+  },
+  unseen_notification_container: {
+    flexDirection : "row",
+    flex:1,
+    justifyContent: 'flex-start', 
+    borderBottomColor: '#000000',
+    borderBottomWidth: 1,
+    backgroundColor : "coral"
   }
 });

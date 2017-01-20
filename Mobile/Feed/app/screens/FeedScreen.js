@@ -243,11 +243,6 @@ class FeedScreen extends Component {
       // this.props.refreshScreen();
   }
 
-  componentDidUpdate(){
-      if (this.props.feed.length > 10 && this.props.spinnerLoading){
-         this.props.hideSpinner()
-      }
-   }
 
   render() {
     var alert;

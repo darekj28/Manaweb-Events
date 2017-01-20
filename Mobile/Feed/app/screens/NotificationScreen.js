@@ -45,7 +45,8 @@ export default class NotificationScreen extends React.Component {
                     isOP : obj['isOP'],
                     numOtherPeople : obj['numOtherPeople'],
                     sender_name : obj['sender_name'],
-                    op_name : obj['op_name']
+                    op_name : obj['op_name'],
+                    seen : obj['seen']
                 })
               }
               this.setState({notifications: feed})
