@@ -4,9 +4,9 @@ import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHig
         TouchableWithoutFeedback, Alert, Image, Animated} from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
 
-const PROFILE_HEIGHT = 40
-const PROFILE_WIDTH = 40
-const COMMENT_HEIGHT = 30
+const PROFILE_HEIGHT = 50
+const PROFILE_WIDTH = 50
+const COMMENT_HEIGHT = 25
 const DOT_WIDTH = 30
 const DROP_DOWN_OPTIONS = ['Report Post']
 
@@ -85,24 +85,23 @@ export default class FeedBox extends Component {
                     </View>
 
                     <View style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-start'}}>
-                        <View style={{flex: 1, height: PROFILE_HEIGHT, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                            <TouchableHighlight onPress={this.handleFilterUser.bind(this)}>
-                                <Text style = {styles.text_name}>
-                                    {post.name}
+                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
+                            <View style={{flex : 1, height : 40, flexDirection: 'row', justifyContent : 'flex-start', flexWrap : 'wrap', 
+                                        paddingLeft : 4, paddingBottom : 20}}>
+                                <TouchableHighlight onPress={this.handleFilterUser.bind(this)}>
+                                    <Text style = {styles.text_name}>
+                                        {post.name}
+                                    </Text>
+                                </TouchableHighlight>
+                                <Text style = {styles.text_userID}>
+                                    @{post.userID}
                                 </Text>
-                            </TouchableHighlight>
-
-                            <Text style = {styles.text_userID}>
-                                @{post.userID}
-                            </Text>
-                            <Text style = {styles.text_userID}>
-                                &#8226; {post.time}
-                            </Text>
-
-                            <View style={{flex: 1}}>
+                                <Text style = {styles.text_userID}>
+                                    &#8226; {post.time}
+                                </Text>
                             </View>
 
-                            <View style={{flex: 0, margin: 1, flexDirection: 'row'}}>
+                            <View style={{flex: 0, margin: 1, paddingTop : 3, paddingRight : 3, flexDirection: 'row'}}>
                                 { post.isTrade &&
                                     <Image  style={styles.feed_filter_image} source={otherImages.filter1} />
                                 }
@@ -119,9 +118,9 @@ export default class FeedBox extends Component {
                             {post.postContent}
                         </Text>
 
-                        <View style={{flex: 1, flexDirection:'row'}}>
+                        <View style={{flex: 1, paddingLeft : 4, flexDirection:'row'}}>
                             <Image  style={styles.comments_image} source={otherImages.comments} />
-                            <Text style = {{color: '#90D7ED'}}>
+                            <Text style = {{color: '#90D7ED', fontSize : 12, marginTop : 2}}>
                                 {post.numberOfComments}
                             </Text>
                             <View style = {{flex: 1}}>
@@ -153,22 +152,22 @@ export default class FeedBox extends Component {
 const styles = StyleSheet.create({
     text_name: {
         flex: 0,
-        color: '#333333',
-        fontSize: 18,
+        color: '#90D7ED',
+        fontSize: 15,
         fontWeight: 'bold',
         textAlignVertical: 'top',
-        marginLeft: 4,
-        marginRight: 4,
         marginTop: 2
     },
     text_userID: {
         flex: 0,
-        fontSize: 18,
+        fontSize: 15,
         textAlignVertical: 'top',
         marginTop: 2,
+        color : '#333333',
+        paddingLeft : 4
     },
     text_feed_type: {
-        fontSize: 16,
+        fontSize: 15,
         flex: 0,
         textAlignVertical: 'top',
         color: 'silver',
@@ -180,10 +179,12 @@ const styles = StyleSheet.create({
         marginLeft: 2,
     },
     text_message: {
-        fontSize: 18,
+        fontSize: 15,
         textAlignVertical: 'top',
-        marginLeft: 4,
-        flex: 0.8
+        flex: 0.8,
+        paddingBottom : 20,
+        paddingLeft : 4,
+        color : "#333333"
     },
     profile_image: {
         width: PROFILE_WIDTH,
@@ -193,13 +194,12 @@ const styles = StyleSheet.create({
         marginLeft: 4
     },
     feed_filter_image: {
-        width: 20,
-        height: 20,
+        width: 16,
+        height: 16,
         borderWidth: 1,
-        padding: 3,
+        padding: 4,
         borderColor: '#333333',
-        marginTop: 2,
-        tintColor: 'green'
+        tintColor: '#333333'
     },
     comments_image: {
         width: COMMENT_HEIGHT,
@@ -230,5 +230,7 @@ const styles = StyleSheet.create({
         width: DOT_WIDTH,
         height: DOT_WIDTH / 2,
         tintColor: '#90D7ED',
+        marginRight : 3,
+        marginTop : 3
     },
 });
