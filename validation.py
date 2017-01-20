@@ -47,8 +47,6 @@ def validatePhoneNumber(phone_number):
 	for char in phone_number:
 		if char.isdigit():
 			raw_phone_number = raw_phone_number + char
-		else:
-			isSuccess = False
 	if len(raw_phone_number) == 10:
 		if raw_phone_number[0] == "1" or raw_phone_number[3] == "1":
 			isSuccess = False
@@ -63,17 +61,16 @@ def validatePhoneNumber(phone_number):
 			isSuccess = False
 	elif len(raw_phone_number) != 10 and len(raw_phone_number) != 11:
 		isSuccess = False
-
 	if isSuccess == False:
 		output['result'] = 'failure'
 		output['error'] = 'Invalid phone number.'
-
 	user_manager = Users()
 	this_user = user_manager.getInfoFromPhoneNumber(raw_phone_number)
 	user_manager.closeConnection()
 	if this_user != None:
 		output['result'] = 'failure'
 		output['error'] = 'This phone number is already registered.'
+	print(output)
 	return output
 
 
