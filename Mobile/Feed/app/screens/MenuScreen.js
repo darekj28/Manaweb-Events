@@ -1,15 +1,7 @@
-
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 const FBSDK = require('react-native-fbsdk');
 const {
   LoginManager,
 } = FBSDK;
-
 import React from 'react';
 import {Component} from 'react'
 import {AsyncStorage, AppRegistry,StyleSheet,View,TouchableOpacity,TouchableHighlight,
@@ -20,6 +12,7 @@ import FeedScreen from './FeedScreen'
 import SettingsScreen from './SettingsScreen'
 import NotificationScreen from './NotificationScreen'
 import Spinner from 'react-native-loading-spinner-overlay';
+import IconBadge from 'react-native-icon-badge';
 const MENU_ICON_SIZE = 23
 const BOTTOM_BAR_PROPORTION = 0.09
 const HIGHLIGHTED_COLOR = '#A348A4'
@@ -47,6 +40,8 @@ class MenuScreen extends Component {
         feedLoading : true,
         spinnerLoading: true,
         feed : [],
+        notifications: [],
+        numUnseenNotifications: 0
     }
     this._onPanel1Pressed = this._onPanel1Pressed.bind(this)
   }
@@ -102,7 +97,7 @@ class MenuScreen extends Component {
       this.setState({current_user : thisUser})
       this.setState({userLoading: false})
       if (initialize) {
-        this.refreshScreen.bind(this)()
+        this.refreshScreen.bind(this)(true)
       }
     }).done();
   }
@@ -135,7 +130,7 @@ class MenuScreen extends Component {
       this.setState({spinnerLoading : false})
   }
 
-  refreshScreen() {
+  refreshScreen(initialize) {
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
     fetch(url + "/mobileGetPosts", {method: "POST",
@@ -172,9 +167,53 @@ class MenuScreen extends Component {
             })
           }
           this.setState({feed: feed})
+          if (initialize){
+            this.getNotifications.bind(this)()
+          }
          }
       }
     }).done()
+  }
+
+  getNotifications() {
+    const url = "https://manaweb-events.herokuapp.com"
+    const test_url = "http://0.0.0.0:5000"
+      fetch(url + "/mobileGetNotifications", 
+        {method: "POST",
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username : this.state.current_username })
+        }
+      ).then((response) => response.json())
+      .then((responseData) => {
+        var numUnseenNotifications = 0;
+        if (responseData.notification_list.length > 0) {
+              var notifications = []
+              for (var i = 0; i < responseData['notification_list'].length; i++) {
+                var obj = responseData['notification_list'][i]
+                  notifications.unshift({
+                    comment_id : obj['comment_id'],
+                    timeString : obj['timeString'],
+                    isOP : obj['isOP'],
+                    numOtherPeople : obj['numOtherPeople'],
+                    sender_name : obj['sender_name'],
+                    op_name : obj['op_name'],
+                    seen : obj['seen']
+                })
+                  if (!obj['seen']){
+                    numUnseenNotifications++;
+                  }
+              }
+              this.setState({notifications: notifications})
+              this.setState({numUnseenNotifications : numUnseenNotifications})
+
+          }    
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   }
 
 
@@ -222,7 +261,11 @@ class MenuScreen extends Component {
                   <View style = {{backgroundColor: 'white', flex: 1}}>
                     <NotificationScreen current_user = {this.state.current_user}
                     current_username = {this.state.current_username}
-                    navigator={this.props.navigator}/>
+                    navigator={this.props.navigator}
+                    notifications = {this.state.notifications}
+                    getNotifications = {this.getNotifications.bind(this)}
+                    numUnseenNotifications = {this.state.numUnseenNotifications}
+                    />
                   </View>
               }
               </View>
@@ -252,7 +295,18 @@ class MenuScreen extends Component {
                       style = {this._imageWrapperStyle(this.state.show_panel3)}
                       onPress={() => this._onPanel1Pressed(false, false, true)}>
                       <View style = {{flex: 1}}>
-                        <Image  style={this._imageStyle(this.state.show_panel3)} source={image_res.notification} />
+                      {this.state.numUnseenNotifications == 0
+                         ? 
+                        <Image  style= {this._imageStyle(this.state.show_panel3)} source={image_res.notification}/>
+                        :
+                        <IconBadge
+                          MainElement={<Image  style= {this._imageStyle(this.state.show_panel3)} source={image_res.notification}/>}
+                           BadgeElement={<Text style={{color:'#FFFFFF'}}> {this.state.numUnseenNotifications} </Text>}
+                           IconBadgeStyle = {styles.notification_badge}
+                          />
+                        }
+
+                              
                         <Text style = {this._textStyle(this.state.show_panel3)}>
                             {'Notification'}
                         </Text>
@@ -268,7 +322,12 @@ const styles = StyleSheet.create({
   container: {
     flex:1,
     justifyContent: 'flex-start',
-  }
+  },
+  notification_badge : {
+    alignSelf: "center",
+  },
+
+
 });
 
 module.exports = MenuScreen

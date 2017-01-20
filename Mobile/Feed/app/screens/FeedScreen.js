@@ -175,7 +175,7 @@ class FeedScreen extends Component {
     
           if (responseData['result'] == 'success') {
             this.setState({newPostContent : ""})
-            this.refreshScreen.bind(this)();
+            this.props.refreshScreen(true);
           }
           else {
             this.setState({newPostContent: 'failure...'})

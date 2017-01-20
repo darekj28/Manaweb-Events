@@ -15,47 +15,7 @@ export default class NotificationScreen extends React.Component {
       this.state = {current_username : '',
                   notifications : []};
   }
-  initializeUser(){
-      AsyncStorage.getItem("current_username").then((value) => {
-        if (value) this.setState({ current_username : value })
-        this.getNotifications.bind(this)();
-        this.seeNotifications.bind(this)();
-      }).catch((error) => {
-        console.log(error);
-      });
-  }
-  getNotifications() {
-      fetch(url + "/mobileGetNotifications", 
-        {method: "POST",
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username : this.state.current_username })
-        }
-      ).then((response) => response.json())
-      .then((responseData) => {
-        if (responseData.notification_list.length > 0) {
-              var feed = []
-              for (var i = 0; i < responseData['notification_list'].length; i++) {
-                var obj = responseData['notification_list'][i]
-                  feed.unshift({
-                    comment_id : obj['comment_id'],
-                    timeString : obj['timeString'],
-                    isOP : obj['isOP'],
-                    numOtherPeople : obj['numOtherPeople'],
-                    sender_name : obj['sender_name'],
-                    op_name : obj['op_name'],
-                    seen : obj['seen']
-                })
-              }
-              this.setState({notifications: feed})
-          }    
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  }
+
   seeNotifications() {
     fetch(url + "/mobileSeeNotifications", 
         {method: "POST",
@@ -63,14 +23,21 @@ export default class NotificationScreen extends React.Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username : this.state.current_username })
+            body: JSON.stringify({ username : this.props.current_username })
         }
-      ).catch((error) => {
+      ).then((value) =>{
+        // console.log("notifications seen")
+        // nothing needed to do here
+      })
+      .catch((error) => {
       console.log(error);
     });
   }
   componentDidMount() {
-    this.initializeUser.bind(this)();
+    this.seeNotifications.bind(this)();
+  }
+  componentWillUnmount() {
+    this.props.getNotifications();
   }
   render() {
     return (
@@ -80,7 +47,7 @@ export default class NotificationScreen extends React.Component {
         </View>
         <Notifications current_user = {this.props.current_user}
            current_username = {this.props.current_username}
-          notifications={this.state.notifications} navigator={this.props.navigator}/>
+          notifications={this.props.notifications} navigator={this.props.navigator}/>
       </View>
       )
   }

@@ -8,5 +8,6 @@ npm install —-save react-native-facebook-login
 npm install —-save react-native-fbsdk
 npm install react-native-modal-picker --save
 npm install --save react-native-loading-spinner-overlay@latest
+npm install --save react-native-icon-badge
 
 react-native run-ios
