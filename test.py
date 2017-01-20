@@ -27,7 +27,7 @@ post_manager = Posts()
 security_manager = Security()
 # user_manager.deleteUser('drd')
 
-fb_users = user_manager.getFacebookUsers()
+# fb_users = user_manager.getFacebookUsers()
 # user_list = user_manager.getUserList()
 
 
@@ -36,7 +36,10 @@ fb_users = user_manager.getFacebookUsers()
 # user_manager.deleteUser('lily')
 # security_manager.createRecovery()
 # post_manager.deleteNotifications()
-user_manager.deleteUser("uglybro")
+
+user_manager.deleteUser("brobro")
+print(user_manager.getUserList())
+
 # feed_name = "BALT"
 # post_manager.recalculateLastPostTable(feed_name)
 # post_manager.recalculateUnseenPosts(feed_name)

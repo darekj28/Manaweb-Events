@@ -217,6 +217,7 @@ class Users:
 		return output_table
 
 	def deleteUser(self, userID):
+		userID = userID.lower()
 		table_name = self.USER_TABLE
 		self.udb.execute("DELETE FROM " + table_name + " WHERE userID = %s", (userID,))
 		action = "USER " + userID + " DELETED"
