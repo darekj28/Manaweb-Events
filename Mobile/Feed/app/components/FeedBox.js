@@ -86,8 +86,8 @@ export default class FeedBox extends Component {
 
                     <View style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-start'}}>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                            <View style={{flex : 1, height : 40, flexDirection: 'row', justifyContent : 'flex-start', flexWrap : 'wrap', 
-                                        paddingLeft : 4, paddingBottom : 20}}>
+                            <View style={{flex : 1, height : 50, flexDirection: 'row', justifyContent : 'flex-start', flexWrap : 'wrap', 
+                                        paddingLeft : 8, paddingBottom : 20, paddingTop : 8}}>
                                 <TouchableHighlight onPress={this.handleFilterUser.bind(this)}>
                                     <Text style = {styles.text_name}>
                                         {post.name}
@@ -101,7 +101,7 @@ export default class FeedBox extends Component {
                                 </Text>
                             </View>
 
-                            <View style={{flex: 0, margin: 1, paddingTop : 3, paddingRight : 3, flexDirection: 'row'}}>
+                            <View style={{flex: 0, margin: 1, paddingTop : 8, paddingRight : 6, flexDirection: 'row'}}>
                                 { post.isTrade &&
                                     <Image  style={styles.feed_filter_image} source={otherImages.filter1} />
                                 }
@@ -114,11 +114,11 @@ export default class FeedBox extends Component {
                             </View>
                         </View>
 
-                        <Text style = {styles.text_message} numberOfLines={5}>
+                        <Text style = {styles.text_message} numberOfLines={6}>
                             {post.postContent}
                         </Text>
 
-                        <View style={{flex: 1, paddingLeft : 4, flexDirection:'row'}}>
+                        <View style={{flex: 1, paddingLeft : 8, flexDirection:'row'}}>
                             <Image  style={styles.comments_image} source={otherImages.comments} />
                             <Text style = {{color: '#90D7ED', fontSize : 12, marginTop : 2}}>
                                 {post.numberOfComments}
@@ -153,50 +153,46 @@ const styles = StyleSheet.create({
     text_name: {
         flex: 0,
         color: '#90D7ED',
-        fontSize: 15,
+        fontSize: 14,
         fontWeight: 'bold',
         textAlignVertical: 'top',
-        marginTop: 2
     },
     text_userID: {
         flex: 0,
-        fontSize: 15,
+        fontSize: 14,
         textAlignVertical: 'top',
-        marginTop: 2,
         color : '#333333',
         paddingLeft : 4
     },
     text_feed_type: {
-        fontSize: 15,
+        fontSize: 14,
         flex: 0,
         textAlignVertical: 'top',
         color: 'silver',
         borderColor: 'silver',
         borderWidth: 2,
         borderRadius: 1,
-        marginTop: 1,
-        marginRight: 3,
-        marginLeft: 2,
     },
     text_message: {
-        fontSize: 15,
+        fontSize: 14,
         textAlignVertical: 'top',
         flex: 0.8,
         paddingBottom : 20,
-        paddingLeft : 4,
+        paddingLeft : 8,
+        paddingRight : 8,
         color : "#333333"
     },
     profile_image: {
         width: PROFILE_WIDTH,
         height: PROFILE_HEIGHT,
-        borderRadius: 2,
-        marginTop: 4,
-        marginLeft: 4
+        borderRadius: 4,
+        marginTop: 8,
+        marginLeft: 8
     },
     feed_filter_image: {
-        width: 16,
-        height: 16,
-        borderWidth: 1,
+        width: 14,
+        height: 14,
+        borderWidth: 0,
         padding: 4,
         borderColor: '#333333',
         tintColor: '#333333'
@@ -230,7 +226,7 @@ const styles = StyleSheet.create({
         width: DOT_WIDTH,
         height: DOT_WIDTH / 2,
         tintColor: '#90D7ED',
-        marginRight : 3,
-        marginTop : 3
+        marginRight : 6,
+        marginTop : 2
     },
 });
