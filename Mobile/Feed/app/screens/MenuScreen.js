@@ -43,7 +43,10 @@ class MenuScreen extends Component {
         show_panel3: false,
         current_user : {},
         current_username : "",
-        isLoading: true
+        userLoading: true,
+        feedLoading : true,
+        spinnerLoading: true,
+        feed : [],
     }
     this._onPanel1Pressed = this._onPanel1Pressed.bind(this)
   }
@@ -78,7 +81,7 @@ class MenuScreen extends Component {
       }
   }
 
-  initializeUserInformation(current_username){
+  initializeUserInformation(current_username, initialize){
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
     fetch(url + "/mobileGetCurrentUserInfo", {method: "POST",
@@ -97,15 +100,22 @@ class MenuScreen extends Component {
 
       var thisUser = responseData.thisUser;
       this.setState({current_user : thisUser})
-      this.setState({isLoading: false})
+      this.setState({userLoading: false})
+      if (initialize) {
+        this.refreshScreen.bind(this)()
+      }
     }).done();
   }
 
-  initializeUserName(){
+  initialize(){
     AsyncStorage.getItem("current_username").then((current_username) => {
       this.setState({current_username: current_username});
-      this.initializeUserInformation.bind(this)(current_username)
+      this.initializeUserInformation.bind(this)(current_username, true)
     })
+  }
+
+  refreshInfo() {
+    this.initializeUserInformation.bind(this)(this.state.current_username, false)
   }
 
   handleLogout() {
@@ -121,26 +131,86 @@ class MenuScreen extends Component {
     })
   }
 
+  hideSpinner(){
+      this.setState({spinnerLoading : false})
+  }
+
+  refreshScreen() {
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
+    fetch(url + "/mobileGetPosts", {method: "POST",
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      body:
+      JSON.stringify(
+       {
+        feed_name: "BALT"
+      })
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+    if (responseData['result'] == 'success'){
+      this.setState({feedLoading: false})
+      if (responseData.post_list.length > 0) {
+          var feed = []
+          for (var i = 0; i < responseData['post_list'].length; i++) {
+            var obj = responseData['post_list'][i]
+            feed.unshift({
+              postContent : obj['body'],
+              avatar    : obj['avatar'],
+              name    : obj['first_name'] + ' ' + obj['last_name'],
+              userID    : obj['poster_id'],
+              time      : obj['time'],
+              isTrade   : obj['isTrade'],
+              isPlay    : obj['isPlay'],
+              isChill   : obj['isChill'],
+              comment_id  : obj['comment_id'],
+              unique_id   : obj['unique_id'],
+              numberOfComments : obj['numComments']
+            })
+          }
+          this.setState({feed: feed})
+         }
+      }
+    }).done()
+  }
+
+
+  componentDidUpdate(){
+      if (this.state.feed.length > 10 && this.state.spinnerLoading){
+         this.hideSpinner.bind(this)()
+      }
+   }
+
   componentDidMount() {
-    this.initializeUserName.bind(this)();
+    this.initialize.bind(this)();
   }
 
   render() {
+      console.log("Spinner loading state : " + this.state.spinnerLoading)
+      var isLoading = (this.state.userLoading || this.state.feedLoading)
       return (
           <View style = {styles.container}>
+              <Spinner visible={this.state.spinnerLoading} textContent= "Loading..." textStyle={{color: '#FFF'}} />
               <View style = {{flex: 1 - BOTTOM_BAR_PROPORTION, flexDirection:'row'}}>
-                  { this.state.show_panel1 &&
+                  { (this.state.show_panel1) && 
                       <View style = {{flex: 1}}>
                           <FeedScreen navigator={this.props.navigator}
                                 current_user = {this.state.current_user}
                                 handleLogout = {this.handleLogout.bind(this)}
+                                refreshScreen = {this.refreshScreen.bind(this)}
+                                feed = {this.state.feed}
+                                spinnerLoading = {this.state.spinnerLoading}
+                                hideSpinner = {this.hideSpinner.bind(this)}
                             />
                       </View>
                   }
                   { this.state.show_panel2 &&
                   <View style = {{backgroundColor: 'white', flex: 1}}>
                     <SettingsScreen current_user = {this.state.current_user}
-                          refreshInfo = {this.initializeUserName.bind(this)}
+                          refreshInfo = {this.refreshInfo.bind(this)}
                           handleLogout = {this.handleLogout.bind(this)}
                           navigator = {this.props.navigator}
                           isLoading = {this.state.isLoading}

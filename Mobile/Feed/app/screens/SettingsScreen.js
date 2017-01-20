@@ -222,7 +222,7 @@ class SettingsScreen extends Component {
     if (canSubmit) {
       var url = "https://manaweb-events.herokuapp.com"
       var test_url = "http://0.0.0.0:5000"
-      fetch(test_url + "/mobileUpdateSettings", {method: "POST",
+      fetch(url + "/mobileUpdateSettings", {method: "POST",
       headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',

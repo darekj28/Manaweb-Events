@@ -74,7 +74,6 @@ class FeedScreen extends Component {
         }
         this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
         this.postMessagePressed = this.postMessagePressed.bind(this)
-        this.refreshScreen = this.refreshScreen.bind(this);
         this.handlePostSubmit = this.handlePostSubmit.bind(this);
         this.handlePostTyping = this.handlePostTyping.bind(this);
         this.handleFilterPress = this.handleFilterPress.bind(this);
@@ -183,49 +182,6 @@ class FeedScreen extends Component {
           }
         }).done()
     }
-
-  refreshScreen() {
-    var url = "https://manaweb-events.herokuapp.com"
-    var test_url = "http://0.0.0.0:5000"
-    fetch(url + "/mobileGetPosts", {method: "POST",
-          headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      body:
-      JSON.stringify(
-       {
-        feed_name: "BALT"
-      })
-    })
-    .then((response) => response.json())
-    .then((responseData) => {
-    if (responseData['result'] == 'success'){
-      this.setState({loading: false})
-      if (responseData.post_list.length > 0) {
-          var feed = []
-          for (var i = 0; i < responseData['post_list'].length; i++) {
-            var obj = responseData['post_list'][i]
-            feed.unshift({
-              postContent : obj['body'],
-              avatar    : obj['avatar'],
-              name    : obj['first_name'] + ' ' + obj['last_name'],
-              userID    : obj['poster_id'],
-              time      : obj['time'],
-              isTrade   : obj['isTrade'],
-              isPlay    : obj['isPlay'],
-              isChill   : obj['isChill'],
-              comment_id  : obj['comment_id'],
-              unique_id   : obj['unique_id'],
-              numberOfComments : obj['numComments']
-            })
-          }
-          this.setState({feed: feed})
-         }
-      }
-    }).done()
-
-  }
   handleTitlePress() {
     Alert.alert('Manaweb is pressed');
   };
@@ -281,12 +237,18 @@ class FeedScreen extends Component {
   initializeUserInfo(){
       this.setState({current_user : this.props.current_user})
       this.setState({current_username : this.props.current_user.userID})
-
   }
   componentDidMount() {
       this.initializeUserInfo.bind(this)();
-      this.refreshScreen.bind(this)();
+      // this.props.refreshScreen();
   }
+
+  componentDidUpdate(){
+      if (this.props.feed.length > 10 && this.props.spinnerLoading){
+         this.props.hideSpinner()
+      }
+   }
+
   render() {
     var alert;
     if ((this.state.alert)) {
@@ -300,9 +262,6 @@ class FeedScreen extends Component {
     let dropdownIcon = require('./res/down_arrow.png')
     return (
         <View style = {styles.container}>
-
-           <Spinner visible={this.state.loading} textContent= "Loading..." textStyle={{color: '#FFF'}} />
-
            <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
                <View style = {{height: SEARCH_BAR_HEIGHT}}>
                    <LogoAndSearchBar color = {SEARCH_BAR_COLOR} searchText={this.state.searchText}
@@ -337,10 +296,11 @@ class FeedScreen extends Component {
                 </PostMessageBox>
             </Animated.View>
 
-            <Feed posts = {this.state.feed} searchText = {this.state.searchText} filters = {this.state.filters}
+            <Feed posts = {this.props.feed} searchText = {this.state.searchText} filters = {this.state.filters}
             userIdToFilterPosts={this.state.userIdToFilterPosts} handleFilterUser={this.handleFilterUser.bind(this)}
             current_user = {this.props.current_user}
-                navigator = {this.props.navigator} current_username = {this.props.current_user.userID}/>
+                navigator = {this.props.navigator} current_username = {this.props.current_user.userID}
+                />
         </View>
 
     )

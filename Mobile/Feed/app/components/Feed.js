@@ -84,7 +84,6 @@ export default class Feed extends Component {
   componentDidMount(){
     this.setState({posts: this.props.posts})
   }
-
   render() {
     var feed = this.filter()
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -97,22 +96,8 @@ export default class Feed extends Component {
                   enableEmptySections = {true}
                   />
 
-
-          /*   <ScrollView
-            // ref={(scrollView) => { _scrollView = scrollView; }}
-            automaticallyAdjustContentInsets={false}
-            onScroll={() => {}}
-            scrollEventThrottle={200}
-            onPress={() => {Alert.alert('Scroll clicked')}}
-            >
-              {feed}
-            </ScrollView> */
-          
-        
     ) 
   }
-
-
 }
 
 const styles = StyleSheet.create({
