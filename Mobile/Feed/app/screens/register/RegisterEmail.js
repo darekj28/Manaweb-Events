@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {Image, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 
 import ViewContainer from '../../components/ViewContainer';
 import HomeStatusBar from '../../components/HomeStatusBar';
@@ -84,97 +84,90 @@ class RegisterEmail extends Component {
     if (this.state.validation_output.error != "" && this.state.validation_output.error != null) {
       error_message = this.state.validation_output.error;
       return (
-          <Text style = {styles.error_message}>
+          <Text style = {styles.error_text}>
             {error_message}
             </Text>
         )
     }
     else return;
   }
-
-
   render() {
     var error_message = this.getErrorMessage.bind(this)();
     return (
-       <View style = {styles.container}>
+        <View style = {styles.container}>
           <View style = {styles.top_bar}>
               <TouchableOpacity style = {styles.back_button}
                 onPress = {() => this.props.navigator.pop()}>
                 <Icon name = "chevron-left" size = {20}/>
               </TouchableOpacity>
-
-              <Text style = {styles.logo}> 
-                Logo
-              </Text> 
-
+               <Image
+                style={styles.logo}
+                source={require('../../static/favicon-32x32.png')}
+              />
               <View style = {styles.cog_box}>
                 <Icon name = "cog" size = {20} style = {styles.cog}/> 
               </View>
             </View>
-
+            <View style = {styles.small_padding}/>
             <View style = {styles.instruction_box}> 
               <Text style = {styles.instruction_text}>
-                What's yo e-mail?
+                Enter your email address
               </Text>
             </View>
-
-            <View style = {styles.input_box}> 
-              
-               <TextInput
+            <View style = {styles.input_row}>
+              <View style = {styles.input_box}> 
+                    <TextInput
                 onChangeText = {this.handleEmailChange}
                 style = {styles.input_text} placeholder = "Email"
                 value = {this.state.email}
               />
-
               { this.state.email != "" &&
               <View style = {styles.clear_button}>
                 <Icon name = "close" size = {20} onPress = {this.clearEmail.bind(this)}/>
               </View>
               }
+              </View>
             </View>
 
-            <View style = {styles.error_box}>
+          <View style = {styles.small_padding}/>
+          { error_message != null &&
+              <View style = {styles.error_box}>
                 {error_message}
             </View>
-
-            <View style = {styles.bottom_bar}>
-
-              <Text style = {styles.recovery_text}>
-                {/* Forgot your password? */}
-              </Text>
-
-              <TouchableHighlight style = {styles.next} onPress = {this.handleEmailSubmit.bind(this)}>
+          }
+          {error_message == null &&
+            <View style = {styles.small_padding}/>
+          }
+            <View style = {styles.large_padding} />
+             <View style = {styles.bottom_bar}>
+                <TouchableHighlight style = {styles.next} onPress = {this.handleEmailSubmit.bind(this)}>
                 <Text style = {styles.next_text}>
                   Next!
                 </Text>
               </TouchableHighlight>
-
-            </View>
-
-            <View style = {styles.padding} />
+             </View>
           </View>
     )
   }
-
-
 }
 
 const styles = StyleSheet.create({
- container: {
+  container: {
     flex: 1,
     flexDirection : "column",
     justifyContent: 'space-between',
     padding : 10,
     paddingTop: 40,
     backgroundColor: "white",
-    alignItems: 'flex-start'
   },
 
 
   top_bar : {
-    flex : 0.1,
+    flex : 0.05,
     flexDirection : "row",
     justifyContent: "space-around",
+    // backgroundColor: "coral",
+    alignItems: "center"
   },
 
   back_button :{
@@ -187,7 +180,7 @@ const styles = StyleSheet.create({
 
   logo: {
     flex : 1,
-    textAlign: "center"
+    resizeMode: "contain"
   },
 
   cog_box: {
@@ -203,21 +196,25 @@ const styles = StyleSheet.create({
   },
 
   instruction_text : {
-    fontSize : 16
+    fontSize : 24
   },
 
+  input_row: {
+    flexDirection: "row",
+    flex : 0.075,
+  },
   input_box: {
     flexDirection : "row",
     flex: 0.075,
     borderColor: "skyblue",
     borderWidth : 1,
-    borderRadius : 5,
+    borderRadius : 5
     // backgroundColor: "skyblue"
   },
 
   input_text :{
     flex: 0.65,
-    alignSelf: "stretch"
+    padding: 5
   },
 
   clear_button : {
@@ -225,42 +222,44 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
 
-  error_box : {
-    flex: 0.05,
-    flexDirection : "column"
-  },
-
-  error_text : {
-
-  },
-
-  padding : {
-    flex: 0.60,
+  large_padding : {
+    flex: 0.45,
     backgroundColor : "white"
   },
 
+    error_box : {
+    flex: 0.05,
+    flexDirection : "column",
+  },
 
+  error_text : {
+    color : "red",
+    fontSize : 20,
+    alignSelf: "center"
+  },
+
+ 
   bottom_bar : {
     flex : 0.05,
     // backgroundColor : "purple",
     flexDirection: "row",
-    justifyContent : "space-between"
+    justifyContent : "flex-end",
   },
 
   recovery_text: {
     flex: 0.75
   },
-
-  next : {
-    flex: 0.25,
-
-  },
-
+ 
   next_text : {
     borderColor : "skyblue",
     borderWidth : 1,
     borderRadius : 5,
+    padding: 8,
     textAlign : "center"
+  },
+
+  small_padding : {
+    flex : 0.05,
   },
 
 });

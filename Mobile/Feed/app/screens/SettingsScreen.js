@@ -104,7 +104,6 @@ class SettingsScreen extends Component {
     .done();
   }
 
-
   validatePhoneNumber(phone_number) {
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
@@ -121,7 +120,7 @@ class SettingsScreen extends Component {
     })
     .then((response) => response.json())
     .then((responseData) => {
-      this.setState({validation_output : responseData})
+      this.setState({phone_number_validation: responseData})
     })
     .done();
   }
@@ -214,15 +213,15 @@ class SettingsScreen extends Component {
     return picker_list
   }
 
-
-
   // makes the fetch request to submit the new settings
   submitNewSettings() {
-    var canSubmit = this.errorCheck.bind(this)();
+    var errorCheckResult = this.errorCheck.bind(this)();
+    var canSubmit = errorCheckResult.result
+    var errorMessage = errorCheckResult.reason
     if (canSubmit) {
       var url = "https://manaweb-events.herokuapp.com"
       var test_url = "http://0.0.0.0:5000"
-      fetch(url + "/mobileUpdateSettings", {method: "POST",
+      fetch(test_url + "/mobileUpdateSettings", {method: "POST",
       headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -244,23 +243,35 @@ class SettingsScreen extends Component {
         alert("Settings Updated")
       }).done();
     }
+    else {
+      alert(errorMessage)
+    }
   }
   // checks if we can submit the output, i.e. no errors
   errorCheck() {
       var canSubmit = true;
+      var reason = ""
       if (this.state.first_name_validation.result != 'success') {
          canSubmit = false;
+         reason = "Error with first name"
+         // reason = this.state.first_name_validation.error
       }
       if (this.state.last_name_validation.result != 'success') {
         canSubmit = false;
+        reason = "Error with last name"
+        // reason = this.state.last_name_validation.error
       }
       if (this.state.email_validation.result != 'success') {
         canSubmit = false;
+        reason = "Error with email"
+        // reason = this.state.email_validation.error
       }
       if (this.state.phone_number_validation.result != 'success') {
         canSubmit = false;
+        reason = "Error with phone number"
+        // reason = this.state.phone_number_validation.error
       }
-      return canSubmit;
+      return {result: canSubmit, reason : reason};
   }
   toggleAvatarPicker() {
     this.setState({display_avatar_picker : !this.state.display_avatar_picker})
@@ -289,6 +300,7 @@ class SettingsScreen extends Component {
     else return;
   }
   getAvatarImage(avatar) {
+    var avatar = avatar.toLowerCase()
     if (avatar =='nissa') return ( <Image  style={styles.avatar_image} source={require('../static/avatars/nissa.png')} />)
     if (avatar == 'chandra') return (<Image  style={styles.avatar_image} source={require('../static/avatars/chandra.png')} />)
     if (avatar == 'elspeth') return (<Image  style={styles.avatar_image} source={require('../static/avatars/elspeth.png')} />)

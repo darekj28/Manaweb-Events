@@ -17,6 +17,7 @@ import CommentScreen from '../screens/CommentScreen'
 import FbCreate from '../screens/register/FbCreate'
 import TestHTTP from '../screens/TestHTTP'
 import SettingsScreen from '../screens/SettingsScreen'
+import WelcomeScreen from '../screens/register/WelcomeScreen'
 import Spinner from 'react-native-loading-spinner-overlay';
 
 
@@ -113,6 +114,14 @@ class StartNavigator extends Component {
                 fb_id = {route.fb_id}
                 {...globalNavigatorProps} 
                />
+          )
+
+    case "Welcome":
+        return (
+            <WelcomeScreen
+            current_user = {route.current_user}
+            {...globalNavigatorProps}
+            />
           )
    default:
         return (

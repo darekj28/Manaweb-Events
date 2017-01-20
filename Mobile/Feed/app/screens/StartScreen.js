@@ -70,7 +70,6 @@ class StartScreen extends Component {
   // }
 
   render() {
-
     return (
       <View style = {styles.container}>
               <View style = {styles.logo_box}>

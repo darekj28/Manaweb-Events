@@ -39,7 +39,6 @@ class FbCreate extends Component {
     this.handleUsernameSubmit = this.handleUsernameSubmit.bind(this);
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.validateUsername = this.validateUsername.bind(this);
-    this._navigateToFeed = this._navigateToFeed.bind(this);
     this.createAccount = this.createAccount.bind(this);
 
   }
@@ -69,12 +68,11 @@ class FbCreate extends Component {
     })
     .then((response) => response.json())
     .then((responseData) => {
-        
         if (responseData['result'] == 'success') {
             AsyncStorage.setItem("fb_token", this.props.fb_token)
-            AsyncStorage.setItem("current_username", responseData['current_user']['userID']);
+            AsyncStorage.setItem("current_username", responseData.current_user.userID);
+            this._navigateToWelcome.bind(this)(responseData.current_user)
         }
-        this._navigateToFeed()
     })
     .done();
   }
@@ -111,9 +109,10 @@ class FbCreate extends Component {
     .done();
   }
 
-  _navigateToFeed() {
+  _navigateToWelcome(current_user) {
     this.props.navigator.push({
-    href: "Feed",
+    href: "Welcome",
+    current_user : current_user
     })
   }
 

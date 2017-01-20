@@ -116,13 +116,17 @@ export default class RegisterName extends Component {
 
   getErrorMessage() {
     var error_message = "";
-    if (this.state.last_name_validation_output.error != "" && this.state.last_name_validation_output != null) {
-      error_message = this.state.last_name_validation_output.error
-    } 
-    else if (this.state.first_name_validation_output.error != "" && this.state.first_name_validation_output != null) {
+    var first_name_error = this.state.first_name_validation_output.error != "" && this.state.first_name_validation_output.error != null
+    var last_name_error = this.state.last_name_validation_output.error != "" && this.state.last_name_validation_output.error != null  
+    if (first_name_error && !last_name_error) {
       error_message = this.state.first_name_validation_output.error
     } 
-    else if (this.state.first_name == "" && this.state.last_name == "") {
+
+    if (last_name_error) {
+      error_message = this.state.last_name_validation_output.error
+    } 
+    
+    if (this.state.first_name == "" && this.state.last_name == "") {
       error_message = ""
       // error_message = "Names must not be blank!"
     }
@@ -145,13 +149,10 @@ export default class RegisterName extends Component {
                 onPress = {() => this.props.navigator.pop()}>
                 <Icon name = "chevron-left" size = {20}/>
               </TouchableOpacity>
-
               <Image
                 style={styles.logo}
                 source={require('../../static/favicon-32x32.png')}
               />
-             
-
               <View style = {styles.cog_box}>
                 <Icon name = "cog" size = {20} style = {styles.cog}/> 
               </View>
@@ -165,7 +166,7 @@ export default class RegisterName extends Component {
               </Text>
             </View>
 
-            <View style = {styles.name_row}>
+            <View style = {styles.input_row}>
               <View style = {styles.input_box}> 
                 <TextInput
                     onChangeText = {this.handleFirstNameChange}
@@ -192,46 +193,32 @@ export default class RegisterName extends Component {
                   maxLength = {20}
                   value = {this.state.last_name}
                   />
-                
                 { this.state.last_name != "" &&
                 <View style = {styles.clear_button}>
                   <Icon name = "close" size = {20} onPress = {this.clearLastName.bind(this)}/>
                 </View>
                 }
-
               </View>
             </View>
-
             <View style = {styles.small_padding}/>
-
-
-            
            { error_message != null &&
               <View style = {styles.error_box}>
                 {error_message}
             </View>
           }
 
-          {error_message != null &&
+          {error_message == null &&
             <View style = {styles.small_padding}/>
           }
+            <View style = {styles.large_padding} />
 
-            
-
-            <View style = {styles.next_button}>
+            <View style = {styles.bottom_bar}>
               <TouchableHighlight style = {styles.next} onPress = {this._navigateToRegisterPhoneNumber.bind(this)}>
                 <Text style = {styles.next_text}>
                   Next!
                 </Text>
               </TouchableHighlight>
             </View>
-
-
-            <View style = {styles.padding} />
-
-
-
-            
 
           </View>
       
@@ -289,20 +276,6 @@ const styles = StyleSheet.create({
     fontSize : 24
   },
 
-  input_box: {
-    flexDirection : "row",
-    flex: 0.075,
-    borderColor: "skyblue",
-    borderWidth : 1,
-    borderRadius : 5
-    // backgroundColor: "skyblue"
-  },
-
-  input_text :{
-    flex: 0.65,
-    padding: 5
-  },
-
   clear_button : {
     flex: 0.1,
     justifyContent: "center"
@@ -319,7 +292,7 @@ const styles = StyleSheet.create({
     alignSelf: "center"
   },
 
-  padding : {
+  large_padding : {
     flex: 0.45,
     backgroundColor : "white"
   },
@@ -329,18 +302,11 @@ const styles = StyleSheet.create({
     flex : 0.05,
     // backgroundColor : "purple",
     flexDirection: "row",
-    justifyContent : "space-between"
+    justifyContent : "flex-end",
   },
 
   recovery_text: {
     flex: 0.75
-  },
-
-  next_button : {
-    flex: 0.075,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
   },
 
   next_text : {
@@ -351,13 +317,26 @@ const styles = StyleSheet.create({
     textAlign : "center"
   },
 
-  name_row: {
+  input_row: {
     flexDirection: "row",
     flex : 0.075,
   },
+  input_box: {
+    flexDirection : "row",
+    flex: 0.075,
+    borderColor: "skyblue",
+    borderWidth : 1,
+    borderRadius : 5
+    // backgroundColor: "skyblue"
+  },
+
+  input_text :{
+    flex: 0.65,
+    padding: 5
+  },
 
   small_padding : {
-    flex : 0.025,
+    flex : 0.05,
   },
 
   col_padding: {
