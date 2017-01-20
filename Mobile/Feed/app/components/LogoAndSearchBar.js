@@ -45,11 +45,12 @@ const styles = StyleSheet.create({
       width: LOGO_HEIGHT,
       height: LOGO_HEIGHT,
     },
-    text_input: {
+    search_input: {
         flex: 1,
         fontSize: 25,
         padding: 2,
-        textAlignVertical: 'center'
+        textAlignVertical: 'center',
+        height : 30
     },
     search_input_wrapper: {
         flexDirection: 'column',
@@ -59,6 +60,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         padding: 0,
         borderRadius: 5,
-        marginRight: 5
+        marginRight: 5,
+        height : 30
     }
 });
