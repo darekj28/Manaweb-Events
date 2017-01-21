@@ -160,22 +160,24 @@ button.kep-login-facebook:hover{
 }
 .NotificationsFeedPost{
   list-style-type : none;
-  padding-top : 5px;
-  padding-bottom : 5px;
   padding-left : 0px;
   padding-right : 0px;
+}
+.notification-post-row {
+  padding-top : 2px;
+  padding-bottom : 2px;
 }
 #NotificationsFeed { 
   max-width : 92vw;
 }
-#NotificationsFeed > li > a {
+#NotificationsFeed > li > div > a {
   text-decoration : none;
   color : var(--main-color);
   padding-left : 0px;
   padding-right : 0px;
   white-space : normal;
 }
-#NotificationsFeed > li > a :hover {
+#NotificationsFeed > li > div > a :hover {
   color : var(--light);
 }
 .CommentFeedPost {
@@ -279,6 +281,12 @@ button.kep-login-facebook:hover{
   padding-left : 10px;
   padding-right : 25px;
 }
+.NotificationAvatarSpace {
+  padding-bottom : 10px;
+}
+.NotificationSpace {
+  margin-left: 75px;
+}
 .FeedPostHeader {
   white-space : nowrap;
 }
@@ -299,11 +307,8 @@ button.kep-login-facebook:hover{
   padding-right: 20px;
 }
 .FeedPostHeader .postType {
-  color : var(--navbar);
+  color : var(--main-color);
   background-color : #ffffff;
-  /*border-radius: 4px;*/
-  border : 1px solid var(--navbar);
-  padding-left: 5px;
   padding-right: 5px;
 }
 .icon-danger {
@@ -324,7 +329,7 @@ button.kep-login-facebook:hover{
   font-size: 20px;
 }
 .HeaderGlyphicon {
-  font-size : 12px;
+  font-size : 14px;
 }
 .AppGlyphicon:hover {
   color:var(--dark);
