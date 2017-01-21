@@ -345,7 +345,7 @@ class Posts:
 	def sendNotification(self, feed_name, comment_id, receiver_id, sender_id, original_post) :
 		user_manager = Users()
 		sender_name = user_manager.getInfo(sender_id)['first_name']
-		op_name = user_manager.getInfo(original_post['poster_id'])
+		op_name = user_manager.getInfo(original_post['poster_id'])['userID']
 		numOtherPeople = self.getNumberOfOtherPeople(comment_id, sender_id, receiver_id)
 		numNotificationsFromComment = self.getNumberOfNotificationsFromComment(comment_id, receiver_id)
 		isOP = original_post['poster_id'] == receiver_id
