@@ -5,7 +5,7 @@ import SettingsInputLabel from './SettingsInputLabel.jsx';
 import NoSearchNavBar from '../GenericNavBar/NoSearchNavBar.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 
-var text_fields = [	"first_name", "last_name", "old_password", "password", "phone_number" ];
+var text_fields = [	"first_name", "last_name", "old_password", "password", "email", "phone_number" ];
 var select_fields = [ "month_of_birth", "day_of_birth", "year_of_birth", "avatar" ];
 var required_text_fields = ["first_name", "last_name", "old_password"];
 export default class SettingsApp extends React.Component {
@@ -17,6 +17,7 @@ export default class SettingsApp extends React.Component {
 			last_name  			: '',
 			old_password		: '',
 			password			: '',
+			email				: '',
 			phone_number 		: '',
 			month_of_birth 		: '',
 			day_of_birth 		: '',
@@ -44,7 +45,8 @@ export default class SettingsApp extends React.Component {
 					day_of_birth		: user.birthDay,
 					year_of_birth		: user.birthYear,
 					month_of_birth		: user.birthMonth,
-					avatar      		: user.avatar_name
+					avatar      		: user.avatar_name,
+					email				: user.email
 				});
 			}.bind(this)
 		});

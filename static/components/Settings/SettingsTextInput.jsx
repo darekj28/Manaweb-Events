@@ -26,6 +26,26 @@ export default class SettingsTextInput extends React.Component {
 		    }.bind(this)
 		});
 	}
+	verifyEmail(email) {
+		var obj = { email : email, currentUser : AppStore.getCurrentUser() };
+		$.ajax({
+			type: 'POST',
+			url: '/verifyEmailIfChanged',
+			data : JSON.stringify(obj, null, '\t'),
+		    contentType: 'application/json;charset=UTF-8',
+		    success : function(res) {
+		    	if (!res['error']) {
+		    		this.setState({ valid : "valid" });
+					this.props.handleBlur("email", "valid");
+		    	}
+		    	else {
+		    		console.log(res['error']);
+		    		this.setState({ valid : "invalid", warning : res['error'] });
+					this.props.handleBlur("email", "invalid");
+		    	}
+		    }.bind(this)
+		});
+	}
 	handleTyping(event) {
 		var obj = {};
 		obj[this.props.field] = event.target.value;
@@ -35,12 +55,14 @@ export default class SettingsTextInput extends React.Component {
 		var field = this.props.field;
 		if (field == "old_password")
 			this.verifyOldPassword.bind(this)(event.target.value);
+		else if (field == "email")
+			this.verifyEmail.bind(this)(event.target.value);
 		else { 
 			var isValid = testValid(field, event.target.value);
 			this.setState({ valid : isValid, 
 					warning : warningForField(field, event.target.value) });
+			this.props.handleBlur(field, isValid);
 		};
-		this.props.handleBlur(field, isValid);
 	}
 	componentWillReceiveProps(nextProps) {
 		if (!this.state.hasMounted) {
