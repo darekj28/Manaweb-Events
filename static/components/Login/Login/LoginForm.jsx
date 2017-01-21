@@ -1,7 +1,7 @@
 var React = require('react');
-import AppActions from '../../actions/AppActions.jsx';
-import AppStore from '../../stores/AppStore.jsx';
-import SettingsInputLabel from '../Settings/SettingsInputLabel.jsx';
+import AppActions from '../../../actions/AppActions.jsx';
+import AppStore from '../../../stores/AppStore.jsx';
+import SettingsInputLabel from '../../Settings/SettingsInputLabel.jsx';
 import { browserHistory } from 'react-router';
 var Link = require('react-router').Link;
 
@@ -63,7 +63,8 @@ export default class LoginForm extends React.Component {
                         isOP : obj['isOP'],
                         numOtherPeople : obj['numOtherPeople'],
                         sender_name : obj['sender_name'],
-                        op_name : obj['op_name']
+                        op_name : obj['op_name'],
+                        avatar : obj['avatar']
                     });
                 });
                 AppActions.addNotifications(notifications);

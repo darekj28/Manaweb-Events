@@ -1,14 +1,12 @@
 var React = require('react');
 var Link = require('react-router').Link;
 import FacebookLogin from 'react-facebook-login';
-
 import LoginNavBar from './LoginNavBar.jsx';
 import SettingsTextInput from '../Settings/SettingsTextInput.jsx';
 import SettingsInputLabel from '../Settings/SettingsInputLabel.jsx';
 import AppActions from '../../actions/AppActions.jsx';
 import { browserHistory } from 'react-router';
 import AppStore from '../../stores/AppStore.jsx';
-
 import SendConfirmation from './SendConfirmation.jsx'
 
 export default class Recovery extends React.Component {

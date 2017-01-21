@@ -345,7 +345,7 @@ class Posts:
 	def sendNotification(self, feed_name, comment_id, receiver_id, sender_id, original_post) :
 		user_manager = Users()
 		sender_name = user_manager.getInfo(sender_id)['first_name']
-		op_name = user_manager.getInfo(original_post['poster_id'])['first_name']
+		op_name = user_manager.getInfo(original_post['poster_id'])
 		numOtherPeople = self.getNumberOfOtherPeople(comment_id, sender_id, receiver_id)
 		numNotificationsFromComment = self.getNumberOfNotificationsFromComment(comment_id, receiver_id)
 		isOP = original_post['poster_id'] == receiver_id
@@ -473,7 +473,10 @@ class Posts:
 
 	def shortNotificationListToDict(self, query): # check this
 		n_list = list()
+		user_manager = Users()
 		for note in query:
+			sender = user_manager.getInfo(note[3])
+			op = user_manager.getInfo(note[11])
 			this_note = {'feed_name' 		: note[0],
 						 'comment_id'		: note[1],
 						 'receiver_id'		: note[2],
@@ -484,12 +487,14 @@ class Posts:
 						 'timeStamp'		: note[7],
 						 'timeString'		: self.getTimeString(note[7]),
 						 #'numUnseenActions' : note[9]
-						 'sender_name'		: note[10],
-						 'op_name'			: note[11],
+						 'sender_name'		: sender['first_name'],
+						 'op_name'			: op['first_name'],
 						 'numOtherPeople'	: note[12],
-						 'isOP'				: note[13]
+						 'isOP'				: note[13],
+						 'avatar'			: sender['avatar_name']
 						 }
 			n_list.append(this_note)
+		user_manager.closeConnection()
 		return n_list
 
 	def markNotificationAsSeen(self, userID):

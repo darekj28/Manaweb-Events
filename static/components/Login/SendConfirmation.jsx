@@ -8,7 +8,6 @@ import AppStore from '../../stores/AppStore.jsx';
 import SettingsTextInput from '../Settings/SettingsTextInput.jsx';
 import SettingsInputLabel from '../Settings/SettingsInputLabel.jsx';
 
-
 export default class SendConfirmation extends React.Component {
 	constructor() {
 		super();

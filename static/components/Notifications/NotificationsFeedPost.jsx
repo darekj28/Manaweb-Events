@@ -1,5 +1,7 @@
 var React = require('react');
 var Link = require('react-router').Link;
+import Avatar from '../Home/Feed/Avatar.jsx';
+
 export default class NotificationsFeedPost extends React.Component {
     getNotificationSyntax(note) {
         var whose; var also; var notification;

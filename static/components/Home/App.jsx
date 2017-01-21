@@ -2,12 +2,11 @@ var React = require('react');
 import SearchNavBar from './SearchNavBar.jsx';
 import EventName from './EventName.jsx';
 import MakePost from './MakePost.jsx';
-import Feed from './Feed.jsx';
+import Feed from './Feed/Feed.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 import LoginApp from '../Login/LoginApp.jsx';
 import ViewMoreButton from './ViewMoreButton.jsx';
 import ExtendFeedButton from './ExtendFeedButton.jsx';
-import Footer from '../Footer.jsx';
 
 var feed_name = "BALT";
 var actions = ['Play', 'Trade', 'Chill'];

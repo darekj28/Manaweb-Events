@@ -1,9 +1,9 @@
 var React = require('react');
 var Link = require('react-router').Link;
-import RegisterTextInput from './RegisterTextInput.jsx';
-import AppActions from '../../actions/AppActions.jsx';
+import RegisterTextInput from '../Register/RegisterTextInput.jsx';
+import AppActions from '../../../actions/AppActions.jsx';
 import { browserHistory } from 'react-router';
-import AppStore from '../../stores/AppStore.jsx';
+import AppStore from '../../../stores/AppStore.jsx';
 import FacebookLogin from 'react-facebook-login';
 export default class FacebookConnect extends React.Component {
 		constructor() {

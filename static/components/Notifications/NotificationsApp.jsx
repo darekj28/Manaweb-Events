@@ -3,7 +3,6 @@ import NoSearchNavBar from "../GenericNavBar/NoSearchNavBar.jsx";
 import NotificationsFeed from './NotificationsFeed.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 import AppActions from '../../actions/AppActions.jsx';
-import Footer from '../Footer.jsx';
 
 export default class NotificationsApp extends React.Component {
 	constructor(props) {

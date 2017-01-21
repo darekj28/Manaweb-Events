@@ -1,6 +1,6 @@
 var React = require('react');
 var Link = require('react-router').Link;
-import LoginForm from './LoginForm.jsx';
+import LoginForm from './Login/LoginForm.jsx';
 export default class LoginNavBar extends React.Component {
 	constructor() {
 		super();

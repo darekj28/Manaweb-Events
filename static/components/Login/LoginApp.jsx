@@ -1,9 +1,9 @@
 var React = require('react');
 
-import FacebookConnect from './FacebookConnect.jsx';
-import RegisterForm from './RegisterForm.jsx';
+import FacebookConnect from './Login/FacebookConnect.jsx';
+import RegisterForm from './Register/RegisterForm.jsx';
 import LoginNavBar from './LoginNavBar.jsx';
-import Footer from '../Footer.jsx';
+import Footer from './Footer.jsx';
 
 export default class LoginApp extends React.Component {
 	render() {

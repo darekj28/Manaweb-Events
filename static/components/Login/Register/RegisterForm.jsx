@@ -1,8 +1,8 @@
 var React = require('react');
 var Link = require('react-router').Link;
 import RegisterTextInput from './RegisterTextInput.jsx';
-import AppActions from '../../actions/AppActions.jsx';
-import AppStore from '../../stores/AppStore.jsx';
+import AppActions from '../../../actions/AppActions.jsx';
+import AppStore from '../../../stores/AppStore.jsx';
 import { browserHistory } from 'react-router';
 
 var text_fields = ["first_name", "last_name", "email_or_phone", "username", "password" ];
@@ -145,7 +145,8 @@ export default class RegisterForm extends React.Component {
                         isOP : obj['isOP'],
                         numOtherPeople : obj['numOtherPeople'],
                         sender_name : obj['sender_name'],
-                        op_name : obj['op_name']
+                        op_name : obj['op_name'],
+                        avatar : obj['avatar']
                     });
                 });
                 AppActions.addNotifications(notifications);
