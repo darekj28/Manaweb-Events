@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {TouchableWithoutFeedback, KeyboardAvoidingView, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {Image, TouchableWithoutFeedback, KeyboardAvoidingView, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -74,84 +74,91 @@ class LoginScreen extends Component {
   handleLoginIdChange(login_id) {
     this.setState({login_id : login_id})
   }
+
+  _navigateToRecovery(){
+    this.props.navigator.push({
+    href: "Recovery"
+    })
+  }
+
   render() {
     return (
+
       <View style = {styles.container}>
-            <View style = {styles.top_bar}>
+          <View style = {styles.top_bar}>
               <TouchableOpacity style = {styles.back_button}
                 onPress = {() => this.props.navigator.pop()}>
-                <Text style = {styles.back_button_text}>
-                  Cancel
-                </Text>
+                <Icon name = "chevron-left" size = {20}/>
               </TouchableOpacity>
-              <Text style = {styles.logo}> 
-                Logo
-              </Text> 
+               <Image
+                style={styles.logo}
+                source={require('../static/favicon-32x32.png')}
+              />
               <View style = {styles.cog_box}>
                 <Icon name = "cog" size = {20} style = {styles.cog}/> 
               </View>
             </View>
-            <View style = {styles.login_instruction_box}> 
-              <Text style = {styles.login_instruction_text}>
-                Login to Manaweb here!
+            <View style = {styles.small_padding}/>
+            <View style = {styles.instruction_box}> 
+              <Text style = {styles.instruction_text}>  
+                  Login to Manaweb!
               </Text>
             </View>
-            <View style = {styles.input_box}> 
-              <TextInput 
-              onChangeText = {this.handleLoginIdChange}
-              style = {styles.input_text} placeholder = "Enter Username or Email"
-              />
-              { this.state.login_id != "" &&
-              <View style = {styles.clear_button}>
-                <Icon name = "close" size = {20}/>
+
+          {/* <View style = {styles.small_padding} /> */}
+
+
+            <View style = {styles.input_row}>
+              <View style = {styles.input_box}> 
+                    <TextInput 
+                  onChangeText = {this.handleLoginIdChange}
+                  style = {styles.input_text} placeholder = "Enter Username or Email"
+                  />
+                  { this.state.login_id != "" &&
+                  <View style = {styles.clear_button}>
+                    <Icon name = "close" size = {20}/>
+                  </View>
+                  }
               </View>
-              }
             </View>
+
+            <View style = {{flex: 0.025}}/>
+
+          <View style = {styles.input_row}>
             <View style = {styles.input_box}> 
-              <TextInput 
-              onChangeText = {this.handlePasswordChange}
-              style = {styles.input_text}
-              placeholder = "Password"
-              secureTextEntry = {!this.state.show_password}
-              />
-              { this.state.password != "" &&
-              <View style = {styles.clear_button}>
-                <Icon name = "close" size = {20}/>
-              </View>
-              }
+              
+                    <TextInput 
+                    onChangeText = {this.handlePasswordChange}
+                    style = {styles.input_text}
+                    placeholder = "Password"
+                    secureTextEntry = {!this.state.show_password}
+                    />
+                    { this.state.password != "" &&
+                    <View style = {styles.clear_button}>
+                      <Icon name = "close" size = {20}/>
+                    </View>
+                    }
+
             </View>
-            <View style = {styles.show_password_box}>
-              <Text style = {styles.show_password_text} onPress = {this.togglePassword.bind(this)}>
-                Show password
-              </Text>
-            </View>
-            <View style = {styles.padding} />
-            <View style = {styles.bottom_bar}>
-              <Text style = {styles.recovery_text}>
-                Forgot your password?
-              </Text>
-              <TouchableOpacity style = {styles.login_submit} onPress = {this.handleLoginSubmit}>
+          </View>
+
+
+
+            <View style = {styles.large_padding} />
+             <View style = {styles.bottom_bar}>
+             <TouchableOpacity style = {styles.recovery_button} onPress = {this._navigateToRecovery.bind(this)}>
+                <Text style = {styles.recovery_text}>
+                    Forgot your password?
+                </Text>
+                </TouchableOpacity>
+              <View style = {styles.bottom_bar_padding}/>
+              <TouchableOpacity style = {styles.login_submit_button} onPress = {this.handleLoginSubmit}>
                 <Text style = {styles.login_submit_text}>
                   Login!
                 </Text>
               </TouchableOpacity>
-            </View>
-            {/*
-              <TouchableHighlight style = {styles.button} onPress = {this.handleLoginSubmit}>
-                <Text style = {styles.buttonText}>
-                  Login Baby!
-                </Text>
-              </TouchableHighlight>
-
-
-              {
-                this.state.validation_output['result'] == 'failure' && 
-                <Text> 
-                  {this.state.validation_output['error']}
-                  </Text>
-              } 
-            */}
-      </View>
+             </View>
+          </View>
     )
   }
 }
@@ -164,32 +171,49 @@ const styles = StyleSheet.create({
     padding : 10,
     paddingTop: 40,
     backgroundColor: "white",
-    alignItems: 'flex-start'
   },
+
+
   top_bar : {
-    flex : 0.1,
+    flex : 0.05,
     flexDirection : "row",
     justifyContent: "space-around",
+    // backgroundColor: "coral",
+    alignItems: "center"
   },
+
   back_button :{
     flex : 1,
   },
+
   back_button_text: {
+
   },
+
   logo: {
     flex : 1,
-    textAlign: "center"
+    resizeMode: "contain"
   },
+
   cog_box: {
     flex:1,
     flexDirection : "row",
     justifyContent : "flex-end"
   },
-  login_instruction_box :{
+  // cog : {
+  // },
+
+  instruction_box :{
     flex : 0.075,
   },
-  login_instruction_text : {
-    fontSize : 16
+
+  instruction_text : {
+    fontSize : 24
+  },
+
+  input_row: {
+    flexDirection: "row",
+    flex : 0.075,
   },
   input_box: {
     flexDirection : "row",
@@ -199,41 +223,73 @@ const styles = StyleSheet.create({
     borderRadius : 5
     // backgroundColor: "skyblue"
   },
+
   input_text :{
     flex: 0.65,
+    padding: 5
   },
+
   clear_button : {
     flex: 0.05,
     justifyContent: "center"
   },
-  show_password_box : {
-    flex : 0.05,
-    justifyContent: "flex-end"
-  },
-  show_password_text : {
-  },
-  padding : {
-    flex: 0.60,
+
+  large_padding : {
+    flex: 0.325,
     backgroundColor : "white"
   },
+
+  error_box : {
+    flex: 0.05,
+    flexDirection : "column",
+  },
+
+  error_text : {
+    color : "red",
+    fontSize : 20,
+    alignSelf: "center"
+  },
+
+ 
   bottom_bar : {
     flex : 0.05,
     // backgroundColor : "purple",
     flexDirection: "row",
-    justifyContent : "space-between"
+    justifyContent : "flex-end",
   },
+
   recovery_text: {
-    flex: 0.75
+    borderColor : "skyblue",
+    borderWidth : 1,
+    borderRadius : 5,
+    padding: 8,
+    textAlign : "center"
   },
-  login_submit : {
-    flex: 0.25,
-  },
+ 
   login_submit_text : {
     borderColor : "skyblue",
     borderWidth : 1,
     borderRadius : 5,
+    padding: 8,
     textAlign : "center"
   },
+
+  recovery_button : {
+      flex: 0.65
+  },
+
+  bottom_bar_padding: {
+      flex: 0.10
+  },
+
+  login_submit_button: {
+      flex: 0.25
+  },
+
+  small_padding : {
+    flex : 0.05,
+  },
+
 });
 
 module.exports = LoginScreen

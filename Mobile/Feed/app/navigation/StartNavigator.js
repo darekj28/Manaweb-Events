@@ -18,6 +18,7 @@ import FbCreate from '../screens/register/FbCreate'
 import TestHTTP from '../screens/TestHTTP'
 import SettingsScreen from '../screens/SettingsScreen'
 import WelcomeScreen from '../screens/register/WelcomeScreen'
+import RecoveryScreen from '../screens/RecoveryScreen'
 import Spinner from 'react-native-loading-spinner-overlay';
 
 
@@ -122,6 +123,13 @@ class StartNavigator extends Component {
             current_user = {route.current_user}
             {...globalNavigatorProps}
             />
+          )
+
+    case "Recovery":
+        return (
+            <RecoveryScreen
+              {...globalNavigatorProps}
+              />
           )
    default:
         return (
