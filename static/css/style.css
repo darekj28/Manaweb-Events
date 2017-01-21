@@ -93,6 +93,14 @@ button.kep-login-facebook:hover{
   max-width : 350px;
   max-height : 34px;
 }
+.register#Or {
+  padding-bottom : 10px;
+}
+.forgot-password > a {
+  text-decoration: none;
+  font-size : 12px;
+  color : var(--light);
+}
 .btn-login {
   background-color : var(--light);
   color : #fff;
@@ -470,11 +478,16 @@ button.kep-login-facebook:hover{
 .navbar-default .navbar-link:hover {
   color: #ffffff;
 }
-
+.login-home {
+  padding-top : 10px;
+}
 @media (max-width: 767px) {
   button.kep-login-facebook{
     width : auto;
     height : auto;
+  }
+  .login-home {
+    padding-top : 0px;
   }
   #login_user {
     border-radius : 4px 4px 0px 0px;

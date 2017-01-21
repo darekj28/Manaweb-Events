@@ -100,6 +100,11 @@ export default class LoginForm extends React.Component {
 	                    	onChange={this.handleTyping.bind(this)} onKeyPress={this.handleEnter.bind(this)} placeholder="Password"/>
 		            	<button className="btn-login login form-control"
 		            					id="LoginButton"><b>Login</b></button>
+		            	<div className="forgot-password">
+		            		<Link to="/recovery">
+		            			Forget your username or password?
+		            		</Link>
+		            	</div>
 		            	{this.state.error && <div className="warning">
 				  			<strong>Bro!</strong> {this.state.error}
 						</div>}
