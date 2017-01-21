@@ -128,6 +128,7 @@ export default class CommentApp extends React.Component {
 	}
 	render() {
 		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
+		var op = this.state.original_post['name'] ? this.state.original_post['name'].split(' ')[0] : "";
 		return (<div id="CommentApp">
 					<CommentNavBar 
 						 searchText={this.state.search} onSearch={this.handleSearch.bind(this)} currentUser={this.state.currentUser}
@@ -141,7 +142,7 @@ export default class CommentApp extends React.Component {
 							<CommentFeedPost comment={this.state.original_post} isOriginalPost={true}/>
 						</div>
 						<div className="app row">
-							<MakeComment placeholder="What's up bro?" commentText={this.state.comment} 
+							<MakeComment placeholder="What's up bro?" op={op} commentText={this.state.comment} 
 								onCommentChange ={this.handleTypingComment.bind(this)} onCommentSubmit={this.handleCommentSubmit.bind(this)}/>
 						</div>
 						<div className="feed row">

@@ -200,7 +200,8 @@ class MenuScreen extends Component {
                     numOtherPeople : obj['numOtherPeople'],
                     sender_name : obj['sender_name'],
                     op_name : obj['op_name'],
-                    seen : obj['seen']
+                    seen : obj['seen'],
+                    avatar : obj['avatar']
                 })
                   if (!obj['seen']){
                     numUnseenNotifications++;

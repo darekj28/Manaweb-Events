@@ -1,7 +1,7 @@
 import React from 'react';
 import {Component} from 'react'
 import { AppRegistry,StyleSheet,Text,View, TextInput, Alert, Image, TouchableHighlight} from 'react-native';
-
+import Icon from 'react-native-vector-icons/Ionicons';
 
 var titleIcon = require('./res/logo4.png')
 const FILTER_HEIGHT = 25
@@ -39,15 +39,17 @@ export default class LogoAndSearchBar extends Component {
     }
 
     filterText(index) {
-        if (this.props.filter_enable[index]) {
+        // if (this.props.filter_enable[index]) {
             return FILTER_NAMES[index]
-        } else {
-            return ''
-        }
+        // } else {
+        //     return ''
+        // }
     }
 
 
     render() {
+        var green = '#5cb85c';
+        var red = '#d9534f';
         return (
             <View style={{flex:1, flexDirection: 'row', backgroundColor: this.props.color, alignItems:'center'}}>
                 <View style={{flex: ACTIVITY_PROPORTION, margin: 5}}>
@@ -59,7 +61,8 @@ export default class LogoAndSearchBar extends Component {
                 <View style={{flex: 0, flexDirection: 'row'}}>
                     <TouchableHighlight onPress={() => this.props.onFilterChange(0)}>
                         <View style = {styles.filter_wrapper}>
-                            <Image  style={this.imageStyle.bind(this)(0)} source={filters.trade} />
+                            {!this.props.filter_enable[0] && <Icon name = "ios-swap" size = {25} color = {red}/>}
+                            {this.props.filter_enable[0] && <Icon name = "ios-swap" size = {25} color = {green}/>}
                             <Text style = {styles.filter_text}>
                                 {this.filterText.bind(this)(0)}
                             </Text>
@@ -68,7 +71,8 @@ export default class LogoAndSearchBar extends Component {
 
                     <TouchableHighlight onPress={() => this.props.onFilterChange(1)}>
                         <View style = {styles.filter_wrapper}>
-                            <Image  style={this.imageStyle.bind(this)(1)} source={filters.play} />
+                            {!this.props.filter_enable[1] && <Icon name = "ios-play" size = {25} color = {red}/>}
+                            {this.props.filter_enable[1] && <Icon name = "ios-play" size = {25} color = {green}/>}
                             <Text style = {styles.filter_text}>
                                 {this.filterText.bind(this)(1)}
                             </Text>
@@ -77,7 +81,8 @@ export default class LogoAndSearchBar extends Component {
 
                     <TouchableHighlight onPress={() => this.props.onFilterChange(2)}>
                         <View style = {styles.filter_wrapper}>
-                            <Image  style={this.imageStyle.bind(this)(2)} source={filters.chill} />
+                            {!this.props.filter_enable[2] && <Icon name = "ios-time-outline" size = {25} color = {red}/>}
+                            {this.props.filter_enable[2] && <Icon name = "ios-time-outline" size = {25} color = {green}/>}
                             <Text style = {styles.filter_text}>
                                 {this.filterText.bind(this)(2)}
                             </Text>
@@ -104,8 +109,9 @@ const styles = StyleSheet.create({
     },
     filter_wrapper: {
         margin: 2,
-        marginLeft: 6,
-        marginRight: 6
+        marginLeft: 4,
+        marginRight: 4,
+        alignItems : 'center'
     },
     filter_image: {
       height: FILTER_HEIGHT,
@@ -113,6 +119,6 @@ const styles = StyleSheet.create({
     },
     filter_text: {
       color: 'white',
-      fontSize: 12
+      fontSize: 10
     },
 });

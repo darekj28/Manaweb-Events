@@ -8,9 +8,8 @@ export default class CommentBox extends React.Component {
 		var comment = this.props.comment;
 		return (
 			<View style={{  flex:1, flexDirection: 'row', justifyContent: 'flex-start',
-                                borderBottomColor: 'silver', borderBottomWidth: 1}}>
+                                borderBottomColor: 'silver', borderBottomWidth: 1,backgroundColor : 'white'}}>
                 <View style={{flex: 0, paddingLeft : 8, paddingTop: 8, justifyContent: 'flex-start'}}>
-                      
                     {comment.avatar =='nissa' && <Image  style={styles.profile_image} source={require('../static/avatars/nissa.png')} />}
                     {comment.avatar == 'chandra' && <Image  style={styles.profile_image} source={require('../static/avatars/chandra.png')} />}
                     {comment.avatar == 'elspeth' && <Image  style={styles.profile_image} source={require('../static/avatars/elspeth.png')} />}
@@ -23,7 +22,7 @@ export default class CommentBox extends React.Component {
                     {comment.avatar == 'gideon' && <Image  style={styles.profile_image} source={require('../static/avatars/gideon.png')} />}
                 </View>
                 <View style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-start'}}>
-                    <View style={{flex: 0, flexDirection: 'row', justifyContent: 'flex-start'}}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
                         <View style={{flex : 0, height : 50, flexDirection: 'row', justifyContent : 'flex-start', flexWrap : 'wrap', 
                                             paddingLeft : 8, paddingRight : 8, paddingTop : 8}}>    
                             <Text style = {styles.text_name}>
@@ -32,23 +31,17 @@ export default class CommentBox extends React.Component {
                             <Text style = {styles.text_userID}>
                                 @{comment.userID}
                             </Text>
-                            {!this.props.isOriginalPost && <Text style = {styles.text_userID}>
+                            <Text style = {styles.text_userID}>
                                 &#8226; {comment.time}
-                            </Text>}
+                            </Text>
                         </View>
                     </View>
-                    <View style={{flex : 1, paddingLeft : 8, paddingRight : 8 }}>
-                        {!this.props.isOriginalPost && <Text style = {styles.text_message}>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
+                        <View style={{flex : 0, paddingLeft : 8, paddingRight : 8 }}>
+                            <Text style = {styles.text_message}>
                                 {comment.postContent} 
-                        </Text>}
-                        {this.props.isOriginalPost && <Text style = {styles.original_post}>
-                                {comment.postContent}
-                        </Text>}
-                    </View>
-                    <View style={{flex: 0, paddingLeft : 4, paddingRight : 8, paddingBottom : 4}}>
-                        {this.props.isOriginalPost && <Text style={styles.text_userID}>
-                               {comment.timeString}
-                        </Text>}
+                            </Text>
+                        </View>
                     </View>
                 </View>
             </View>
@@ -82,10 +75,5 @@ const styles = StyleSheet.create({
         width: PROFILE_WIDTH,
         height: PROFILE_HEIGHT,
         borderRadius: 4
-    },
-    original_post : {
-        flex: 0,
-        fontSize: 20,
-        textAlignVertical: 'top'
     }
 });

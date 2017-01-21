@@ -42,7 +42,7 @@ export default class NotificationScreen extends React.Component {
   render() {
     return (
       <View style = {styles.container}>
-        <View style = {{borderBottomColor: '#000000', borderBottomWidth: 5}}>
+        <View style = {{borderBottomColor: 'black', borderBottomWidth: 1}}>
             <Text style={styles.title}>Your Notifications</Text>
         </View>
         <Notifications current_user = {this.props.current_user}

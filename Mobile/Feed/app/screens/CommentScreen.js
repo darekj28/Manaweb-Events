@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Comments from '../components/Comments';
 import CommentBox from '../components/CommentBox';
 import MakeCommentBox from '../components/MakeCommentBox';
+import OriginalPost from '../components/OriginalPost';
 
 const POST_MESSAGE_HEIGHT_SHORT = 50
 const POST_MESSAGE_HEIGHT_TALL = 150
@@ -145,6 +146,7 @@ export default class CommentScreen extends React.Component {
 		this.setState({current_user : this.props.current_user})
 	}
 	render() {
+		var op = this.state.original_post['name'] ? this.state.original_post['name'].split(' ')[0] : "";
 		return (
 			<View style = {styles.container}>
 				<View style = {styles.topbar}>
@@ -152,14 +154,21 @@ export default class CommentScreen extends React.Component {
 	                	<Icon name = "chevron-left" size = {20} />
 	              	</TouchableOpacity>
 	            </View>
-              	<CommentBox comment={this.state.original_post} isOriginalPost={true}/> 
-              	<MakeCommentBox onClick={(event) => this.postMessagePressed.bind(this)()}
-             		animateDuration={ANIMATE_DURATION}
-                    post_message_expanded={this.state.post_message_expanded}
-                    newPostContent = {this.state.newPostContent}
-                    handlePostTyping = {this.handlePostTyping.bind(this)}
-                    handlePostSubmit = {this.handleCommentSubmit.bind(this)}/>
-              	<Comments comments={this.state.comments} comment_id={this.props.comment_id}/>
+	            <View style={{flexDirection : 'row'}}>
+	              	<OriginalPost post={this.state.original_post}/> 
+	            </View>
+	            <View style={{flexDirection : 'row'}}>
+	            	<MakeCommentBox onClick={(event) => this.postMessagePressed.bind(this)()}
+	             		animateDuration={ANIMATE_DURATION}
+	                    post_message_expanded={this.state.post_message_expanded}
+	                    newPostContent = {this.state.newPostContent}
+	                    handlePostTyping = {this.handlePostTyping.bind(this)}
+	                    handlePostSubmit = {this.handleCommentSubmit.bind(this)}
+	                    op = {op}/>
+	            </View>
+	            <View style={{flexDirection : 'row'}}>
+              		<Comments comments={this.state.comments} comment_id={this.props.comment_id}/>
+              	</View>
             </View>
 			);
 	}

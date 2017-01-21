@@ -23,7 +23,7 @@ export default class MakeComment extends React.Component {
 	render() {
 		return(
 			<div id="MakeComment"> 
-				<div id="ToggleComment"><h4>Make a comment...</h4></div>
+				<div id="ToggleComment"><h4>Reply to {this.props.op}...</h4></div>
 				<div id="CommentPost">
 					<textarea id="CommentInput" className="form-control" 
 							value={this.props.commentText} 
