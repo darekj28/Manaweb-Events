@@ -503,24 +503,31 @@ class SettingsScreen extends Component {
           <Modal
             visible={this.state.display_password_change}
               animationType={"slide"}
-              transparent={false}
-              >
-                 {old_password_input}
-                 {new_password_input} 
-
-                 <TouchableOpacity 
-                style = {styles.password_modal_button}
-                 onPress = {this.togglePasswordModal.bind(this)}>
-                  <Text style = {styles.input_text}>
-                    Return 
-                  </Text>
-                 </TouchableOpacity>
-                 <TouchableOpacity style = {styles.password_modal_button} 
-                 onPress = {this.updatePassword.bind(this)}>
-                  <Text style = {styles.input_text}>
-                    Click to Update Password  
-                  </Text>
-                 </TouchableOpacity>
+              transparent={false}>
+                <View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start', paddingTop: 40}}>
+                    <View style={{ flex : 0.1, flexDirection : 'row', padding : 16, paddingBottom : 0}}>
+                        <View style={{flex: 1}}>
+                            <TouchableOpacity onPress = {this.togglePasswordModal.bind(this)}>
+                                <Text style = {{color : '#90D7ED'}}>
+                                    Cancel
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{flex: 0}}>
+                            <TouchableOpacity onPress = {this.updatePassword.bind(this)}>
+                                <Text style = {{color : '#90D7ED'}}>
+                                    Update
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <View style={{flex : 1, paddingLeft : 16}}>
+                        {old_password_input}
+                        {new_password_input} 
+                    </View>
+                </View>
+                 
+                 
           </Modal>
       )
   }
@@ -530,8 +537,8 @@ class SettingsScreen extends Component {
             <View style = {styles.input_box}>
                 <TouchableOpacity style = {styles.toggle_picker_row} onPress = {this.togglePasswordModal.bind(this)}>
                     <Text style = {styles.input_text}> 
-                       Click To Update Password
-                     </Text>
+                        Click To Update Password
+                    </Text>
                 </TouchableOpacity>
               </View>
         )
@@ -539,13 +546,13 @@ class SettingsScreen extends Component {
 
   generateOldPasswordInput() {
     var old_password_error = this.getErrorMessage.bind(this)('old_password')
-    return  (<View style = {styles.password_box}> 
-                <Text style = {styles.instruction_text}>
-                    Confirm your current password first
+    return  (<View style = {{flexDirection:'column', paddingBottom : 16}}> 
+                <Text style = {{fontSize : 16, fontWeight : 'bold', paddingLeft: 16, padding: 8}}>
+                    Current Password
                   </Text>
                  <TextInput
                   onChangeText = {this.handleOldPasswordChange.bind(this)}
-                  style = {styles.input_text} placeholder = "Current Password"
+                  style = {{fontSize : 16, padding : 8, paddingLeft : 16, height : 40}} placeholder = "Password"
                   secureTextEntry = {true}
                   maxLength = {20}
                 />
@@ -556,13 +563,13 @@ class SettingsScreen extends Component {
 
   generateNewPasswordInput() {
     var new_password_error = this.getErrorMessage.bind(this)('new_password')
-    return  (<View style = {styles.password_box}> 
-                <Text style = {styles.instruction_text}>
-                    Your new password
+    return  (<View style = {{flexDirection : 'column'}}> 
+                <Text style = {{fontSize : 16, fontWeight :'bold', paddingLeft : 16, padding : 8}}>
+                    New Password
                   </Text>
                  <TextInput
                   onChangeText = {this.handleNewPasswordChange.bind(this)}
-                  style = {styles.input_text} placeholder = "New Password"
+                  style = {{fontSize : 16, padding : 8, paddingLeft: 16, height : 40}} placeholder = "Password"
                   secureTextEntry = {true}
                   maxLength = {20}
                 />
@@ -836,12 +843,6 @@ const styles = StyleSheet.create({
     // backgroundColor: "skyblue"
   },
   password_modal_button : {
-    borderColor: "skyblue",
-    borderWidth : 1,
-    borderRadius : 5,
-    padding: 20,
-    width : winSize.width * 0.925,
-    height: winSize.height * 0.10
   },
   logout_button: {
     backgroundColor: "orange",
