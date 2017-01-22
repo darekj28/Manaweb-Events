@@ -41,14 +41,25 @@ export default class NotificationScreen extends React.Component {
   }
   render() {
     return (
-      <View style = {styles.container}>
-        <View style = {{borderBottomColor: 'black', borderBottomWidth: 1}}>
-            <Text style={styles.title}>Your Notifications</Text>
+    <View style = {styles.container}>
+        <View style={{ flex : 0.1, flexDirection : 'row', justifyContent : 'space-around'}}>
+            <View style={{flex: 0.2}}>
+                <TouchableOpacity>
+                    <Icon name = "chevron-left" size = {20}/>
+                </TouchableOpacity>
+            </View>
+            <View style={{flex: 0.6}}>
+                <Text style = {{textAlign : 'center', fontWeight : 'bold'}}>
+                    Your Notifications
+                </Text>
+            </View>
+            <View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}>
+            </View>
         </View>
         <Notifications current_user = {this.props.current_user}
            current_username = {this.props.current_username}
           notifications={this.props.notifications} navigator={this.props.navigator}/>
-      </View>
+    </View>
       )
   }
 }
