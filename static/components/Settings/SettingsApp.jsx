@@ -152,7 +152,7 @@ export default class SettingsApp extends React.Component {
 				<div className="container app-container">
 					<form class="form-horizontal">
 						<div className="page-header">
-							<h2> Update Settings </h2>
+							<h2> Account Settings </h2>
 						</div>
 						{text_fields.map(function(field) {
 							return <div className="form-group">
