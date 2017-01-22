@@ -10,14 +10,9 @@ import random
 
 # from tasks import asyncGetPosts
 # from tasks import test
-
-
-
-
 mobile_api = Blueprint('mobile_api', __name__)
 DEFAULT_FEED = "BALT"
 avatars = ["ajani", "chandra", "elspeth", "gideon", "jace", "liliana", "nahiri", "nicol", "nissa", "ugin"]
-
 
 @mobile_api.route('/mobileFacebookCreateAccount', methods = ['POST'])
 def mobileFacebookCreateAccount():
@@ -47,12 +42,10 @@ def mobileFacebookCreateAccount():
 	user_manager.closeConnection()
 	session['logged_in'] = True
 	session['userID'] = userID
-
 	return jsonify({'result' : 'success', 'current_user': current_user})
 
 @mobile_api.route('/mobileCreateProfile', methods = ['POST'])
 def mobileCreateProfile():
-	
 	first_name = request.json['first_name'].title()
 	last_name = request.json['last_name'].title()
 	userID = request.json['username']
@@ -69,33 +62,21 @@ def mobileCreateProfile():
 	gender = "Other"
 	avatar_name = "Jace"
 	avatar_url = '/static/avatars/' + avatar_name + '.png'
-	
 	isActive = True
 	confirmationPin = "DEFAULT"
 	# confirmationPin = email_confirm.hashUserID(userID)
-	confirmed = True
-
 	confirmed = True		
 	user_manager = Users()
 	user_manager.addUser(userID, first_name = first_name, last_name = last_name, password = password, email = email,  isActive = isActive,
 		avatar_url = avatar_url, avatar_name = avatar_name, confirmationPin = confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
 		isAdmin = False, phone_number = phone_number, birthMonth = birthMonth, birthDay = birthDay, birthYear = birthYear,
 		gender = gender, confirmed = confirmed) 
-
 	current_user = user_manager.getInfo(userID)
-
 	user_manager.closeConnection()
-
-	# add to last seen table 
 	post_manager = Posts()
 	post_manager.addUserToLastSeenTables(userID)
 	post_manager.closeConnection()
-
-
 	return jsonify({'result' : 'success', 'current_user' : current_user})
-	# return jsonify({'response': "success!" })
-
-	
 
 @mobile_api.route('/mobileLogin', methods =['POST'])
 def mobileLogin():
@@ -107,18 +88,19 @@ def mobileLogin():
 		current_user = user_manager.getInfo(validator_output['username'])
 		validator_output['current_user'] = current_user
 		user_manager.closeConnection()
-
 	return jsonify(validator_output)
-
-
 
 @mobile_api.route('/mobileTextConfirmation', methods = ['POST'])
 def mobileTextConfirmation():
 	phone_number = request.json['phone_number']
-	print(phone_number)
 	confirmationPin = sms.sendTextConfirmationPin(phone_number)
 	return jsonify({'confirmationPin' : confirmationPin})
 
+@mobile_api.route('/mobileEmailConfirmation', methods = ['POST'])
+def mobileEmailConfirmation():
+	email = request.json['email']
+	confirmationPin = email_confirm.sendConfirmationEmail(email)
+	return jsonify({'result' : 'success', 'confirmationPin' : confirmationPin})
 
 @mobile_api.route('/mobileNameValidation', methods = ['POST'])
 def mobileNameValidation():
@@ -150,7 +132,6 @@ def mobileUsernameValidation():
 	username = request.json['username']
 	validator_output = validation.validateUsername(username)
 	return jsonify(validator_output)
-
 
 @mobile_api.route('/mobileGetCurrentUserInfo', methods = ['POST'])
 def mobileGetCurrentUserInfo():
@@ -186,8 +167,6 @@ def mobileGetPosts():
 	# modified_post_list = post_list[0:5]
 	# output = {'result' : 'success', 'post_list' : modified_post_list}
 	output = {'result' : 'success', 'post_list' : post_list}
-
-
 	return jsonify(output)
 
 @mobile_api.route('/mobileGetComments', methods = ['POST'])
@@ -221,9 +200,7 @@ def mobileMakePost():
 	post_manager = Posts()
 	post_manager.postInThread(feed_name, body = postContent, poster_id = poster_id, 
 			isTrade = isTrade, isPlay = isPlay, isChill = isChill, comment_id = comment_id)
-	
 	post_manager.closeConnection()
-
 	return jsonify({'result' : 'success'})
 
 @mobile_api.route("/mobileMakeComment", methods = ['POST'])
@@ -239,7 +216,6 @@ def mobileMakeComment():
 	else:
 		print(userID)
 	post_manager.closeConnection()	
-
 	return jsonify({ 'result' : 'success'})
 
 @mobile_api.route('/mobileGetNotifications', methods=['POST'])
@@ -297,43 +273,26 @@ def mobileCheckPassword():
 	user_manager.closeConnection()
 	return jsonify(output)
 
+
 @mobile_api.route('/mobileUpdatePassword', methods = ['POST'])
 def mobileUpdatePassword():
-	user_manager = Users()
+
 	username = request.json['username']
-	password = request.json['password']
-	user_manager.updateInfo(username, 'password', password)
+	new_password = request.json['password']
+	print(username)
+	print(new_password)
+	user_manager = Users()
+	user_manager.updateInfo(username, 'password', new_password)
 	user_manager.closeConnection()
 	output = {}
 	output['result'] = 'success'
 	return jsonify(output)
 
-
-# @mobile_api.route('/status/<task_id>')
-# def taskStatus(task_id):
-#     task = test.AsyncResult(task_id)
-#     if task.state == 'PENDING':
-#         # job did not start yet
-#         response = {
-#             'state': task.state,
-#             'status': 'Pending...'
-#         }
-#     elif task.state != 'FAILURE':
-#         response = {
-#             'state': task.state,
-#             'current': task.info.get('answer', 0),
-#         }
-#         if 'result' in task.info:
-#             response['result'] = task.info['result']
-#     else:
-#         # something went wrong in the background job
-#         response = {
-#             'state': task.state,
-#             'current': 1,
-#             'total': 1,
-#             'status': str(task.info),  # this is the exception raised
-#         }
-#     return jsonify(response)
-
-
+@mobile_api.route('/mobileRecoverAccount', methods = ['POST'])
+def mobileRecoverAccount():
+	recovery_input = request.json['recovery_input']
+	security_manager = Security()
+	output = security_manager.recoverAccount(recovery_input)
+	security_manager.closeConnection()
+	return jsonify(output)
 

@@ -4392,7 +4392,7 @@
 	
 	var _MakePost2 = _interopRequireDefault(_MakePost);
 	
-	var _Feed = __webpack_require__(/*! ./Feed.jsx */ 111);
+	var _Feed = __webpack_require__(/*! ./Feed/Feed.jsx */ 111);
 	
 	var _Feed2 = _interopRequireDefault(_Feed);
 	
@@ -4411,10 +4411,6 @@
 	var _ExtendFeedButton = __webpack_require__(/*! ./ExtendFeedButton.jsx */ 129);
 	
 	var _ExtendFeedButton2 = _interopRequireDefault(_ExtendFeedButton);
-	
-	var _Footer = __webpack_require__(/*! ../Footer.jsx */ 127);
-	
-	var _Footer2 = _interopRequireDefault(_Footer);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -10555,9 +10551,9 @@
 
 /***/ },
 /* 111 */
-/*!*****************************************!*\
-  !*** ./static/components/Home/Feed.jsx ***!
-  \*****************************************/
+/*!**********************************************!*\
+  !*** ./static/components/Home/Feed/Feed.jsx ***!
+  \**********************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10675,9 +10671,9 @@
 
 /***/ },
 /* 112 */
-/*!*********************************************!*\
-  !*** ./static/components/Home/FeedPost.jsx ***!
-  \*********************************************/
+/*!**************************************************!*\
+  !*** ./static/components/Home/Feed/FeedPost.jsx ***!
+  \**************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10853,9 +10849,9 @@
 
 /***/ },
 /* 113 */
-/*!*******************************************!*\
-  !*** ./static/components/Home/Avatar.jsx ***!
-  \*******************************************/
+/*!************************************************!*\
+  !*** ./static/components/Home/Feed/Avatar.jsx ***!
+  \************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10901,9 +10897,9 @@
 
 /***/ },
 /* 114 */
-/*!***************************************************!*\
-  !*** ./static/components/Home/FeedPostHeader.jsx ***!
-  \***************************************************/
+/*!********************************************************!*\
+  !*** ./static/components/Home/Feed/FeedPostHeader.jsx ***!
+  \********************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10989,9 +10985,9 @@
 
 /***/ },
 /* 115 */
-/*!*************************************************!*\
-  !*** ./static/components/Home/FeedPostBody.jsx ***!
-  \*************************************************/
+/*!******************************************************!*\
+  !*** ./static/components/Home/Feed/FeedPostBody.jsx ***!
+  \******************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -11037,9 +11033,9 @@
 
 /***/ },
 /* 116 */
-/*!**************************************************!*\
-  !*** ./static/components/Home/EditPostModal.jsx ***!
-  \**************************************************/
+/*!*******************************************************!*\
+  !*** ./static/components/Home/Feed/EditPostModal.jsx ***!
+  \*******************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11155,9 +11151,9 @@
 
 /***/ },
 /* 117 */
-/*!****************************************************!*\
-  !*** ./static/components/Home/DeletePostModal.jsx ***!
-  \****************************************************/
+/*!*********************************************************!*\
+  !*** ./static/components/Home/Feed/DeletePostModal.jsx ***!
+  \*********************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11255,9 +11251,9 @@
 
 /***/ },
 /* 118 */
-/*!****************************************************!*\
-  !*** ./static/components/Home/ReportPostModal.jsx ***!
-  \****************************************************/
+/*!*********************************************************!*\
+  !*** ./static/components/Home/Feed/ReportPostModal.jsx ***!
+  \*********************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11387,11 +11383,11 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _FacebookConnect = __webpack_require__(/*! ./FacebookConnect.jsx */ 120);
+	var _FacebookConnect = __webpack_require__(/*! ./Login/FacebookConnect.jsx */ 120);
 	
 	var _FacebookConnect2 = _interopRequireDefault(_FacebookConnect);
 	
-	var _RegisterForm = __webpack_require__(/*! ./RegisterForm.jsx */ 123);
+	var _RegisterForm = __webpack_require__(/*! ./Register/RegisterForm.jsx */ 123);
 	
 	var _RegisterForm2 = _interopRequireDefault(_RegisterForm);
 	
@@ -11399,7 +11395,7 @@
 	
 	var _LoginNavBar2 = _interopRequireDefault(_LoginNavBar);
 	
-	var _Footer = __webpack_require__(/*! ../Footer.jsx */ 127);
+	var _Footer = __webpack_require__(/*! ./Footer.jsx */ 127);
 	
 	var _Footer2 = _interopRequireDefault(_Footer);
 	
@@ -11473,9 +11469,9 @@
 
 /***/ },
 /* 120 */
-/*!*****************************************************!*\
-  !*** ./static/components/Login/FacebookConnect.jsx ***!
-  \*****************************************************/
+/*!***********************************************************!*\
+  !*** ./static/components/Login/Login/FacebookConnect.jsx ***!
+  \***********************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11486,17 +11482,17 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _RegisterTextInput = __webpack_require__(/*! ./RegisterTextInput.jsx */ 121);
+	var _RegisterTextInput = __webpack_require__(/*! ../Register/RegisterTextInput.jsx */ 121);
 	
 	var _RegisterTextInput2 = _interopRequireDefault(_RegisterTextInput);
 	
-	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 48);
+	var _AppActions = __webpack_require__(/*! ../../../actions/AppActions.jsx */ 48);
 	
 	var _AppActions2 = _interopRequireDefault(_AppActions);
 	
 	var _reactRouter = __webpack_require__(/*! react-router */ 52);
 	
-	var _AppStore = __webpack_require__(/*! ../../stores/AppStore.jsx */ 1);
+	var _AppStore = __webpack_require__(/*! ../../../stores/AppStore.jsx */ 1);
 	
 	var _AppStore2 = _interopRequireDefault(_AppStore);
 	
@@ -11739,9 +11735,9 @@
 
 /***/ },
 /* 121 */
-/*!*******************************************************!*\
-  !*** ./static/components/Login/RegisterTextInput.jsx ***!
-  \*******************************************************/
+/*!****************************************************************!*\
+  !*** ./static/components/Login/Register/RegisterTextInput.jsx ***!
+  \****************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -11829,9 +11825,9 @@
 
 /***/ },
 /* 123 */
-/*!**************************************************!*\
-  !*** ./static/components/Login/RegisterForm.jsx ***!
-  \**************************************************/
+/*!***********************************************************!*\
+  !*** ./static/components/Login/Register/RegisterForm.jsx ***!
+  \***********************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11846,11 +11842,11 @@
 	
 	var _RegisterTextInput2 = _interopRequireDefault(_RegisterTextInput);
 	
-	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 48);
+	var _AppActions = __webpack_require__(/*! ../../../actions/AppActions.jsx */ 48);
 	
 	var _AppActions2 = _interopRequireDefault(_AppActions);
 	
-	var _AppStore = __webpack_require__(/*! ../../stores/AppStore.jsx */ 1);
+	var _AppStore = __webpack_require__(/*! ../../../stores/AppStore.jsx */ 1);
 	
 	var _AppStore2 = _interopRequireDefault(_AppStore);
 	
@@ -12026,7 +12022,8 @@
 							isOP: obj['isOP'],
 							numOtherPeople: obj['numOtherPeople'],
 							sender_name: obj['sender_name'],
-							op_name: obj['op_name']
+							op_name: obj['op_name'],
+							avatar: obj['avatar']
 						});
 					});
 					_AppActions2.default.addNotifications(notifications);
@@ -12158,7 +12155,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _LoginForm = __webpack_require__(/*! ./LoginForm.jsx */ 125);
+	var _LoginForm = __webpack_require__(/*! ./Login/LoginForm.jsx */ 125);
 	
 	var _LoginForm2 = _interopRequireDefault(_LoginForm);
 	
@@ -12236,9 +12233,9 @@
 
 /***/ },
 /* 125 */
-/*!***********************************************!*\
-  !*** ./static/components/Login/LoginForm.jsx ***!
-  \***********************************************/
+/*!*****************************************************!*\
+  !*** ./static/components/Login/Login/LoginForm.jsx ***!
+  \*****************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12249,15 +12246,15 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 48);
+	var _AppActions = __webpack_require__(/*! ../../../actions/AppActions.jsx */ 48);
 	
 	var _AppActions2 = _interopRequireDefault(_AppActions);
 	
-	var _AppStore = __webpack_require__(/*! ../../stores/AppStore.jsx */ 1);
+	var _AppStore = __webpack_require__(/*! ../../../stores/AppStore.jsx */ 1);
 	
 	var _AppStore2 = _interopRequireDefault(_AppStore);
 	
-	var _SettingsInputLabel = __webpack_require__(/*! ../Settings/SettingsInputLabel.jsx */ 126);
+	var _SettingsInputLabel = __webpack_require__(/*! ../../Settings/SettingsInputLabel.jsx */ 126);
 	
 	var _SettingsInputLabel2 = _interopRequireDefault(_SettingsInputLabel);
 	
@@ -12345,7 +12342,8 @@
 							isOP: obj['isOP'],
 							numOtherPeople: obj['numOtherPeople'],
 							sender_name: obj['sender_name'],
-							op_name: obj['op_name']
+							op_name: obj['op_name'],
+							avatar: obj['avatar']
 						});
 					});
 					_AppActions2.default.addNotifications(notifications);
@@ -12474,9 +12472,9 @@
 
 /***/ },
 /* 127 */
-/*!**************************************!*\
-  !*** ./static/components/Footer.jsx ***!
-  \**************************************/
+/*!********************************************!*\
+  !*** ./static/components/Login/Footer.jsx ***!
+  \********************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -12675,10 +12673,6 @@
 	
 	var _AppStore2 = _interopRequireDefault(_AppStore);
 	
-	var _Footer = __webpack_require__(/*! ../Footer.jsx */ 127);
-	
-	var _Footer2 = _interopRequireDefault(_Footer);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -12838,6 +12832,7 @@
 			key: "render",
 			value: function render() {
 				var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
+				var op = this.state.original_post['name'] ? this.state.original_post['name'].split(' ')[0] : "";
 				return React.createElement(
 					"div",
 					{ id: "CommentApp" },
@@ -12865,7 +12860,7 @@
 						React.createElement(
 							"div",
 							{ className: "app row" },
-							React.createElement(_MakeComment2.default, { placeholder: "What's up bro?", commentText: this.state.comment,
+							React.createElement(_MakeComment2.default, { placeholder: "What's up bro?", op: op, commentText: this.state.comment,
 								onCommentChange: this.handleTypingComment.bind(this), onCommentSubmit: this.handleCommentSubmit.bind(this) })
 						),
 						React.createElement(
@@ -13043,7 +13038,7 @@
 	
 	var _CommentFeedPostBody2 = _interopRequireDefault(_CommentFeedPostBody);
 	
-	var _Avatar = __webpack_require__(/*! ../Home/Avatar.jsx */ 113);
+	var _Avatar = __webpack_require__(/*! ../Home/Feed/Avatar.jsx */ 113);
 	
 	var _Avatar2 = _interopRequireDefault(_Avatar);
 	
@@ -13811,7 +13806,9 @@
 						React.createElement(
 							'h4',
 							null,
-							'Make a comment...'
+							'Reply to ',
+							this.props.op,
+							'...'
 						)
 					),
 					React.createElement(
@@ -13873,10 +13870,6 @@
 	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 48);
 	
 	var _AppActions2 = _interopRequireDefault(_AppActions);
-	
-	var _Footer = __webpack_require__(/*! ../Footer.jsx */ 127);
-	
-	var _Footer2 = _interopRequireDefault(_Footer);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -14142,6 +14135,12 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
+	var _Avatar = __webpack_require__(/*! ../Home/Feed/Avatar.jsx */ 113);
+	
+	var _Avatar2 = _interopRequireDefault(_Avatar);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -14169,9 +14168,9 @@
 	                also = "";
 	            } else {
 	                whose = note.op_name + "'s";
-	                also = "also";
+	                also = " also";
 	            }
-	            if (note.numOtherPeople > 1) notification = note.sender_name + " and " + note.numOtherPeople + " other people commented on " + whose + " post.";else if (note.numOtherPeople == 1) notification = note.sender_name + " and 1 other person commented on " + whose + " post.";else notification = note.sender_name + " " + also + " commented on " + whose + " post.";
+	            if (note.numOtherPeople > 1) notification = note.sender_name + " and " + note.numOtherPeople + " other people commented on " + whose + " post.";else if (note.numOtherPeople == 1) notification = note.sender_name + " and 1 other person commented on " + whose + " post.";else notification = note.sender_name + also + " commented on " + whose + " post.";
 	            return notification;
 	        }
 	    }, {
@@ -14182,27 +14181,36 @@
 	                'li',
 	                { className: 'NotificationsFeedPost' },
 	                React.createElement(
-	                    Link,
-	                    { to: "/comment/" + note.comment_id },
-	                    React.createElement(
-	                        'div',
-	                        { className: 'row' },
-	                        React.createElement(
-	                            'b',
-	                            null,
-	                            this.getNotificationSyntax.bind(this)(note)
-	                        )
-	                    )
+	                    'div',
+	                    { className: 'NotificationAvatarSpace' },
+	                    React.createElement(_Avatar2.default, { source: "./static/avatars/" + note.avatar + ".png" })
 	                ),
 	                React.createElement(
 	                    'div',
-	                    { className: 'row' },
+	                    { className: 'NotificationSpace' },
 	                    React.createElement(
-	                        'small',
-	                        null,
-	                        note.timeString
+	                        Link,
+	                        { to: "/comment/" + note.comment_id },
+	                        React.createElement(
+	                            'div',
+	                            { className: 'notification-post-row' },
+	                            React.createElement(
+	                                'b',
+	                                null,
+	                                this.getNotificationSyntax.bind(this)(note)
+	                            )
+	                        )
 	                    ),
-	                    React.createElement('hr', { className: 'notification-hr' })
+	                    React.createElement(
+	                        'div',
+	                        { className: 'notification-post-row' },
+	                        React.createElement(
+	                            'small',
+	                            null,
+	                            note.timeString
+	                        ),
+	                        React.createElement('hr', { className: 'notification-hr' })
+	                    )
 	                )
 	            );
 	        }
@@ -14247,10 +14255,6 @@
 	var _AppStore = __webpack_require__(/*! ../../stores/AppStore.jsx */ 1);
 	
 	var _AppStore2 = _interopRequireDefault(_AppStore);
-	
-	var _Footer = __webpack_require__(/*! ../Footer.jsx */ 127);
-	
-	var _Footer2 = _interopRequireDefault(_Footer);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	

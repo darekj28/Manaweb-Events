@@ -12,19 +12,27 @@ export default class Notifications extends React.Component {
 		super(props);
 	}
 	render() {
-		return (
-			<ScrollView            
-			automaticallyAdjustContentInsets={false}
-            onScroll={() => {}}
-            scrollEventThrottle={200}
-            onPress={() => {Alert.alert('Scroll clicked')}}>
-				{this.props.notifications.map(function(note, i) {
-					return (<NotificationBox key={i} note={note} 
-						current_username = {this.props.current_username} 
-						current_user = {this.props.current_user}
-						navigator = {this.props.navigator}/>);	
-				}, this)}
-			</ScrollView>
-			)
+		if (this.props.notifications.length == 0)
+			return ( 
+					<Text> 
+						No new notificaitons at this time
+					</Text>
+				)
+
+		else 
+			return (
+				<ScrollView            
+				automaticallyAdjustContentInsets={false}
+	            onScroll={() => {}}
+	            scrollEventThrottle={200}
+	            onPress={() => {Alert.alert('Scroll clicked')}}>
+					{this.props.notifications.map(function(note, i) {
+						return (<NotificationBox key={i} note={note} 
+							current_username = {this.props.current_username} 
+							current_user = {this.props.current_user}
+							navigator = {this.props.navigator}/>);	
+					}, this)}
+				</ScrollView>
+				)
 	}
 }
