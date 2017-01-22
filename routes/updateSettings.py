@@ -18,7 +18,8 @@ def getPreviousSettings():
 			'birthYear' 		: thisUser['birthYear'],
 			'avatar_name'		: thisUser['avatar_name'],
 			'avatar_url' 		: thisUser['avatar_url'],
-			'phone_number'		: thisUser['phone_number']
+			'phone_number'		: thisUser['phone_number'],
+			'email'				: thisUser['email']
 		})
 
 @update_settings.route('/updateSettings', methods=['POST'])

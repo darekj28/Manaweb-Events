@@ -448,12 +448,14 @@ def verifyUser():
 	thisUser = getUserInfo(request.form['username'])
 	return jsonify({ 'result' : (thisUser is None) })		
 
-@browser_api.route('/verifyEmail', methods=['POST'])
-def verifyEmail():
-	user_manager = Users()
-	thisUser = user_manager.getInfoFromEmail(request.form['mail'])
-	user_manager.closeConnection()
-	return jsonify({ 'result' : (thisUser is None) })	
+@browser_api.route('/verifyEmailIfChanged', methods=['POST'])
+def verifyEmailIfChanged():
+	email = request.json['email']
+	currentUser = request.json['currentUser']
+	if (currentUser['email'] == email):
+		return jsonify({ 'error' : False })
+	output = validation.validateEmail(email)
+	return jsonify(output)
 
 
 @browser_api.route('/createFeed', methods = ['POST'])

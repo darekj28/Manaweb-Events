@@ -477,6 +477,8 @@ class Posts:
 		for note in query:
 			sender = user_manager.getInfo(note[3])
 			op = user_manager.getInfo(note[11])
+			if (op is None): 
+				op = {"first_name" : "None"}
 			this_note = {'feed_name' 		: note[0],
 						 'comment_id'		: note[1],
 						 'receiver_id'		: note[2],
