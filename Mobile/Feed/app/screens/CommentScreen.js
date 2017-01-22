@@ -149,11 +149,20 @@ export default class CommentScreen extends React.Component {
 		var op = this.state.original_post['name'] ? this.state.original_post['name'].split(' ')[0] : "";
 		return (
 			<View style = {styles.container}>
-				<View style = {styles.topbar}>
-	              	<TouchableOpacity onPress = {() => this.props.navigator.pop()}>
-	                	<Icon name = "chevron-left" size = {20} />
-	              	</TouchableOpacity>
-	            </View>
+	            <View style={{flexDirection : 'row', justifyContent : 'space-around', paddingLeft : 10, paddingRight : 10}}>
+		            <View style={{flex: 0.2}}>
+		                <TouchableOpacity onPress = {() => this.props.navigator.pop()}>
+		                    <Icon name = "chevron-left" size = {20}/>
+		                </TouchableOpacity>
+		            </View>
+		            <View style={{flex: 0.6}}>
+		                <Text style = {{textAlign : 'center', fontWeight : 'bold'}}>
+		                    {op + "'s post"}
+		                </Text>
+		            </View>
+		            <View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}>
+		            </View>
+		        </View>
 	            <View style={{flexDirection : 'row'}}>
 	              	<OriginalPost post={this.state.original_post}/> 
 	            </View>
@@ -177,9 +186,7 @@ const styles = StyleSheet.create({
     container: {
       	flex:1,
       	justifyContent: 'flex-start',
-      	paddingTop: 40
-    },
-    topbar : {
-    	padding : 10
+      	paddingTop: 30,
+      	backgroundColor : 'white'
     }
 });

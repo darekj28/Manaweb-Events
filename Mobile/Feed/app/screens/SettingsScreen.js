@@ -726,7 +726,7 @@ const styles = StyleSheet.create({
     flexDirection : "column",
     justifyContent: 'space-between',
     padding : 10,
-    paddingTop: 40,
+    paddingTop: 30,
     backgroundColor: "white",
     alignItems: 'flex-start'
   },

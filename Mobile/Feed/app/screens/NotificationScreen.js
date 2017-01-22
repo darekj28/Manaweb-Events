@@ -42,7 +42,7 @@ export default class NotificationScreen extends React.Component {
   render() {
     return (
     <View style = {styles.container}>
-        <View style={{ flex : 0.1, flexDirection : 'row', justifyContent : 'space-around'}}>
+        <View style={{ flex : 0.1, flexDirection : 'row', justifyContent : 'space-around', paddingLeft : 10, paddingRight : 10}}>
             <View style={{flex: 0.2}}>
                 <TouchableOpacity>
                     <Icon name = "chevron-left" size = {20}/>
@@ -67,8 +67,7 @@ const styles = StyleSheet.create({
   container: {
     flex:1,
     justifyContent: 'flex-start',
-    padding : 10,
-    paddingTop: 40
+    paddingTop: 30
   },
   title : {
     fontSize : 20
