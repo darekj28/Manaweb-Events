@@ -27,13 +27,15 @@ export default class Comments extends React.Component {
 		 var feed = this.filter.bind(this)();
 		 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
    		 var dataSource = ds.cloneWithRows(feed)
+
     return (
 			<ListView 
-                  style={styles.list_container}
-                  dataSource={dataSource}
-                  renderRow={this.listViewRenderRow.bind(this)}
-                  enableEmptySections = {true}
-                  />
+                style={styles.list_container}
+                dataSource={dataSource}
+                renderRow={this.listViewRenderRow.bind(this)}
+                enableEmptySections = {true}
+                removeClippedSubviews={false}
+			/>
 			/* <ScrollView
 	            automaticallyAdjustContentInsets={false}
 	            onScroll={() => {}}
