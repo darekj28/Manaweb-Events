@@ -19,6 +19,7 @@ import TestHTTP from '../screens/TestHTTP'
 import SettingsScreen from '../screens/SettingsScreen'
 import WelcomeScreen from '../screens/register/WelcomeScreen'
 import RecoveryScreen from '../screens/RecoveryScreen'
+import RecoverPassword from '../screens/RecoverPassword'
 import Spinner from 'react-native-loading-spinner-overlay';
 
 
@@ -130,6 +131,14 @@ class StartNavigator extends Component {
             <RecoveryScreen
               {...globalNavigatorProps}
               />
+          )
+
+    case "RecoverPassword":
+        return (
+            <RecoverPassword
+            current_username = {route.username}
+            {...globalNavigatorProps}
+            />
           )
    default:
         return (
