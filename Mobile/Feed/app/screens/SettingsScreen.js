@@ -505,15 +505,20 @@ class SettingsScreen extends Component {
               animationType={"slide"}
               transparent={false}>
                 <View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start', paddingTop: 40}}>
-                    <View style={{ flex : 0.1, flexDirection : 'row', padding : 16, paddingBottom : 0}}>
-                        <View style={{flex: 1}}>
+                    <View style={{ flex : 0.1, flexDirection : 'row', justifyContent : 'space-around', padding : 16, paddingBottom : 0}}>
+                        <View style={{flex: 0.2}}>
                             <TouchableOpacity onPress = {this.togglePasswordModal.bind(this)}>
                                 <Text style = {{color : '#90D7ED'}}>
                                     Cancel
                                 </Text>
                             </TouchableOpacity>
                         </View>
-                        <View style={{flex: 0}}>
+                        <View style={{flex: 0.6}}>
+                            <Text style = {{textAlign : 'center', fontWeight : 'bold'}}>
+                                Update password
+                            </Text>
+                        </View>
+                        <View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}>
                             <TouchableOpacity onPress = {this.updatePassword.bind(this)}>
                                 <Text style = {{color : '#90D7ED'}}>
                                     Update
