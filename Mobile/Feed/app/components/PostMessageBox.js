@@ -9,7 +9,7 @@ import React from 'react';
 import {Component} from 'react'
 import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
         TouchableWithoutFeedback, Alert, Image, Animated} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/Ionicons';
 import renderIf from './renderIf'
 
 
@@ -80,9 +80,8 @@ export default class PostMessageBox extends Component {
     }
 
     render() {
-        let filterIcon1 = require('./res/icon1.png')
-        let filterIcon2 = require('./res/icon2.png')
-        let filterIcon3 = require('./res/icon3.png')
+        var green = '#5cb85c';
+        var red = '#d9534f';
         // var newPostContent = this.props.newPostContent;
         if (!this.props.post_message_expanded) {
             return (
@@ -114,30 +113,33 @@ export default class PostMessageBox extends Component {
                 </View>
                 <Animated.View style={[styles.container, {height: this.state.filter_bar_height}]}>
                     <View style = {{flex: 0.85, flexDirection:'row'}}>
-                        <TouchableHighlight onPress={() => this.setFilter(0)}>
-                            <Image  style={this.imageStyle(0)}
-                                source={filterIcon1}>
-                            </Image>
-                        </TouchableHighlight>
+                        <TouchableOpacity onPress={() => this.setFilter(0)}>
+                            <View style={styles.filter_wrapper}>
+                                {!this.state.filter_enable[0] && <Icon name = "ios-swap" size = {25} color = {red}/>}
+                                {this.state.filter_enable[0] && <Icon name = "ios-swap" size = {25} color = {green}/>}
+                            </View>
+                        </TouchableOpacity>
 
-                        <TouchableHighlight onPress={() => this.setFilter(1)}>
-                            <Image  style={this.imageStyle(1)}
-                                source={filterIcon2}>
-                            </Image>
-                        </TouchableHighlight>
+                        <TouchableOpacity onPress={() => this.setFilter(1)}>
+                            <View style={styles.filter_wrapper}>
+                                {!this.state.filter_enable[1] && <Icon name = "ios-play" size = {25} color = {red}/>}
+                                {this.state.filter_enable[1] && <Icon name = "ios-play" size = {25} color = {green}/>}
+                            </View>
+                        </TouchableOpacity>
 
-                        <TouchableHighlight onPress={() => this.setFilter(2)}>
-                            <Image  style={this.imageStyle(2)}
-                                source={filterIcon3}>
-                            </Image>
-                        </TouchableHighlight>
+                        <TouchableOpacity onPress={() => this.setFilter(2)}>
+                            <View style={styles.filter_wrapper}>
+                                {!this.state.filter_enable[2] && <Icon name = "ios-time-outline" size = {25} color = {red}/>}
+                                {this.state.filter_enable[2] && <Icon name = "ios-time-outline" size = {25} color = {green}/>}
+                            </View>
+                        </TouchableOpacity>
                     </View>
                     <View style = {{flex: 0.15}}>
-                        <TouchableHighlight onPress={this.handlePostSubmit.bind(this)}>
+                        <TouchableOpacity onPress={this.handlePostSubmit.bind(this)}>
                             <Text style={{fontSize: 15}}>
-                                {'POST'}
+                                Post
                             </Text>
-                        </TouchableHighlight>
+                        </TouchableOpacity>
                     </View>
                 </Animated.View>
             </View>
@@ -161,4 +163,9 @@ const styles = StyleSheet.create({
       fontSize: 20,
       textAlignVertical: 'center',
   },
+  filter_wrapper: {
+        marginLeft: 16,
+        marginRight: 16,
+        alignItems : 'center'
+    }
 });

@@ -15,7 +15,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import IconBadge from 'react-native-icon-badge';
 const MENU_ICON_SIZE = 23
 const BOTTOM_BAR_PROPORTION = 0.09
-const HIGHLIGHTED_COLOR = '#A348A4'
+const HIGHLIGHTED_COLOR = '#90D7ED'
 const DEFAULT_COLOR = 'silver'
 
 var image_res = {
@@ -288,7 +288,7 @@ class MenuScreen extends Component {
                       <View style = {{flex: 1}}>
                         <Image  style={this._imageStyle(this.state.show_panel2)} source={image_res.settings} />
                         <Text style = {this._textStyle(this.state.show_panel2)}>
-                            {'Setting'}
+                            {'Settings'}
                         </Text>
                     </View>
                   </TouchableWithoutFeedback>
@@ -309,7 +309,7 @@ class MenuScreen extends Component {
 
                               
                         <Text style = {this._textStyle(this.state.show_panel3)}>
-                            {'Notification'}
+                            {'Notifications'}
                         </Text>
                     </View>
                   </TouchableWithoutFeedback>
@@ -323,6 +323,7 @@ const styles = StyleSheet.create({
   container: {
     flex:1,
     justifyContent: 'flex-start',
+    backgroundColor : 'white'
   },
   notification_badge : {
     alignSelf: "center",

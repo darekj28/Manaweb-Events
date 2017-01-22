@@ -320,112 +320,98 @@ class SettingsScreen extends Component {
     var currentAvatarLabel = currentAvatar.charAt(0).toUpperCase() + currentAvatar.slice(1);
     var avatarImage = this.getAvatarImage.bind(this)(this.state.avatar)
     return (
-               <View style = {styles.avatar_box}>
-                <View style = {styles.avatar_text_column}>
-                <Text style = {styles.avatar_text}> 
+              <View style = {{flexDirection:'column', paddingBottom : 8}}> 
+                <Text style = {styles.settings_label}>
                     Avatar
-                </Text>
-                <TouchableOpacity style = {styles.toggle_picker_row} onPress = {this.toggleAvatarPicker.bind(this)}>
-                    <Text style = {styles.current_avatar_text}> 
-                      {currentAvatarLabel}
-                     </Text>
-                </TouchableOpacity>
-                </View>
-
-                <View style = {styles.avatar_image_container}>
-                      {avatarImage}
-                </View>
-              </View>
+                  </Text>
+                  <View style={{flexDirection : 'row'}}>
+                     <TouchableOpacity style = {{justifyContent : 'flex-start', flex : 1}} 
+                        onPress = {this.toggleAvatarPicker.bind(this)}>
+                        <View style={{flexDirection : 'column',  alignItems : 'center'}}> 
+                            {avatarImage}
+                            <Text style = {{fontSize : 12}}> 
+                              {currentAvatarLabel}
+                            </Text>     
+                        </View> 
+                    </TouchableOpacity>   
+                    <View style={{flex : 2}}>
+                    </View>
+                </View>           
+             </View>
       )
   }
     generateFirstNameInput() {
     var first_name_error = this.getErrorMessage.bind(this)('first_name')
     return (
-          <View style = {styles.input_box}>
-              <View style = {styles.input_top_row}>
-                  <View style = {styles.instruction_box}>
-                    <TextInput style = {styles.instruction_text} editable = {false} value = "First Name"/>
-                  </View>
-                  <View style = {styles.user_input_container}>
-                  <TextInput 
-                      style = {styles.input_text}
-                      placeholder = "First Name" 
+        <View style = {{flexDirection:'column', paddingBottom : 8}}> 
+                <Text style = {styles.settings_label}>
+                    First name
+                  </Text>
+                 <TextInput 
+                      style = {styles.settings_input}
+                      placeholder = "First name" 
                       maxLength = {20}
                       onChangeText = {this.handleFirstNameChange.bind(this)}
                       value = {this.state.first_name}
-                  /> 
-                  </View> 
-                </View>
-                   {first_name_error}
-              </View> 
+                  />                  
+                  {first_name_error}
+             </View>
       )
   }
     generateLastNameInput(){
     var last_name_error = this.getErrorMessage.bind(this)('last_name')
     return (
-               <View style = {styles.input_box}>
-                  <View style = {styles.input_top_row}>
-                    <View style = {styles.instruction_box}>
-                    <TextInput style = {styles.instruction_text} editable = {false} value = "Last Name"/>
-                    </View>
-
-                    <View style = {styles.user_input_container}>
-                  <TextInput 
-                      style = {styles.input_text}
-                      placeholder = "Last Name" 
+              <View style = {{flexDirection:'column', paddingBottom : 8}}> 
+                <Text style = {styles.settings_label}>
+                    Last name
+                  </Text>
+                 <TextInput 
+                      style = {styles.settings_input}
+                      placeholder = "Last name" 
                       maxLength = {20}
                       onChangeText = {this.handleLastNameChange.bind(this)}
                       value = {this.state.last_name}
-                  />  
-                  </View>
-                  </View>
+                  />                  
                   {last_name_error}
-              </View>  
+             </View>
       )
   }
   generateEmailInput() {
     var email_error = this.getErrorMessage.bind(this)('email')
     return(
-               <View style = {styles.input_box}>
-                  <View style = {styles.input_top_row}>
-                    <View style = {styles.instruction_box}>
-                    <TextInput style = {styles.instruction_text} editable = {false} value = "Email"/>
-                    </View>
-
-                    <View style = {styles.user_input_container}>
-                  <TextInput
-                  onChangeText = {this.handleEmailChange.bind(this)}
-                  style = {styles.input_text} placeholder = "Email"
-                  value = {this.state.email}
-                />
-                  </View>
-                  </View>
+               <View style = {{flexDirection:'column', paddingBottom : 8}}> 
+                <Text style = {styles.settings_label}>
+                    Email
+                  </Text>
+                 <TextInput 
+                      style = {styles.settings_input}
+                      placeholder = "Last name" 
+                      maxLength = {20}
+                      onChangeText = {this.handleEmailChange.bind(this)}
+                      value = {this.state.email}
+                  />                  
                   {email_error}
-              </View>  
+             </View>
       )
   }
   generatePhoneNumberInput() {
     var phone_number_error = this.getErrorMessage.bind(this)('phone_number')
     return (
-               <View style = {styles.input_box}>
-                  <View style = {styles.input_top_row}>
-                    <View style = {styles.instruction_box}>
-                    <TextInput style = {styles.instruction_text} editable = {false} value = "Phone Number"/>
-                    </View>
-
-                    <View style = {styles.user_input_container}>
+              <View style = {{flexDirection:'column', paddingBottom : 8}}> 
+                <Text style = {styles.settings_label}>
+                    Phone number
+                  </Text>
                   <TextInput
                   onChangeText = {this.handlePhoneNumberChange.bind(this)}
-                  style = {styles.input_text} placeholder = "Phone Number"
+                  style = {styles.settings_input}
+                  placeholder = "Phone number"
                   value = {this.state.phone_number}
                   keyboardType = "number-pad"
                   dataDetectorTypes = "phoneNumber"
                   maxLength = {14}
                 />
-                  </View>
-                  </View>
                   {phone_number_error}
-              </View>  
+             </View>
       )
   }
   validateOldPassword(old_password) {
@@ -504,8 +490,8 @@ class SettingsScreen extends Component {
             visible={this.state.display_password_change}
               animationType={"slide"}
               transparent={false}>
-                <View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start', paddingTop: 40}}>
-                    <View style={{ flex : 0.1, flexDirection : 'row', justifyContent : 'space-around', padding : 16, paddingBottom : 0}}>
+                <View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start', paddingTop: 30}}>
+                    <View style={{ flex : 0.1, flexDirection : 'row', justifyContent : 'space-around', paddingLeft : 10, paddingRight : 10}}>
                         <View style={{flex: 0.2}}>
                             <TouchableOpacity onPress = {this.togglePasswordModal.bind(this)}>
                                 <Text style = {{color : '#90D7ED'}}>
@@ -539,25 +525,23 @@ class SettingsScreen extends Component {
 
   generatePasswordLink() {
       return (
-            <View style = {styles.input_box}>
-                <TouchableOpacity style = {styles.toggle_picker_row} onPress = {this.togglePasswordModal.bind(this)}>
-                    <Text style = {styles.input_text}> 
-                        Click To Update Password
+            <TouchableOpacity style = {{alignItems : 'center'}} onPress = {this.togglePasswordModal.bind(this)}>
+                    <Text style = {styles.settings_clickable}> 
+                        Change your password
                     </Text>
                 </TouchableOpacity>
-              </View>
         )
   }
 
   generateOldPasswordInput() {
     var old_password_error = this.getErrorMessage.bind(this)('old_password')
     return  (<View style = {{flexDirection:'column', paddingBottom : 16}}> 
-                <Text style = {{fontSize : 16, fontWeight : 'bold', paddingLeft: 16, padding: 8}}>
-                    Current Password
+                <Text style = {{fontSize : 16, fontWeight : 'bold', padding: 8}}>
+                    Current password
                   </Text>
                  <TextInput
                   onChangeText = {this.handleOldPasswordChange.bind(this)}
-                  style = {{fontSize : 16, padding : 8, paddingLeft : 16, height : 40}} placeholder = "Password"
+                  style = {{fontSize : 16, padding : 8, height : 40}} placeholder = "Password"
                   secureTextEntry = {true}
                   maxLength = {20}
                 />
@@ -569,12 +553,12 @@ class SettingsScreen extends Component {
   generateNewPasswordInput() {
     var new_password_error = this.getErrorMessage.bind(this)('new_password')
     return  (<View style = {{flexDirection : 'column'}}> 
-                <Text style = {{fontSize : 16, fontWeight :'bold', paddingLeft : 16, padding : 8}}>
-                    New Password
+                <Text style = {{fontSize : 16, fontWeight :'bold', padding : 8}}>
+                    New password
                   </Text>
                  <TextInput
                   onChangeText = {this.handleNewPasswordChange.bind(this)}
-                  style = {{fontSize : 16, padding : 8, paddingLeft: 16, height : 40}} placeholder = "Password"
+                  style = {{fontSize : 16, padding : 8, height : 40}} placeholder = "Password"
                   secureTextEntry = {true}
                   maxLength = {20}
                 />
@@ -586,15 +570,13 @@ class SettingsScreen extends Component {
 
   generateLogoutButton(){
     return (
-      <View style = {styles.logout_box}>
-        <TouchableOpacity
+      <TouchableOpacity
          onPress = {this.props.handleLogout}
-         style = {styles.logout_button}>
-          <Text style = {styles.logout_text}>
-            Logout!
+         style = {{alignItems: 'center'}}>
+          <Text style = {styles.settings_clickable}>
+            Sign out
           </Text>
          </TouchableOpacity>
-        </View>
       )
   }
 
@@ -628,7 +610,6 @@ class SettingsScreen extends Component {
     var password_modal  = this.generatePasswordModal.bind(this)()
     var password_link = this.generatePasswordLink.bind(this)()
     var logout_button = this.generateLogoutButton.bind(this)()
-
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     var data = [first_name_input, last_name_input, email_input, phone_number_input
                 ,avatar_input, password_link, logout_button]
@@ -640,45 +621,61 @@ class SettingsScreen extends Component {
               animationType={"slide"}
               transparent={false}
                 >
-                 <Picker
-                  selectedValue={this.state.avatar}
-                  onValueChange={this.handleAvatarChange.bind(this)}>
-                      {picker_list}
-                </Picker> 
-                <TouchableHighlight onPress = {this.toggleAvatarPicker.bind(this)}>
-                  <Text>
-                    Return
-                  </Text>
-                </TouchableHighlight>
+                <View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start', paddingTop: 30}}>
+                    <View style={{ flex : 0.1, flexDirection : 'row', justifyContent : 'space-around', paddingLeft : 10, paddingRight : 10}}>
+                        <View style={{flex: 0.2}}>
+                        </View>
+                        <View style={{flex: 0.6}}>
+                            <Text style = {{textAlign : 'center', fontWeight : 'bold'}}>
+                                Select your avatar
+                            </Text>
+                        </View>
+                        <View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}>
+                            <TouchableOpacity onPress = {this.toggleAvatarPicker.bind(this)}>
+                                <Text style = {{color : '#90D7ED'}}>
+                                    Done
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <View style={{flex : 1}}>
+                        <View style={{alignItems : 'center'}}>
+                            {this.getAvatarImage.bind(this)(this.state.avatar)}
+                        </View>
+                        <Picker selectedValue={this.state.avatar}
+                            onValueChange={this.handleAvatarChange.bind(this)}>
+                            {picker_list}
+                        </Picker> 
+                    </View>
+                </View>
+                 
               </Modal>
               {password_modal}
             <View style = {styles.top_bar}>
               <TouchableOpacity style = {styles.back_button}
                 // onPress = {() => this.props.navigator.pop()}
                 >
-                <Icon name = "chevron-left" size = {20}/>
               </TouchableOpacity>
 
               <Text style = {styles.logo}> 
-                Logo
+                Account Settings
               </Text> 
 
               <View style = {styles.cog_box}>
-                <Icon name = "cog" size = {20} style = {styles.cog}/> 
+                <TouchableOpacity 
+                    style = {{}}
+                    onPress = {this.submitNewSettings.bind(this)}>
+                    <Text style = {{color : '#90D7ED', fontWeight : 'bold'}}>
+                        Update
+                    </Text>
+                </TouchableOpacity>
               </View>
             </View>
                 <ListView
                   style={styles.list_container}
                   dataSource={dataSource}
                   renderRow={this.listViewRenderRow.bind(this)}
-                />
-              <TouchableOpacity 
-                style = {styles.submit_settings_box}
-                onPress = {this.submitNewSettings.bind(this)}>
-                <Text style = {styles.submit_settings_text}>
-                    Update Settings!
-                </Text>
-              </TouchableOpacity>    
+                />  
           </View> 
     )
   }
@@ -736,7 +733,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   list_container: {
-    flex : 0.6,
+    flex : 1,
+    paddingLeft : 8,
+    alignSelf : 'stretch'
   },
   back_button :{
     flex : 1,
@@ -744,8 +743,9 @@ const styles = StyleSheet.create({
   back_button_text: {
   },
   logo: {
-    flex : 1,
-    textAlign: "center"
+    flex : 2,
+    textAlign: "center",
+    fontWeight : 'bold'
   },
   cog_box: {
     flex:1,
@@ -832,10 +832,9 @@ const styles = StyleSheet.create({
     flex: 0.5
   },
   avatar_image : {
-    flex: 1,
-    width : null,
-    height : null,
-    resizeMode : "contain"
+    width : 80,
+    height : 80,
+    borderRadius : 8
   },
   password_box: {
     flexDirection : "column",
@@ -870,7 +869,21 @@ const styles = StyleSheet.create({
     width : winSize.width * 0.925,
     height: winSize.height * 0.15
   },
-
+  settings_label : {
+    fontSize : 14, 
+    fontWeight : 'bold', 
+    padding: 8
+  },
+  settings_input : {
+    fontSize : 14, 
+    padding : 8, 
+    height : 30
+  },
+  settings_clickable : {
+    fontSize : 16,
+    color: '#90D7ED',
+    padding : 8
+  }
 
 });
 

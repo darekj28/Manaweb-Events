@@ -44,9 +44,6 @@ export default class NotificationScreen extends React.Component {
     <View style = {styles.container}>
         <View style={{ flex : 0.1, flexDirection : 'row', justifyContent : 'space-around', paddingLeft : 10, paddingRight : 10}}>
             <View style={{flex: 0.2}}>
-                <TouchableOpacity>
-                    <Icon name = "chevron-left" size = {20}/>
-                </TouchableOpacity>
             </View>
             <View style={{flex: 0.6}}>
                 <Text style = {{textAlign : 'center', fontWeight : 'bold'}}>
