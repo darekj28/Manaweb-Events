@@ -665,7 +665,7 @@ class SettingsScreen extends Component {
                 <TouchableOpacity 
                     style = {{}}
                     onPress = {this.submitNewSettings.bind(this)}>
-                    <Text style = {{color : '#90D7ED', fontWeight : 'bold'}}>
+                    <Text style = {{color : '#90D7ED'}}>
                         Update
                     </Text>
                 </TouchableOpacity>
@@ -870,14 +870,14 @@ const styles = StyleSheet.create({
     height: winSize.height * 0.15
   },
   settings_label : {
-    fontSize : 14, 
+    fontSize : 16, 
     fontWeight : 'bold', 
     padding: 8
   },
   settings_input : {
-    fontSize : 14, 
+    fontSize : 16, 
     padding : 8, 
-    height : 30
+    height : 35
   },
   settings_clickable : {
     fontSize : 16,

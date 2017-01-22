@@ -149,18 +149,12 @@ export default class CommentScreen extends React.Component {
 		var op = this.state.original_post['name'] ? this.state.original_post['name'].split(' ')[0] : "";
 		return (
 			<View style = {styles.container}>
-	            <View style={{flexDirection : 'row', justifyContent : 'space-around', paddingLeft : 10, paddingRight : 10}}>
+	            <View style={{flexDirection : 'row', justifyContent : 'space-around', paddingLeft : 10, paddingRight : 10,
+	            paddingBottom : 10}}>
 		            <View style={{flex: 0.2}}>
 		                <TouchableOpacity onPress = {() => this.props.navigator.pop()}>
-		                    <Icon name = "chevron-left" size = {20}/>
+		                    <Icon name = "chevron-left" size = {20} color = '#90D7ED'/>
 		                </TouchableOpacity>
-		            </View>
-		            <View style={{flex: 0.6}}>
-		                <Text style = {{textAlign : 'center', fontWeight : 'bold'}}>
-		                    {op + "'s post"}
-		                </Text>
-		            </View>
-		            <View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}>
 		            </View>
 		        </View>
 	            <View style={{flexDirection : 'row'}}>

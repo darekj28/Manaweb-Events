@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     },
     toggle_message : {
         fontSize : 12,
-        color : 'silver'
+        color : '#90D7ED'
     },
     profile_image: {
         width: PROFILE_WIDTH,
