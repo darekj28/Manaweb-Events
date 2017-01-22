@@ -320,12 +320,12 @@ class SettingsScreen extends Component {
     var currentAvatarLabel = currentAvatar.charAt(0).toUpperCase() + currentAvatar.slice(1);
     var avatarImage = this.getAvatarImage.bind(this)(this.state.avatar)
     return (
-              <View style = {{flexDirection:'column', paddingBottom : 8}}> 
+              <View style = {{flexDirection:'column', paddingLeft : 16, paddingBottom : 8}}> 
                 <Text style = {styles.settings_label}>
                     Avatar
                   </Text>
                   <View style={{flexDirection : 'row'}}>
-                     <TouchableOpacity style = {{justifyContent : 'flex-start', flex : 1}} 
+                     <TouchableOpacity style = {{justifyContent : 'flex-start', flex : 0.9}} 
                         onPress = {this.toggleAvatarPicker.bind(this)}>
                         <View style={{flexDirection : 'column',  alignItems : 'center'}}> 
                             {avatarImage}
@@ -343,7 +343,7 @@ class SettingsScreen extends Component {
     generateFirstNameInput() {
     var first_name_error = this.getErrorMessage.bind(this)('first_name')
     return (
-        <View style = {{flexDirection:'column', paddingBottom : 8}}> 
+        <View style = {{flexDirection:'column', paddingLeft : 16, paddingBottom : 8}}> 
                 <Text style = {styles.settings_label}>
                     First name
                   </Text>
@@ -361,7 +361,7 @@ class SettingsScreen extends Component {
     generateLastNameInput(){
     var last_name_error = this.getErrorMessage.bind(this)('last_name')
     return (
-              <View style = {{flexDirection:'column', paddingBottom : 8}}> 
+              <View style = {{flexDirection:'column', paddingLeft : 16, paddingBottom : 8}}> 
                 <Text style = {styles.settings_label}>
                     Last name
                   </Text>
@@ -379,7 +379,7 @@ class SettingsScreen extends Component {
   generateEmailInput() {
     var email_error = this.getErrorMessage.bind(this)('email')
     return(
-               <View style = {{flexDirection:'column', paddingBottom : 8}}> 
+               <View style = {{flexDirection:'column', paddingLeft : 16, paddingBottom : 8}}> 
                 <Text style = {styles.settings_label}>
                     Email
                   </Text>
@@ -397,7 +397,7 @@ class SettingsScreen extends Component {
   generatePhoneNumberInput() {
     var phone_number_error = this.getErrorMessage.bind(this)('phone_number')
     return (
-              <View style = {{flexDirection:'column', paddingBottom : 8}}> 
+              <View style = {{flexDirection:'column', paddingLeft : 16, paddingBottom : 8}}> 
                 <Text style = {styles.settings_label}>
                     Phone number
                   </Text>
@@ -621,7 +621,7 @@ class SettingsScreen extends Component {
               animationType={"slide"}
               transparent={false}
                 >
-                <View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start', paddingTop: 30}}>
+                <View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start', padding : 10, paddingTop: 30}}>
                     <View style={{ flex : 0.1, flexDirection : 'row', justifyContent : 'space-around', paddingLeft : 10, paddingRight : 10}}>
                         <View style={{flex: 0.2}}>
                         </View>
@@ -722,19 +722,19 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection : "column",
     justifyContent: 'space-between',
-    padding : 10,
     paddingTop: 30,
     backgroundColor: "white",
     alignItems: 'flex-start'
   },
   top_bar : {
     flex : 0.1,
+    paddingLeft : 10,
+    paddingRight : 10,
     flexDirection : "row",
     justifyContent: "space-around",
   },
   list_container: {
     flex : 1,
-    paddingLeft : 8,
     alignSelf : 'stretch'
   },
   back_button :{

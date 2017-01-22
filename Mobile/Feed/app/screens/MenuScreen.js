@@ -13,7 +13,8 @@ import SettingsScreen from './SettingsScreen'
 import NotificationScreen from './NotificationScreen'
 import Spinner from 'react-native-loading-spinner-overlay';
 import IconBadge from 'react-native-icon-badge';
-const MENU_ICON_SIZE = 23
+const MENU_ICON_SIZE = 20
+const MENU_FONT_SIZE = 12
 const BOTTOM_BAR_PROPORTION = 0.09
 const HIGHLIGHTED_COLOR = '#90D7ED'
 const DEFAULT_COLOR = 'silver'
@@ -70,9 +71,9 @@ class MenuScreen extends Component {
 
   _textStyle(highlighted) {
       if (highlighted) {
-          return {color: HIGHLIGHTED_COLOR, fontWeight: 'bold', alignSelf: 'center'}
+          return {color: HIGHLIGHTED_COLOR, fontSize : MENU_FONT_SIZE, fontWeight: 'bold', alignSelf: 'center'}
       } else {
-          return {color: DEFAULT_COLOR, fontWeight: 'bold', alignSelf: 'center'}
+          return {color: DEFAULT_COLOR, fontSize : MENU_FONT_SIZE, fontWeight: 'bold', alignSelf: 'center'}
       }
   }
 
@@ -271,7 +272,8 @@ class MenuScreen extends Component {
               }
               </View>
 
-              <View style = {{flex: BOTTOM_BAR_PROPORTION, flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
+              <View style = {{flex: BOTTOM_BAR_PROPORTION, flexDirection:'row', alignItems:'center', justifyContent:'center', 
+                            borderTopWidth : 1, borderTopColor : 'silver'}}>
                   <TouchableWithoutFeedback
                       style = {this._imageWrapperStyle(this.state.show_panel1)}
                       onPress={() => this._onPanel1Pressed(true, false, false)}>
