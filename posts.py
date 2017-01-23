@@ -329,8 +329,8 @@ class Posts:
 		pushNotificationSent = False
 		seen = False
 		table_name = self.USER_NOTIFICATION_PREFIX + receiver_id
-		sql = "INSERT INTO " + table_name + " (feed_name, comment_id, sender_id, seen, notification_id, timeStamp, timeString, isOP, numOtherPeople, sender_name, op_name, pushNotificationSent) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s)"
-		self.db.execute(self.db.mogrify(sql, (feed_name, comment_id, sender_id, seen, notification_id, timeStamp, timeString, isOP, numOtherPeople, sender_name, op_name, pushNotificationSent)))
+		sql = "INSERT INTO " + table_name + " (feed_name, comment_id, receiver_id, sender_id, seen, notification_id, timeStamp, timeString, isOP, numOtherPeople, sender_name, op_name, pushNotificationSent) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s, %s)"
+		self.db.execute(self.db.mogrify(sql, (feed_name, comment_id, receiver_id, sender_id, seen, notification_id, timeStamp, timeString, isOP, numOtherPeople, sender_name, op_name, pushNotificationSent)))
 		self.post_db.commit()
 
 		# then if we are at more than the threshold, remove the oldest one
@@ -406,6 +406,7 @@ class Posts:
 		n_list = list()
 		user_manager = Users()
 		for note in query:
+			print(note)
 			sender = user_manager.getInfo(note[3])
 			op = user_manager.getInfo(note[11])
 			if (op is None): 
