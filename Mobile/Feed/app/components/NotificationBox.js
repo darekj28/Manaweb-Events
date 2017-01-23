@@ -82,7 +82,7 @@ export default class NotificationBox extends React.Component {
             text_message_clickable = styles.unseen_text_message;
         }
 	   	return(
-	   		<TouchableWithoutFeedback onPress={this._navigateToComment.bind(this)}>
+	   		<TouchableOpacity onPress={this._navigateToComment.bind(this)}>
                 <View style={container_style}>
                     <View style={{flex: 0, justifyContent: 'flex-start'}}>
                         {note.avatar =='nissa' && <Image  style={styles.profile_image} source={profileImages.nissa} />}
@@ -113,7 +113,7 @@ export default class NotificationBox extends React.Component {
                         </View>
                     </View>
                 </View>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
 	   		);
 	}
 }

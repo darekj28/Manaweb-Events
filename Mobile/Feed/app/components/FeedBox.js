@@ -61,7 +61,7 @@ export default class FeedBox extends Component {
 
         let commentIcon = require('./res/comments.png')
         return (
-            <TouchableWithoutFeedback onPress={this._navigateToComment.bind(this)}>
+            <TouchableOpacity onPress={this._navigateToComment.bind(this)}>
                 <View style={{  flex:1, flexDirection: 'row', justifyContent: 'flex-start',
                                 borderBottomColor: 'silver', borderBottomWidth: 1,backgroundColor : 'white'}}>
                     <View style={{flex: 0, justifyContent: 'flex-start'}}>
@@ -95,11 +95,11 @@ export default class FeedBox extends Component {
                             </View>
 
                             <View style={{flex: 0, paddingTop : 8, paddingRight : 6, flexDirection: 'row'}}>
-                                { post.isTrade && <View style={styles.feed_filter_image}><Icon name = "ios-swap" size = {14} color = "#333333"/></View>}
+                                { post.isTrade && <View style={styles.feed_filter_image}><Icon name = "md-swap" size = {16} color = "#333333"/></View>}
                     
-                                { post.isPlay && <View style={styles.feed_filter_image}><Icon name = "ios-play" size = {14} color = "#333333"/></View>}
+                                { post.isPlay && <View style={styles.feed_filter_image}><Icon name = "ios-play" size = {16} color = "#333333"/></View>}
                                 
-                                { post.isChill && <View style={styles.feed_filter_image}><Icon name = "ios-time-outline" size = {14} color = "#333333"/></View>}
+                                { post.isChill && <View style={styles.feed_filter_image}><Icon name = "md-time" size = {16} color = "#333333"/></View>}
                             </View>
                         </View>
 
@@ -132,7 +132,7 @@ export default class FeedBox extends Component {
                         </View>
                     </View>
                 </View>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
         );
     }
 }
