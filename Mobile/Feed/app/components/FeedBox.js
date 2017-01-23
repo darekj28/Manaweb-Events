@@ -61,7 +61,7 @@ export default class FeedBox extends Component {
 
         let commentIcon = require('./res/comments.png')
         return (
-            <TouchableWithoutFeedback onPress={this._navigateToComment.bind(this)}>
+            <TouchableOpacity onPress={this._navigateToComment.bind(this)}>
                 <View style={{  flex:1, flexDirection: 'row', justifyContent: 'flex-start',
                                 borderBottomColor: 'silver', borderBottomWidth: 1,backgroundColor : 'white'}}>
                     <View style={{flex: 0, justifyContent: 'flex-start'}}>
@@ -132,7 +132,7 @@ export default class FeedBox extends Component {
                         </View>
                     </View>
                 </View>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
         );
     }
 }
