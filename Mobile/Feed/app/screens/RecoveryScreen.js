@@ -150,16 +150,17 @@ export default class RecoveryScreen extends React.Component {
         var hasPhoneNumber = (phone_number != null && email != "")
 
         var alert_text = ""
-        if (hasEmail && hasPhoneNumber) alert_text = "A confirmation pin will be sent to " + email + " and " + phone_number
-        else if (hasEmail) alert_text = "A confirmation pin will be sent to  " + email
-        else if (hasPhoneNumber) alert_text = "A confirmation pin will be sent to  " + phone_number
+        // if (hasEmail && hasPhoneNumber) alert_text = "A confirmation pin will be sent to " + email + " and " + phone_number
+        // else if (hasEmail) alert_text = "A confirmation pin will be sent to  " + email
+        // else if (hasPhoneNumber) alert_text = "A confirmation pin will be sent to  " + phone_number
 
         Alert.alert(
-          alert_text,
+          "Choose your confirmation method",
           "SMS fees may apply",
             [
-              {text: 'Edit', style: 'cancel'},
-              {text: 'OK', onPress: () => this.sendConfirmations.bind(this)()}
+              {text: 'Retry', style: 'cancel'},
+              {text: 'Phone ' + phone_number, onPress: () => this.sendTextConfirmation.bind(this)()},
+              {text: 'Email ' + email, onPress: () => this.sendEmailConfirmation.bind(this)()}
             ]) 
           }
 
@@ -171,17 +172,6 @@ export default class RecoveryScreen extends React.Component {
     .done();
   }
 
-  sendConfirmations(){
-    var responseData = this.state.input_response
-    if (responseData.phone_number != null && responseData.phone_number != "") 
-      {
-        this.sendTextConfirmation.bind(this)()
-      }
-    if (responseData.email != null && responseData.email != "")
-      {
-      this.sendEmailConfirmation.bind(this)()
-      }
-  }
 
    sendEmailConfirmation() {
     var url = "https://manaweb-events.herokuapp.com"
@@ -231,9 +221,8 @@ export default class RecoveryScreen extends React.Component {
     var hasEmail = (email != null && email != "")
     var hasPhoneNumber = (phone_number != null && email != "")
     var alert_text = ""
-    if (hasEmail && hasPhoneNumber) alert_text = email + " or " + phone_number
-    else if (hasEmail) alert_text =  email
-    else if (hasPhoneNumber) alert_text = phone_number
+    if (this.state.email_confirmation_pin != "") alert_text = email
+    if (this.state.text_confirmation_pin != "") alert_text = phone_number
 
     if (this.state.email_confirmation_pin == "" && this.state.text_confirmation_pin == "")
          var instructions = <View style = {styles.instruction_box}> 
@@ -243,7 +232,7 @@ export default class RecoveryScreen extends React.Component {
                           </View>
 
     else var instructions =   <View style=  {styles.instruction_box}>                  
-                <Text style = {{fontSize : 16}}> 
+                <Text style = {{fontSize : 24}}> 
                   Your username is {this.state.username}. Enter the confirmation pin sent to {alert_text}
                 </Text> 
             </View>

@@ -9,5 +9,7 @@ npm install —-save react-native-fbsdk
 npm install react-native-modal-picker --save
 npm install --save react-native-loading-spinner-overlay@latest
 npm install --save react-native-icon-badge
+npm install react-native-push-notification
 
+react-native link
 react-native run-ios

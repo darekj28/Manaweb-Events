@@ -20,6 +20,9 @@ import java.util.List;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 
+// Push notifications
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+
 public class MainApplication extends Application implements ReactApplication {
     
     
@@ -41,7 +44,8 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new FacebookLoginPackage(),
             new FBSDKPackage(mCallbackManager),
-            new VectorIconsPackage()
+            new VectorIconsPackage(),
+            new ReactNativePushNotificationPackage()
       );
     }
   };
