@@ -273,10 +273,8 @@ class Users:
 		for char in phoneNumberWithDashes:
 			if char.isdigit():
 				raw_phone_number = raw_phone_number + char
-
 		if len(raw_phone_number) == 11:
 			raw_phone_number = raw_phone_number[1:]
-
 		return raw_phone_number
 
 	# input : any string with 10 digits 
@@ -291,19 +289,14 @@ class Users:
 			return None
 		user_table = self.getUserInfoTable()
 		raw_phone_number = self.formatRawPhoneNumber(phone_number)
-		
-
 		matched_user = {}
-
 		for user in user_table.keys():
 			search_user = user_table[user]
 			search_user_phone_number = self.formatRawPhoneNumber(search_user['phone_number'])
 			if search_user_phone_number == raw_phone_number:
 				matched_user = search_user
-
 		if matched_user == {}:
 			return None
-
 		else:
 			return matched_user
 

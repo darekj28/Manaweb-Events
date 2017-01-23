@@ -19,14 +19,10 @@ def validateName(name):
 	length = len(name)
 	output = {}
 	output['result'] = 'success'
-
-
 	# invalidate if the name is 0 letters
 	if length == 0:
 		output['result'] =  'failure'
 		output['error'] = 'Names cannot be empty'
-
-
 	# we invalidate a name if it contains non letters
 	elif not name.isalpha():
 		output['result'] =  'failure'
@@ -60,6 +56,8 @@ def validatePhoneNumber(phone_number):
 		if raw_phone_number[3] == "1" and raw_phone_number[3] == "1":
 			isSuccess = False
 	elif len(raw_phone_number) != 10 and len(raw_phone_number) != 11:
+		isSuccess = False
+	else:
 		isSuccess = False
 	if isSuccess == False:
 		output['result'] = 'failure'

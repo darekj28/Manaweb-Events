@@ -269,6 +269,7 @@ class MenuScreen extends Component {
           }
           this.setState({feed: feed})
           if (initialize){
+            console.log("initialize")
             this.getNotifications.bind(this)()
           }
          }
@@ -277,6 +278,7 @@ class MenuScreen extends Component {
   }
 
   refreshFeed(){
+    console.log("refreshed")
     this.refreshScreen.bind(this)(false)
   }
 
@@ -339,7 +341,7 @@ class MenuScreen extends Component {
   }
 
   render() {
-      console.log("Spinner loading state : " + this.state.spinnerLoading)
+      // console.log("Spinner loading state : " + this.state.spinnerLoading)
       var isLoading = (this.state.userLoading || this.state.feedLoading)
       return (
           <View style = {styles.container}>
