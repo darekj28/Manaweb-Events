@@ -3,15 +3,15 @@ var months = [	{label : "January",  value: 1,  days : 31}, {label : "February", 
 function testValid (field, value) {
 	switch (field) {
 		case "first_name":
-			var condition = /^[a-z ,.'-]+$/i;
+			var condition = /^[A-Za-z]{1,12}$/;
 			if (!value.match(condition)) return "invalid";
 			break;
 		case "last_name":
-			var condition = /^[a-z ,.'-]+$/i;
+			var condition = /^[A-Za-z]{1,12}$/;
 			if (!value.match(condition)) return "invalid";
 			break;
 		case "password":
-			var condition = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,}$/;
+			var condition = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,20}$/
 			if (value == "") return "";
 			if (!value.match(condition)) return "invalid";
 			break;

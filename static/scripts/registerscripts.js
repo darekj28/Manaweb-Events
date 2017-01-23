@@ -9,10 +9,10 @@ $.fn.goValidate = function() {
             regex: /^[A-Za-z0-9]{2,15}$/
         },
         first_name: {
-            regex: /^[A-Za-z]{1,20}$/
+            regex: /^[A-Za-z]{1,12}$/
         },
         last_name: {
-            regex: /^[A-Za-z]{1,20}$/
+            regex: /^[A-Za-z]{1,12}$/
         },
         password: {
             regex: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,20}$/
