@@ -4,7 +4,7 @@ const {
 } = FBSDK;
 import React from 'react';
 import {Component} from 'react'
-import {AsyncStorage, AppRegistry,StyleSheet,View,TouchableOpacity,TouchableHighlight,
+import {Platform, AppState, AsyncStorage, AppRegistry,StyleSheet,View,TouchableOpacity,TouchableHighlight,
           Alert, Animated, TouchableWithoutFeedback, Image, Easing, Text} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -13,6 +13,7 @@ import SettingsScreen from './SettingsScreen'
 import NotificationScreen from './NotificationScreen'
 import Spinner from 'react-native-loading-spinner-overlay';
 import IconBadge from 'react-native-icon-badge';
+import PushNotification from 'react-native-push-notification';
 const MENU_ICON_SIZE = 20
 const MENU_FONT_SIZE = 12
 const BOTTOM_BAR_PROPORTION = 0.09
@@ -44,7 +45,101 @@ class MenuScreen extends Component {
         notifications: [],
         numUnseenNotifications: 0
     }
+    this.interval;
+    this.time_interval = 4.0 * 1000
+
     this._onPanel1Pressed = this._onPanel1Pressed.bind(this)
+  }
+
+  getPushNotifications(){
+    const url = "https://manaweb-events.herokuapp.com"
+    const test_url = "http://0.0.0.0:5000"
+      fetch(url + "/mobileGetPushNotifications", 
+        {method: "POST",
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username : this.state.current_username })
+        }
+      ).then((response) => response.json())
+       .then((responseData) => {
+        // handle number of notifications
+        PushNotification.setApplicationIconBadgeNumber(responseData['num_notifications'])
+        // maybe use current storage..not sure yet
+        // console.log(responseData['push_notifications'])
+        if (responseData['push_notifications'].length > 0) {
+              for (var i = 0; i < responseData['push_notifications'].length; i++) {
+                console.log("notifcation sent")
+                var obj = responseData['push_notifications'][i]
+                var data = {
+                  comment_id : obj['comment_id']
+                }
+                if (Platform.OS ===  'ios'){
+                  PushNotification.localNotification({
+                    message : obj['sender_name'] + " did something",
+                    userInfo : data,
+                  })
+                }
+                else if (Platform.OS === 'android'){
+                  PushNotification.localNotification({
+                    tag : data,
+                    message : obj['sender_name'] + " did something",
+                  })
+                }
+              }
+            }
+          //         notifications.unshift({
+          //           comment_id : obj['comment_id'],
+          //           timeString : obj['timeString'],
+          //           isOP : obj['isOP'],
+          //           numOtherPeople : obj['numOtherPeople'],
+          //           sender_name : obj['sender_name'],
+          //           op_name : obj['op_name'],
+          //           seen : obj['seen'],
+          //           avatar : obj['avatar']
+          
+    })
+    .catch((error) => {
+      console.log(error);
+    }).done();
+  }
+
+  initializePushNotifications(){
+    var that = this;
+    PushNotification.configure({
+    // (required) Called when a remote or local notification is opened or received
+    onNotification: function(notification) {
+        console.log(notification)
+        var comment_id = "";
+        if (Platform.OS === 'ios'){
+          comment_id = notification.data.comment_id
+        }
+
+        else if (Platform.OS === 'android'){
+          comment_id = notificaiton.tag.comment_id
+        }
+        
+        that.props.navigator.push({
+          href : "Comment",
+          current_username : that.state.current_username,
+          current_user : that.state.current_user,
+          comment_id : comment_id
+        })
+      },
+    });
+  }
+
+  handleAppStateChange(appState){
+      clearInterval(this.interval)
+      this.interval = setInterval(this.checkNotifications.bind(this), this.time_interval)
+  }
+
+  checkNotifications(){
+    // console.log("notificaiton")
+    if (AppState.currentState === 'background' && this.state.current_username != "") {
+      this.getPushNotifications.bind(this)()
+    }
   }
 
   _onPanel1Pressed (show1, show2, show3) {
@@ -218,15 +313,20 @@ class MenuScreen extends Component {
     });
   }
 
-
   componentDidUpdate(){
       if (this.state.feed.length > 10 && this.state.spinnerLoading){
          this.hideSpinner.bind(this)()
       }
    }
 
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this.handleAppStateChange.bind(this))
+  }
+
   componentDidMount() {
     this.initialize.bind(this)();
+    this.initializePushNotifications.bind(this)();
+    AppState.addEventListener('change', this.handleAppStateChange.bind(this))
   }
 
   render() {

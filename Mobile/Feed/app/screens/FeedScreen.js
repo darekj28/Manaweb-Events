@@ -51,7 +51,6 @@ function toggle(collection, item) {
 }
 
 class FeedScreen extends Component {
-
     constructor(props) {
         super(props)
         this.state = {
@@ -204,7 +203,6 @@ class FeedScreen extends Component {
           this.state.post_message_height, {toValue: final, duration: ANIMATE_DURATION}
       ).start();
   }
-
   collapseMessageBox() {
       dismissKeyboard();
       if (this.state.post_message_expanded) {
@@ -244,8 +242,6 @@ class FeedScreen extends Component {
       this.initializeUserInfo.bind(this)();
       // this.props.refreshScreen();
   }
-
-
   render() {
     var alert;
     if ((this.state.alert)) {

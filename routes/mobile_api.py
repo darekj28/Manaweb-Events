@@ -27,7 +27,7 @@ def mobileFacebookCreateAccount():
 	birthDay = ""
 	birthMonth = ""
 	gender = ""
-	avatar_name = random.choice(avatars)
+	avatar_name = random.choice(avatars).lower()
 	avatar_url = '/static/avatars/' + avatar_name + '.png'
 	isActive = True
 	confirmationPin = "placeholder pin"
@@ -60,7 +60,7 @@ def mobileCreateProfile():
 	birthDay = "1"
 	birthMonth = "1"
 	gender = "Other"
-	avatar_name = "Jace"
+	avatar_name = random.choice(avatars).lower()
 	avatar_url = '/static/avatars/' + avatar_name + '.png'
 	isActive = True
 	confirmationPin = "DEFAULT"
@@ -273,14 +273,10 @@ def mobileCheckPassword():
 	user_manager.closeConnection()
 	return jsonify(output)
 
-
 @mobile_api.route('/mobileUpdatePassword', methods = ['POST'])
 def mobileUpdatePassword():
-
 	username = request.json['username']
 	new_password = request.json['password']
-	print(username)
-	print(new_password)
 	user_manager = Users()
 	user_manager.updateInfo(username, 'password', new_password)
 	user_manager.closeConnection()
@@ -296,3 +292,26 @@ def mobileRecoverAccount():
 	security_manager.closeConnection()
 	return jsonify(output)
 
+@mobile_api.route('/mobileMarkPushNotificationsAsSent', methods = ['POST'])
+def mobileMarkPushNotificationsAsSent():
+	username = request.json['username']
+	post_manager = Posts()
+	post_manager.markNotificationAsSent(username)
+	post_manager.closeConnection()
+	output = {}
+	output['result'] = 'success'
+	return jsonify(output)
+
+@mobile_api.route('/mobileGetPushNotifications', methods = ['POST'])
+def mobileGetPushNotifications():
+	username = request.json['username']
+	post_manager = Posts()
+	push_notifications = post_manager.getPushNotifications(username)
+	num_notifications = post_manager.getNotificationCount(username)
+	# post_manager.markPushNotificationsAsSent(username)
+	post_manager.closeConnection()
+	output = {}
+	output['push_notifications'] = push_notifications
+	output['result'] = 'success'
+	output['num_notifications'] = num_notifications
+	return jsonify(output)

@@ -35,10 +35,16 @@ security_manager = Security()
 # post_manager.deleteUserPosts('lily')
 # user_manager.deleteUser('lily')
 # security_manager.createRecovery()
-# post_manager.deleteNotifications()
+post_manager.deleteNotifications()
 
-user_manager.deleteUser("brobro")
-print(user_manager.getUserList())
+
+user_list = user_manager.getUserList()
+for user in user_list: 
+	table_name = "n_" + user
+	# post_manager.deleteColumn(table_name, "pushNotificationSent")
+	# post_manager.addColumn(table_name, "pushNotificationSent", "BOOLEAN", True)
+
+
 
 # feed_name = "BALT"
 # post_manager.recalculateLastPostTable(feed_name)

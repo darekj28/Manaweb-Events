@@ -12202,7 +12202,7 @@
 							React.createElement(
 								'div',
 								{ className: 'navbar-brand navbar-brand-logo' },
-								React.createElement('span', { className: 'glyphicon glyphicon-home' })
+								React.createElement('span', { className: 'glyphicon glyphicon-home login-home' })
 							),
 							React.createElement(
 								'button',
@@ -12395,6 +12395,15 @@
 								'b',
 								null,
 								'Login'
+							)
+						),
+						React.createElement(
+							'div',
+							{ className: 'forgot-password' },
+							React.createElement(
+								Link,
+								{ to: '/recovery' },
+								'Forget your username or password?'
 							)
 						),
 						this.state.error && React.createElement(
@@ -14267,7 +14276,7 @@
 	var React = __webpack_require__(/*! react */ 2);
 	
 	
-	var text_fields = ["first_name", "last_name", "old_password", "password", "phone_number"];
+	var text_fields = ["first_name", "last_name", "old_password", "password", "email", "phone_number"];
 	var select_fields = ["month_of_birth", "day_of_birth", "year_of_birth", "avatar"];
 	var required_text_fields = ["first_name", "last_name", "old_password"];
 	
@@ -14285,6 +14294,7 @@
 				last_name: '',
 				old_password: '',
 				password: '',
+				email: '',
 				phone_number: '',
 				month_of_birth: '',
 				day_of_birth: '',
@@ -14316,7 +14326,8 @@
 							day_of_birth: user.birthDay,
 							year_of_birth: user.birthYear,
 							month_of_birth: user.birthMonth,
-							avatar: user.avatar_name
+							avatar: user.avatar_name,
+							email: user.email
 						});
 					}.bind(this)
 				});
@@ -14441,7 +14452,7 @@
 								React.createElement(
 									'h2',
 									null,
-									' Update Settings '
+									' Account Settings '
 								)
 							),
 							text_fields.map(function (field) {
@@ -14569,6 +14580,27 @@
 				});
 			}
 		}, {
+			key: 'verifyEmail',
+			value: function verifyEmail(email) {
+				var obj = { email: email, currentUser: _AppStore2.default.getCurrentUser() };
+				$.ajax({
+					type: 'POST',
+					url: '/verifyEmailIfChanged',
+					data: JSON.stringify(obj, null, '\t'),
+					contentType: 'application/json;charset=UTF-8',
+					success: function (res) {
+						if (!res['error']) {
+							this.setState({ valid: "valid" });
+							this.props.handleBlur("email", "valid");
+						} else {
+							console.log(res['error']);
+							this.setState({ valid: "invalid", warning: res['error'] });
+							this.props.handleBlur("email", "invalid");
+						}
+					}.bind(this)
+				});
+			}
+		}, {
 			key: 'handleTyping',
 			value: function handleTyping(event) {
 				var obj = {};
@@ -14579,12 +14611,12 @@
 			key: 'handleBlur',
 			value: function handleBlur(event) {
 				var field = this.props.field;
-				if (field == "old_password") this.verifyOldPassword.bind(this)(event.target.value);else {
+				if (field == "old_password") this.verifyOldPassword.bind(this)(event.target.value);else if (field == "email") this.verifyEmail.bind(this)(event.target.value);else {
 					var isValid = testValid(field, event.target.value);
 					this.setState({ valid: isValid,
 						warning: warningForField(field, event.target.value) });
+					this.props.handleBlur(field, isValid);
 				};
-				this.props.handleBlur(field, isValid);
 			}
 		}, {
 			key: 'componentWillReceiveProps',
