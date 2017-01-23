@@ -43,14 +43,12 @@ export default class NotificationScreen extends React.Component {
     return (
     <View style = {styles.container}>
         <View style={styles.top_bar}>
-            <View style={{flex: 0.2}}>
+            <View style={{flex: 1}}>
             </View>
-            <View style={{flex: 0.6}}>
-                <Text style = {{textAlign : 'center', fontWeight : 'bold'}}>
+            <Text style = {{flex : 2, textAlign : 'center', fontWeight : 'bold'}}>
                     Your Notifications
-                </Text>
-            </View>
-            <View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}>
+            </Text>
+            <View style={{flex: 1, justifyContent : 'flex-end', flexDirection : 'row'}}>
             </View>
         </View>
         <Notifications current_user = {this.props.current_user}
@@ -63,11 +61,7 @@ export default class NotificationScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex:1,
-    justifyContent: 'flex-start',
-    paddingTop: 10
-  },
-  title : {
-    fontSize : 20
+    justifyContent: 'flex-start'
   },
   top_bar : {
     flex : 0.1,
@@ -76,6 +70,7 @@ const styles = StyleSheet.create({
     flexDirection : "row",
     justifyContent: "space-around",
     borderBottomColor : '#e1e1e1',
-    borderBottomWidth : 1
+    borderBottomWidth : 1,
+    alignItems : 'center'
   },
 });
