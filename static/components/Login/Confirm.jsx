@@ -7,7 +7,7 @@ import SettingsInputLabel from '../Settings/SettingsInputLabel.jsx';
 import AppActions from '../../actions/AppActions.jsx';
 import { browserHistory } from 'react-router';
 import AppStore from '../../stores/AppStore.jsx';
-import SendConfirmation from './SendConfirmation.jsx'
+
 
 export default class Confirm extends React.Component {
 	constructor() {

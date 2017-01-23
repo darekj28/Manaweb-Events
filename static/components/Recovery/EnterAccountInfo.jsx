@@ -24,7 +24,7 @@ export default class EnterAccountInfo extends React.Component {
 		     		this.props.handleEAI(data);
 		     	}
 		     	else 
-		     		this.setState({ error: data['error'] });
+		     		alert("Unable to find account");
 		    }.bind(this)
 		});
 	}
