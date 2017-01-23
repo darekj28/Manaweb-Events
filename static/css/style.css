@@ -27,6 +27,27 @@ button.kep-login-facebook{
 button.kep-login-facebook:hover{
   background-color : #365899;
 }
+.recovery-input {
+  margin-left : 20px;
+  margin-right : 20px;
+  min-width : 300px;
+  width : 33%;
+}
+.recovery-title {
+  padding : 20px;
+  color : var(--light);
+  font-size : 40px;
+}
+.recovery-button {
+  margin-left : 20px;
+  margin-top : 10px;
+}
+.recovery {
+  margin-top : 10px;
+  margin-bottom : 10px;
+  margin-left : 20px;
+  margin-right : 20px;
+}
 #login_user {
   border-radius : 4px 0px 0px 4px;
 }
@@ -49,6 +70,10 @@ button.kep-login-facebook:hover{
 .post-button:hover {
   color : #fff;
   background-color : var(--dark);
+}
+.post-button:focus {
+  color : #fff;
+  background-color : var(--light);
 }
 .footer {
   color : var(--navbar);

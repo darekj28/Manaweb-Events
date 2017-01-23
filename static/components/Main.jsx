@@ -11,7 +11,7 @@ import App from './Home/App.jsx';
 import CommentApp from './Comment/CommentApp.jsx';
 import NotificationsApp from './Notifications/NotificationsApp.jsx';
 import SettingsApp from './Settings/SettingsApp.jsx';
-import Recovery from './Login/Recovery.jsx';
+import Recovery from './Recovery/RecoveryApp.jsx';
 import Confirm from './Login/Confirm.jsx';
 
 
