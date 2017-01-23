@@ -495,7 +495,7 @@ class SettingsScreen extends Component {
             visible={this.state.display_password_change}
               animationType={"slide"}
               transparent={false}>
-                <View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start', paddingTop: 30}}>
+                <View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start'}}>
                     <View style={styles.top_bar}>
                         <View style={{flex: 0.2}}>
                             <TouchableOpacity onPress = {this.togglePasswordModal.bind(this)}>
@@ -644,7 +644,7 @@ class SettingsScreen extends Component {
               animationType={"slide"}
               transparent={false}
                 >
-                <View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start', paddingTop: 30}}>
+                <View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start'}}>
                     <View style={styles.top_bar}>
                         <View style={{flex: 0.2}}>
                         </View>
@@ -707,45 +707,10 @@ class SettingsScreen extends Component {
 
 let winSize = Dimensions.get('window')
 const styles = StyleSheet.create({
-  input_box :{ 
-    flexDirection : "column",
-    width : winSize.width * 0.925,
-    height: winSize.height * 0.15,
-    borderRadius : 5,
-    borderColor: "skyblue",
-    padding: 5,
-    borderWidth : 2
-  },
-  input_top_row : {
-    flexDirection: "row",
-    flex: 0.5,
-    backgroundColor: "skyblue"
-  },
-  instruction_box: {
-    flex : 0.4,
-    flexDirection: "column",
-    padding : 5
-
-  },
-  instruction_text : {
-      flex: 1
-  },
-  user_input_container:{
-    flex: 0.6,
-    backgroundColor : "coral",
-    flexDirection: "column"
-
-  },
-  input_text: {
-    flex: 1,
-    padding : 5
-
-  },
  container: {
     flex: 1,
     flexDirection : "column",
     justifyContent: 'space-between',
-    paddingTop: 10,
     backgroundColor: "white",
     alignItems: 'flex-start'
   },
@@ -756,18 +721,17 @@ const styles = StyleSheet.create({
     flexDirection : "row",
     justifyContent: "space-around",
     borderBottomColor : '#e1e1e1',
-    borderBottomWidth : 1
+    borderBottomWidth : 1,
+    alignItems : 'center'
   },
   list_container: {
     flex : 1,
-    paddingTop : 16,
+    paddingTop : 8,
     alignSelf : 'stretch',
     backgroundColor : '#fbfbfb'
   },
   back_button :{
     flex : 1,
-  },
-  back_button_text: {
   },
   logo: {
     flex : 2,
@@ -779,34 +743,6 @@ const styles = StyleSheet.create({
     flexDirection : "row",
     justifyContent : "flex-end"
   },
-  // instruction_box :{
-  //   flex : 0.3,
-  // },
-  // instruction_text : {
-  //   fontSize : 16
-  // },
-
-  // input_box: {
-  //   flexDirection : "column",
-  //   borderColor: "skyblue",
-  //   borderWidth : 1,
-  //   borderRadius : 5,
-  //   width : winSize.width * 0.95,
-  //   height: winSize.height * 0.15,
-  //   justifyContent: "flex-start"
-  //   // backgroundColor: "skyblue"
-  // },
-  // input_text :{
-  //   flex: 0.6,
-  //   backgroundColor: "coral",
-  //   padding : 8,
-  //   alignSelf: "flex-start"
-  // },
-  // input_top_row: {
-  //   flexDirection: "row",
-  //   flex : 0.5,
-  //   // backgroundColor: "skyblue"
-  // },
   clear_button : {
     flex: 0.05,
     justifyContent: "center"
