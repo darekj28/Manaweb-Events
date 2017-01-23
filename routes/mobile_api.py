@@ -310,7 +310,7 @@ def mobileGetPushNotifications():
 	post_manager = Posts()
 	push_notifications = post_manager.getPushNotifications(username)
 	num_notifications = post_manager.getNotificationCount(username)
-	# post_manager.markPushNotificationsAsSent(username)
+	post_manager.markPushNotificationsAsSent(username)
 	post_manager.closeConnection()
 	output = {}
 	output['push_notifications'] = push_notifications
