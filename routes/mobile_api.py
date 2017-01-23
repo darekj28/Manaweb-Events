@@ -273,10 +273,8 @@ def mobileCheckPassword():
 	user_manager.closeConnection()
 	return jsonify(output)
 
-
 @mobile_api.route('/mobileUpdatePassword', methods = ['POST'])
 def mobileUpdatePassword():
-
 	username = request.json['username']
 	new_password = request.json['password']
 	print(username)
@@ -296,3 +294,27 @@ def mobileRecoverAccount():
 	security_manager.closeConnection()
 	return jsonify(output)
 
+@mobile_api.route('/mobileMarkPushNotificationsAsSent', methods = ['POST'])
+def mobileMarkPushNotificationsAsSent():
+	username = request.json['username']
+	post_manager = Posts()
+	post_manager.markNotificationAsSent(username)
+	post_manager.closeConnection()
+	output = {}
+	output['result'] = 'success'
+	return jsonify(output)
+
+@mobile_api.route('/mobileGetPushNotifications', methods = ['POST'])
+def mobileGetPushNotifications():
+	username = request.json['username']
+	post_manager = Posts()
+	push_notifications = post_manager.getPushNotifications(username)
+	num_notifications = post_manager.getNotificationCount(username)
+	# post_manager.markPushNotificationsAsSent(username)
+	post_manager.closeConnection()
+	output = {}
+	output['push_notifications'] = push_notifications
+	output['result'] = 'success'
+	output['num_notifications'] = num_notifications
+	print(output)
+	return jsonify(output)
