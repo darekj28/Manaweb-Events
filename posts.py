@@ -406,7 +406,6 @@ class Posts:
 		n_list = list()
 		user_manager = Users()
 		for note in query:
-			print(note)
 			sender = user_manager.getInfo(note[3])
 			op = user_manager.getInfo(note[11])
 			if (op is None): 
@@ -442,14 +441,11 @@ class Posts:
 		full_notificaiton_list = self.getShortListNotifications(userID)
 		notifications_to_push = list()
 		for note in full_notificaiton_list:
-			print(note['pushNotificationSent'])
 			if note['pushNotificationSent'] == False:
 				notifications_to_push.append(note)
 
-
-		output = self.shortNotificationListToDict(notifications_to_push)
 		# self.markPushNotificationsAsSent(userID)
-		return output
+		return notifications_to_push
 
 	def markNotificationAsSeen(self, userID):
 		sql = "UPDATE " + self.USER_NOTIFICATION_PREFIX + userID + " SET seen = %s"

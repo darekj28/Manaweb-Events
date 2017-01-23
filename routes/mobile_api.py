@@ -277,8 +277,6 @@ def mobileCheckPassword():
 def mobileUpdatePassword():
 	username = request.json['username']
 	new_password = request.json['password']
-	print(username)
-	print(new_password)
 	user_manager = Users()
 	user_manager.updateInfo(username, 'password', new_password)
 	user_manager.closeConnection()
@@ -316,5 +314,4 @@ def mobileGetPushNotifications():
 	output['push_notifications'] = push_notifications
 	output['result'] = 'success'
 	output['num_notifications'] = num_notifications
-	print(output)
 	return jsonify(output)
