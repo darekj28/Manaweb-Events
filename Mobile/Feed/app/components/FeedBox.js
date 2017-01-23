@@ -95,11 +95,11 @@ export default class FeedBox extends Component {
                             </View>
 
                             <View style={{flex: 0, paddingTop : 8, paddingRight : 6, flexDirection: 'row'}}>
-                                { post.isTrade && <View style={styles.feed_filter_image}><Icon name = "ios-swap" size = {14} color = "#333333"/></View>}
+                                { post.isTrade && <View style={styles.feed_filter_image}><Icon name = "md-swap" size = {16} color = "#333333"/></View>}
                     
-                                { post.isPlay && <View style={styles.feed_filter_image}><Icon name = "ios-play" size = {14} color = "#333333"/></View>}
+                                { post.isPlay && <View style={styles.feed_filter_image}><Icon name = "ios-play" size = {16} color = "#333333"/></View>}
                                 
-                                { post.isChill && <View style={styles.feed_filter_image}><Icon name = "ios-time-outline" size = {14} color = "#333333"/></View>}
+                                { post.isChill && <View style={styles.feed_filter_image}><Icon name = "md-time" size = {16} color = "#333333"/></View>}
                             </View>
                         </View>
 

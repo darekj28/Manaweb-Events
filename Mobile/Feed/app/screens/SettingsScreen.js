@@ -325,7 +325,7 @@ class SettingsScreen extends Component {
                     Avatar
                   </Text>
                   <View style={{flexDirection : 'row'}}>
-                     <TouchableOpacity style = {{justifyContent : 'flex-start', flex : 0.9}} 
+                     <TouchableOpacity style = {{justifyContent : 'flex-start', flex : 0, paddingLeft:8}} 
                         onPress = {this.toggleAvatarPicker.bind(this)}>
                         <View style={{flexDirection : 'column',  alignItems : 'center'}}> 
                             {avatarImage}
@@ -334,7 +334,7 @@ class SettingsScreen extends Component {
                             </Text>     
                         </View> 
                     </TouchableOpacity>   
-                    <View style={{flex : 2}}>
+                    <View style={{flex : 1}}>
                     </View>
                 </View>           
              </View>

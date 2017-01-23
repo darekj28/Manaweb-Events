@@ -61,8 +61,8 @@ export default class LogoAndSearchBar extends Component {
                 <View style={{flex: 0, flexDirection: 'row'}}>
                     <TouchableHighlight onPress={() => this.props.onFilterChange(0)}>
                         <View style = {styles.filter_wrapper}>
-                            {!this.props.filter_enable[0] && <Icon name = "ios-swap" size = {25} color = {red}/>}
-                            {this.props.filter_enable[0] && <Icon name = "ios-swap" size = {25} color = {green}/>}
+                            {!this.props.filter_enable[0] && <Icon name = "md-swap" size = {25} color = {red}/>}
+                            {this.props.filter_enable[0] && <Icon name = "md-swap" size = {25} color = {green}/>}
                             <Text style = {styles.filter_text}>
                                 {this.filterText.bind(this)(0)}
                             </Text>
@@ -81,8 +81,8 @@ export default class LogoAndSearchBar extends Component {
 
                     <TouchableHighlight onPress={() => this.props.onFilterChange(2)}>
                         <View style = {styles.filter_wrapper}>
-                            {!this.props.filter_enable[2] && <Icon name = "ios-time-outline" size = {25} color = {red}/>}
-                            {this.props.filter_enable[2] && <Icon name = "ios-time-outline" size = {25} color = {green}/>}
+                            {!this.props.filter_enable[2] && <Icon name = "md-time" size = {25} color = {red}/>}
+                            {this.props.filter_enable[2] && <Icon name = "md-time" size = {25} color = {green}/>}
                             <Text style = {styles.filter_text}>
                                 {this.filterText.bind(this)(2)}
                             </Text>

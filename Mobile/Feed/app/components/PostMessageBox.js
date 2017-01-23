@@ -115,8 +115,8 @@ export default class PostMessageBox extends Component {
                     <View style = {{flex: 0.85, flexDirection:'row'}}>
                         <TouchableOpacity onPress={() => this.setFilter(0)}>
                             <View style={styles.filter_wrapper}>
-                                {!this.state.filter_enable[0] && <Icon name = "ios-swap" size = {25} color = {red}/>}
-                                {this.state.filter_enable[0] && <Icon name = "ios-swap" size = {25} color = {green}/>}
+                                {!this.state.filter_enable[0] && <Icon name = "md-swap" size = {25} color = {red}/>}
+                                {this.state.filter_enable[0] && <Icon name = "md-swap" size = {25} color = {green}/>}
                             </View>
                         </TouchableOpacity>
 
@@ -129,8 +129,8 @@ export default class PostMessageBox extends Component {
 
                         <TouchableOpacity onPress={() => this.setFilter(2)}>
                             <View style={styles.filter_wrapper}>
-                                {!this.state.filter_enable[2] && <Icon name = "ios-time-outline" size = {25} color = {red}/>}
-                                {this.state.filter_enable[2] && <Icon name = "ios-time-outline" size = {25} color = {green}/>}
+                                {!this.state.filter_enable[2] && <Icon name = "md-time" size = {25} color = {red}/>}
+                                {this.state.filter_enable[2] && <Icon name = "md-time" size = {25} color = {green}/>}
                             </View>
                         </TouchableOpacity>
                     </View>
