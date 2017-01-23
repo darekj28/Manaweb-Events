@@ -71,8 +71,6 @@ class FeedScreen extends Component {
             test: "",
             loading: true
         }
-        this.refresh_interval;
-        this.time_interval = 10.0 * 1000
         this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
         this.postMessagePressed = this.postMessagePressed.bind(this)
         this.handlePostSubmit = this.handlePostSubmit.bind(this);
@@ -129,7 +127,7 @@ class FeedScreen extends Component {
             this.setState({userIdToFilterPosts : ""});
         else this.setState({ userIdToFilterPosts : userIdToFilterPosts});
     }
-    
+
     // updates feed then sends the post to the server
     handlePostSubmit(newPostContent){
         var feed = this.state.feed;
@@ -243,7 +241,7 @@ class FeedScreen extends Component {
   }
   componentDidMount() {
       this.initializeUserInfo.bind(this)();
-      this.refresh_interval = setInterval(this.props.refreshScreen, this.time_interval)
+
 
       // this.props.refreshScreen();
   }

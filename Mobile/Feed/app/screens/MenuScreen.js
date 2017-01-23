@@ -47,6 +47,8 @@ class MenuScreen extends Component {
     }
     this.interval;
     this.time_interval = 4.0 * 1000
+    this.refresh_interval;
+    this.refresh_time_interval = 10.0 * 1000
 
     this._onPanel1Pressed = this._onPanel1Pressed.bind(this)
   }
@@ -215,6 +217,7 @@ class MenuScreen extends Component {
   }
 
   handleLogout() {
+    clearInterval(this.refresh_interval)
     AsyncStorage.setItem("current_username", "").then((value) => {
           LoginManager.logOut()
           this._navigateToHome();
@@ -278,7 +281,6 @@ class MenuScreen extends Component {
   }
 
   refreshFeed(){
-    console.log("refreshed")
     this.refreshScreen.bind(this)(false)
   }
 
@@ -337,6 +339,7 @@ class MenuScreen extends Component {
   componentDidMount() {
     this.initialize.bind(this)();
     this.initializePushNotifications.bind(this)();
+    this.refresh_interval = setInterval(this.props.refreshScreen, this.refresh_time_interval)
     AppState.addEventListener('change', this.handleAppStateChange.bind(this))
   }
 
