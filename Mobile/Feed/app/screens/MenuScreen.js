@@ -5,7 +5,7 @@ const {
 import React from 'react';
 import {Component} from 'react'
 import {Platform, AppState, AsyncStorage, AppRegistry,StyleSheet,View,TouchableOpacity,TouchableHighlight,
-          Alert, Animated, TouchableWithoutFeedback, Image, Easing, Text} from 'react-native';
+          Alert, Animated, TouchableWithoutFeedback, Image, Easing, Text, ActivityIndicator} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FeedScreen from './FeedScreen'
@@ -334,8 +334,11 @@ class MenuScreen extends Component {
       var isLoading = (this.state.userLoading || this.state.feedLoading)
       return (
           <View style = {styles.container}>
-              <Spinner visible={this.state.spinnerLoading} textContent= "Loading..." textStyle={{color: '#FFF'}} />
-              <View style = {{flex: 1 - BOTTOM_BAR_PROPORTION, flexDirection:'row'}}>
+              {this.state.spinnerLoading &&
+                <ActivityIndicator style={[styles.centering, styles.white]} color="#cccccc" size="large"/>
+                }
+              {!this.state.spinnerLoading &&
+                <View style = {{flex: 1 - BOTTOM_BAR_PROPORTION, flexDirection:'row'}}>
                   { (this.state.show_panel1) && 
                       <View style = {{flex: 1}}>
                           <FeedScreen navigator={this.props.navigator}
@@ -370,9 +373,9 @@ class MenuScreen extends Component {
                     />
                   </View>
               }
-              </View>
+              </View>}
 
-              <View style = {{flex: BOTTOM_BAR_PROPORTION, flexDirection:'row', alignItems:'center', justifyContent:'center', 
+              {!this.state.spinnerLoading && <View style = {{flex: BOTTOM_BAR_PROPORTION, flexDirection:'row', alignItems:'center', justifyContent:'center', 
                             borderTopWidth : 1, borderTopColor : 'silver'}}>
                   <TouchableWithoutFeedback
                       style = {this._imageWrapperStyle(this.state.show_panel1)}
@@ -415,7 +418,7 @@ class MenuScreen extends Component {
                         </Text>
                     </View>
                   </TouchableWithoutFeedback>
-              </View>
+              </View>}
           </View>
       );
   }
@@ -430,6 +433,15 @@ const styles = StyleSheet.create({
   notification_badge : {
     alignSelf: "center",
   },
+  centering: {
+    flex : 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 8,
+  },
+  white: {
+    backgroundColor: 'white',
+  }
 
 
 });
