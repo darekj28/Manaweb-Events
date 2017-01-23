@@ -79,6 +79,17 @@ class RegisterEmail extends Component {
     })
   }
 
+  _skipEmail(){
+    this.props.navigator.push({
+    href: "RegisterUsername",
+    email : "",
+    phone_number : this.props.phone_number,
+    password : this.props.password,
+    first_name: this.props.first_name,
+    last_name: this.props.last_name
+    })
+  }
+
   getErrorMessage() {
     var error_message = "";
     if (this.state.validation_output.error != "" && this.state.validation_output.error != null) {
@@ -140,13 +151,19 @@ class RegisterEmail extends Component {
           }
             <View style = {styles.large_padding} />
              <View style = {styles.bottom_bar}>
-                <TouchableHighlight style = {styles.next} onPress = {this.handleEmailSubmit.bind(this)}>
-                <Text style = {styles.next_text}>
+              <TouchableOpacity style = {styles.recovery_button} onPress = {this._skipEmail.bind(this)}>
+                <Text style = {styles.recovery_text}>
+                    Not now?
+                </Text>
+                </TouchableOpacity>
+                <View style = {styles.bottom_bar_padding}/>
+                <TouchableHighlight style = {styles.login_submit_button} onPress = {this.handleEmailSubmit.bind(this)}>
+                <Text style = {styles.login_submit_text}>
                   Next!
                 </Text>
               </TouchableHighlight>
-             </View>
           </View>
+        </View>
     )
   }
 }
@@ -239,7 +256,7 @@ const styles = StyleSheet.create({
   },
 
  
-  bottom_bar : {
+    bottom_bar : {
     flex : 0.05,
     // backgroundColor : "purple",
     flexDirection: "row",
@@ -247,10 +264,14 @@ const styles = StyleSheet.create({
   },
 
   recovery_text: {
-    flex: 0.75
+    borderColor : "skyblue",
+    borderWidth : 1,
+    borderRadius : 5,
+    padding: 8,
+    textAlign : "center"
   },
  
-  next_text : {
+  login_submit_text : {
     borderColor : "skyblue",
     borderWidth : 1,
     borderRadius : 5,
@@ -260,6 +281,17 @@ const styles = StyleSheet.create({
 
   small_padding : {
     flex : 0.05,
+  },
+   recovery_button : {
+      flex: 0.30
+  },
+
+  bottom_bar_padding: {
+      flex: 0.45
+  },
+
+  login_submit_button: {
+      flex: 0.25
   },
 
 });
