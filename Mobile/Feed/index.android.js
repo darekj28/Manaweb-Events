@@ -9,10 +9,7 @@ import {Component} from 'react'
 import {AppRegistry, StyleSheet, TabBarIOS, View} from 'react-native';
 import ViewContainer from './app/components/ViewContainer'
 import StartNavigator from './app/navigation/StartNavigator'
-
-
-
-
+import Index from './app/Index'
 
 class Feed extends Component {
 
@@ -24,10 +21,7 @@ class Feed extends Component {
   }
   render() {
     return (
-        <View style = {styles.contianer}>
-          <StartNavigator /> 
-        </View>
-
+        <Index />
       )
   }
 }

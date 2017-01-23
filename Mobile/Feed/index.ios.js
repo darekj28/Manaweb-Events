@@ -7,9 +7,7 @@
 import React from 'react';
 import {Component} from 'react'
 import {AppState, AppRegistry, StyleSheet, TabBarIOS, View} from 'react-native';
-import ViewContainer from './app/components/ViewContainer'
-import StartNavigator from './app/navigation/StartNavigator'
-
+import Index from './app/Index'
 
 
 
@@ -24,22 +22,10 @@ class Feed extends Component {
   }
 
 
-  componentDidMount() {
-    
-  }
 
-  componentWillUnmount() {
-
-  }
-
-  
   render() {
     return (
-        <View style = {styles.contianer}>
-          <StartNavigator 
-          />
-        </View>
-
+        <Index />
       )
   }
 }
