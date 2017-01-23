@@ -21,7 +21,6 @@ class SettingsScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-
       current_username: "",
       current_user: {},
       first_name : "",
@@ -152,8 +151,7 @@ class SettingsScreen extends Component {
   handleEmailChange(email) {
     this.setState({email : email})
     if (email == this.state.current_user.email){
-      ouput = {}
-      output['result'] = 'success'
+      var output = {result : 'success'}
       this.setState({email_validation : output})
     }
     else {
@@ -196,7 +194,13 @@ class SettingsScreen extends Component {
         new_phone_number = "(" + raw_phone_number.substring(0,3) + ") " + raw_phone_number.substring(3, 6) + "-" + raw_phone_number.substring(6, length)
       }
       this.setState({phone_number : new_phone_number});  
-      this.validatePhoneNumber(phone_number);
+      if (phone_number == this.state.current_user.phone_number){
+        var output = {result : 'succces'}
+        this.setState({phone_number_error : output})
+      }
+      else {
+      this.validatePhoneNumber.bind(this)(phone_number);
+      }
   }
 
   handleAvatarChange(avatar) {
@@ -221,7 +225,7 @@ class SettingsScreen extends Component {
     if (canSubmit) {
       var url = "https://manaweb-events.herokuapp.com"
       var test_url = "http://0.0.0.0:5000"
-      fetch(test_url + "/mobileUpdateSettings", {method: "POST",
+      fetch(url + "/mobileUpdateSettings", {method: "POST",
       headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -320,7 +324,7 @@ class SettingsScreen extends Component {
     var currentAvatarLabel = currentAvatar.charAt(0).toUpperCase() + currentAvatar.slice(1);
     var avatarImage = this.getAvatarImage.bind(this)(this.state.avatar)
     return (
-              <View style = {{flexDirection:'column', paddingLeft : 16, paddingBottom : 8}}> 
+              <View style = {styles.input_container}> 
                 <Text style = {styles.settings_label}>
                     Avatar
                   </Text>
@@ -343,7 +347,7 @@ class SettingsScreen extends Component {
     generateFirstNameInput() {
     var first_name_error = this.getErrorMessage.bind(this)('first_name')
     return (
-        <View style = {{flexDirection:'column', paddingLeft : 16, paddingBottom : 8}}> 
+        <View style = {styles.input_container}> 
                 <Text style = {styles.settings_label}>
                     First name
                   </Text>
@@ -361,7 +365,7 @@ class SettingsScreen extends Component {
     generateLastNameInput(){
     var last_name_error = this.getErrorMessage.bind(this)('last_name')
     return (
-              <View style = {{flexDirection:'column', paddingLeft : 16, paddingBottom : 8}}> 
+              <View style = {styles.input_container}> 
                 <Text style = {styles.settings_label}>
                     Last name
                   </Text>
@@ -379,7 +383,7 @@ class SettingsScreen extends Component {
   generateEmailInput() {
     var email_error = this.getErrorMessage.bind(this)('email')
     return(
-               <View style = {{flexDirection:'column', paddingLeft : 16, paddingBottom : 8}}> 
+               <View style = {styles.input_container}> 
                 <Text style = {styles.settings_label}>
                     Email
                   </Text>
@@ -397,7 +401,7 @@ class SettingsScreen extends Component {
   generatePhoneNumberInput() {
     var phone_number_error = this.getErrorMessage.bind(this)('phone_number')
     return (
-              <View style = {{flexDirection:'column', paddingLeft : 16, paddingBottom : 8}}> 
+              <View style = {styles.input_container}> 
                 <Text style = {styles.settings_label}>
                     Phone number
                   </Text>
@@ -600,6 +604,20 @@ class SettingsScreen extends Component {
     // initialize all the states to previous values
     this.initializeUserInfo.bind(this)();
   }
+
+  checkForChanges() {
+    var hasChanges = false;
+    if (this.state.first_name != this.current_user.first_name) hasChanges = true
+    if (this.state.last_name != this.current_user.last_name) hasChanges = true
+    if (this.state.email != this.current_user.email) hasChanges = true
+    if (this.state.phone_number != this.current_user.phone_number) hasChanges = true
+    if (this.state.avatar != this.current_user.avatar_name) hasChanges = true
+    return hasChanges
+  }
+
+  // componentWillUnmount(){
+  //   var hasChanges = this.checkForChanges.bind(this)()
+  // }
 
   render() {
     var first_name_input = this.generateFirstNameInput.bind(this)()
@@ -883,6 +901,13 @@ const styles = StyleSheet.create({
     fontSize : 16,
     color: '#90D7ED',
     padding : 8
+  },
+
+  input_container : {
+    flexDirection:'column',
+    paddingLeft : 16,
+    paddingBottom : 8,
+    borderColor: 'skyblue',
   }
 
 });

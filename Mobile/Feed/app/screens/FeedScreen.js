@@ -128,20 +128,18 @@ class FeedScreen extends Component {
     // updates feed then sends the post to the server
     handlePostSubmit(newPostContent){
         var feed = this.state.feed;
-
         if (this.state.post_actions.length == 0) {
           this.setState({alert : true});
+          alert("You must select a filter before submitting your post")
         }
         else {
           this.setState({alert : false});
-
           feed.unshift({
                 postContent: newPostContent,
                 avatar  : this.props.current_user['avatar_name'],
                 name    : this.props.current_user['first_name'] + " " + this.props.current_user['last_name'],
                 userID  : this.props.current_user['userID'],
                 time  : "just now",
-
                 isTrade : contains(this.state.post_actions, "Trade"),
                 isPlay  : contains(this.state.post_actions, "Play"),
                 isChill : contains(this.state.post_actions, "Chill"),
