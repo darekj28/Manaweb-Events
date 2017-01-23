@@ -324,24 +324,18 @@ class SettingsScreen extends Component {
     var currentAvatarLabel = currentAvatar.charAt(0).toUpperCase() + currentAvatar.slice(1);
     var avatarImage = this.getAvatarImage.bind(this)(this.state.avatar)
     return (
-              <View style = {styles.input_container}> 
-                <Text style = {styles.settings_label}>
+                <View style = {styles.input_container}> 
+                    <Text style = {styles.settings_label}>
                     Avatar
-                  </Text>
-                  <View style={{flexDirection : 'row'}}>
-                     <TouchableOpacity style = {{justifyContent : 'flex-start', flex : 0, paddingLeft:8}} 
-                        onPress = {this.toggleAvatarPicker.bind(this)}>
-                        <View style={{flexDirection : 'column',  alignItems : 'center'}}> 
-                            {avatarImage}
-                            <Text style = {{fontSize : 12}}> 
-                              {currentAvatarLabel}
+                    </Text>
+                    <View style={styles.settings_input_container}>
+                        <TouchableOpacity onPress = {this.toggleAvatarPicker.bind(this)}>
+                            <Text style = {styles.settings_input}> 
+                                {currentAvatarLabel}
                             </Text>     
-                        </View> 
-                    </TouchableOpacity>   
-                    <View style={{flex : 1}}>
-                    </View>
-                </View>           
-             </View>
+                        </TouchableOpacity>             
+                    </View>         
+                 </View>
       )
   }
     generateFirstNameInput() {
@@ -351,6 +345,7 @@ class SettingsScreen extends Component {
                 <Text style = {styles.settings_label}>
                     First name
                   </Text>
+                <View style={styles.settings_input_container}>
                  <TextInput 
                       style = {styles.settings_input}
                       placeholder = "First name" 
@@ -358,6 +353,7 @@ class SettingsScreen extends Component {
                       onChangeText = {this.handleFirstNameChange.bind(this)}
                       value = {this.state.first_name}
                   />                  
+                  </View>
                   {first_name_error}
              </View>
       )
@@ -369,6 +365,7 @@ class SettingsScreen extends Component {
                 <Text style = {styles.settings_label}>
                     Last name
                   </Text>
+                  <View style={styles.settings_input_container}>
                  <TextInput 
                       style = {styles.settings_input}
                       placeholder = "Last name" 
@@ -376,6 +373,7 @@ class SettingsScreen extends Component {
                       onChangeText = {this.handleLastNameChange.bind(this)}
                       value = {this.state.last_name}
                   />                  
+                  </View>
                   {last_name_error}
              </View>
       )
@@ -387,13 +385,15 @@ class SettingsScreen extends Component {
                 <Text style = {styles.settings_label}>
                     Email
                   </Text>
+                  <View style={styles.settings_input_container}>
                  <TextInput 
                       style = {styles.settings_input}
                       placeholder = "Last name" 
                       maxLength = {20}
                       onChangeText = {this.handleEmailChange.bind(this)}
                       value = {this.state.email}
-                  />                  
+                  />      
+                  </View>            
                   {email_error}
              </View>
       )
@@ -405,6 +405,7 @@ class SettingsScreen extends Component {
                 <Text style = {styles.settings_label}>
                     Phone number
                   </Text>
+                  <View style={styles.settings_input_container}>
                   <TextInput
                   onChangeText = {this.handlePhoneNumberChange.bind(this)}
                   style = {styles.settings_input}
@@ -414,6 +415,7 @@ class SettingsScreen extends Component {
                   dataDetectorTypes = "phoneNumber"
                   maxLength = {14}
                 />
+                </View>
                   {phone_number_error}
              </View>
       )
@@ -516,7 +518,7 @@ class SettingsScreen extends Component {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={{flex : 1, paddingLeft : 16}}>
+                    <View style={{flex : 1, backgroundColor : '#fbfbfb'}}>
                         {old_password_input}
                         {new_password_input} 
                     </View>
@@ -540,15 +542,17 @@ class SettingsScreen extends Component {
   generateOldPasswordInput() {
     var old_password_error = this.getErrorMessage.bind(this)('old_password')
     return  (<View style = {{flexDirection:'column', paddingBottom : 16}}> 
-                <Text style = {{fontSize : 16, fontWeight : 'bold', padding: 8}}>
+                <Text style = {styles.settings_label}>
                     Current password
                   </Text>
+                <View style={styles.settings_input_container}>
                  <TextInput
                   onChangeText = {this.handleOldPasswordChange.bind(this)}
-                  style = {{fontSize : 16, padding : 8, height : 40}} placeholder = "Password"
+                  style = {styles.settings_input} placeholder = "Password"
                   secureTextEntry = {true}
                   maxLength = {20}
                 />
+                </View>
                  {old_password_error}
              </View>
           )
@@ -557,15 +561,17 @@ class SettingsScreen extends Component {
   generateNewPasswordInput() {
     var new_password_error = this.getErrorMessage.bind(this)('new_password')
     return  (<View style = {{flexDirection : 'column'}}> 
-                <Text style = {{fontSize : 16, fontWeight :'bold', padding : 8}}>
+                <Text style = {styles.settings_label}>
                     New password
                   </Text>
+                  <View style={styles.settings_input_container}>
                  <TextInput
                   onChangeText = {this.handleNewPasswordChange.bind(this)}
-                  style = {{fontSize : 16, padding : 8, height : 40}} placeholder = "Password"
+                  style = {styles.settings_input} placeholder = "Password"
                   secureTextEntry = {true}
                   maxLength = {20}
                 />
+                </View>
                  {new_password_error}
              </View>
           )
@@ -753,7 +759,9 @@ const styles = StyleSheet.create({
   },
   list_container: {
     flex : 1,
-    alignSelf : 'stretch'
+    paddingTop : 16,
+    alignSelf : 'stretch',
+    backgroundColor : '#fbfbfb'
   },
   back_button :{
     flex : 1,
@@ -805,7 +813,7 @@ const styles = StyleSheet.create({
   error_box : {
     flex: 0.5,
     flexDirection : "row",
-    backgroundColor: "teal"
+    paddingLeft : 32
   },
   error_text : {
     color : "red"
@@ -850,8 +858,8 @@ const styles = StyleSheet.create({
     flex: 0.5
   },
   avatar_image : {
-    width : 80,
-    height : 80,
+    width : 160,
+    height : 160,
     borderRadius : 8
   },
   password_box: {
@@ -890,12 +898,21 @@ const styles = StyleSheet.create({
   settings_label : {
     fontSize : 16, 
     fontWeight : 'bold', 
-    padding: 8
+    padding: 8,
+    paddingLeft : 32
   },
   settings_input : {
     fontSize : 16, 
-    padding : 8, 
+    padding : 8,
+    paddingLeft : 32, 
     height : 35
+  },
+  settings_input_container : {
+    backgroundColor : 'white',
+    borderTopWidth : 0.5,
+    borderBottomWidth : 0.5,
+    borderTopColor : '#e1e1e1',
+    borderBottomColor : '#e1e1e1'
   },
   settings_clickable : {
     fontSize : 16,
@@ -905,7 +922,6 @@ const styles = StyleSheet.create({
 
   input_container : {
     flexDirection:'column',
-    paddingLeft : 16,
     paddingBottom : 8,
     borderColor: 'skyblue',
   }
