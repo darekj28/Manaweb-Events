@@ -171,7 +171,7 @@ export default class RegisterName extends Component {
                 <TextInput
                     onChangeText = {this.handleFirstNameChange}
                     style = {styles.input_text} placeholder = "First Name"
-                    maxLength = {20}
+                    maxLength = {13}
                     value = {this.state.first_name}
                   />
 

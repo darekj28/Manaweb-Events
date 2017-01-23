@@ -71,6 +71,8 @@ class FeedScreen extends Component {
             test: "",
             loading: true
         }
+        this.refresh_interval;
+        this.time_interval = 10.0 * 1000
         this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
         this.postMessagePressed = this.postMessagePressed.bind(this)
         this.handlePostSubmit = this.handlePostSubmit.bind(this);
@@ -79,11 +81,12 @@ class FeedScreen extends Component {
         this.handleServerPostSubmit = this.handleServerPostSubmit.bind(this);
         this._navigateToHome = this._navigateToHome.bind(this);
         this.handleRightAction = this.handleRightAction.bind(this)
-
     }
+
     handlePostTyping (newPostContent) {
         this.setState({newPostContent : newPostContent})
     }
+
     handleFilterPress(index) {
         var filters = ['Trade', 'Play', 'Chill']
         var this_filter = filters[index]
@@ -95,6 +98,7 @@ class FeedScreen extends Component {
         // scroll to top
         // $('html, body').animate({scrollTop: 0}, 300);
     }
+
     handleFeedFilterPress(index) {
         var newFilter = this.state.filter_enable
         var allFeedsWillBeOff = true
@@ -125,6 +129,7 @@ class FeedScreen extends Component {
             this.setState({userIdToFilterPosts : ""});
         else this.setState({ userIdToFilterPosts : userIdToFilterPosts});
     }
+    
     // updates feed then sends the post to the server
     handlePostSubmit(newPostContent){
         var feed = this.state.feed;
@@ -174,7 +179,7 @@ class FeedScreen extends Component {
     
           if (responseData['result'] == 'success') {
             this.setState({newPostContent : ""})
-            this.props.refreshScreen(true);
+            this.props.refreshScreen(false);
           }
           else {
             this.setState({newPostContent: 'failure...'})
@@ -238,6 +243,8 @@ class FeedScreen extends Component {
   }
   componentDidMount() {
       this.initializeUserInfo.bind(this)();
+      this.refresh_interval = setInterval(this.props.refreshScreen, this.time_interval)
+
       // this.props.refreshScreen();
   }
   render() {

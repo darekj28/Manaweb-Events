@@ -34,7 +34,7 @@ def validateName(name):
 
 	
 	# invalidate if more than 12 letters
-	elif length > 19:
+	elif length > 13:
 		output['result'] =  'failure'
 		output['error'] = 'Names must be less than 20 letters'
 	return output

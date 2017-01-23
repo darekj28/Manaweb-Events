@@ -188,13 +188,18 @@ class MenuScreen extends Component {
     })
     .then((response) => response.json())
     .then((responseData) => {
-
-      var thisUser = responseData.thisUser;
-      this.setState({current_user : thisUser})
-      this.setState({userLoading: false})
-      if (initialize) {
-        this.refreshScreen.bind(this)(true)
+      if (responseData.thisUser == null) {
+        this.handleLogout.bind(this)()
       }
+      else {
+          var thisUser = responseData.thisUser;
+        this.setState({current_user : thisUser})
+        this.setState({userLoading: false})
+        if (initialize) {
+          this.refreshScreen.bind(this)(true)
+        }  
+      }
+      
     }).done();
   }
 
@@ -271,6 +276,10 @@ class MenuScreen extends Component {
     }).done()
   }
 
+  refreshFeed(){
+    this.refreshScreen.bind(this)(false)
+  }
+
   getNotifications() {
     const url = "https://manaweb-events.herokuapp.com"
     const test_url = "http://0.0.0.0:5000"
@@ -344,7 +353,7 @@ class MenuScreen extends Component {
                           <FeedScreen navigator={this.props.navigator}
                                 current_user = {this.state.current_user}
                                 handleLogout = {this.handleLogout.bind(this)}
-                                refreshScreen = {this.refreshScreen.bind(this)}
+                                refreshScreen = {this.refreshFeed.bind(this)}
                                 feed = {this.state.feed}
                                 spinnerLoading = {this.state.spinnerLoading}
                                 hideSpinner = {this.hideSpinner.bind(this)}

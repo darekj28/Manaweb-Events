@@ -141,6 +141,7 @@ class RegisterUsername extends Component {
                 onChangeText = {this.handleUsernameChange.bind(this)}
                 style = {styles.input_text} placeholder = "Username"
                 value = {this.state.username}
+                maxLength = {15}
               />
               { this.state.username != "" &&
               <View style = {styles.clear_button}>
