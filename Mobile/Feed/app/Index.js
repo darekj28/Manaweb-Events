@@ -25,6 +25,7 @@ export default class Index extends React.Component {
   render() {
     return (
         <View style = {styles.contianer}>
+          <View style = {{paddingTop : 20}} />
           <StartNavigator />
           {/* <PushController /> */}
         </View>
