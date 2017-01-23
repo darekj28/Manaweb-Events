@@ -83,27 +83,23 @@ export default class FeedBox extends Component {
 
                     <View style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-start'}}>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                            <View style={{flex : 1, height : 50, flexDirection: 'row', justifyContent : 'flex-start', flexWrap : 'wrap', 
+                            <View style={{flex : 1, height : 50, flexDirection: 'row', justifyContent : 'flex-start', 
                                         paddingLeft : 8, paddingBottom : 20, paddingTop : 8}}>
                                 <TouchableHighlight onPress={this.handleFilterUser.bind(this)}>
-                                    <Text style = {styles.text_name}>
-                                        {post.name}
+                                    <Text style = {styles.text_name} numberOfLines={1}>
+                                        {post.name} 
+                                        <Text style={styles.text_userID}> @{post.userID} 
+                                            <Text style={{flex : 1}}> &#8226; {post.time} </Text>
+                                        </Text>
                                     </Text>
                                 </TouchableHighlight>
-                                <Text style = {styles.text_userID}>
-                                    @{post.userID}
-                                </Text>
-                                <Text style = {styles.text_userID}>
-                                    &#8226; {post.time}
-                                </Text>
                             </View>
-
                             <View style={{flex: 0, paddingTop : 8, paddingRight : 6, flexDirection: 'row'}}>
-                                { post.isTrade && <View style={styles.feed_filter_image}><Icon name = "md-swap" size = {16} color = "#333333"/></View>}
+                                { post.isTrade && <View style={styles.feed_filter_image}><Icon name = "md-swap" size = {16} color = "#696969"/></View>}
                     
-                                { post.isPlay && <View style={styles.feed_filter_image}><Icon name = "ios-play" size = {16} color = "#333333"/></View>}
+                                { post.isPlay && <View style={styles.feed_filter_image}><Icon name = "ios-play" size = {16} color = "#696969"/></View>}
                                 
-                                { post.isChill && <View style={styles.feed_filter_image}><Icon name = "md-time" size = {16} color = "#333333"/></View>}
+                                { post.isChill && <View style={styles.feed_filter_image}><Icon name = "md-time" size = {16} color = "#696969"/></View>}
                             </View>
                         </View>
 
@@ -150,10 +146,11 @@ const styles = StyleSheet.create({
         textAlignVertical: 'top'
     },
     text_userID: {
-        flex: 0,
-        fontSize: 14,
+        flex: 1,
+        fontSize: 13,
+        fontWeight : 'normal',
         textAlignVertical: 'top',
-        color : '#333333',
+        color : '#696969',
         paddingLeft : 4
     },
     text_feed_type: {
