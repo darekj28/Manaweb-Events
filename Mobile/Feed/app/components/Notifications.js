@@ -14,7 +14,7 @@ export default class Notifications extends React.Component {
 	render() {
 		if (this.props.notifications.length == 0)
 			return ( 
-					<Text style={{flex : 1, paddingLeft: 32}}> 
+					<Text style={{flex : 1, padding : 32}}> 
 						You have no notifications.
 					</Text>
 				)

@@ -42,7 +42,7 @@ export default class NotificationScreen extends React.Component {
   render() {
     return (
     <View style = {styles.container}>
-        <View style={{ flex : 0.1, flexDirection : 'row', justifyContent : 'space-around', paddingLeft : 10, paddingRight : 10}}>
+        <View style={styles.top_bar}>
             <View style={{flex: 0.2}}>
             </View>
             <View style={{flex: 0.6}}>
@@ -64,9 +64,18 @@ const styles = StyleSheet.create({
   container: {
     flex:1,
     justifyContent: 'flex-start',
-    paddingTop: 30
+    paddingTop: 10
   },
   title : {
     fontSize : 20
-  }
+  },
+  top_bar : {
+    flex : 0.1,
+    paddingLeft : 10,
+    paddingRight : 10,
+    flexDirection : "row",
+    justifyContent: "space-around",
+    borderBottomColor : '#e1e1e1',
+    borderBottomWidth : 1
+  },
 });

@@ -322,7 +322,6 @@ class SettingsScreen extends Component {
     var picker_list = this.generateAvatarPickerList.bind(this)()
     var currentAvatar = this.state.avatar
     var currentAvatarLabel = currentAvatar.charAt(0).toUpperCase() + currentAvatar.slice(1);
-    var avatarImage = this.getAvatarImage.bind(this)(this.state.avatar)
     return (
                 <View style = {styles.input_container}> 
                     <Text style = {styles.settings_label}>
@@ -497,7 +496,7 @@ class SettingsScreen extends Component {
               animationType={"slide"}
               transparent={false}>
                 <View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start', paddingTop: 30}}>
-                    <View style={{ flex : 0.1, flexDirection : 'row', justifyContent : 'space-around', paddingLeft : 10, paddingRight : 10}}>
+                    <View style={styles.top_bar}>
                         <View style={{flex: 0.2}}>
                             <TouchableOpacity onPress = {this.togglePasswordModal.bind(this)}>
                                 <Text style = {{color : '#90D7ED'}}>
@@ -518,7 +517,7 @@ class SettingsScreen extends Component {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={{flex : 1, backgroundColor : '#fbfbfb'}}>
+                    <View style={styles.list_container}>
                         {old_password_input}
                         {new_password_input} 
                     </View>
@@ -541,7 +540,7 @@ class SettingsScreen extends Component {
 
   generateOldPasswordInput() {
     var old_password_error = this.getErrorMessage.bind(this)('old_password')
-    return  (<View style = {{flexDirection:'column', paddingBottom : 16}}> 
+    return  (<View style = {styles.input_container}> 
                 <Text style = {styles.settings_label}>
                     Current password
                   </Text>
@@ -560,7 +559,7 @@ class SettingsScreen extends Component {
 
   generateNewPasswordInput() {
     var new_password_error = this.getErrorMessage.bind(this)('new_password')
-    return  (<View style = {{flexDirection : 'column'}}> 
+    return  (<View style = {styles.input_container}> 
                 <Text style = {styles.settings_label}>
                     New password
                   </Text>
@@ -645,8 +644,8 @@ class SettingsScreen extends Component {
               animationType={"slide"}
               transparent={false}
                 >
-                <View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start', padding : 10, paddingTop: 30}}>
-                    <View style={{ flex : 0.1, flexDirection : 'row', justifyContent : 'space-around', paddingLeft : 10, paddingRight : 10}}>
+                <View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start', paddingTop: 30}}>
+                    <View style={styles.top_bar}>
                         <View style={{flex: 0.2}}>
                         </View>
                         <View style={{flex: 0.6}}>
@@ -662,7 +661,7 @@ class SettingsScreen extends Component {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={{flex : 1}}>
+                    <View style={{flex : 1, paddingTop : 16, backgroundColor : 'white'}}>
                         <View style={{alignItems : 'center'}}>
                             {this.getAvatarImage.bind(this)(this.state.avatar)}
                         </View>
@@ -746,7 +745,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection : "column",
     justifyContent: 'space-between',
-    paddingTop: 30,
+    paddingTop: 10,
     backgroundColor: "white",
     alignItems: 'flex-start'
   },
@@ -756,6 +755,8 @@ const styles = StyleSheet.create({
     paddingRight : 10,
     flexDirection : "row",
     justifyContent: "space-around",
+    borderBottomColor : '#e1e1e1',
+    borderBottomWidth : 1
   },
   list_container: {
     flex : 1,
@@ -899,7 +900,8 @@ const styles = StyleSheet.create({
     fontSize : 16, 
     fontWeight : 'bold', 
     padding: 8,
-    paddingLeft : 32
+    paddingLeft : 32,
+    color : '#696969'
   },
   settings_input : {
     fontSize : 16, 
