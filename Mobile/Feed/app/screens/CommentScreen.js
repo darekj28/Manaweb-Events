@@ -76,7 +76,7 @@ export default class CommentScreen extends React.Component {
 	getComments() {
 		let url = "https://manaweb-events.herokuapp.com"
 	    let test_url = "http://0.0.0.0:5000"
-	    fetch(url + "/mobileGetComments", 
+	    fetch(test_url + "/mobileGetComments", 
 	    	{method: "POST",
 	          	headers: {
 	          		'Accept': 'application/json',
@@ -104,7 +104,6 @@ export default class CommentScreen extends React.Component {
 						timeString  : obj['timeString']
 	            	})
 	          	}
-	          	console.log(obj)
 	          	this.setState({comments: feed})
 	        }    
 		})

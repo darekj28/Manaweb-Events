@@ -27,7 +27,7 @@ def mobileFacebookCreateAccount():
 	birthDay = ""
 	birthMonth = ""
 	gender = ""
-	avatar_name = random.choice(avatars)
+	avatar_name = random.choice(avatars).lower()
 	avatar_url = '/static/avatars/' + avatar_name + '.png'
 	isActive = True
 	confirmationPin = "placeholder pin"
@@ -60,7 +60,7 @@ def mobileCreateProfile():
 	birthDay = "1"
 	birthMonth = "1"
 	gender = "Other"
-	avatar_name = "Jace"
+	avatar_name = random.choice(avatars).lower()
 	avatar_url = '/static/avatars/' + avatar_name + '.png'
 	isActive = True
 	confirmationPin = "DEFAULT"
