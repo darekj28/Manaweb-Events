@@ -76,15 +76,13 @@ export default class CommentScreen extends React.Component {
 	getComments() {
 		let url = "https://manaweb-events.herokuapp.com"
 	    let test_url = "http://0.0.0.0:5000"
-	    fetch(test_url + "/mobileGetComments", 
+	    fetch(url + "/mobileGetComments", 
 	    	{method: "POST",
 	          	headers: {
 	          		'Accept': 'application/json',
 	          		'Content-Type': 'application/json'
 	        	},
-	      		body: JSON.stringify({ comment_id : this.props.comment_id,
-	      			username : this.props.current_user.userID,
-	      			commentContent : this.state.newPostContent
+	      		body: JSON.stringify({ comment_id : this.props.comment_id
 	      		 })
 	    	}
 	    ).then((response) => response.json())
@@ -168,7 +166,7 @@ export default class CommentScreen extends React.Component {
 	                    handlePostSubmit = {this.handleCommentSubmit.bind(this)}
 	                    op = {op}/>
 	            </View>
-	            <View style={{flexDirection : 'row'}}>
+	            <View style={{flex : 1, flexDirection : 'row'}}>
               		<Comments comments={this.state.comments} comment_id={this.props.comment_id}/>
               	</View>
             </View>

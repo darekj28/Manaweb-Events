@@ -34,7 +34,7 @@ export default class Comments extends React.Component {
                 dataSource={dataSource}
                 renderRow={this.listViewRenderRow.bind(this)}
                 enableEmptySections = {true}
-                removeClippedSubviews={false}
+                removeClippedSubviews= {false}
 			/>
 			/* <ScrollView
 	            automaticallyAdjustContentInsets={false}
@@ -48,6 +48,6 @@ export default class Comments extends React.Component {
 
 const styles = StyleSheet.create({
   list_container : {
-
+  	flex: 1
   },
 });
