@@ -95,6 +95,7 @@ class Users:
 				 avatar_name, confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
 				  isAdmin = None, phone_number = None, birthMonth = None
 				 ,birthDay = None, birthYear = None, gender = None, confirmed = None, fb_id = None):
+		phone_number = self.formatPhoneNumberWithDashes(phone_number)
 		table_name = self.USER_TABLE
 		if isAdmin == None:
 			isAdmin = False
@@ -198,6 +199,8 @@ class Users:
 		self.user_db.commit()
 
 	def getInfo(self, userID):
+		if (userID == None or userID == ""):
+			return None
 		search_id = userID.lower()
 		table_name = self.USER_TABLE
 		self.udb.execute(self.udb.mogrify("SELECT * FROM " + table_name + " WHERE userID = %s", (search_id,)))
@@ -276,7 +279,16 @@ class Users:
 
 		return raw_phone_number
 
+	# input : any string with 10 digits 
+	# output: (123) 456-7890
+	def formatPhoneNumberWithDashes(self, input_phone_number):
+		raw_phone_number = self.formatRawPhoneNumber(input_phone_number)
+		formatted_phone_number = "(" + raw_phone_number[0:3] + ") " + raw_phone_number[3:6] + "-" + raw_phone_number[6:10]
+		return formatted_phone_number
+
 	def getInfoFromPhoneNumber(self, phone_number):
+		if (phone_number == None or phone_number == ""):
+			return None
 		user_table = self.getUserInfoTable()
 		raw_phone_number = self.formatRawPhoneNumber(phone_number)
 		
@@ -296,6 +308,8 @@ class Users:
 			return matched_user
 
 	def getInfoFromEmail(self, email):
+		if (email == None or email == ""):
+			return None
 		table_name = self.USER_TABLE
 		self.udb.execute("SELECT * FROM " + table_name + " WHERE email = %s", (email,))
 		size_test = self.udb.fetchall()

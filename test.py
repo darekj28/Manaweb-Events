@@ -38,17 +38,18 @@ security_manager = Security()
 post_manager.deleteNotifications()
 
 
-user_list = user_manager.getUserList()
-for user in user_list: 
-	table_name = "n_" + user
+feed_name = "BALT"
+# post_manager.recalculateLastPostTable(feed_name)
+# post_manager.recalculateUnseenPosts(feed_name)
+# post_manager.deleteUserPosts("mongomongomongo")
+user_manager.deleteUser("mongomongomongo")
+
 	# post_manager.deleteColumn(table_name, "pushNotificationSent")
 	# post_manager.addColumn(table_name, "pushNotificationSent", "BOOLEAN", True)
 
 
 
-# feed_name = "BALT"
-# post_manager.recalculateLastPostTable(feed_name)
-# post_manager.recalculateUnseenPosts(feed_name)
+
 
 # for fb_user in fb_users:
 # 	post_manager.deleteUserPosts(fb_user)
