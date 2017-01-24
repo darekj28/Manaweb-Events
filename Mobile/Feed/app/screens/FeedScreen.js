@@ -18,7 +18,7 @@ import {ActivityIndicator, Picker, RCTAnimation, AsyncStorage, AppRegistry,Style
 					Alert, Image, Animated, TouchableWithoutFeedback, ScrollView} from 'react-native';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import _ from 'lodash'
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/Ionicons';
 import ActionBar from '../actionbar/ActionBar'; // downloaded from https://github.com/Osedea/react-native-action-bar
 // import Menu, {SubMenu, MenuItem} from 'rc-menu'; // rc-menu https://github.com/react-component/menu MIT liscence
 // import ReactDOM from 'react-dom';
@@ -278,7 +278,7 @@ class FeedScreen extends Component {
 								</PostMessageBox>
 						</Animated.View>
 						<TouchableOpacity onPress={this.toggleMakePostModal.bind(this)}>
-							<Text>Post</Text>
+							<Icon name = "md-add" size = {25} color = "black"/>
 						</TouchableOpacity>
 						<MakePostModal display={this.state.display_make_post} 
 										toggleMakePostModal={this.toggleMakePostModal.bind(this)} 
