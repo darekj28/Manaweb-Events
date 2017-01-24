@@ -23,13 +23,13 @@ export default class PasswordModal extends React.Component {
 	}
 	updatePassword(){
 		if (this.state.current_password_error){
-			alert("Your current password is invalid.");
+			Alert.alert("Your current password is invalid.");
 		}
 		else if (this.state.new_password_error){
-			alert("Your new password must have at least one letter and one number.");
+			Alert.alert("Your new password must have at least one letter and one number.");
 		}
 		else if (this.state.confirm_password_error) {
-			alert(this.state.confirm_password_error);
+			Alert.alert(this.state.confirm_password_error);
 		}
 		else {
 			var url = "https://manaweb-events.herokuapp.com";

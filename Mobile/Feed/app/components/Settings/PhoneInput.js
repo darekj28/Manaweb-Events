@@ -59,9 +59,11 @@ export default class PhoneInput extends React.Component {
 		.then((responseData) => {
 			if (responseData.result != "success") {
 				this.setState({ error : responseData.error });
+				this.props.addError("phone_number");
 			}
 			else {
 				this.setState({ error : false });
+				this.props.removeError("phone_number");
 			}
 		})
 		.done();
@@ -85,7 +87,7 @@ export default class PhoneInput extends React.Component {
 				{this.state.error && 
 				<View style = {styles.error_box}>
 					<Text style = {styles.error_text}>
-						 {this.state.error}
+						{this.state.error}
 					</Text>
 				</View>}
 			 </View>

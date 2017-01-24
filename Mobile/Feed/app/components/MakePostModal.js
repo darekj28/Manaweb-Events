@@ -25,7 +25,7 @@ export default class MakePostModal extends React.Component {
     	if ((filters[0] || filters[1]) || filters[2])
     		this.setState({ step : this.state.step + 1 });
     	else 
-    		alert("You must choose something!");
+    		Alert.alert("You must choose something!");
     }
     decrementStep() {
     	this.setState({ step : this.state.step - 1 });
@@ -33,6 +33,8 @@ export default class MakePostModal extends React.Component {
 	handleSubmit() {
         if (this.state.post.length > 0)
             this.props.handlePostSubmit(this.state.post);
+        else 
+        	Alert.alert("You can't submit an empty post!");
     }
 	render() {
 		var green = '#90D7ED';

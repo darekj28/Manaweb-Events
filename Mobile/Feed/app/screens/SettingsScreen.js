@@ -12,6 +12,16 @@ import AvatarInput from 	'../components/Settings/AvatarInput';
 import PasswordModal from 	'../components/Settings/PasswordModal/PasswordModal';
 import PasswordModalLink from '../components/Settings/PasswordModal/PasswordModalLink';
 import LogoutButton from 	'../components/Settings/LogoutButton';
+function remove(array, value) {
+	var index = array.indexOf(value);
+	if (index != -1) array.splice(index, 1);
+	return array;
+}
+function add(array, value) {
+	var index = array.indexOf(value);
+	if (index === -1) array.push(value);
+	return array;
+}
 export default class SettingsScreen extends Component {
 	constructor(props) {
 		super(props);
@@ -24,68 +34,50 @@ export default class SettingsScreen extends Component {
 			phone_number 					: this.props.current_user.phone_number,
 			avatar 							: this.props.current_user.avatar_name,
 			display_avatar_picker 			: false,
-			display_password_change 		: false
+			display_password_change 		: false,
+			error_fields					: []
 		};
 	}
 	handleChange(obj) {
 		this.setState(obj);
 	}
+	addError(field) {
+		this.setState({ error_fields : add(this.state.error_fields, field) });
+	}
+	removeError(field) {
+		this.setState({ error_fields : remove(this.state.error_fields, field) });
+	}
 	submitNewSettings() {
-		var errorCheckResult = this.errorCheck.bind(this)();
-		var canSubmit = errorCheckResult.result
-		var errorMessage = errorCheckResult.reason
+		var canSubmit = this.state.error_fields.length === 0;
+		var errorMessage = "There's a mistake in one of your fields."
 		if (canSubmit) {
 			var url = "https://manaweb-events.herokuapp.com"
 			var test_url = "http://0.0.0.0:5000"
-			fetch(url + "/mobileUpdateSettings", {method: "POST",
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-				}, 
-			body: 
-			JSON.stringify({
-				username: this.state.current_username,
-				first_name : this.state.first_name,
-				last_name : this.state.last_name,
-				email : this.state.email,
-				phone_number : this.state.phone_number,
-				avatar : this.state.avatar
-			})
+			fetch(url + "/mobileUpdateSettings", {
+				method: "POST",
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+					}, 
+				body: 
+				JSON.stringify({
+					username: this.state.current_username,
+					first_name : this.state.first_name,
+					last_name : this.state.last_name,
+					email : this.state.email,
+					phone_number : this.state.phone_number,
+					avatar : this.state.avatar
+				})
 			})
 			.then((response) => response.json())
 			.then((responseData) => {
-			this.props.refreshInfo.bind(this)();
-			alert("Settings Updated")
+				this.props.refreshInfo.bind(this)();
+				Alert.alert("Settings updated.")
 			}).done();
 		}
 		else {
-			alert(errorMessage)
+			Alert.alert(errorMessage);
 		}
-	}
-	errorCheck() {
-		var canSubmit = true;
-		var reason = "";
-		if (this.state.first_name_validation.result != 'success') {
-		 	canSubmit = false;
-		 	reason = "Error with first name"
-		 	// reason = this.state.first_name_validation.error
-		}
-		if (this.state.last_name_validation.result != 'success') {
-			canSubmit = false;
-			reason = "Error with last name"
-			// reason = this.state.last_name_validation.error
-		}
-		if (this.state.email_validation.result != 'success') {
-			canSubmit = false;
-			reason = "Error with email"
-			// reason = this.state.email_validation.error
-		}
-		if (this.state.phone_number_validation.result != 'success') {
-			canSubmit = false;
-			reason = "Error with phone number"
-			// reason = this.state.phone_number_validation.error
-		}
-		return {result: canSubmit, reason : reason};
 	}
 	toggleAvatarPicker() {
 		this.setState({display_avatar_picker : !this.state.display_avatar_picker});
@@ -94,7 +86,7 @@ export default class SettingsScreen extends Component {
 		this.setState({display_password_change : !this.state.display_password_change})
 	}
 	listViewRenderRow(input_element){
-		return input_element
+		return input_element;
 	}
 	checkForChanges() {
 		var hasChanges = false;
@@ -110,10 +102,10 @@ export default class SettingsScreen extends Component {
 		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		var data = 
 		[
-			<NameInput value={this.state.first_name} 	handleChange={this.handleChange.bind(this)} label="First name" name="first_name"/>,
-			<NameInput value={this.state.last_name} 	handleChange={this.handleChange.bind(this)} label="Last name" name="last_name"/>,
-			<EmailInput value={this.state.email} 		handleChange={this.handleChange.bind(this)}/>, 
-			<PhoneInput value={this.state.phone_number} handleChange={this.handleChange.bind(this)} prevPhone={this.state.current_user.phone_number}/>,
+			<NameInput value={this.state.first_name} 	addError={this.addError.bind(this)} removeError={this.removeError.bind(this)} handleChange={this.handleChange.bind(this)} label="First name" name="first_name"/>,
+			<NameInput value={this.state.last_name} 	addError={this.addError.bind(this)} removeError={this.removeError.bind(this)} handleChange={this.handleChange.bind(this)} label="Last name" name="last_name"/>,
+			<EmailInput value={this.state.email} 		addError={this.addError.bind(this)} removeError={this.removeError.bind(this)} handleChange={this.handleChange.bind(this)}/>, 
+			<PhoneInput value={this.state.phone_number} addError={this.addError.bind(this)} removeError={this.removeError.bind(this)} handleChange={this.handleChange.bind(this)} prevPhone={this.state.current_user.phone_number}/>,
 			<AvatarInput avatar={this.state.avatar} 	toggleAvatarPicker={this.toggleAvatarPicker.bind(this)}/>,
 			<PasswordModalLink togglePasswordModal={this.togglePasswordModal.bind(this)}/>, 
 			<LogoutButton handleLogout={this.props.handleLogout}/>

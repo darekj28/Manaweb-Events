@@ -33,9 +33,11 @@ export default class EmailInput extends React.Component {
 		.then((responseData) => {
 			if (responseData.result != "success") {
 				this.setState({ error : responseData.error });
+				this.props.addError('email');
 			}
 			else {
 				this.setState({ error : false });
+				this.props.removeError('email');
 			}
 		})
 		.done();

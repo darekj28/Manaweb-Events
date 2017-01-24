@@ -33,9 +33,11 @@ export default class NameInput extends React.Component {
 		.then((responseData) => {
 			if (responseData.result != "success") {
 				this.setState({ error : responseData.error });
+				this.props.addError(this.props.name);
 			}
 			else {
 				this.setState({ error : false });
+				this.props.removeError(this.props.name);
 			}
 		})
 		.done();
