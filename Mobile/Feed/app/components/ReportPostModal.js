@@ -4,9 +4,7 @@ import {Platform, Alert, Image, Modal, Picker, AsyncStorage, AppRegistry,StyleSh
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Dimensions from 'Dimensions';
-import CurrentPassword from './CurrentPassword';
-import NewPassword from './NewPassword';
-import ConfirmPassword from './ConfirmPassword';
+
 
 export default class ReportPostModal extends React.Component {
 	constructor(props) {
@@ -42,20 +40,15 @@ export default class ReportPostModal extends React.Component {
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify(obj)
-			}
-			).then((response) => response.json())
-			.then((responseData) => {
-	        	alert("Post Reported")
-			}
-	    })
+			})
+		.then((response) => response.json())
+		.then((responseData) => {
+        	alert("Post Reported")
+		})
 	    .catch((error) => {
 	      console.log(error);
 	    }).done();
 	}
-
-
-
-
 	
 	render() {
 		return(
@@ -87,10 +80,24 @@ export default class ReportPostModal extends React.Component {
 					</View>
 					<View style={styles.list_container}>
 						<Text>
-							{this.props.post.}
+							{this.props.post.postContent}
 						</Text>
 					</View>
-					<View style={{flex: 0.7}}>
+
+					<View style = {{flex:  0.2}}>
+						 <Picker style={styles.picker}  selectedValue= "Inappropriate">
+				            <Item label="Spam" value="Spam" />
+				            <Item label="Inappropriate" value="Inappropriate" />
+				            <Item label="Other" value = "Other"/>
+				          </Picker>
+					</View>
+
+					<View style = {{flex : 0.3}}>
+						<TextInput onTextChange = {this.handleDescriptionChange.bind(this)} 
+						placeholder = "Describe Why This Post Is Bad" />
+					</View>
+
+					<View style={{flex: 0.1}}>
 							<TouchableOpacity onPress = {this.reportPost.bind(this)} style = {styles.update_button}>
 								<Text style = {{textAlign : 'center', fontWeight : 'bold', 'color' : 'skyblue'}}>
 									Report Post
@@ -107,6 +114,9 @@ export default class ReportPostModal extends React.Component {
 
 const window = Dimensions.get('window');
 const styles = StyleSheet.create({
+	picker: {
+
+	},
 	top_bar : {
 		flex : 0.1,
 		paddingLeft : 10,
