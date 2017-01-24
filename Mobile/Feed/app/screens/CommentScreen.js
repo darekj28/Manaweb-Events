@@ -9,6 +9,7 @@ import CommentBox from '../components/comments/CommentBox';
 import MakeCommentBox from '../components/comments/MakeCommentBox';
 import OriginalPost from '../components/comments/OriginalPost';
 
+const NAVIGATOR_BACK_ICON_HEIGHT = 30
 const POST_MESSAGE_HEIGHT_SHORT = 50
 const POST_MESSAGE_HEIGHT_TALL = 150
 const ANIMATE_DURATION = 700
@@ -42,13 +43,13 @@ export default class CommentScreen extends React.Component {
 	handleCommentSubmit() {
 		let url = "https://manaweb-events.herokuapp.com"
 	    let test_url = "http://0.0.0.0:5000"
-	    fetch(url + "/mobileMakeComment", 
+	    fetch(url + "/mobileMakeComment",
 	    	{method: "POST",
 	          	headers: {
 	          		'Accept': 'application/json',
 	          		'Content-Type': 'application/json'
 	        	},
-	      		body: JSON.stringify({ 
+	      		body: JSON.stringify({
 	      			comment_id : this.props.comment_id,
 	      			username : this.props.current_username,
 	      			commentContent : this.state.newPostContent
@@ -58,15 +59,15 @@ export default class CommentScreen extends React.Component {
 	    .then((responseData) => {
 		    if (responseData['result'] == 'success') {
 		    	var feed = this.state.comments;
-		    	feed.push({ 
-		    		postContent: this.state.newPostContent, 
-					avatar  : this.props.current_user['avatar_name'], 
+		    	feed.push({
+		    		postContent: this.state.newPostContent,
+					avatar  : this.props.current_user['avatar_name'],
 					name    : this.props.current_user['first_name'] + " " + this.props.current_user['last_name'],
-					userID  : this.props.current_user['userID'], 
-					time	: "just now", 
+					userID  : this.props.current_user['userID'],
+					time	: "just now",
 					comment_id : this.state.comment_id
 				});
-		    	this.setState({ comments: feed, newPostContent : '' });	
+		    	this.setState({ comments: feed, newPostContent : '' });
 		    }
 		})
 		.catch((error) => {
@@ -76,7 +77,7 @@ export default class CommentScreen extends React.Component {
 	getComments() {
 		let url = "https://manaweb-events.herokuapp.com"
 	    let test_url = "http://0.0.0.0:5000"
-	    fetch(url + "/mobileGetComments", 
+	    fetch(url + "/mobileGetComments",
 	    	{method: "POST",
 	          	headers: {
 	          		'Accept': 'application/json',
@@ -103,7 +104,7 @@ export default class CommentScreen extends React.Component {
 	            	})
 	          	}
 	          	this.setState({comments: feed})
-	        }    
+	        }
 		})
 		.catch((error) => {
 			console.log(error);
@@ -113,7 +114,7 @@ export default class CommentScreen extends React.Component {
 	getPostById() {
 		let url = "https://manaweb-events.herokuapp.com"
 	    let test_url = "http://0.0.0.0:5000"
-	    fetch(url + "/mobileGetPostById", 
+	    fetch(url + "/mobileGetPostById",
 	    	{method: "POST",
 	          	headers: {
 	          		'Accept': 'application/json',
@@ -123,7 +124,7 @@ export default class CommentScreen extends React.Component {
 	    	}
 	    ).then((response) => response.json())
 	    .then((responseData) => {
-		    this.setState({ original_post : 
+		    this.setState({ original_post :
 		    	{postContent: responseData.post['body'],
 				avatar 		: responseData.post['avatar'],
 				name 		: responseData.post['first_name'] + ' ' + responseData.post['last_name'],
@@ -146,16 +147,21 @@ export default class CommentScreen extends React.Component {
 		var op = this.state.original_post['name'] ? this.state.original_post['name'].split(' ')[0] : "";
 		return (
 			<View style = {styles.container}>
-	            <View style={{flexDirection : 'row', justifyContent : 'space-around', paddingLeft : 10, paddingRight : 10,
+	            {/* <View style={{flexDirection : 'row', justifyContent : 'space-around', paddingLeft : 10, paddingRight : 10,
 	            paddingBottom : 10}}>
 		            <View style={{flex: 0.2}}>
 		                <TouchableOpacity onPress = {() => this.props.navigator.pop()}>
 		                    <Icon name = "chevron-left" size = {20} color = '#90D7ED'/>
 		                </TouchableOpacity>
 		            </View>
-		        </View>
+		        </View> */}
+				<View style = {styles.top_navigator}>
+					<TouchableOpacity onPress = {() => this.props.navigator.pop()}>
+						<Icon name = "chevron-left" size = {NAVIGATOR_BACK_ICON_HEIGHT} />
+					</TouchableOpacity>
+				</View>
 	            <View style={{flexDirection : 'row'}}>
-	              	<OriginalPost post={this.state.original_post}/> 
+	              	<OriginalPost post={this.state.original_post}/>
 	            </View>
 	            <View style={{flexDirection : 'row'}}>
 	            	<MakeCommentBox onClick={(event) => this.postMessagePressed.bind(this)()}
@@ -177,7 +183,11 @@ const styles = StyleSheet.create({
     container: {
       	flex:1,
       	justifyContent: 'flex-start',
-      	paddingTop: 30,
       	backgroundColor : 'white'
-    }
+    },
+	top_navigator: {
+		flex: 0,
+		padding: 3,
+		backgroundColor: '#90D7ED'
+	},
 });
