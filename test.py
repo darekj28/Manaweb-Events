@@ -32,8 +32,8 @@ security_manager = Security()
 
 
 
-# post_manager.deleteUserPosts('lily')
-# user_manager.deleteUser('lily')
+# post_manager.deleteUserPosts('brovogre')
+# user_manager.deleteUser('brovogre')
 # security_manager.createRecovery()
 # post_manager.deleteNotifications()
 
