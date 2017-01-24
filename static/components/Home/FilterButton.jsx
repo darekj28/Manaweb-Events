@@ -10,20 +10,10 @@ export default class FilterButton extends React.Component {
 	}
 	componentDidMount() {
 		$('[data-toggle="tooltip"]').tooltip(); 
-		// $('p a').tooltip({placement: 'bottom',trigger: 'manual'}).tooltip('show');
 	}
-
-	componentWillUnmount(){
-		// $('[data-toggle="tooltip"]').tooltip('destroy'); 
-	}
-
 	render() {
 		var icon;
 		var selected = this.state.isSelected ? "icon-success" : "icon-danger";
-
-		if (this.props.isSearch){
-			$('[data-toggle="tooltip"]').tooltip('show'); 
-		}
 		switch(this.props.name) {
 			case 'Trade' : 
 				icon="glyphicon glyphicon-transfer";
@@ -38,18 +28,16 @@ export default class FilterButton extends React.Component {
 				alert('Invalid action.');
 		}
 		if (!this.props.isSearch)
-			return(<a className="input-group-addon">
+			return(<div className="input-group-addon">
 					<span className={icon + " filterButton " + selected} data-container="body" data-toggle="tooltip"
 					 title={this.props.name} onClick={this.handleClick.bind(this)}>
 					</span>
-				</a>)
-		else return(<a className="input-group-addon">
-					<span className={icon + " filterButton " + selected} data-container="body" 
-					data-toggle="tooltip"
-					 title={this.props.name}
-					 data-placement="bottom" onClick={this.handleClick.bind(this)}>
+				</div>)
+		else return(<div className="input-group-addon text-center">
+					<span className={icon + " filterButton " + selected} onClick={this.handleClick.bind(this)}>
 					</span>
-				</a>
+					<div className="filter-caption">{this.props.name}</div>
+				</div>
 			);
 	}
 }

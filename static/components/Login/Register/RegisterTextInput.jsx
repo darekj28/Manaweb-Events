@@ -30,11 +30,10 @@ export default class RegisterTextInput extends React.Component {
 				content = "Must be a valid email or phone number";
 				break;
 		}
-		console.log(maxlength);
 		return (
 			<div className="form-group">
 				<input className={field + " register required form-control"} 
-					data-placement="left" data-trigger="manual" data-content={content}
+					data-placement="top" data-trigger="manual" data-content={content}
 					id={field} type={type} value={value} placeholder={placeholder} maxlength={maxlength}
 					onChange={this.handleTyping.bind(this)}/>
 			</div>

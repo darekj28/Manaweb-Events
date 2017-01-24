@@ -1,4 +1,6 @@
 var React = require('react');
+import { browserHistory } from 'react-router';
+
 export default class EnterAccountInfo extends React.Component {
 	constructor() {
 		super();
@@ -28,6 +30,9 @@ export default class EnterAccountInfo extends React.Component {
 		    }.bind(this)
 		});
 	}
+	goBack() {
+		browserHistory.push('/');
+	}
 	render() {
 		return (
 			<div>
@@ -36,6 +41,8 @@ export default class EnterAccountInfo extends React.Component {
 				<input className="form-control recovery-input" onKeyPress={this.handleEnter.bind(this)} onChange={this.handleChange.bind(this)}/>
                 <button className="btn post-button recovery-button"
                 		onClick={this.handleSubmit.bind(this)}> Search </button>
+               	<button className="btn post-button recovery-button"
+                		onClick={this.goBack}> Go back </button>
 			</div>
 			)
 	}
