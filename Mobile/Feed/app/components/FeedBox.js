@@ -118,7 +118,7 @@ export default class FeedBox extends Component {
                                     defaultValue={DROP_DOWN_OPTIONS[0]}
                                     dropdownStyle={styles.dropdown_box}
                                     options={DROP_DOWN_OPTIONS}
-                                    onSelect={(idx, value) => {Alert.alert('Report post pressed')}}
+                                    onSelect={(idx, value) => {this.props.toggleReportModal(this.props.post)}}
                                     renderRow={this._dropdown_renderRow.bind(this)}
                                     renderSeparator = {
                                     (sectionID, rowID, adjacentRowHighlighted) =>

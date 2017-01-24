@@ -1,12 +1,12 @@
 import React from 'react';
 import {Component} from 'react'
-import {Platform, Alert, Image, Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {Item, Platform, Alert, Image, Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Dimensions from 'Dimensions';
 
 
-export default class ReportPostModal extends React.Component {
+export default class ReportPostModal extends Component {
 	constructor(props) {
 		super(props);
 		this.state = { 
@@ -30,7 +30,7 @@ export default class ReportPostModal extends React.Component {
 			unique_id 		: this.props.post.unique_id,
 			reason 			: this.state.reason,
 			description 	: this.state.description,
-			reporting_user	: this.props.current_username,
+			reporting_user	: this.props.current_user.username,
 			reported_user 	: this.props.post.poster_id
 		}
 		fetch(url + "/mobileReportPost", 
@@ -49,8 +49,14 @@ export default class ReportPostModal extends React.Component {
 	      console.log(error);
 	    }).done();
 	}
+
+	handleReturn(){
+		this.props.toggleReportModal("")
+	}
 	
 	render() {
+		if (this.props.post == null) {return null;}
+		else
 		return(
 			<Modal visible={this.props.display} animationType={"slide"} transparent={false} onRequestClose={() => {return}}>
 				{Platform.OS == 'ios' && <View style = {{paddingTop : 20}} />}
@@ -58,7 +64,7 @@ export default class ReportPostModal extends React.Component {
 				<View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start'}}>
 					<View style={styles.top_bar}>
 						<View style={{flex: 0.2}}>
-							<TouchableOpacity onPress = {this.props.toggleConfirmPasswordModal}>
+							<TouchableOpacity onPress = {this.handleReturn.bind(this)}>
 								<Text style = {{color : '#90D7ED'}}>
 									Cancel
 								</Text>
@@ -84,17 +90,13 @@ export default class ReportPostModal extends React.Component {
 						</Text>
 					</View>
 
-					<View style = {{flex:  0.2}}>
-						 <Picker style={styles.picker}  selectedValue= "Inappropriate">
-				            <Item label="Spam" value="Spam" />
-				            <Item label="Inappropriate" value="Inappropriate" />
-				            <Item label="Other" value = "Other"/>
-				          </Picker>
-					</View>
-
+			
 					<View style = {{flex : 0.3}}>
-						<TextInput onTextChange = {this.handleDescriptionChange.bind(this)} 
-						placeholder = "Describe Why This Post Is Bad" />
+						<TextInput
+						onChangeText = {this.handleDescriptionChange.bind(this)} 
+						placeholder = "Describe Why This Post Is Bad" 
+						maxLength = {40}
+						/>
 					</View>
 
 					<View style={{flex: 0.1}}>
@@ -105,8 +107,6 @@ export default class ReportPostModal extends React.Component {
 							</TouchableOpacity>
 					</View>
 				</View>
-				 
-				 
 			</Modal>
 		)
 	}
