@@ -118,15 +118,15 @@ export default class SettingsScreen extends Component {
 			if (this.state[fields[i]] !== this.props.current_user[fields[i]])
 				hasChanges = true;
 		if (this.state.avatar !== this.props.current_user.avatar_name) hasChanges = true;
-		this.setState({ hasChanges : hasChanges });
+		this.setState({ hasChanges : hasChanges }, this.checkForPrivateChanges.bind(this));
 	}
 
 	checkForPrivateChanges(){
-		var hasChanges = false;
+		var hasPrivateChanges = false;
 		var fields = ['email', 'phone_number'];
 		for (var i = 0; i < fields.length; i++)
 			if (this.state[fields[i]] !== this.props.current_user[fields[i]])
-				hasChanges = true;
+				hasPrivateChanges = true;
 		this.setState({ hasPrivateChanges : hasPrivateChanges });	
 	}
 
@@ -159,8 +159,14 @@ export default class SettingsScreen extends Component {
 					</Text> 
 
 					<View style = {styles.right}>
-						{this.state.hasChanges && 
+						{(this.state.hasChanges && !this.state.hasPrivateChanges) && 
 						<TouchableOpacity onPress = {this.handleSubmitPress.bind(this)}>
+							<Text style = {styles.enabled_update}>
+								Update
+							</Text>
+						</TouchableOpacity>}
+						{this.state.hasPrivateChanges && 
+						<TouchableOpacity onPress = {this.toggleConfirmPasswordModal.bind(this)}>
 							<Text style = {styles.enabled_update}>
 								Update
 							</Text>
