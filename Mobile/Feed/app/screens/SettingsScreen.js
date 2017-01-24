@@ -38,11 +38,12 @@ export default class SettingsScreen extends Component {
 			display_password_confirm		: false,
 			display_avatar_picker 			: false,
 			display_password_change 		: false,
-			error_fields					: []
+			error_fields					: [],
+			hasChanges 						: false
 		};
 	}
 	handleChange(obj) {
-		this.setState(obj);
+		this.setState(obj, this.checkForChanges.bind(this));
 	}
 	addError(field) {
 		this.setState({ error_fields : add(this.state.error_fields, field) });
@@ -51,8 +52,7 @@ export default class SettingsScreen extends Component {
 		this.setState({ error_fields : remove(this.state.error_fields, field) });
 	}
 	handleSubmitPress() {
-		var hasChanges = this.checkForChanges.bind(this)()
-		if (!hasChanges) {
+		if (!this.state.hasChanges) {
 			alert("No changes have been made")
 		}
 		// if there are changes, give a modal that makes the user confirm their password
@@ -109,12 +109,12 @@ export default class SettingsScreen extends Component {
 	}
 	checkForChanges() {
 		var hasChanges = false;
-		if (this.state.first_name 	!== this.props.current_user.first_name) hasChanges = true
-		if (this.state.last_name 	!== this.props.current_user.last_name) hasChanges = true
-		if (this.state.email 		!== this.props.current_user.email) hasChanges = true
-		if (this.state.phone_number !== this.props.current_user.phone_number) hasChanges = true
-		if (this.state.avatar 		!== this.props.current_user.avatar_name) hasChanges = true
-		return hasChanges;
+		var fields = ['first_name', 'last_name', 'email', 'phone_number'];
+		for (var i = 0; i < fields.length; i++)
+			if (this.state[fields[i]] !== this.props.current_user[fields[i]])
+				hasChanges = true;
+		if (this.state.avatar !== this.props.current_user.avatar_name) hasChanges = true;
+		this.setState({ hasChanges : hasChanges });
 	}
 
 	render() {
@@ -130,9 +130,6 @@ export default class SettingsScreen extends Component {
 			<LogoutButton handleLogout={this.props.handleLogout}/>
 		]
 		var dataSource = ds.cloneWithRows(data)
-		var hasChanges = this.checkForChanges.bind(this)()
-		if (hasChanges) var update_button_text = styles.highlighted_update_button_text
-		else var update_button_text = styles.update_button_text
 		return (
 			<View style = {styles.container}>
 				<AvatarPicker handleChange={this.handleChange.bind(this)} display={this.state.display_avatar_picker}
@@ -149,11 +146,16 @@ export default class SettingsScreen extends Component {
 					</Text> 
 
 					<View style = {styles.right}>
+						{this.state.hasChanges && 
 						<TouchableOpacity onPress = {this.handleSubmitPress.bind(this)}>
-							<Text style = {update_button_text}>
+							<Text style = {styles.enabled_update}>
 								Update
 							</Text>
-						</TouchableOpacity>
+						</TouchableOpacity>}
+						{!this.state.hasChanges && 
+						<Text style = {styles.disabled_update}>
+							Update
+						</Text>}
 					</View>
 				</View>
 				<ListView style={styles.list_container} dataSource={dataSource} renderRow={this.listViewRenderRow.bind(this)}/>  
@@ -199,37 +201,14 @@ const styles = StyleSheet.create({
 	right: {
 		flex:1,
 		flexDirection : "row",
-		justifyContent : "flex-end",
-		// backgroundColor: "white",
+		justifyContent : "flex-end"	
 	},
-
-	update_right : {
-		flex:1,
-		flexDirection : "row",
-		justifyContent : "flex-end",
-		// backgroundColor: "white",
-	},
-
-	update_button_text: {
-		alignSelf : 'center',
-		textAlign : 'center',
+	enabled_update : {
 		color : '#90D7ED',
-		borderWidth : 1,
-		borderRadius : 4,
-		padding : 4,
-		borderColor: 'white'
-		// borderColor: 'skyblue'
+		fontWeight : 'bold'
 	},
-
-	highlighted_update_button_text: {
-		alignSelf : 'center',
-		textAlign : 'center',
-		color : '#90D7ED',
-		borderWidth : 1,
-		borderRadius : 4,
-		padding : 4,
-		borderColor: 'skyblue'
-	},
-
-
+	disabled_update : {
+		fontWeight : 'bold',
+		color : 'silver'
+	}
 });
