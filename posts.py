@@ -517,10 +517,8 @@ class Posts:
 		body = self.getPostById(feed_name, comment_id)['body']
 		timeStamp = time.time()
 		timeString = self.getTimeString(timeStamp)
-
 		self.db.execute(self.db.mogrify("INSERT INTO " + self.REPORT_TABLE + "(feed_name, id, body, reason, isComment, description, timeStamp, timeString, reporting_user, reported_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (feed_name, comment_id, body, reason, False, description, timeStamp, timeString, reporting_user, reported_user)))
 		self.post_db.commit()
-
 		action = "REPORTED POST"
 		isComment = False
 		self.updateAdminTable(feed_name, body, reported_user, action, comment_id, timeString, timeStamp, isComment)
