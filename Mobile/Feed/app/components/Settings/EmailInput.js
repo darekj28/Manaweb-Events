@@ -13,7 +13,12 @@ export default class EmailInput extends React.Component {
 	handleChange(value) {
 		var obj = {};
 		obj["email"] = value;
-		this.validateEmail.bind(this)(value);
+		if (this.props.current_user.email != value){
+			this.validateEmail.bind(this)(value);			
+		}
+		else {
+			this.setState({ error : false });
+		}
 		this.props.handleChange(obj);
 	}
 	validateEmail(value) {
@@ -43,6 +48,7 @@ export default class EmailInput extends React.Component {
 		.done();
 	}
 	render() {
+
 		return(
 			<View style = {styles.input_container}> 
 				<Text style = {styles.settings_label}>
@@ -67,6 +73,8 @@ export default class EmailInput extends React.Component {
 	}
 }
 const styles = StyleSheet.create({
+
+
 	settings_label : {
 		fontSize : 16, 
 		fontWeight : 'bold', 

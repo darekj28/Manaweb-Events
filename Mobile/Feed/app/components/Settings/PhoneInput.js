@@ -69,6 +69,7 @@ export default class PhoneInput extends React.Component {
 		.done();
 	}
 	render() {
+
 		return(
 			<View style = {styles.input_container}> 
 				<Text style = {styles.settings_label}>

@@ -53,6 +53,27 @@ class MenuScreen extends Component {
     this._onPanel1Pressed = this._onPanel1Pressed.bind(this)
   }
 
+    getNotificationSyntax(note) {
+        var whose; var also; var notification;
+        if (note.isOP) { 
+            whose = "your";
+            also = "";
+        }
+        else {
+            whose = note.op_name + "'s";
+            also = " also";
+        }
+        if (note.numOtherPeople > 1)
+            notification = note.sender_name + " and " + 
+                note.numOtherPeople + " other people commented on " + whose + " post."
+        else if (note.numOtherPeople == 1)
+            notification = note.sender_name + 
+                " and 1 other person commented on " + whose + " post."
+        else 
+            notification = note.sender_name + also + " commented on " + whose + " post."
+        return notification;
+    }
+
   getPushNotifications(){
     const url = "https://manaweb-events.herokuapp.com"
     const test_url = "http://0.0.0.0:5000"
@@ -79,14 +100,14 @@ class MenuScreen extends Component {
                 }
                 if (Platform.OS ===  'ios'){
                   PushNotification.localNotification({
-                    message : obj['sender_name'] + " did something",
+                    message : this.getNotificationSyntax(obj),
                     userInfo : data,
                   })
                 }
                 else if (Platform.OS === 'android'){
                   PushNotification.localNotification({
                     tag : data,
-                    message : obj['sender_name'] + " did something",
+                    message : this.getNotificationSyntax(obj),
                   })
                 }
               }

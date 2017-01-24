@@ -8,7 +8,7 @@ import CurrentPassword from './CurrentPassword';
 import NewPassword from './NewPassword';
 import ConfirmPassword from './ConfirmPassword';
 
-export default class PasswordModal extends React.Component {
+export default class ConfirmBeforeUpdate extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = { current_password_error : true, 
@@ -21,41 +21,17 @@ export default class PasswordModal extends React.Component {
 	handleChange(obj) {
 		this.setState(obj);
 	}
-	updatePassword(){
-		if (this.state.current_password_error){
-			Alert.alert("Your current password is invalid.");
-		}
-		else if (this.state.new_password_error){
-			Alert.alert("Your new password must have at least one letter and one number.");
-		}
-		else if (this.state.confirm_password_error) {
-			Alert.alert(this.state.confirm_password_error);
+
+	confirmPassword(){
+		if (this.state.current_password_error) {
+			alert("Current password is invalid")
 		}
 		else {
-			var url = "https://manaweb-events.herokuapp.com";
-			var test_url = "http://0.0.0.0:5000";
-			fetch(url + "/mobileUpdatePassword", {
-				method: "POST",
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json',
-				}, 
-				body: JSON.stringify({
-					username: this.props.username,
-					password: this.state.new_password
-				})
-			})
-			.then((response) => response.json())
-			.then((responseData) => {
-			Alert.alert(
-				"Your password was updated.",
-				"Returning to settings...",
-				[
-				{text: 'OK', onPress: () => this.props.togglePasswordModal()}
-				])
-			}).done();
+			this.props.submitNewSettings()
+			this.props.toggleConfirmPasswordModal()
 		}
 	}
+	
 	render() {
 		return(
 			<Modal visible={this.props.display} animationType={"slide"} transparent={false} onRequestClose={() => {return}}>
@@ -63,7 +39,7 @@ export default class PasswordModal extends React.Component {
 				<View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start'}}>
 					<View style={styles.top_bar}>
 						<View style={{flex: 0.2}}>
-							<TouchableOpacity onPress = {this.props.togglePasswordModal}>
+							<TouchableOpacity onPress = {this.props.toggleConfirmPasswordModal}>
 								<Text style = {{color : '#90D7ED'}}>
 									Cancel
 								</Text>
@@ -71,26 +47,30 @@ export default class PasswordModal extends React.Component {
 						</View>
 						<View style={{flex: 0.6}}>
 							<Text style = {{textAlign : 'center', fontWeight : 'bold'}}>
-								Update password
+								Confirm Password
 							</Text>
 						</View>
-						<View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}>
-							<TouchableOpacity onPress = {this.updatePassword.bind(this)}>
+						<View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}/>
+				{/*		<View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}>
+							<TouchableOpacity onPress = {this.confirmPassword.bind(this)}>
 								<Text style = {{color : '#90D7ED'}}>
 									Update
 								</Text>
 							</TouchableOpacity>
-						</View>
+						</View> */}
 					</View>
 					<View style={styles.list_container}>
 						<CurrentPassword username={this.props.username} 
 										handleChange={this.handleChange.bind(this)}
-										handleError={this.handleError.bind(this)}/>
-						<NewPassword 	handleChange={this.handleChange.bind(this)}
-										handleError={this.handleError.bind(this)}/>
-						<ConfirmPassword password={this.state.new_password}
-										handleChange={this.handleChange.bind(this)}
-										handleError={this.handleError.bind(this)}/>
+										handleError={this.handleError.bind(this)}
+										label = {"Enter Current Password To Update"}/>
+					</View>
+					<View style={{flex: 0.7}}>
+							<TouchableOpacity onPress = {this.confirmPassword.bind(this)} style = {styles.update_button}>
+								<Text style = {{textAlign : 'center', fontWeight : 'bold', 'color' : 'skyblue'}}>
+									Confirm Password To Update Settings
+								</Text>
+							</TouchableOpacity>
 					</View>
 				</View>
 				 
@@ -99,6 +79,8 @@ export default class PasswordModal extends React.Component {
 		)
 	}
 }
+
+const window = Dimensions.get('window');
 const styles = StyleSheet.create({
 	top_bar : {
 		flex : 0.1,
@@ -111,9 +93,15 @@ const styles = StyleSheet.create({
 		alignItems : 'center'
 	},
 	list_container: {
-		flex : 1,
+		flex : 0.2,
 		paddingTop : 8,
 		alignSelf : 'stretch',
 		backgroundColor : '#fbfbfb'
 	},
+	update_button : {
+		borderColor : "skyblue",
+		borderWidth : 2,
+		borderRadius : 5,
+		padding: 6,
+	}
 });

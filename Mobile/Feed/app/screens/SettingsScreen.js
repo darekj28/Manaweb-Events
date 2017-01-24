@@ -12,6 +12,8 @@ import AvatarInput from 	'../components/Settings/AvatarInput';
 import PasswordModal from 	'../components/Settings/PasswordModal/PasswordModal';
 import PasswordModalLink from '../components/Settings/PasswordModal/PasswordModalLink';
 import LogoutButton from 	'../components/Settings/LogoutButton';
+import ConfirmBeforeUpdate from '../components/Settings/PasswordModal/ConfirmBeforeUpdate'
+
 function remove(array, value) {
 	var index = array.indexOf(value);
 	if (index != -1) array.splice(index, 1);
@@ -33,6 +35,7 @@ export default class SettingsScreen extends Component {
 			email 							: this.props.current_user.email,
 			phone_number 					: this.props.current_user.phone_number,
 			avatar 							: this.props.current_user.avatar_name,
+			display_password_confirm		: false,
 			display_avatar_picker 			: false,
 			display_password_change 		: false,
 			error_fields					: []
@@ -47,6 +50,17 @@ export default class SettingsScreen extends Component {
 	removeError(field) {
 		this.setState({ error_fields : remove(this.state.error_fields, field) });
 	}
+	handleSubmitPress() {
+		var hasChanges = this.checkForChanges.bind(this)()
+		if (!hasChanges) {
+			alert("No changes have been made")
+		}
+		// if there are changes, give a modal that makes the user confirm their password
+		else {
+			this.toggleConfirmPasswordModal.bind(this)()
+		}
+	}
+
 	submitNewSettings() {
 		var canSubmit = this.state.error_fields.length === 0;
 		var errorMessage = "There's a mistake in one of your fields."
@@ -72,7 +86,7 @@ export default class SettingsScreen extends Component {
 			.then((response) => response.json())
 			.then((responseData) => {
 				this.props.refreshInfo.bind(this)();
-				Alert.alert("Settings updated.")
+				Alert.alert("Settings updated. Returning to settings...")
 			}).done();
 		}
 		else {
@@ -85,6 +99,11 @@ export default class SettingsScreen extends Component {
 	togglePasswordModal() {
 		this.setState({display_password_change : !this.state.display_password_change})
 	}
+
+	toggleConfirmPasswordModal(){
+		this.setState({display_password_confirm : !this.state.display_password_confirm})
+	}
+
 	listViewRenderRow(input_element){
 		return input_element;
 	}
@@ -102,30 +121,36 @@ export default class SettingsScreen extends Component {
 		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		var data = 
 		[
-			<NameInput value={this.state.first_name} 	addError={this.addError.bind(this)} removeError={this.removeError.bind(this)} handleChange={this.handleChange.bind(this)} label="First name" name="first_name"/>,
-			<NameInput value={this.state.last_name} 	addError={this.addError.bind(this)} removeError={this.removeError.bind(this)} handleChange={this.handleChange.bind(this)} label="Last name" name="last_name"/>,
-			<EmailInput value={this.state.email} 		addError={this.addError.bind(this)} removeError={this.removeError.bind(this)} handleChange={this.handleChange.bind(this)}/>, 
-			<PhoneInput value={this.state.phone_number} addError={this.addError.bind(this)} removeError={this.removeError.bind(this)} handleChange={this.handleChange.bind(this)} prevPhone={this.state.current_user.phone_number}/>,
-			<AvatarInput avatar={this.state.avatar} 	toggleAvatarPicker={this.toggleAvatarPicker.bind(this)}/>,
+			<NameInput value={this.state.first_name} current_user = {this.props.current_user}	addError={this.addError.bind(this)} removeError={this.removeError.bind(this)} handleChange={this.handleChange.bind(this)} label="First name" name="first_name"/>,
+			<NameInput value={this.state.last_name} current_user = {this.props.current_user}	addError={this.addError.bind(this)} removeError={this.removeError.bind(this)} handleChange={this.handleChange.bind(this)} label="Last name" name="last_name"/>,
+			<EmailInput value={this.state.email} 	current_user = {this.props.current_user}	addError={this.addError.bind(this)} removeError={this.removeError.bind(this)} handleChange={this.handleChange.bind(this)}/>, 
+			<PhoneInput value={this.state.phone_number} current_user = {this.props.current_user} addError={this.addError.bind(this)} removeError={this.removeError.bind(this)} handleChange={this.handleChange.bind(this)} prevPhone={this.state.current_user.phone_number}/>,
+			<AvatarInput avatar={this.state.avatar} current_user = {this.props.current_user}	toggleAvatarPicker={this.toggleAvatarPicker.bind(this)}/>,
 			<PasswordModalLink togglePasswordModal={this.togglePasswordModal.bind(this)}/>, 
 			<LogoutButton handleLogout={this.props.handleLogout}/>
 		]
 		var dataSource = ds.cloneWithRows(data)
+		var hasChanges = this.checkForChanges.bind(this)()
+		if (hasChanges) var update_button_text = styles.highlighted_update_button_text
+		else var update_button_text = styles.update_button_text
 		return (
 			<View style = {styles.container}>
 				<AvatarPicker handleChange={this.handleChange.bind(this)} display={this.state.display_avatar_picker}
 								avatar={this.state.avatar} toggleAvatarPicker={this.toggleAvatarPicker.bind(this)}/>
 				<PasswordModal display={this.state.display_password_change} togglePasswordModal={this.togglePasswordModal.bind(this)} 
 								username={this.state.current_username}/>
+				<ConfirmBeforeUpdate display={this.state.display_password_confirm} toggleConfirmPasswordModal={this.toggleConfirmPasswordModal.bind(this)} 
+				username={this.state.current_username} submitNewSettings = {this.submitNewSettings.bind(this)}/>
 				<View style = {styles.top_bar}>
 					<View style={styles.left}>
 					</View>
 					<Text style={styles.middle}> 
 						Account Settings
 					</Text> 
+
 					<View style = {styles.right}>
-						<TouchableOpacity onPress = {this.submitNewSettings.bind(this)}>
-							<Text style = {{color : '#90D7ED'}}>
+						<TouchableOpacity onPress = {this.handleSubmitPress.bind(this)}>
+							<Text style = {update_button_text}>
 								Update
 							</Text>
 						</TouchableOpacity>
@@ -164,14 +189,47 @@ const styles = StyleSheet.create({
 	left : {
 		flex : 1
 	},
+
 	middle: {
 		flex : 2,
 		textAlign: "center",
 		fontWeight : 'bold'
 	},
+
 	right: {
 		flex:1,
 		flexDirection : "row",
-		justifyContent : "flex-end"
+		justifyContent : "flex-end",
+		// backgroundColor: "white",
 	},
+
+	update_right : {
+		flex:1,
+		flexDirection : "row",
+		justifyContent : "flex-end",
+		// backgroundColor: "white",
+	},
+
+	update_button_text: {
+		alignSelf : 'center',
+		textAlign : 'center',
+		color : '#90D7ED',
+		borderWidth : 1,
+		borderRadius : 4,
+		padding : 4,
+		borderColor: 'white'
+		// borderColor: 'skyblue'
+	},
+
+	highlighted_update_button_text: {
+		alignSelf : 'center',
+		textAlign : 'center',
+		color : '#90D7ED',
+		borderWidth : 1,
+		borderRadius : 4,
+		padding : 4,
+		borderColor: 'skyblue'
+	},
+
+
 });

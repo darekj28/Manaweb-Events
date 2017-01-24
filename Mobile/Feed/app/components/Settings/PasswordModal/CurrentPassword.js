@@ -42,10 +42,12 @@ export default class CurrentPassword extends React.Component {
 		.done();
 	}
 	render() {
+		if (this.props.label == null) var label  = "Current Password"
+		else var label = this.props.label
 		return(
 			<View style = {styles.input_container}> 
 				<Text style = {styles.settings_label}>
-					Current password
+					{label}
 				</Text>
 				<View style={styles.settings_input_container}>
 				 	<TextInput
