@@ -10350,7 +10350,7 @@
 		}, {
 			key: 'componentWillUnmount',
 			value: function componentWillUnmount() {
-				$('[data-toggle="tooltip"]').tooltip('destroy');
+				// $('[data-toggle="tooltip"]').tooltip('destroy'); 
 			}
 		}, {
 			key: 'render',
@@ -10377,9 +10377,8 @@
 				if (!this.props.isSearch) return React.createElement(
 					'a',
 					{ className: 'input-group-addon' },
-					React.createElement('span', { className: icon + " filterButton " + selected, 'data-container': 'body'
-						// data-toggle="tooltip"
-						, title: this.props.name, onClick: this.handleClick.bind(this) })
+					React.createElement('span', { className: icon + " filterButton " + selected, 'data-container': 'body', 'data-toggle': 'tooltip',
+						title: this.props.name, onClick: this.handleClick.bind(this) })
 				);else return React.createElement(
 					'a',
 					{ className: 'input-group-addon' },

@@ -14,7 +14,7 @@ export default class FilterButton extends React.Component {
 	}
 
 	componentWillUnmount(){
-		$('[data-toggle="tooltip"]').tooltip('destroy'); 
+		// $('[data-toggle="tooltip"]').tooltip('destroy'); 
 	}
 
 	render() {
@@ -39,8 +39,7 @@ export default class FilterButton extends React.Component {
 		}
 		if (!this.props.isSearch)
 			return(<a className="input-group-addon">
-					<span className={icon + " filterButton " + selected} data-container="body" 
-					// data-toggle="tooltip"
+					<span className={icon + " filterButton " + selected} data-container="body" data-toggle="tooltip"
 					 title={this.props.name} onClick={this.handleClick.bind(this)}>
 					</span>
 				</a>)
