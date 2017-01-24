@@ -14,157 +14,164 @@
 		<meta http-equiv="pragma" content="no-cache" />
 	  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	  <style media="screen" type="text/css">
-	  		:root{
-			    --light: #80CCEE;
-			    --dark : #66A3BE;
-			    --navbar : #4d505b;
-			    --main-color : #353D41;
-			    --success : #5cb85c;
-			    --warning : #d9534f;
-			    --error : #f44336;
-			    --border-gray : #e5e5e5;
-			}
-			@font-face {
-			  font-family: 'open';
-			  src: url('OpenSans-Light.ttf');
-			}
-			body {
-			  font-family : "open";
-			  background-color : #ffffff;
-			  color : var(--main-color);
-			  overflow-x : hidden;
-			}
-			.title {
-				padding-top : 65px;
-				color : var(--light);
-			}
-			.glyphicon {
-			  font-size: 20px;
-			}
-			#login_user {
-			  border-radius : 4px 0px 0px 4px;
-			}
-			#login_password {
-			  border-radius : 0px;
-			} 
-			#LoginButton {
-			  border-radius : 0px 4px 4px 0px;
-			}
-			.btn-login {
-			  background-color : var(--light);
-			  color : #fff;
-			  border : none;
-			}
-			.btn-login:hover {
-			  background-color: var(--dark);
-			  color : #fff;
-			}
-			.navbar-default {
-			  background-color: #fff;
-			  border-radius : 0px;
-			  position : fixed;
-			  width : 100%;
-			  z-index : 500;
-			}
-			.navbar-default .navbar-brand {
-			  color: var(--light);
-			}
-			.navbar-default .navbar-brand:hover,
-			.navbar-default .navbar-brand:focus {
-			  color: var(--dark);
-			}
-			.navbar-default .navbar-text {
-			  color: var(--light);
-			}
-			.navbar-default .navbar-nav > li > a {
-			  color: var(--light);
-			}
-			.navbar-default .navbar-nav > li > a:hover,
-			.navbar-default .navbar-nav > li > a:focus {
-			  color: var(--dark);
-			}
-			.navbar-default .navbar-nav > .active > a,
-			.navbar-default .navbar-nav > .active > a:hover,
-			.navbar-default .navbar-nav > .active > a:focus {
-			  color: #ffffff;
-			  background-color: var(--light);
-			}
-			.navbar-default .navbar-nav > .open > a,
-			.navbar-default .navbar-nav > .open > a:hover,
-			.navbar-default .navbar-nav > .open > a:focus {
-			  color: #ffffff;
-			  background-color: var(--light);
-			}
-			.navbar-default .navbar-toggle {
-			  color : var(--light)!important;
-			  border-color: var(--light);
-			}
-			.navbar-default .navbar-toggle:hover,
-			.navbar-default .navbar-toggle:focus {
-			  color : #fff!important;
-			  background-color: var(--light);
-			}
-			.navbar-default .navbar-toggle .icon-bar {
-			  background-color: var(--light);
-			}
-			.navbar-default .navbar-toggle:hover .icon-bar {
-			  background-color: #fff;
-			}
-			.navbar-default .navbar-collapse,
-			.navbar-default .navbar-form {
-			  border-color: var(--light);
-			}
-			.navbar-default .navbar-link {
-			  color: var(--light);
-			}
-			.navbar-default .navbar-link:hover {
-			  color: #ffffff;
-			}
-			.login-home {
-			  padding-top : 10px;
-			}
-			@media (max-width: 767px) {
-			  button.kep-login-facebook{
-			    width : 340px;
-			    height : auto;
-			  }
-			  .login-page-filler {
-			    display : none;
-			  }
-			  .register-form-container {
-			    width : 100%;
-			  }
-			  .login-home {
-			    padding-top : 0px;
-			  }
-			  #login_user {
-			    border-radius : 4px 4px 0px 0px;
-			  }
-			  #LoginButton {
-			    border-radius: 0px 0px 4px 4px;
-			  }
-			  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
-			    color: var(--main-color);    
-			    white-space : normal;
-			  }
-			  .navbar-default .navbar-nav .open .dropdown-menu > li {
-			    color: var(--light);
-			  }
-			  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
-			    color: var(--dark);
-			  }
-			  .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
-			    color: var(--dark);
-			  }
-			  .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
-			  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
-			  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
-			    color: #ffffff;
-			    background-color: var(--light);
-			  }
-			}
-
-
+:root{
+    --light: #80CCEE;
+    --dark : #66A3BE;
+    --navbar : #4d505b;
+    --main-color : #353D41;
+    --success : #5cb85c;
+    --warning : #d9534f;
+    --error : #f44336;
+    --border-gray : #e5e5e5;
+}
+@font-face {
+  font-family: 'open';
+  src: url('OpenSans-Light.ttf');
+}
+body {
+  font-family : "open";
+  background-color : #ffffff;
+  color : var(--main-color);
+  overflow-x : hidden;
+}
+.footer-title {
+  padding: 20px; 
+  font-size : 13px;
+  float : left;
+}
+.title {
+	padding-top : 65px;
+	color : var(--light);
+}
+.caption {
+	padding-top : 20px;
+	color : var(--light);
+}
+.glyphicon {
+  font-size: 20px;
+}
+#login_user {
+  border-radius : 4px 0px 0px 4px;
+}
+#login_password {
+  border-radius : 0px;
+} 
+#LoginButton {
+  border-radius : 0px 4px 4px 0px;
+}
+.btn-login {
+  background-color : var(--light);
+  color : #fff;
+  border : none;
+}
+.btn-login:hover {
+  background-color: var(--dark);
+  color : #fff;
+}
+.navbar-default {
+  background-color: #fff;
+  border-radius : 0px;
+  position : fixed;
+  width : 100%;
+  z-index : 500;
+}
+.navbar-default .navbar-brand {
+  color: var(--light);
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: var(--dark);
+}
+.navbar-default .navbar-text {
+  color: var(--light);
+}
+.navbar-default .navbar-nav > li > a {
+  color: var(--light);
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color: var(--dark);
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #ffffff;
+  background-color: var(--light);
+}
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: #ffffff;
+  background-color: var(--light);
+}
+.navbar-default .navbar-toggle {
+  color : var(--light)!important;
+  border-color: var(--light);
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  color : #fff!important;
+  background-color: var(--light);
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: var(--light);
+}
+.navbar-default .navbar-toggle:hover .icon-bar {
+  background-color: #fff;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: var(--light);
+}
+.navbar-default .navbar-link {
+  color: var(--light);
+}
+.navbar-default .navbar-link:hover {
+  color: #ffffff;
+}
+.login-home {
+  padding-top : 10px;
+}
+@media (max-width: 767px) {
+  button.kep-login-facebook{
+    width : 340px;
+    height : auto;
+  }
+  .login-page-filler {
+    display : none;
+  }
+  .register-form-container {
+    width : 100%;
+  }
+  .login-home {
+    padding-top : 0px;
+  }
+  #login_user {
+    border-radius : 4px 4px 0px 0px;
+  }
+  #LoginButton {
+    border-radius: 0px 0px 4px 4px;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: var(--main-color);    
+    white-space : normal;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li {
+    color: var(--light);
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
+    color: var(--dark);
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: var(--dark);
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #ffffff;
+    background-color: var(--light);
+  }
+}
 	  </style>
 </head>
 <body>
@@ -201,8 +208,17 @@
 			  </div>
 		</nav>
 		<div class="container app-container">
-			<h1 class="title">Welcome to Manaweb! Coming soon...</h1>
+			<div class="row"><h1 class="title">Welcome to Manaweb!</h1></div>
+			<div class="row"><h1 class="caption">Coming soon...</h1>
 		</div>
+		<nav class="navbar navbar-default navbar-fixed-bottom">
+			<div class="container">
+				<div class="row">
+				<div class="footer-title">© 2017 Manaweb, Inc.</div>
+				</div>
+			</div>
+		</nav>
 		{% endblock %}
+		
 </body>
 </html>
