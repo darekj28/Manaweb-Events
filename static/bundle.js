@@ -4636,7 +4636,7 @@
 								React.createElement(
 									'center',
 									null,
-									React.createElement(_EventName2.default, { name: 'Event Name' })
+									React.createElement(_EventName2.default, { name: 'Grand Prix San Jose' })
 								)
 							),
 							React.createElement(
@@ -10345,12 +10345,22 @@
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				$('[data-toggle="tooltip"]').tooltip();
+				// $('p a').tooltip({placement: 'bottom',trigger: 'manual'}).tooltip('show');
+			}
+		}, {
+			key: 'componentWillUnmount',
+			value: function componentWillUnmount() {
+				$('[data-toggle="tooltip"]').tooltip('destroy');
 			}
 		}, {
 			key: 'render',
 			value: function render() {
 				var icon;
 				var selected = this.state.isSelected ? "icon-success" : "icon-danger";
+	
+				if (this.props.isSearch) {
+					$('[data-toggle="tooltip"]').tooltip('show');
+				}
 				switch (this.props.name) {
 					case 'Trade':
 						icon = "glyphicon glyphicon-transfer";
@@ -10367,11 +10377,15 @@
 				if (!this.props.isSearch) return React.createElement(
 					'a',
 					{ className: 'input-group-addon' },
-					React.createElement('span', { className: icon + " filterButton " + selected, 'data-container': 'body', 'data-toggle': 'tooltip', title: this.props.name, onClick: this.handleClick.bind(this) })
+					React.createElement('span', { className: icon + " filterButton " + selected, 'data-container': 'body'
+						// data-toggle="tooltip"
+						, title: this.props.name, onClick: this.handleClick.bind(this) })
 				);else return React.createElement(
 					'a',
 					{ className: 'input-group-addon' },
-					React.createElement('span', { className: icon + " filterButton " + selected, 'data-container': 'body', 'data-toggle': 'tooltip', title: this.props.name,
+					React.createElement('span', { className: icon + " filterButton " + selected, 'data-container': 'body',
+						'data-toggle': 'tooltip',
+						title: this.props.name,
 						'data-placement': 'bottom', onClick: this.handleClick.bind(this) })
 				);
 			}

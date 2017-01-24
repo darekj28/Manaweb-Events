@@ -186,7 +186,7 @@ export default class App extends React.Component {
 									filters={this.state.filters}/>
 					<div className="container app-container">
 						<div className="app row">
-							<center><EventName name="Event Name"/></center>
+							<center><EventName name="Grand Prix San Jose"/></center>
 						</div>
 						<div className="app row">
 							<MakePost placeholder="What's happening?" postText={this.state.post} 
