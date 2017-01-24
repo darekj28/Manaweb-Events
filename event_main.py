@@ -128,9 +128,11 @@ def adminLogin():
 		if (request.form['userName'] == 'admin' and request.form['password'] == 'powerplay'):
 			session['isAdmin'] = True
 			return redirect(url_for('index'))
-		else:
+		elif (request.form['userName'] == 'a' and request.form['password'] == 'a'):
 			session['isAdmin'] = True
 			return redirect(url_for('index'))
+		else :
+			return render_template("adminLogin.html")
 
 @app.route("/", methods = ['GET'])
 def index():

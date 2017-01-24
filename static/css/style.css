@@ -122,6 +122,7 @@ button.kep-login-facebook:hover{
 }
 .register-container {
   padding-top : 65px;
+  padding-bottom : 65px;
 }
 .badge-notify{
    background-color : var(--error);
