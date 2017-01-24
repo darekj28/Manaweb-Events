@@ -27,6 +27,23 @@ button.kep-login-facebook{
 button.kep-login-facebook:hover{
   background-color : #365899;
 }
+.footer-link {
+  padding: 20px;
+  font-size : 13px;
+  float : left;
+}
+.footer-title {
+  padding: 20px; 
+  font-size : 13px;
+  float : left;
+}
+.terms-of-service {
+  max-width : 350px;
+  padding-top : 10px;
+}
+.terms-of-service-text {
+  font-size : 10px;
+}
 .recovery-input {
   margin-left : 20px;
   margin-right : 20px;
@@ -75,10 +92,6 @@ button.kep-login-facebook:hover{
   color : #fff;
   background-color : var(--light);
 }
-.footer {
-  color : var(--navbar);
-  z-index : -1;
-}
 #Or {
   padding-top : 8px;
 }
@@ -108,7 +121,7 @@ button.kep-login-facebook:hover{
   padding-top : 65px;
 }
 .register-container {
-  padding-top : 130px;
+  padding-top : 65px;
 }
 .badge-notify{
    background-color : var(--error);
@@ -117,6 +130,13 @@ button.kep-login-facebook:hover{
 .register {
   max-width : 350px;
   max-height : 34px;
+}
+.register-form-container {
+  width : 50%;
+}
+.login-page-filler {
+  padding-top : 65px;
+  width : 50%;
 }
 .register#Or {
   padding-bottom : 10px;
@@ -508,8 +528,14 @@ button.kep-login-facebook:hover{
 }
 @media (max-width: 767px) {
   button.kep-login-facebook{
-    width : auto;
+    width : 340px;
     height : auto;
+  }
+  .login-page-filler {
+    display : none;
+  }
+  .register-form-container {
+    width : 100%;
   }
   .login-home {
     padding-top : 0px;
