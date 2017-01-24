@@ -293,7 +293,6 @@ class MenuScreen extends Component {
           }
           this.setState({feed: feed})
           if (initialize){
-            console.log("initialize")
             this.getNotifications.bind(this)()
           }
          }
