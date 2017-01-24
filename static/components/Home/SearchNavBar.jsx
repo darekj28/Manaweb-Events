@@ -60,7 +60,7 @@ export default class SearchNavBar extends React.Component {
 				                      <input type="text" value={this.props.searchText} 
 				                      			ref={(input) => this.searchText = input} 
 				                      			id="searchInput" className="form-control" 
-				                      			placeholder="Search posts..." 
+				                      			placeholder="&#xf002;  Search posts..."
 				                      			onChange={this.handleSearch.bind(this)}/>
 				                      <div className = "input-group-addon"></div>
 								  	  {this.props.actions.map(function(action, i) {

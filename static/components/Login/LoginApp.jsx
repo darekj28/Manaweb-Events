@@ -16,7 +16,7 @@ export default class LoginApp extends React.Component {
 						<div className="pull-right"><img id="Logo" src="static/img/gatewatch.jpg"></img></div>
 					</div>
 					<div className="register-form-container col-xs-6">
-						<div className="page-header"><h3><b>Create an account</b></h3></div>
+						<div className="page-header"><h2>Create an account</h2></div>
 						<RegisterForm/>
 						<FacebookConnect/>
 						<div className="terms-of-service">

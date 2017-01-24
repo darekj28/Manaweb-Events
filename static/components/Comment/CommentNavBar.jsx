@@ -45,7 +45,7 @@ export default class CommentNavBar extends React.Component {
 			                 <div className="form-group">
 			                 	  <div>
 				                      <input type="text" value={this.props.searchText} ref={(input) => this.searchText = input} 
-				                      			id="searchInput" className="form-control" placeholder="Search comments..." 
+				                      			id="searchInput" className="form-control" placeholder="&#xf002;  Search comments..."
 				                      			onChange={this.handleSearch.bind(this)}/>
 								  </div>		  
 			                 </div> 

@@ -5,7 +5,7 @@ import SettingsInputLabel from './SettingsInputLabel.jsx';
 import NoSearchNavBar from '../GenericNavBar/NoSearchNavBar.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 
-var text_fields = [	"first_name", "last_name", "old_password", "password", "email", "phone_number" ];
+var text_fields = [	"old_password", "password", "first_name", "last_name", "email", "phone_number" ];
 var select_fields = [ "month_of_birth", "day_of_birth", "year_of_birth", "avatar" ];
 var required_text_fields = ["first_name", "last_name", "old_password"];
 export default class SettingsApp extends React.Component {
