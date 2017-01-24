@@ -58,7 +58,7 @@ export default class PasswordModal extends React.Component {
 	}
 	render() {
 		return(
-			<Modal visible={this.props.display} animationType={"slide"} transparent={false}>
+			<Modal visible={this.props.display} animationType={"slide"} transparent={false} onRequestClose={() => {return}}>
 				<View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start'}}>
 					<View style={styles.top_bar}>
 						<View style={{flex: 0.2}}>

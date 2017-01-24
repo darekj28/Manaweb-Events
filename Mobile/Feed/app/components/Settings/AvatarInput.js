@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
 		fontSize : 16, 
 		padding : 8,
 		paddingLeft : 32, 
-		height : 35
+		height : 40
 	},
 	settings_input_container : {
 		backgroundColor : 'white',

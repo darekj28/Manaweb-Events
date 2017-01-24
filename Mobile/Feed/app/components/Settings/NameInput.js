@@ -50,7 +50,7 @@ export default class NameInput extends React.Component {
 					<TextInput 
 						style = {styles.settings_input}
 						placeholder = {this.props.label} 
-						maxLength = {20}
+						maxLength = {12}
 						onChangeText = {this.handleChange.bind(this)}
 						value = {this.props.value}/>                  
 				</View>

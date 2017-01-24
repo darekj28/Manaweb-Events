@@ -38,103 +38,106 @@ export default class MakePostModal extends React.Component {
 		var green = '#90D7ED';
         var red = '#cacaca';
 		return(
-			<Modal visible={this.props.display} animationType={"slide"} transparent={false}>
-				<View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start', backgroundColor : 'white'}}>
-					<View style={styles.top_bar}>
-						{this.state.step == 1 && <View style={{flex: 1}}>
-							<TouchableOpacity onPress = {this.props.toggleMakePostModal}>
-								<Text style = {{color : '#90D7ED'}}>
-									Cancel
+			<Modal visible={this.props.display} animationType={"slide"} transparent={false} onRequestClose={() => {return}}>
+				{this.state.step == 1 && 
+					<View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start', backgroundColor : 'white'}}>
+						<View style={styles.top_bar}>
+							<View style={{flex: 1}}>
+								<TouchableOpacity onPress = {this.props.toggleMakePostModal}>
+									<Text style = {{color : '#90D7ED'}}>
+										Cancel
+									</Text>
+								</TouchableOpacity>
+							</View>
+							<View style={{flex: 3}}>
+								<Text style = {{textAlign : 'center', fontWeight : 'bold'}}>
+									Pick an activity
 								</Text>
-							</TouchableOpacity>
-						</View>}
-						{this.state.step == 2 && <View style={{flex: 1}}>
-							<TouchableOpacity onPress = {this.decrementStep.bind(this)}>
-								<Text style = {{color : '#90D7ED'}}>
-									Back
-								</Text>
-							</TouchableOpacity>
-						</View>}
-						{this.state.step == 1 && <View style={{flex: 3}}>
-							<Text style = {{textAlign : 'center', fontWeight : 'bold'}}>
-								Pick an activity
-							</Text>
-						</View>}
-						{this.state.step == 2 && <View style={{flex: 3}}>
-							<Text style = {{textAlign : 'center', fontWeight : 'bold'}}>
-								Post a message
-							</Text>
-						</View>}
-						{this.state.step == 1 && <View style={{flex: 1, justifyContent : 'flex-end', flexDirection : 'row'}}>
-							<TouchableOpacity onPress = {this.incrementStep.bind(this)}>
-								<Text style = {{color : '#90D7ED'}}>
-									Next
-								</Text>
-							</TouchableOpacity>
-						</View>}
-						{this.state.step == 2 && <View style={{flex: 1, justifyContent : 'flex-end', flexDirection : 'row'}}>
-							<TouchableOpacity onPress = {this.handleSubmit.bind(this)}>
-								<Text style = {{color : '#90D7ED'}}>
-									Post!
-								</Text>
-							</TouchableOpacity>
-						</View>}
-					</View>
-					{this.state.step == 1 && 
-					<View style={{flex : 1}}>
-						<View>
-							<Text style={{fontSize : 25, padding : 20, color : 'black'}}>
-								Choose something to do.
-							</Text>
+							</View>
+							<View style={{flex: 1, justifyContent : 'flex-end', flexDirection : 'row'}}>
+								<TouchableOpacity onPress = {this.incrementStep.bind(this)}>
+									<Text style = {{color : '#90D7ED'}}>
+										Next
+									</Text>
+								</TouchableOpacity>
+							</View>
 						</View>
-						
-                    	<TouchableOpacity style={styles.filter_wrapper} onPress={() => this.setFilter(0)}>
-                    	    <View style={{flexDirection : 'row'}}>
-                    	        {!this.state.filter_enable[0] && <Icon name = "md-swap" size = {40} color = {red}/>}
-                    	    	{!this.state.filter_enable[0] && <Text style={styles.filter_label_neg}>Trade</Text>}
-                    	        {this.state.filter_enable[0] && <Icon name = "md-swap" size = {40} color = {green}/>}
-                    	    	{this.state.filter_enable[0] && <Text style={styles.filter_label_pos}>Trade</Text>}
-                    	    </View>
-                    	</TouchableOpacity>
-	
-                    	<TouchableOpacity style={styles.filter_wrapper} onPress={() => this.setFilter(1)}>
-                    	    <View style={{flexDirection : 'row'}}>
-                    	        {!this.state.filter_enable[1] && <Icon name = "ios-play" size = {40} color = {red}/>}
-                    	    	{!this.state.filter_enable[1] && <Text style={styles.filter_label_neg}>Play</Text>}
-                    	        {this.state.filter_enable[1] && <Icon name = "ios-play" size = {40} color = {green}/>}
-                    	    	{this.state.filter_enable[1] && <Text style={styles.filter_label_pos}>Play</Text>}
-                    	    </View>
-                    	</TouchableOpacity>
-	
-                    	<TouchableOpacity style={styles.filter_wrapper} onPress={() => this.setFilter(2)}>
-                    	    <View style={{flexDirection : 'row'}}>
-                    	        {!this.state.filter_enable[2] && <Icon name = "md-time" size = {40} color = {red}/>}
-                    	    	{!this.state.filter_enable[2] && <Text style={styles.filter_label_neg}>Chill</Text>}
-                    	        {this.state.filter_enable[2] && <Icon name = "md-time" size = {40} color = {green}/>}
-                    	    	{this.state.filter_enable[2] && <Text style={styles.filter_label_pos}>Chill</Text>}
-                    	    </View>
-                    	</TouchableOpacity>
+						<View style={{flex : 1}}>
+							<View>
+								<Text style={{fontSize : 25, padding : 20, color : 'black'}}>
+									Choose something to do.
+								</Text>
+							</View>
+							
+                    		<TouchableOpacity style={styles.filter_wrapper} onPress={() => this.setFilter(0)}>
+                    		    <View style={{flexDirection : 'row'}}>
+                    		        {!this.state.filter_enable[0] && <Icon name = "md-swap" size = {40} color = {red}/>}
+                    		    	{!this.state.filter_enable[0] && <Text style={styles.filter_label_neg}>Trade</Text>}
+                    		        {this.state.filter_enable[0] && <Icon name = "md-swap" size = {40} color = {green}/>}
+                    		    	{this.state.filter_enable[0] && <Text style={styles.filter_label_pos}>Trade</Text>}
+                    		    </View>
+                    		</TouchableOpacity>
+		
+                    		<TouchableOpacity style={styles.filter_wrapper} onPress={() => this.setFilter(1)}>
+                    		    <View style={{flexDirection : 'row'}}>
+                    		        {!this.state.filter_enable[1] && <Icon name = "ios-play" size = {40} color = {red}/>}
+                    		    	{!this.state.filter_enable[1] && <Text style={styles.filter_label_neg}>Play</Text>}
+                    		        {this.state.filter_enable[1] && <Icon name = "ios-play" size = {40} color = {green}/>}
+                    		    	{this.state.filter_enable[1] && <Text style={styles.filter_label_pos}>Play</Text>}
+                    		    </View>
+                    		</TouchableOpacity>
+		
+                    		<TouchableOpacity style={styles.filter_wrapper} onPress={() => this.setFilter(2)}>
+                    		    <View style={{flexDirection : 'row'}}>
+                    		        {!this.state.filter_enable[2] && <Icon name = "md-time" size = {40} color = {red}/>}
+                    		    	{!this.state.filter_enable[2] && <Text style={styles.filter_label_neg}>Chill</Text>}
+                    		        {this.state.filter_enable[2] && <Icon name = "md-time" size = {40} color = {green}/>}
+                    		    	{this.state.filter_enable[2] && <Text style={styles.filter_label_pos}>Chill</Text>}
+                    		    </View>
+                    		</TouchableOpacity>
+             			</View>
              		</View>}
-					{this.state.step == 2 && 
-					<View style={{flex : 1}}>
-						<View>
-							<Text style={{fontSize : 25, padding : 20, color : 'black'}}>
-								Tell us what's happening.
-							</Text>
+				{this.state.step == 2 && 
+					<View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start', backgroundColor : 'white'}}>
+						<View style={styles.top_bar}>
+							<View style={{flex: 1}}>
+								<TouchableOpacity onPress = {this.decrementStep.bind(this)}>
+									<Text style = {{color : '#90D7ED'}}>
+										Back
+									</Text>
+								</TouchableOpacity>
+							</View>
+							<View style={{flex: 3}}>
+								<Text style = {{textAlign : 'center', fontWeight : 'bold'}}>
+									Post a message
+								</Text>
+							</View>
+							<View style={{flex: 1, justifyContent : 'flex-end', flexDirection : 'row'}}>
+								<TouchableOpacity onPress = {this.handleSubmit.bind(this)}>
+									<Text style = {{color : '#90D7ED'}}>
+										Post!
+									</Text>
+								</TouchableOpacity>
+							</View>
 						</View>
-						<View style={styles.list_container}>
-							<TextInput style = {styles.text_input}
-                       			autoFocus = {true}
-                       			multiline = {true}
-                       			numberOfLines = {1}
-                       			underlineColorAndroid={"transparent"}
-                       			onChangeText={this.handleChange.bind(this)}
-                       			placeholder={"Nah bro"}
-                       			value={this.state.post}/>
+						<View style={{flex : 1}}>
+							<View>
+								<Text style={{fontSize : 25, padding : 20, color : 'black'}}>
+									Tell us what's happening.
+								</Text>
+							</View>
+							<View style={styles.list_container}>
+								<TextInput style = {styles.text_input}
+                    	   			autoFocus = {true}
+                    	   			multiline = {true}
+                    	   			numberOfLines = {1}
+                    	   			underlineColorAndroid={"transparent"}
+                    	   			onChangeText={this.handleChange.bind(this)}
+                    	   			placeholder={"Nah bro"}
+                    	   			value={this.state.post}/>
+							</View>
 						</View>
 					</View>}
-					
-				</View>
 			</Modal>
 		)
 	}

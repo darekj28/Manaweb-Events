@@ -50,14 +50,14 @@ export default class EmailInput extends React.Component {
 					<TextInput 
 						style = {styles.settings_input}
 						placeholder = "Email" 
-						maxLength = {20}
+						maxLength = {30}
 						onChangeText = {this.handleChange.bind(this)}
 						value = {this.props.value}/>                  
 				</View>
 				{this.state.error && 
 				<View style = {styles.error_box}>
 					<Text style = {styles.error_text}>
-						 {this.state.error}
+						{this.state.error}
 					</Text>
 				</View>}
 			 </View>
