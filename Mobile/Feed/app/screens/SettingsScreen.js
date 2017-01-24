@@ -39,7 +39,8 @@ export default class SettingsScreen extends Component {
 			display_avatar_picker 			: false,
 			display_password_change 		: false,
 			error_fields					: [],
-			hasChanges 						: false
+			hasChanges 						: false,
+			hasPrivateChanges				: false
 		};
 	}
 	handleChange(obj) {
@@ -54,6 +55,9 @@ export default class SettingsScreen extends Component {
 	handleSubmitPress() {
 		if (!this.state.hasChanges) {
 			alert("No changes have been made")
+		}
+		else if (!this.state.hasPrivateChanges){
+			this.submitNewSettings.bind(this)()
 		}
 		// if there are changes, give a modal that makes the user confirm their password
 		else {
@@ -115,6 +119,15 @@ export default class SettingsScreen extends Component {
 				hasChanges = true;
 		if (this.state.avatar !== this.props.current_user.avatar_name) hasChanges = true;
 		this.setState({ hasChanges : hasChanges });
+	}
+
+	checkForPrivateChanges(){
+		var hasChanges = false;
+		var fields = ['email', 'phone_number'];
+		for (var i = 0; i < fields.length; i++)
+			if (this.state[fields[i]] !== this.props.current_user[fields[i]])
+				hasChanges = true;
+		this.setState({ hasPrivateChanges : hasPrivateChanges });	
 	}
 
 	render() {
