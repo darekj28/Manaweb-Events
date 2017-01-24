@@ -10,7 +10,7 @@ export default class ReportPostModal extends Component {
 	constructor(props) {
 		super(props);
 		this.state = { 
-			reason: "",
+			reason: "Spam",
 			description: "",
 		}
 	}
@@ -30,8 +30,8 @@ export default class ReportPostModal extends Component {
 			unique_id 		: this.props.post.unique_id,
 			reason 			: this.state.reason,
 			description 	: this.state.description,
-			reporting_user	: this.props.current_user.username,
-			reported_user 	: this.props.post.poster_id
+			reporting_user	: this.props.current_user.userID,
+			reported_user 	: this.props.post.userID
 		}
 		fetch(url + "/mobileReportPost", 
 			{method: "POST",
@@ -43,7 +43,15 @@ export default class ReportPostModal extends Component {
 			})
 		.then((response) => response.json())
 		.then((responseData) => {
-        	alert("Post Reported")
+			if (responseData.result == 'success'){
+				console.log("successful report")
+				Alert.alert(
+				"Post reported",
+				"Click OK to return to the feed",
+				[
+				{text: 'OK', onPress: () => this.handleReturn.bind(this)()}
+				])	
+			}
 		})
 	    .catch((error) => {
 	      console.log(error);
@@ -51,7 +59,7 @@ export default class ReportPostModal extends Component {
 	}
 
 	handleReturn(){
-		this.props.toggleReportModal("")
+		this.props.toggleReportModal()
 	}
 	
 	render() {
@@ -76,28 +84,35 @@ export default class ReportPostModal extends Component {
 							</Text>
 						</View>
 						<View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}/>
-				{/*		<View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}>
-							<TouchableOpacity onPress = {this.confirmPassword.bind(this)}>
-								<Text style = {{color : '#90D7ED'}}>
-									Update
-								</Text>
-							</TouchableOpacity>
-						</View> */}
 					</View>
+
 					<View style={styles.list_container}>
+						<Text style = {{fontWeight: "bold"}}>
+							Original Post
+						</Text>
 						<Text>
 							{this.props.post.postContent}
 						</Text>
 					</View>
 
+					<Picker style = {{flex : 0}} selectedValue={this.state.reason} 
+					onValueChange={this.handleReasonChange.bind(this)}
+					>
+							<Picker.Item  label= {"Inappropriate"} value = {"Inappropriate"} />
+							<Picker.Item  label= {"Spam"} value = {"Spam"} />
+							<Picker.Item  label= {"Other"} value = {"Other"} />
+					</Picker> 
+
 			
-					<View style = {{flex : 0.3}}>
+					<View style = {{flex : 0.4, flexDirection : "row", justifyContent: "flex-start"}}>
 						<TextInput
+						style = {{flex : 0.9, borderColor : "skyblue", borderWidth : 4, padding: 6, borderRadius : 4}}
 						onChangeText = {this.handleDescriptionChange.bind(this)} 
 						placeholder = "Describe Why This Post Is Bad" 
 						maxLength = {40}
 						/>
 					</View>
+					<View style = {{flex : 0.05}}/>
 
 					<View style={{flex: 0.1}}>
 							<TouchableOpacity onPress = {this.reportPost.bind(this)} style = {styles.update_button}>
@@ -128,7 +143,7 @@ const styles = StyleSheet.create({
 		alignItems : 'center'
 	},
 	list_container: {
-		flex : 0.2,
+		flex : 0.15,
 		paddingTop : 8,
 		alignSelf : 'stretch',
 		backgroundColor : '#fbfbfb'

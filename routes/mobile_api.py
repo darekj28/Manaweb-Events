@@ -324,10 +324,10 @@ def mobileReportPost():
 	unique_id = request.json['unique_id']
 	reason = request.json["reason"]
 	description = request.json['description']
-	reporting_user = request.json['username']
+	reporting_user = request.json['reporting_user']
 	reported_user = request.json['reported_user']
 	post_manager = Posts()
-	posts_manager.reportPost(feed_name, unique_id, reason, description, reporting_user, reported_user)
+	post_manager.reportPost(feed_name, unique_id, reason, description, reporting_user, reported_user)
 	post_manager.closeConnection()
 	output = {}
 	output['result'] = 'success'
@@ -342,7 +342,7 @@ def mobileReportComment():
 	reporting_user = request.json['username']
 	reported_user = request.json['reported_user']
 	post_manager = Posts()
-	posts_manager.reportComment(feed_name, unique_id, reason, description, reporting_user, reported_user)
+	post_manager.reportComment(feed_name, unique_id, reason, description, reporting_user, reported_user)
 	post_manager.closeConnection()
 	output = {}
 	output['result'] = 'success'
