@@ -340,7 +340,7 @@ class MenuScreen extends Component {
   componentDidMount() {
     this.initialize.bind(this)();
     this.initializePushNotifications.bind(this)();
-    this.refresh_interval = setInterval(this.refreshFeed.bind(this), this.refresh_time_interval)
+    // this.refresh_interval = setInterval(this.refreshFeed.bind(this), this.refresh_time_interval)
     AppState.addEventListener('change', this.handleAppStateChange.bind(this))
   }
 
