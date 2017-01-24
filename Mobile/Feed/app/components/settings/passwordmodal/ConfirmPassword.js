@@ -5,47 +5,31 @@ import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Dimensions from 'Dimensions';
 
-export default class CurrentPassword extends React.Component {
+export default class ConfirmPassword extends React.Component {
 	constructor(props ){
 		super(props);
-		this.state = { error : "" };
+		this.state = { error : false };
 	}
 	handleChange(value) {
 		var obj = {};
-		obj["current_password"] = value;
+		obj["confirm_password"] = value;
 		this.validatePassword.bind(this)(value);
 		this.props.handleChange(obj);
 	}
-	validatePassword(current_password) {
-		var url = "https://manaweb-events.herokuapp.com"
-		var test_url = "http://0.0.0.0:5000"
-		fetch(url + "/mobileCheckPassword", {
-			method: "POST",
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json',
-			}, 
-			body: JSON.stringify({
-				username : this.props.username,
-				password: current_password
-			})
-		})
-		.then((response) => response.json())
-		.then((responseData) => {
-			if (responseData.result != "success") {
-				this.props.handleError({ "current_password_error" : responseData.error });
-			}
-			else {
-				this.props.handleError({ "current_password_error" : "" });
-			}
-		})
-		.done();
+	validatePassword(confirm_password) {
+		var error = "Your passwords don't match.";
+		if (confirm_password !== this.props.password) {
+			this.props.handleError({ "confirm_password_error" : error });
+		}
+		else {
+			this.props.handleError({ "confirm_password_error" : "" });
+		}
 	}
 	render() {
 		return(
 			<View style = {styles.input_container}> 
 				<Text style = {styles.settings_label}>
-					Current password
+					Confirm password
 				</Text>
 				<View style={styles.settings_input_container}>
 				 	<TextInput

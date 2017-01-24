@@ -4,10 +4,10 @@ import {Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,Lis
           Alert, Image, Animated, TouchableWithoutFeedback, ScrollView} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Comments from '../components/Comments';
-import CommentBox from '../components/CommentBox';
-import MakeCommentBox from '../components/MakeCommentBox';
-import OriginalPost from '../components/OriginalPost';
+import Comments from '../components/comments/Comments';
+import CommentBox from '../components/comments/CommentBox';
+import MakeCommentBox from '../components/comments/MakeCommentBox';
+import OriginalPost from '../components/comments/OriginalPost';
 
 const POST_MESSAGE_HEIGHT_SHORT = 50
 const POST_MESSAGE_HEIGHT_TALL = 150

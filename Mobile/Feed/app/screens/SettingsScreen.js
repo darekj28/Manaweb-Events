@@ -4,14 +4,14 @@ import {Alert, Image, Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,V
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Dimensions from 'Dimensions';
-import AvatarPicker from '../components/Settings/AvatarPicker';
-import NameInput from '../components/Settings/NameInput';
-import EmailInput from '../components/Settings/EmailInput';
-import PhoneInput from '../components/Settings/PhoneInput';
-import AvatarInput from '../components/Settings/AvatarInput';
-import PasswordModal from '../components/Settings/PasswordModal/PasswordModal';
-import PasswordModalLink from '../components/Settings/PasswordModal/PasswordModalLink';
-import LogoutButton from '../components/Settings/LogoutButton';
+import AvatarPicker from 	'../components/settings/AvatarPicker';
+import NameInput from 		'../components/settings/NameInput';
+import EmailInput from 		'../components/settings/EmailInput';
+import PhoneInput from 		'../components/settings/PhoneInput';
+import AvatarInput from 	'../components/settings/AvatarInput';
+import PasswordModal from 	'../components/settings/passwordmodal/PasswordModal';
+import PasswordModalLink from '../components/settings/passwordmodal/PasswordModalLink';
+import LogoutButton from 	'../components/settings/LogoutButton';
 export default class SettingsScreen extends Component {
 	constructor(props) {
 		super(props);

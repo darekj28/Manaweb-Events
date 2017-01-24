@@ -17,31 +17,21 @@ export default class Comments extends React.Component {
 		}, this);
 		return feed;
 	}
-
-	// for some reason this needs to go here
   	listViewRenderRow(input_element){
     	return input_element
   	}
-
 	render() {
 		 var feed = this.filter.bind(this)();
 		 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
    		 var dataSource = ds.cloneWithRows(feed)
 
-    return (
+    	return (
 			<ListView 
                 style={styles.list_container}
                 dataSource={dataSource}
                 renderRow={this.listViewRenderRow.bind(this)}
                 enableEmptySections = {true}
-                removeClippedSubviews= {false}
-			/>
-			/* <ScrollView
-	            automaticallyAdjustContentInsets={false}
-	            onScroll={() => {}}
-	            scrollEventThrottle={200}>
-              {feed}
-            </ScrollView> */
+                removeClippedSubviews= {false}/>
 			)
 	}
 }

@@ -32,9 +32,12 @@ export default class NewPassword extends React.Component {
 		})
 		.then((response) => response.json())
 		.then((responseData) => {
-			if (responseData.result != "success")
+			if (responseData.result != "success") {
 				this.props.handleError({ "new_password_error" : responseData.error });
-			else this.props.handleError({ "new_password_error" : "" });
+			}
+			else {
+				this.props.handleError({ "new_password_error" : "" });
+			}
 		})
 		.done();
 	}
@@ -51,12 +54,6 @@ export default class NewPassword extends React.Component {
 						secureTextEntry = {true}
 						maxLength = {20}/>
 				</View>
-				{this.state.error && 
-				<View style = {styles.error_box}>
-					<Text style = {styles.error_text}>
-						{this.state.error}
-					</Text>
-				</View>}
 			</View>
 		)
 	}

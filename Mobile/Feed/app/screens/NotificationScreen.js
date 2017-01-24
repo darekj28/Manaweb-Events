@@ -5,7 +5,7 @@ import {Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,Lis
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import Notifications from '../components/Notifications'
+import Notifications from '../components/notifications/Notifications'
 
 let url = "https://manaweb-events.herokuapp.com"
 let test_url = "http://0.0.0.0:5000"

@@ -6,11 +6,14 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Dimensions from 'Dimensions';
 import CurrentPassword from './CurrentPassword';
 import NewPassword from './NewPassword';
+import ConfirmPassword from './ConfirmPassword';
 
 export default class PasswordModal extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {};
+		this.state = { current_password_error : true, 
+						new_password_error : true,
+						confirm_password_error : "Please confirm your password."};
 	}
 	handleError(obj) {
 		this.setState(obj);
@@ -20,10 +23,13 @@ export default class PasswordModal extends React.Component {
 	}
 	updatePassword(){
 		if (this.state.current_password_error){
-			alert("Current password is invalid.");
+			alert("Your current password is invalid.");
 		}
 		else if (this.state.new_password_error){
-			alert("New password is of invalid form: " + this.state.new_password_error);
+			alert("Your new password must have at least one letter and one number.");
+		}
+		else if (this.state.confirm_password_error) {
+			alert(this.state.confirm_password_error);
 		}
 		else {
 			var url = "https://manaweb-events.herokuapp.com";
@@ -35,15 +41,15 @@ export default class PasswordModal extends React.Component {
 					'Content-Type': 'application/json',
 				}, 
 				body: JSON.stringify({
-					username: this.state.current_username,
+					username: this.props.username,
 					password: this.state.new_password
 				})
 			})
 			.then((response) => response.json())
 			.then((responseData) => {
 			Alert.alert(
-				"Password Succesfully Updated!",
-				"Returning To Previous Settings",
+				"Your password was updated.",
+				"Returning to settings...",
 				[
 				{text: 'OK', onPress: () => this.props.togglePasswordModal()}
 				])
@@ -80,6 +86,9 @@ export default class PasswordModal extends React.Component {
 										handleChange={this.handleChange.bind(this)}
 										handleError={this.handleError.bind(this)}/>
 						<NewPassword 	handleChange={this.handleChange.bind(this)}
+										handleError={this.handleError.bind(this)}/>
+						<ConfirmPassword password={this.state.new_password}
+										handleChange={this.handleChange.bind(this)}
 										handleError={this.handleError.bind(this)}/>
 					</View>
 				</View>

@@ -6,16 +6,16 @@ import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 var profileImages = {
-    nissa: require('./static/avatars/nissa.png'),
-    chandra: require('./static/avatars/chandra.png'),
-    elspeth: require('./static/avatars/elspeth.png'),
-    nicol: require('./static/avatars/nicol.png'),
-    ugin: require('./static/avatars/ugin.png'),
-    jace: require('./static/avatars/jace.png'),
-    liliana: require('./static/avatars/liliana.png'),
-    ajani: require('./static/avatars/ajani.png'),
-    nahiri: require('./static/avatars/nahiri.png'),
-    gideon: require('./static/avatars/gideon.png'),
+    nissa:      require('../static/avatars/nissa.png'),
+    chandra:    require('../static/avatars/chandra.png'),
+    elspeth:    require('../static/avatars/elspeth.png'),
+    nicol:      require('../static/avatars/nicol.png'),
+    ugin:       require('../static/avatars/ugin.png'),
+    jace:       require('../static/avatars/jace.png'),
+    liliana:    require('../static/avatars/liliana.png'),
+    ajani:      require('../static/avatars/ajani.png'),
+    nahiri:     require('../static/avatars/nahiri.png'),
+    gideon:     require('../static/avatars/gideon.png'),
 };
 
 const PROFILE_HEIGHT = 50

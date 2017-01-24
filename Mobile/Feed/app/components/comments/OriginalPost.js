@@ -46,13 +46,13 @@ export default class OriginalPost extends React.Component {
                     </View>}
                     <View style={{justifyContent: 'flex-start', padding : 8, paddingTop : 16}}>
                         {!this.state.show && 
-                        <TouchableWithoutFeedback onPress={this.toggleShow.bind(this)}><View><Text style = {styles.toggle_message}>
+                        <TouchableOpacity onPress={this.toggleShow.bind(this)}><View><Text style = {styles.toggle_message}>
                             Show
-                        </Text></View></TouchableWithoutFeedback>}
+                        </Text></View></TouchableOpacity>}
                         {this.state.show && 
-                        <TouchableWithoutFeedback onPress={this.toggleShow.bind(this)}><View><Text style = {styles.toggle_message}>
+                        <TouchableOpacity onPress={this.toggleShow.bind(this)}><View><Text style = {styles.toggle_message}>
                             Hide
-                        </Text></View></TouchableWithoutFeedback>}
+                        </Text></View></TouchableOpacity>}
                     </View>
                     <View style={{justifyContent: 'flex-start', padding : 8, paddingLeft : 5}}>
                         <Text style={styles.text_time}>
