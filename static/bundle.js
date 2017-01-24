@@ -11408,6 +11408,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(/*! react */ 2);
+	var Link = __webpack_require__(/*! react-router */ 52).Link;
 	
 	var LoginApp = function (_React$Component) {
 		_inherits(LoginApp, _React$Component);
@@ -11430,7 +11431,7 @@
 						{ className: 'container app-container register-container col-xs-12' },
 						React.createElement(
 							'div',
-							{ className: 'col-xs-6' },
+							{ className: 'login-page-filler col-xs-6' },
 							React.createElement(
 								'div',
 								{ className: 'pull-right' },
@@ -11439,7 +11440,7 @@
 						),
 						React.createElement(
 							'div',
-							{ className: 'RegisterContainer col-xs-6' },
+							{ className: 'register-form-container col-xs-6' },
 							React.createElement(
 								'div',
 								{ className: 'page-header' },
@@ -11454,7 +11455,34 @@
 								)
 							),
 							React.createElement(_RegisterForm2.default, null),
-							React.createElement(_FacebookConnect2.default, null)
+							React.createElement(_FacebookConnect2.default, null),
+							React.createElement(
+								'div',
+								{ className: 'terms-of-service' },
+								React.createElement(
+									'center',
+									{ className: 'terms-of-service-text' },
+									'"By signing up, you agree to our ',
+									React.createElement(
+										Link,
+										{ to: '/' },
+										'Terms of Service'
+									),
+									' and ',
+									React.createElement(
+										Link,
+										{ to: '/' },
+										'Privacy Policy'
+									),
+									', including our ',
+									React.createElement(
+										Link,
+										{ to: '/' },
+										'Cookie Use'
+									),
+									'. You may receive emails from Manaweb and can opt out at any time".'
+								)
+							)
 						)
 					),
 					React.createElement(_Footer2.default, null)
@@ -11777,33 +11805,38 @@
 			value: function render() {
 				var field = this.props.field,
 				    value = this.props.value,
-				    placeholder = idToName(field);
+				    placeholder = idToName(field),
+				    maxlength = "30";
 				var isPassword = field == "password";
 				var type = isPassword ? "password" : "text";
 				var content;
 				switch (field) {
 					case "first_name":
-						content = "Must contain only letters";
+						content = "Must contain only letters (1 to 12 characters)";
+						maxlength = "12";
 						break;
 					case "last_name":
-						content = "Must contain only letters";
+						content = "Must contain only letters (1 to 12 characters)";
+						maxlength = "12";
 						break;
 					case "password":
 						content = "Must contain at least one number and one letter";
 						break;
 					case "username":
-						content = "Must be at least 2 characters";
+						content = "Must be at least 2 characters (2 to 15 characters)";
+						maxlength = "15";
 						break;
 					case "email_or_phone":
 						content = "Must be a valid email or phone number";
 						break;
 				}
+				console.log(maxlength);
 				return React.createElement(
 					"div",
 					{ className: "form-group" },
 					React.createElement("input", { className: field + " register required form-control",
 						"data-placement": "left", "data-trigger": "manual", "data-content": content,
-						id: field, type: type, value: value, placeholder: placeholder,
+						id: field, type: type, value: value, placeholder: placeholder, maxlength: maxlength,
 						onChange: this.handleTyping.bind(this) })
 				);
 			}
@@ -12486,7 +12519,7 @@
   \********************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -12501,6 +12534,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(/*! react */ 2);
+	var Link = __webpack_require__(/*! react-router */ 52).Link;
 	
 	var Footer = function (_React$Component) {
 		_inherits(Footer, _React$Component);
@@ -12512,15 +12546,77 @@
 		}
 	
 		_createClass(Footer, [{
-			key: "render",
+			key: 'render',
 			value: function render() {
 				return React.createElement(
-					"div",
-					{ className: "footer navbar-fixed-bottom" },
+					'div',
+					{ className: 'navbar navbar-default navbar-fixed-bottom' },
 					React.createElement(
-						"center",
-						null,
-						"Use of this site constitutes acceptance of our User Agreement and Privacy Policy. \xA9 2017 Manaweb."
+						'div',
+						{ className: 'container' },
+						React.createElement(
+							'div',
+							{ className: 'row' },
+							React.createElement(
+								'div',
+								{ className: 'footer-title' },
+								'\xA9 2017 Manaweb, Inc.'
+							),
+							React.createElement(
+								'div',
+								{ className: 'footer-link' },
+								React.createElement(
+									Link,
+									{ to: '/' },
+									'About'
+								)
+							),
+							React.createElement(
+								'div',
+								{ className: 'footer-link' },
+								React.createElement(
+									Link,
+									{ to: '/' },
+									'Terms'
+								)
+							),
+							React.createElement(
+								'div',
+								{ className: 'footer-link' },
+								React.createElement(
+									Link,
+									{ to: '/' },
+									'Privacy'
+								)
+							),
+							React.createElement(
+								'div',
+								{ className: 'footer-link' },
+								React.createElement(
+									Link,
+									{ to: '/' },
+									'Cookies'
+								)
+							),
+							React.createElement(
+								'div',
+								{ className: 'footer-link' },
+								React.createElement(
+									Link,
+									{ to: '/' },
+									'Status '
+								)
+							),
+							React.createElement(
+								'div',
+								{ className: 'footer-link' },
+								React.createElement(
+									Link,
+									{ to: '/' },
+									'Help'
+								)
+							)
+						)
 					)
 				);
 			}
