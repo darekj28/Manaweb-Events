@@ -125,7 +125,7 @@ export default class MakePostModal extends React.Component {
 						<View style={{flex : 1}}>
 							<View>
 								<Text style={{fontSize : 25, padding : 20, color : 'black'}}>
-									Tell us what's happening.
+									What's happening?
 								</Text>
 							</View>
 							<View style={styles.list_container}>
@@ -135,7 +135,7 @@ export default class MakePostModal extends React.Component {
                     	   			numberOfLines = {1}
                     	   			underlineColorAndroid={"transparent"}
                     	   			onChangeText={this.handleChange.bind(this)}
-                    	   			placeholder={"Nah bro"}
+                    	   			placeholder={""}
                     	   			value={this.state.post}/>
 							</View>
 						</View>
