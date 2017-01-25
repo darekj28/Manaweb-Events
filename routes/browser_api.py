@@ -23,6 +23,9 @@ def updatePassword():
 	user_manager = Users()
 	user_manager.updateInfo(username, 'password', new_password)
 	user_manager.closeConnection()
+	security_manager = Security()
+	security_manager.unlockAccount(username)
+	security_manager.closeConnection()
 	output = {}
 	output['result'] = 'success'
 	return jsonify(output)
@@ -32,7 +35,6 @@ def verifyEmailOrPhone():
 	emailOrPhone = request.json['emailOrPhone']
 	output = validation.validateEmailOrPhone(emailOrPhone)
 	return output
-
 
 @browser_api.route('/sendEmailConfirmation', methods = ['POST'])
 def sendEmailConfirmation():
@@ -66,9 +68,9 @@ def isFacebookUser():
 def recordFacebookLogin():
 	username = request.json['username']
 	ip = request.json['ip']
-	security_manager = Security()
-	security_manager.recordLoginAttempt(username, True, ip, True)
-	security_manager.closeConnection()
+	# security_manager = Security()
+	# security_manager.recordLoginAttempt(username, True, ip, True)
+	# security_manager.closeConnection()
 	return jsonify({'result': 'success'})
 
 @browser_api.route('/facebookCreateAccount', methods = ['POST'])
@@ -98,33 +100,52 @@ def facebookCreateAccount():
 		gender = gender, fb_id = fb_id) 
 
 	user_manager.closeConnection()
-
-	session['logged_in'] = True
-	session['userID'] = userID
-
 	return jsonify({'result' : 'success', 'username': userID})
 
 @browser_api.route('/verifyAndLogin', methods=['POST'])
 def verifyAndLogin() :
-	user = request.json['user']
+	login_id = request.json['user']
 	password = request.json['password']
-	ip = request.json['ip']
-	res = validation.validateLogin(user, password)
-
+	# ip = request.json['ip']
+	res = validation.validateLogin(login_id, password)
+	fb_login = False
 	if res['result'] == 'success':
-		session['logged_in'] = True
-		session['userID'] = res['username']
+		userID = res['username']
 		security_manager = Security()
 		isSuccess = True
-		security_manager.recordLoginAttempt(user, isSuccess, ip, True)
+		security_manager.recordInvalidLoginAttempt(login_id, userID, isSuccess)
 		security_manager.closeConnection()
 		return jsonify({ 'error' : False })
-	else: 
+	elif res['username'] != None: 
 		isSuccess = False
+		userID = res['username']
 		security_manager = Security()
-		security_manager.recordLoginAttempt(user, isSuccess, ip, False)
+		security_manager.recordInvalidLoginAttempt(login_id, userID, isSuccess)
 		security_manager.closeConnection()
 		return jsonify({ 'error' : res['error'] })
+
+@browser_api.route('/getNumInvalidLoginAttempts', methods = ['POST'])
+def getInvalidLoginAttempts():
+	user_manager = Users()
+	security_manager = Security()
+	login_id = request.json['login_id']
+	if '@' in login_id:
+		user_info = user_manager.getInfoFromEmail(login_id)
+	else:
+		user_info = user_manager.getInfo(login_id)
+	if user_info == None:
+		return jsonify({'invalid_logins' : -1})
+	userID = user_info['userID']
+	numInvalidLoginAttempts = security_manager.getInvalidLoginAttempts(userID)
+	return jsonify({'invalid_logins' : numInvalidLoginAttempts})
+
+@browser_api.route('/isUserLocked', methods = ['POST'])
+def isUserLocked():
+	login_id = request.json['login_id']
+	security_manager = Security()
+	isUserLocked = security_manager.isUserLocked(login_id)
+	security_manager.closeConnection()
+	return jsonify(isUserLocked)
 
 @browser_api.route('/registerUsername', methods=['POST'])
 def registerUsername() :

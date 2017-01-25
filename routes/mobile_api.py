@@ -82,13 +82,28 @@ def mobileCreateProfile():
 def mobileLogin():
 	login_id = request.json['login_id']
 	password = request.json['password']
+	security_manager = Security()
+	user_manager = Users()
 	validator_output = validation.validateLogin(login_id, password)
+	userID = validator_output['username']
 	if validator_output['result'] == 'success':
-		user_manager = Users()
-		current_user = user_manager.getInfo(validator_output['username'])
-		validator_output['current_user'] = current_user
-		user_manager.closeConnection()
+		isSuccess = True
+		security_manager.recordInvalidLoginAttempt(login_id, userID, isSuccess)
+	elif userID != None:
+		isSuccess == False
+		security_manager.recordInvalidLoginAttempt(login_id, userID, isSuccess)
+	user_manager.closeConnection()
+	security_manager.closeConnection()	
 	return jsonify(validator_output)
+
+@mobile_api.route('/mobileIsUserLocked', methods = ['POST'])
+def mobileIsUserLocked():
+	login_id = request.json['login_id']
+	security_manager = Security()
+	isUserLocked = security_manager.isUserLocked(login_id)
+	security_manager.closeConnection()
+	return jsonify(isUserLocked)
+
 
 @mobile_api.route('/mobileTextConfirmation', methods = ['POST'])
 def mobileTextConfirmation():
@@ -282,6 +297,9 @@ def mobileUpdatePassword():
 	user_manager = Users()
 	user_manager.updateInfo(username, 'password', new_password)
 	user_manager.closeConnection()
+	security_manager = Security()
+	security_manager.unlockAccount(username)
+	security_manager.closeConnection()
 	output = {}
 	output['result'] = 'success'
 	return jsonify(output)

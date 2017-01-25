@@ -23,6 +23,7 @@ class Security:
 		self.LOGIN_ATTEMPT_TABLE = "login_attempt_table"
 		self.RECOVERY_HISTORY_TABLE = "recovery_history_table"
 		self.FREEGEOPIP_URL = "http://freegeoip.net/json"
+		self.INVALID_LOGIN_ATTEMPT_TABLE = "invalid_login_attempt_table"
 		urllib.parse.uses_netloc.append("postgres")
 		os.environ["DATABASE_URL"] = "postgres://spkgochzoicojm:y0MABz523D1H-zMqeZVvplCuC2@ec2-54-163-252-55.compute-1.amazonaws.com:5432/d15b0teu2kkhek"
 		url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
@@ -62,6 +63,81 @@ class Security:
 		zip_code, timeString, timeStamp, fb_login) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 		self.db.execute(self.db.mogrify(sql, (login_id, isSuccess, ip, country_code, city, region_code,
 		zip_code, timeString, timeStamp, fb_login)))
+
+	# if the login_id matches to a user, this will record their login attempt
+	def createInvalidLoginAttemptTable(self):
+		sql  = "CREATE TABLE IF NOT EXISTS " + self.INVALID_LOGIN_ATTEMPT_TABLE + " (login_id TEXT, userID TEXT,\
+		count INTEGER, timeString TEXT, timeStamp FLOAT, isLocked BOOLEAN)"
+		self.db.execute(self.db.mogrify(sql))
+		addIndexCode = 'CREATE INDEX IF NOT EXISTS login_id ON ' + self.INVALID_LOGIN_ATTEMPT_TABLE + ' (login_id)'
+		self.db.execute(addIndexCode)
+		addIndexCode = 'CREATE INDEX IF NOT EXISTS userID ON ' + self.INVALID_LOGIN_ATTEMPT_TABLE + ' (userID)'
+		self.db.execute(addIndexCode)
+
+	def recordInvalidLoginAttempt(self, login_id, userID, isSuccess, fb_login = None):
+		self.createInvalidLoginAttemptTable()
+		if fb_login == None:
+			fb_login = False
+		timeStamp = time.time()
+		timeString = self.getTimeString()
+		# add the user into the table if they do not exist
+		sql = "SELECT * FROM " + self.INVALID_LOGIN_ATTEMPT_TABLE + " WHERE userID = %s"
+		self.db.execute(self.db.mogrify(sql, (userID,)))
+		query = self.db.fetchall()
+		# if the user does not exist in the table, insert them
+		if len(query) == 0:
+			isLocked = False
+			sql = "INSERT INTO " + self.INVALID_LOGIN_ATTEMPT_TABLE + " (login_id, userID, count, timeString, \
+			 timeStamp, isLocked) VALUES (%s, %s,%s,%s,%s,%s)"
+			if (isSuccess):
+				count = 0
+			else:
+				count = 1
+			self.db.execute(self.db.mogrify(sql, (login_id, userID, count, timeString, timeStamp, isLocked)))
+		# in this case, the user is already in the table
+		else:
+			old_count = query[0][2]
+			isLocked = False
+			if (isSuccess):
+				new_count = 0
+			else:
+				new_count = old_count + 1
+			if new_count >= 10:
+				isLocked = True
+			sql = "UPDATE " + self.INVALID_LOGIN_ATTEMPT_TABLE + " SET count = %s, timeString = %s, timeStamp = %s, isLocked = %s"
+			self.db.execute(self.db.mogrify(sql, (new_count, timeStamp, timeStamp, isLocked)))
+
+	def getInvalidLoginAttempts(self, login_id):
+		user_manager = Users()
+		if '@' in login_id:
+			user_info = user_manager.getInfoFromEmail(login_id)
+		else:
+			user_info = user_manager.getInfo(login_id)
+		if user_info != None:
+			userID = user_info['userID']
+			sql = "SELECT * FROM " + self.INVALID_LOGIN_ATTEMPT_TABLE + " WHERE userID = %s"
+			self.db.execute(self.db.mogrify(sql, (userID,)))
+			query = self.db.fetchall()
+			return query[0][2]
+
+	def isUserLocked(self, login_id):
+		user_manager = Users()
+		if '@' in login_id:
+			user_info = user_manager.getInfoFromEmail(login_id)
+		else:
+			user_info = user_manager.getInfo(login_id)
+		if user_info != None:
+			userID = user_info['userID']
+			sql = "SELECT * FROM " + self.INVALID_LOGIN_ATTEMPT_TABLE + " WHERE userID = %s"
+			self.db.execute(seld.db.mogrify(sql, (login_id,)))
+			query = self.db.fetchall()
+			return query[0][5]
+		else:
+			return False
+
+	def unlockAccount(self, userID):
+		sql = "UPDATE " + self.INVALID_LOGIN_ATTEMPT_TABLE + " SET isLocked = %s WHERE userID = %s"
+		self.db.execute(self.db.mogrify(sql, (False, userID)))
 
 	# given an ip address returns their json file with the following parameters
 	# ip, country_code, country_name, region_code, region_name, city, zipcode, lataitude, longitude, metro_code, area_code

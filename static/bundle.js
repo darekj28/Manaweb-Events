@@ -11458,7 +11458,7 @@
 								React.createElement(
 									'center',
 									{ className: 'terms-of-service-text' },
-									'"By signing up, you agree to our ',
+									'By signing up, you agree to our ',
 									React.createElement(
 										Link,
 										{ to: '/' },
@@ -11476,7 +11476,7 @@
 										{ to: '/' },
 										'Cookie Use'
 									),
-									'. You may receive emails from Manaweb and can opt out at any time".'
+									'. You may receive emails from Manaweb and can opt out at any time.'
 								)
 							)
 						)
