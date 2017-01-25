@@ -4920,18 +4920,27 @@
 	            }.bind(this));
 	        }
 	    }, {
-	        key: 'getNotificationSyntax',
-	        value: function getNotificationSyntax(note) {
-	            var whose;var also;var notification;
+	        key: 'getNotificationFirst',
+	        value: function getNotificationFirst(note) {
+	            var also;var notification;
 	            if (note.isOP) {
-	                whose = "your";
 	                also = "";
 	            } else {
-	                whose = note.op_name + "'s";
-	                also = "also";
+	                also = " also";
 	            }
-	            if (note.numOtherPeople > 1) notification = note.sender_name + " and " + note.numOtherPeople + " other people commented on " + whose + " post.";else if (note.numOtherPeople == 1) notification = note.sender_name + " and 1 other person commented on " + whose + " post.";else notification = note.sender_name + " " + also + " commented on " + whose + " post.";
+	            if (note.numOtherPeople > 1) notification = note.sender_name + " and " + note.numOtherPeople + " other people commented on ";else if (note.numOtherPeople == 1) notification = note.sender_name + " and 1 other person commented on ";else notification = note.sender_name + also + " commented on ";
 	            return notification;
+	        }
+	    }, {
+	        key: 'getNotificationSecond',
+	        value: function getNotificationSecond(note) {
+	            var whose;
+	            if (note.isOP) {
+	                whose = "your";
+	            } else {
+	                whose = note.op_name + "'s";
+	            }
+	            return whose + " post";
 	        }
 	    }, {
 	        key: 'componentDidMount',
@@ -4978,11 +4987,13 @@
 	                            React.createElement(
 	                                Link,
 	                                { to: "/comment/" + note.comment_id },
+	                                this.getNotificationFirst(note),
 	                                React.createElement(
 	                                    'b',
-	                                    null,
-	                                    this.getNotificationSyntax.bind(this)(note)
+	                                    { className: 'notification-dropdown-link' },
+	                                    this.getNotificationSecond(note)
 	                                ),
+	                                '.',
 	                                React.createElement(
 	                                    'small',
 	                                    null,
@@ -10307,7 +10318,7 @@
   \*************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -10336,18 +10347,13 @@
 		}
 	
 		_createClass(FilterButton, [{
-			key: 'handleClick',
+			key: "handleClick",
 			value: function handleClick() {
 				this.setState({ isSelected: !this.state.isSelected });
 				this.props.onClick(this.props.name, this.props.isSearch);
 			}
 		}, {
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				$('[data-toggle="tooltip"]').tooltip();
-			}
-		}, {
-			key: 'render',
+			key: "render",
 			value: function render() {
 				var icon;
 				var selected = this.state.isSelected ? "icon-success" : "icon-danger";
@@ -10365,17 +10371,21 @@
 						alert('Invalid action.');
 				}
 				if (!this.props.isSearch) return React.createElement(
-					'div',
-					{ className: 'input-group-addon' },
-					React.createElement('span', { className: icon + " filterButton " + selected, 'data-container': 'body', 'data-toggle': 'tooltip',
-						title: this.props.name, onClick: this.handleClick.bind(this) })
-				);else return React.createElement(
-					'div',
-					{ className: 'input-group-addon text-center' },
-					React.createElement('span', { className: icon + " filterButton " + selected, onClick: this.handleClick.bind(this) }),
+					"div",
+					{ className: "input-group-addon make-post-filter", onClick: this.handleClick.bind(this) },
+					React.createElement("span", { className: icon + " filterButton " + selected }),
 					React.createElement(
-						'div',
-						{ className: 'filter-caption' },
+						"div",
+						{ className: "make-post-filter-text " + selected },
+						this.props.name
+					)
+				);else return React.createElement(
+					"div",
+					{ className: "input-group-addon text-center", onClick: this.handleClick.bind(this) },
+					React.createElement("span", { className: icon + " " + selected }),
+					React.createElement(
+						"div",
+						{ className: "filter-caption" },
 						this.props.name
 					)
 				);
@@ -10535,8 +10545,8 @@
 							{ className: 'input-group-addon', onClick: this.handlePostSubmit.bind(this) },
 							React.createElement(
 								'button',
-								{ className: 'btn post-button important-text' },
-								'POST!'
+								{ className: 'btn post-button' },
+								'Post'
 							)
 						)
 					)
@@ -13927,8 +13937,8 @@
 							{ className: 'SubmitButton input-group-addon', onClick: this.handleCommentSubmit.bind(this) },
 							React.createElement(
 								'button',
-								{ className: 'btn post-button important-text' },
-								'COMMENT!'
+								{ className: 'btn post-button' },
+								'Comment'
 							)
 						)
 					)
