@@ -1,5 +1,5 @@
 import React from 'react';
-import {Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,
+import {Platform, Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,
 		TouchableOpacity,TouchableHighlight, TextInput,
 		  Alert, Image, Animated, TouchableWithoutFeedback, ScrollView} from 'react-native';
 import _ from 'lodash'
@@ -171,18 +171,16 @@ export default class CommentScreen extends React.Component {
 		var dataSource = ds.cloneWithRows(scrollable_section);
 		return (
 			<View style = {styles.container}>
-				{/* <View style={{flexDirection : 'row', justifyContent : 'space-around', paddingLeft : 10, paddingRight : 10,
-				paddingBottom : 10}}>
+				<View style={styles.top_bar}>
 					<View style={{flex: 0.2}}>
 						<TouchableOpacity onPress = {() => this.props.navigator.pop()}>
 							<Icon name = "chevron-left" size = {20} color = '#90D7ED'/>
 						</TouchableOpacity>
 					</View>
-				</View> */}
-				<View style = {styles.top_navigator}>
-					<TouchableOpacity onPress = {() => this.props.navigator.pop()}>
-						<Icon name = "chevron-left" size = {NAVIGATOR_BACK_ICON_HEIGHT} />
-					</TouchableOpacity>
+					<View style={{flex: 0.6}}>
+					</View>
+					<View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}>
+					</View>
 				</View>
 				<ListView 
                 	style={styles.list_container}
@@ -200,12 +198,17 @@ const styles = StyleSheet.create({
 		justifyContent: 'flex-start',
 		backgroundColor : 'white'
 	},
-	top_navigator: {
-		flex: 0,
-		padding: 3,
-		backgroundColor: '#90D7ED'
-	},
 	list_container : {
   		flex: 1
   	},
+  	top_bar : {
+		flex : 0.1,
+		paddingLeft : 10,
+		paddingRight : 10,
+		flexDirection : "row",
+		justifyContent: "space-around",
+		borderBottomColor : '#e1e1e1',
+		borderBottomWidth : 1,
+		alignItems : 'center'
+	},
 });

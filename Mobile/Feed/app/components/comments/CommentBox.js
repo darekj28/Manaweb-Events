@@ -25,14 +25,11 @@ export default class CommentBox extends React.Component {
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
                         <View style={{flex : 0, height : 50, flexDirection: 'row', justifyContent : 'flex-start', flexWrap : 'wrap', 
                                             paddingLeft : 8, paddingRight : 8, paddingTop : 8}}>    
-                            <Text style = {styles.text_name}>
-                                {comment.name}
-                            </Text>
-                            <Text style = {styles.text_userID}>
-                                @{comment.userID}
-                            </Text>
-                            <Text style = {styles.text_userID}>
-                                &#8226; {comment.time}
+                            <Text style = {styles.text_name} numberOfLines={1}>
+                                <Text>{comment.name}</Text> 
+                                <Text style={styles.text_userID}> @{comment.userID} 
+                                    <Text style={{flex : 1}}> &#8226; {comment.time} </Text>
+                                </Text>
                             </Text>
                         </View>
                     </View>
@@ -58,10 +55,11 @@ const styles = StyleSheet.create({
         textAlignVertical: 'top',
     },
     text_userID: {
-        flex: 0,
-        fontSize: 14,
+        flex: 1,
+        fontSize: 13,
+        fontWeight : 'normal',
         textAlignVertical: 'top',
-        color : '#333333',
+        color : '#696969',
         paddingLeft : 4
     },
     text_message: {
