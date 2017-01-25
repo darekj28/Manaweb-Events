@@ -26,7 +26,7 @@ export default class PasswordModal extends React.Component {
 			Alert.alert("Your current password is invalid.");
 		}
 		else if (this.state.new_password_error){
-			Alert.alert("Your new password must have at least one letter and one number.");
+			Alert.alert("Your new password must have at least one uppercase letter and one number.");
 		}
 		else if (this.state.confirm_password_error) {
 			Alert.alert(this.state.confirm_password_error);
@@ -49,7 +49,7 @@ export default class PasswordModal extends React.Component {
 			.then((responseData) => {
 			Alert.alert(
 				"Your password was updated.",
-				"Returning to settings...",
+				"",
 				[
 				{text: 'OK', onPress: () => this.props.togglePasswordModal()}
 				])

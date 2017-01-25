@@ -65,7 +65,7 @@ export default class SettingsScreen extends Component {
 		}
 	}
 	handleSubmitSettings() {
-		this.setState({ display_password_confirm : false }, this.props.refreshInfo);
+		this.setState({ display_password_confirm : false, hasChanges : false, hasPrivateChanges : false }, this.props.refreshInfo);
 	}
 	submitNewSettings() {
 		var canSubmit = this.state.error_fields.length === 0;
