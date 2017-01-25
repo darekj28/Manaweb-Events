@@ -374,6 +374,7 @@ class Users:
 		if user_info == None:
 			output['result'] = 'failure'
 			output['error'] = "This username doesn't exist."
+			output['username'] = None
 		else:
 			user_manager.closeConnection()
 			password_match = argon2.verify(password, user_info['password'])
@@ -384,6 +385,7 @@ class Users:
 			else:
 				output['result'] = 'failure'
 				output['error'] = 'Login credentials incorrect.'
+				output['username'] = user_info['userID']
 		return output
 
 	def checkPassword(self, userID, password):
