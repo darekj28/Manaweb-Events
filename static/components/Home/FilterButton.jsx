@@ -8,9 +8,6 @@ export default class FilterButton extends React.Component {
 		this.setState({ isSelected : !this.state.isSelected });
 		this.props.onClick(this.props.name, this.props.isSearch);
 	}
-	componentDidMount() {
-		$('[data-toggle="tooltip"]').tooltip(); 
-	}
 	render() {
 		var icon;
 		var selected = this.state.isSelected ? "icon-success" : "icon-danger";
@@ -28,13 +25,13 @@ export default class FilterButton extends React.Component {
 				alert('Invalid action.');
 		}
 		if (!this.props.isSearch)
-			return(<div className="input-group-addon">
-					<span className={icon + " filterButton " + selected} data-container="body" data-toggle="tooltip"
-					 title={this.props.name} onClick={this.handleClick.bind(this)}>
+			return(<div className="input-group-addon make-post-filter" onClick={this.handleClick.bind(this)}>
+					<span className={icon + " filterButton " + selected}>
 					</span>
+					<div className={"make-post-filter-text " + selected}>{this.props.name}</div>
 				</div>)
-		else return(<div className="input-group-addon text-center">
-					<span className={icon + " filterButton " + selected} onClick={this.handleClick.bind(this)}>
+		else return(<div className="input-group-addon text-center" onClick={this.handleClick.bind(this)}>
+					<span className={icon + " " + selected} >
 					</span>
 					<div className="filter-caption">{this.props.name}</div>
 				</div>

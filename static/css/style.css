@@ -1,6 +1,6 @@
 :root{
     --light: #80CCEE;
-    --dark : #66A3BE;
+    --dark : #73b7d6;
     --navbar : #4d505b;
     --main-color : #353D41;
     --success : #5cb85c;
@@ -9,11 +9,11 @@
     --border-gray : #e5e5e5;
 }
 @font-face {
-  font-family: 'open';
+  font-family: 'OpenSans-Light';
   src: url('OpenSans-Light.ttf');
 }
 body {
-  font-family : "open", FontAwesome;
+  font-family : "HelveticaNeue-Light", FontAwesome;
   font-size : 18px;
   background-color : #ffffff;
   color : var(--main-color);
@@ -27,6 +27,18 @@ button.kep-login-facebook{
 }
 button.kep-login-facebook:hover{
   background-color : #365899;
+}
+.notification-dropdown-link {
+  color : var(--light);
+}
+.make-post-filter-text {
+  float:left;
+  padding-top : 4px;
+  padding-left : 4px;
+}
+.filterButton {
+  margin-left : 90px;
+  float : left;
 }
 .important-text {
   font-size : 24px;
@@ -43,12 +55,12 @@ button.kep-login-facebook:hover{
   padding-bottom :4px;
 }
 .footer-link {
-  padding: 20px;
+  padding: 16px;
   font-size : 13px;
   float : left;
 }
 .footer-title {
-  padding: 20px; 
+  padding: 16px; 
   font-size : 13px;
   float : left;
 }
@@ -390,15 +402,9 @@ button.kep-login-facebook:hover{
   color:var(--warning);
   cursor: pointer;
 }
-.icon-danger:hover {
-  color:#973a37;
-}
 .icon-success {
   color:var(--success);
   cursor: pointer;
-}
-.icon-success:hover{
-  color:#408040;
 }
 .glyphicon {
   font-size: 20px;
@@ -571,6 +577,10 @@ button.kep-login-facebook:hover{
   .important-text {
     font-size : 18px;
     font-weight : 'bold';
+  }
+  .filterButton {
+    margin-left : 10px;
+    float : left;
   }
   button.kep-login-facebook{
     width : 340px;

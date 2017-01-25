@@ -23,25 +23,31 @@ export default class NotificationsDropdown extends React.Component {
                 }
             }.bind(this));
     }
-    getNotificationSyntax(note) {
-        var whose; var also; var notification;
+    getNotificationFirst(note) {
+        var also; var notification;
         if (note.isOP) { 
-            whose = "your";
             also = "";
         }
         else {
-            whose = note.op_name + "'s";
-            also = "also";
+            also = " also";
         }
         if (note.numOtherPeople > 1)
-            notification = note.sender_name + " and " + 
-                note.numOtherPeople + " other people commented on " + whose + " post."
+            notification = note.sender_name + " and " + note.numOtherPeople + " other people commented on "
         else if (note.numOtherPeople == 1)
-            notification = note.sender_name + 
-                " and 1 other person commented on " + whose + " post."
+            notification = note.sender_name + " and 1 other person commented on "
         else 
-            notification = note.sender_name + " " + also + " commented on " + whose + " post."
+            notification = note.sender_name + also + " commented on "
         return notification;
+    }
+    getNotificationSecond(note) {
+        var whose;
+        if (note.isOP) { 
+            whose = "your";
+        }
+        else {
+            whose = note.op_name + "'s";
+        }
+        return whose + " post";
     }
     componentDidMount() {
         AppStore.addNoteChangeListener(this._onChange.bind(this));
@@ -68,7 +74,8 @@ export default class NotificationsDropdown extends React.Component {
                     {this.state.notifications.map(function(note, i) {
                         return (<li key={i}>
                                     <Link to={"/comment/" + note.comment_id}> 
-                                        <b>{this.getNotificationSyntax.bind(this)(note)}</b> 
+                                        {this.getNotificationFirst(note)}
+                                        <b className="notification-dropdown-link">{this.getNotificationSecond(note)}</b>. 
                                         <small>{" " + note.timeString}</small>
                                     </Link>
                                 </li>);
