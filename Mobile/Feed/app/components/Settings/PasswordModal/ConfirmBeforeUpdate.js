@@ -27,8 +27,7 @@ export default class ConfirmBeforeUpdate extends React.Component {
 			Alert.alert("Password is invalid.")
 		}
 		else {
-			this.props.submitNewSettings()
-			this.props.toggleConfirmPasswordModal()
+			this.props.submitNewSettings();
 		}
 	}
 	

@@ -64,10 +64,12 @@ export default class SettingsScreen extends Component {
 			this.toggleConfirmPasswordModal.bind(this)()
 		}
 	}
-
+	handleSubmitSettings() {
+		this.setState({ display_password_confirm : false }, this.props.refreshInfo);
+	}
 	submitNewSettings() {
 		var canSubmit = this.state.error_fields.length === 0;
-		var errorMessage = "There's a mistake in one of your fields."
+		var errorMessage = "There's a mistake in one of your fields.";
 		if (canSubmit) {
 			var url = "https://manaweb-events.herokuapp.com"
 			var test_url = "http://0.0.0.0:5000"
@@ -89,8 +91,9 @@ export default class SettingsScreen extends Component {
 			})
 			.then((response) => response.json())
 			.then((responseData) => {
-				this.props.refreshInfo.bind(this)();
-				Alert.alert("Settings updated. Returning to settings...")
+				Alert.alert("Settings updated", "", [
+				  { text: "OK", onPress: () => this.handleSubmitSettings.bind(this)()}    
+				])
 			}).done();
 		}
 		else {
@@ -105,7 +108,10 @@ export default class SettingsScreen extends Component {
 	}
 
 	toggleConfirmPasswordModal(){
-		this.setState({display_password_confirm : !this.state.display_password_confirm})
+		var canSubmit = this.state.error_fields.length === 0;
+		var errorMessage = "There's a mistake in one of your fields.";
+		if (!canSubmit) Alert.alert(errorMessage);
+		else this.setState({display_password_confirm : !this.state.display_password_confirm})
 	}
 
 	listViewRenderRow(input_element){
