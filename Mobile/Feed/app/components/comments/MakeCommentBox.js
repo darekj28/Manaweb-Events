@@ -8,6 +8,10 @@ export default class MakeCommentBox extends React.Component {
         this.props.handlePostTyping(text);
     }
     handlePostSubmit() {
+        if (!this.props.canPost) {
+            Alert.alert("You must wait 10 seconds before posting again.");
+            return;
+        }
         if (this.props.newPostContent.length > 0)
             this.props.handlePostSubmit(this.props.newPostContent);
     }

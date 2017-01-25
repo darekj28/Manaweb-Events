@@ -23,7 +23,8 @@ export default class CommentScreen extends React.Component {
 			comments : [],
 			original_post : {},
 			newPostContent: "",
-			current_user: {'userID' : 'not initialized'}
+			current_user: {'userID' : 'not initialized'},
+			canPost : true
 		}
 	}
 	handlePostTyping(newPostContent) {
@@ -67,12 +68,13 @@ export default class CommentScreen extends React.Component {
 					time	: "just now",
 					comment_id : this.state.comment_id
 				});
-				this.setState({ comments: feed, newPostContent : '' });
+				this.setState({ comments: feed, newPostContent : '', canPost: false});
 			}
 		})
 		.catch((error) => {
 			console.log(error);
 		});
+		setTimeout(() => {this.setState({ canPost: true })}, 10000);
 	}
 	getComments() {
 		let url = "https://manaweb-events.herokuapp.com"
@@ -161,7 +163,7 @@ export default class CommentScreen extends React.Component {
 						newPostContent = {this.state.newPostContent}
 						handlePostTyping = {this.handlePostTyping.bind(this)}
 						handlePostSubmit = {this.handleCommentSubmit.bind(this)}
-						op = {op}/>
+						op = {op} canPost={this.state.canPost}/>
 				</View>
 				<View style={{flex : 1, flexDirection : 'row'}}>
 					<Comments comments={this.state.comments} comment_id={this.props.comment_id}/>
