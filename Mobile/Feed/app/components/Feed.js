@@ -73,15 +73,14 @@ export default class Feed extends Component {
 	}
 
 	toggleReportModal(post){
+		console.log("toggled")
 		if (!this.state.display_report_modal){
 			this.setState({report_post : post})
 			this.setState({display_report_modal : true})	
 		}
 		else {
-			this.setState({report_post : null})
 			this.setState({display_report_modal : false})
 		}
-		
 	}
 
 	render() {
@@ -90,8 +89,10 @@ export default class Feed extends Component {
 		var dataSource = ds.cloneWithRows(feed)
 		return (
 			<View>
-				<ReportPostModal post = {this.state.report_post} display = {this.state.display_report_modal} 
-				toggleReportModal = {this.toggleReportModal.bind(this)} current_user = {this.props.current_user}/>
+				{(this.state.report_post != null && this.state.display_report_modal) &&
+					<ReportPostModal post = {this.state.report_post} display = {this.state.display_report_modal} 
+					toggleReportModal = {this.toggleReportModal.bind(this)} current_user = {this.props.current_user}/>
+				}
 				<ListView 
 					style={styles.list_container}
 					dataSource={dataSource}
