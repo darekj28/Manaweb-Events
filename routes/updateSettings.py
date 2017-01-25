@@ -29,6 +29,7 @@ def updateSettings():
 	thisUser = user_manager.getInfo(userID)
 	user_manager.updateInfo(session['userID'], 'first_name'	, 	request.json['first_name'])
 	user_manager.updateInfo(session['userID'], 'last_name'	, 	request.json['last_name'])
+	user_manager.updateInfo(session['userID'], 'email'		, 	request.json['email'])
 	user_manager.updateInfo(session['userID'], 'password'	, 	request.json['password'])
 	user_manager.updateInfo(session['userID'], 'birthMonth'	, 	request.json['month_of_birth'])
 	user_manager.updateInfo(session['userID'], 'birthDay'	, 	request.json['day_of_birth'])
