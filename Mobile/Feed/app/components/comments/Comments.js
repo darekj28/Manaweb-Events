@@ -21,17 +21,11 @@ export default class Comments extends React.Component {
     	return input_element
   	}
 	render() {
-		 var feed = this.filter.bind(this)();
-		 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-   		 var dataSource = ds.cloneWithRows(feed)
-
+		var feed = this.filter.bind(this)();
     	return (
-			<ListView 
-                style={styles.list_container}
-                dataSource={dataSource}
-                renderRow={this.listViewRenderRow.bind(this)}
-                enableEmptySections = {true}
-                removeClippedSubviews= {false}/>
+			<View style={styles.list_container}>
+				{feed}
+			</View>
 			)
 	}
 }

@@ -4,15 +4,6 @@ import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHig
 const PROFILE_HEIGHT = 50
 const PROFILE_WIDTH = 50
 export default class OriginalPost extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            show : true
-        };
-    }
-    toggleShow() {
-        this.setState({ show : !this.state.show });
-    }
 	render() {
 		var post = this.props.post;
 		return (
@@ -39,20 +30,10 @@ export default class OriginalPost extends React.Component {
                             @{post.userID}
                         </Text>
                     </View>
-                    {this.state.show && <View style={{justifyContent: 'flex-start', padding : 8, paddingBottom : 25, paddingTop : 25 }}>
+                    <View style={{justifyContent: 'flex-start', padding : 8, paddingBottom : 25, paddingTop : 25 }}>
                         <Text style = {styles.text_message}>
                             {post.postContent}
                         </Text>
-                    </View>}
-                    <View style={{justifyContent: 'flex-start', padding : 8, paddingTop : 16}}>
-                        {!this.state.show && 
-                        <TouchableOpacity onPress={this.toggleShow.bind(this)}><View><Text style = {styles.toggle_message}>
-                            Show
-                        </Text></View></TouchableOpacity>}
-                        {this.state.show && 
-                        <TouchableOpacity onPress={this.toggleShow.bind(this)}><View><Text style = {styles.toggle_message}>
-                            Hide
-                        </Text></View></TouchableOpacity>}
                     </View>
                     <View style={{justifyContent: 'flex-start', padding : 8, paddingLeft : 5}}>
                         <Text style={styles.text_time}>
