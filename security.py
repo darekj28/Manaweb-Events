@@ -126,10 +126,11 @@ class Security:
 			user_info = user_manager.getInfoFromEmail(login_id)
 		else:
 			user_info = user_manager.getInfo(login_id)
+		user_manager.closeConnection()
 		if user_info != None:
 			userID = user_info['userID']
 			sql = "SELECT * FROM " + self.INVALID_LOGIN_ATTEMPT_TABLE + " WHERE userID = %s"
-			self.db.execute(seld.db.mogrify(sql, (login_id,)))
+			self.db.execute(self.db.mogrify(sql, (userID,)))
 			query = self.db.fetchall()
 			return query[0][5]
 		else:

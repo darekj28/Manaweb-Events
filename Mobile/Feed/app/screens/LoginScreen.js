@@ -27,10 +27,37 @@ class LoginScreen extends Component {
     this.handleLoginIdChange = this.handleLoginIdChange.bind(this);
     this._navigateToFeed = this._navigateToFeed.bind(this);
   }
+
+  checkIfLocked(){
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
+    fetch(test_url + "/mobileIsUserLocked", {method: "POST",
+    headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, 
+      body: 
+      JSON.stringify(
+       {
+        login_id : this.state.login_id,
+      })
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+        if (responseData) {
+          alert("Your account is locked due to suspicious activity, please use account recovery to reset your password")
+        }
+        else {
+          this.handleLoginSubmit.bind(this)()
+        }
+    })
+    .done();
+  }
+
   handleLoginSubmit() {
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
-    fetch(url + "/mobileLogin", {method: "POST",
+    fetch(test_url + "/mobileLogin", {method: "POST",
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -152,7 +179,7 @@ class LoginScreen extends Component {
                 </Text>
                 </TouchableOpacity>
               <View style = {styles.bottom_bar_padding}/>
-              <TouchableOpacity style = {styles.login_submit_button} onPress = {this.handleLoginSubmit}>
+              <TouchableOpacity style = {styles.login_submit_button} onPress = {this.checkIfLocked.bind(this)}>
                 <Text style = {styles.login_submit_text}>
                   Login!
                 </Text>

@@ -36,7 +36,7 @@ security_manager = Security()
 # user_manager.deleteUser('brovogre')
 # security_manager.createRecovery()
 # post_manager.deleteNotifications()
-
+# print(user_manager.getInfoFromEmail('Darekj@bro.bro'))
 
 feed_name = "BALT"
 # post_manager.recalculateLastPostTable(feed_name)

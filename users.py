@@ -303,6 +303,7 @@ class Users:
 	def getInfoFromEmail(self, email):
 		if (email == None or email == ""):
 			return None
+		email = email.lower()
 		table_name = self.USER_TABLE
 		self.udb.execute("SELECT * FROM " + table_name + " WHERE email = %s", (email,))
 		size_test = self.udb.fetchall()
