@@ -919,8 +919,8 @@ class Posts:
 		if day_diff < 31:
 		    return str(int(day_diff / 7)) + "w"
 		if day_diff < 365:
-		    return str(int(day_diff / 30)) + "m"
-		return str(int(day_diff / 365)) + "y"
+		    return str(int(day_diff / 30)) + "mo"
+		return str(int(day_diff / 365)) + "yr"
 
 	def search(self, postDict, s = None, poster_id = None, isComment = None):
 		removeList = list()

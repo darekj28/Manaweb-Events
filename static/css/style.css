@@ -222,12 +222,13 @@ button.kep-login-facebook:hover{
 .add-to-feed {
   padding-top: 8px;
   padding-bottom: 8px;
-  color : var(--navbar);
+  color : var(--light);
   z-index : 100!important;
+  border: none;
+  cursor : default;
 }
 .add-to-feed:hover {
-  cursor : pointer;
-  background-color : var(--border-gray);
+  color : var(--dark);
 }
 .popover-title { 
   display: none; 
