@@ -28,6 +28,9 @@ button.kep-login-facebook{
 button.kep-login-facebook:hover{
   background-color : #365899;
 }
+.notification-dropdown-link {
+  color : var(--light);
+}
 .make-post-filter-text {
   float:left;
   padding-top : 4px;
