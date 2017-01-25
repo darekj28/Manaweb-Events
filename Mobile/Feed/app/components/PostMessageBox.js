@@ -75,6 +75,10 @@ export default class PostMessageBox extends Component {
     }
 
     handlePostSubmit() {
+        if (!this.props.canPost) {
+            Alert.alert("You must wait 30 seconds before posting again.");
+            return;
+        }
         if (this.props.newPostContent.length > 0)
             this.props.handlePostSubmit(this.props.newPostContent);
     }

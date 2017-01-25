@@ -71,7 +71,8 @@ class FeedScreen extends Component {
 					searchText : "",
 					test: "",
 					loading: true,
-					display_make_post : false
+					display_make_post : false,
+					canPost : true
 			}
 			this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
 			this.postMessagePressed = this.postMessagePressed.bind(this)
@@ -180,13 +181,14 @@ class FeedScreen extends Component {
 			.then((responseData) => {
 	
 				if (responseData['result'] == 'success') {
-					this.setState({newPostContent : ""})
+					this.setState({newPostContent : "", canPost : false});
 					this.props.refreshScreen(false);
 				}
 				else {
 					this.setState({newPostContent: 'failure...'})
 				}
 			}).done()
+		setTimeout(() => {this.setState({ canPost: true })}, 30000);
 	}
 	handleTitlePress() {
 		Alert.alert('Manaweb is pressed');
@@ -274,6 +276,7 @@ class FeedScreen extends Component {
 										handlePostTyping = {this.handlePostTyping}
 										handlePostSubmit = {this.handlePostSubmit}
 										newPostContent = {this.state.newPostContent}
+										canPost={this.state.canPost}
 										>
 								</PostMessageBox>
 						</Animated.View>
