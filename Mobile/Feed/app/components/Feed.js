@@ -71,7 +71,9 @@ export default class Feed extends Component {
 	componentDidMount(){
 		this.setState({posts: this.props.posts})
 	}
-
+	scrollToTop() {
+		this.listView.scrollTo({y: 0});
+	}
 	toggleReportModal(post){
 		if (!this.state.display_report_modal){
 			this.setState({report_post : post})
@@ -92,11 +94,15 @@ export default class Feed extends Component {
 					<ReportPostModal post = {this.state.report_post} display = {this.state.display_report_modal} 
 					toggleReportModal = {this.toggleReportModal.bind(this)} current_user = {this.props.current_user}/>
 				}
+				<TouchableOpacity onPress={this.scrollToTop.bind(this)}>
+					<Text>Scroll</Text>
+				</TouchableOpacity>
 				<ListView 
 					style={styles.list_container}
 					dataSource={dataSource}
 					renderRow={this.listViewRenderRow.bind(this)}
 					enableEmptySections = {true}
+					ref={ref => this.listView = ref}
 					/>
 			</View>
 
