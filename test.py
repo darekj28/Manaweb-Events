@@ -42,7 +42,7 @@ feed_name = "BALT"
 # post_manager.recalculateLastPostTable(feed_name)
 # post_manager.recalculateUnseenPosts(feed_name)
 # post_manager.deleteUserPosts("mongomongomongo")
-user_manager.deleteUser("bro1234")
+# user_manager.deleteUser("bro1234")
 
 	# post_manager.deleteColumn(table_name, "pushNotificationSent")
 	# post_manager.addColumn(table_name, "pushNotificationSent", "BOOLEAN", True)

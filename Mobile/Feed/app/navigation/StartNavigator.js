@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {ViewContainer, AsyncStorage, AppRegistry, StyleSheet, Text, View, ListView, TouchableOpacity, TouchableHighlight, Navigator} from 'react-native';
+import {ActivityIndicator, ViewContainer, AsyncStorage, AppRegistry, StyleSheet, Text, View, ListView, TouchableOpacity, TouchableHighlight, Navigator} from 'react-native';
 import StartScreen from '../screens/StartScreen'
 import RegisterName from '../screens/register/RegisterName'
 import RegisterPhoneNumber from '../screens/register/RegisterPhoneNumber'
@@ -177,8 +177,8 @@ class StartNavigator extends Component {
     }
     if (this.state.isLoading) {
       return (
-          <View>
-              <Spinner visible={this.state.isLoading} textContent= "Loading..." textStyle={{color: '#FFF'}} />
+          <View style = {styles.container}>
+              <ActivityIndicator style={[styles.centering, styles.white]} color="#cccccc" size="large"/>
           </View>
         )
     }
@@ -199,7 +199,19 @@ class StartNavigator extends Component {
 }
 
 const styles = StyleSheet.create({
-  
+  container: {
+    flex: 1,
+    backgroundColor : "#F5FCFF"
+  },
+  centering: {
+    flex : 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 8,
+  },
+  white: {
+    backgroundColor: 'white',
+  }
 });
 
 module.exports = StartNavigator;

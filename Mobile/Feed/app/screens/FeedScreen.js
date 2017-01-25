@@ -277,9 +277,9 @@ class FeedScreen extends Component {
 										>
 								</PostMessageBox>
 						</Animated.View>
-						<TouchableOpacity onPress={this.toggleMakePostModal.bind(this)}>
+						{/* <TouchableOpacity onPress={this.toggleMakePostModal.bind(this)}> 
 							<Icon name = "md-add" size = {25} color = "black"/>
-						</TouchableOpacity>
+						</TouchableOpacity> */}
 						<MakePostModal display={this.state.display_make_post} 
 										toggleMakePostModal={this.toggleMakePostModal.bind(this)} 
 										handlePostSubmit={this.handlePostSubmit}

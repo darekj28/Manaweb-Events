@@ -44,7 +44,6 @@ export default class ReportPostModal extends Component {
 		.then((response) => response.json())
 		.then((responseData) => {
 			if (responseData.result == 'success'){
-				console.log("successful report")
 				Alert.alert(
 				"Post reported",
 				"Click OK to return to the feed",
