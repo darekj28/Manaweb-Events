@@ -4832,7 +4832,7 @@
 												return _this2.searchText = input;
 											},
 											id: 'searchInput', className: 'form-control',
-											placeholder: 'Search posts...',
+											placeholder: '\uF002  Search posts...',
 											onChange: this.handleSearch.bind(this) }),
 										React.createElement('div', { className: 'input-group-addon' }),
 										this.props.actions.map(function (action, i) {
@@ -10345,22 +10345,12 @@
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				$('[data-toggle="tooltip"]').tooltip();
-				// $('p a').tooltip({placement: 'bottom',trigger: 'manual'}).tooltip('show');
-			}
-		}, {
-			key: 'componentWillUnmount',
-			value: function componentWillUnmount() {
-				// $('[data-toggle="tooltip"]').tooltip('destroy'); 
 			}
 		}, {
 			key: 'render',
 			value: function render() {
 				var icon;
 				var selected = this.state.isSelected ? "icon-success" : "icon-danger";
-	
-				if (this.props.isSearch) {
-					$('[data-toggle="tooltip"]').tooltip('show');
-				}
 				switch (this.props.name) {
 					case 'Trade':
 						icon = "glyphicon glyphicon-transfer";
@@ -10375,17 +10365,19 @@
 						alert('Invalid action.');
 				}
 				if (!this.props.isSearch) return React.createElement(
-					'a',
+					'div',
 					{ className: 'input-group-addon' },
 					React.createElement('span', { className: icon + " filterButton " + selected, 'data-container': 'body', 'data-toggle': 'tooltip',
 						title: this.props.name, onClick: this.handleClick.bind(this) })
 				);else return React.createElement(
-					'a',
-					{ className: 'input-group-addon' },
-					React.createElement('span', { className: icon + " filterButton " + selected, 'data-container': 'body',
-						'data-toggle': 'tooltip',
-						title: this.props.name,
-						'data-placement': 'bottom', onClick: this.handleClick.bind(this) })
+					'div',
+					{ className: 'input-group-addon text-center' },
+					React.createElement('span', { className: icon + " filterButton " + selected, onClick: this.handleClick.bind(this) }),
+					React.createElement(
+						'div',
+						{ className: 'filter-caption' },
+						this.props.name
+					)
 				);
 			}
 		}]);
@@ -10523,17 +10515,13 @@
 					null,
 					React.createElement(
 						'div',
-						{ id: 'TogglePost' },
-						React.createElement(
-							'h4',
-							null,
-							'Post a message...'
-						)
+						{ id: 'TogglePost', className: 'important-text' },
+						'Post a message...'
 					),
 					React.createElement(
 						'div',
 						{ id: 'MessagePost' },
-						React.createElement('textarea', { id: 'PostInput', className: 'PostText form-control',
+						React.createElement('textarea', { id: 'PostInput', className: 'important-text form-control',
 							value: this.props.postText, rows: '4',
 							placeholder: this.props.placeholder, ref: function ref(input) {
 								return _this2.postText = input;
@@ -10544,11 +10532,10 @@
 						}, this),
 						React.createElement(
 							'div',
-							{ className: 'input-group-addon',
-								onClick: this.handlePostSubmit.bind(this) },
+							{ className: 'input-group-addon', onClick: this.handlePostSubmit.bind(this) },
 							React.createElement(
 								'button',
-								{ className: 'btn post-button' },
+								{ className: 'btn post-button important-text' },
 								'POST!'
 							)
 						)
@@ -11458,13 +11445,9 @@
 								'div',
 								{ className: 'page-header' },
 								React.createElement(
-									'h3',
+									'h2',
 									null,
-									React.createElement(
-										'b',
-										null,
-										'Create an account'
-									)
+									'Create an account'
 								)
 							),
 							React.createElement(_RegisterForm2.default, null),
@@ -11843,12 +11826,11 @@
 						content = "Must be a valid email or phone number";
 						break;
 				}
-				console.log(maxlength);
 				return React.createElement(
 					"div",
 					{ className: "form-group" },
 					React.createElement("input", { className: field + " register required form-control",
-						"data-placement": "left", "data-trigger": "manual", "data-content": content,
+						"data-placement": "top", "data-trigger": "manual", "data-content": content,
 						id: field, type: type, value: value, placeholder: placeholder, maxlength: maxlength,
 						onChange: this.handleTyping.bind(this) })
 				);
@@ -12480,7 +12462,7 @@
   \***********************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -12506,15 +12488,21 @@
 		}
 	
 		_createClass(SettingsInputLabel, [{
-			key: 'render',
+			key: "render",
 			value: function render() {
+				var label = idToName(this.props.field);
+				if (this.props.field == "old_password") label = "Current password";
 				return React.createElement(
-					'div',
+					"div",
 					null,
 					React.createElement(
-						'b',
+						"h4",
 						null,
-						idToName(this.props.field)
+						React.createElement(
+							"b",
+							null,
+							label
+						)
 					)
 				);
 			}
@@ -13117,7 +13105,7 @@
 										React.createElement('input', { type: 'text', value: this.props.searchText, ref: function ref(input) {
 												return _this2.searchText = input;
 											},
-											id: 'searchInput', className: 'form-control', placeholder: 'Search comments...',
+											id: 'searchInput', className: 'form-control', placeholder: '\uF002  Search comments...',
 											onChange: this.handleSearch.bind(this) })
 									)
 								)
@@ -13920,19 +13908,15 @@
 					{ id: 'MakeComment' },
 					React.createElement(
 						'div',
-						{ id: 'ToggleComment' },
-						React.createElement(
-							'h4',
-							null,
-							'Reply to ',
-							this.props.op,
-							'...'
-						)
+						{ id: 'ToggleComment', className: 'important-text' },
+						'Reply to ',
+						this.props.op,
+						'...'
 					),
 					React.createElement(
 						'div',
 						{ id: 'CommentPost' },
-						React.createElement('textarea', { id: 'CommentInput', className: 'form-control',
+						React.createElement('textarea', { id: 'CommentInput', className: 'form-control important-text',
 							value: this.props.commentText,
 							placeholder: this.props.placeholder, rows: '2', ref: function ref(input) {
 								return _this2.commentText = input;
@@ -13940,11 +13924,10 @@
 							onChange: this.handleCommentChange.bind(this) }),
 						React.createElement(
 							'div',
-							{ className: 'SubmitButton input-group-addon',
-								onClick: this.handleCommentSubmit.bind(this) },
+							{ className: 'SubmitButton input-group-addon', onClick: this.handleCommentSubmit.bind(this) },
 							React.createElement(
 								'button',
-								{ className: 'btn post-button' },
+								{ className: 'btn post-button important-text' },
 								'COMMENT!'
 							)
 						)
@@ -14385,7 +14368,7 @@
 	var React = __webpack_require__(/*! react */ 2);
 	
 	
-	var text_fields = ["first_name", "last_name", "old_password", "password", "email", "phone_number"];
+	var text_fields = ["old_password", "password", "first_name", "last_name", "email", "phone_number"];
 	var select_fields = ["month_of_birth", "day_of_birth", "year_of_birth", "avatar"];
 	var required_text_fields = ["first_name", "last_name", "old_password"];
 	
@@ -14751,7 +14734,7 @@
 				var value = this.props.value;
 				var isPassword = field == "password" || field == "old_password";
 				var type = isPassword ? "password" : "text";
-				var placeholder = field == "old_password" ? "Enter your old password" : idToName(field);
+				var placeholder = field == "old_password" ? "Enter your current password (required)" : idToName(field);
 				return React.createElement(
 					'div',
 					null,
@@ -14761,7 +14744,7 @@
 					field == "password" && React.createElement('input', { 'data-toggle': 'popover', 'data-trigger': 'focus',
 						'data-content': 'Your password must contain at least one letter and one number.',
 						className: "setting form-control " + this.state.valid, id: field, type: type, value: value,
-						onClick: focus(), placeholder: 'Change your password',
+						onClick: focus(), placeholder: 'Change your password (optional)',
 						onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),
 					this.state.valid == "invalid" && React.createElement(
 						'div',
@@ -15018,13 +15001,15 @@
   \*********************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _reactRouter = __webpack_require__(/*! react-router */ 52);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -15048,17 +15033,17 @@
 		}
 	
 		_createClass(EnterAccountInfo, [{
-			key: "handleChange",
+			key: 'handleChange',
 			value: function handleChange(e) {
 				this.setState({ info: e.target.value });
 			}
 		}, {
-			key: "handleEnter",
+			key: 'handleEnter',
 			value: function handleEnter(e) {
 				if (e.charCode == 13) this.handleSubmit.bind(this)();
 			}
 		}, {
-			key: "handleSubmit",
+			key: 'handleSubmit',
 			value: function handleSubmit() {
 				var obj = { recovery_input: this.state.info };
 				$.ajax({
@@ -15074,27 +15059,38 @@
 				});
 			}
 		}, {
-			key: "render",
+			key: 'goBack',
+			value: function goBack() {
+				_reactRouter.browserHistory.push('/');
+			}
+		}, {
+			key: 'render',
 			value: function render() {
 				return React.createElement(
-					"div",
+					'div',
 					null,
 					React.createElement(
-						"div",
-						{ className: "recovery-title" },
-						"Find your Manaweb account"
+						'div',
+						{ className: 'recovery-title' },
+						'Find your Manaweb account'
 					),
 					React.createElement(
-						"div",
-						{ className: "recovery" },
-						" Enter your email, phone number, or username."
+						'div',
+						{ className: 'recovery' },
+						' Enter your email, phone number, or username.'
 					),
-					React.createElement("input", { className: "form-control recovery-input", onKeyPress: this.handleEnter.bind(this), onChange: this.handleChange.bind(this) }),
+					React.createElement('input', { className: 'form-control recovery-input', onKeyPress: this.handleEnter.bind(this), onChange: this.handleChange.bind(this) }),
 					React.createElement(
-						"button",
-						{ className: "btn post-button recovery-button",
+						'button',
+						{ className: 'btn post-button recovery-button',
 							onClick: this.handleSubmit.bind(this) },
-						" Search "
+						' Search '
+					),
+					React.createElement(
+						'button',
+						{ className: 'btn post-button recovery-button',
+							onClick: this.goBack },
+						' Go back '
 					)
 				);
 			}
