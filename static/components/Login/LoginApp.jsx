@@ -21,7 +21,7 @@ export default class LoginApp extends React.Component {
 						<FacebookConnect/>
 						<div className="terms-of-service">
 							<center className="terms-of-service-text">
-								"By signing up, you agree to our <Link to="/">Terms of Service</Link> and <Link to="/">Privacy Policy</Link>, including our <Link to="/">Cookie Use</Link>. You may receive emails from Manaweb and can opt out at any time". 
+								By signing up, you agree to our <Link to="/">Terms of Service</Link> and <Link to="/">Privacy Policy</Link>, including our <Link to="/">Cookie Use</Link>. You may receive emails from Manaweb and can opt out at any time. 
 							</center>
 						</div>
 					</div>	
