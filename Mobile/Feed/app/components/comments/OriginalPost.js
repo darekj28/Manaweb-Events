@@ -58,19 +58,19 @@ const styles = StyleSheet.create({
         flex: 0,
         fontSize: 14,
         textAlignVertical: 'top',
-        color : '#333333',
+        color : '#696969',
         paddingLeft : 4
     },
     text_time: {
         flex: 0,
         fontSize: 14,
         textAlignVertical: 'top',
-        color : '#333333',
-        paddingLeft : 4
+        color : '#696969',
+        paddingLeft : 3
     },
     text_message: {
         flex: 0,
-        fontSize: 18,
+        fontSize: 20,
         textAlignVertical: 'top',
         color : '#333333'
     },
