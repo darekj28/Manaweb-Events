@@ -153,7 +153,7 @@ def registerUsername() :
 	res = validation.validateUsername(username)
 	if res['result'] == 'success' :
 		return jsonify({'result': 'success', 'error' : False })
-	else : 
+	else: 
 		return jsonify({ 'error' : res['error'] })
 
 @browser_api.route('/registerEmailOrPhone', methods=['POST'])
@@ -171,7 +171,7 @@ def verifyOldPassword() :
 	user = request.json['currentUser']
 	if argon2.verify(password, user['password']) :
 		return jsonify({ 'error' : False })
-	else : 
+	else: 
 		return jsonify({ 'error' : "Error" })
 
 @browser_api.route('/getFeedNames', methods = ['POST'])
@@ -200,7 +200,6 @@ def getNotificationCount():
 
 @browser_api.route('/getNumUnseenPosts', methods = ['POST'])
 def getNumUnseenPosts():
-
 	userID = request.form.get("currentUser[userID]")
 	if userID != None:
 		feed_name = request.form['feed_name']
@@ -220,8 +219,6 @@ def seeNotifications():
 	post_manager.closeConnection()
 	return jsonify({'success' : True})
 	
-
-
 @browser_api.route('/markPostFeedAsSeen', methods = ['POST'])
 def markPostFeedAsSeen():
 	userID = request.form.get("currentUser[userID]")
@@ -230,7 +227,6 @@ def markPostFeedAsSeen():
 		post_manager = Posts()
 		post_manager.markPostFeedAsSeen(feed_name, userID)
 		post_manager.closeConnection()
-
 		return jsonify({'success': True})
 	else: 
 		return jsonify({'success': False})
@@ -240,7 +236,6 @@ def markPostFeedAsSeen():
 def getPosts():
 	# feed_name = request.form['feed_name']
 	feed_name = "BALT"
-
 	post_manager = Posts()
 	# time1 = time.time()
 	post_list = post_manager.getPosts(feed_name)
@@ -251,7 +246,6 @@ def getPosts():
 	# sortTime = time3 - time2
 	# print('getPosts time : '  + str(getPostTime))
 	# print('sort time : '  + str(sortTime))
-
 	post_manager.closeConnection()
 	return jsonify({ 'post_list' : post_list })	
 
@@ -302,7 +296,6 @@ def editComment():
 	post_manager.closeConnection()
 	return redirect(url_for('index'))
 	
-
 @browser_api.route('/editPost', methods = ['POST'])
 def editPost():
 	feed_name = DEFAULT_FEED
@@ -314,7 +307,6 @@ def editPost():
 	post_manager.closeConnection()
 	return redirect(url_for('index'))
 	
-
 # get current user info
 @browser_api.route('/getCurrentUserInfo', methods = ['POST'])
 def getCurrentUserInfo():
@@ -331,14 +323,12 @@ def setFeedFilter():
 		tradeFilter = True
 		playFilter = True
 		chillFilter = True
-	
 		if request.form.get('tradeFilter') == None:
 			tradeFilter = False
 		if request.form.get('playFilter') == None:
 			playFilter = False
 		if request.form.get('chillFilter') == None:
 			chillFilter = False
-
 		user_manager = Users()
 		user_manager.updateInfo(userID, 'tradeFilter', tradeFilter)	
 		user_manager.updateInfo(userID, 'playFilter', playFilter)	

@@ -114,7 +114,8 @@ export default class SettingsApp extends React.Component {
 				month_of_birth 	: this.state.month_of_birth,
 				year_of_birth 	: this.state.year_of_birth,
 				avatar 			: this.state.avatar,
-				currentUser 	: this.state.currentUser
+				currentUser 	: this.state.currentUser,
+				email			: this.state.email,
 			}
 			$.ajax({
 				type: 'POST',

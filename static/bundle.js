@@ -12335,7 +12335,26 @@
 		}, {
 			key: 'handleEnter',
 			value: function handleEnter(event) {
-				if (event.charCode == 13) this.login.bind(this)();
+				if (event.charCode == 13) this.checkLogin.bind(this)();
+			}
+		}, {
+			key: 'checkLogin',
+			value: function checkLogin() {
+				var obj = { user: this.state.login_user };
+				$.ajax({
+					type: "POST",
+					url: '/isLockedUser',
+					data: JSON.stringify(obj, null, '\t'),
+					contentType: 'application/json;charset=UTF-8',
+					success: function (res) {
+						if (res) {
+							// alert the user their account is locked 
+							this.getCurrentUserInfo.bind(this)();
+						} else {
+							this.login.bind(this)();
+						}
+					}.bind(this)
+				});
 			}
 		}, {
 			key: 'login',
@@ -14502,7 +14521,8 @@
 						month_of_birth: this.state.month_of_birth,
 						year_of_birth: this.state.year_of_birth,
 						avatar: this.state.avatar,
-						currentUser: this.state.currentUser
+						currentUser: this.state.currentUser,
+						email: this.state.email
 					};
 					$.ajax({
 						type: 'POST',

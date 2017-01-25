@@ -18,10 +18,32 @@ export default class LoginForm extends React.Component {
 		obj["error"] = "";
 		this.setState(obj);
 	}
+
 	handleEnter(event) {
 		if (event.charCode == 13)
-			this.login.bind(this)();
+			this.checkLogin.bind(this)();
 	}
+
+	checkLogin(){
+		var obj = { user : this.state.login_user};
+		$.ajax({
+			type: "POST",
+			url : '/isLockedUser',
+			data : JSON.stringify(obj, null, '\t'),
+			contentType : 'application/json;charset=UTF-8',
+			success : function(res) {
+				if (res) {
+					console.log("locked account")
+					// alert the user their account is locked 
+					// TBD
+				}
+				else {
+					this.login.bind(this)()
+				}
+			}.bind(this)
+		});
+	}
+
 	login() {
 		var obj = { user : this.state.login_user, 
 					password : this.state.login_password, 
