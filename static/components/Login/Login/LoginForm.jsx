@@ -104,7 +104,7 @@ export default class LoginForm extends React.Component {
     	$('#LoginButton').one('click', function(e) {
     		e.preventDefault();
     		$(this).blur();
-    		this.login.bind(this)();
+    		this.checkLogin.bind(this)();
     	}.bind(this));
     }
     componentDidMount() {
