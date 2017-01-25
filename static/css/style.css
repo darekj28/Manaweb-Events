@@ -13,7 +13,8 @@
   src: url('OpenSans-Light.ttf');
 }
 body {
-  font-family : "open";
+  font-family : "open", FontAwesome;
+  font-size : 18px;
   background-color : #ffffff;
   color : var(--main-color);
   overflow-x : hidden;
@@ -26,6 +27,37 @@ button.kep-login-facebook{
 }
 button.kep-login-facebook:hover{
   background-color : #365899;
+}
+.important-text {
+  font-size : 24px;
+  font-weight : 'bold';
+}
+.filter-caption {
+  font-size : 10px;
+  padding-top : 2px;
+  text-decoration: none;
+  color : var(--main-color);
+  cursor : default;
+}
+.filterBottom {
+  padding-bottom :4px;
+}
+.footer-link {
+  padding: 20px;
+  font-size : 13px;
+  float : left;
+}
+.footer-title {
+  padding: 20px; 
+  font-size : 13px;
+  float : left;
+}
+.terms-of-service {
+  max-width : 350px;
+  padding-top : 10px;
+}
+.terms-of-service-text {
+  font-size : 10px;
 }
 .recovery-input {
   margin-left : 20px;
@@ -75,12 +107,9 @@ button.kep-login-facebook:hover{
   color : #fff;
   background-color : var(--light);
 }
-.footer {
-  color : var(--navbar);
-  z-index : -1;
-}
 #Or {
   padding-top : 8px;
+  font-size : 14px;
 }
 #Logo {
   width : 35vw;
@@ -108,7 +137,8 @@ button.kep-login-facebook:hover{
   padding-top : 65px;
 }
 .register-container {
-  padding-top : 130px;
+  padding-top : 65px;
+  padding-bottom : 65px;
 }
 .badge-notify{
    background-color : var(--error);
@@ -118,8 +148,18 @@ button.kep-login-facebook:hover{
   max-width : 350px;
   max-height : 34px;
 }
+.register-form-container {
+  width : 50%;
+}
+.login-page-filler {
+  padding-top : 65px;
+  width : 50%;
+}
 .register#Or {
-  padding-bottom : 10px;
+  padding-bottom : 12px;
+}
+.forgot-password {
+  padding-top : 4px;
 }
 .forgot-password > a {
   text-decoration: none;
@@ -183,7 +223,8 @@ button.kep-login-facebook:hover{
   padding-top: 8px;
   padding-bottom: 8px;
   color : var(--navbar);
-  z-index : 100;0!important}
+  z-index : 100!important;
+}
 .add-to-feed:hover {
   cursor : pointer;
   background-color : var(--border-gray);
@@ -362,7 +403,7 @@ button.kep-login-facebook:hover{
   font-size: 20px;
 }
 .HeaderGlyphicon {
-  font-size : 14px;
+  font-size : 18px;
 }
 .AppGlyphicon:hover {
   color:var(--dark);
@@ -447,7 +488,9 @@ button.kep-login-facebook:hover{
   border-radius : 0px;
   position : fixed;
   width : 100%;
+  height : 52px;
   z-index : 500;
+  background: rgba(255, 255, 255, 1);
 }
 .navbar-default .navbar-brand {
   color: var(--light);
@@ -503,13 +546,29 @@ button.kep-login-facebook:hover{
 .navbar-default .navbar-link:hover {
   color: #ffffff;
 }
-.login-home {
-  padding-top : 10px;
-}
 @media (max-width: 767px) {
+  body {
+    font-size : 14px;
+  }
+  .HeaderGlyphicon {
+    font-size : 14px;
+  }
+  .important-text {
+    font-size : 18px;
+    font-weight : 'bold';
+  }
   button.kep-login-facebook{
-    width : auto;
+    width : 340px;
     height : auto;
+  }
+  .navbar-default {
+    height : auto;
+  }
+  .login-page-filler {
+    display : none;
+  }
+  .register-form-container {
+    width : 100%;
   }
   .login-home {
     padding-top : 0px;

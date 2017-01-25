@@ -12,7 +12,7 @@ export default class AvatarInput extends React.Component {
 		return(
 				<View style = {styles.input_container}> 
 					<Text style = {styles.settings_label}>
-					Avatar
+						Avatar
 					</Text>
 					<View style={styles.settings_input_container}>
 						<TouchableOpacity onPress = {this.props.toggleAvatarPicker}>

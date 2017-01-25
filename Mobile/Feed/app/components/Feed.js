@@ -7,12 +7,15 @@ import HomeStatusBar from '../components/HomeStatusBar';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FeedBox from './FeedBox'
+import ReportPostModal from './ReportPostModal'
 
 export default class Feed extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
 			posts : [],
+			display_report_modal : false,
+			report_post: null
 		}
 		this.filter = this.filter.bind(this);
 	}
@@ -56,9 +59,8 @@ export default class Feed extends Component {
 			else
 				rows.push(<FeedBox key={i} post = {post} handleFilterUser={this.props.handleFilterUser}
 						image_ID = {i % 3} navigator = {this.props.navigator} current_username = {this.props.current_username}
-						current_user = {this.props.current_user}
-						/>);
-			 }, this);
+						current_user = {this.props.current_user} toggleReportModal = {this.toggleReportModal.bind(this)}/>);
+		}, this);
 		return rows;
 	}
 
@@ -69,17 +71,35 @@ export default class Feed extends Component {
 	componentDidMount(){
 		this.setState({posts: this.props.posts})
 	}
+
+	toggleReportModal(post){
+		console.log("toggled")
+		if (!this.state.display_report_modal){
+			this.setState({report_post : post})
+			this.setState({display_report_modal : true})	
+		}
+		else {
+			this.setState({display_report_modal : false})
+		}
+	}
+
 	render() {
 		var feed = this.filter()
 		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		var dataSource = ds.cloneWithRows(feed)
 		return (
-			<ListView 
+			<View>
+				{(this.state.report_post != null && this.state.display_report_modal) &&
+					<ReportPostModal post = {this.state.report_post} display = {this.state.display_report_modal} 
+					toggleReportModal = {this.toggleReportModal.bind(this)} current_user = {this.props.current_user}/>
+				}
+				<ListView 
 					style={styles.list_container}
 					dataSource={dataSource}
 					renderRow={this.listViewRenderRow.bind(this)}
 					enableEmptySections = {true}
 					/>
+			</View>
 
 		) 
 	}

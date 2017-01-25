@@ -401,8 +401,6 @@ def deleteComment():
 	post_manager.closeConnection()
 	return redirect(url_for('index'))
 
-
-
 @browser_api.route('/reportPost', methods = ['POST'])
 def reportPost():
 	# feed_name = request.json['feed_name']

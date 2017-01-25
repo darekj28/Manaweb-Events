@@ -317,3 +317,33 @@ def mobileGetPushNotifications():
 	output['result'] = 'success'
 	output['num_notifications'] = num_notifications
 	return jsonify(output)
+
+@mobile_api.route('/mobileReportPost', methods = ['POST'])
+def mobileReportPost():
+	feed_name = DEFAULT_FEED
+	unique_id = request.json['unique_id']
+	reason = request.json["reason"]
+	description = request.json['description']
+	reporting_user = request.json['reporting_user']
+	reported_user = request.json['reported_user']
+	post_manager = Posts()
+	post_manager.reportPost(feed_name, unique_id, reason, description, reporting_user, reported_user)
+	post_manager.closeConnection()
+	output = {}
+	output['result'] = 'success'
+	return jsonify(output)
+
+@mobile_api.route('/mobileReportComment', methods = ['POST'])
+def mobileReportComment():
+	feed_name = DEFAULT_FEED
+	unique_id = request.json['unique_id']
+	reason = request.json["reason"]
+	description = request.json['description']
+	reporting_user = request.json['username']
+	reported_user = request.json['reported_user']
+	post_manager = Posts()
+	post_manager.reportComment(feed_name, unique_id, reason, description, reporting_user, reported_user)
+	post_manager.closeConnection()
+	output = {}
+	output['result'] = 'success'
+	return jsonify(output)

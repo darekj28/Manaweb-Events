@@ -87,7 +87,7 @@ export default class SettingsTextInput extends React.Component {
 		var value = this.props.value;
 		var isPassword = (field == "password" || field == "old_password");
 		var type = isPassword ? "password" : "text";
-		var placeholder = field == "old_password" ? "Enter your old password" : idToName(field);
+		var placeholder = field == "old_password" ? "Enter your current password (required)" : idToName(field);
 		return (
 				<div>
 					{field != "password" && <input className={"setting form-control " + this.state.valid} 
@@ -96,7 +96,7 @@ export default class SettingsTextInput extends React.Component {
 					{field == "password" && <input data-toggle="popover" data-trigger="focus" 
 						data-content="Your password must contain at least one letter and one number."
 						className={"setting form-control " + this.state.valid} id={field} type={type} value={value} 
-						onClick={focus()} placeholder="Change your password"
+						onClick={focus()} placeholder="Change your password (optional)"
 						onChange={this.handleTyping.bind(this)} onBlur={this.handleBlur.bind(this)}/>}
 					{(this.state.valid == "invalid") && 
 					<div className="warning" id={field + "_warning"}>{this.state.warning}</div>}				

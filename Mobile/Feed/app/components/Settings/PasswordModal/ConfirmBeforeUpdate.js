@@ -24,53 +24,45 @@ export default class ConfirmBeforeUpdate extends React.Component {
 
 	confirmPassword(){
 		if (this.state.current_password_error) {
-			alert("Current password is invalid")
+			Alert.alert("Password is invalid.")
 		}
 		else {
-			this.props.submitNewSettings()
-			this.props.toggleConfirmPasswordModal()
+			this.props.submitNewSettings();
 		}
 	}
 	
 	render() {
+		var update = !this.state.current_password ?
+			<Text style={styles.disabled_update}>Update</Text> :
+			<TouchableOpacity onPress={this.confirmPassword.bind(this)}>
+				<Text style={styles.enabled_update}>Update</Text>
+			</TouchableOpacity>;
 		return(
 			<Modal visible={this.props.display} animationType={"slide"} transparent={false} onRequestClose={() => {return}}>
 				{Platform.OS == 'ios' && <View style = {{paddingTop : 20}} />}
 				<View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start'}}>
 					<View style={styles.top_bar}>
-						<View style={{flex: 0.2}}>
+						<View style={{flex: 1}}>
 							<TouchableOpacity onPress = {this.props.toggleConfirmPasswordModal}>
 								<Text style = {{color : '#90D7ED'}}>
-									Cancel
+									Back
 								</Text>
 							</TouchableOpacity>
 						</View>
-						<View style={{flex: 0.6}}>
+						<View style={{flex: 3}}>
 							<Text style = {{textAlign : 'center', fontWeight : 'bold'}}>
 								Confirm Password
 							</Text>
 						</View>
-						<View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}/>
-				{/*		<View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}>
-							<TouchableOpacity onPress = {this.confirmPassword.bind(this)}>
-								<Text style = {{color : '#90D7ED'}}>
-									Update
-								</Text>
-							</TouchableOpacity>
-						</View> */}
+						<View style={{flex: 1, justifyContent : 'flex-end', flexDirection : 'row'}}>
+							{update}
+						</View>
 					</View>
 					<View style={styles.list_container}>
 						<CurrentPassword username={this.props.username} 
 										handleChange={this.handleChange.bind(this)}
 										handleError={this.handleError.bind(this)}
-										label = {"Enter Current Password To Update"}/>
-					</View>
-					<View style={{flex: 0.7}}>
-							<TouchableOpacity onPress = {this.confirmPassword.bind(this)} style = {styles.update_button}>
-								<Text style = {{textAlign : 'center', fontWeight : 'bold', 'color' : 'skyblue'}}>
-									Confirm Password To Update Settings
-								</Text>
-							</TouchableOpacity>
+										label = {"Confirm password"}/>
 					</View>
 				</View>
 				 
@@ -93,15 +85,17 @@ const styles = StyleSheet.create({
 		alignItems : 'center'
 	},
 	list_container: {
-		flex : 0.2,
+		flex : 1,
 		paddingTop : 8,
 		alignSelf : 'stretch',
 		backgroundColor : '#fbfbfb'
 	},
-	update_button : {
-		borderColor : "skyblue",
-		borderWidth : 2,
-		borderRadius : 5,
-		padding: 6,
+	enabled_update : {
+		color : '#90D7ED',
+		fontWeight : 'bold'
+	},
+	disabled_update : {
+		fontWeight : 'bold',
+		color : 'silver'
 	}
 });
