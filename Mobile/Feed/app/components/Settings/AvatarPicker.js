@@ -1,6 +1,6 @@
 import React from 'react';
 import {Component} from 'react'
-import {Alert, Image, Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {Platform, Alert, Image, Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Dimensions from 'Dimensions';
@@ -39,6 +39,7 @@ export default class AvatarPicker extends React.Component {
 	render() {
 		return(
 			<Modal visible={this.props.display} animationType={"slide"} transparent={false} onRequestClose={() => {return}}>
+				{Platform.OS == 'ios' && <View style = {{paddingTop : 20}} />}
 				<View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start'}}>
 					<View style={styles.top_bar}>
 						<View style={{flex: 0.2}}></View>

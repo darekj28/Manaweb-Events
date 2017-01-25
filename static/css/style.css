@@ -137,7 +137,7 @@ button.kep-login-facebook:hover{
   padding-top : 65px;
 }
 .register-container {
-  padding-top : 65px;
+  padding-top : 90px;
   padding-bottom : 65px;
 }
 .badge-notify{
@@ -339,8 +339,8 @@ button.kep-login-facebook:hover{
   flex-grow:1;
 }
 .Avatar {
-  height: 48px;
-  width: 48px;
+  height: 64px;
+  width: 64px;
 }
 .AvatarSpace {
   width: 60px;
@@ -351,7 +351,7 @@ button.kep-login-facebook:hover{
 }
 .PostSpace {
   padding-top: 10px;
-  margin-left: 75px;
+  margin-left: 90px;
   padding-left : 10px;
   padding-right : 25px;
 }
@@ -359,7 +359,7 @@ button.kep-login-facebook:hover{
   padding-bottom : 10px;
 }
 .NotificationSpace {
-  margin-left: 75px;
+  margin-left: 90px;
 }
 .FeedPostHeader {
   white-space : nowrap;
@@ -552,6 +552,20 @@ button.kep-login-facebook:hover{
   }
   .HeaderGlyphicon {
     font-size : 14px;
+  }
+  .PostSpace {
+    margin-left : 75px;
+  }
+  .NotificationSpace {
+    margin-left : 75px;
+  }
+  .register-container {
+    padding-top : 65px;
+    padding-bottom : 116px;
+  }
+  .Avatar {
+    width : 48px;
+    height : 48px; 
   }
   .important-text {
     font-size : 18px;
