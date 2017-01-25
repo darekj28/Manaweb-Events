@@ -90,7 +90,7 @@ def mobileLogin():
 		isSuccess = True
 		security_manager.recordInvalidLoginAttempt(login_id, userID, isSuccess)
 	elif userID != None:
-		isSuccess == False
+		isSuccess = False
 		security_manager.recordInvalidLoginAttempt(login_id, userID, isSuccess)
 	user_manager.closeConnection()
 	security_manager.closeConnection()	
