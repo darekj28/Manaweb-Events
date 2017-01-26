@@ -8,39 +8,40 @@ import AppActions from '../../actions/AppActions.jsx';
 import { browserHistory } from 'react-router';
 import AppStore from '../../stores/AppStore.jsx';
 
-
 export default class Confirm extends React.Component {
 	constructor() {
 		super();
 		this.state = {
 			error : '',
-			confirmation_code_input: "",
-			verified : false ,
-			confirmationCode : "",
-			this_user: {}
+			input: "",
+			confirmationCode : AppStore.getCurrentUser().confirmationPin,
+			this_user: AppStore.getCurrentUser()
 		};
 	}
 
-	handleConfirmationCodeChange(event) {
-		var obj = {}; 
-		obj[event.target.id] = event.target.value;
-		this.setState(obj);
+	handleChange(e) {
+		this.setState({ input : e.target.value });
+	}
+	handleEnter(e) {
+		if (e.charCode == 13)
+			this.handleSubmit.bind(this)();
 	}
 
-	handleConfirmationCodeSubmit() {
-		console.log(this.state.confirmation_code_input)
-		console.log(this.state.confirmationCode)
-		if (this.state.confirmation_code_input == this.state.confirmationCode) {
-			this.confirmAccount.bind(this)()
+	handleSubmit() {
+		if (this.state.input === this.state.confirmationCode) {
+			this.confirmAccount.bind(this)();
+			swal({title : "Success!", 
+						text: "Please hold on as we get you started.", 
+						type: "success",
+						showConfirmButton : false});
 		}
-
 		else {
-			this.setState({error : "Incorrect pin "})
+			this.setState({ error : true });
+			swal("Sorry!", "Incorrect pin.", "error");
 		}
 	}
 
 	confirmAccount() {
-		var that = this;
 		var obj = {
 			userID : this.state.this_user.userID,
 		}
@@ -49,23 +50,39 @@ export default class Confirm extends React.Component {
 			url : '/confirmAccount',
 			data : JSON.stringify(obj, null, '\t'),
 			contentType : 'application/json;charset=UTF-8',
-			success: function(data)          
-		     {   
-		     	this.getCurrentUserInfo.bind(this)()
-		     }.bind(this)
+			success: function(data){   
+		     	this.getNotifications.bind(this)();
+		    }.bind(this)
 		});
 	}
-
-	getCurrentUserInfo() {
-		$.post('/getCurrentUserInfo', {userID : this.state.this_user.userID}, function(data) {
-			AppActions.removeCurrentUser()
-			AppActions.addCurrentUser(data.thisUser);
-			this.setState({verified : true})
-		}.bind(this));
-	}
-
+	getNotifications() {
+        $.post('/getNotifications', {currentUser : AppStore.getCurrentUser()},
+            function(data) {
+                var notifications = [];
+                data.notification_list.map(function(obj) {
+                    notifications.unshift({
+                    	comment_id : obj['comment_id'],
+                        timeString : obj['timeString'],
+                        isOP : obj['isOP'],
+                        numOtherPeople : obj['numOtherPeople'],
+                        sender_name : obj['sender_name'],
+                        op_name : obj['op_name'],
+                        avatar : obj['avatar']
+                    });
+                });
+                AppActions.addNotifications(notifications);
+                this.getNotificationCount.bind(this)();
+            }.bind(this));
+    }
+    getNotificationCount() {
+    	$.post('/getNotificationCount', {currentUser : AppStore.getCurrentUser()},
+            function(data) {
+                AppActions.addNotificationCount(data.count);
+                swal.close();
+                browserHistory.push('/');
+            }.bind(this));
+    }
 	resendConfirmation() {
-		var that = this;
 		var obj = {
 			userID : this.state.this_user.userID,
 			email : this.state.this_user.email,
@@ -77,62 +94,26 @@ export default class Confirm extends React.Component {
 			url : '/resendConfirmation',
 			data : JSON.stringify(obj, null, '\t'),
 			contentType : 'application/json;charset=UTF-8',
-			success: function(data)          
-		     {   
+			success: function(data){   
 		     	this.setState({error : ""});
-		     	alert("A new confirmation code has been sent to " + data.target);
-
-		     }.bind(this)
+		     	swal("A confirmation code has been sent to " + data.target + ".", "Try again.");
+		    }.bind(this)
 		});
-	}
-
-
-
-	componentDidMount() {
-		var this_user = AppStore.getCurrentUser()
-		console.log(this_user)
-		this.setState({this_user: this_user})
-		this.setState({confirmationCode:  this_user.confirmationPin})
 	}
 
 	render() {
 		return (
-			<div>
-
 				<div className="container app-container">
-					<div className = "col-xs-4 col-sm-offset-4">
-                   		<div> 
-
-							<input type="text" className="form-control text-center" id="confirmation_code_input" 
-	                    	onChange={this.handleConfirmationCodeChange.bind(this)} placeholder="Enter confirmation code!"/>
-							<button className="btn btn-default form-control blurButton"
-		            					id="Submit Confirmation Pin"
-		            					onClick = {this.handleConfirmationCodeSubmit.bind(this)} > Confirm new account!</button>
-
-
-			            	{	
-			            		this.state.error != "" &&
-			            		<div> 
-			            			Click <a onClick = {this.resendConfirmation.bind(this)} > here </a> to send again
-			            		</div>
-			            	}
-
-		            	</div>
-
-		            	{
-		            		this.state.verified &&
-		            		<div>
-		            			Congradulations! Your account has been confirmed! Your avatar is {this.state.this_user.avatar} 
-		            		
-		            			<img src = {this.state.this_user.avatar_url} />
-		            				You can change your avatar at any time in settings. Click <a href = "/"> here </a> to continue to Manaweb!
-		            		</div>
-		            	}
-
-
-                	</div>
-				</div>
-			</div>
+					<div className="recovery-title">Confirm your account</div>
+					{this.state.this_user.email && 
+						<div className="recovery">A confirmation code was sent to {this.state.this_user.email}. Please enter it below.</div>}
+					{(!this.state.this_user.email && this.state.this_user.phone_number) && 
+						<div className="recovery">A confirmation code was sent to {this.state.this_user.phone_number}. Please enter it below.</div>}
+               		<input className="form-control recovery-input" onKeyPress={this.handleEnter.bind(this)} onChange={this.handleChange.bind(this)}/>
+               		<button className="btn post-button recovery-button" onClick={this.handleSubmit.bind(this)}> Confirm </button>
+		            {this.state.error &&
+		            	<button className="btn post-button recovery-button" onClick={this.resendConfirmation.bind(this)}> Resend confirmation code </button>}
+            	</div>
 		);
 	}	
 }

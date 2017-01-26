@@ -21,7 +21,7 @@ export default class RegisterForm extends React.Component {
 		if ($('#register_form').find('input.valid').length == 5) {
 			this.verifyUsername.bind(this)();
 			swal({title : "Success!", 
-						text: "Please hold on as we make your account.", 
+						text: "Please hold on as we redirect you.", 
 						type: "success",
 						showConfirmButton : false});
 		}
@@ -110,7 +110,9 @@ export default class RegisterForm extends React.Component {
 			contentType : 'application/json;charset=UTF-8',
 			success : function(res) {
 				if(res['result'] == "success") {
-					location.reload();
+					this.getCurrentUserInfo.bind(this)();
+					swal.close();
+					browserHistory.push('/confirm');
 				}
 				else {
 					swal.close();
@@ -118,6 +120,11 @@ export default class RegisterForm extends React.Component {
 				}
 			}.bind(this)
 		});
+	}
+	getCurrentUserInfo() {
+		$.post('/getCurrentUserInfo', {userID : this.state.username}, function(data) {
+			AppActions.addCurrentUser(data.thisUser);
+		}.bind(this));
 	}
     register() {
     	$('#register_form').on("submit", function(e) {

@@ -41,7 +41,7 @@ const checkConfirmedMain = (nextState, replace) => {
 }
 
 const checkConfirmed = (nextState, replace) => {
-	var thisUser = AppStore.getCurrentUser()
+	var thisUser = AppStore.getCurrentUser();
 	if (thisUser.confirmed) {
 		replace(`/`);
 	}
