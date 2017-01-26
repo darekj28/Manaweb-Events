@@ -156,6 +156,13 @@ export default class CommentScreen extends React.Component {
 				<View style={{flexDirection : 'row'}}>
 					<OriginalPost post={this.state.original_post}/>
 				</View>
+				<TouchableWithoutFeedback onPress={() => Alert.alert('pressed')}>
+					<View style = {{flexDirection: 'row', borderTopColor: 'silver', borderTopWidth: 1}}>
+						<Text style = {{paddingLeft: 3}}>
+							Reply to {op}...
+						</Text>
+					</View>
+				</TouchableWithoutFeedback>
 				<View style={{flexDirection : 'row'}}>
 					<MakeCommentBox onClick={(event) => this.postMessagePressed.bind(this)()}
 						animateDuration={ANIMATE_DURATION}
@@ -184,7 +191,7 @@ export default class CommentScreen extends React.Component {
 					<View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}>
 					</View>
 				</View>
-				<ListView 
+				<ListView
                 	style={styles.list_container}
                 	dataSource={dataSource}
                 	renderRow={this.listViewRenderRow.bind(this)}

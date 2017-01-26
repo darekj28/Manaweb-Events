@@ -24,7 +24,7 @@ export default class SendConfirmationCode extends React.Component {
 		else if (this.state.selected == "phone")
 			this.sendTextConfirmation.bind(this)(this.props.input.phone_number);
 		else 
-			alert("Please select a method.")
+			swal("Yo!", "Please select a method.", "warning");
 	}
 	sendEmailConfirmation(email) {
 		var obj = { email : email };
@@ -38,7 +38,7 @@ export default class SendConfirmationCode extends React.Component {
 		     		this.props.handleSCC(data.confirmationCode, "email");	
 		     	}
 		     	else {
-		     		alert("Error with confirmation code from email");
+		     		swal("Sorry!", "There was an error in sending the confirmation code.", "error");
 		     	}
 		    }.bind(this)
 		});
@@ -55,7 +55,7 @@ export default class SendConfirmationCode extends React.Component {
 		     		this.props.handleSCC(data.confirmationCode, "phone");	
 		     	}
 		     	else {
-		     		alert("Error with confirmation code from text");
+		     		swal("Sorry!", "There was an error in sending the confirmation code.", "error");
 		     	}
 		    }.bind(this)
 		});

@@ -2,6 +2,10 @@ var React = require('react');
 import FilterButton from "./FilterButton.jsx";
 
 export default class MakePost extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = { canPost : true };
+	}
 	componentDidMount() {
 		$('.post-button').click(function() {
 			$(this).blur();
@@ -14,8 +18,16 @@ export default class MakePost extends React.Component {
 		})
 	}
 	handlePostSubmit() {
-		if (this.postText.value.trim().length > 0)
-			this.props.onPostSubmit(this.postText.value);
+		if (!this.state.canPost) swal("Yo!", "Please wait 30 seconds between posting.", "warning");
+		else {
+			if (this.postText.value.trim().length > 0) {
+				this.setState({ canPost : false });
+				this.props.onPostSubmit(this.postText.value);
+				setTimeout(function() { this.setState({ canPost : true }); }, 30000);
+			}
+			else 
+				swal("Oops...", "You can't post an empty message!", "error");
+		}
 	}
 	handlePostChange() {
 		this.props.onPostChange(this.postText.value);

@@ -33,12 +33,10 @@ export default class LoginForm extends React.Component {
 			contentType : 'application/json;charset=UTF-8',
 			success : function(res) {
 				if (res) {
-					alert("account locked due to specific activity, reset password to unlock")
-					// alert the user their account is locked 
-					// TBD
+					swal("Sorry!", "Account locked due to specific activity. Reset password to unlock.", "warning");
 				}
 				else {
-					this.login.bind(this)()
+					this.login.bind(this)();
 				}
 			}.bind(this)
 		});
@@ -128,8 +126,8 @@ export default class LoginForm extends React.Component {
 		            			Forget your username or password?
 		            		</Link>
 		            	</div>
-		            	{this.state.error && <div className="warning">
-				  			<strong>Bro!</strong> {this.state.error}
+		            	{this.state.error && <div className="login-warning warning">
+				  			{this.state.error}
 						</div>}
 					</div>
 	        </div>

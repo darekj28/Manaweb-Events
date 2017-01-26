@@ -31,17 +31,17 @@ export default class ChangePassword extends React.Component {
 				contentType : 'application/json;charset=UTF-8',
 				success: function(data){   
 			     	if (data['result'] == 'success'){
-			     		alert("Success! Your password is changed.")
+			     		swal("Success!", "Your password has been changed.", "success");
 			     		browserHistory.push('/');
 			     	}
 			     	else {
-			     		alert("Sorry! There was an error in changing your password.")
+			     		swal("Sorry!", "There was an error in changing your password.", "error");
 			     	}
 			    }.bind(this)
 			});
 		}
 		else 
-			alert("Invalid password. Please follow the instructions in the tooltip.");
+			swal("Invalid password.", "Please follow the instructions in the tooltip.", "warning");
 	}
 	componentDidMount() {
 		passwordHelper();

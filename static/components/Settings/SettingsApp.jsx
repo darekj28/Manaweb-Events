@@ -124,12 +124,15 @@ export default class SettingsApp extends React.Component {
 			    contentType: 'application/json;charset=UTF-8'
 			});
 			$('#UpdateSettingsSubmit').blur();
-			$('#UpdateSettingsSuccess').fadeIn(400).delay(4000).fadeOut(400);
-			$("html, body").animate({ scrollTop: $('#SettingsApp').prop('scrollHeight') }, 600);
+			swal({title : "Success!", 
+				text: "Your settings have been updated.", 
+				type: "success",
+				confirmButtonColor: "#80CCEE",
+  				confirmButtonText: "OK",
+  				closeOnConfirm: true}, function() { location.reload() });
 		}
 		else {
-			$('#UpdateSettingsFail').fadeIn(400).delay(4000).fadeOut(400);
-			$("html, body").animate({ scrollTop: $('#SettingsApp').prop('scrollHeight') }, 600);
+			swal("Oops...", "There's a mistake in your submission!", "error");
 		}
 	}
 
@@ -142,8 +145,6 @@ export default class SettingsApp extends React.Component {
 	componentDidMount() {
 		this.autopopulateSettings.bind(this)();
 		this.enableUpdate.bind(this)();
-		$('#UpdateSettingsSuccess').hide();
-		$('#UpdateSettingsFail').hide();
 	}
 	render() {
 		var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
@@ -177,12 +178,6 @@ export default class SettingsApp extends React.Component {
 									onClick={this.handleSubmit.bind(this)}> Update! </button>
 						</div>
 					</form>
-					<div className="success" id="UpdateSettingsSuccess">
-					  <strong>Success!</strong> Your settings have been updated.
-					</div>
-					<div className="warning" id="UpdateSettingsFail">
-					  <strong>Bro!</strong> There's an error in your submission.
-					</div>
 				</div>
 			</div>
 			);
