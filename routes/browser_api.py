@@ -136,7 +136,7 @@ def resendConfirmation():
 		output['target'] = phone_number
 	else:
 		email_confirm.sendConfirmationEmail(email, confirmationPin)
-		output['targer'] = email
+		output['target'] = email
 	return jsonify(output)
 
 @browser_api.route('/sendTextConfirmation', methods = ['POST'])
