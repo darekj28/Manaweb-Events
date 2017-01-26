@@ -116,9 +116,8 @@ export default class RegisterForm extends React.Component {
 				if(res['result'] == "success") {
 					this.getCurrentUserInfo.bind(this)();
 				}
-				else {
-					swal.close();
-					swal("Oops...", "There was an error in making your account.", "error");
+				else if (res['result'] == "phone_exception") {
+					swal("Oops...", "The number you gave us is not valid.", "error");
 				}
 			}.bind(this)
 		});

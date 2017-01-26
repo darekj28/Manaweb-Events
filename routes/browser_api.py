@@ -33,7 +33,11 @@ def createProfile():
 	elif request.json['email_or_phone'] == "phone_number" :
 		phone_number = request.json['phone_number']
 		email = ""
-		confirmationPin = sms.sendTextConfirmationPin(phone_number)
+		try : 
+			confirmationPin = sms.sendTextConfirmationPin(phone_number)
+		except : 
+			print('exceptionnnn')
+			return jsonify({ "result" : 'phone_exception'})
 	# read the form data and save it
 	first_name 		= request.json['first_name']
 	last_name 		= request.json['last_name']
