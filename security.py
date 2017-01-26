@@ -135,9 +135,9 @@ class Security:
 			if len(query) == 0:
 				isLocked = False
 				sql = "INSERT INTO " + self.INVALID_LOGIN_ATTEMPT_TABLE + " (login_id, userID, count,\
-				isLocked) VALUES (%s, %s,%s,%s,%s,%s)"
+				isLocked) VALUES (%s, %s,%s, %s)"
 				count = 0
-				self.db.execute(self.db.mogrify(sql, (login_id, userID, count)))
+				self.db.execute(self.db.mogrify(sql, (login_id, userID, count, isLocked)))
 			return query[0][5]
 		else:
 			return False
