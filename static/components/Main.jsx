@@ -39,11 +39,11 @@ const addIp = (nextState, replace) => {
 ReactDOM.render(
 	<Router history={browserHistory}>
 	<Route path="/" component={Main}>
-		<IndexRoute component={App}/>
+		<IndexRoute component={App} onEnter={checkLogin}/>
 	  	<Route path="comment/:comment_id" component={CommentApp} onEnter={checkLogin}/>
 	  	<Route path="notifications" component={NotificationsApp} onEnter={checkLogin}/>
 	  	<Route path="settings" component={SettingsApp} onEnter={checkLogin}/>
-	  	<Route path="recovery" component={Recovery}/>
-	  	<Route path ="confirm" component = {Confirm} />
+	  	<Route path="recovery" component={Recovery} onEnter={checkLogin}/>
+	  	<Route path ="confirm" component = {Confirm} onEnter={checkLogin}/>
     </Route></Router>, document.getElementById('app'));
 

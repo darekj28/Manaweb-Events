@@ -20,10 +20,6 @@ def sendConfirmationEmail(email, confirmationPin = None):
 	
 	receiver = email
 	message = "Please confirm your account by clicking the following link "
-	# will change to manaweb.com when online
-	# hostName = "www.manaweb.com"
-	# confirmationURL = hostName + '/' + 'confirmation' + '/' + confirmationPin
-	# fullMessage = message + "\n" + "\n" + confirmationURL
 	fullMessage = "Below is your confirmation pin " + "\n"
 	fullMessage = fullMessage + " " + confirmationPin
 	msg = "From: noreply@manaweb.com <darek@manaweb.com>" + "\n"
