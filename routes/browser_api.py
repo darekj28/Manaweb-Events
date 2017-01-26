@@ -36,7 +36,6 @@ def createProfile():
 		try : 
 			confirmationPin = sms.sendTextConfirmationPin(phone_number)
 		except : 
-			print('exceptionnnn')
 			return jsonify({ "result" : 'phone_exception'})
 	# read the form data and save it
 	first_name 		= request.json['first_name']
