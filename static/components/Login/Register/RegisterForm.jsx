@@ -20,7 +20,7 @@ export default class RegisterForm extends React.Component {
 	verifyFields() {
 		if ($('#register_form').find('input.valid').length == 5)
 			this.verifyUsername.bind(this)();
-		else
+		else 
 			swal("Oops...", "There's a mistake in your submission!", "error");
 	}
 	checkUsername() {
@@ -110,11 +110,10 @@ export default class RegisterForm extends React.Component {
 			}.bind(this)
 		});
 		swal({title : "Success!", 
- 				text: "Account created. Please hold on as we redirect you.", 
- 				type: "success",
- 				showConfirmButton : false});
+				text: "Account created. Please hold on as we redirect you.", 
+				type: "success",
+				showConfirmButton : false});
 	}
-
 	login() {
 		var obj = { user : this.state.username, password : this.state.password, ip : AppStore.getIp() };
 		$.ajax({
@@ -132,12 +131,7 @@ export default class RegisterForm extends React.Component {
 	getCurrentUserInfo() {
 		$.post('/getCurrentUserInfo', {userID : this.state.username}, function(data) {
 			AppActions.addCurrentUser(data.thisUser);
-			if (!data.thisUser.confirmed) {
-				browserHistory.push('/confirm');
-			}
-			else {
-				this.getNotifications.bind(this)();
-			}
+			browserHistory.push('/confirm');
 		}.bind(this));
 	}
     register() {
@@ -178,12 +172,6 @@ export default class RegisterForm extends React.Component {
 						{error != "" && <div className="warning">
 						   {error}
 						</div>}
-						<div className="success" id="CreateProfileSuccess">
-						  <strong>Success!</strong> Please hold on as we redirect you.
-						</div>
-						<div className="warning" id="CreateProfileFail">
-						  <strong>Bro!</strong> You need to fill out more stuff.
-						</div>
 						<div className="register" id="Or">
 							<center>- or -</center>
 						</div>

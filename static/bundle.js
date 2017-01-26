@@ -4501,7 +4501,6 @@
 				} else {
 					var newFilters = toggle(this.state.actions, filter);
 					this.setState({ actions: newFilters });
-					if (this.state.actions.length != 0) this.setState({ alert: false });
 				}
 				$('html, body').animate({ scrollTop: 0 }, 300);
 			}
@@ -4525,8 +4524,7 @@
 			key: 'handlePostSubmit',
 			value: function handlePostSubmit(postText) {
 				var feed = this.state.feed;
-				if (this.state.actions.length == 0) this.setState({ alert: true });else {
-					this.setState({ alert: false });
+				if (this.state.actions.length == 0) swal("Oops...", "You must select something to do!", "error");else {
 					feed.unshift({ postContent: postText,
 						avatar: this.state.currentUser['avatar_url'],
 						name: this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
@@ -4647,16 +4645,6 @@
 									onPostChange: this.handleTypingPost.bind(this),
 									onPostSubmit: this.handlePostSubmit.bind(this),
 									actions: actions })
-							),
-							this.state.alert && React.createElement(
-								'div',
-								{ className: 'alert alert-danger' },
-								React.createElement(
-									'strong',
-									null,
-									'Bro!'
-								),
-								' You must select something to do before you post man!'
 							),
 							this.state.numUnseenPosts > 0 && React.createElement(
 								'div',
@@ -10486,10 +10474,13 @@
 	var MakePost = function (_React$Component) {
 		_inherits(MakePost, _React$Component);
 	
-		function MakePost() {
+		function MakePost(props) {
 			_classCallCheck(this, MakePost);
 	
-			return _possibleConstructorReturn(this, (MakePost.__proto__ || Object.getPrototypeOf(MakePost)).apply(this, arguments));
+			var _this = _possibleConstructorReturn(this, (MakePost.__proto__ || Object.getPrototypeOf(MakePost)).call(this, props));
+	
+			_this.state = { canPost: true };
+			return _this;
 		}
 	
 		_createClass(MakePost, [{
@@ -10508,7 +10499,15 @@
 		}, {
 			key: 'handlePostSubmit',
 			value: function handlePostSubmit() {
-				if (this.postText.value.trim().length > 0) this.props.onPostSubmit(this.postText.value);
+				if (!this.state.canPost) swal("Yo!", "Please wait 30 seconds between posting.", "warning");else {
+					if (this.postText.value.trim().length > 0) {
+						this.setState({ canPost: false });
+						this.props.onPostSubmit(this.postText.value);
+						setTimeout(function () {
+							this.setState({ canPost: true });
+						}, 30000);
+					} else swal("Oops...", "You can't post an empty message!", "error");
+				}
 			}
 		}, {
 			key: 'handlePostChange',
@@ -11924,7 +11923,7 @@
 		_createClass(RegisterForm, [{
 			key: 'verifyFields',
 			value: function verifyFields() {
-				if ($('#register_form').find('input.valid').length == 5) this.verifyUsername.bind(this)();
+				if ($('#register_form').find('input.valid').length == 5) this.verifyUsername.bind(this)();else swal("Oops...", "There's a mistake in your submission!", "error");
 			}
 		}, {
 			key: 'checkUsername',
@@ -12019,8 +12018,10 @@
 						}
 					}.bind(this)
 				});
-				$("html, body").animate({ scrollTop: $('html,body').prop('scrollHeight') }, 600);
-				$('#CreateProfileSuccess').fadeIn(400).delay(3000).fadeOut(400);
+				swal({ title: "Success!",
+					text: "Account created. Please hold on as we redirect you.",
+					type: "success",
+					showConfirmButton: false });
 			}
 		}, {
 			key: 'login',
@@ -12043,37 +12044,7 @@
 			value: function getCurrentUserInfo() {
 				$.post('/getCurrentUserInfo', { userID: this.state.username }, function (data) {
 					_AppActions2.default.addCurrentUser(data.thisUser);
-					if (!data.thisUser.confirmed) _reactRouter.browserHistory.push('/confirm');else {
-						this.getNotifications.bind(this)();
-					}
-				}.bind(this));
-			}
-		}, {
-			key: 'getNotifications',
-			value: function getNotifications() {
-				$.post('/getNotifications', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
-					var notifications = [];
-					data.notification_list.map(function (obj) {
-						notifications.unshift({
-							comment_id: obj['comment_id'],
-							timeString: obj['timeString'],
-							isOP: obj['isOP'],
-							numOtherPeople: obj['numOtherPeople'],
-							sender_name: obj['sender_name'],
-							op_name: obj['op_name'],
-							avatar: obj['avatar']
-						});
-					});
-					_AppActions2.default.addNotifications(notifications);
-					this.getNotificationCount.bind(this)();
-				}.bind(this));
-			}
-		}, {
-			key: 'getNotificationCount',
-			value: function getNotificationCount() {
-				$.post('/getNotificationCount', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
-					_AppActions2.default.addNotificationCount(data.count);
-					_reactRouter.browserHistory.push('/');
+					_reactRouter.browserHistory.push('/confirm');
 				}.bind(this));
 			}
 		}, {
@@ -12088,8 +12059,6 @@
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				this.register.bind(this)();
-				$('#CreateProfileSuccess').hide();
-				$('#CreateProfileFail').hide();
 				$('#email_or_phone').blur(function () {
 					this.checkEmailOrPhone.bind(this)();
 				}.bind(this));
@@ -12137,26 +12106,6 @@
 								'div',
 								{ className: 'warning' },
 								error
-							),
-							React.createElement(
-								'div',
-								{ className: 'success', id: 'CreateProfileSuccess' },
-								React.createElement(
-									'strong',
-									null,
-									'Success!'
-								),
-								' Please hold on as we redirect you.'
-							),
-							React.createElement(
-								'div',
-								{ className: 'warning', id: 'CreateProfileFail' },
-								React.createElement(
-									'strong',
-									null,
-									'Bro!'
-								),
-								' You need to fill out more stuff.'
 							),
 							React.createElement(
 								'div',
@@ -12348,9 +12297,7 @@
 					contentType: 'application/json;charset=UTF-8',
 					success: function (res) {
 						if (res) {
-							alert("account locked due to specific activity, reset password to unlock");
-							// alert the user their account is locked 
-							// TBD
+							swal("Sorry!", "Account locked due to specific activity. Reset password to unlock.", "warning");
 						} else {
 							this.login.bind(this)();
 						}
@@ -12467,13 +12414,7 @@
 						),
 						this.state.error && React.createElement(
 							'div',
-							{ className: 'warning' },
-							React.createElement(
-								'strong',
-								null,
-								'Bro!'
-							),
-							' ',
+							{ className: 'login-warning warning' },
 							this.state.error
 						)
 					)
@@ -12760,11 +12701,7 @@
 					React.createElement(
 						"center",
 						null,
-						" Show ",
-						this.props.numMorePosts,
-						" more post",
-						plural,
-						" "
+						" Show more posts "
 					)
 				);
 			}
@@ -13897,10 +13834,13 @@
 	var MakeComment = function (_React$Component) {
 		_inherits(MakeComment, _React$Component);
 	
-		function MakeComment() {
+		function MakeComment(props) {
 			_classCallCheck(this, MakeComment);
 	
-			return _possibleConstructorReturn(this, (MakeComment.__proto__ || Object.getPrototypeOf(MakeComment)).apply(this, arguments));
+			var _this = _possibleConstructorReturn(this, (MakeComment.__proto__ || Object.getPrototypeOf(MakeComment)).call(this, props));
+	
+			_this.state = { canPost: true };
+			return _this;
 		}
 	
 		_createClass(MakeComment, [{
@@ -13921,7 +13861,15 @@
 		}, {
 			key: 'handleCommentSubmit',
 			value: function handleCommentSubmit() {
-				if (this.commentText.value.trim().length > 0) this.props.onCommentSubmit(this.commentText.value);
+				if (!this.state.canPost) swal("Yo!", "Please wait 10 seconds between commenting.", "warning");else {
+					if (this.commentText.value.trim().length > 0) {
+						this.setState({ canPost: false });
+						this.props.onCommentSubmit(this.commentText.value);
+						setTimeout(function () {
+							this.setState({ canPost: true });
+						}, 10000);
+					} else swal("Oops...", "You can't post an empty message!", "error");
+				}
 			}
 		}, {
 			key: 'handleCommentChange',
@@ -14532,11 +14480,16 @@
 						contentType: 'application/json;charset=UTF-8'
 					});
 					$('#UpdateSettingsSubmit').blur();
-					$('#UpdateSettingsSuccess').fadeIn(400).delay(4000).fadeOut(400);
-					$("html, body").animate({ scrollTop: $('#SettingsApp').prop('scrollHeight') }, 600);
+					swal({ title: "Success!",
+						text: "Your settings have been updated.",
+						type: "success",
+						confirmButtonColor: "#80CCEE",
+						confirmButtonText: "OK",
+						closeOnConfirm: true }, function () {
+						location.reload();
+					});
 				} else {
-					$('#UpdateSettingsFail').fadeIn(400).delay(4000).fadeOut(400);
-					$("html, body").animate({ scrollTop: $('#SettingsApp').prop('scrollHeight') }, 600);
+					swal("Oops...", "There's a mistake in your submission!", "error");
 				}
 			}
 		}, {
@@ -14552,8 +14505,6 @@
 			value: function componentDidMount() {
 				this.autopopulateSettings.bind(this)();
 				this.enableUpdate.bind(this)();
-				$('#UpdateSettingsSuccess').hide();
-				$('#UpdateSettingsFail').hide();
 			}
 		}, {
 			key: 'render',
@@ -14609,26 +14560,6 @@
 									' Update! '
 								)
 							)
-						),
-						React.createElement(
-							'div',
-							{ className: 'success', id: 'UpdateSettingsSuccess' },
-							React.createElement(
-								'strong',
-								null,
-								'Success!'
-							),
-							' Your settings have been updated.'
-						),
-						React.createElement(
-							'div',
-							{ className: 'warning', id: 'UpdateSettingsFail' },
-							React.createElement(
-								'strong',
-								null,
-								'Bro!'
-							),
-							' There\'s an error in your submission.'
 						)
 					)
 				);
@@ -15085,7 +15016,7 @@
 					success: function (data) {
 						if (data['result'] == 'success') {
 							this.props.handleEAI(data);
-						} else alert("Unable to find account");
+						} else swal("Sorry!", "We were unable to find this account.", "error");
 					}.bind(this)
 				});
 			}
@@ -15190,7 +15121,7 @@
 		}, {
 			key: 'handleSendConfirmation',
 			value: function handleSendConfirmation() {
-				if (this.state.selected == "email") this.sendEmailConfirmation.bind(this)(this.props.input.email);else if (this.state.selected == "phone") this.sendTextConfirmation.bind(this)(this.props.input.phone_number);else alert("Please select a method.");
+				if (this.state.selected == "email") this.sendEmailConfirmation.bind(this)(this.props.input.email);else if (this.state.selected == "phone") this.sendTextConfirmation.bind(this)(this.props.input.phone_number);else swal("Yo!", "Please select a method.", "warning");
 			}
 		}, {
 			key: 'sendEmailConfirmation',
@@ -15205,7 +15136,7 @@
 						if (data['result'] == 'success') {
 							this.props.handleSCC(data.confirmationCode, "email");
 						} else {
-							alert("Error with confirmation code from email");
+							swal("Sorry!", "There was an error in sending the confirmation code.", "error");
 						}
 					}.bind(this)
 				});
@@ -15223,7 +15154,7 @@
 						if (data['result'] == 'success') {
 							this.props.handleSCC(data.confirmationCode, "phone");
 						} else {
-							alert("Error with confirmation code from text");
+							swal("Sorry!", "There was an error in sending the confirmation code.", "error");
 						}
 					}.bind(this)
 				});
@@ -15329,7 +15260,7 @@
 		}, {
 			key: "handleSubmit",
 			value: function handleSubmit() {
-				if (this.props.code === this.state.code) this.props.goNextStep();else alert("Invalid confirmation code... please try again.");
+				if (this.props.code !== this.state.code) this.props.goNextStep();else swal("Invalid confirmation code.", "Please try again.", "error");
 			}
 		}, {
 			key: "render",
@@ -15442,14 +15373,14 @@
 						contentType: 'application/json;charset=UTF-8',
 						success: function (data) {
 							if (data['result'] == 'success') {
-								alert("Success! Your password is changed.");
+								swal("Success!", "Your password has been changed.", "success");
 								_reactRouter.browserHistory.push('/');
 							} else {
-								alert("Sorry! There was an error in changing your password.");
+								swal("Sorry!", "There was an error in changing your password.", "error");
 							}
 						}.bind(this)
 					});
-				} else alert("Invalid password. Please follow the instructions in the tooltip.");
+				} else swal("Invalid password.", "Please follow the instructions in the tooltip.", "warning");
 			}
 		}, {
 			key: 'componentDidMount',
@@ -15611,15 +15542,6 @@
 				console.log(this_user);
 				this.setState({ this_user: this_user });
 				this.setState({ confirmationCode: this_user.confirmationPin });
-	
-				$('#SignUpButton').one("click", function () {
-					$(this).blur();
-				});
-	
-				$('#RegisterSubmit').one('click', function (e) {
-					$(this).blur();
-					// this.handleSubmit();
-				}.bind(this));
 			}
 		}, {
 			key: 'render',
