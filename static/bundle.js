@@ -4826,13 +4826,18 @@
 									React.createElement(
 										'div',
 										{ className: 'input-group input-group-unstyled' },
-										React.createElement('input', { type: 'text', value: this.props.searchText,
-											ref: function ref(input) {
-												return _this2.searchText = input;
-											},
-											id: 'searchInput', className: 'form-control',
-											placeholder: '\uF002  Search posts...',
-											onChange: this.handleSearch.bind(this) }),
+										React.createElement(
+											'div',
+											{ className: 'inner-addon left-addon' },
+											React.createElement('span', { className: 'glyphicon glyphicon-search input-icon' }),
+											React.createElement('input', { type: 'text', value: this.props.searchText,
+												ref: function ref(input) {
+													return _this2.searchText = input;
+												},
+												id: 'searchInput', className: 'form-control',
+												placeholder: 'Search posts...',
+												onChange: this.handleSearch.bind(this) })
+										),
 										React.createElement('div', { className: 'input-group-addon' }),
 										this.props.actions.map(function (action, i) {
 											var button = !this.props.isComment ? React.createElement(_FilterButton2.default, { key: i,
@@ -4988,8 +4993,8 @@
 	                                { to: "/comment/" + note.comment_id },
 	                                this.getNotificationFirst(note),
 	                                React.createElement(
-	                                    'b',
-	                                    { className: 'notification-dropdown-link' },
+	                                    'span',
+	                                    { className: 'special' },
 	                                    this.getNotificationSecond(note)
 	                                ),
 	                                '.',
@@ -11934,10 +11939,14 @@
 		_createClass(RegisterForm, [{
 			key: 'verifyFields',
 			value: function verifyFields() {
+				if (this.state.username_error || this.state.email_error) {
+					swal("Oops...", "There's a mistake in your submission!", "error");
+					return;
+				}
 				if ($('#register_form').find('input.valid').length == 5) {
 					this.verifyUsername.bind(this)();
 					swal({ title: "Success!",
-						text: "Please hold on as we make your account.",
+						text: "Please hold on as we redirect you.",
 						type: "success",
 						showConfirmButton: false });
 				} else swal("Oops...", "There's a mistake in your submission!", "error");
@@ -12031,13 +12040,21 @@
 					contentType: 'application/json;charset=UTF-8',
 					success: function (res) {
 						if (res['result'] == "success") {
-							location.reload();
-						} else {
-							swal.close();
-							swal("Oops...", "There was an error in making your account.", "error");
+							this.getCurrentUserInfo.bind(this)();
+						} else if (res['result'] == "phone_exception") {
+							swal("Oops...", "The number you gave us is not valid.", "error");
 						}
 					}.bind(this)
 				});
+			}
+		}, {
+			key: 'getCurrentUserInfo',
+			value: function getCurrentUserInfo() {
+				$.post('/getCurrentUserInfo', { userID: this.state.username }, function (data) {
+					_AppActions2.default.addCurrentUser(data.thisUser);
+					swal.close();
+					_reactRouter.browserHistory.push('/confirm');
+				}.bind(this));
 			}
 		}, {
 			key: 'register',
@@ -12323,7 +12340,6 @@
 				$.post('/getCurrentUserInfo', { userID: this.state.login_user }, function (data) {
 					_AppActions2.default.addCurrentUser(data.thisUser);
 					if (!data.thisUser.confirmed) _reactRouter.browserHistory.push('/confirm');else {
-						// AppActions.addCurrentUser(data.thisUser);
 						this.getNotifications.bind(this)();
 					}
 				}.bind(this));
@@ -12381,10 +12397,20 @@
 					React.createElement(
 						'div',
 						{ className: 'form-group' },
-						React.createElement('input', { type: 'text', className: 'login form-control', id: 'login_user',
-							onChange: this.handleTyping.bind(this), onKeyPress: this.handleEnter.bind(this), placeholder: 'Username' }),
-						React.createElement('input', { type: 'password', className: 'login form-control', id: 'login_password',
-							onChange: this.handleTyping.bind(this), onKeyPress: this.handleEnter.bind(this), placeholder: 'Password' }),
+						React.createElement(
+							'span',
+							{ className: 'inner-addon left-addon' },
+							React.createElement('span', { className: 'glyphicon glyphicon-user input-icon login-icon' }),
+							React.createElement('input', { type: 'text', className: 'login form-control', id: 'login_user',
+								onChange: this.handleTyping.bind(this), onKeyPress: this.handleEnter.bind(this), placeholder: 'Username' })
+						),
+						React.createElement(
+							'span',
+							{ className: 'inner-addon left-addon' },
+							React.createElement('span', { className: 'glyphicon glyphicon-lock input-icon login-icon' }),
+							React.createElement('input', { type: 'password', className: 'login form-control', id: 'login_password',
+								onChange: this.handleTyping.bind(this), onKeyPress: this.handleEnter.bind(this), placeholder: 'Password' })
+						),
 						React.createElement(
 							'button',
 							{ className: 'btn-login login form-control',
@@ -13061,11 +13087,12 @@
 									{ className: 'form-group' },
 									React.createElement(
 										'div',
-										null,
+										{ className: 'inner-addon left-addon' },
+										React.createElement('span', { className: 'glyphicon glyphicon-search input-icon' }),
 										React.createElement('input', { type: 'text', value: this.props.searchText, ref: function ref(input) {
 												return _this2.searchText = input;
 											},
-											id: 'searchInput', className: 'form-control', placeholder: '\uF002  Search comments...',
+											id: 'searchInput', className: 'form-control', placeholder: 'Search comments...',
 											onChange: this.handleSearch.bind(this) })
 									)
 								)
@@ -15480,36 +15507,40 @@
 	
 			_this.state = {
 				error: '',
-				confirmation_code_input: "",
-				verified: false,
-				confirmationCode: "",
-				this_user: {}
+				input: "",
+				confirmationCode: _AppStore2.default.getCurrentUser().confirmationPin,
+				this_user: _AppStore2.default.getCurrentUser()
 			};
 			return _this;
 		}
 	
 		_createClass(Confirm, [{
-			key: 'handleConfirmationCodeChange',
-			value: function handleConfirmationCodeChange(event) {
-				var obj = {};
-				obj[event.target.id] = event.target.value;
-				this.setState(obj);
+			key: 'handleChange',
+			value: function handleChange(e) {
+				this.setState({ input: e.target.value });
 			}
 		}, {
-			key: 'handleConfirmationCodeSubmit',
-			value: function handleConfirmationCodeSubmit() {
-				console.log(this.state.confirmation_code_input);
-				console.log(this.state.confirmationCode);
-				if (this.state.confirmation_code_input == this.state.confirmationCode) {
+			key: 'handleEnter',
+			value: function handleEnter(e) {
+				if (e.charCode == 13) this.handleSubmit.bind(this)();
+			}
+		}, {
+			key: 'handleSubmit',
+			value: function handleSubmit() {
+				if (this.state.input === this.state.confirmationCode) {
 					this.confirmAccount.bind(this)();
+					swal({ title: "Success!",
+						text: "Please hold on as we get you started.",
+						type: "success",
+						showConfirmButton: false });
 				} else {
-					this.setState({ error: "Incorrect pin " });
+					this.setState({ error: true });
+					swal("Sorry!", "Incorrect pin.", "error");
 				}
 			}
 		}, {
 			key: 'confirmAccount',
 			value: function confirmAccount() {
-				var that = this;
 				var obj = {
 					userID: this.state.this_user.userID
 				};
@@ -15527,15 +15558,44 @@
 			key: 'getCurrentUserInfo',
 			value: function getCurrentUserInfo() {
 				$.post('/getCurrentUserInfo', { userID: this.state.this_user.userID }, function (data) {
-					_AppActions2.default.removeCurrentUser();
 					_AppActions2.default.addCurrentUser(data.thisUser);
-					this.setState({ verified: true });
+					this.getNotifications.bind(this)();
+				}.bind(this));
+			}
+		}, {
+			key: 'getNotifications',
+			value: function getNotifications() {
+				$.post('/getNotifications', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
+					var notifications = [];
+					data.notification_list.map(function (obj) {
+						notifications.unshift({
+							comment_id: obj['comment_id'],
+							timeString: obj['timeString'],
+							isOP: obj['isOP'],
+							numOtherPeople: obj['numOtherPeople'],
+							sender_name: obj['sender_name'],
+							op_name: obj['op_name'],
+							avatar: obj['avatar']
+						});
+					});
+					_AppActions2.default.addNotifications(notifications);
+					this.getNotificationCount.bind(this)();
+				}.bind(this));
+			}
+		}, {
+			key: 'getNotificationCount',
+			value: function getNotificationCount() {
+				$.post('/getNotificationCount', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
+					_AppActions2.default.addNotificationCount(data.count);
+					swal.close();
+					_reactRouter.browserHistory.push('/');
 				}.bind(this));
 			}
 		}, {
 			key: 'resendConfirmation',
 			value: function resendConfirmation() {
-				var that = this;
+				this.setState({ error: "" });
+				swal("A new confirmation code has been sent to you.", "Try again.");
 				var obj = {
 					userID: this.state.this_user.userID,
 					email: this.state.this_user.email,
@@ -15547,71 +15607,52 @@
 					url: '/resendConfirmation',
 					data: JSON.stringify(obj, null, '\t'),
 					contentType: 'application/json;charset=UTF-8',
-					success: function (data) {
-						this.setState({ error: "" });
-						alert("A new confirmation code has been sent to " + data.target);
-					}.bind(this)
+					success: function (data) {}.bind(this)
 				});
-			}
-		}, {
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				var this_user = _AppStore2.default.getCurrentUser();
-				console.log(this_user);
-				this.setState({ this_user: this_user });
-				this.setState({ confirmationCode: this_user.confirmationPin });
 			}
 		}, {
 			key: 'render',
 			value: function render() {
 				return React.createElement(
 					'div',
-					null,
+					{ className: 'container app-container' },
 					React.createElement(
 						'div',
-						{ className: 'container app-container' },
+						{ className: 'recovery-title' },
+						'Confirm your account'
+					),
+					this.state.this_user.email && React.createElement(
+						'div',
+						{ className: 'recovery' },
+						'A confirmation code was sent to ',
 						React.createElement(
-							'div',
-							{ className: 'col-xs-4 col-sm-offset-4' },
-							React.createElement(
-								'div',
-								null,
-								React.createElement('input', { type: 'text', className: 'form-control text-center', id: 'confirmation_code_input',
-									onChange: this.handleConfirmationCodeChange.bind(this), placeholder: 'Enter confirmation code!' }),
-								React.createElement(
-									'button',
-									{ className: 'btn btn-default form-control blurButton',
-										id: 'Submit Confirmation Pin',
-										onClick: this.handleConfirmationCodeSubmit.bind(this) },
-									' Confirm new account!'
-								),
-								this.state.error != "" && React.createElement(
-									'div',
-									null,
-									'Click ',
-									React.createElement(
-										'a',
-										{ onClick: this.resendConfirmation.bind(this) },
-										' here '
-									),
-									' to send again'
-								)
-							),
-							this.state.verified && React.createElement(
-								'div',
-								null,
-								'Congradulations! Your account has been confirmed! Your avatar is ',
-								this.state.this_user.avatar,
-								React.createElement('img', { src: this.state.this_user.avatar_url }),
-								'You can change your avatar at any time in settings. Click ',
-								React.createElement(
-									'a',
-									{ href: '/' },
-									' here '
-								),
-								' to continue to Manaweb!'
-							)
-						)
+							'span',
+							{ className: 'special' },
+							this.state.this_user.email
+						),
+						'. Please enter it below.'
+					),
+					!this.state.this_user.email && this.state.this_user.phone_number && React.createElement(
+						'div',
+						{ className: 'recovery' },
+						'A confirmation code was sent to ',
+						React.createElement(
+							'span',
+							{ className: 'special' },
+							this.state.this_user.phone_number
+						),
+						'. Please enter it below.'
+					),
+					React.createElement('input', { className: 'form-control recovery-input', onKeyPress: this.handleEnter.bind(this), onChange: this.handleChange.bind(this) }),
+					React.createElement(
+						'button',
+						{ className: 'btn post-button recovery-button', onClick: this.handleSubmit.bind(this) },
+						' Confirm '
+					),
+					this.state.error && React.createElement(
+						'button',
+						{ className: 'btn post-button recovery-button', onClick: this.resendConfirmation.bind(this) },
+						' Resend confirmation code '
 					)
 				);
 			}
