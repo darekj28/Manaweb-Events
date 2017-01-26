@@ -17,18 +17,21 @@ export default class MakeCommentBox extends React.Component {
     }
 	render() {
 		return (
-			<View style={{flex:1, height : 60, flexDirection : 'row', justifyContent: 'flex-start',
-                borderColor: '#000000',borderWidth: 1, paddingRight: 3, margin: 3, borderRadius: 3}}>
-                <TextInput
-                    style = {styles.text_input}
-                    autoFocus = {false}
-                    multiline = {true}
-                    numberOfLines = {1}
-                    underlineColorAndroid={"transparent"}
-                    onChangeText={this.handlePostTextChange.bind(this)}
-                    placeholder={"Reply to " + this.props.op + "..."}
-                    value = {this.props.newPostContent}
-                />
+            <View style = {{flex: 1}}>
+    			<View style={{flex:1, flexDirection : 'row', justifyContent: 'flex-start',
+                    borderColor: '#000000',borderWidth: 1, paddingRight: 3, margin: 3, borderRadius: 3}}>
+                    <TextInput
+                        style = {styles.text_input}
+                        autoFocus = {false}
+                        multiline = {true}
+                        numberOfLines = {1}
+                        underlineColorAndroid={"transparent"}
+                        onChangeText={this.handlePostTextChange.bind(this)}
+                        placeholder={"Reply to " + this.props.op + "..."}
+                        value = {this.props.newPostContent}
+                    />
+
+                </View>
                 <TouchableHighlight
                     style = {{justifyContent: 'center'}}
                     onPress={this.handlePostSubmit.bind(this)}>
@@ -38,6 +41,7 @@ export default class MakeCommentBox extends React.Component {
                         </Text>
                     </View>
                 </TouchableHighlight>
+
             </View>
 		);
 	}
