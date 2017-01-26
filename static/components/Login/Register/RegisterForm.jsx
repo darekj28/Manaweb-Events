@@ -18,8 +18,13 @@ export default class RegisterForm extends React.Component {
 					};
 	}
 	verifyFields() {
-		if ($('#register_form').find('input.valid').length == 5)
+		if ($('#register_form').find('input.valid').length == 5) {
 			this.verifyUsername.bind(this)();
+			swal({title : "Success!", 
+						text: "Please hold on as we make your account.", 
+						type: "success",
+						showConfirmButton : false});
+		}
 		else 
 			swal("Oops...", "There's a mistake in your submission!", "error");
 	}
@@ -105,34 +110,14 @@ export default class RegisterForm extends React.Component {
 			contentType : 'application/json;charset=UTF-8',
 			success : function(res) {
 				if(res['result'] == "success") {
-					this.login.bind(this)();
+					location.reload();
+				}
+				else {
+					swal.close();
+					swal("Oops...", "There was an error in making your account.", "error");
 				}
 			}.bind(this)
 		});
-		swal({title : "Success!", 
-				text: "Account created. Please hold on as we redirect you.", 
-				type: "success",
-				showConfirmButton : false});
-	}
-	login() {
-		var obj = { user : this.state.username, password : this.state.password, ip : AppStore.getIp() };
-		$.ajax({
-			type: "POST",
-			url : '/verifyAndLogin',
-			data : JSON.stringify(obj, null, '\t'),
-			contentType : 'application/json;charset=UTF-8',
-			success : function(res) {
-				if (!res['error']) {
-					this.getCurrentUserInfo.bind(this)();
-				}
-			}.bind(this)
-		});
-	}
-	getCurrentUserInfo() {
-		$.post('/getCurrentUserInfo', {userID : this.state.username}, function(data) {
-			AppActions.addCurrentUser(data.thisUser);
-			browserHistory.push('/confirm');
-		}.bind(this));
 	}
     register() {
     	$('#register_form').on("submit", function(e) {

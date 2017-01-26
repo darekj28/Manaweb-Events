@@ -142,7 +142,7 @@ export default class CommentApp extends React.Component {
 							<CommentFeedPost comment={this.state.original_post} isOriginalPost={true}/>
 						</div>
 						<div className="app row">
-							<MakeComment placeholder="What's up bro?" op={op} commentText={this.state.comment} 
+							<MakeComment placeholder="What's up?" op={op} commentText={this.state.comment} 
 								onCommentChange ={this.handleTypingComment.bind(this)} onCommentSubmit={this.handleCommentSubmit.bind(this)}/>
 						</div>
 						<div className="feed row">
