@@ -56,8 +56,7 @@ export default class App extends React.Component {
 		}.bind(this));
 	}
 	extendFeed() {
-		this.setState({ numShownPosts : (this.state.numShownPosts + 50) },
-				this.refreshFeed.bind(this));;
+		this.setState({ numShownPosts : (this.state.numShownPosts + 50) }, this.refreshFeed.bind(this));;
 	}
 	refreshNumUnseenPosts() {
 		$.post('/getNumUnseenPosts', {feed_name: feed_name, currentUser : this.state.currentUser},
@@ -74,7 +73,6 @@ export default class App extends React.Component {
 		else {
 			var newFilters = toggle(this.state.actions, filter);
 			this.setState({actions : newFilters});
-			if (this.state.actions.length != 0) this.setState({alert : false});
 		}
 		$('html, body').animate({scrollTop: 0}, 300);
 	}
@@ -93,9 +91,9 @@ export default class App extends React.Component {
 
 	handlePostSubmit(postText) {
 		var feed = this.state.feed;
-		if (this.state.actions.length == 0) this.setState({alert : true});
+		if (this.state.actions.length == 0) 
+			swal("Oops...", "You must select something to do!", "error");
 		else {
-			this.setState({alert : false});
 			feed.unshift({ postContent: postText, 
 						avatar  : this.state.currentUser['avatar_url'], 
 						name    : this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
@@ -195,10 +193,6 @@ export default class App extends React.Component {
 									onPostSubmit={this.handlePostSubmit.bind(this)} 
 									actions={actions}/>
 						</div>
-						{this.state.alert && 
-						<div className="alert alert-danger">
-				  			<strong>Bro!</strong> You must select something to do before you post man!
-						</div>}
 						{this.state.numUnseenPosts > 0 &&
 						<div className="feed row">
 							<ViewMoreButton numUnseenPosts={this.state.numUnseenPosts} 

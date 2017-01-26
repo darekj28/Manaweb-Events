@@ -180,6 +180,9 @@ button.kep-login-facebook:hover{
 .forgot-password {
   padding-top : 4px;
 }
+.login-warning {
+  font-size : 12px;
+}
 .forgot-password > a {
   text-decoration: none;
   font-size : 12px;

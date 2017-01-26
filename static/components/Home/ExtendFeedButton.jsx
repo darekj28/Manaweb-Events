@@ -5,7 +5,7 @@ export default class ExtendFeedButton extends React.Component {
 		return (
 			<div className="add-to-feed" id="ExtendFeedButton" 
 					onClick={this.props.extendFeed}>
-				<center> Show {this.props.numMorePosts} more post{plural} </center>
+				<center> Show more posts </center>
 			</div>
 			);
 	}

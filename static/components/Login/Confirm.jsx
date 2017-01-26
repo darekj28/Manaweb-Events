@@ -71,15 +71,6 @@ export default class Confirm extends React.Component {
 		var this_user = AppStore.getCurrentUser()
 		this.setState({this_user: this_user})
 		this.setState({confirmationCode:  this_user.confirmationPin})
-
-		$('#SignUpButton').one("click", function() {
-			$(this).blur();
-		})
-
-		$('#RegisterSubmit').one('click', function(e) {
-			$(this).blur();
-			// this.handleSubmit();
-		}.bind(this));
 	}
 
 	render() {
