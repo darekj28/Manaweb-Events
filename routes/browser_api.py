@@ -16,6 +16,83 @@ browser_api = Blueprint('browser_api', __name__)
 DEFAULT_FEED = "BALT"
 avatars = ["ajani", "chandra", "elspeth", "gideon", "jace", "liliana", "nahiri", "nicol", "nissa", "ugin"]
 
+@browser_api.route('/createProfile', methods = ['POST'])
+def createProfile():
+	if request.method == 'POST':
+		if request.json['email_or_phone'] == "email" :
+			email = request.json['email']
+			phone_number = ""
+			confirmationPin = email_confirm.sendConfirmationEmail(email)
+		elif request.json['email_or_phone'] == "phone_number" :
+			phone_number = request.json['phone_number']
+			email = ""
+			confirmationPin = sms.sendTextConfirmationPin(phone_number)
+		# read the form data and save it
+		first_name 		= request.json['first_name']
+		last_name 		= request.json['last_name']
+		userID 			= request.json['username']
+		password 		= request.json['password']
+		birthDay 		= ""
+		birthMonth 		= ""
+		birthYear 		= ""
+		avatar_name 	= random.choice(avatars)
+		avatar_url 		= '/static/avatars/' + avatar_name + '.png'	
+		isActive = True	
+		confirmed = False
+		user_manager = Users()
+		user_manager.addUser(userID, first_name = first_name, last_name = last_name, password = password, email = email,  isActive = isActive,
+			avatar_url = avatar_url, avatar_name = avatar_name, confirmed=confirmed, confirmationPin = confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
+			isAdmin = False, phone_number = phone_number, birthMonth = birthMonth, birthDay = birthDay, birthYear = birthYear) 
+
+		user_manager.closeConnection()
+
+		post_manager = Posts()
+		post_manager.addUserToLastSeenTables(userID)
+		post_manager.closeConnection()
+		res = {}
+		res['result'] = "success"
+		return jsonify(res)
+	else:
+		res = {}
+		res['result'] = "failure"
+		return jsonify(res)
+
+@browser_api.route('/getPreviousSettings', methods=['POST'])
+def getPreviousSettings():
+	user_manager = Users()
+	userID = request.json['currentUser']['userID']
+	thisUser = user_manager.getInfo(userID)
+	user_manager.closeConnection()
+	return jsonify({
+			'first_name' 		: thisUser['first_name'],
+			'last_name' 		: thisUser['last_name'],
+			'password' 			: thisUser['password'],
+			'birthMonth' 		: thisUser['birthMonth'],
+			'birthDay' 			: thisUser['birthDay'],
+			'birthYear' 		: thisUser['birthYear'],
+			'avatar_name'		: thisUser['avatar_name'],
+			'avatar_url' 		: thisUser['avatar_url'],
+			'phone_number'		: thisUser['phone_number'],
+			'email'				: thisUser['email']
+		})
+
+@browser_api.route('/updateSettings', methods=['POST'])
+def updateSettings():
+	user_manager = Users()
+	userID = request.json['currentUser']['userID']
+	user_manager.updateInfo(userID, 'first_name'				, 	request.json['first_name'])
+	user_manager.updateInfo(userID, 'last_name'					, 	request.json['last_name'])
+	user_manager.updateInfo(userID, 'email'						, 	request.json['email'])
+	user_manager.updateInfo(userID, 'password'					, 	request.json['password'])
+	user_manager.updateInfo(userID, 'birthMonth'				, 	request.json['month_of_birth'])
+	user_manager.updateInfo(userID, 'birthDay'					, 	request.json['day_of_birth'])
+	user_manager.updateInfo(userID, 'birthYear'					, 	request.json['year_of_birth'])
+	user_manager.updateInfo(userID, 'phone_number'				, 	request.json['phone_number'])
+	user_manager.updateInfo(userID, 'avatar_name'				, 	request.json['avatar'])
+	user_manager.updateInfo(userID, 'avatar_url'				, 	'/static/avatars/' + request.json['avatar'] + '.png')
+	user_manager.closeConnection()
+	return jsonify({'result' : 'success'})
+
 @browser_api.route('/updatePassword', methods = ['POST'])
 def updatePassword():
 	username = request.json['username']

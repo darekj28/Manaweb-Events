@@ -1,18 +1,12 @@
 from flask import Flask, render_template, request, url_for, redirect, session, flash, jsonify, send_from_directory
 from werkzeug import secure_filename
-
-
-
 # used for the date.today() in calculating age
 from datetime import date
-
 # used for time stamps 
 import time
 import datetime
 import pytz
 from pytz import timezone
-
-
 import smtplib
 import shutil
 import os
@@ -22,46 +16,18 @@ from contextlib import closing
 import random
 import requests
 import sqlite3
-
 import sys
 import re
-
 from users import Users
 from posts import Posts
 from app_factory import create_app
 
-
-
-
-
-# Darek Made .py files
-# import geo
-# import email_confirm
-# import zipcode
-# import msg
-# import lgs_info
-
-# must first authenticate into our datebase 
-# uses authenticate("URL", "username", "Password")
-# then inialzie graph
-		
-# authenticate("localhost:7474", "neo4j", "powerplay")
-# graph = Graph()
-
-
 app = create_app()
 
-from routes.createProfile import create_profile
-from routes.updateSettings import update_settings
 from routes.mobile_api import mobile_api
 from routes.browser_api import browser_api
-
-
-app.register_blueprint(create_profile)
-app.register_blueprint(update_settings)
 app.register_blueprint(mobile_api)
 app.register_blueprint(browser_api)
-
 
 @app.after_request
 def add_header(response):
@@ -72,7 +38,6 @@ def add_header(response):
 	response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
 	response.headers['Cache-Control'] = 'public, max-age=0'
 	return response
-
 
 @app.before_request
 def before_request():
