@@ -57,11 +57,14 @@ export default class SearchNavBar extends React.Component {
 				         		role="search">                  
 			                 <div className="form-group">
 			                 	  <div className="input-group input-group-unstyled">
-				                      <input type="text" value={this.props.searchText} 
+			                 	  		<div className="inner-addon left-addon">
+    										<span className="glyphicon glyphicon-search input-icon"></span>
+				                      		<input type="text" value={this.props.searchText} 
 				                      			ref={(input) => this.searchText = input} 
 				                      			id="searchInput" className="form-control" 
-				                      			placeholder="&#xf002;  Search posts..."
+				                      			placeholder="Search posts..."
 				                      			onChange={this.handleSearch.bind(this)}/>
+				                      	</div>
 				                      <div className = "input-group-addon"></div>
 								  	  {this.props.actions.map(function(action, i) {
 											var button = !this.props.isComment ? 

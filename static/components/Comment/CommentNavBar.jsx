@@ -43,9 +43,10 @@ export default class CommentNavBar extends React.Component {
 				          </ul>
 				         <form className="navbar-form navbar-right navbar-search-form" role="search">                  
 			                 <div className="form-group">
-			                 	  <div>
-				                      <input type="text" value={this.props.searchText} ref={(input) => this.searchText = input} 
-				                      			id="searchInput" className="form-control" placeholder="&#xf002;  Search comments..."
+			                 	  <div className="inner-addon left-addon">
+    								<span className="glyphicon glyphicon-search input-icon"></span>
+				                    <input type="text" value={this.props.searchText} ref={(input) => this.searchText = input} 
+				                      			id="searchInput" className="form-control" placeholder="Search comments..."
 				                      			onChange={this.handleSearch.bind(this)}/>
 								  </div>		  
 			                 </div> 

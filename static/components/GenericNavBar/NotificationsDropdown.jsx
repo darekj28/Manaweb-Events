@@ -75,7 +75,7 @@ export default class NotificationsDropdown extends React.Component {
                         return (<li key={i}>
                                     <Link to={"/comment/" + note.comment_id}> 
                                         {this.getNotificationFirst(note)}
-                                        <b className="special">{this.getNotificationSecond(note)}</b>. 
+                                        <span className="special">{this.getNotificationSecond(note)}</span>. 
                                         <small>{" " + note.timeString}</small>
                                     </Link>
                                 </li>);

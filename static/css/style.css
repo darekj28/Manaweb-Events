@@ -28,6 +28,25 @@ button.kep-login-facebook{
 button.kep-login-facebook:hover{
   background-color : #365899;
 }
+.inner-addon { 
+    position: relative; 
+}
+
+.inner-addon .input-icon {
+  position: absolute;
+  padding: 10px;
+  font-size : 14px;
+  pointer-events: none;
+  z-index : 20000;
+}
+.login-icon {
+  top : -4px;
+}
+.left-addon .input-icon  { left:  0px;}
+.right-addon .input-icon { right: 0px;}
+.left-addon input { padding-left:  30px; }
+.right-addon input { padding-right: 30px; }
+
 .original-post-time {
   padding-top : 20px;
   padding-bottom : 10px;
@@ -497,9 +516,6 @@ button.kep-login-facebook:hover{
     border: 0px;
     background-color: transparent;
 }
-#searchInput {
-    margin-top : 2px;
-}
 .navbar-default {
   background-color: #fff;
   border-radius : 0px;
@@ -566,6 +582,9 @@ button.kep-login-facebook:hover{
 @media (max-width: 767px) {
   body {
     font-size : 14px;
+  }
+  .login-icon {
+    top : 0px;
   }
   .HeaderGlyphicon {
     font-size : 14px;

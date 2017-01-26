@@ -114,10 +114,16 @@ export default class LoginForm extends React.Component {
 			<div className="navbar-form navbar-right navbar-search-form" 
 				         		role="search">  	            	
 				    <div className="form-group">
-	                	<input type="text" className="login form-control" id="login_user" 
-	                	onChange={this.handleTyping.bind(this)} onKeyPress={this.handleEnter.bind(this)} placeholder="Username"/>
-	                    <input type="password" className="login form-control" id="login_password" 
+				    	<span className="inner-addon left-addon">
+				    		<span className="glyphicon glyphicon-user input-icon login-icon"></span>
+	                		<input type="text" className="login form-control" id="login_user" 
+	                		onChange={this.handleTyping.bind(this)} onKeyPress={this.handleEnter.bind(this)} placeholder="Username"/>
+	                    </span>
+	                    <span className="inner-addon left-addon">
+	                    	<span className="glyphicon glyphicon-lock input-icon login-icon"></span>
+	                    	<input type="password" className="login form-control" id="login_password" 
 	                    	onChange={this.handleTyping.bind(this)} onKeyPress={this.handleEnter.bind(this)} placeholder="Password"/>
+		            	</span>
 		            	<button className="btn-login login form-control"
 		            					id="LoginButton"><b>Login</b></button>
 		            	<div className="forgot-password">
