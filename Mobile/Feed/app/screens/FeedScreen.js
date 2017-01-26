@@ -154,7 +154,7 @@ class FeedScreen extends Component {
 							isChill : contains(this.state.post_actions, "Chill"),
 							numberOfComments : 0,
 						});
-				this.spamTimer = setTimeout(function (){
+				setTimeout(function (){
 					this.handleServerPostSubmit(newPostContent);
 					}.bind(this), 1000)
 			}    
@@ -189,7 +189,7 @@ class FeedScreen extends Component {
 					this.setState({newPostContent: 'failure...'})
 				}
 			}).done()
-		setTimeout(() => {this.setState({ canPost: true })}, 30000);
+		this.spamTimer = setTimeout(() => {this.setState({ canPost: true })}, 30000);
 	}
 	handleTitlePress() {
 		Alert.alert('Manaweb is pressed');
@@ -232,7 +232,7 @@ class FeedScreen extends Component {
 			this.initializeUserInfo.bind(this)();
 			// this.props.refreshScreen();
 	}
-	componentDidUnmount(){
+	componentWillUnmount(){
 		clearInterval(this.spamTimer)
 	}
 	render() {
