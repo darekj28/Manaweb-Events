@@ -33,7 +33,7 @@ export default class LoginForm extends React.Component {
 			contentType : 'application/json;charset=UTF-8',
 			success : function(res) {
 				if (res) {
-					console.log("locked account")
+					alert("account locked due to specific activity, reset password to unlock")
 					// alert the user their account is locked 
 					// TBD
 				}

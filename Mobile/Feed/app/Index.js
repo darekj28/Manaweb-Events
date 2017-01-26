@@ -25,12 +25,13 @@ export default class Index extends React.Component {
   componentWillMount() {
     const dispatchConnected = isConnected => this.props.dispatch(setIsConnected(isConnected));
 
-    NetInfo.isConnected.fetch().then().done(() => {
+    NetInfo.isConnected.fetch().then((data) => {
       if (Platform.OS == 'android'){
         this.setState({
         isConnected: data
         })
       }
+    }).done(() => {
       NetInfo.isConnected.addEventListener('change', this.handleConnectivityChange.bind(this));
     });
   }
