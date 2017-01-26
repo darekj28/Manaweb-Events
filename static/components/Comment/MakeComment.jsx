@@ -23,7 +23,7 @@ export default class MakeComment extends React.Component {
 			if (this.commentText.value.trim().length > 0) {
 				this.setState({ canPost : false });
 				this.props.onCommentSubmit(this.commentText.value);
-				setTimeout(function() { this.setState({ canPost : true }); }, 10000);
+				this.setState({ timeout : setTimeout(function() { this.setState({ canPost : true }); }, 10000) });
 			}
 			else 
 				swal("Oops...", "You can't post an empty message!", "error");
@@ -31,6 +31,9 @@ export default class MakeComment extends React.Component {
 	}
 	handleCommentChange() {
 		this.props.onCommentChange(this.commentText.value);
+	}
+	componentWillUnmount() {
+		clearTimeout(this.state.timeout);
 	}
 	render() {
 		return(
