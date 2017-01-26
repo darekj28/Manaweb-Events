@@ -26,6 +26,7 @@ export default class CommentScreen extends React.Component {
 			current_user: {'userID' : 'not initialized'},
 			canPost : true
 		}
+		this.spamTimer
 	}
 	handlePostTyping(newPostContent) {
 		this.setState({ newPostContent : newPostContent });
@@ -74,7 +75,7 @@ export default class CommentScreen extends React.Component {
 		.catch((error) => {
 			console.log(error);
 		});
-		setTimeout(() => {this.setState({ canPost: true })}, 10000);
+		this.spamTimer = setTimeout(() => {this.setState({ canPost: true })}, 10000);
 	}
 	getComments() {
 		let url = "https://manaweb-events.herokuapp.com"
@@ -134,7 +135,8 @@ export default class CommentScreen extends React.Component {
 				time  		: responseData.post['time'],
 				comment_id  : responseData.post['comment_id'],
 				unique_id	: responseData.post['unique_id'],
-				timeString  : responseData.post['timeString']} });
+				timeString  : responseData.post['timeString']}
+			});
 		})
 		.catch((error) => {
 			console.log(error);
@@ -148,6 +150,11 @@ export default class CommentScreen extends React.Component {
 		this.getPostById.bind(this)();
 		this.setState({current_user : this.props.current_user})
 	}
+
+	componentWillUnmount(){
+		clearInterval(this.spamTimer)
+	}
+
 	render() {
 		var op = this.state.original_post['name'] ? this.state.original_post['name'].split(' ')[0] : "";
 		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});

@@ -132,6 +132,12 @@ class Security:
 			sql = "SELECT * FROM " + self.INVALID_LOGIN_ATTEMPT_TABLE + " WHERE userID = %s"
 			self.db.execute(self.db.mogrify(sql, (userID,)))
 			query = self.db.fetchall()
+			if len(query) == 0:
+				isLocked = False
+				sql = "INSERT INTO " + self.INVALID_LOGIN_ATTEMPT_TABLE + " (login_id, userID, count,\
+				isLocked) VALUES (%s, %s,%s,%s,%s,%s)"
+				count = 0
+				self.db.execute(self.db.mogrify(sql, (login_id, userID, count)))
 			return query[0][5]
 		else:
 			return False

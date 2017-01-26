@@ -74,6 +74,7 @@ class FeedScreen extends Component {
 					display_make_post : false,
 					canPost : true
 			}
+			this.spamTimer;
 			this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
 			this.postMessagePressed = this.postMessagePressed.bind(this)
 			this.handlePostSubmit = this.handlePostSubmit.bind(this);
@@ -153,7 +154,7 @@ class FeedScreen extends Component {
 							isChill : contains(this.state.post_actions, "Chill"),
 							numberOfComments : 0,
 						});
-				setTimeout(function (){
+				this.spamTimer = setTimeout(function (){
 					this.handleServerPostSubmit(newPostContent);
 					}.bind(this), 1000)
 			}    
@@ -229,9 +230,10 @@ class FeedScreen extends Component {
 	}
 	componentDidMount() {
 			this.initializeUserInfo.bind(this)();
-
-
 			// this.props.refreshScreen();
+	}
+	componentDidUnmount(){
+		clearInterval(this.spamTimer)
 	}
 	render() {
 		var alert;
