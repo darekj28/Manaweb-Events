@@ -3,9 +3,9 @@ from users import Users
 import time
 
 # put your own credentials here 
-ACCOUNT_SID = "AC9fd48a9574442d6cbad3b2e8775be710" 
-AUTH_TOKEN = "90df7dbbc3aff7c39f66abe2ee5b7397" 
-Twilio_Number =  "+16466796455"
+ACCOUNT_SID = "AC14aa2c80e770d77439ccde10800e206b" 
+AUTH_TOKEN = "17cefd81ceb38d3ac03ad3c732e4883d"
+Twilio_Number =  "+16466307655"
 
 client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN) 
  
@@ -20,7 +20,7 @@ def sendMessage(sender, receiver, body):
 	client.messages.create(to = receiver, from_ = sender, body = body)
 
 def sendTextConfirmationPin(user_phone_number, confirmationPin = None):
-	message_template = "Your confirmation pin is : " 
+	message_template = "Sent from Manaweb - \n Your confirmation pin is : " 
 	timeStamp = time.time()
 	if confirmationPin == None:
 		confirmationPin = generatePin()
