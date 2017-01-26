@@ -28,7 +28,7 @@ export default class Confirm extends React.Component {
 	}
 
 	handleSubmit() {
-		if (this.state.input !== this.state.confirmationCode) {
+		if (this.state.input === this.state.confirmationCode) {
 			this.confirmAccount.bind(this)();
 			swal({title : "Success!", 
 						text: "Please hold on as we get you started.", 
