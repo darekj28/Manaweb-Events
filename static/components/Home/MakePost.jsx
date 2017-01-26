@@ -18,7 +18,7 @@ export default class MakePost extends React.Component {
 		})
 	}
 	handlePostSubmit() {
-		if (!this.state.canPost) swal("Yo!", "Please wait 30 seconds between posting.", "warning");
+		if (!this.state.canPost) swal("Yo!", "Please wait 30 seconds between posts.", "warning");
 		else {
 			if (this.postText.value.trim().length > 0) {
 				this.setState({ canPost : false });

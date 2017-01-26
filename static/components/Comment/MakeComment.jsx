@@ -18,7 +18,7 @@ export default class MakeComment extends React.Component {
 		})
 	}
 	handleCommentSubmit() {
-		if (!this.state.canPost) swal("Yo!", "Please wait 10 seconds between commenting.", "warning");
+		if (!this.state.canPost) swal("Yo!", "Please wait 10 seconds between comments.", "warning");
 		else {
 			if (this.commentText.value.trim().length > 0) {
 				this.setState({ canPost : false });
