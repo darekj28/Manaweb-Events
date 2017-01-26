@@ -131,30 +131,19 @@
 	
 	var checkConfirmedMain = function checkConfirmedMain(nextState, replace) {
 		var thisUser = _AppStore2.default.getCurrentUser();
-	
-		if (!thisUser) {
+		if (!thisUser) return;
+		if (!thisUser.confirmed) {
 			_AppActions2.default.removeCurrentUser();
-			return;
-		} else if (thisUser.confirmed == true) {
-			return;
-		} else if (thisUser.confirmed == false) {
-			_AppActions2.default.removeCurrentUser();
-			replace('/confirm');
 		}
 	};
 	
 	var checkConfirmed = function checkConfirmed(nextState, replace) {
 		var thisUser = _AppStore2.default.getCurrentUser();
-		if (thisUser.confirmed == true) {
+		if (thisUser.confirmed) {
 			replace('/');
 		}
 	};
 	
-	var addIp = function addIp(nextState, replace) {
-		// $.get('https://api.ipify.org/?format=json', function(r){ 
-		//    	AppActions.addIp(r.ip);
-		//    }.bind(this));
-	};
 	ReactDOM.render(React.createElement(
 		Router,
 		{ history: browserHistory },
@@ -11945,7 +11934,13 @@
 		_createClass(RegisterForm, [{
 			key: 'verifyFields',
 			value: function verifyFields() {
-				if ($('#register_form').find('input.valid').length == 5) this.verifyUsername.bind(this)();else swal("Oops...", "There's a mistake in your submission!", "error");
+				if ($('#register_form').find('input.valid').length == 5) {
+					this.verifyUsername.bind(this)();
+					swal({ title: "Success!",
+						text: "Please hold on as we make your account.",
+						type: "success",
+						showConfirmButton: false });
+				} else swal("Oops...", "There's a mistake in your submission!", "error");
 			}
 		}, {
 			key: 'checkUsername',
@@ -12036,38 +12031,13 @@
 					contentType: 'application/json;charset=UTF-8',
 					success: function (res) {
 						if (res['result'] == "success") {
-							this.login.bind(this)();
+							location.reload();
+						} else {
+							swal.close();
+							swal("Oops...", "There was an error in making your account.", "error");
 						}
 					}.bind(this)
 				});
-				swal({ title: "Success!",
-					text: "Account created. Please hold on as we redirect you.",
-					type: "success",
-					showConfirmButton: false });
-			}
-		}, {
-			key: 'login',
-			value: function login() {
-				var obj = { user: this.state.username, password: this.state.password, ip: _AppStore2.default.getIp() };
-				$.ajax({
-					type: "POST",
-					url: '/verifyAndLogin',
-					data: JSON.stringify(obj, null, '\t'),
-					contentType: 'application/json;charset=UTF-8',
-					success: function (res) {
-						if (!res['error']) {
-							this.getCurrentUserInfo.bind(this)();
-						}
-					}.bind(this)
-				});
-			}
-		}, {
-			key: 'getCurrentUserInfo',
-			value: function getCurrentUserInfo() {
-				$.post('/getCurrentUserInfo', { userID: this.state.username }, function (data) {
-					_AppActions2.default.addCurrentUser(data.thisUser);
-					_reactRouter.browserHistory.push('/confirm');
-				}.bind(this));
 			}
 		}, {
 			key: 'register',
@@ -12956,7 +12926,7 @@
 						React.createElement(
 							"div",
 							{ className: "app row" },
-							React.createElement(_MakeComment2.default, { placeholder: "What's up bro?", op: op, commentText: this.state.comment,
+							React.createElement(_MakeComment2.default, { placeholder: "What's up?", op: op, commentText: this.state.comment,
 								onCommentChange: this.handleTypingComment.bind(this), onCommentSubmit: this.handleCommentSubmit.bind(this) })
 						),
 						React.createElement(
@@ -14507,7 +14477,7 @@
 						type: "success",
 						confirmButtonColor: "#80CCEE",
 						confirmButtonText: "OK",
-						closeOnConfirm: true }, function () {
+						closeOnConfirm: false }, function () {
 						location.reload();
 					});
 				} else {

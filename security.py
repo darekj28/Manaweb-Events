@@ -138,6 +138,9 @@ class Security:
 				isLocked) VALUES (%s, %s,%s, %s)"
 				count = 0
 				self.db.execute(self.db.mogrify(sql, (login_id, userID, count, isLocked)))
+				sql = "SELECT * FROM " + self.INVALID_LOGIN_ATTEMPT_TABLE + " WHERE userID = %s"
+				self.db.execute(self.db.mogrify(sql, (userID,)))
+				query = self.db.fetchall()
 			return query[0][5]
 		else:
 			return False
