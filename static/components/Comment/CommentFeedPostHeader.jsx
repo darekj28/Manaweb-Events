@@ -9,8 +9,6 @@ export default class CommentFeedPostHeader extends React.Component {
 				<div className="headerpart pull-left username text-muted">@{this.props.comment.userID}</div>}
 				{!this.props.isOriginalPost && 
 				<div className="headerpart time pull-left text-muted">&#8226; {this.props.comment.time}</div>}
-				{(this.props.comment.name != undefined && this.props.isOriginalPost) && 
-				<div className="headerpart time pull-left text-muted">&#8226; {this.props.comment.timeString}</div>}
 			</div>
 		)
 	}

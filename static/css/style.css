@@ -28,6 +28,10 @@ button.kep-login-facebook{
 button.kep-login-facebook:hover{
   background-color : #365899;
 }
+.original-post-time {
+  padding-top : 20px;
+  padding-bottom : 10px;
+}
 .notification-dropdown-link {
   color : var(--light);
 }
@@ -122,6 +126,9 @@ button.kep-login-facebook:hover{
 #Or {
   padding-top : 8px;
   font-size : 14px;
+}
+#OriginalPost {
+  padding-bottom : 10px;
 }
 #Logo {
   width : 35vw;
