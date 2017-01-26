@@ -129,7 +129,7 @@ export default class SettingsApp extends React.Component {
 				type: "success",
 				confirmButtonColor: "#80CCEE",
   				confirmButtonText: "OK",
-  				closeOnConfirm: true}, function() { location.reload() });
+  				closeOnConfirm: false}, function() { location.reload() });
 		}
 		else {
 			swal("Oops...", "There's a mistake in your submission!", "error");
