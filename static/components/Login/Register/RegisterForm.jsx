@@ -18,6 +18,10 @@ export default class RegisterForm extends React.Component {
 					};
 	}
 	verifyFields() {
+		if (this.state.username_error || this.state.email_error) {
+			swal("Oops...", "There's a mistake in your submission!", "error");
+			return;
+		}
 		if ($('#register_form').find('input.valid').length == 5) {
 			this.verifyUsername.bind(this)();
 			swal({title : "Success!", 
@@ -111,8 +115,6 @@ export default class RegisterForm extends React.Component {
 			success : function(res) {
 				if(res['result'] == "success") {
 					this.getCurrentUserInfo.bind(this)();
-					swal.close();
-					browserHistory.push('/confirm');
 				}
 				else {
 					swal.close();
@@ -124,6 +126,8 @@ export default class RegisterForm extends React.Component {
 	getCurrentUserInfo() {
 		$.post('/getCurrentUserInfo', {userID : this.state.username}, function(data) {
 			AppActions.addCurrentUser(data.thisUser);
+			swal.close();
+			browserHistory.push('/confirm');
 		}.bind(this));
 	}
     register() {

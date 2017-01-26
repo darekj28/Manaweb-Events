@@ -28,7 +28,7 @@ export default class Confirm extends React.Component {
 	}
 
 	handleSubmit() {
-		if (this.state.input === this.state.confirmationCode) {
+		if (this.state.input !== this.state.confirmationCode) {
 			this.confirmAccount.bind(this)();
 			swal({title : "Success!", 
 						text: "Please hold on as we get you started.", 
@@ -51,9 +51,15 @@ export default class Confirm extends React.Component {
 			data : JSON.stringify(obj, null, '\t'),
 			contentType : 'application/json;charset=UTF-8',
 			success: function(data){   
-		     	this.getNotifications.bind(this)();
+		     	this.getCurrentUserInfo.bind(this)();
 		    }.bind(this)
 		});
+	}
+	getCurrentUserInfo() {
+		$.post('/getCurrentUserInfo', {userID : this.state.this_user.userID}, function(data) {
+			AppActions.addCurrentUser(data.thisUser);
+			this.getNotifications.bind(this)();
+		}.bind(this));
 	}
 	getNotifications() {
         $.post('/getNotifications', {currentUser : AppStore.getCurrentUser()},
@@ -83,6 +89,8 @@ export default class Confirm extends React.Component {
             }.bind(this));
     }
 	resendConfirmation() {
+		this.setState({error : ""});
+		swal("A new confirmation code has been sent to you.", "Try again.");
 		var obj = {
 			userID : this.state.this_user.userID,
 			email : this.state.this_user.email,
@@ -95,8 +103,6 @@ export default class Confirm extends React.Component {
 			data : JSON.stringify(obj, null, '\t'),
 			contentType : 'application/json;charset=UTF-8',
 			success: function(data){   
-		     	this.setState({error : ""});
-		     	swal("A confirmation code has been sent to " + data.target + ".", "Try again.");
 		    }.bind(this)
 		});
 	}
@@ -106,9 +112,9 @@ export default class Confirm extends React.Component {
 				<div className="container app-container">
 					<div className="recovery-title">Confirm your account</div>
 					{this.state.this_user.email && 
-						<div className="recovery">A confirmation code was sent to {this.state.this_user.email}. Please enter it below.</div>}
+						<div className="recovery">A confirmation code was sent to <b className="special">{this.state.this_user.email}</b>. Please enter it below.</div>}
 					{(!this.state.this_user.email && this.state.this_user.phone_number) && 
-						<div className="recovery">A confirmation code was sent to {this.state.this_user.phone_number}. Please enter it below.</div>}
+						<div className="recovery">A confirmation code was sent to <b className="special">{this.state.this_user.phone_number}</b>. Please enter it below.</div>}
                		<input className="form-control recovery-input" onKeyPress={this.handleEnter.bind(this)} onChange={this.handleChange.bind(this)}/>
                		<button className="btn post-button recovery-button" onClick={this.handleSubmit.bind(this)}> Confirm </button>
 		            {this.state.error &&
