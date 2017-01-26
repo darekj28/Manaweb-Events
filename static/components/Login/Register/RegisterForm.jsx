@@ -20,6 +20,8 @@ export default class RegisterForm extends React.Component {
 	verifyFields() {
 		if ($('#register_form').find('input.valid').length == 5)
 			this.verifyUsername.bind(this)();
+		else 
+			swal("Oops...", "There's a mistake in your submission!", "error");
 	}
 	checkUsername() {
 		var obj = { username : this.state.username };
@@ -107,8 +109,10 @@ export default class RegisterForm extends React.Component {
 				}
 			}.bind(this)
 		});
-		$("html, body").animate({ scrollTop: $('html,body').prop('scrollHeight') }, 600);
-		$('#CreateProfileSuccess').fadeIn(400).delay(3000).fadeOut(400);
+		swal({title : "Success!", 
+				text: "Account created. Please hold on as we redirect you.", 
+				type: "success",
+				showConfirmButton : false});
 	}
 	login() {
 		var obj = { user : this.state.username, password : this.state.password, ip : AppStore.getIp() };
@@ -126,40 +130,9 @@ export default class RegisterForm extends React.Component {
 	}
 	getCurrentUserInfo() {
 		$.post('/getCurrentUserInfo', {userID : this.state.username}, function(data) {
-			if (!data.thisUser.confirmed) 
-				browserHistory.push('/confirm');
-			else {
-				AppActions.addCurrentUser(data.thisUser);
-				this.getNotifications.bind(this)();
-			}
+			setTimeout(function() { browserHistory.push('/confirm'); location.reload(); }, 3000);
 		}.bind(this));
 	}
-	getNotifications() {
-        $.post('/getNotifications', {currentUser : AppStore.getCurrentUser()},
-            function(data) {
-                var notifications = [];
-                data.notification_list.map(function(obj) {
-                    notifications.unshift({
-                        comment_id : obj['comment_id'],
-                        timeString : obj['timeString'],
-                        isOP : obj['isOP'],
-                        numOtherPeople : obj['numOtherPeople'],
-                        sender_name : obj['sender_name'],
-                        op_name : obj['op_name'],
-                        avatar : obj['avatar']
-                    });
-                });
-                AppActions.addNotifications(notifications);
-                this.getNotificationCount.bind(this)();
-            }.bind(this));
-    }
-    getNotificationCount() {
-    	$.post('/getNotificationCount', {currentUser : AppStore.getCurrentUser()},
-            function(data) {
-                AppActions.addNotificationCount(data.count);
-                browserHistory.push('/');
-            }.bind(this));
-    }
     register() {
     	$('#register_form').on("submit", function(e) {
 			e.preventDefault();
@@ -168,8 +141,6 @@ export default class RegisterForm extends React.Component {
     }
     componentDidMount() {
     	this.register.bind(this)();
-    	$('#CreateProfileSuccess').hide();
-    	$('#CreateProfileFail').hide();
     	$('#email_or_phone').blur(function() {
     		this.checkEmailOrPhone.bind(this)();
     	}.bind(this));
@@ -200,12 +171,6 @@ export default class RegisterForm extends React.Component {
 						{error != "" && <div className="warning">
 						   {error}
 						</div>}
-						<div className="success" id="CreateProfileSuccess">
-						  <strong>Success!</strong> Please hold on as we redirect you.
-						</div>
-						<div className="warning" id="CreateProfileFail">
-						  <strong>Bro!</strong> You need to fill out more stuff.
-						</div>
 						<div className="register" id="Or">
 							<center>- or -</center>
 						</div>

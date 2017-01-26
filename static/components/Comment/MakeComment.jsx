@@ -1,5 +1,9 @@
 var React = require('react');
 export default class MakeComment extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = { canPost : true };
+	}
 	componentDidMount() {
 		var messageVisible = true;
 		var that = this;
@@ -14,8 +18,16 @@ export default class MakeComment extends React.Component {
 		})
 	}
 	handleCommentSubmit() {
-		if (this.commentText.value.trim().length > 0)
-			this.props.onCommentSubmit(this.commentText.value);
+		if (!this.state.canPost) swal("Yo!", "Please wait 10 seconds between commenting.", "warning");
+		else {
+			if (this.commentText.value.trim().length > 0) {
+				this.setState({ canPost : false });
+				this.props.onCommentSubmit(this.commentText.value);
+				setTimeout(function() { this.setState({ canPost : true }); }, 10000);
+			}
+			else 
+				swal("Oops...", "You can't post an empty message!", "error");
+		}
 	}
 	handleCommentChange() {
 		this.props.onCommentChange(this.commentText.value);
