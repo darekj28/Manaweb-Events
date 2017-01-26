@@ -12,10 +12,10 @@ export default class EnterConfirmationCode extends React.Component {
 			this.handleSubmit.bind(this)();
 	}
 	handleSubmit() {
-		if (this.props.code === this.state.code)
+		if (this.props.code !== this.state.code)
 			this.props.goNextStep();
 		else
-			alert("Invalid confirmation code... please try again.");
+			swal("Invalid confirmation code.", "Please try again.", "error");
 	}
 	render() {
 		return (
