@@ -128,6 +128,28 @@
 			replace('/confirm');
 		}
 	};
+	
+	var checkConfirmedMain = function checkConfirmedMain(nextState, replace) {
+		var thisUser = _AppStore2.default.getCurrentUser();
+	
+		if (!thisUser) {
+			_AppActions2.default.removeCurrentUser();
+			return;
+		} else if (thisUser.confirmed == true) {
+			return;
+		} else if (thisUser.confirmed == false) {
+			_AppActions2.default.removeCurrentUser();
+			replace('/confirm');
+		}
+	};
+	
+	var checkConfirmed = function checkConfirmed(nextState, replace) {
+		var thisUser = _AppStore2.default.getCurrentUser();
+		if (thisUser.confirmed == true) {
+			replace('/');
+		}
+	};
+	
 	var addIp = function addIp(nextState, replace) {
 		// $.get('https://api.ipify.org/?format=json', function(r){ 
 		//    	AppActions.addIp(r.ip);
@@ -139,12 +161,12 @@
 		React.createElement(
 			Route,
 			{ path: '/', component: Main },
-			React.createElement(IndexRoute, { component: _App2.default }),
+			React.createElement(IndexRoute, { component: _App2.default, onEnter: checkConfirmedMain }),
 			React.createElement(Route, { path: 'comment/:comment_id', component: _CommentApp2.default, onEnter: checkLogin }),
 			React.createElement(Route, { path: 'notifications', component: _NotificationsApp2.default, onEnter: checkLogin }),
 			React.createElement(Route, { path: 'settings', component: _SettingsApp2.default, onEnter: checkLogin }),
 			React.createElement(Route, { path: 'recovery', component: _RecoveryApp2.default }),
-			React.createElement(Route, { path: 'confirm', component: _Confirm2.default })
+			React.createElement(Route, { path: 'confirm', component: _Confirm2.default, onEnter: checkConfirmed })
 		)
 	), document.getElementById('app'));
 
@@ -15509,10 +15531,36 @@
 				console.log(this.state.confirmation_code_input);
 				console.log(this.state.confirmationCode);
 				if (this.state.confirmation_code_input == this.state.confirmationCode) {
-					this.setState({ verified: true });
+					this.confirmAccount.bind(this)();
 				} else {
 					this.setState({ error: "Incorrect pin " });
 				}
+			}
+		}, {
+			key: 'confirmAccount',
+			value: function confirmAccount() {
+				var that = this;
+				var obj = {
+					userID: this.state.this_user.userID
+				};
+				$.ajax({
+					type: "POST",
+					url: '/confirmAccount',
+					data: JSON.stringify(obj, null, '\t'),
+					contentType: 'application/json;charset=UTF-8',
+					success: function (data) {
+						this.getCurrentUserInfo.bind(this)();
+					}.bind(this)
+				});
+			}
+		}, {
+			key: 'getCurrentUserInfo',
+			value: function getCurrentUserInfo() {
+				$.post('/getCurrentUserInfo', { userID: this.state.this_user.userID }, function (data) {
+					_AppActions2.default.removeCurrentUser();
+					_AppActions2.default.addCurrentUser(data.thisUser);
+					this.setState({ verified: true });
+				}.bind(this));
 			}
 		}, {
 			key: 'resendConfirmation',

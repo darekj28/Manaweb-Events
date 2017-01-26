@@ -31,6 +31,31 @@ const checkLogin = (nextState, replace) => {
     	replace(`/confirm`);
     }
 }
+
+const checkConfirmedMain  = (nextState, replace) => {
+	var thisUser = AppStore.getCurrentUser()
+
+	if (!thisUser) {
+		AppActions.removeCurrentUser()
+		return;
+	}
+
+	else if (thisUser.confirmed == true) {
+		return;
+	}
+	else if (thisUser.confirmed == false) {
+		AppActions.removeCurrentUser();
+		replace(`/confirm`)
+	}
+}
+
+const checkConfirmed = (nextState , replace) => {
+	var thisUser = AppStore.getCurrentUser()
+	if (thisUser.confirmed == true) {
+		replace(`/`)
+	}
+}
+
 const addIp = (nextState, replace) => {
 	// $.get('https://api.ipify.org/?format=json', function(r){ 
  //    	AppActions.addIp(r.ip);
@@ -38,12 +63,12 @@ const addIp = (nextState, replace) => {
 }
 ReactDOM.render(
 	<Router history={browserHistory}>
-	<Route path="/" component={Main}>
-		<IndexRoute component={App} onEnter={checkLogin}/>
+	<Route path="/" component={Main} >
+		<IndexRoute component={App} onEnter ={checkConfirmedMain}/>
 	  	<Route path="comment/:comment_id" component={CommentApp} onEnter={checkLogin}/>
 	  	<Route path="notifications" component={NotificationsApp} onEnter={checkLogin}/>
 	  	<Route path="settings" component={SettingsApp} onEnter={checkLogin}/>
-	  	<Route path="recovery" component={Recovery} onEnter={checkLogin}/>
-	  	<Route path ="confirm" component = {Confirm} onEnter={checkLogin}/>
+	  	<Route path="recovery" component={Recovery}/>
+	  	<Route path ="confirm" component = {Confirm} onEnter = {checkConfirmed}/>
     </Route></Router>, document.getElementById('app'));
 

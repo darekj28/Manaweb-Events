@@ -31,12 +31,37 @@ export default class Confirm extends React.Component {
 		console.log(this.state.confirmation_code_input)
 		console.log(this.state.confirmationCode)
 		if (this.state.confirmation_code_input == this.state.confirmationCode) {
-			this.setState({verified : true})
+			this.confirmAccount.bind(this)()
 		}
 
 		else {
 			this.setState({error : "Incorrect pin "})
 		}
+	}
+
+	confirmAccount() {
+		var that = this;
+		var obj = {
+			userID : this.state.this_user.userID,
+		}
+		$.ajax({
+			type: "POST",
+			url : '/confirmAccount',
+			data : JSON.stringify(obj, null, '\t'),
+			contentType : 'application/json;charset=UTF-8',
+			success: function(data)          
+		     {   
+		     	this.getCurrentUserInfo.bind(this)()
+		     }.bind(this)
+		});
+	}
+
+	getCurrentUserInfo() {
+		$.post('/getCurrentUserInfo', {userID : this.state.this_user.userID}, function(data) {
+			AppActions.removeCurrentUser()
+			AppActions.addCurrentUser(data.thisUser);
+			this.setState({verified : true})
+		}.bind(this));
 	}
 
 	resendConfirmation() {
