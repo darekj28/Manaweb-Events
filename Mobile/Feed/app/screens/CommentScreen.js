@@ -10,8 +10,8 @@ import MakeCommentBox from '../components/comments/MakeCommentBox';
 import OriginalPost from '../components/comments/OriginalPost';
 
 const NAVIGATOR_BACK_ICON_HEIGHT = 30
-const POST_MESSAGE_HEIGHT_SHORT = 50
-const POST_MESSAGE_HEIGHT_TALL = 150
+const POST_MESSAGE_HEIGHT_SHORT = 0
+const POST_MESSAGE_HEIGHT_TALL = 120
 const ANIMATE_DURATION = 700
 
 export default class CommentScreen extends React.Component {
@@ -19,7 +19,7 @@ export default class CommentScreen extends React.Component {
 		super();
 		this.state = {
 			post_message_expanded: false,
-			post_message_height: new Animated.Value(50),
+			post_message_height: new Animated.Value(0),
 			comments : [],
 			original_post : {},
 			newPostContent: "",
@@ -156,14 +156,14 @@ export default class CommentScreen extends React.Component {
 				<View style={{flexDirection : 'row'}}>
 					<OriginalPost post={this.state.original_post}/>
 				</View>
-				<TouchableWithoutFeedback onPress={() => Alert.alert('pressed')}>
+				<TouchableWithoutFeedback onPress={() => this.postMessagePressed.bind(this)()}>
 					<View style = {{flexDirection: 'row', borderTopColor: 'silver', borderTopWidth: 1}}>
 						<Text style = {{paddingLeft: 3}}>
 							Reply to {op}...
 						</Text>
 					</View>
 				</TouchableWithoutFeedback>
-				<View style={{flexDirection : 'row'}}>
+				<Animated.View style = {{flexDirection:'row', height: this.state.post_message_height}}>
 					<MakeCommentBox onClick={(event) => this.postMessagePressed.bind(this)()}
 						animateDuration={ANIMATE_DURATION}
 						post_message_expanded={this.state.post_message_expanded}
@@ -171,7 +171,7 @@ export default class CommentScreen extends React.Component {
 						handlePostTyping = {this.handlePostTyping.bind(this)}
 						handlePostSubmit = {this.handleCommentSubmit.bind(this)}
 						op = {op} canPost={this.state.canPost}/>
-				</View>
+				</Animated.View>
 				<View style={{flex : 1, flexDirection : 'row'}}>
 					<Comments comments={this.state.comments} comment_id={this.props.comment_id}/>
 				</View>
