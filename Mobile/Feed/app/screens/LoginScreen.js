@@ -31,7 +31,7 @@ class LoginScreen extends Component {
   checkIfLocked(){
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
-    fetch(url + "/mobileIsUserLocked", {method: "POST",
+    fetch(test_url + "/mobileIsUserLocked", {method: "POST",
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ class LoginScreen extends Component {
   handleLoginSubmit() {
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
-    fetch(url + "/mobileLogin", {method: "POST",
+    fetch(test_url + "/mobileLogin", {method: "POST",
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',

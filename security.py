@@ -104,8 +104,8 @@ class Security:
 				new_count = old_count + 1
 			if new_count >= 10:
 				isLocked = True
-			sql = "UPDATE " + self.INVALID_LOGIN_ATTEMPT_TABLE + " SET count = %s, timeString = %s, timeStamp = %s, isLocked = %s"
-			self.db.execute(self.db.mogrify(sql, (new_count, timeStamp, timeStamp, isLocked)))
+			sql = "UPDATE " + self.INVALID_LOGIN_ATTEMPT_TABLE + " SET count = %s, timeString = %s, timeStamp = %s, isLocked = %s WHERE userID = %s"
+			self.db.execute(self.db.mogrify(sql, (new_count, timeStamp, timeStamp, isLocked, userID)))
 
 	def getInvalidLoginAttempts(self, login_id):
 		user_manager = Users()

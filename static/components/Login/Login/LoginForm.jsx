@@ -28,7 +28,7 @@ export default class LoginForm extends React.Component {
 		var obj = { user : this.state.login_user};
 		$.ajax({
 			type: "POST",
-			url : '/isLockedUser',
+			url : '/isUserLocked',
 			data : JSON.stringify(obj, null, '\t'),
 			contentType : 'application/json;charset=UTF-8',
 			success : function(res) {

@@ -141,7 +141,7 @@ def getInvalidLoginAttempts():
 
 @browser_api.route('/isUserLocked', methods = ['POST'])
 def isUserLocked():
-	login_id = request.json['login_id']
+	login_id = request.json['user']
 	security_manager = Security()
 	isUserLocked = security_manager.isUserLocked(login_id)
 	security_manager.closeConnection()

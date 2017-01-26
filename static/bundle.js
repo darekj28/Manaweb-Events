@@ -12343,13 +12343,14 @@
 				var obj = { user: this.state.login_user };
 				$.ajax({
 					type: "POST",
-					url: '/isLockedUser',
+					url: '/isUserLocked',
 					data: JSON.stringify(obj, null, '\t'),
 					contentType: 'application/json;charset=UTF-8',
 					success: function (res) {
 						if (res) {
+							console.log("locked account");
 							// alert the user their account is locked 
-							this.getCurrentUserInfo.bind(this)();
+							// TBD
 						} else {
 							this.login.bind(this)();
 						}
@@ -12421,7 +12422,7 @@
 				$('#LoginButton').one('click', function (e) {
 					e.preventDefault();
 					$(this).blur();
-					this.login.bind(this)();
+					this.checkLogin.bind(this)();
 				}.bind(this));
 			}
 		}, {
