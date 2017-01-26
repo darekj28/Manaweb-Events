@@ -49,6 +49,8 @@ export default class CommentFeedPost extends React.Component {
 				              		<li><a id="hcr" onClick={this.handleCommentReport.bind(this)}>Report comment</a></li> }
 				            </ul>
 			        	</div>}
+			        	{this.props.isOriginalPost && 
+			        	<div className="original-post-time headerpart time pull-left text-muted">{comment.timeString}</div>}
 					</div>
 				</div>
 			</li>)
