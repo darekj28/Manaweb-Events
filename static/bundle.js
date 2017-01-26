@@ -12042,8 +12042,8 @@
 			key: 'getCurrentUserInfo',
 			value: function getCurrentUserInfo() {
 				$.post('/getCurrentUserInfo', { userID: this.state.username }, function (data) {
+					_AppActions2.default.addCurrentUser(data.thisUser);
 					if (!data.thisUser.confirmed) _reactRouter.browserHistory.push('/confirm');else {
-						_AppActions2.default.addCurrentUser(data.thisUser);
 						this.getNotifications.bind(this)();
 					}
 				}.bind(this));
@@ -12348,7 +12348,7 @@
 					contentType: 'application/json;charset=UTF-8',
 					success: function (res) {
 						if (res) {
-							console.log("locked account");
+							alert("account locked due to specific activity, reset password to unlock");
 							// alert the user their account is locked 
 							// TBD
 						} else {
@@ -12382,8 +12382,9 @@
 			key: 'getCurrentUserInfo',
 			value: function getCurrentUserInfo() {
 				$.post('/getCurrentUserInfo', { userID: this.state.login_user }, function (data) {
+					_AppActions2.default.addCurrentUser(data.thisUser);
 					if (!data.thisUser.confirmed) _reactRouter.browserHistory.push('/confirm');else {
-						_AppActions2.default.addCurrentUser(data.thisUser);
+						// AppActions.addCurrentUser(data.thisUser);
 						this.getNotifications.bind(this)();
 					}
 				}.bind(this));
@@ -13289,6 +13290,11 @@
 										)
 									)
 								)
+							),
+							this.props.isOriginalPost && React.createElement(
+								"div",
+								{ className: "original-post-time headerpart time pull-left text-muted" },
+								comment.timeString
 							)
 						)
 					)
@@ -13359,12 +13365,6 @@
 						{ className: "headerpart time pull-left text-muted" },
 						"\u2022 ",
 						this.props.comment.time
-					),
-					this.props.comment.name != undefined && this.props.isOriginalPost && React.createElement(
-						"div",
-						{ className: "headerpart time pull-left text-muted" },
-						"\u2022 ",
-						this.props.comment.timeString
 					)
 				);
 			}
@@ -15560,9 +15560,8 @@
 				confirmation_code_input: "",
 				verified: false,
 				confirmationCode: "",
-				this_user: ""
+				this_user: {}
 			};
-	
 			return _this;
 		}
 	
@@ -15589,18 +15588,17 @@
 			value: function resendConfirmation() {
 				var that = this;
 				var obj = {
-					userID: this.state.userID,
+					userID: this.state.this_user.userID,
 					email: this.state.this_user.email,
-					phone_number: this.state.this_user.phone_number
+					phone_number: this.state.this_user.phone_number,
+					confirmationPin: this.state.confirmationCode
 				};
-	
 				$.ajax({
 					type: "POST",
 					url: '/resendConfirmation',
 					data: JSON.stringify(obj, null, '\t'),
 					contentType: 'application/json;charset=UTF-8',
 					success: function (data) {
-						this.setState({ confirmationCode: data.confirmationCode });
 						this.setState({ error: "" });
 						alert("A new confirmation code has been sent to " + data.target);
 					}.bind(this)
@@ -15610,6 +15608,7 @@
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				var this_user = _AppStore2.default.getCurrentUser();
+				console.log(this_user);
 				this.setState({ this_user: this_user });
 				this.setState({ confirmationCode: this_user.confirmationPin });
 	

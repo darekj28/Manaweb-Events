@@ -8,6 +8,7 @@ import os
 import smtplib
 import sqlite3
 import random
+import sms
 from users import Users
 from posts import Posts
 
@@ -21,9 +22,11 @@ def createProfile():
 		if request.json['email_or_phone'] == "email" :
 			email = request.json['email']
 			phone_number = ""
+			confirmationPin = sms.sendConfirmationEmail(email)
 		elif request.json['email_or_phone'] == "phone_number" :
 			phone_number = request.json['phone_number']
 			email = ""
+			confirmationPin = sms.sendTextConfirmationPin(phone_number)
 		# read the form data and save it
 		first_name 		= request.json['first_name']
 		last_name 		= request.json['last_name']
@@ -35,7 +38,6 @@ def createProfile():
 		avatar_name 	= random.choice(avatars)
 		avatar_url 		= '/static/avatars/' + avatar_name + '.png'	
 		isActive = True	
-		confirmationPin = email_confirm.hashString(userID)
 		confirmed = False
 		user_manager = Users()
 		user_manager.addUser(userID, first_name = first_name, last_name = last_name, password = password, email = email,  isActive = isActive,

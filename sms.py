@@ -19,10 +19,11 @@ client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN)
 def sendMessage(sender, receiver, body):
 	client.messages.create(to = receiver, from_ = sender, body = body)
 
-def sendTextConfirmationPin(user_phone_number):
+def sendTextConfirmationPin(user_phone_number, confirmationPin = None):
 	message_template = "Your confirmation pin is : " 
 	timeStamp = time.time()
-	confirmationPin = generatePin()
+	if confirmationPin == None:
+		confirmationPin = generatePin()
 	message = message_template + confirmationPin
 	# we comment this out so Dareks phone doesn't get spammed
 	raw_phone_number = formatRawPhoneNumber(user_phone_number)

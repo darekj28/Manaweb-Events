@@ -17,12 +17,9 @@ export default class Confirm extends React.Component {
 			confirmation_code_input: "",
 			verified : false ,
 			confirmationCode : "",
-			this_user: ""
+			this_user: {}
 		};
-		
-
 	}
-
 
 	handleConfirmationCodeChange(event) {
 		var obj = {}; 
@@ -45,11 +42,11 @@ export default class Confirm extends React.Component {
 	resendConfirmation() {
 		var that = this;
 		var obj = {
-			userID : this.state.userID,
+			userID : this.state.this_user.userID,
 			email : this.state.this_user.email,
-			phone_number : this.state.this_user.phone_number
+			phone_number : this.state.this_user.phone_number,
+			confirmationPin : this.state.confirmationCode
 		}
-
 		$.ajax({
 			type: "POST",
 			url : '/resendConfirmation',
@@ -57,7 +54,6 @@ export default class Confirm extends React.Component {
 			contentType : 'application/json;charset=UTF-8',
 			success: function(data)          
 		     {   
-		     	this.setState({confirmationCode : data.confirmationCode})
 		     	this.setState({error : ""});
 		     	alert("A new confirmation code has been sent to " + data.target);
 
@@ -69,6 +65,7 @@ export default class Confirm extends React.Component {
 
 	componentDidMount() {
 		var this_user = AppStore.getCurrentUser()
+		console.log(this_user)
 		this.setState({this_user: this_user})
 		this.setState({confirmationCode:  this_user.confirmationPin})
 

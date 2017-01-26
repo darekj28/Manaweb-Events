@@ -110,6 +110,7 @@ export default class RegisterForm extends React.Component {
 		$("html, body").animate({ scrollTop: $('html,body').prop('scrollHeight') }, 600);
 		$('#CreateProfileSuccess').fadeIn(400).delay(3000).fadeOut(400);
 	}
+
 	login() {
 		var obj = { user : this.state.username, password : this.state.password, ip : AppStore.getIp() };
 		$.ajax({
@@ -126,10 +127,10 @@ export default class RegisterForm extends React.Component {
 	}
 	getCurrentUserInfo() {
 		$.post('/getCurrentUserInfo', {userID : this.state.username}, function(data) {
+			AppActions.addCurrentUser(data.thisUser);
 			if (!data.thisUser.confirmed) 
 				browserHistory.push('/confirm');
 			else {
-				AppActions.addCurrentUser(data.thisUser);
 				this.getNotifications.bind(this)();
 			}
 		}.bind(this));

@@ -3,15 +3,15 @@ from py2neo import authenticate, Graph, Node, Relationship
 from users import Users
 import time
 
-def sendConfirmationEmail(email):
+def sendConfirmationEmail(email, confirmationPin = None):
 	#to send from temporary gmail 
 	"""
 	sender = "manaweb.noreply@gmail.com"
 	passW = "powerplay"
 	smtpserver = smtplib.SMTP('smtp.gmail.com', 587)
 	"""
-
-	confirmationPin = generatePin()
+	if confirmationPin == None:
+		confirmationPin = generatePin()
 	
 	# to send from manaweb
 	sender = 'darek@manaweb.com'

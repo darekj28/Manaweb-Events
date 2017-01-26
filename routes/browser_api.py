@@ -42,6 +42,23 @@ def sendEmailConfirmation():
 	confirmationCode = email_confirm.sendConfirmationEmail(email)
 	return jsonify({'result' : 'success', 'confirmationCode' : confirmationCode})
 
+
+@browser_api.route('/resendConfirmation', methods = ['POST'])
+def resendConfirmation():
+	userID = request.json['userID']
+	phone_number = request.json['phone_number']
+	email = request.json['email']
+	confirmationPin = request.json['confirmationPin']
+	output = {}
+	output['confirmationPin'] = confirmationPin
+	if email == '':
+		sms.sendTextConfirmationPin(phone_number, confirmationPin)
+		output['target'] = phone_number
+	else:
+		email_confirm.sendConfirmationEmail(email, confirmationPin)
+		output['targer'] = email
+	return jsonify(output)
+
 @browser_api.route('/sendTextConfirmation', methods = ['POST'])
 def sendTextConfirmation():
 	phone_number = request.json['phone_number']
@@ -122,6 +139,8 @@ def verifyAndLogin() :
 		security_manager = Security()
 		security_manager.recordInvalidLoginAttempt(login_id, userID, isSuccess)
 		security_manager.closeConnection()
+		return jsonify({ 'error' : res['error'] })
+	else:
 		return jsonify({ 'error' : res['error'] })
 
 @browser_api.route('/getNumInvalidLoginAttempts', methods = ['POST'])
