@@ -38,6 +38,7 @@ button.kep-login-facebook:hover{
   font-size : 14px;
   pointer-events: none;
   z-index : 20000;
+  opacity : 0.5;
 }
 .login-icon {
   top : -4px;
