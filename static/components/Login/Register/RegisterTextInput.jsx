@@ -20,7 +20,7 @@ export default class RegisterTextInput extends React.Component {
 				maxlength = "12";
 				break;
 			case "password" :
-				content = "Must contain at least one number and one letter";
+				content = "Must contain at least one uppercase letter, one lowercase letter, and one number.";
 				break;
 			case "username" : 
 				content = "Must be at least 2 characters (2 to 15 characters)";

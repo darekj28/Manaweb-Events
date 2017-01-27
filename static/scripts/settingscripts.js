@@ -11,7 +11,7 @@ function testValid (field, value) {
 			if (!value.match(condition)) return "invalid";
 			break;
 		case "password":
-			var condition = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,20}$/
+			var condition = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(.{2,20})$/;
 			if (value == "") return "";
 			if (!value.match(condition)) return "invalid";
 			break;

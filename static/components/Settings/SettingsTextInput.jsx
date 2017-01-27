@@ -94,7 +94,7 @@ export default class SettingsTextInput extends React.Component {
 						id={field} type={type} value={value} placeholder={placeholder}
 						onChange={this.handleTyping.bind(this)} onBlur={this.handleBlur.bind(this)}/>}
 					{field == "password" && <input data-toggle="popover" data-trigger="focus" 
-						data-content="Your password must contain at least one letter and one number."
+						data-content="Your password must contain at least one lowercase letter, one uppercase letter, and one number."
 						className={"setting form-control " + this.state.valid} id={field} type={type} value={value} 
 						onClick={focus()} placeholder="Change your password (optional)"
 						onChange={this.handleTyping.bind(this)} onBlur={this.handleBlur.bind(this)}/>}

@@ -15,7 +15,7 @@ $.fn.goValidate = function() {
             regex: /^[A-Za-z]{1,12}$/
         },
         password: {
-            regex: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{2,20}$/
+            regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(.{2,20})$/
         },
         email_or_phone: {
             regex: /^.*$/
@@ -104,7 +104,6 @@ $.fn.goValidate = function() {
     	});
         if ($form.find('input.invalid').length) { /* form is not valid */
         	e.preventDefault();
-            $('#CreateProfileFail').fadeIn(400).delay(3000).fadeOut(400);
             return false;
         }
     });

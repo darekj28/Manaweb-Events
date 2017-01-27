@@ -19,7 +19,7 @@ export default class RegisterForm extends React.Component {
 	}
 	verifyFields() {
 		if (this.state.username_error || this.state.email_error) {
-			swal("Oops...", "There's a mistake in your submission!", "error");
+			swal("Oops...", "There's a mistake in your username or contact you provided!", "error");
 			return;
 		}
 		if ($('#register_form').find('input.valid').length == 5) {
