@@ -24,12 +24,11 @@ import ActionBar from '../actionbar/ActionBar'; // downloaded from https://githu
 // import ReactDOM from 'react-dom';
 // import ModalPicker from 'react-native-modal-picker' // https://www.npmjs.com/package/react-native-modal-picker
 import ModalDropdown from 'react-native-modal-dropdown'; // https://github.com/sohobloo/react-native-modal-dropdown
-import PostMessageBox from '../components/PostMessageBox'
-import MakePostModal from '../components/MakePostModal';
-import FeedBox from '../components/FeedBox'
-import Feed from '../components/Feed'
-import LogoAndSearchBar from '../components/LogoAndSearchBar'
-import ActivityAndFilterBar from '../components/ActivityAndFilterBar'
+import PostMessageBox from '../components/feed/PostMessageBox'
+import FeedBox from '../components/feed/FeedBox'
+import Feed from '../components/feed/Feed'
+import LogoAndSearchBar from '../components/feed/LogoAndSearchBar'
+import ActivityAndFilterBar from '../components/feed/ActivityAndFilterBar'
 
 const SEARCH_BAR_HEIGHT = 45
 const SEARCH_BAR_COLOR = "#90D7ED"
@@ -83,9 +82,6 @@ class FeedScreen extends Component {
 			this.handleServerPostSubmit = this.handleServerPostSubmit.bind(this);
 			this._navigateToHome = this._navigateToHome.bind(this);
 			this.handleRightAction = this.handleRightAction.bind(this)
-	}
-	toggleMakePostModal() {
-		this.setState({ display_make_post : !this.state.display_make_post });
 	}
 	handlePostTyping (newPostContent) {
 			this.setState({newPostContent : newPostContent})
@@ -281,13 +277,6 @@ class FeedScreen extends Component {
 										>
 								</PostMessageBox>
 						</Animated.View>
-						{/* <TouchableOpacity onPress={this.toggleMakePostModal.bind(this)}> 
-							<Icon name = "md-add" size = {25} color = "black"/>
-						</TouchableOpacity> */}
-						<MakePostModal display={this.state.display_make_post} 
-										toggleMakePostModal={this.toggleMakePostModal.bind(this)} 
-										handlePostSubmit={this.handlePostSubmit}
-										handleFilterPress={this.handleFilterPress}/>
 						<Feed posts = {this.props.feed} searchText = {this.state.searchText} filters = {this.state.filters}
 						userIdToFilterPosts={this.state.userIdToFilterPosts} handleFilterUser={this.handleFilterUser.bind(this)}
 						current_user = {this.props.current_user} shouldScroll={this.props.shouldScroll} stopScroll={this.props.stopScroll}

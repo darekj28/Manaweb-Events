@@ -12,16 +12,16 @@ const DOT_WIDTH = 30
 const DROP_DOWN_OPTIONS = ['Report Post']
 
 var profileImages = {
-    nissa: require('./static/avatars/nissa.png'),
-    chandra: require('./static/avatars/chandra.png'),
-    elspeth: require('./static/avatars/elspeth.png'),
-    nicol: require('./static/avatars/nicol.png'),
-    ugin: require('./static/avatars/ugin.png'),
-    jace: require('./static/avatars/jace.png'),
-    liliana: require('./static/avatars/liliana.png'),
-    ajani: require('./static/avatars/ajani.png'),
-    nahiri: require('./static/avatars/nahiri.png'),
-    gideon: require('./static/avatars/gideon.png'),
+    nissa:      require('../static/avatars/nissa.png'),
+    chandra:    require('../static/avatars/chandra.png'),
+    elspeth:    require('../static/avatars/elspeth.png'),
+    nicol:      require('../static/avatars/nicol.png'),
+    ugin:       require('../static/avatars/ugin.png'),
+    jace:       require('../static/avatars/jace.png'),
+    liliana:    require('../static/avatars/liliana.png'),
+    ajani:      require('../static/avatars/ajani.png'),
+    nahiri:     require('../static/avatars/nahiri.png'),
+    gideon:     require('../static/avatars/gideon.png'),
 };
 
 export default class FeedBox extends Component {
@@ -59,7 +59,6 @@ export default class FeedBox extends Component {
     render() {
         const post = this.props.post
 
-        let commentIcon = require('./res/comments.png')
         var length = post.name.length + post.userID.length 
         
 

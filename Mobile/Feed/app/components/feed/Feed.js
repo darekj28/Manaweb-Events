@@ -2,8 +2,7 @@ import React from 'react';
 import {Component} from 'react'
 import {ScrollView, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 
-import ViewContainer from '../components/ViewContainer';
-import HomeStatusBar from '../components/HomeStatusBar';
+import HomeStatusBar from '../HomeStatusBar';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FeedBox from './FeedBox'

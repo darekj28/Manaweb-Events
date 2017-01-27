@@ -3,17 +3,11 @@ import {Component} from 'react'
 import { AppRegistry,StyleSheet,Text,View, TextInput, Alert, Image, TouchableHighlight} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-var titleIcon = require('./res/logo4.png')
+var titleIcon = require('../res/logo4.png')
 const FILTER_HEIGHT = 25
 const ACTIVITY_PROPORTION = 0.55
 
 const FILTER_NAMES = ['Trade', 'Play', 'Chill']
-
-var filters = {
-    trade: require('./res/icon1.png'),
-    play: require('./res/icon2.png'),
-    chill: require('./res/icon3.png'),
-}
 
 export default class LogoAndSearchBar extends Component {
     constructor(props) {

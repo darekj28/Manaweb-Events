@@ -3,7 +3,7 @@ import {Component} from 'react'
 import { AppRegistry,StyleSheet,Text,View, TextInput, Alert, Image} from 'react-native';
 
 
-var titleIcon = require('./res/logo4.png')
+var titleIcon = require('../res/logo4.png')
 const LOGO_HEIGHT = 30
 const SEARCH_BAR_PROPORTION = 0.7
 
