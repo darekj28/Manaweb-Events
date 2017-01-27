@@ -230,7 +230,6 @@ class FeedScreen extends Component {
 	}
 	componentDidMount() {
 			this.initializeUserInfo.bind(this)();
-			// this.props.refreshScreen();
 	}
 	componentWillUnmount(){
 		clearInterval(this.spamTimer)
@@ -291,7 +290,7 @@ class FeedScreen extends Component {
 										handleFilterPress={this.handleFilterPress}/>
 						<Feed posts = {this.props.feed} searchText = {this.state.searchText} filters = {this.state.filters}
 						userIdToFilterPosts={this.state.userIdToFilterPosts} handleFilterUser={this.handleFilterUser.bind(this)}
-						current_user = {this.props.current_user}
+						current_user = {this.props.current_user} shouldScroll={this.props.shouldScroll} stopScroll={this.props.stopScroll}
 								navigator = {this.props.navigator} current_username = {this.props.current_user.userID}
 								/>
 				</View>
