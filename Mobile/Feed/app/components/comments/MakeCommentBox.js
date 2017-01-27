@@ -27,21 +27,20 @@ export default class MakeCommentBox extends React.Component {
                         numberOfLines = {1}
                         underlineColorAndroid={"transparent"}
                         onChangeText={this.handlePostTextChange.bind(this)}
-                        placeholder={"Reply to " + this.props.op + "..."}
+                        placeholder={"What's up bro?"}
                         value = {this.props.newPostContent}
                     />
 
                 </View>
-                <TouchableHighlight
-                    style = {{justifyContent: 'center'}}
-                    onPress={this.handlePostSubmit.bind(this)}>
-                    <View style = {{backgroundColor: '#90D7ED', borderRadius: 3, flex: 0}}>
-                        <Text style={{fontSize: 15, color: 'white', padding: 3}}>
-                            COMMENT!
-                        </Text>
+                    <View style = {{flex: 0, justifyContent: 'center', flexDirection: 'row'}}>
+                        <TouchableHighlight
+                            style = {{backgroundColor: '#90D7ED', borderRadius: 3, justifyContent: 'center', flex: 0, flexDirection: 'row'}}
+                            onPress={this.handlePostSubmit.bind(this)}>
+                            <Text style={{fontSize: 15, color: 'white', padding: 5}}>
+                                COMMENT!
+                            </Text>
+                        </TouchableHighlight>
                     </View>
-                </TouchableHighlight>
-
             </View>
 		);
 	}

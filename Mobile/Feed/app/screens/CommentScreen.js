@@ -11,7 +11,7 @@ import OriginalPost from '../components/comments/OriginalPost';
 
 const NAVIGATOR_BACK_ICON_HEIGHT = 30
 const POST_MESSAGE_HEIGHT_SHORT = 0
-const POST_MESSAGE_HEIGHT_TALL = 120
+const POST_MESSAGE_HEIGHT_TALL = 100
 const ANIMATE_DURATION = 700
 
 export default class CommentScreen extends React.Component {
@@ -165,7 +165,7 @@ export default class CommentScreen extends React.Component {
 				</View>
 				<TouchableWithoutFeedback onPress={() => this.postMessagePressed.bind(this)()}>
 					<View style = {{flexDirection: 'row', borderTopColor: 'silver', borderTopWidth: 1}}>
-						<Text style = {{paddingLeft: 3}}>
+						<Text style = {{padding: 3, fontSize: 14, color: 'black'}}>
 							Reply to {op}...
 						</Text>
 					</View>
