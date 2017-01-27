@@ -10515,13 +10515,13 @@
 		}, {
 			key: 'handlePostSubmit',
 			value: function handlePostSubmit() {
-				if (!this.state.canPost) swal("Yo!", "Please wait 30 seconds between posting.", "warning");else {
+				if (!this.state.canPost) swal("Yo!", "Please wait 30 seconds between posts.", "warning");else {
 					if (this.postText.value.trim().length > 0) {
 						this.setState({ canPost: false });
 						this.props.onPostSubmit(this.postText.value);
-						setTimeout(function () {
-							this.setState({ canPost: true });
-						}, 30000);
+						this.setState({ timeout: setTimeout(function () {
+								this.setState({ canPost: true });
+							}, 30000) });
 					} else swal("Oops...", "You can't post an empty message!", "error");
 				}
 			}
@@ -10529,6 +10529,11 @@
 			key: 'handlePostChange',
 			value: function handlePostChange() {
 				this.props.onPostChange(this.postText.value);
+			}
+		}, {
+			key: 'componentWillUnmount',
+			value: function componentWillUnmount() {
+				clearTimeout(this.state.timeout);
 			}
 		}, {
 			key: 'render',
@@ -13880,13 +13885,13 @@
 		}, {
 			key: 'handleCommentSubmit',
 			value: function handleCommentSubmit() {
-				if (!this.state.canPost) swal("Yo!", "Please wait 10 seconds between commenting.", "warning");else {
+				if (!this.state.canPost) swal("Yo!", "Please wait 10 seconds between comments.", "warning");else {
 					if (this.commentText.value.trim().length > 0) {
 						this.setState({ canPost: false });
 						this.props.onCommentSubmit(this.commentText.value);
-						setTimeout(function () {
-							this.setState({ canPost: true });
-						}, 10000);
+						this.setState({ timeout: setTimeout(function () {
+								this.setState({ canPost: true });
+							}, 10000) });
 					} else swal("Oops...", "You can't post an empty message!", "error");
 				}
 			}
@@ -13894,6 +13899,11 @@
 			key: 'handleCommentChange',
 			value: function handleCommentChange() {
 				this.props.onCommentChange(this.commentText.value);
+			}
+		}, {
+			key: 'componentWillUnmount',
+			value: function componentWillUnmount() {
+				clearTimeout(this.state.timeout);
 			}
 		}, {
 			key: 'render',

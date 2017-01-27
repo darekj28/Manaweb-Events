@@ -71,7 +71,7 @@ export default class Index extends React.Component {
 
     return (
         <View style = {styles.container}>
-          {Platform.OS == 'ios' && <View style = {{paddingTop : 20}} />}
+          {Platform.OS == 'ios' && <View style = {{paddingTop : 20, backgroundColor : "white"}} />}
           {main_activity}
           {/* <PushController /> */}
         </View>
