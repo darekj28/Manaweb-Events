@@ -1,7 +1,7 @@
 import React from 'react';
 import {Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,
 		TouchableOpacity,TouchableHighlight, TextInput,
-          Alert, Image, Animated, TouchableWithoutFeedback, ScrollView} from 'react-native';
+          Alert, Image, Animated, Easing, TouchableWithoutFeedback, ScrollView} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -24,6 +24,7 @@ const PROFILE_WIDTH = 50
 export default class NotificationBox extends React.Component {
 	constructor(props) {
 		super(props);
+        this.animatedValue = new Animated.Value(0);
 	}
 	getNotificationFirst(note) {
         var also; var notification;
@@ -59,31 +60,46 @@ export default class NotificationBox extends React.Component {
             current_user : this.props.current_user
         })
     }
-    
-    // trimTimeString(string){
-    //     var len = string.length
-    //     var trimString = string.substring(0, len - 5)
-    //     return trimString
-    // }
-
+    animate () {
+        this.animatedValue.setValue(0)
+        Animated.timing(
+            this.animatedValue,
+            {
+                toValue: 1,
+                duration: 2500,
+                easing: Easing.linear
+            }
+        ).start(() => this.animatedValue.setValue(0))
+    }
+    componentDidMount() {
+        if (!this.props.note.seen)
+            this.animate();
+    }
 	render() {
 		var note = this.props.note;
-        var container_style;
-        if (note.seen) {
-            container_style = styles.notification_container;
-            text_message = styles.text_message;
-            text_time = styles.text_time;
-            text_message_clickable = styles.text_message_clickable;
-        }
-        else {
-            container_style = styles.unseen_notification_container;
-            text_message = styles.unseen_text_message;
-            text_time = styles.unseen_text_time;
-            text_message_clickable = styles.unseen_text_message;
-        }
+        const backgroundColor = this.animatedValue.interpolate({
+            inputRange: [0, 0.5, 1],
+            outputRange: ["white", "#A6DFF0", "white"]
+        });
+        const borderBottomColor = this.animatedValue.interpolate({
+            inputRange: [0, 0.5, 1],
+            outputRange: ["silver", "white", "silver"]
+        });
+        const textColor = this.animatedValue.interpolate({ 
+            inputRange: [0, 0.35, 0.5, 0.65, 1],
+            outputRange: ["#333333", "white", "white", "white", "#333333"]
+        });
+        const timeColor = this.animatedValue.interpolate({ 
+            inputRange: [0, 0.5, 1],
+            outputRange: ["silver", "white", "silver"]
+        });
+        const clickableColor = this.animatedValue.interpolate({ 
+            inputRange: [0, 0.5, 1],
+            outputRange: ["#90D7ED", "#90D7ED", "#90D7ED"]
+        });
 	   	return(
 	   		<TouchableOpacity onPress={this._navigateToComment.bind(this)}>
-                <View style={container_style}>
+                <Animated.View style={{flex:1,justifyContent: 'flex-start',flexDirection : 'row', borderBottomColor,borderBottomWidth: 1,backgroundColor}}>
                     <View style={{flex: 0, justifyContent: 'flex-start'}}>
                         {note.avatar =='nissa' && <Image  style={styles.profile_image} source={profileImages.nissa} />}
                         {note.avatar == 'chandra' && <Image  style={styles.profile_image} source={profileImages.chandra} />}
@@ -98,69 +114,26 @@ export default class NotificationBox extends React.Component {
                     </View>
                     <View style={{flex : 1, flexDirection : 'column'}}>
                         <View style={{flex : 1, flexDirection : 'row',padding : 8}}>
-                            <Text style = {text_message}>
+                            <Animated.Text style = {{fontSize: 14,flex : 1,textAlignVertical: 'top',color : textColor}}>
                                 {this.getNotificationFirst(note)} 
-                                <Text style = {text_message_clickable}>
+                                <Animated.Text style = {{color : clickableColor}}>
                                     {this.getNotificationSecond(note)}
-                                </Text>
+                                </Animated.Text>
                                 .
-                            </Text>
+                            </Animated.Text>
                         </View>
                         <View style={{flex : 1, padding : 8}}>
-                            <Text style = {text_time}>
+                            <Animated.Text style = {{fontSize: 14,flex : 1,textAlignVertical: 'top',color: timeColor}}>
                                 {note.timeString}
-                            </Text>
+                            </Animated.Text>
                         </View>
                     </View>
-                </View>
+                </Animated.View>
             </TouchableOpacity>
 	   		);
 	}
 }
 const styles = StyleSheet.create({
-    notification_container :{
-        flex:1,
-        justifyContent: 'flex-start',
-        flexDirection : 'row', 
-        borderBottomColor: 'silver',
-        borderBottomWidth: 1,
-        backgroundColor : 'white'
-    },
-    text_time: {
-        flex: 1,
-        fontSize: 14,
-        textAlignVertical: 'top',
-        color: 'silver'
-    },
-    text_message: {
-        fontSize: 14,
-        flex : 1,
-        textAlignVertical: 'top',
-        color : '#333333'
-    },
-    text_message_clickable : {
-        color : '#90D7ED'
-    },
-    unseen_text_time: {
-        flex: 1,
-        fontSize: 14,
-        textAlignVertical: 'top',
-        color: 'white'
-    },
-    unseen_text_message: {
-        flex: 1,
-        fontSize: 14,
-        textAlignVertical: 'top',
-        color : 'white'
-    },
-    unseen_notification_container: {
-        flex:1,
-        justifyContent: 'flex-start',
-        flexDirection : 'row', 
-        borderBottomColor: 'white',
-        borderBottomWidth: 1,
-        backgroundColor : '#90D7ED'
-    },
     profile_image: {
         width: PROFILE_WIDTH,
         height: PROFILE_HEIGHT,

@@ -25,7 +25,6 @@ export default class PostMessageBox extends Component {
             filter_enable: [false, false, false]
         };
         this.onClick = this.onClick.bind(this)
-        this.imageStyle = this.imageStyle.bind(this)
         this.setFilter = this.setFilter.bind(this)
         this.handlePostTextChange = this.handlePostTextChange.bind(this);
         this.handlePostSubmit = this.handlePostSubmit.bind(this);
@@ -48,31 +47,9 @@ export default class PostMessageBox extends Component {
         this.setState({filter_enable: newFilter})
         this.props.handleFilterPress(index);
     }
-
     handlePostTextChange (text) {
         this.props.handlePostTyping(text)
     }
-
-    imageStyle(index) {
-        if (this.state.filter_enable[index]) {
-            return {
-                marginLeft: 8,
-                marginRight: 8,
-                width: 30,
-                height: 30,
-                tintColor: 'red'
-            }
-        } else {
-            return {
-                marginLeft: 8,
-                marginRight: 8,
-                width: 30,
-                height: 30,
-            }
-        }
-
-    }
-
     handlePostSubmit() {
         if (!this.props.canPost) {
             Alert.alert("You must wait 30 seconds before posting again.");
