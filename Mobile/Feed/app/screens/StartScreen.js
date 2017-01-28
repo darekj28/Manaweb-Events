@@ -86,19 +86,21 @@ class StartScreen extends Component {
                   See what's happening in the Magic world now!
               </Text>
               </View>
-              <View style = {styles.padding}/>
+              <View style = {styles.padding_box}/>
               <View style = {styles.button_box}>
-              <TouchableHighlight style = {styles.register_button} onPress = {(event) => this._navigateToRegisterName()}>
+              <TouchableOpacity style = {styles.register_button} onPress = {(event) => this._navigateToRegisterName()}>
                 <Text style = {styles.register_buttonText}>
                   Register!
                 </Text>
-              </TouchableHighlight>
-              <TouchableHighlight style = {styles.login_button} onPress = {(event) => this._navigateToLogin()}>
+              </TouchableOpacity>
+              <TouchableOpacity style = {styles.login_button} onPress = {(event) => this._navigateToLogin()}>
                 <Text style = {styles.login_buttonText}>
                   Login!
                 </Text>
-              </TouchableHighlight>
-              <FacebookLogin navigator = {this.props.navigator}/>
+              </TouchableOpacity>
+              <View style={styles.login_button}>
+                <FacebookLogin navigator = {this.props.navigator}/>
+              </View>
               </View>
               <View style = {styles.bottom_padding} />
 			       {/* <TouchableHighlight style = {styles.button} onPress = {(event) => this._navigateToFeed()}>
@@ -130,17 +132,18 @@ const styles = StyleSheet.create({
     resizeMode: "contain"
   },
   welcome_box: {
-    flex: 0.45,
+    flex: 1,
     justifyContent: "center",
   },
 
   padding_box : {
-    flex: 0.3
+    flex: 0
   },
 
   button_box: {
-    flex: 0.45,
-    justifyContent: "flex-end"
+    flex: 0.75,
+    justifyContent: "flex-start",
+    alignItems : 'center'
   },
   welcome_text : {
     color : "white",
@@ -162,6 +165,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 5,
     alignItems : "center",
+    width : 170
   },
   register_buttonText : {
     justifyContent: "center",

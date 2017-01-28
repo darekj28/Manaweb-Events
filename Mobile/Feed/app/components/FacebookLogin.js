@@ -154,11 +154,9 @@ componentDidMount() {
 
 const styles = StyleSheet.create({
   fb_button : {
-    marginBottom: 10,
     alignItems : "center",
-    marginTop : 10,
     borderRadius: 5,
-    padding: 4,
+    marginLeft : 3
   },
 
 });

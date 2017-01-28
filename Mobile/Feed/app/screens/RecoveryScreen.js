@@ -147,22 +147,38 @@ export default class RecoveryScreen extends React.Component {
         var phone_number = responseData.phone_number
 
         var hasEmail = (email != null && email != "")
-        var hasPhoneNumber = (phone_number != null && email != "")
+        var hasPhoneNumber = (phone_number != null && phone_number.length > 13)
 
         var alert_text = ""
         // if (hasEmail && hasPhoneNumber) alert_text = "A confirmation pin will be sent to " + email + " and " + phone_number
         // else if (hasEmail) alert_text = "A confirmation pin will be sent to  " + email
         // else if (hasPhoneNumber) alert_text = "A confirmation pin will be sent to  " + phone_number
-
-        Alert.alert(
-          "Choose your confirmation method",
-          "SMS fees may apply",
-            [
-              {text: 'Retry', style: 'cancel'},
-              {text: 'Phone ' + phone_number, onPress: () => this.sendTextConfirmation.bind(this)()},
-              {text: 'Email ' + email, onPress: () => this.sendEmailConfirmation.bind(this)()}
-            ]) 
+        if (hasEmail && hasPhoneNumber)
+          Alert.alert(
+            "Choose your confirmation method",
+            "SMS fees may apply",
+              [
+                {text: "This is not me!", style: 'cancel'},
+                {text: 'Send a text to ' + phone_number, onPress: () => this.sendTextConfirmation.bind(this)()},
+                {text: 'Send an email to ' + email, onPress: () => this.sendEmailConfirmation.bind(this)()}
+              ])
+        else if (hasEmail)
+          Alert.alert(
+            "Choose your confirmation method",
+            "SMS fees may apply",
+              [
+                {text: "This is not me!", style: 'cancel'},
+                {text: 'Send an email to ' + email, onPress: () => this.sendEmailConfirmation.bind(this)()}
+              ])
           }
+        else if (hasPhoneNumber)
+          Alert.alert(
+            "Choose your confirmation method",
+            "SMS fees may apply",
+              [
+                {text: "This is not me!", style: 'cancel'},
+                {text: 'Send a text to ' + phone_number, onPress: () => this.sendTextConfirmation.bind(this)()}
+              ])
 
       else {
         alert("Invalid input, try again")
