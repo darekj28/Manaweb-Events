@@ -20,8 +20,10 @@ import SettingsScreen from '../screens/SettingsScreen'
 import WelcomeScreen from '../screens/register/WelcomeScreen'
 import RecoveryScreen from '../screens/RecoveryScreen'
 import RecoverPassword from '../screens/RecoverPassword'
+import FeedScreen from '../screens/FeedScreen'
+import NotificationScreen from '../screens/NotificationScreen'
 import Spinner from 'react-native-loading-spinner-overlay';
-
+import BottomTabBar from '../components/BottomTabBar';
 
 
 class StartNavigator extends Component {
@@ -76,8 +78,19 @@ class StartNavigator extends Component {
 				screen =  (<MenuScreen {...globalNavigatorProps}/>)
 				break;
 			case "Comment":
-				screen =  (<CommentScreen current_username={route.current_username} comment_id={route.comment_id} 
-					current_user = {route.current_user} {...globalNavigatorProps}/>)
+				screen =  (<View style={{flex : 1}}>
+								<View style={{flex : 1}}>
+								<CommentScreen current_username={route.current_username} comment_id={route.comment_id} 
+								current_user = {route.current_user} {...globalNavigatorProps}/>
+								</View>
+								<BottomTabBar {...globalNavigatorProps}/>
+							</View>)
+				break;
+			case "Feed":
+				screen = (<FeedScreen {...globalNavigatorProps}/>)
+				break;
+			case "Notification":
+				screen = (<NotificationScreen {...globalNavigatorProps}/>)
 				break;
 			case "FbCreate":
 				screen =  (<FbCreate fb_token = {route.fb_token} fb_id = {route.fb_id} {...globalNavigatorProps} />)
