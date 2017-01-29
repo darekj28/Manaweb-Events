@@ -106,9 +106,9 @@ export default class ReportPostModal extends Component {
 					</Picker>
 
 
-					<View style = {{flex : 0.4, flexDirection : "row", justifyContent: "flex-start"}}>
+					<View style = {{flex : 0.4, flexDirection : "row", justifyContent: "flex-start", padding: 5}}>
 						<TextInput
-						style = {{flex : 0.9, borderColor : "skyblue", borderWidth : 4, padding: 6, borderRadius : 4}}
+						style = {{flex : 1, borderColor : "skyblue", borderWidth : 4, padding: 6, borderRadius : 4}}
 						onChangeText = {this.handleDescriptionChange.bind(this)}
 						placeholder = "Describe Why This Post Is Bad"
 						maxLength = {40}
@@ -116,13 +116,14 @@ export default class ReportPostModal extends Component {
 					</View>
 					<View style = {{flex : 0.05}}/>
 
-					<View style={{flex: 0.1}}>
-							<TouchableOpacity onPress = {this.reportPost.bind(this)} style = {styles.update_button}>
-								<Text style = {{textAlign : 'center', fontWeight : 'bold', 'color' : 'skyblue'}}>
-									Report Post
-								</Text>
-							</TouchableOpacity>
+					<View style={{flex: 0, flexDirection: 'row', justifyContent: 'center'}}>
+						<TouchableOpacity onPress = {this.reportPost.bind(this)} style = {styles.report_button}>
+							<Text style = {styles.report_text}>
+								Report Post
+							</Text>
+						</TouchableOpacity>
 					</View>
+					<View style = {{flex: 0.1}}></View>
 				</View>
 			</Modal>
 		)
@@ -153,10 +154,20 @@ const styles = StyleSheet.create({
 		backgroundColor : '#fbfbfb',
 		padding: 5
 	},
-	update_button : {
-		borderColor : "skyblue",
+	report_button : {
+		borderColor : "#90D7ED",
+		backgroundColor: '#90D7ED',
 		borderWidth : 2,
 		borderRadius : 5,
 		padding: 6,
+		flexDirection: 'row',
+		flex: 0
+	},
+	report_text: {
+		textAlign : 'center',
+		fontWeight : 'bold',
+		'color' : 'white',
+		flex: 0,
+		paddingHorizontal: 10
 	}
 });
