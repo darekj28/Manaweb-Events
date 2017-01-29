@@ -96,13 +96,15 @@ export default class Feed extends Component {
 					<ReportPostModal post = {this.state.report_post} display = {this.state.display_report_modal} 
 					toggleReportModal = {this.toggleReportModal.bind(this)} current_user = {this.props.current_user}/>
 				}
-				<ListView 
+				{(!this.state.display_report_modal) &&
+				<ListView
 					style={styles.list_container}
 					dataSource={dataSource}
 					renderRow={this.listViewRenderRow.bind(this)}
 					enableEmptySections = {true}
 					ref={ref => this.listView = ref}
 					/>
+					}
 			</View>
 
 		) 
@@ -114,4 +116,3 @@ const styles = StyleSheet.create({
 
 	},
 });
-
