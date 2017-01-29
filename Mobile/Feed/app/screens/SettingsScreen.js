@@ -91,6 +91,7 @@ export default class SettingsScreen extends Component {
 			})
 			.then((response) => response.json())
 			.then((responseData) => {
+				this.props.refreshUserInformation()
 				Alert.alert("Settings updated", "", [
 				  { text: "OK", onPress: () => this.handleSubmitSettings.bind(this)()}    
 				])

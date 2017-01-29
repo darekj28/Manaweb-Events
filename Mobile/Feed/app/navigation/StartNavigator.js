@@ -33,7 +33,7 @@ class StartNavigator extends Component {
 		this.state = {
 			isLoading: true
 		}
-		this.initializeUser = this.initializeUser.bind(this);
+		// this.initializeUser = this.initializeUser.bind(this);
 	}
 
 	_renderScene(route, navigator) {
@@ -41,9 +41,11 @@ class StartNavigator extends Component {
 			navigator: navigator,
 		}
 		var screen;
+		var current_username = this.props.current_username
+		var current_user = this.props.current_user
 		switch(route.href){
 			case "Login":
-				screen =  (<LoginScreen {...globalNavigatorProps} />);
+				screen =  (<LoginScreen {...globalNavigatorProps} asyncStorageLogin = {this.props.asyncStorageLogin}/>);
 				break;
 			case "Start":
 				screen =  (<StartScreen {...globalNavigatorProps} />);
@@ -69,19 +71,24 @@ class StartNavigator extends Component {
 				break;
 			case "RegisterUsername":
 				screen =  (<RegisterUsername first_name = {route.first_name} last_name = {route.last_name}
-					phone_number = {route.phone_number} password = {route.password} email = {route.email} {...globalNavigatorProps} />)
+					phone_number = {route.phone_number} password = {route.password} email = {route.email} 
+					asyncStorageLogin = {this.props.asyncStorageLogin} {...globalNavigatorProps} />)
 				break;
 			case "Settings":
-				screen =  (<SettingsScreen {...globalNavigatorProps}/>)
+				screen =  (<SettingsScreen
+					{...globalNavigatorProps}/>)
 		 		break;
 		 	case "Menu":
-				screen =  (<MenuScreen {...globalNavigatorProps}/>)
+				screen =  (<MenuScreen asyncStorageLogout = {this.props.asyncStorageLogout} current_user = {this.props.current_user}
+				current_username = {this.props.current_username} 
+				refreshUserInformation = {this.props.refreshUserInformation}
+				{...globalNavigatorProps}/>)
 				break;
 			case "Comment":
 				screen =  (<View style={{flex : 1}}>
 								<View style={{flex : 1}}>
-								<CommentScreen current_username={route.current_username} comment_id={route.comment_id} 
-								current_user = {route.current_user} {...globalNavigatorProps}/>
+								<CommentScreen current_username={this.props.current_username} comment_id={route.comment_id} 
+								current_user = {this.props.current_user} {...globalNavigatorProps}/>
 								</View>
 								<BottomTabBar {...globalNavigatorProps}/>
 							</View>)
@@ -96,7 +103,7 @@ class StartNavigator extends Component {
 				screen =  (<FbCreate fb_token = {route.fb_token} fb_id = {route.fb_id} {...globalNavigatorProps} />)
 				break;
 			case "Welcome":
-				screen =  (<WelcomeScreen current_user = {route.current_user} {...globalNavigatorProps}/>)
+				screen =  (<WelcomeScreen current_user = {this.props.current_user} {...globalNavigatorProps}/>)
 				break;
 			case "Recovery":
 				screen =  (<RecoveryScreen {...globalNavigatorProps} />)
@@ -116,30 +123,19 @@ class StartNavigator extends Component {
 		return screen;
 	}
 
-	initializeUser(){
-			var value = AsyncStorage.getItem("current_username").then((value) => {
-				if (value != null){
-					 this.setState({current_username : value})
-						this.setState({isLoading : false})
-				}
-				else {
-					this.setState({current_username : ""})
-					this.setState({isLoading: false})
-				}
-			}).done()
-	}
 	componentWillMount() {
-			this.initializeUser.bind(this)()   
+
 	}
+
 	render() {
 		var start = ""
-		if (this.state.current_username == "" || this.state.current_username == null) {
+		if (this.props.current_username == "" || this.props.current_username == null) {
 			start = "Start"
 		}
 		else {
 			start = "Menu"
 		}
-		if (this.state.isLoading) {
+		if (this.props.isLoading) {
 			return (
 					<View style = {styles.container}>
 							<ActivityIndicator style={[styles.centering, styles.white]} color="#cccccc" size="large"/>
@@ -152,7 +148,7 @@ class StartNavigator extends Component {
 				initialRoute = {{href: start}}
 				ref = "appNavigator"
 				style = {styles.navigatorStyles}
-				renderScene = {this._renderScene}
+				renderScene = {this._renderScene.bind(this)}
 				configureScene={(route, routeStack) =>
 				Navigator.SceneConfigs.PushFromRight}
 				/>
