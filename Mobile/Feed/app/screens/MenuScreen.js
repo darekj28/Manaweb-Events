@@ -324,27 +324,27 @@ class MenuScreen extends Component {
 			.then((responseData) => {
 				var numUnseenNotifications = 0;
 				if (responseData.notification_list.length > 0) {
-							var notifications = []
-							for (var i = 0; i < responseData['notification_list'].length; i++) {
-								var obj = responseData['notification_list'][i]
-									notifications.unshift({
-										comment_id : obj['comment_id'],
-										timeString : obj['timeString'],
-										isOP : obj['isOP'],
-										numOtherPeople : obj['numOtherPeople'],
-										sender_name : obj['sender_name'],
-										op_name : obj['op_name'],
-										seen : obj['seen'],
-										avatar : obj['avatar']
-								})
-									if (!obj['seen']){
-										numUnseenNotifications++;
-									}
+					var notifications = []
+					for (var i = 0; i < responseData['notification_list'].length; i++) {
+						var obj = responseData['notification_list'][i]
+							notifications.unshift({
+								comment_id : obj['comment_id'],
+								timeString : obj['timeString'],
+								isOP : obj['isOP'],
+								numOtherPeople : obj['numOtherPeople'],
+								sender_name : obj['sender_name'],
+								op_name : obj['op_name'],
+								seen : obj['seen'],
+								avatar : obj['avatar']
+						})
+							if (!obj['seen']){
+								numUnseenNotifications++;
 							}
-							this.setState({notifications: notifications})
-							this.setState({numUnseenNotifications : numUnseenNotifications})
+					}
+					this.setState({notifications: notifications})
+					this.setState({numUnseenNotifications : numUnseenNotifications})
 
-					}    
+				}    
 		})
 		.catch((error) => {
 			console.log(error);

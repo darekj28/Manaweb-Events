@@ -23,7 +23,7 @@ export default class BottomTabBar extends React.Component {
 		}
 		this.setState({ selected : 'settings' });
 	}
-	notificationPress() {
+	notificationsPress() {
 		if (this.state.selected != 'notifications') {
 			this.navigate.bind(this)("Notifications");
 		}
@@ -54,7 +54,7 @@ export default class BottomTabBar extends React.Component {
 							<Text style={[{color: settings}, styles.tab_text]}>Settings</Text>
 						</View>
 					</TouchableWithoutFeedback>
-					<TouchableWithoutFeedback style={styles.tab} onPress={this.notificationPress.bind(this)}>
+					<TouchableWithoutFeedback style={styles.tab} onPress={this.notificationsPress.bind(this)}>
 						<View style={styles.tab_content}>
 							<Icon name = "md-mail" size={25} color={notifications}/>
 							<Text style={[{color: notifications}, styles.tab_text]}>Notifications</Text>

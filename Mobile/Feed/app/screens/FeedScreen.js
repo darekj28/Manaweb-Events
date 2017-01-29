@@ -179,7 +179,7 @@ class FeedScreen extends Component {
 
 				if (responseData['result'] == 'success') {
 					this.setState({newPostContent : "", canPost : false});
-					this.props.refreshScreen(false);
+					this.props.getPosts();
 				}
 				else {
 					this.setState({newPostContent: 'failure...'})
@@ -228,7 +228,7 @@ class FeedScreen extends Component {
 			this.initializeUserInfo.bind(this)();
 	}
 	componentWillUnmount(){
-		clearInterval(this.spamTimer)
+		clearTimeout(this.spamTimer)
 	    this.keyboardDidHideListener.remove();
 	}
 

@@ -60,7 +60,7 @@ export default class Index extends React.Component {
       isConnected: change
     })
   }
-
+  // get current user info and notifications
   initializeUserInformation(){
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
@@ -191,7 +191,7 @@ export default class Index extends React.Component {
 
   componentDidUpdate(){
     this.initializeUserInformation.bind(this)()
-    this.getPosts.bind(this)();
+    this.getPosts.bind(this)(); 
   }
 
   refreshUserInformation(new_info) {
@@ -230,6 +230,7 @@ export default class Index extends React.Component {
         feed={this.state.feed}
         notifications={this.state.notifications}
         numUnseenNotifications={this.state.numUnseenNotifications}
+        getPosts={this.getPosts.bind(this)}
         /> 
     }
 

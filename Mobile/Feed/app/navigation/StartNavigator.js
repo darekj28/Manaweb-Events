@@ -89,7 +89,7 @@ class StartNavigator extends Component {
 				screen =  (<CommentScreen comment_id={route.comment_id} {...globalNavigatorProps}/>)
 				break;
 			case "Feed":
-				screen = (<FeedScreen feed={this.props.feed} {...globalNavigatorProps}/>)
+				screen = (<FeedScreen feed={this.props.feed} getPosts={this.props.getPosts} {...globalNavigatorProps}/>)
 				break;
 			case "Notifications":
 				screen = (<NotificationScreen notifications={this.props.notifications} {...globalNavigatorProps}/>)

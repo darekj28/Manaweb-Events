@@ -146,7 +146,7 @@ export default class CommentScreen extends React.Component {
 	}
 
 	componentWillUnmount(){
-		clearInterval(this.spamTimer)
+		clearTimeout(this.spamTimer)
 	}
 	expand () {
         this.animatedValue.setValue(0)
