@@ -15,7 +15,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import React from 'react';
 import {Component} from 'react'
 import {ActivityIndicator, Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
-					Alert, Image, Animated, TouchableWithoutFeedback, ScrollView} from 'react-native';
+					Alert, Image, Animated, TouchableWithoutFeedback, ScrollView, Keyboard} from 'react-native';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -125,7 +125,7 @@ class FeedScreen extends Component {
 			this.setState({ searchText : text });
 	}
 	handleFilterUser(userIdToFilterPosts) {
-			if (userIdToFilterPosts == this.state.userIdToFilterPosts) 
+			if (userIdToFilterPosts == this.state.userIdToFilterPosts)
 					this.setState({userIdToFilterPosts : ""});
 			else this.setState({ userIdToFilterPosts : userIdToFilterPosts});
 	}
@@ -153,7 +153,7 @@ class FeedScreen extends Component {
 				setTimeout(function (){
 					this.handleServerPostSubmit(newPostContent);
 					}.bind(this), 1000)
-			}    
+			}
 	}
 	// sends the post to the server and refreshes the page
 	handleServerPostSubmit (newPostContent) {
@@ -176,7 +176,7 @@ class FeedScreen extends Component {
 			})
 		}).then((response) => response.json())
 			.then((responseData) => {
-	
+
 				if (responseData['result'] == 'success') {
 					this.setState({newPostContent : "", canPost : false});
 					this.props.refreshScreen(false);
@@ -219,7 +219,7 @@ class FeedScreen extends Component {
 		href: "Start"
 		})
 	}
-	
+
 	initializeUserInfo(){
 			this.setState({current_user : this.props.current_user})
 			this.setState({current_username : this.props.current_user.userID})
@@ -229,7 +229,14 @@ class FeedScreen extends Component {
 	}
 	componentWillUnmount(){
 		clearInterval(this.spamTimer)
+		this.keyboardDidShowListener.remove();
+	    this.keyboardDidHideListener.remove();
 	}
+
+	componentWillMount () {
+    	this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => this.collapseMessageBox());
+  	}
+
 	render() {
 		var alert;
 		if ((this.state.alert)) {
