@@ -89,10 +89,10 @@ class StartNavigator extends Component {
 				screen =  (<CommentScreen comment_id={route.comment_id} {...globalNavigatorProps}/>)
 				break;
 			case "Feed":
-				screen = (<FeedScreen {...globalNavigatorProps}/>)
+				screen = (<FeedScreen feed={this.props.feed} {...globalNavigatorProps}/>)
 				break;
 			case "Notifications":
-				screen = (<NotificationScreen {...globalNavigatorProps}/>)
+				screen = (<NotificationScreen notifications={this.props.notifications} {...globalNavigatorProps}/>)
 				break;
 			case "FbCreate":
 				screen =  (<FbCreate fb_token = {route.fb_token} fb_id = {route.fb_id} {...globalNavigatorProps} />)
@@ -128,29 +128,30 @@ class StartNavigator extends Component {
 			start = "Start"
 		}
 		else {
-			start = "Menu"
+			start = "Feed"
 		}
 		if (this.props.isLoading) {
 			return (
 					<View style = {styles.container}>
-							<ActivityIndicator style={[styles.centering, styles.white]} color="#cccccc" size="large"/>
+						<ActivityIndicator style={[styles.centering, styles.white]} color="#cccccc" size="large"/>
 					</View>
 				)
 		}
 		else {
 			return (
-				<View style={{flex : 1}}>
+				<View style={styles.container}>
 					<View style={{flex : 1}}>
 						<Navigator 
 						initialRoute = {{href: start}}
 						ref = "appNavigator"
-						style = {styles.navigatorStyles}
 						renderScene = {this._renderScene.bind(this)}
 						configureScene={(route, routeStack) =>
 						Navigator.SceneConfigs.PushFromRight}
 						/>
 					</View>
-					<BottomTabBar navigator={this.refs.appNavigator} current_user={this.props.current_user} current_username={this.props.current_username}/>
+					<BottomTabBar navigator={this.refs.appNavigator} 
+						current_username={this.props.current_username} 
+						numUnseenNotifications={this.props.numUnseenNotifications}/>
 				</View>
 	 ) 
 
@@ -161,7 +162,7 @@ class StartNavigator extends Component {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor : "#F5FCFF"
+		backgroundColor : "white"
 	},
 	centering: {
 		flex : 1,

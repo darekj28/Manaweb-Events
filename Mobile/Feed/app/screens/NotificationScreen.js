@@ -36,9 +36,6 @@ export default class NotificationScreen extends React.Component {
   componentDidMount() {
     this.seeNotifications.bind(this)();
   }
-  componentWillUnmount() {
-    this.props.getNotifications();
-  }
   render() {
     return (
     <View style = {styles.container}>

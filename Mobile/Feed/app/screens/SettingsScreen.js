@@ -1,3 +1,5 @@
+const FBSDK = require('react-native-fbsdk');
+const {LoginManager,} = FBSDK;
 import React from 'react';
 import {Component} from 'react'
 import {Alert, Image, Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
@@ -134,7 +136,14 @@ export default class SettingsScreen extends Component {
 				hasPrivateChanges = true;
 		this.setState({ hasPrivateChanges : hasPrivateChanges });	
 	}
-
+	handleLogout() {
+		this.props.asyncStorageLogout().then((value) => {
+			LoginManager.logOut()
+			this.props.navigator.push({
+				href: "Start"
+			})
+		});
+	}
 	render() {
 		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		var data = 
@@ -145,7 +154,7 @@ export default class SettingsScreen extends Component {
 			<PhoneInput value={this.state.phone_number} current_user = {this.props.current_user} addError={this.addError.bind(this)} removeError={this.removeError.bind(this)} handleChange={this.handleChange.bind(this)} prevPhone={this.state.current_user.phone_number}/>,
 			<AvatarInput avatar={this.state.avatar} current_user = {this.props.current_user}	toggleAvatarPicker={this.toggleAvatarPicker.bind(this)}/>,
 			<PasswordModalLink togglePasswordModal={this.togglePasswordModal.bind(this)}/>, 
-			<LogoutButton handleLogout={this.props.handleLogout}/>
+			<LogoutButton handleLogout={this.handleLogout.bind(this)}/>
 		]
 		var dataSource = ds.cloneWithRows(data)
 		return (

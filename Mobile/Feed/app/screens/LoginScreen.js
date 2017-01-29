@@ -92,7 +92,7 @@ class LoginScreen extends Component {
   }
   _navigateToFeed() {
     this.props.navigator.push({
-    href: "Menu"
+    href: "Feed"
     })
   }
   handlePasswordChange(password) {

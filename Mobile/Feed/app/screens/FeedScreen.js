@@ -52,36 +52,36 @@ function toggle(collection, item) {
 
 class FeedScreen extends Component {
 	constructor(props) {
-			super(props)
-			this.state = {
-					filters : ['Trade', 'Play', 'Chill'],
-					filter_enable: [true, true, true],
-					post_actions : [],
-					alert: false,
-					search : '',
-					userIdToFilterPosts : '',
-					activity_index: 0,
-					post_message_expanded: false,
-					post_message_height: new Animated.Value(50),
-					current_username: "",
-					feed: [],
-					current_user: {'userID' : 'not initialized'},
-					newPostContent: "",
-					searchText : "",
-					test: "",
-					loading: true,
-					display_make_post : false,
-					canPost : true
-			}
-			this.spamTimer;
-			this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
-			this.postMessagePressed = this.postMessagePressed.bind(this)
-			this.handlePostSubmit = this.handlePostSubmit.bind(this);
-			this.handlePostTyping = this.handlePostTyping.bind(this);
-			this.handleFilterPress = this.handleFilterPress.bind(this);
-			this.handleServerPostSubmit = this.handleServerPostSubmit.bind(this);
-			this._navigateToHome = this._navigateToHome.bind(this);
-			this.handleRightAction = this.handleRightAction.bind(this)
+		super(props)
+		this.state = {
+				filters : ['Trade', 'Play', 'Chill'],
+				filter_enable: [true, true, true],
+				post_actions : [],
+				alert: false,
+				search : '',
+				userIdToFilterPosts : '',
+				activity_index: 0,
+				post_message_expanded: false,
+				post_message_height: new Animated.Value(50),
+				current_username: "",
+				feed: [],
+				current_user: {'userID' : 'not initialized'},
+				newPostContent: "",
+				searchText : "",
+				test: "",
+				loading: true,
+				display_make_post : false,
+				canPost : true
+		}
+		this.spamTimer;
+		this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
+		this.postMessagePressed = this.postMessagePressed.bind(this)
+		this.handlePostSubmit = this.handlePostSubmit.bind(this);
+		this.handlePostTyping = this.handlePostTyping.bind(this);
+		this.handleFilterPress = this.handleFilterPress.bind(this);
+		this.handleServerPostSubmit = this.handleServerPostSubmit.bind(this);
+		this._navigateToHome = this._navigateToHome.bind(this);
+		this.handleRightAction = this.handleRightAction.bind(this)
 	}
 	handlePostTyping (newPostContent) {
 			this.setState({newPostContent : newPostContent})

@@ -21,7 +21,9 @@ export default class Index extends React.Component {
       isConnected : null,
       current_user : {},
       current_username: "",
-      isLoading: true
+      isLoading: true,
+      feed: [],
+      notifications: []
     }
   }
 
@@ -43,7 +45,6 @@ export default class Index extends React.Component {
         this.setState({current_username : current_username})
         this.initializeUserInformation.bind(this)()
       }).then(() => {
-        this.setState({isLoading : false})
     }).done()
   }
 
@@ -85,12 +86,91 @@ export default class Index extends React.Component {
 
       else if (this.state.current_user.userID != responseData.thisUser.userID) {
           var thisUser = responseData.thisUser;
-          this.setState({current_user : thisUser})
+          this.setState({current_user : thisUser}, this.getNotifications.bind(this))
       }
       
     }).done();
   }
-
+  getNotifications() {
+    const url = "https://manaweb-events.herokuapp.com"
+    const test_url = "http://0.0.0.0:5000"
+      fetch(url + "/mobileGetNotifications", 
+        {method: "POST",
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username : this.state.current_username })
+        }
+      ).then((response) => response.json())
+      .then((responseData) => {
+        var numUnseenNotifications = 0;
+        if (responseData.notification_list.length > 0) {
+              var notifications = []
+              for (var i = 0; i < responseData['notification_list'].length; i++) {
+                var obj = responseData['notification_list'][i]
+                  notifications.unshift({
+                    comment_id : obj['comment_id'],
+                    timeString : obj['timeString'],
+                    isOP : obj['isOP'],
+                    numOtherPeople : obj['numOtherPeople'],
+                    sender_name : obj['sender_name'],
+                    op_name : obj['op_name'],
+                    seen : obj['seen'],
+                    avatar : obj['avatar']
+                })
+                  if (!obj['seen']){
+                    numUnseenNotifications++;
+                  }
+              }
+              this.setState({notifications: notifications})
+              this.setState({numUnseenNotifications : numUnseenNotifications})
+          }    
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+  getPosts() {
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
+    fetch(url + "/mobileGetPosts", {method: "POST",
+          headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      body:
+      JSON.stringify(
+       {
+        feed_name: "BALT"
+      })
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+    if (responseData['result'] == 'success'){
+      if (responseData.post_list.length > 0) {
+          var feed = []
+          for (var i = 0; i < responseData['post_list'].length; i++) {
+            var obj = responseData['post_list'][i]
+            feed.unshift({
+              postContent : obj['body'],
+              avatar    : obj['avatar'],
+              name    : obj['first_name'] + ' ' + obj['last_name'],
+              userID    : obj['poster_id'],
+              time      : obj['time'],
+              isTrade   : obj['isTrade'],
+              isPlay    : obj['isPlay'],
+              isChill   : obj['isChill'],
+              comment_id  : obj['comment_id'],
+              unique_id   : obj['unique_id'],
+              numberOfComments : obj['numComments']
+            })
+          }
+          this.setState({feed: feed, isLoading : false})
+         }
+      }
+    }).done()
+  }
   async asyncStorageLogin(current_username) {
     AsyncStorage.setItem("current_username", current_username).then(() => 
     {
@@ -111,6 +191,7 @@ export default class Index extends React.Component {
 
   componentDidUpdate(){
     this.initializeUserInformation.bind(this)()
+    this.getPosts.bind(this)();
   }
 
   refreshUserInformation() {
@@ -142,6 +223,9 @@ export default class Index extends React.Component {
         current_user = {this_user}
         isLoading = {this.state.isLoading}
         refreshUserInformation = {this.refreshUserInformation.bind(this)}
+        feed={this.state.feed}
+        notifications={this.state.notifications}
+        numUnseenNotifications={this.state.numUnseenNotifications}
         /> 
     }
 
