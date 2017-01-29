@@ -23,7 +23,7 @@ export default class BottomTabBar extends React.Component {
 		}
 		this.setState({ selected : 'settings' });
 	}
-	notificationPress() {
+	notificationsPress() {
 		if (this.state.selected != 'notifications') {
 			this.navigate.bind(this)("Notifications");
 		}
@@ -39,28 +39,30 @@ export default class BottomTabBar extends React.Component {
 		var home = selected == 'home' ? HIGHLIGHTED : DEFAULT;
 		var settings = selected == 'settings' ? HIGHLIGHTED : DEFAULT;
 		var notifications = selected == 'notifications' ? HIGHLIGHTED : DEFAULT;
-		return (
-			<View style = {styles.container}>
-				<TouchableWithoutFeedback style={styles.tab} onPress={this.homePress.bind(this)}>
-					<View style={styles.tab_content}>
-						<Icon name = "md-home" size={25} color={home}/>
-						<Text style={[{color: home}, styles.tab_text]}>Home</Text>
-					</View>
-				</TouchableWithoutFeedback>
-				<TouchableWithoutFeedback style={styles.tab} onPress={this.settingsPress.bind(this)}>
-					<View style={styles.tab_content}>
-						<Icon name = "md-settings" size={25} color={settings}/>
-						<Text style={[{color: settings}, styles.tab_text]}>Settings</Text>
-					</View>
-				</TouchableWithoutFeedback>
-				<TouchableWithoutFeedback style={styles.tab} onPress={this.notificationPress.bind(this)}>
-					<View style={styles.tab_content}>
-						<Icon name = "md-mail" size={25} color={notifications}/>
-						<Text style={[{color: notifications}, styles.tab_text]}>Notifications</Text>
-					</View>
-				</TouchableWithoutFeedback>
-			</View>
-			);
+		if (this.props.current_username)
+			return (
+				<View style = {styles.container}>
+					<TouchableWithoutFeedback style={styles.tab} onPress={this.homePress.bind(this)}>
+						<View style={styles.tab_content}>
+							<Icon name = "md-home" size={25} color={home}/>
+							<Text style={[{color: home}, styles.tab_text]}>Home</Text>
+						</View>
+					</TouchableWithoutFeedback>
+					<TouchableWithoutFeedback style={styles.tab} onPress={this.settingsPress.bind(this)}>
+						<View style={styles.tab_content}>
+							<Icon name = "md-settings" size={25} color={settings}/>
+							<Text style={[{color: settings}, styles.tab_text]}>Settings</Text>
+						</View>
+					</TouchableWithoutFeedback>
+					<TouchableWithoutFeedback style={styles.tab} onPress={this.notificationsPress.bind(this)}>
+						<View style={styles.tab_content}>
+							<Icon name = "md-mail" size={25} color={notifications}/>
+							<Text style={[{color: notifications}, styles.tab_text]}>Notifications</Text>
+						</View>
+					</TouchableWithoutFeedback>
+				</View>
+				);
+		else return <View/>;
 	}
 }
 const styles = StyleSheet.create({

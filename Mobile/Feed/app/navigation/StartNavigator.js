@@ -33,17 +33,30 @@ class StartNavigator extends Component {
 		this.state = {
 			isLoading: true
 		}
-		this.initializeUser = this.initializeUser.bind(this);
+		// this.initializeUser = this.initializeUser.bind(this);
 	}
 
 	_renderScene(route, navigator) {
 		var globalNavigatorProps = {
 			navigator: navigator,
+			current_username : this.props.current_username,
+			current_user : this.props.current_user,
+			asyncStorageLogin : this.props.asyncStorageLogin,
+			asyncStorageLogout : this.props.asyncStorageLogout,
+			refreshUserInformation : this.props.refreshUserInformation
+		}
+		var registerNavigatorProps = {
+			first_name : route.first_name,
+			last_name : route.last_name,
+			phone_number : route.phone_number,
+			confirmationPin : route.confirmationPin,
+			password : route.password,
+			email : route.email
 		}
 		var screen;
 		switch(route.href){
 			case "Login":
-				screen =  (<LoginScreen {...globalNavigatorProps} />);
+				screen =  (<LoginScreen {...globalNavigatorProps} asyncStorageLogin = {this.props.asyncStorageLogin}/>);
 				break;
 			case "Start":
 				screen =  (<StartScreen {...globalNavigatorProps} />);
@@ -52,24 +65,19 @@ class StartNavigator extends Component {
 				screen =  ( <RegisterName  {...globalNavigatorProps} /> );
 				break;
 			 case "RegisterPhoneNumber":
-				screen =  ( <RegisterPhoneNumber first_name = {route.first_name} last_name = {route.last_name}
-							 {...globalNavigatorProps}  /> );
+				screen =  ( <RegisterPhoneNumber {...registerNavigatorProps} {...globalNavigatorProps}  /> );
 				break;
 			case "RegisterConfirmCode":
-				screen =  ( <RegisterConfirmCode first_name = {route.first_name} last_name = {route.last_name} 
-					phone_number = {route.phone_number} confirmationPin = {route.confirmationPin} {...globalNavigatorProps} /> )
+				screen =  ( <RegisterConfirmCode {...registerNavigatorProps} {...globalNavigatorProps} /> )
 				break;
 			case "RegisterPassword":
-				screen =  ( <RegisterPassword first_name = {route.first_name} last_name = {route.last_name} 
-					phone_number = {route.phone_number} {...globalNavigatorProps} />)
+				screen =  ( <RegisterPassword {...registerNavigatorProps} {...globalNavigatorProps} />)
 				break;
 			case "RegisterEmail":
-				screen =  ( <RegisterEmail first_name = {route.first_name} last_name = {route.last_name}
-					phone_number = {route.phone_number} password = {route.password} {...globalNavigatorProps} />)
+				screen =  ( <RegisterEmail {...registerNavigatorProps}{...globalNavigatorProps} />)
 				break;
 			case "RegisterUsername":
-				screen =  (<RegisterUsername first_name = {route.first_name} last_name = {route.last_name}
-					phone_number = {route.phone_number} password = {route.password} email = {route.email} {...globalNavigatorProps} />)
+				screen =  (<RegisterUsername {...registerNavigatorProps} {...globalNavigatorProps} />)
 				break;
 			case "Settings":
 				screen =  (<SettingsScreen {...globalNavigatorProps}/>)
@@ -78,25 +86,19 @@ class StartNavigator extends Component {
 				screen =  (<MenuScreen {...globalNavigatorProps}/>)
 				break;
 			case "Comment":
-				screen =  (<View style={{flex : 1}}>
-								<View style={{flex : 1}}>
-								<CommentScreen current_username={route.current_username} comment_id={route.comment_id} 
-								current_user = {route.current_user} {...globalNavigatorProps}/>
-								</View>
-								<BottomTabBar {...globalNavigatorProps}/>
-							</View>)
+				screen =  (<CommentScreen comment_id={route.comment_id} {...globalNavigatorProps}/>)
 				break;
 			case "Feed":
-				screen = (<FeedScreen {...globalNavigatorProps}/>)
+				screen = (<FeedScreen feed={this.props.feed} getPosts={this.props.getPosts} {...globalNavigatorProps}/>)
 				break;
-			case "Notification":
-				screen = (<NotificationScreen {...globalNavigatorProps}/>)
+			case "Notifications":
+				screen = (<NotificationScreen notifications={this.props.notifications} {...globalNavigatorProps}/>)
 				break;
 			case "FbCreate":
 				screen =  (<FbCreate fb_token = {route.fb_token} fb_id = {route.fb_id} {...globalNavigatorProps} />)
 				break;
 			case "Welcome":
-				screen =  (<WelcomeScreen current_user = {route.current_user} {...globalNavigatorProps}/>)
+				screen =  (<WelcomeScreen current_user = {this.props.current_user} {...globalNavigatorProps}/>)
 				break;
 			case "Recovery":
 				screen =  (<RecoveryScreen {...globalNavigatorProps} />)
@@ -116,46 +118,41 @@ class StartNavigator extends Component {
 		return screen;
 	}
 
-	initializeUser(){
-			var value = AsyncStorage.getItem("current_username").then((value) => {
-				if (value != null){
-					 this.setState({current_username : value})
-						this.setState({isLoading : false})
-				}
-				else {
-					this.setState({current_username : ""})
-					this.setState({isLoading: false})
-				}
-			}).done()
-	}
 	componentWillMount() {
-			this.initializeUser.bind(this)()   
+
 	}
+
 	render() {
 		var start = ""
-		if (this.state.current_username == "" || this.state.current_username == null) {
+		if (this.props.current_username == "" || this.props.current_username == null) {
 			start = "Start"
 		}
 		else {
-			start = "Menu"
+			start = "Feed"
 		}
-		if (this.state.isLoading) {
+		if (this.props.isLoading) {
 			return (
 					<View style = {styles.container}>
-							<ActivityIndicator style={[styles.centering, styles.white]} color="#cccccc" size="large"/>
+						<ActivityIndicator style={[styles.centering, styles.white]} color="#cccccc" size="large"/>
 					</View>
 				)
 		}
 		else {
 			return (
-				<Navigator 
-				initialRoute = {{href: start}}
-				ref = "appNavigator"
-				style = {styles.navigatorStyles}
-				renderScene = {this._renderScene}
-				configureScene={(route, routeStack) =>
-				Navigator.SceneConfigs.PushFromRight}
-				/>
+				<View style={styles.container}>
+					<View style={{flex : 1}}>
+						<Navigator 
+						initialRoute = {{href: start}}
+						ref = "appNavigator"
+						renderScene = {this._renderScene.bind(this)}
+						configureScene={(route, routeStack) =>
+						Navigator.SceneConfigs.PushFromRight}
+						/>
+					</View>
+					<BottomTabBar navigator={this.refs.appNavigator} 
+						current_username={this.props.current_username} 
+						numUnseenNotifications={this.props.numUnseenNotifications}/>
+				</View>
 	 ) 
 
 	 }  
@@ -165,7 +162,7 @@ class StartNavigator extends Component {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor : "#F5FCFF"
+		backgroundColor : "white"
 	},
 	centering: {
 		flex : 1,

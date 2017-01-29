@@ -36,9 +36,9 @@ class MenuScreen extends Component {
 				show_panel1: true,
 				show_panel2: false,
 				show_panel3: false,
-				current_user : {},
-				current_username : "",
-				userLoading: true,
+				// current_user : {},
+				// current_username : "",
+				// userLoading: true,
 				feedLoading : true,
 				spinnerLoading: true,
 				feed : [],
@@ -49,7 +49,6 @@ class MenuScreen extends Component {
 		this.time_interval = 4.0 * 1000
 		this.refresh_interval;
 		this.refresh_time_interval = 10.0 * 1000
-
 		this._onPanel1Pressed = this._onPanel1Pressed.bind(this)
 	}
 
@@ -83,7 +82,7 @@ class MenuScreen extends Component {
 								'Accept': 'application/json',
 								'Content-Type': 'application/json'
 						},
-						body: JSON.stringify({ username : this.state.current_username })
+						body: JSON.stringify({ username : this.props.current_username })
 				}
 			).then((response) => response.json())
 			 .then((responseData) => {
@@ -160,7 +159,7 @@ class MenuScreen extends Component {
 
 	checkNotifications(){
 		// console.log("notificaiton")
-		if (AppState.currentState === 'background' && this.state.current_username != "") {
+		if (AppState.currentState === 'background' && this.props.current_username != "") {
 			this.getPushNotifications.bind(this)()
 		}
 	}
@@ -200,53 +199,53 @@ class MenuScreen extends Component {
 			}
 	}
 
-	initializeUserInformation(current_username, initialize){
-		var url = "https://manaweb-events.herokuapp.com"
-		var test_url = "http://0.0.0.0:5000"
-		fetch(url + "/mobileGetCurrentUserInfo", {method: "POST",
-		headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json',
-				},
-			body:
-			JSON.stringify(
-			 {
-				username: current_username
-			})
-		})
-		.then((response) => response.json())
-		.then((responseData) => {
-			if (responseData.thisUser == null) {
-				this.handleLogout.bind(this)()
-			}
-			else {
-					var thisUser = responseData.thisUser;
-				this.setState({current_user : thisUser})
-				this.setState({userLoading: false})
-				if (initialize) {
-					this.refreshScreen.bind(this)(true)
-				}  
-			}
+	// initializeUserInformation(current_username, initialize){
+	// 	var url = "https://manaweb-events.herokuapp.com"
+	// 	var test_url = "http://0.0.0.0:5000"
+	// 	fetch(url + "/mobileGetCurrentUserInfo", {method: "POST",
+	// 	headers: {
+	// 				'Accept': 'application/json',
+	// 				'Content-Type': 'application/json',
+	// 			},
+	// 		body:
+	// 		JSON.stringify(
+	// 		 {
+	// 			username: current_username
+	// 		})
+	// 	})
+	// 	.then((response) => response.json())
+	// 	.then((responseData) => {
+	// 		if (responseData.thisUser == null) {
+	// 			this.handleLogout.bind(this)()
+	// 		}
+	// 		else {
+	// 				var thisUser = responseData.thisUser;
+	// 			this.setState({current_user : thisUser})
+	// 			this.setState({userLoading: false})
+	// 			if (initialize) {
+	// 				this.refreshScreen.bind(this)(true)
+	// 			}  
+	// 		}
 			
-		}).done();
-	}
+	// 	}).done();
+	// }
 
 	initialize(){
-		AsyncStorage.getItem("current_username").then((current_username) => {
-			this.setState({current_username: current_username});
-			this.initializeUserInformation.bind(this)(current_username, true)
-		})
+		// AsyncStorage.getItem("current_username").then((current_username) => {
+			// this.setState({current_username: current_username});
+		this.refreshScreen.bind(this)(true)
+		// })
 	}
 
 	refreshInfo() {
-		this.initializeUserInformation.bind(this)(this.state.current_username, false)
+		this.refreshScreen.bind(this)(false)
 	}
 
 	handleLogout() {
 		clearInterval(this.refresh_interval)
-		AsyncStorage.setItem("current_username", "").then((value) => {
-					LoginManager.logOut()
-					this._navigateToHome();
+		this.props.asyncStorageLogout().then((value) => {
+				LoginManager.logOut()
+				this._navigateToHome();
 			});
 	}
 
@@ -319,33 +318,33 @@ class MenuScreen extends Component {
 								'Accept': 'application/json',
 								'Content-Type': 'application/json'
 						},
-						body: JSON.stringify({ username : this.state.current_username })
+						body: JSON.stringify({ username : this.props.current_username })
 				}
 			).then((response) => response.json())
 			.then((responseData) => {
 				var numUnseenNotifications = 0;
 				if (responseData.notification_list.length > 0) {
-							var notifications = []
-							for (var i = 0; i < responseData['notification_list'].length; i++) {
-								var obj = responseData['notification_list'][i]
-									notifications.unshift({
-										comment_id : obj['comment_id'],
-										timeString : obj['timeString'],
-										isOP : obj['isOP'],
-										numOtherPeople : obj['numOtherPeople'],
-										sender_name : obj['sender_name'],
-										op_name : obj['op_name'],
-										seen : obj['seen'],
-										avatar : obj['avatar']
-								})
-									if (!obj['seen']){
-										numUnseenNotifications++;
-									}
+					var notifications = []
+					for (var i = 0; i < responseData['notification_list'].length; i++) {
+						var obj = responseData['notification_list'][i]
+							notifications.unshift({
+								comment_id : obj['comment_id'],
+								timeString : obj['timeString'],
+								isOP : obj['isOP'],
+								numOtherPeople : obj['numOtherPeople'],
+								sender_name : obj['sender_name'],
+								op_name : obj['op_name'],
+								seen : obj['seen'],
+								avatar : obj['avatar']
+						})
+							if (!obj['seen']){
+								numUnseenNotifications++;
 							}
-							this.setState({notifications: notifications})
-							this.setState({numUnseenNotifications : numUnseenNotifications})
+					}
+					this.setState({notifications: notifications})
+					this.setState({numUnseenNotifications : numUnseenNotifications})
 
-					}    
+				}    
 		})
 		.catch((error) => {
 			console.log(error);
@@ -382,7 +381,7 @@ class MenuScreen extends Component {
 									{ (this.state.show_panel1) && 
 											<View style = {{flex: 1}}>
 													<FeedScreen navigator={this.props.navigator}
-																current_user = {this.state.current_user}
+																current_user = {this.props.current_user}
 																handleLogout = {this.handleLogout.bind(this)}
 																refreshScreen = {this.refreshFeed.bind(this)}
 																feed = {this.state.feed}
@@ -395,19 +394,20 @@ class MenuScreen extends Component {
 									}
 									{ this.state.show_panel2 &&
 									<View style = {{backgroundColor: 'white', flex: 1}}>
-										<SettingsScreen current_user = {this.state.current_user}
+										<SettingsScreen current_user = {this.props.current_user}
 													refreshInfo = {this.refreshInfo.bind(this)}
 													handleLogout = {this.handleLogout.bind(this)}
 													navigator = {this.props.navigator}
 													isLoading = {this.state.isLoading}
+													refreshUserInformation = {this.props.refreshUserInformation}
 													/>
 									</View>
 										}
 
 									{ this.state.show_panel3 &&
 									<View style = {{backgroundColor: 'white', flex: 1}}>
-										<NotificationScreen current_user = {this.state.current_user}
-										current_username = {this.state.current_username}
+										<NotificationScreen current_user = {this.props.current_user}
+										current_username = {this.props.current_username}
 										navigator={this.props.navigator}
 										notifications = {this.state.notifications}
 										getNotifications = {this.getNotifications.bind(this)}

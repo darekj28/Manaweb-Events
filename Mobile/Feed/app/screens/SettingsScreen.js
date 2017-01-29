@@ -1,3 +1,5 @@
+const FBSDK = require('react-native-fbsdk');
+const {LoginManager,} = FBSDK;
 import React from 'react';
 import {Component} from 'react'
 import {Alert, Image, Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
@@ -64,13 +66,20 @@ export default class SettingsScreen extends Component {
 			this.toggleConfirmPasswordModal.bind(this)()
 		}
 	}
-	handleSubmitSettings() {
-		this.setState({ display_password_confirm : false, hasChanges : false, hasPrivateChanges : false }, this.props.refreshInfo);
-	}
 	submitNewSettings() {
 		var canSubmit = this.state.error_fields.length === 0;
 		var errorMessage = "There's a mistake in one of your fields.";
 		if (canSubmit) {
+			var obj = JSON.stringify({
+					username: this.state.current_username,
+					first_name : this.state.first_name,
+					last_name : this.state.last_name,
+					email : this.state.email,
+					phone_number : this.state.phone_number,
+					avatar : this.state.avatar,
+					avatar_name : this.state.avatar
+				});
+			this.setState({ display_password_confirm : false, hasChanges : false, hasPrivateChanges : false });
 			var url = "https://manaweb-events.herokuapp.com"
 			var test_url = "http://0.0.0.0:5000"
 			fetch(url + "/mobileUpdateSettings", {
@@ -79,20 +88,13 @@ export default class SettingsScreen extends Component {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
 					}, 
-				body: 
-				JSON.stringify({
-					username: this.state.current_username,
-					first_name : this.state.first_name,
-					last_name : this.state.last_name,
-					email : this.state.email,
-					phone_number : this.state.phone_number,
-					avatar : this.state.avatar
-				})
+				body: obj
 			})
 			.then((response) => response.json())
 			.then((responseData) => {
+				this.props.refreshUserInformation(obj);
 				Alert.alert("Settings updated", "", [
-				  { text: "OK", onPress: () => this.handleSubmitSettings.bind(this)()}    
+				  { text: "OK" }    
 				])
 			}).done();
 		}
@@ -135,7 +137,14 @@ export default class SettingsScreen extends Component {
 				hasPrivateChanges = true;
 		this.setState({ hasPrivateChanges : hasPrivateChanges });	
 	}
-
+	handleLogout() {
+		this.props.asyncStorageLogout().then((value) => {
+			LoginManager.logOut()
+			this.props.navigator.push({
+				href: "Start"
+			})
+		});
+	}
 	render() {
 		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		var data = 
@@ -146,7 +155,7 @@ export default class SettingsScreen extends Component {
 			<PhoneInput value={this.state.phone_number} current_user = {this.props.current_user} addError={this.addError.bind(this)} removeError={this.removeError.bind(this)} handleChange={this.handleChange.bind(this)} prevPhone={this.state.current_user.phone_number}/>,
 			<AvatarInput avatar={this.state.avatar} current_user = {this.props.current_user}	toggleAvatarPicker={this.toggleAvatarPicker.bind(this)}/>,
 			<PasswordModalLink togglePasswordModal={this.togglePasswordModal.bind(this)}/>, 
-			<LogoutButton handleLogout={this.props.handleLogout}/>
+			<LogoutButton handleLogout={this.handleLogout.bind(this)}/>
 		]
 		var dataSource = ds.cloneWithRows(data)
 		return (

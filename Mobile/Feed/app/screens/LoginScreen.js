@@ -72,7 +72,7 @@ class LoginScreen extends Component {
     .then((response) => response.json())
     .then((responseData) => {
         if (responseData['result'] == 'success') {
-            AsyncStorage.setItem("current_username", responseData['current_user']['userID']).then((value) => {
+            this.props.asyncStorageLogin(responseData['current_user']['userID']).then((value) => {
               this.setState({username: responseData['username']})
               this.setState({validation_output: responseData})
               this._navigateToFeed()
@@ -92,7 +92,7 @@ class LoginScreen extends Component {
   }
   _navigateToFeed() {
     this.props.navigator.push({
-    href: "Menu"
+    href: "Feed"
     })
   }
   handlePasswordChange(password) {

@@ -32,7 +32,7 @@ class WelcomeScreen extends Component {
   }
 	_navigateToMenu(){
 		this.props.navigator.push({
-			href: "Menu",
+			href: "Feed",
 		})
 	}
 	render() {
