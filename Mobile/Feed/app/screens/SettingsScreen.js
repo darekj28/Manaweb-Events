@@ -70,6 +70,15 @@ export default class SettingsScreen extends Component {
 		var canSubmit = this.state.error_fields.length === 0;
 		var errorMessage = "There's a mistake in one of your fields.";
 		if (canSubmit) {
+			var obj = JSON.stringify({
+					username: this.state.current_username,
+					first_name : this.state.first_name,
+					last_name : this.state.last_name,
+					email : this.state.email,
+					phone_number : this.state.phone_number,
+					avatar : this.state.avatar,
+					avatar_name : this.state.avatar
+				});
 			this.setState({ display_password_confirm : false, hasChanges : false, hasPrivateChanges : false });
 			var url = "https://manaweb-events.herokuapp.com"
 			var test_url = "http://0.0.0.0:5000"
@@ -79,21 +88,13 @@ export default class SettingsScreen extends Component {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
 					}, 
-				body: 
-				JSON.stringify({
-					username: this.state.current_username,
-					first_name : this.state.first_name,
-					last_name : this.state.last_name,
-					email : this.state.email,
-					phone_number : this.state.phone_number,
-					avatar : this.state.avatar
-				})
+				body: obj
 			})
 			.then((response) => response.json())
 			.then((responseData) => {
-				this.props.refreshUserInformation()
+				this.props.refreshUserInformation(obj);
 				Alert.alert("Settings updated", "", [
-				  { text: "OK", onPress: () => this.handleSubmitSettings.bind(this)()}    
+				  { text: "OK" }    
 				])
 			}).done();
 		}

@@ -194,8 +194,12 @@ export default class Index extends React.Component {
     this.getPosts.bind(this)();
   }
 
-  refreshUserInformation() {
-    this.initializeUserInformation.bind(this)()
+  refreshUserInformation(new_info) {
+    AsyncStorage.mergeItem("current_user", new_info, () => {
+      AsyncStorage.getItem("current_user", (err, result) => {
+        this.setState({ current_user : JSON.parse(result) });
+      });
+    });
   }
 
   render() {
