@@ -229,7 +229,6 @@ class FeedScreen extends Component {
 	}
 	componentWillUnmount(){
 		clearInterval(this.spamTimer)
-		this.keyboardDidShowListener.remove();
 	    this.keyboardDidHideListener.remove();
 	}
 
