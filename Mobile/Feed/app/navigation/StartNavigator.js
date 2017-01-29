@@ -39,10 +39,21 @@ class StartNavigator extends Component {
 	_renderScene(route, navigator) {
 		var globalNavigatorProps = {
 			navigator: navigator,
+			current_username : this.props.current_username,
+			current_user : this.props.current_user,
+			asyncStorageLogin : this.props.asyncStorageLogin,
+			asyncStorageLogout : this.props.asyncStorageLogout,
+			refreshUserInformation : this.props.refreshUserInformation
+		}
+		var registerNavigatorProps = {
+			first_name : route.first_name,
+			last_name : route.last_name,
+			phone_number : route.phone_number,
+			confirmationPin : route.confirmationPin,
+			password : route.password,
+			email : route.email
 		}
 		var screen;
-		var current_username = this.props.current_username
-		var current_user = this.props.current_user
 		switch(route.href){
 			case "Login":
 				screen =  (<LoginScreen {...globalNavigatorProps} asyncStorageLogin = {this.props.asyncStorageLogin}/>);
@@ -54,49 +65,33 @@ class StartNavigator extends Component {
 				screen =  ( <RegisterName  {...globalNavigatorProps} /> );
 				break;
 			 case "RegisterPhoneNumber":
-				screen =  ( <RegisterPhoneNumber first_name = {route.first_name} last_name = {route.last_name}
-							 {...globalNavigatorProps}  /> );
+				screen =  ( <RegisterPhoneNumber {...registerNavigatorProps} {...globalNavigatorProps}  /> );
 				break;
 			case "RegisterConfirmCode":
-				screen =  ( <RegisterConfirmCode first_name = {route.first_name} last_name = {route.last_name} 
-					phone_number = {route.phone_number} confirmationPin = {route.confirmationPin} {...globalNavigatorProps} /> )
+				screen =  ( <RegisterConfirmCode {...registerNavigatorProps} {...globalNavigatorProps} /> )
 				break;
 			case "RegisterPassword":
-				screen =  ( <RegisterPassword first_name = {route.first_name} last_name = {route.last_name} 
-					phone_number = {route.phone_number} {...globalNavigatorProps} />)
+				screen =  ( <RegisterPassword {...registerNavigatorProps} {...globalNavigatorProps} />)
 				break;
 			case "RegisterEmail":
-				screen =  ( <RegisterEmail first_name = {route.first_name} last_name = {route.last_name}
-					phone_number = {route.phone_number} password = {route.password} {...globalNavigatorProps} />)
+				screen =  ( <RegisterEmail {...registerNavigatorProps}{...globalNavigatorProps} />)
 				break;
 			case "RegisterUsername":
-				screen =  (<RegisterUsername first_name = {route.first_name} last_name = {route.last_name}
-					phone_number = {route.phone_number} password = {route.password} email = {route.email} 
-					asyncStorageLogin = {this.props.asyncStorageLogin} {...globalNavigatorProps} />)
+				screen =  (<RegisterUsername {...registerNavigatorProps} {...globalNavigatorProps} />)
 				break;
 			case "Settings":
-				screen =  (<SettingsScreen
-					{...globalNavigatorProps}/>)
+				screen =  (<SettingsScreen {...globalNavigatorProps}/>)
 		 		break;
 		 	case "Menu":
-				screen =  (<MenuScreen asyncStorageLogout = {this.props.asyncStorageLogout} current_user = {this.props.current_user}
-				current_username = {this.props.current_username} 
-				refreshUserInformation = {this.props.refreshUserInformation}
-				{...globalNavigatorProps}/>)
+				screen =  (<MenuScreen {...globalNavigatorProps}/>)
 				break;
 			case "Comment":
-				screen =  (<View style={{flex : 1}}>
-								<View style={{flex : 1}}>
-								<CommentScreen current_username={this.props.current_username} comment_id={route.comment_id} 
-								current_user = {this.props.current_user} {...globalNavigatorProps}/>
-								</View>
-								<BottomTabBar {...globalNavigatorProps}/>
-							</View>)
+				screen =  (<CommentScreen comment_id={route.comment_id} {...globalNavigatorProps}/>)
 				break;
 			case "Feed":
 				screen = (<FeedScreen {...globalNavigatorProps}/>)
 				break;
-			case "Notification":
+			case "Notifications":
 				screen = (<NotificationScreen {...globalNavigatorProps}/>)
 				break;
 			case "FbCreate":
@@ -144,14 +139,19 @@ class StartNavigator extends Component {
 		}
 		else {
 			return (
-				<Navigator 
-				initialRoute = {{href: start}}
-				ref = "appNavigator"
-				style = {styles.navigatorStyles}
-				renderScene = {this._renderScene.bind(this)}
-				configureScene={(route, routeStack) =>
-				Navigator.SceneConfigs.PushFromRight}
-				/>
+				<View style={{flex : 1}}>
+					<View style={{flex : 1}}>
+						<Navigator 
+						initialRoute = {{href: start}}
+						ref = "appNavigator"
+						style = {styles.navigatorStyles}
+						renderScene = {this._renderScene.bind(this)}
+						configureScene={(route, routeStack) =>
+						Navigator.SceneConfigs.PushFromRight}
+						/>
+					</View>
+					<BottomTabBar navigator={this.refs.appNavigator} current_user={this.props.current_user} current_username={this.props.current_username}/>
+				</View>
 	 ) 
 
 	 }  

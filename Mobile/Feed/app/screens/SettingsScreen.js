@@ -64,13 +64,11 @@ export default class SettingsScreen extends Component {
 			this.toggleConfirmPasswordModal.bind(this)()
 		}
 	}
-	handleSubmitSettings() {
-		this.setState({ display_password_confirm : false, hasChanges : false, hasPrivateChanges : false }, this.props.refreshInfo);
-	}
 	submitNewSettings() {
 		var canSubmit = this.state.error_fields.length === 0;
 		var errorMessage = "There's a mistake in one of your fields.";
 		if (canSubmit) {
+			this.setState({ display_password_confirm : false, hasChanges : false, hasPrivateChanges : false });
 			var url = "https://manaweb-events.herokuapp.com"
 			var test_url = "http://0.0.0.0:5000"
 			fetch(url + "/mobileUpdateSettings", {
