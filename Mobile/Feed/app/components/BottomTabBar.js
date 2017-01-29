@@ -12,28 +12,27 @@ export default class BottomTabBar extends React.Component {
 		this.state = { selected : 'home' };
 	}
 	homePress() {
-		this.setState({ selected : 'home' }, this.navigateToFeed.bind(this));
+		if (this.state.selected != 'home') {
+			this.navigate.bind(this)("Feed");
+		}
+		this.setState({ selected : 'home' });
 	}
 	settingsPress() {
-		this.setState({ selected : 'settings' }, this.navigateToSettings.bind(this));
+		if (this.state.selected != 'settings') {
+			this.navigate.bind(this)("Settings");
+		}
+		this.setState({ selected : 'settings' });
 	}
 	notificationPress() {
-		this.setState({ selected : 'notifications'}, this.navigateToNotifications.bind(this));
+		if (this.state.selected != 'notifications') {
+			this.navigate.bind(this)("Notifications");
+		}
+		this.setState({ selected : 'notifications' });
 	}
-	navigateToFeed() {
-		// this.props.navigator.push({
-  //           href: "Feed",
-  //       })
-	}
-	navigateToSettings() {
-		// this.props.navigator.push({
-  //           href: "Settings",
-  //       })
-	}
-	navigateToNotifications() {
-		// this.props.navigator.push({
-  //           href: "Notification",
-  //       })
+	navigate(href) {
+		this.props.navigator.replace({
+	        href: href
+	    })
 	}
 	render() {
 		var selected = this.state.selected;
