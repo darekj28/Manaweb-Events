@@ -1,6 +1,7 @@
 import React from 'react';
 import {Component} from 'react'
-import {Item, Platform, Alert, Image, Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {Item, Platform, Alert, Image, Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,
+	View,ListView,TouchableOpacity,TouchableHighlight, TextInput, ScrollView} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Dimensions from 'Dimensions';
@@ -9,7 +10,7 @@ import Dimensions from 'Dimensions';
 export default class ReportPostModal extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { 
+		this.state = {
 			reason: "Spam",
 			description: "",
 		}
@@ -33,7 +34,7 @@ export default class ReportPostModal extends Component {
 			reporting_user	: this.props.current_user.userID,
 			reported_user 	: this.props.post.userID
 		}
-		fetch(url + "/mobileReportPost", 
+		fetch(url + "/mobileReportPost",
 			{method: "POST",
 				headers: {
 					'Accept': 'application/json',
@@ -49,7 +50,7 @@ export default class ReportPostModal extends Component {
 				"Click OK to return to the feed",
 				[
 				{text: 'OK', onPress: () => this.handleReturn.bind(this)()}
-				])	
+				])
 			}
 		})
 	    .catch((error) => {
@@ -60,26 +61,26 @@ export default class ReportPostModal extends Component {
 	handleReturn(){
 		this.props.toggleReportModal()
 	}
-	
+
 	render() {
 		if (this.props.post == null) {return null;}
 		else
 		return(
 			<Modal visible={this.props.display} animationType={"slide"} transparent={false} onRequestClose={() => {return}}>
 				{Platform.OS == 'ios' && <View style = {{paddingTop : 20}} />}
-				
+
 				<View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start'}}>
 					<View style={styles.top_bar}>
 						<View style={{flex: 0.2}}>
 							<TouchableOpacity onPress = {this.handleReturn.bind(this)}>
-								<Text style = {{color : '#90D7ED'}}>
+								<Text style = {{color : '#90D7ED', fontSize: 20}}>
 									Cancel
 								</Text>
 							</TouchableOpacity>
 						</View>
 						<View style={{flex: 0.6}}>
-							<Text style = {{textAlign : 'center', fontWeight : 'bold'}}>
-								Report 
+							<Text style = {{textAlign : 'center', fontWeight : 'bold', fontSize: 20}}>
+								Report
 							</Text>
 						</View>
 						<View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}/>
@@ -87,27 +88,29 @@ export default class ReportPostModal extends Component {
 
 					<View style={styles.list_container}>
 						<Text style = {{fontWeight: "bold"}}>
-							Original Post
+							Original Post:
 						</Text>
-						<Text>
-							{this.props.post.postContent}
-						</Text>
+						<ScrollView>
+							<Text>
+								{this.props.post.postContent}
+							</Text>
+						</ScrollView>
 					</View>
 
-					<Picker style = {{flex : 0}} selectedValue={this.state.reason} 
+					<Picker style = {{flex : 0}} selectedValue={this.state.reason}
 					onValueChange={this.handleReasonChange.bind(this)}
 					>
 							<Picker.Item  label= {"Inappropriate"} value = {"Inappropriate"} />
 							<Picker.Item  label= {"Spam"} value = {"Spam"} />
 							<Picker.Item  label= {"Other"} value = {"Other"} />
-					</Picker> 
+					</Picker>
 
-			
+
 					<View style = {{flex : 0.4, flexDirection : "row", justifyContent: "flex-start"}}>
 						<TextInput
 						style = {{flex : 0.9, borderColor : "skyblue", borderWidth : 4, padding: 6, borderRadius : 4}}
-						onChangeText = {this.handleDescriptionChange.bind(this)} 
-						placeholder = "Describe Why This Post Is Bad" 
+						onChangeText = {this.handleDescriptionChange.bind(this)}
+						placeholder = "Describe Why This Post Is Bad"
 						maxLength = {40}
 						/>
 					</View>
@@ -132,9 +135,11 @@ const styles = StyleSheet.create({
 
 	},
 	top_bar : {
-		flex : 0.1,
+		flex : 0,
 		paddingLeft : 10,
 		paddingRight : 10,
+		paddingTop: 10,
+		paddingBottom: 10,
 		flexDirection : "row",
 		justifyContent: "space-around",
 		borderBottomColor : '#e1e1e1',
@@ -145,7 +150,8 @@ const styles = StyleSheet.create({
 		flex : 0.15,
 		paddingTop : 8,
 		alignSelf : 'stretch',
-		backgroundColor : '#fbfbfb'
+		backgroundColor : '#fbfbfb',
+		padding: 5
 	},
 	update_button : {
 		borderColor : "skyblue",
