@@ -40,7 +40,7 @@ class FacebookLogin extends Component {
     // this._navigateToFbCreateAccount = this._navigateToFbCreateAccount.bind(this)
   }
 
-  
+
 
 
 
@@ -51,16 +51,16 @@ async loadCurrentUser(fb_id){
             headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-          }, 
-        body: 
+          },
+        body:
         JSON.stringify(
          {
           fb_id : this.state.fb_id
         })
       })
 
-      let responseData = await response.json(); 
-      // login is good and there already is an account for this user 
+      let responseData = await response.json();
+      // login is good and there already is an account for this user
       if (responseData['result'] == 'success') {
         AsyncStorage.setItem("fb_token", this.state.fb_token)
         AsyncStorage.setItem("current_username", responseData['current_user']['userID'])
@@ -92,7 +92,7 @@ _navigateToFeed() {
 
 onLogin(data) {
   this.setState({ fb_token : data.credentials.token });
-  this.setState({ fb_id : data.credentials.userId }); 
+  this.setState({ fb_id : data.credentials.userId });
   this.loadCurrentUser();
 }
 
@@ -126,9 +126,9 @@ onPermissionsMissing(data){
 }
 
 
-      
+
 componentDidMount() {
-  
+
 }
 
   render() {
@@ -156,7 +156,8 @@ const styles = StyleSheet.create({
   fb_button : {
     alignItems : "center",
     borderRadius: 5,
-    marginLeft : 3
+    marginLeft : 3,
+    flex: 0
   },
 
 });
