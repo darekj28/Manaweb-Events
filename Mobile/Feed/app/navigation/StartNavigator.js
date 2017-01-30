@@ -87,7 +87,7 @@ class StartNavigator extends Component {
 				screen =  (<MenuScreen {...globalNavigatorProps}/>)
 				break;
 			case "Comment":
-				screen =  (<CommentScreen comment_id={route.comment_id} original_post={route.original_post} {...globalNavigatorProps}/>)
+				screen =  (<CommentScreen comment_id={route.comment_id} getPosts={this.props.getPosts} original_post={route.original_post} {...globalNavigatorProps}/>)
 				break;
 			case "Feed":
 				screen = (<FeedScreen feed={this.props.feed} getPosts={this.props.getPosts} {...globalNavigatorProps}/>)
@@ -119,12 +119,7 @@ class StartNavigator extends Component {
 		return screen;
 	}
 
-	componentWillMount() {
-
-	}
-
 	render() {
-		console.log('current_user' , this.props.current_user)
 		var start = ""
 		if (this.props.current_username == "" || this.props.current_username == null) {
 			start = "Start"

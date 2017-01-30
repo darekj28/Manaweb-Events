@@ -115,9 +115,9 @@ export default class CommentScreen extends React.Component {
 		this.getComments.bind(this)();
 		this.setState({current_user : this.props.current_user});
 	}
-
 	componentWillUnmount(){
 		clearTimeout(this.spamTimer)
+		this.props.getPosts();
 	}
 	expand() {
         this.animatedValue.setValue(0)

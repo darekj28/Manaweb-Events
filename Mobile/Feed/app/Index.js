@@ -61,7 +61,6 @@ export default class Index extends React.Component {
     })
   }
   initializeUserInformation(){
-    console.log(this.state.current_username)
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
     fetch(url + "/mobileGetCurrentUserInfo", {method: "POST",
@@ -77,7 +76,6 @@ export default class Index extends React.Component {
     })
     .then((response) => response.json())
     .then((responseData) => {
-      console.log('current_username', this.state.current_username)
       if (responseData.thisUser == null) {
         // if (this.state.current_username != "") {
          this.asyncStorageLogout.bind(this)()
@@ -87,7 +85,6 @@ export default class Index extends React.Component {
       else 
         // if (this.state.current_user.userID != responseData.thisUser.userID) 
           {
-          console.log("refresh", responseData.thisUser)
           var thisUser = responseData.thisUser;
           this.setState({current_user : thisUser}, this.getNotifications.bind(this))
       }
@@ -127,7 +124,7 @@ export default class Index extends React.Component {
                   }
               }
               this.setState({notifications: notifications})
-              this.setState({numUnseenNotifications : numUnseenNotifications + 1})
+              this.setState({numUnseenNotifications : numUnseenNotifications})
           }    
     })
     .catch((error) => {

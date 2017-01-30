@@ -52,13 +52,42 @@ export default class NotificationBox extends React.Component {
         }
         return whose + " post";
     }
-    _navigateToComment() {
-        this.props.navigator.push({
-            href: "Comment",
-            current_username : this.props.current_username,
-            comment_id : this.props.note['comment_id'],
-            current_user : this.props.current_user
+    getPostById() {
+        let url = "https://manaweb-events.herokuapp.com"
+        let test_url = "http://0.0.0.0:5000"
+        fetch(url + "/mobileGetPostById",
+            {method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ comment_id : this.props.note['comment_id'] })
+            }
+        ).then((response) => response.json())
+        .then((responseData) => {
+            var original_post = {
+                postContent : responseData.post['body'],
+                avatar      : responseData.post['avatar'],
+                name        : responseData.post['first_name'] + ' ' + responseData.post['last_name'],
+                userID      : responseData.post['poster_id'],
+                time        : responseData.post['time'],
+                comment_id  : responseData.post['comment_id'],
+                unique_id   : responseData.post['unique_id'],
+                timeString  : responseData.post['timeString'] 
+            };
+            this.props.navigator.push({
+                href: "Comment",
+                current_username : this.props.current_username,
+                original_post : original_post,
+                current_user : this.props.current_user
+            })
         })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+    _navigateToComment() {
+        this.getPostById.bind(this)();
     }
     animate () {
         this.animatedValue.setValue(0)
