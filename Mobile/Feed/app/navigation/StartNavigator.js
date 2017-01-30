@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import {Component} from 'react'
 import {KeyboardAvoidingView, Platform, Keyboard, ActivityIndicator, ViewContainer, AsyncStorage, AppRegistry, StyleSheet, Text, View, ListView, TouchableOpacity, TouchableHighlight, Navigator} from 'react-native';

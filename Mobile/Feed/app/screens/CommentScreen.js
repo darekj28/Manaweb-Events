@@ -130,8 +130,8 @@ export default class CommentScreen extends React.Component {
 					<OriginalPost post={this.props.original_post}/>
 				</View>
 				<TouchableWithoutFeedback onPress={() => this.postMessagePressed.bind(this)()}>
-					<View style = {{flexDirection: 'row', borderTopColor: 'silver', borderTopWidth: 1}}>
-						<Text style = {{padding: 3, fontSize: 14, color: 'black'}}>
+					<View style = {{flexDirection: 'row', borderTopColor: 'silver', borderTopWidth: 1, borderBottomColor : 'silver', borderBottomWidth : 1}}>
+						<Text style = {{padding: 3, fontSize: 14, color: '#90d7ed'}}>
 							Write a comment...
 						</Text>
 					</View>
@@ -163,14 +163,16 @@ export default class CommentScreen extends React.Component {
                 	removeClippedSubviews= {false}/>}
                 {!this.props.original_post.name && 
                 	<View style={styles.list_container}/>}
-                {this.state.post_message_expanded && <View style={{flex: 0.1}}>
-				<MakeCommentBox onClick={(event) => this.postMessagePressed.bind(this)()}
+                {this.state.post_message_expanded && 
+                <View style={{flex: 0.1}}>
+					<MakeCommentBox onClick={(event) => this.postMessagePressed.bind(this)()}
 						post_message_expanded = {this.state.post_message_expanded}
 						newPostContent = {this.state.newPostContent}
 						handlePostTyping = {this.handlePostTyping.bind(this)}
 						handlePostSubmit = {this.handleCommentSubmit.bind(this)}
 						op = {op} 
-						canPost={this.state.canPost}/></View>}
+						canPost={this.state.canPost}/>
+				</View>}
             </View>
 		)
 	}
