@@ -27,7 +27,7 @@ def sendTextConfirmationPin(user_phone_number, confirmationPin = None):
 		sendMessage(Twilio_Number, raw_phone_number, message)
 	except:
 		return {'error' : 'invalid phone'}
-	return confirmationPin
+	return {'pin' : confirmationPin}
 
 def generatePin():
 	return hashString(str(time.time()))

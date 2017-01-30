@@ -98,9 +98,14 @@ def validatePassword(password, password_confirm):
 	# 	output['error'] = 'Passwords must be at least 10 characters'
 	
 	# if there are no uppercase characters we reject
+	elif password.upper() == password:
+		output['result'] = 'failure'
+		output['error'] = 'Passwords must contain at least one lowercase character'
+
 	elif password.lower() == password:
 		output['result'] = 'failure'
 		output['error'] = 'Passwords must contain at least one uppercase character'
+
 	else:
 		digitCheck = False
 		for char in password:
@@ -109,18 +114,17 @@ def validatePassword(password, password_confirm):
 		if digitCheck == False:
 			output['result'] = 'failure'
 			output['error'] = 'Passwords must contain at least one digit'
+	output['explanation'] = "Passwords must contain at least one digit, upper, and lower case character"
 	return output
 
 def validateEmail(email):
 	output = {}
 	output['result']  = 'success'
-
 	email_regex = re.compile("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")
 	isMatch = email_regex.match(email)
 	if not isMatch:
 		output['result'] = 'failure'
-		output['error'] = 'Invalid email address.'
-
+		output['error'] = 'Invalid email address.'s
 	user_manager = Users()
 	isEmailTaken = user_manager.isEmailTaken(email)
 	user_manager.closeConnection()

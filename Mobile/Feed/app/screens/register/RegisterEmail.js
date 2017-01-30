@@ -7,7 +7,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {Image, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {Alert, Image, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 
 import ViewContainer from '../../components/ViewContainer';
 import HomeStatusBar from '../../components/HomeStatusBar';
@@ -25,7 +25,6 @@ class RegisterEmail extends Component {
       email : "",
       validation_output: {'error' : ""}
     }
-
     this.handleEmailSubmit = this.handleEmailSubmit.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.validateEmail = this.validateEmail.bind(this);
@@ -35,6 +34,9 @@ class RegisterEmail extends Component {
   handleEmailSubmit() {
     if (this.state.validation_output['result'] == 'success') {
       this._navigateToRegisterUsername()
+    }
+    else {
+      Alert.alert(this.state.validation_output.error)
     }
   }
 
@@ -141,12 +143,14 @@ class RegisterEmail extends Component {
             </View>
 
           <View style = {styles.small_padding}/>
-          { error_message != null &&
+          { //error_message != null &&
+            false
               <View style = {styles.error_box}>
                 {error_message}
             </View>
           }
-          {error_message == null &&
+          {// error_message == null &&
+            true &&
             <View style = {styles.small_padding}/>
           }
             <View style = {styles.large_padding} />

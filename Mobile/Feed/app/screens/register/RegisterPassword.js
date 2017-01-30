@@ -1,22 +1,10 @@
-
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React from 'react';
 import {Component} from 'react'
-import {Image, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
-
+import {Alert, Image, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 import ViewContainer from '../../components/ViewContainer';
 import HomeStatusBar from '../../components/HomeStatusBar';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
-
-
-
-
 
 class RegisterPassword extends Component {
   constructor(props) {
@@ -26,14 +14,12 @@ class RegisterPassword extends Component {
       password_confirm: "",
       validation_output : {}
     }
-
     this._navigateToRegisterEmail = this._navigateToRegisterEmail.bind(this);
     this.handlePasswordConfirmChange = this.handlePasswordConfirmChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.validatePassword = this.validatePassword.bind(this);
     this.handlePasswordSubmit = this.handlePasswordSubmit.bind(this);
   }
-
 
   validatePassword(password, password_confirm) {
     var url = "https://manaweb-events.herokuapp.com"
@@ -62,28 +48,23 @@ class RegisterPassword extends Component {
       this._navigateToRegisterEmail();
     }
     else {
-      alert(this.state.validation_output.error)
+      Alert.alert(this.state.validation_output.explanation)
     }
   }
-
   handlePasswordChange(password) {
     this.setState({password : password})
     this.validatePassword(password, this.state.password_confirm)
   }
-
   handlePasswordConfirmChange(password_confirm) {
     this.setState({password_confirm : password_confirm})
     this.validatePassword(this.state.password, password_confirm)
   }
-
   clearPassword() {
     this.setState({password : ""})
   }
-
   clearPasswordConfirm() {
     this.setState({password_confirm : ""})
   }
-
 // add validators
   _navigateToRegisterEmail() {
     this.props.navigator.push({
@@ -118,10 +99,7 @@ class RegisterPassword extends Component {
                 Choose a password
               </Text>
             </View>
-
           {/* <View style = {styles.small_padding} /> */}
-
-
             <View style = {styles.input_row}>
               <View style = {styles.input_box}> 
                 <TextInput
@@ -131,19 +109,15 @@ class RegisterPassword extends Component {
                   value = {this.state.password}
                   secureTextEntry = {true}
                 />
-
               { this.state.password != "" &&
               <View style = {styles.clear_button}>
                 <Icon name = "close" size = {20} onPress = {this.clearPassword.bind(this)}/>
               </View> }
               </View>
             </View>
-
             <View style = {{flex: 0.025}}/>
-
           <View style = {styles.input_row}>
             <View style = {styles.input_box}> 
-              
               <TextInput
                 onChangeText = {this.handlePasswordConfirmChange}
                 style = {styles.input_text} placeholder = "Confirm Password"

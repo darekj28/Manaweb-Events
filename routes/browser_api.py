@@ -33,9 +33,11 @@ def createProfile():
 	elif request.json['email_or_phone'] == "phone_number" :
 		phone_number = request.json['phone_number']
 		email = ""
-		confirmationPin = sms.sendTextConfirmationPin(phone_number)
-		if confirmationPin.get('error') != None :
+		output = sms.sendTextConfirmationPin(phone_number)
+		if output.get('error') != None :
 			return jsonify({ "result" : 'phone_exception'})
+		confirmationPin = output.get("pin")
+
 	# read the form data and save it
 	first_name 		= request.json['first_name']
 	last_name 		= request.json['last_name']
@@ -144,7 +146,9 @@ def resendConfirmation():
 @browser_api.route('/sendTextConfirmation', methods = ['POST'])
 def sendTextConfirmation():
 	phone_number = request.json['phone_number']
-	confirmationCode = sms.sendTextConfirmationPin(phone_number)
+	output = sms.sendTextConfirmationPin(phone_number)
+	if (confirmationCode.get('error') != None) 
+		return jsonify({'result' : 'failure', reason : output.pin})
 	return jsonify({'result' : 'success', 'confirmationCode' : confirmationCode})
 
 @browser_api.route('/recoverAccount', methods = ['POST'])

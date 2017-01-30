@@ -108,10 +108,10 @@ def mobileIsUserLocked():
 @mobile_api.route('/mobileTextConfirmation', methods = ['POST'])
 def mobileTextConfirmation():
 	phone_number = request.json['phone_number']
-	confirmationPin = sms.sendTextConfirmationPin(phone_number)
-	if confirmationPin.get('error') != None :
-		return jsonify({ 'result' : 'phone_exception' })
-	return jsonify({'confirmationPin' : confirmationPin})
+	output = sms.sendTextConfirmationPin(phone_number)
+	if output.get('error') != None :
+		return jsonify({ 'error' : 'phone_exception' })
+	return jsonify({'confirmationPin' : output.get('pin')})
 
 @mobile_api.route('/mobileEmailConfirmation', methods = ['POST'])
 def mobileEmailConfirmation():

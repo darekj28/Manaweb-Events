@@ -89,7 +89,7 @@ class RegisterPhoneNumber extends Component {
     .then((response) => response.json())
     .then((responseData) => {
       if (responseData.error){
-        alert("That phone number is a prank bro")
+        Alert.alert("Invalid Phone Number")
       }
       else {
         this.setState({confirmationPin : responseData['confirmationPin']})
