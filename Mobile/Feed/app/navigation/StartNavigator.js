@@ -152,7 +152,8 @@ class StartNavigator extends Component {
 						navigationBar = {
 							<BottomTabBar navigator={this.refs.appNavigator} 
 							current_username={this.props.current_username} 
-							numUnseenNotifications={this.props.numUnseenNotifications}/>		
+							numUnseenNotifications={this.props.numUnseenNotifications}
+							resetNotificationCount={this.props.resetNotificationCount}/>		
 						}
 						/>
 					</View>

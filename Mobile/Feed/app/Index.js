@@ -60,7 +60,6 @@ export default class Index extends React.Component {
       isConnected: change
     })
   }
-  // get current user info and notifications
   initializeUserInformation(){
     console.log(this.state.current_username)
     var url = "https://manaweb-events.herokuapp.com"
@@ -128,7 +127,7 @@ export default class Index extends React.Component {
                   }
               }
               this.setState({notifications: notifications})
-              this.setState({numUnseenNotifications : numUnseenNotifications})
+              this.setState({numUnseenNotifications : numUnseenNotifications + 1})
           }    
     })
     .catch((error) => {
@@ -194,24 +193,12 @@ export default class Index extends React.Component {
     })
     console.log("async logout")
   }
-
-  componentDidUpdate(){
-    // we'll figure out someway to 
-    // this.initializeUserInformation.bind(this)()
-    // this.getPosts.bind(this)(); 
+  resetNotificationCount() {
+    this.setState({ numUnseenNotifications : 0 });
   }
-
   componentDidMount() {
     this.getPosts.bind(this)(); 
   }
-
-  // refreshUserInformation(new_info) {
-  //   AsyncStorage.mergeItem("current_user", new_info, () => {
-  //     AsyncStorage.getItem("current_user", (err, result) => {
-  //       this.setState({ current_user : JSON.parse(result) });
-  //     });
-  //   });
-  // }
 
   render() {
     var this_user = this.state.current_user
@@ -242,6 +229,7 @@ export default class Index extends React.Component {
         notifications={this.state.notifications}
         numUnseenNotifications={this.state.numUnseenNotifications}
         getPosts={this.getPosts.bind(this)}
+        resetNotificationCount={this.resetNotificationCount.bind(this)}
         /> 
     }
 

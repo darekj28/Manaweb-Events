@@ -10,7 +10,10 @@ export default class ReportPostModal extends React.Component {
 			type : 'POST',
 			url  : '/reportPost',
 			data : JSON.stringify(obj, null, '\t'),
-			contentType: 'application/json;charset=UTF-8'
+			contentType: 'application/json;charset=UTF-8',
+			success : function(data) {
+				swal("Thank you!", "Your report has been sent.");
+			}
 		});
 	}
 	reportForInappropriate() {
@@ -23,7 +26,10 @@ export default class ReportPostModal extends React.Component {
 			type : 'POST',
 			url  : '/reportPost',
 			data : JSON.stringify(obj, null, '\t'),
-			contentType: 'application/json;charset=UTF-8'
+			contentType: 'application/json;charset=UTF-8',
+			success : function(data) {
+				swal("Thank you!", "Your report has been sent.");
+			}
 		});
 	}
 	render() {

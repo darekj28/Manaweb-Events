@@ -42,7 +42,7 @@ export default class NotificationScreen extends React.Component {
         <View style={styles.top_bar}>
             <View style={{flex: 1}}>
             </View>
-            <Text style = {{flex : 2, textAlign : 'center', fontWeight : 'bold'}}>
+            <Text style = {{flex : 3, textAlign : 'center', fontWeight : 'bold'}}>
                     Your Notifications
             </Text>
             <View style={{flex: 1, justifyContent : 'flex-end', flexDirection : 'row'}}>

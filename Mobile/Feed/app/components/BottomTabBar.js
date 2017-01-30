@@ -2,6 +2,7 @@ import React from 'react';
 import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
         TouchableWithoutFeedback, Alert, Image, Animated} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import IconBadge from 'react-native-icon-badge';
 
 const HIGHLIGHTED = '#90D7ED';
 const DEFAULT = 'silver';
@@ -26,6 +27,7 @@ export default class BottomTabBar extends React.Component {
 	notificationsPress() {
 		if (this.state.selected != 'notifications') {
 			this.navigate.bind(this)("Notifications");
+			this.props.resetNotificationCount();
 		}
 		this.setState({ selected : 'notifications' });
 	}
@@ -63,12 +65,26 @@ export default class BottomTabBar extends React.Component {
 							<Text style={[{color: settings}, styles.tab_text]}>Settings</Text>
 						</View>
 					</TouchableWithoutFeedback>
+					{this.props.numUnseenNotifications == 0 && 
 					<TouchableWithoutFeedback style={styles.tab} onPress={this.notificationsPress.bind(this)}>
 						<View style={styles.tab_content}>
 							<Icon name = "md-mail" size={25} color={notifications}/>
 							<Text style={[{color: notifications}, styles.tab_text]}>Notifications</Text>
 						</View>
-					</TouchableWithoutFeedback>
+					</TouchableWithoutFeedback>}
+					{this.props.numUnseenNotifications != 0 && 
+					<TouchableWithoutFeedback style={styles.tab} onPress={this.notificationsPress.bind(this)}>
+						<View style={styles.tab_content}>
+							<IconBadge
+								MainElement={<View>
+								<Icon name = "md-mail" size={25} color={notifications}/>
+								<Text style={[{color: notifications}, styles.tab_text]}>Notifications</Text>
+							</View>}
+							 BadgeElement={<Text style={{color:'#FFFFFF'}}> {this.props.numUnseenNotifications} </Text>}
+							 IconBadgeStyle = {styles.notification_badge}
+							/>
+						</View>
+					</TouchableWithoutFeedback>}
 				</View>
 				);
 		else return <View/>;
@@ -97,5 +113,8 @@ const styles = StyleSheet.create({
 	tab_text : {
 		fontSize : 12, 
 		fontWeight: 'bold'
-	}
+	},
+	notification_badge : {
+		alignSelf: "center",
+	},
 })
