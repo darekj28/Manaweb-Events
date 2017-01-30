@@ -88,8 +88,14 @@ class RegisterPhoneNumber extends Component {
     })
     .then((response) => response.json())
     .then((responseData) => {
-      this.setState({confirmationPin : responseData['confirmationPin']})
-      this._navigateToConfirmCode();
+      if (responseData.error){
+        alert("That phone number is a prank bro")
+      }
+      else {
+        this.setState({confirmationPin : responseData['confirmationPin']})
+        this._navigateToConfirmCode();  
+      }
+      
     })
     .done();
   }

@@ -11846,7 +11846,7 @@
 						maxlength = "12";
 						break;
 					case "password":
-						content = "Must contain at least one number and one letter";
+						content = "Must contain at least one uppercase letter, one lowercase letter, and one number.";
 						break;
 					case "username":
 						content = "Must be at least 2 characters (2 to 15 characters)";
@@ -11945,7 +11945,7 @@
 			key: 'verifyFields',
 			value: function verifyFields() {
 				if (this.state.username_error || this.state.email_error) {
-					swal("Oops...", "There's a mistake in your submission!", "error");
+					swal("Oops...", "There's a mistake in your username or contact you provided!", "error");
 					return;
 				}
 				if ($('#register_form').find('input.valid').length == 5) {
@@ -14733,7 +14733,7 @@
 						id: field, type: type, value: value, placeholder: placeholder,
 						onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),
 					field == "password" && React.createElement('input', { 'data-toggle': 'popover', 'data-trigger': 'focus',
-						'data-content': 'Your password must contain at least one letter and one number.',
+						'data-content': 'Your password must contain at least one lowercase letter, one uppercase letter, and one number.',
 						className: "setting form-control " + this.state.valid, id: field, type: type, value: value,
 						onClick: focus(), placeholder: 'Change your password (optional)',
 						onChange: this.handleTyping.bind(this), onBlur: this.handleBlur.bind(this) }),

@@ -109,7 +109,7 @@ def mobileIsUserLocked():
 def mobileTextConfirmation():
 	phone_number = request.json['phone_number']
 	confirmationPin = sms.sendTextConfirmationPin(phone_number)
-	if confirmationPin.error != None :
+	if confirmationPin.get('error') != None :
 		return jsonify({ 'result' : 'phone_exception' })
 	return jsonify({'confirmationPin' : confirmationPin})
 

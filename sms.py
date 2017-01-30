@@ -6,16 +6,12 @@ import time
 ACCOUNT_SID = "AC14aa2c80e770d77439ccde10800e206b" 
 AUTH_TOKEN = "17cefd81ceb38d3ac03ad3c732e4883d"
 Twilio_Number =  "+16466307655"
-
 client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN) 
- 
 # client.messages.create(
 # 	to="6122455469", 
 # 	from_="+16466796455", 
 # 	body="hey hey hey!",  
 # ) 
-
-
 def sendMessage(sender, receiver, body):
 	client.messages.create(to = receiver, from_ = sender, body = body)
 
@@ -55,6 +51,5 @@ def formatRawPhoneNumber(phoneNumberWithDashes):
 def test():
 	user_phone_number = "6122455469"
 	sendTextConfirmationPin(user_phone_number)
-
 
 # test()
