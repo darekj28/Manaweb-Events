@@ -15,13 +15,19 @@ export default class MakeCommentBox extends React.Component {
         if (this.props.newPostContent.length > 0)
             this.props.handlePostSubmit(this.props.newPostContent);
     }
+    componentDidMount() {
+        console.log('o');
+        this.refs.makeCommentBox.focus();
+    }
 	render() {
+        var color = this.props.newPostContent.length > 0 ? '#90D7ED' : 'silver';
 		return (
-            <View style = {{flex: 1}}>
+            <View style = {{flex: 1, flexDirection : 'row'}}>
     			<View style={{flex:1, flexDirection : 'row', justifyContent: 'flex-start',
                     borderColor: '#000000',borderWidth: 1, paddingRight: 3, margin: 3, borderRadius: 3}}>
                     <TextInput
                         style = {styles.text_input}
+                        ref="makeCommentBox"
                         autoFocus = {false}
                         multiline = {true}
                         numberOfLines = {1}
@@ -34,10 +40,9 @@ export default class MakeCommentBox extends React.Component {
                 </View>
                     <View style = {{flex: 0, justifyContent: 'center', flexDirection: 'row'}}>
                         <TouchableHighlight
-                            style = {{backgroundColor: '#90D7ED', borderRadius: 3, justifyContent: 'center', flex: 0, flexDirection: 'row'}}
                             onPress={this.handlePostSubmit.bind(this)}>
-                            <Text style={{fontSize: 15, color: 'white', padding: 5}}>
-                                COMMENT!
+                            <Text style={{fontSize: 15, color: color, padding: 5}}>
+                                Comment!
                             </Text>
                         </TouchableHighlight>
                     </View>
@@ -49,5 +54,8 @@ const styles = StyleSheet.create({
     text_input: {
         flex : 1,
         textAlignVertical: 'center',
+        fontSize : 16,
+        paddingLeft : 4, 
+        paddingRight : 4
     },
 });

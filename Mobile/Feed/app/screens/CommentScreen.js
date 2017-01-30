@@ -1,13 +1,14 @@
 import React from 'react';
 import {Platform, Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,
 		TouchableOpacity,TouchableHighlight, TextInput,
-		  Alert, Image, Animated, TouchableWithoutFeedback, ScrollView, Easing} from 'react-native';
+		  Alert, Image, Animated, TouchableWithoutFeedback, ScrollView, Easing, Keyboard} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Comments from '../components/comments/Comments';
 import CommentBox from '../components/comments/CommentBox';
 import MakeCommentBox from '../components/comments/MakeCommentBox';
 import OriginalPost from '../components/comments/OriginalPost';
+import dismissKeyboard from 'react-native-dismiss-keyboard';
 
 const NAVIGATOR_BACK_ICON_HEIGHT = 30
 
@@ -16,7 +17,6 @@ export default class CommentScreen extends React.Component {
 		super();
 		this.state = {
 			post_message_expanded: false,
-			post_message_height: new Animated.Value(0),
 			comments : [],
 			original_post : {},
 			newPostContent: "",
@@ -24,16 +24,11 @@ export default class CommentScreen extends React.Component {
 			canPost : true
 		}
 		this.spamTimer
-		this.animatedValue = new Animated.Value(0);
 	}
 	handlePostTyping(newPostContent) {
 		this.setState({ newPostContent : newPostContent });
 	}
 	postMessagePressed() {
-		if (this.state.post_message_expanded) 
-		  	this.retract();
-		else 
-		  	this.expand();
 		this.setState({ post_message_expanded : !this.state.post_message_expanded });
 	}
 	handleCommentSubmit() {
@@ -111,45 +106,21 @@ export default class CommentScreen extends React.Component {
 	listViewRenderRow(input_element){
 		return input_element
 	}
+	collapseMessageBox() {
+		dismissKeyboard();
+		this.setState({ post_message_expanded : false });
+	}
 	componentDidMount() {
 		this.getComments.bind(this)();
 		this.setState({current_user : this.props.current_user});
+		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => this.collapseMessageBox());
 	}
 	componentWillUnmount(){
 		clearTimeout(this.spamTimer)
 		this.props.getPosts();
+		this.keyboardDidHideListener.remove();
 	}
-	expand() {
-        this.animatedValue.setValue(0)
-        Animated.timing(
-            this.animatedValue,
-            {
-                toValue: 1,
-                duration: 400,
-                easing: Easing.linear
-            }
-        ).start(() => this.animatedValue.setValue(1))
-    }
-    retract() {
-    	this.animatedValue.setValue(1)
-        Animated.timing(
-            this.animatedValue,
-            {
-                toValue: 0,
-                duration: 400,
-                easing: Easing.linear
-            }
-        ).start(() => this.animatedValue.setValue(0))
-    }
 	render() {
-		const height = this.animatedValue.interpolate({ 
-            inputRange: [0, 0.5, 1],
-            outputRange: [0, 50, 100]
-        });
-        const opacity = this.animatedValue.interpolate({ 
-            inputRange: [0, 0.000001, 1],
-            outputRange: [0, 1, 1]
-        });
 		var op = this.props.original_post['name'] ? this.props.original_post['name'].split(' ')[0] : "";
 		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		var scrollable_section = [
@@ -164,18 +135,17 @@ export default class CommentScreen extends React.Component {
 						</Text>
 					</View>
 				</TouchableWithoutFeedback>
-				<Animated.View style = {{flexDirection:'row', height, opacity}}>
-					<MakeCommentBox onClick={(event) => this.postMessagePressed.bind(this)()}
-						post_message_expanded={this.state.post_message_expanded}
+				<View style={{flex : 1, flexDirection : 'row'}}>
+					<Comments comments={this.state.comments} comment_id={this.props.comment_id}/>
+				</View>
+				{this.state.post_message_expanded && <View style={{flex : 0}}>
+				<MakeCommentBox onClick={(event) => this.postMessagePressed.bind(this)()}
+						post_message_expanded = {this.state.post_message_expanded}
 						newPostContent = {this.state.newPostContent}
 						handlePostTyping = {this.handlePostTyping.bind(this)}
 						handlePostSubmit = {this.handleCommentSubmit.bind(this)}
 						op = {op} 
-						canPost={this.state.canPost}/>
-				</Animated.View>
-				<View style={{flex : 1, flexDirection : 'row'}}>
-					<Comments comments={this.state.comments} comment_id={this.props.comment_id}/>
-				</View>
+						canPost={this.state.canPost}/></View>}
 			</View>
 			];
 		var dataSource = ds.cloneWithRows(scrollable_section);
