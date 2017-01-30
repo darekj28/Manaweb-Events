@@ -34,6 +34,15 @@ def mobileFacebookCreateAccount():
 	# confirmed = False
 	confirmed = True		
 	user_manager = Users()
+	email_taken = False
+	another_user = user_manager.getInfoFromEmail(email)
+	# then another user has this email, set the facebook user's email to empty
+	if (another_user != None):
+		email = ""
+		email_taken = True
+
+
+
 	user_manager.addUser(userID, first_name = first_name, last_name = last_name, password = password, email = email,  isActive = isActive,
 		avatar_url = avatar_url, avatar_name = avatar_name, confirmed=confirmed, confirmationPin = confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
 		isAdmin = False, phone_number = phone_number, birthMonth = birthMonth, birthDay = birthDay, birthYear = birthYear,
@@ -42,7 +51,7 @@ def mobileFacebookCreateAccount():
 	user_manager.closeConnection()
 	session['logged_in'] = True
 	session['userID'] = userID
-	return jsonify({'result' : 'success', 'current_user': current_user})
+	return jsonify({'result' : 'success', 'current_user': current_user, 'email_taken' : email_taken})
 
 @mobile_api.route('/mobileCreateProfile', methods = ['POST'])
 def mobileCreateProfile():

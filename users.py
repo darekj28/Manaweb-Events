@@ -219,6 +219,10 @@ class Users:
 			output_table[user] = this_user_info
 		return output_table
 
+	def deleteUserByPhoneNumber(self, phone_number):
+		thisUser = self.getInfoFromPhoneNumber(phone_number)
+		self.deleteUser(thisUser['userID'])
+
 	def deleteUser(self, userID):
 		userID = userID.lower()
 		table_name = self.USER_TABLE

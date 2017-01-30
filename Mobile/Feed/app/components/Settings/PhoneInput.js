@@ -28,6 +28,9 @@ export default class PhoneInput extends React.Component {
 		}
 		var length = raw_phone_number.length;
 		var new_phone_number = "";
+		if (length == 0) {
+			new_phone_number = ""
+		}
 		if (length > 0 && length <= 3) {
 			new_phone_number = "(" + raw_phone_number;
 		}
@@ -68,8 +71,13 @@ export default class PhoneInput extends React.Component {
 		})
 		.done();
 	}
-	render() {
 
+	componentWillMount(){
+		// this.handleChange(this.props.value)
+	}
+
+	render() {
+		var display_number = this.parseNumber(this.props.value)
 		return(
 			<View style = {styles.input_container}> 
 				<Text style = {styles.settings_label}>
@@ -80,7 +88,7 @@ export default class PhoneInput extends React.Component {
 						onChangeText={this.handleChange.bind(this)}
 						style = {styles.settings_input}
 						placeholder = "Phone number"
-						value = {this.props.value}
+						value = {display_number}
 						keyboardType = "number-pad"
 						dataDetectorTypes = "phoneNumber"
 						maxLength = {14}/>              

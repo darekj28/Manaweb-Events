@@ -15,7 +15,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import React from 'react';
 import {Component} from 'react'
 import {ActivityIndicator, Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
-					Alert, Image, Animated, TouchableWithoutFeedback, ScrollView, Keyboard} from 'react-native';
+			Alert, Image, Animated, TouchableWithoutFeedback, ScrollView, Keyboard} from 'react-native';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -29,9 +29,9 @@ import FeedBox from '../components/feed/FeedBox'
 import Feed from '../components/feed/Feed'
 import LogoAndSearchBar from '../components/feed/LogoAndSearchBar'
 import ActivityAndFilterBar from '../components/feed/ActivityAndFilterBar'
-
 const SEARCH_BAR_HEIGHT = 45
-const SEARCH_BAR_COLOR = "#90D7ED"
+// const SEARCH_BAR_COLOR = "#90D7ED"
+const SEARCH_BAR_COLOR = "skyblue"
 const ACTIVITY_BAR_HEIGHT = 40
 const ACTIVITY_BAR_COLOR = "#2f4f4f"
 const POST_MESSAGE_HEIGHT_SHORT = 50

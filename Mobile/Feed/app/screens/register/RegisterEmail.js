@@ -161,11 +161,11 @@ class RegisterEmail extends Component {
                 </Text>
                 </TouchableOpacity>
                 <View style = {styles.bottom_bar_padding}/>
-                <TouchableHighlight style = {styles.login_submit_button} onPress = {this.handleEmailSubmit.bind(this)}>
+                <TouchableOpacity style = {styles.login_submit_button} onPress = {this.handleEmailSubmit.bind(this)}>
                 <Text style = {styles.login_submit_text}>
                   Next!
                 </Text>
-              </TouchableHighlight>
+              </TouchableOpacity>
           </View>
         </View>
     )
