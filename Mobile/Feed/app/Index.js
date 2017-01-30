@@ -190,17 +190,22 @@ export default class Index extends React.Component {
   }
 
   componentDidUpdate(){
-    this.initializeUserInformation.bind(this)()
+    // we'll figure out someway to 
+    // this.initializeUserInformation.bind(this)()
+    // this.getPosts.bind(this)(); 
+  }
+
+  componentDidMount() {
     this.getPosts.bind(this)(); 
   }
 
-  refreshUserInformation(new_info) {
-    AsyncStorage.mergeItem("current_user", new_info, () => {
-      AsyncStorage.getItem("current_user", (err, result) => {
-        this.setState({ current_user : JSON.parse(result) });
-      });
-    });
-  }
+  // refreshUserInformation(new_info) {
+  //   AsyncStorage.mergeItem("current_user", new_info, () => {
+  //     AsyncStorage.getItem("current_user", (err, result) => {
+  //       this.setState({ current_user : JSON.parse(result) });
+  //     });
+  //   });
+  // }
 
   render() {
     var this_user = this.state.current_user
@@ -226,7 +231,7 @@ export default class Index extends React.Component {
         current_username = {this.state.current_username}
         current_user = {this_user}
         isLoading = {this.state.isLoading}
-        refreshUserInformation = {this.refreshUserInformation.bind(this)}
+        refreshUserInformation = {this.initializeUserInformation.bind(this)}
         feed={this.state.feed}
         notifications={this.state.notifications}
         numUnseenNotifications={this.state.numUnseenNotifications}
