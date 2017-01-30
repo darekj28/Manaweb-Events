@@ -33,8 +33,10 @@ security_manager = Security()
 
 
 # post_manager.deleteUserPosts('brovogre')
+
 user_manager.deleteUser('brobro')
-user_manager.deleteUser('')
+user_manager.deleteUser('Ellibereth')
+# user_manager.deleteUserByPhoneNumber('2018208509')
 # security_manager.createRecovery()
 # post_manager.deleteNotifications()
 # print(user_manager.getInfoFromEmail('Darekj@bro.bro'))
