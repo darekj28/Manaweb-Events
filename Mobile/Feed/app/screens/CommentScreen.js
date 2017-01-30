@@ -132,7 +132,7 @@ export default class CommentScreen extends React.Component {
 				<TouchableWithoutFeedback onPress={() => this.postMessagePressed.bind(this)()}>
 					<View style = {{flexDirection: 'row', borderTopColor: 'silver', borderTopWidth: 1}}>
 						<Text style = {{padding: 3, fontSize: 14, color: 'black'}}>
-							Reply to {op}...
+							Write a comment...
 						</Text>
 					</View>
 				</TouchableWithoutFeedback>
@@ -171,7 +171,6 @@ export default class CommentScreen extends React.Component {
 						handlePostSubmit = {this.handleCommentSubmit.bind(this)}
 						op = {op} 
 						canPost={this.state.canPost}/></View>}
-				<KeyboardSpacer topSpacing = {-30}/>
             </View>
 		)
 	}

@@ -29,7 +29,7 @@ export default class MakeCommentBox extends React.Component {
                         numberOfLines = {1}
                         underlineColorAndroid={"transparent"}
                         onChangeText={this.handlePostTextChange.bind(this)}
-                        placeholder={"What's up bro?"}
+                        placeholder={"Write a comment..."}
                         value = {this.props.newPostContent}
                     />
 

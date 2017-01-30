@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {Platform, Keyboard, ActivityIndicator, ViewContainer, AsyncStorage, AppRegistry, StyleSheet, Text, View, ListView, TouchableOpacity, TouchableHighlight, Navigator} from 'react-native';
+import {KeyboardAvoidingView, Platform, Keyboard, ActivityIndicator, ViewContainer, AsyncStorage, AppRegistry, StyleSheet, Text, View, ListView, TouchableOpacity, TouchableHighlight, Navigator} from 'react-native';
 import StartScreen from '../screens/StartScreen'
 import RegisterName from '../screens/register/RegisterName'
 import RegisterPhoneNumber from '../screens/register/RegisterPhoneNumber'
@@ -123,10 +123,10 @@ class StartNavigator extends Component {
 		if (Platform.OS == 'ios') var top_bar = (<View style = {{paddingTop : 20, backgroundColor : bar_color}} />)
 		else var top_bar = <View/>
 
-		return (<View style = {{flex: 1}}>
+		return (<KeyboardAvoidingView style = {{flex: 1}} behavior="padding">
 					{top_bar}
 					{screen}
-				</View>
+				</KeyboardAvoidingView>
 			);
 	}
 	stopScroll() {
