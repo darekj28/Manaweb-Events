@@ -61,7 +61,7 @@ export default class CommentScreen extends React.Component {
 					name    : this.props.current_user['first_name'] + " " + this.props.current_user['last_name'],
 					userID  : this.props.current_user['userID'],
 					time	: "just now",
-					comment_id : this.state.comment_id
+					comment_id : this.props.comment_id
 				});
 				this.setState({ comments: feed, newPostContent : '', canPost: false});
 			}
@@ -108,47 +108,18 @@ export default class CommentScreen extends React.Component {
 		});
 	}
 
-	getPostById() {
-		let url = "https://manaweb-events.herokuapp.com"
-		let test_url = "http://0.0.0.0:5000"
-		fetch(url + "/mobileGetPostById",
-			{method: "POST",
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ comment_id : this.props.comment_id })
-			}
-		).then((response) => response.json())
-		.then((responseData) => {
-			this.setState({ original_post :
-				{postContent: responseData.post['body'],
-				avatar 		: responseData.post['avatar'],
-				name 		: responseData.post['first_name'] + ' ' + responseData.post['last_name'],
-				userID 		: responseData.post['poster_id'],
-				time  		: responseData.post['time'],
-				comment_id  : responseData.post['comment_id'],
-				unique_id	: responseData.post['unique_id'],
-				timeString  : responseData.post['timeString']}
-			});
-		})
-		.catch((error) => {
-			console.log(error);
-		});
-	}
 	listViewRenderRow(input_element){
 		return input_element
 	}
 	componentDidMount() {
 		this.getComments.bind(this)();
-		this.getPostById.bind(this)();
 		this.setState({current_user : this.props.current_user});
 	}
 
 	componentWillUnmount(){
 		clearTimeout(this.spamTimer)
 	}
-	expand () {
+	expand() {
         this.animatedValue.setValue(0)
         Animated.timing(
             this.animatedValue,
@@ -179,12 +150,12 @@ export default class CommentScreen extends React.Component {
             inputRange: [0, 0.000001, 1],
             outputRange: [0, 1, 1]
         });
-		var op = this.state.original_post['name'] ? this.state.original_post['name'].split(' ')[0] : "";
+		var op = this.props.original_post['name'] ? this.props.original_post['name'].split(' ')[0] : "";
 		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		var scrollable_section = [
 			<View>
 				<View style={{flexDirection : 'row'}}>
-					<OriginalPost post={this.state.original_post}/>
+					<OriginalPost post={this.props.original_post}/>
 				</View>
 				<TouchableWithoutFeedback onPress={() => this.postMessagePressed.bind(this)()}>
 					<View style = {{flexDirection: 'row', borderTopColor: 'silver', borderTopWidth: 1}}>
@@ -221,13 +192,13 @@ export default class CommentScreen extends React.Component {
 					<View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}>
 					</View>
 				</View>
-				{this.state.original_post.name && <ListView
+				{this.props.original_post.name && <ListView
                 	style={styles.list_container}
                 	dataSource={dataSource}
                 	renderRow={this.listViewRenderRow.bind(this)}
                 	enableEmptySections = {true}
                 	removeClippedSubviews= {false}/>}
-                {!this.state.original_post.name && 
+                {!this.props.original_post.name && 
                 	<View style={styles.list_container}/>}
             </View>
 		)

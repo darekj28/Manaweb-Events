@@ -163,7 +163,8 @@ export default class Index extends React.Component {
               isChill   : obj['isChill'],
               comment_id  : obj['comment_id'],
               unique_id   : obj['unique_id'],
-              numberOfComments : obj['numComments']
+              numberOfComments : obj['numComments'],
+              timeString : obj['timeString']
             })
           }
           this.setState({feed: feed, isLoading : false})
