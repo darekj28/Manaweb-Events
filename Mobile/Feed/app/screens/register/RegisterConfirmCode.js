@@ -157,12 +157,13 @@ class RegisterConfirmCode extends Component {
             <View style = {styles.small_padding}/>
             <View style = {styles.large_padding} />
              <View style = {styles.bottom_bar}>
-             <TouchableOpacity style = {styles.resend} onPress = {this.resendConfirmationPin.bind(this)}>
+             <TouchableOpacity style = {{flex : 0.4}} onPress = {this.resendConfirmationPin.bind(this)}>
               <Text style = {styles.next_text}>
                 Resend Pin
               </Text>
              </TouchableOpacity>
-              <TouchableOpacity style = {styles.next} onPress = {this.handleEnteredCodeSubmit.bind(this)}>
+             <View style = {{flex :0.35}}/>
+              <TouchableOpacity style = {{flex : 0.25}} onPress = {this.handleEnteredCodeSubmit.bind(this)}>
                 <Text style = {styles.next_text}>
                   Confirm!
                 </Text>

@@ -50,9 +50,8 @@ class RegisterUsername extends Component {
     .then((response) => response.json())
     .then((responseData) => {
         if (responseData['result'] == 'success') {
-            this.props.asyncStorageLogin(responseData.current_username).then(() => {
-              this._navigateToWelcome.bind(this)();              
-            })
+            this.props.asyncStorageLogin(this.state.username).done()  
+            this._navigateToWelcome.bind(this)();              
         }
     }).done();
   }
@@ -93,7 +92,7 @@ class RegisterUsername extends Component {
     this.setState({username : ""})
   }
 
-  _navigateToWelcome(current_user) {
+  _navigateToWelcome() {
     this.props.navigator.push({
     href: "Welcome",
     })

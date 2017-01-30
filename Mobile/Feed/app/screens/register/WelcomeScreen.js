@@ -17,7 +17,8 @@ class WelcomeScreen extends Component {
 	}
 
 	getAvatarImage(avatar) {
-    var avatar = avatar.toLowerCase()
+    if (avatar) avatar = avatar.toLowerCase()
+    else avatar = ""
     if (avatar =='nissa') return ( <Image  style={styles.avatar_image} source={require('../../static/avatars/nissa.png')} />)
     if (avatar == 'chandra') return (<Image  style={styles.avatar_image} source={require('../../static/avatars/chandra.png')} />)
     if (avatar == 'elspeth') return (<Image  style={styles.avatar_image} source={require('../../static/avatars/elspeth.png')} />)

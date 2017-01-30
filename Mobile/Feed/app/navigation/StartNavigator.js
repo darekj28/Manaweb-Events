@@ -99,7 +99,7 @@ class StartNavigator extends Component {
 				screen =  (<FbCreate fb_token = {route.fb_token} fb_id = {route.fb_id} {...globalNavigatorProps} />)
 				break;
 			case "Welcome":
-				screen =  (<WelcomeScreen current_user = {this.props.current_user} {...globalNavigatorProps}/>)
+				screen =  (<WelcomeScreen {...globalNavigatorProps}/>)
 				break;
 			case "Recovery":
 				screen =  (<RecoveryScreen {...globalNavigatorProps} />)

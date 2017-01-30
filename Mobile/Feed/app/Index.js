@@ -179,8 +179,7 @@ export default class Index extends React.Component {
   async asyncStorageLogin(current_username) {
     AsyncStorage.setItem("current_username", current_username).then(() => 
     {
-      this.setState({current_username : current_username})
-      this.initializeUserInformation.bind(this)()
+      this.setState({current_username : current_username}, this.initializeUserInformation.bind(this))
     })
     console.log("async login")
   }
