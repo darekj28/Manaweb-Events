@@ -9,6 +9,7 @@ import CommentBox from '../components/comments/CommentBox';
 import MakeCommentBox from '../components/comments/MakeCommentBox';
 import OriginalPost from '../components/comments/OriginalPost';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 const NAVIGATOR_BACK_ICON_HEIGHT = 30
 
@@ -138,14 +139,6 @@ export default class CommentScreen extends React.Component {
 				<View style={{flex : 1, flexDirection : 'row'}}>
 					<Comments comments={this.state.comments} comment_id={this.props.comment_id}/>
 				</View>
-				{this.state.post_message_expanded && <View style={{flex : 0}}>
-				<MakeCommentBox onClick={(event) => this.postMessagePressed.bind(this)()}
-						post_message_expanded = {this.state.post_message_expanded}
-						newPostContent = {this.state.newPostContent}
-						handlePostTyping = {this.handlePostTyping.bind(this)}
-						handlePostSubmit = {this.handleCommentSubmit.bind(this)}
-						op = {op} 
-						canPost={this.state.canPost}/></View>}
 			</View>
 			];
 		var dataSource = ds.cloneWithRows(scrollable_section);
@@ -170,6 +163,15 @@ export default class CommentScreen extends React.Component {
                 	removeClippedSubviews= {false}/>}
                 {!this.props.original_post.name && 
                 	<View style={styles.list_container}/>}
+                {this.state.post_message_expanded && <View style={{flex: 0.1}}>
+				<MakeCommentBox onClick={(event) => this.postMessagePressed.bind(this)()}
+						post_message_expanded = {this.state.post_message_expanded}
+						newPostContent = {this.state.newPostContent}
+						handlePostTyping = {this.handlePostTyping.bind(this)}
+						handlePostSubmit = {this.handleCommentSubmit.bind(this)}
+						op = {op} 
+						canPost={this.state.canPost}/></View>}
+				<KeyboardSpacer topSpacing = {-50}/>
             </View>
 		)
 	}

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {ActivityIndicator, ViewContainer, AsyncStorage, AppRegistry, StyleSheet, Text, View, ListView, TouchableOpacity, TouchableHighlight, Navigator} from 'react-native';
+import {Keyboard, ActivityIndicator, ViewContainer, AsyncStorage, AppRegistry, StyleSheet, Text, View, ListView, TouchableOpacity, TouchableHighlight, Navigator} from 'react-native';
 import StartScreen from '../screens/StartScreen'
 import RegisterName from '../screens/register/RegisterName'
 import RegisterPhoneNumber from '../screens/register/RegisterPhoneNumber'
@@ -24,7 +24,6 @@ import FeedScreen from '../screens/FeedScreen'
 import NotificationScreen from '../screens/NotificationScreen'
 import Spinner from 'react-native-loading-spinner-overlay';
 import BottomTabBar from '../components/BottomTabBar';
-
 
 class StartNavigator extends Component {
 
@@ -158,7 +157,6 @@ class StartNavigator extends Component {
 						}
 						/>
 					</View>
-					
 				</View>
 	 ) 
 
