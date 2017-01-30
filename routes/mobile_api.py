@@ -113,6 +113,15 @@ def mobileTextConfirmation():
 		return jsonify({ 'error' : 'phone_exception' })
 	return jsonify({'confirmationPin' : output.get('pin')})
 
+@mobile_api.route('/mobileResendTextConfirmation', methods = ['POST'])
+def mobileResendTextConfirmation():
+	phone_number = request.json['phone_number']
+	confirmationPin = request.json['confirmationPin']
+	output = sms.sendTextConfirmationPin(phone_number, confirmationPin)
+	if output.get('error') != None :
+		return jsonify({ 'error' : 'phone_exception' })
+	return jsonify({'confirmationPin' : output.get('pin')})
+
 @mobile_api.route('/mobileEmailConfirmation', methods = ['POST'])
 def mobileEmailConfirmation():
 	email = request.json['email']

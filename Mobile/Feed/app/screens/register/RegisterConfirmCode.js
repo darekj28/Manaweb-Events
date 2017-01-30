@@ -52,6 +52,34 @@ class RegisterConfirmCode extends Component {
     }
   }
 
+
+  resendConfirmationPin(){
+    var url = "https://manaweb-events.herokuapp.com"
+    var test_url = "http://0.0.0.0:5000"
+    fetch(url + "/mobileResendTextConfirmation", {method: "POST",
+    headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, 
+      body: 
+      JSON.stringify(
+       {
+        phone_number : this.props.phone_number,
+        confirmationPin : this.props.confirmationPin
+      })
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (responseData.error){
+        Alert.alert("Invalid Phone Number")
+      }
+      else {
+        this.setState({confirmationPin : responseData['confirmationPin']})
+      }
+    })
+    .done();
+  }
+
   clearConfirmationCode() {
     this.setState({enteredCode: ""})
   }
@@ -129,11 +157,16 @@ class RegisterConfirmCode extends Component {
             <View style = {styles.small_padding}/>
             <View style = {styles.large_padding} />
              <View style = {styles.bottom_bar}>
-              <TouchableHighlight style = {styles.next} onPress = {this.handleEnteredCodeSubmit.bind(this)}>
+             <TouchableOpacity style = {styles.resend} onPress = {this.resendConfirmationPin.bind(this)}>
+              <Text style = {styles.next_text}>
+                Resend Pin
+              </Text>
+             </TouchableOpacity>
+              <TouchableOpacity style = {styles.next} onPress = {this.handleEnteredCodeSubmit.bind(this)}>
                 <Text style = {styles.next_text}>
                   Confirm!
                 </Text>
-              </TouchableHighlight>
+              </TouchableOpacity>
              </View>
           </View>
     )

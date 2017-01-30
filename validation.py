@@ -90,13 +90,11 @@ def validatePassword(password, password_confirm):
 	if password != password_confirm:
 		output['result'] = 'failure'
 		output['error'] = 'Passwords do not match'
-
 	# commented out for now since for testing it's annoying
 	# if the length is less than 10 reject
 	# elif length < 10:
 	# 	output['result'] = 'failure'
 	# 	output['error'] = 'Passwords must be at least 10 characters'
-	
 	# if there are no uppercase characters we reject
 	elif password.upper() == password:
 		output['result'] = 'failure'
@@ -124,7 +122,7 @@ def validateEmail(email):
 	isMatch = email_regex.match(email)
 	if not isMatch:
 		output['result'] = 'failure'
-		output['error'] = 'Invalid email address.'s
+		output['error'] = 'Invalid email address.'
 	user_manager = Users()
 	isEmailTaken = user_manager.isEmailTaken(email)
 	user_manager.closeConnection()

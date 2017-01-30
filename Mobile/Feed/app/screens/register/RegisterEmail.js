@@ -144,7 +144,7 @@ class RegisterEmail extends Component {
 
           <View style = {styles.small_padding}/>
           { //error_message != null &&
-            false
+            false && 
               <View style = {styles.error_box}>
                 {error_message}
             </View>
