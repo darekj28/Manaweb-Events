@@ -130,9 +130,9 @@ export default class CommentScreen extends React.Component {
 					<OriginalPost post={this.props.original_post}/>
 				</View>
 				<TouchableWithoutFeedback onPress={() => this.postMessagePressed.bind(this)()}>
-					<View style = {{flexDirection: 'row', borderTopColor: 'silver', borderTopWidth: 1, borderBottomColor : 'silver', borderBottomWidth : 1}}>
+					<View style = {{flexDirection: 'row', justifyContent : 'center', borderTopColor: '#90d7ed', borderTopWidth: 1, borderBottomColor : '#90d7ed', borderBottomWidth : 1}}>
 						<Text style = {{padding: 3, fontSize: 14, color: '#90d7ed'}}>
-							Write a comment...
+							Comment
 						</Text>
 					</View>
 				</TouchableWithoutFeedback>

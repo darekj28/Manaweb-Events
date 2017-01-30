@@ -124,12 +124,18 @@ class StartNavigator extends Component {
 			spacing = 20;
 		}
 		else var top_bar = <View/>
-
-		return (<KeyboardAvoidingView style = {{flex: 1}} behavior="padding" keyboardVerticalOffset={spacing}>
+		if (route.href == "Comment")
+			return (<KeyboardAvoidingView style = {{flex: 1}} behavior="padding" keyboardVerticalOffset={spacing}>
 					{top_bar}
 					{screen}
 				</KeyboardAvoidingView>
 			);
+		else return (
+			<View style = {{flex: 1}} >
+					{top_bar}
+					{screen}
+				</View>
+			)
 	}
 	stopScroll() {
 		this.setState({ scroll : false });
