@@ -76,13 +76,11 @@ export default class BottomTabBar extends React.Component {
 					<TouchableWithoutFeedback style={styles.tab} onPress={this.notificationsPress.bind(this)}>
 						<View style={styles.tab_content}>
 							<IconBadge
-								MainElement={<View>
-								<Icon name = "md-mail" size={25} color={notifications}/>
-								<Text style={[{color: notifications}, styles.tab_text]}>Notifications</Text>
-							</View>}
-							 BadgeElement={<Text style={{color:'#FFFFFF'}}> {this.props.numUnseenNotifications} </Text>}
+								MainElement={<Icon name = "md-mail" size={25} color={notifications}/>}
+							 BadgeElement={<View/>}
 							 IconBadgeStyle = {styles.notification_badge}
 							/>
+							<Text style={[{color: notifications}, styles.tab_text]}>Notifications</Text>
 						</View>
 					</TouchableWithoutFeedback>}
 				</View>
@@ -116,5 +114,11 @@ const styles = StyleSheet.create({
 	},
 	notification_badge : {
 		alignSelf: "center",
+		width : 10,
+		height : 10,
+		borderRadius : 5,
+		left : 15,
+		bottom : 10,
+		position : 'absolute'
 	},
 })
