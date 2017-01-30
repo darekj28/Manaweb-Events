@@ -62,6 +62,7 @@ export default class Index extends React.Component {
   }
   // get current user info and notifications
   initializeUserInformation(){
+    console.log(this.state.current_username)
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
     fetch(url + "/mobileGetCurrentUserInfo", {method: "POST",
@@ -79,12 +80,15 @@ export default class Index extends React.Component {
     .then((responseData) => {
       console.log('current_username', this.state.current_username)
       if (responseData.thisUser == null) {
-        if (this.state.current_username != "") {
+        // if (this.state.current_username != "") {
          this.asyncStorageLogout.bind(this)()
-        }
+        // }
       }
 
-      else if (this.state.current_user.userID != responseData.thisUser.userID) {
+      else 
+        // if (this.state.current_user.userID != responseData.thisUser.userID) 
+          {
+          console.log("refresh", responseData.thisUser)
           var thisUser = responseData.thisUser;
           this.setState({current_user : thisUser}, this.getNotifications.bind(this))
       }
@@ -176,6 +180,7 @@ export default class Index extends React.Component {
     AsyncStorage.setItem("current_username", current_username).then(() => 
     {
       this.setState({current_username : current_username})
+      this.initializeUserInformation.bind(this)()
     })
     console.log("async login")
   }
@@ -184,7 +189,8 @@ export default class Index extends React.Component {
     AsyncStorage.setItem("current_username", "").then(() => 
     {
       if (this.state.current_username != ""){
-        this.setState({current_username : ""})        
+        this.setState({current_username : ""})
+        this.setState({current_user : {}})        
       }
     })
     console.log("async logout")
@@ -232,7 +238,7 @@ export default class Index extends React.Component {
         current_username = {this.state.current_username}
         current_user = {this_user}
         isLoading = {this.state.isLoading}
-        refreshUserInformation = {this.initializeUserInformation.bind(this)}
+        initializeUserInformation = {this.initializeUserInformation.bind(this)}
         feed={this.state.feed}
         notifications={this.state.notifications}
         numUnseenNotifications={this.state.numUnseenNotifications}

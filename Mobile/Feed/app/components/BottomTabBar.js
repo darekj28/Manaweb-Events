@@ -34,11 +34,20 @@ export default class BottomTabBar extends React.Component {
 	        href: href
 	    })
 	}
+
+	componentWillReceiveProps(nextProps){
+		if (!nextProps.current_username){ 
+			this.setState({selected : 'home'})
+		}
+	}
+
 	render() {
+
 		var selected = this.state.selected;
 		var home = selected == 'home' ? HIGHLIGHTED : DEFAULT;
 		var settings = selected == 'settings' ? HIGHLIGHTED : DEFAULT;
 		var notifications = selected == 'notifications' ? HIGHLIGHTED : DEFAULT;
+
 		if (this.props.current_username)
 			return (
 				<View style = {styles.container}>

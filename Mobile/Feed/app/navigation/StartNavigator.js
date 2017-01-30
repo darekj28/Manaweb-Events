@@ -43,7 +43,8 @@ class StartNavigator extends Component {
 			current_user : this.props.current_user,
 			asyncStorageLogin : this.props.asyncStorageLogin,
 			asyncStorageLogout : this.props.asyncStorageLogout,
-			refreshUserInformation : this.props.refreshUserInformation
+			// refreshUserInformation : this.props.refreshUserInformation,
+			initializeUserInformation : this.props.initializeUserInformation
 		}
 		var registerNavigatorProps = {
 			first_name : route.first_name,
@@ -80,7 +81,7 @@ class StartNavigator extends Component {
 				screen =  (<RegisterUsername {...registerNavigatorProps} {...globalNavigatorProps} />)
 				break;
 			case "Settings":
-				screen =  (<SettingsScreen {...globalNavigatorProps}/>)
+				screen =  (<SettingsScreen  {...globalNavigatorProps}/>)
 		 		break;
 		 	case "Menu":
 				screen =  (<MenuScreen {...globalNavigatorProps}/>)
@@ -123,6 +124,7 @@ class StartNavigator extends Component {
 	}
 
 	render() {
+		console.log('current_user' , this.props.current_user)
 		var start = ""
 		if (this.props.current_username == "" || this.props.current_username == null) {
 			start = "Start"
@@ -147,11 +149,14 @@ class StartNavigator extends Component {
 						renderScene = {this._renderScene.bind(this)}
 						configureScene={(route, routeStack) =>
 						Navigator.SceneConfigs.PushFromRight}
+						navigationBar = {
+							<BottomTabBar navigator={this.refs.appNavigator} 
+							current_username={this.props.current_username} 
+							numUnseenNotifications={this.props.numUnseenNotifications}/>		
+						}
 						/>
 					</View>
-					<BottomTabBar navigator={this.refs.appNavigator} 
-						current_username={this.props.current_username} 
-						numUnseenNotifications={this.props.numUnseenNotifications}/>
+					
 				</View>
 	 ) 
 

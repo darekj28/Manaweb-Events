@@ -92,7 +92,7 @@ export default class SettingsScreen extends Component {
 			})
 			.then((response) => response.json())
 			.then((responseData) => {
-				this.props.refreshUserInformation(obj);
+				this.props.initializeUserInformation();
 				Alert.alert("Settings updated", "", [
 				  { text: "OK" }    
 				])
@@ -140,9 +140,10 @@ export default class SettingsScreen extends Component {
 	handleLogout() {
 		this.props.asyncStorageLogout().then((value) => {
 			LoginManager.logOut()
-			this.props.navigator.push({
-				href: "Start"
-			})
+			this.props.navigator.resetTo({href: 'Start'})
+			// this.props.navigator.push({
+			// 	href: "Start"
+			// })
 		});
 	}
 	render() {
