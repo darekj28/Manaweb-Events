@@ -31,9 +31,9 @@ class StartNavigator extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			isLoading: true
+			isLoading: true,
+			scroll: false
 		}
-		// this.initializeUser = this.initializeUser.bind(this);
 	}
 
 	_renderScene(route, navigator) {
@@ -90,7 +90,7 @@ class StartNavigator extends Component {
 				screen =  (<CommentScreen comment_id={route.comment_id} getPosts={this.props.getPosts} original_post={route.original_post} {...globalNavigatorProps}/>)
 				break;
 			case "Feed":
-				screen = (<FeedScreen feed={this.props.feed} getPosts={this.props.getPosts} {...globalNavigatorProps}/>)
+				screen = (<FeedScreen feed={this.props.feed} scroll={this.state.scroll} stopScroll={this.stopScroll.bind(this)} getPosts={this.props.getPosts} {...globalNavigatorProps}/>)
 				break;
 			case "Notifications":
 				screen = (<NotificationScreen notifications={this.props.notifications} {...globalNavigatorProps}/>)
@@ -118,7 +118,12 @@ class StartNavigator extends Component {
 		}
 		return screen;
 	}
-
+	stopScroll() {
+		this.setState({ scroll : false });
+	}
+	startScroll() {
+		this.setState({ scroll : true });
+	}
 	render() {
 		var start = ""
 		if (this.props.current_username == "" || this.props.current_username == null) {
@@ -148,7 +153,8 @@ class StartNavigator extends Component {
 							<BottomTabBar navigator={this.refs.appNavigator} 
 							current_username={this.props.current_username} 
 							numUnseenNotifications={this.props.numUnseenNotifications}
-							resetNotificationCount={this.props.resetNotificationCount}/>		
+							resetNotificationCount={this.props.resetNotificationCount}
+							startScroll={this.startScroll.bind(this)}/>		
 						}
 						/>
 					</View>

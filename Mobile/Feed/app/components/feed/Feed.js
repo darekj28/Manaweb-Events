@@ -67,7 +67,7 @@ export default class Feed extends Component {
 		return input_element
 	}
 	componentWillReceiveProps(nextProps, nextState) {
-		if (nextProps.shouldScroll) this.scrollToTop.bind(this)();
+		if (nextProps.scroll) this.scrollToTop.bind(this)();
 	}
 	componentDidMount(){
 		this.setState({posts: this.props.posts})

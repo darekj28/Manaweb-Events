@@ -13,9 +13,13 @@ export default class BottomTabBar extends React.Component {
 		this.state = { selected : 'home' };
 	}
 	homePress() {
-		if (this.state.selected != 'home') {
+		var currentRoute = this.props.navigator.getCurrentRoutes().pop().href;
+		if (this.state.selected != 'home')
 			this.navigate.bind(this)("Feed");
-		}
+		else if (currentRoute != "Feed") 
+			this.props.navigator.pop();
+		else if (currentRoute == "Feed")
+			this.props.startScroll();
 		this.setState({ selected : 'home' });
 	}
 	settingsPress() {
