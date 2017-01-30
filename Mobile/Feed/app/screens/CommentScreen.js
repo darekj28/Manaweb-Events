@@ -171,7 +171,7 @@ export default class CommentScreen extends React.Component {
 						handlePostSubmit = {this.handleCommentSubmit.bind(this)}
 						op = {op} 
 						canPost={this.state.canPost}/></View>}
-				<KeyboardSpacer topSpacing = {-50}/>
+				<KeyboardSpacer topSpacing = {-30}/>
             </View>
 		)
 	}
