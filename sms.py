@@ -27,7 +27,10 @@ def sendTextConfirmationPin(user_phone_number, confirmationPin = None):
 	message = message_template + confirmationPin
 	# we comment this out so Dareks phone doesn't get spammed
 	raw_phone_number = formatRawPhoneNumber(user_phone_number)
-	sendMessage(Twilio_Number, raw_phone_number, message)
+	try:
+		sendMessage(Twilio_Number, raw_phone_number, message)
+	except:
+		return {'error' : 'invalid phone'}
 	return confirmationPin
 
 def generatePin():
