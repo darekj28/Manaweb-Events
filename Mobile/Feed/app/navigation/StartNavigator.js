@@ -118,10 +118,14 @@ class StartNavigator extends Component {
 						</View>
 					)
 		}
-		if (Platform.OS == 'ios') var top_bar = (<View style = {{paddingTop : 20, backgroundColor : bar_color}} />)
+		var spacing = 0;
+		if (Platform.OS == 'ios') {
+			var top_bar = (<View style = {{paddingTop : 20, backgroundColor : bar_color}} />)
+			spacing = 20;
+		}
 		else var top_bar = <View/>
 
-		return (<KeyboardAvoidingView style = {{flex: 1}} behavior="padding">
+		return (<KeyboardAvoidingView style = {{flex: 1}} behavior="padding" keyboardVerticalOffset={spacing}>
 					{top_bar}
 					{screen}
 				</KeyboardAvoidingView>

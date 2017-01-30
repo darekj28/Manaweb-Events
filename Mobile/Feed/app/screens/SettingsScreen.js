@@ -243,7 +243,6 @@ const styles = StyleSheet.create({
 		fontWeight : 'bold'
 	},
 	disabled_update : {
-		fontWeight : 'bold',
 		color : 'silver'
 	}
 });
