@@ -145,7 +145,7 @@ def resendConfirmation():
 def sendTextConfirmation():
 	phone_number = request.json['phone_number']
 	output = sms.sendTextConfirmationPin(phone_number)
-	if (output.get('error') != None) 
+	if (output.get('error') != None):
 		return jsonify({'result' : 'failure', 'reason' : output.get('error')})
 	return jsonify({'result' : 'success', 'confirmationCode' : output.get('pin')})
 
