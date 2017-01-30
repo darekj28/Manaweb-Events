@@ -1,5 +1,4 @@
-
-/**
+ /**
  * Sample React Native App
  * https://github.com/facebook/react-native
  * @flow
@@ -19,7 +18,6 @@ const {
 import React from 'react';
 import {Component} from 'react'
 import {AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput, Button} from 'react-native';
-
 import ViewContainer from './ViewContainer';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -40,10 +38,6 @@ class FacebookLogin extends Component {
     // this._navigateToFbCreateAccount = this._navigateToFbCreateAccount.bind(this)
   }
 
-
-
-
-
 async loadCurrentUser(fb_id){
       let url = "https://manaweb-events.herokuapp.com"
       let test_url = "http://0.0.0.0:5000"
@@ -62,9 +56,9 @@ async loadCurrentUser(fb_id){
       let responseData = await response.json();
       // login is good and there already is an account for this user
       if (responseData['result'] == 'success') {
-        AsyncStorage.setItem("fb_token", this.state.fb_token)
-        AsyncStorage.setItem("current_username", responseData['current_user']['userID'])
-        //redirect to the feed
+        this.props.asyncStorageLogin(responseData['current_user']['userID']).then(() => {
+          AsyncStorage.setItem("fb_token", this.state.fb_token).done()        
+        }).done()
         this._navigateToFeed();
       }
 
@@ -136,7 +130,7 @@ componentDidMount() {
     return (
         <FBLogin style={styles.fb_button}
         ref={(fbLogin) => { this.fbLogin = fbLogin }}
-        permissions={["public_profile" , "email", "user_friends"]}
+        permissions={["public_profile" , "email"]}
         loginBehavior={FBLoginManager.LoginBehaviors.Native}
         onLogin={this.onLogin.bind(this)}
         onLogout={this.onLogout.bind(this)}

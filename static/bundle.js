@@ -11323,7 +11323,10 @@
 					type: 'POST',
 					url: '/reportPost',
 					data: JSON.stringify(obj, null, '\t'),
-					contentType: 'application/json;charset=UTF-8'
+					contentType: 'application/json;charset=UTF-8',
+					success: function success(data) {
+						swal("Thank you!", "Your report has been sent.");
+					}
 				});
 			}
 		}, {
@@ -11338,7 +11341,10 @@
 					type: 'POST',
 					url: '/reportPost',
 					data: JSON.stringify(obj, null, '\t'),
-					contentType: 'application/json;charset=UTF-8'
+					contentType: 'application/json;charset=UTF-8',
+					success: function success(data) {
+						swal("Thank you!", "Your report has been sent.");
+					}
 				});
 			}
 		}, {
@@ -13757,7 +13763,10 @@
 					type: 'POST',
 					url: '/reportComment',
 					data: JSON.stringify(obj, null, '\t'),
-					contentType: 'application/json;charset=UTF-8'
+					contentType: 'application/json;charset=UTF-8',
+					success: function success(data) {
+						swal("Thank you!", "Your report has been sent.");
+					}
 				});
 			}
 		}, {
@@ -13772,7 +13781,10 @@
 					type: 'POST',
 					url: '/reportComment',
 					data: JSON.stringify(obj, null, '\t'),
-					contentType: 'application/json;charset=UTF-8'
+					contentType: 'application/json;charset=UTF-8',
+					success: function success(data) {
+						swal("Thank you!", "Your report has been sent.");
+					}
 				});
 			}
 		}, {

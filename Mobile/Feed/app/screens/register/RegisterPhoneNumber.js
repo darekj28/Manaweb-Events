@@ -214,11 +214,11 @@ class RegisterPhoneNumber extends Component {
           }
             <View style = {styles.large_padding} />
              <View style = {styles.bottom_bar}>
-              <TouchableHighlight style = {styles.next} onPress = {this.handlePhoneNumberSubmit.bind(this)}>
+              <TouchableOpacity style = {styles.next} onPress = {this.handlePhoneNumberSubmit.bind(this)}>
                 <Text style = {styles.next_text}>
                   Next!
                 </Text>
-              </TouchableHighlight>
+              </TouchableOpacity>
              </View>
           </View>
     )

@@ -99,7 +99,7 @@ class StartScreen extends Component {
                 </Text>
               </TouchableOpacity>
               <View style={styles.login_button}>
-                <FacebookLogin navigator = {this.props.navigator}/>
+                <FacebookLogin navigator = {this.props.navigator} asyncStorageLogin = {this.props.asyncStorageLogin}/>
               </View>
               </View>
               <View style = {styles.bottom_padding} />
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     borderColor : "skyblue",
     backgroundColor: "skyblue",
     borderRadius: 5,
-    alignItems : "center"
+    alignItems : "center",
   },
   login_buttonText : {
     justifyContent: "center",

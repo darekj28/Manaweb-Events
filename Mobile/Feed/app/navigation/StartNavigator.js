@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {ActivityIndicator, ViewContainer, AsyncStorage, AppRegistry, StyleSheet, Text, View, ListView, TouchableOpacity, TouchableHighlight, Navigator} from 'react-native';
+import {Platform, ActivityIndicator, ViewContainer, AsyncStorage, AppRegistry, StyleSheet, Text, View, ListView, TouchableOpacity, TouchableHighlight, Navigator} from 'react-native';
 import StartScreen from '../screens/StartScreen'
 import RegisterName from '../screens/register/RegisterName'
 import RegisterPhoneNumber from '../screens/register/RegisterPhoneNumber'
@@ -55,12 +55,16 @@ class StartNavigator extends Component {
 			email : route.email
 		}
 		var screen;
+		var bar_color = "white"
+		
+
 		switch(route.href){
 			case "Login":
-				screen =  (<LoginScreen {...globalNavigatorProps} asyncStorageLogin = {this.props.asyncStorageLogin}/>);
+				screen =  (<LoginScreen {...globalNavigatorProps}/>);
 				break;
 			case "Start":
-				screen =  (<StartScreen {...globalNavigatorProps} />);
+				bar_color = "skyblue"
+				screen =  (<StartScreen {...globalNavigatorProps}/>);
 				break;
 			case "RegisterName":
 				screen =  ( <RegisterName  {...globalNavigatorProps} /> );
@@ -90,6 +94,7 @@ class StartNavigator extends Component {
 				screen =  (<CommentScreen comment_id={route.comment_id} getPosts={this.props.getPosts} original_post={route.original_post} {...globalNavigatorProps}/>)
 				break;
 			case "Feed":
+				bar_color = "skyblue"
 				screen = (<FeedScreen feed={this.props.feed} scroll={this.state.scroll} stopScroll={this.stopScroll.bind(this)} getPosts={this.props.getPosts} {...globalNavigatorProps}/>)
 				break;
 			case "Notifications":
@@ -116,7 +121,14 @@ class StartNavigator extends Component {
 						</View>
 					)
 		}
-		return screen;
+		if (Platform.OS == 'ios') var top_bar = (<View style = {{paddingTop : 20, backgroundColor : bar_color}} />)
+		else var top_bar = <View/>
+
+		return (<View style = {{flex: 1}}>
+					{top_bar}
+					{screen}
+				</View>
+			);
 	}
 	stopScroll() {
 		this.setState({ scroll : false });
@@ -142,6 +154,7 @@ class StartNavigator extends Component {
 		else {
 			return (
 				<View style={styles.container}>
+					
 					<View style={{flex : 1}}>
 						<Navigator 
 						initialRoute = {{href: start}}
@@ -158,7 +171,6 @@ class StartNavigator extends Component {
 						}
 						/>
 					</View>
-					
 				</View>
 	 ) 
 
