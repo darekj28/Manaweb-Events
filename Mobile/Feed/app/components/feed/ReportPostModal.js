@@ -48,7 +48,7 @@ export default class ReportPostModal extends Component {
 			if (responseData.result == 'success'){
 				Alert.alert(
 				"Post reported",
-				"Click OK to return to the feed",
+				"Press OK to return to your feed",
 				[
 				{text: 'OK', onPress: () => this.handleReturn.bind(this)()}
 				])
@@ -85,24 +85,28 @@ export default class ReportPostModal extends Component {
 						<Text style = {styles.report_caption}>
 							Post to be reported:
 						</Text>
-						<ReportOriginalPost post={this.props.post}/>
+						<View style={styles.report_section}>
+							<ReportOriginalPost post={this.props.post}/>
+						</View>
 					</View>
 					<View style={styles.list_container}>
 						<Text style = {styles.report_caption}>
 								Select offense:
 						</Text>
-						<Picker style = {{flex : 1}} selectedValue={this.state.reason}
-						onValueChange={this.handleReasonChange.bind(this)}>
-								<Picker.Item  label= {"Inappropriate"} value = {"Inappropriate"} />
-								<Picker.Item  label= {"Spam"} value = {"Spam"} />
-								<Picker.Item  label= {"Other"} value = {"Other"} />
-						</Picker>
+						<View style = {styles.report_section}>
+							<Picker style = {{flex : 1,justifyContent : 'flex-start'}} selectedValue={this.state.reason}
+							onValueChange={this.handleReasonChange.bind(this)}>
+									<Picker.Item  label= {"Inappropriate"} value = {"Inappropriate"} />
+									<Picker.Item  label= {"Spam"} value = {"Spam"} />
+									<Picker.Item  label= {"Other"} value = {"Other"} />
+							</Picker>
+						</View>
 					</View>
 					<View style={styles.list_container}>
 						<Text style = {styles.report_caption}>
 							Additional comments:
 						</Text>
-						<View style = {{flex : 0.4, justifyContent: "flex-start", padding: 5, borderRadius : 5, borderColor : 'silver', borderWidth : 1}}>
+						<View style = {styles.report_section}>
 							<TextInput
 							style = {{flex : 1, padding: 5, fontSize : 16 }}
 							onChangeText = {this.handleDescriptionChange.bind(this)}
@@ -170,6 +174,7 @@ const styles = StyleSheet.create({
 		padding : 8,
 		alignSelf : 'stretch',
 		backgroundColor : '#fbfbfb',
+		justifyContent : 'flex-start'
 	},
 	report_button : {
 		borderColor : "#90D7ED",
@@ -186,5 +191,14 @@ const styles = StyleSheet.create({
 		color : 'white',
 		flex: 0,
 		paddingHorizontal: 10
+	},
+	report_section : {
+		flex : 1,
+		justifyContent: "flex-start", 
+		backgroundColor : 'white', 
+		padding: 5, 
+		borderRadius : 5, 
+		borderColor : 'silver', 
+		borderWidth : 1
 	}
 });
