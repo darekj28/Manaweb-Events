@@ -62,7 +62,7 @@ export default class FeedBox extends Component {
         var length = post.name.length + post.userID.length 
         var reply = post.numberOfComments == 1 ? "reply" : "replies";
         return (
-            <TouchableOpacity onPress={this._navigateToComment.bind(this)}>
+            <TouchableOpacity style={{marginBottom : 4}} onPress={this._navigateToComment.bind(this)}>
                 <View style={{flex:1, flexDirection: 'row', justifyContent: 'flex-start',
                                 borderBottomColor: 'silver', borderBottomWidth: 2,backgroundColor : 'white'}}>
                     <View style={{flex: 0, justifyContent: 'flex-start'}}>

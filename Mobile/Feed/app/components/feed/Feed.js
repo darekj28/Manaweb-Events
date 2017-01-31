@@ -91,7 +91,7 @@ export default class Feed extends Component {
 		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		var dataSource = ds.cloneWithRows(feed)
 		return (
-			<View style = {{flex:1}}>
+			<View style = {styles.list_container}>
 				{(this.state.report_post != null && this.state.display_report_modal) &&
 					<ReportPostModal post = {this.state.report_post} display = {this.state.display_report_modal} 
 					toggleReportModal = {this.toggleReportModal.bind(this)} current_user = {this.props.current_user}/>
@@ -111,7 +111,8 @@ export default class Feed extends Component {
 
 const styles = StyleSheet.create({
 	list_container : {
-
+		flex : 1,
+		backgroundColor : '#e5e5e5'
 	},
 });
 

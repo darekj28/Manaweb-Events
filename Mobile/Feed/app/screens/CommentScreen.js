@@ -172,8 +172,7 @@ export default class CommentScreen extends React.Component {
 const styles = StyleSheet.create({
 	container: {
 		flex:1,
-		justifyContent: 'flex-start',
-		backgroundColor : 'white'
+		justifyContent: 'flex-start'
 	},
 	list_container : {
   		flex: 1
@@ -186,6 +185,7 @@ const styles = StyleSheet.create({
 		justifyContent: "space-around",
 		borderBottomColor : '#e1e1e1',
 		borderBottomWidth : 1,
-		alignItems : 'center'
+		alignItems : 'center',
+		backgroundColor : 'white'
 	},
 });

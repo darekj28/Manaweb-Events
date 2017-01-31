@@ -32,6 +32,6 @@ export default class Comments extends React.Component {
 
 const styles = StyleSheet.create({
   list_container : {
-  	flex: 1
+  	flex: 1,
   },
 });
