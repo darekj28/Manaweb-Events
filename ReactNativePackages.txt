@@ -1,0 +1,12 @@
+cd Mobile/Feed
+npm install --save rc-menu react react-dom react-native react-native-dismiss-keyboard react-native-gifted-spinner react-native-modal-dropdown react-native-modal-picker react-native-router-flux react-native-vector-icons react-native-datepicker 
+npm install —-save react-native-facebook-login
+npm install —-save react-native-fbsdk
+npm install react-native-modal-picker --save
+npm install --save react-native-loading-spinner-overlay@latest
+npm install --save react-native-icon-badge
+npm install —-save react-native-push-notification
+npm install —-save react-native-keyboard-aware-sroll-view
+
+react-native link
+react-native run-ios
