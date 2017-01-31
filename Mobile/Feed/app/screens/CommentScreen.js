@@ -4,6 +4,7 @@ import {Platform, Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Tex
 		  Alert, Image, Animated, TouchableWithoutFeedback, ScrollView, Easing, Keyboard} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IonIcon from 'react-native-vector-icons/Ionicons';
 import Comments from '../components/comments/Comments';
 import CommentBox from '../components/comments/CommentBox';
 import MakeCommentBox from '../components/comments/MakeCommentBox';
@@ -127,13 +128,6 @@ export default class CommentScreen extends React.Component {
 				<View style={{flexDirection : 'row'}}>
 					<OriginalPost post={this.props.original_post}/>
 				</View>
-				<TouchableOpacity onPress={() => this.postMessagePressed.bind(this)()}>
-					<View style = {{flexDirection: 'row', justifyContent : 'center', borderTopColor: '#90d7ed', borderTopWidth: 1, borderBottomColor : '#90d7ed', borderBottomWidth : 1}}>
-						<Text style = {{padding: 3, fontSize: 14, color: '#90d7ed'}}>
-							Comment
-						</Text>
-					</View>
-				</TouchableOpacity>
 				<View style={{flex : 1, flexDirection : 'row'}}>
 					<Comments comments={this.state.comments} comment_id={this.props.comment_id}/>
 				</View>
@@ -161,7 +155,6 @@ export default class CommentScreen extends React.Component {
                 	removeClippedSubviews= {false}/>}
                 {!this.props.original_post.name && 
                 	<View style={styles.list_container}/>}
-                {this.state.post_message_expanded && 
                 <View style={{flex: 0.1}}>
 					<MakeCommentBox onClick={(event) => this.postMessagePressed.bind(this)()}
 						post_message_expanded = {this.state.post_message_expanded}
@@ -170,7 +163,7 @@ export default class CommentScreen extends React.Component {
 						handlePostSubmit = {this.handleCommentSubmit.bind(this)}
 						op = {op} 
 						canPost={this.state.canPost}/>
-				</View>}
+				</View>
             </View>
 		)
 	}

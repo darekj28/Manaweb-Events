@@ -66,7 +66,7 @@ export default class FeedBox extends Component {
         return (
             <TouchableOpacity onPress={this._navigateToComment.bind(this)}>
                 <View style={{flex:1, flexDirection: 'row', justifyContent: 'flex-start',
-                                borderBottomColor: 'silver', borderBottomWidth: 1,backgroundColor : 'white'}}>
+                                borderBottomColor: 'silver', borderBottomWidth: 2,backgroundColor : 'white'}}>
                     <View style={{flex: 0, justifyContent: 'flex-start'}}>
                         {post.avatar =='nissa' && <Image  style={styles.profile_image} source={profileImages.nissa} />}
                         {post.avatar == 'chandra' && <Image  style={styles.profile_image} source={profileImages.chandra} />}

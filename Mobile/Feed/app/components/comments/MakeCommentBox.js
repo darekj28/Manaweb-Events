@@ -24,7 +24,7 @@ export default class MakeCommentBox extends React.Component {
                     borderColor: 'silver',borderWidth: 1, margin : 5, borderRadius: 3, height : 30}}>
                     <TextInput
                         style = {styles.text_input}
-                        autoFocus = {true}
+                        autoFocus = {false}
                         multiline = {true}
                         numberOfLines = {1}
                         underlineColorAndroid={"transparent"}
