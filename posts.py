@@ -56,6 +56,10 @@ class Posts:
 	def id_generator(self, size=6, chars=string.ascii_uppercase + string.digits):
 		return ''.join(random.choice(chars) for _ in range(size))
 
+	def initalizeFeed(self, feed_name):
+		self.createThread(feed_name)
+		self.createSeenPostsTable(feed_name)
+
 	def createSeenPostsTable(self, feed_name):
 		sql = "CREATE TABLE IF NOT EXISTS " + feed_name + self.SEEN_POSTS_SUFFIX + " (userID TEXT PRIMARY KEY, last_seen_post TEXT, numUnseen INTEGER, timeStamp FLOAT, timeString TEXT)"
 		self.db.execute(sql)

@@ -7,6 +7,7 @@ from security import Security
 from tasks import test
 import sqlite3 
 import validation
+import time
 
 from app_factory import create_app
 from celery_factory import create_celery
@@ -40,8 +41,21 @@ user_manager.deleteUser('Ellibereth')
 # security_manager.createRecovery()
 # post_manager.deleteNotifications()
 # print(user_manager.getInfoFromEmail('Darekj@bro.bro'))
+time_sum = 0
+times = list()
+test_size = 50.0
+for i in range(1, int(test_size)):
+	time_0 = time.time()
+	post_list = post_manager.getPosts("BALT")
+	time_1 = time.time()
+	total_time = time_1 - time_0
+	print("Get Posts takes "  + str(total_time))
+	time_sum = time_sum + total_time
+	times.append(total_time)
 
-feed_name = "BALT"
+average = time_sum / test_size
+print('average : ' + str(average))
+
 # post_manager.recalculateLastPostTable(feed_name)
 # post_manager.recalculateUnseenPosts(feed_name)
 # post_manager.deleteUserPosts("mongomongomongo")
