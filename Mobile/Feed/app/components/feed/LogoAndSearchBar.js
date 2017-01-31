@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 var titleIcon = require('../res/logo4.png')
 const LOGO_HEIGHT = 30
-const SEARCH_BAR_PROPORTION = 0.8
+const SEARCH_BAR_PROPORTION = 0.9
 
 export default class LogoAndSearchBar extends Component {
     constructor(props) {
@@ -21,7 +21,7 @@ export default class LogoAndSearchBar extends Component {
                 <View style={{flex: 1 - SEARCH_BAR_PROPORTION, margin: 5}}>
                     <Image  style={styles.logo} source={titleIcon} />
                 </View>
-                <View style={{flex: SEARCH_BAR_PROPORTION, flexDirection: 'row', borderRadius : 5}}>
+                <View style={{flex: SEARCH_BAR_PROPORTION, alignItems : 'center'}}>
                     {/*<View style = {styles.search_input_wrapper}>
                         <TextInput
                             style = {styles.search_input}
@@ -38,6 +38,7 @@ export default class LogoAndSearchBar extends Component {
                         {this.props.activityText}
                     </Text>
                 </View>
+                <View style={{flex : 1 - SEARCH_BAR_PROPORTION }}/>
             </View>
         );
     }
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
       fontSize: 20,
       color: 'white',
       fontWeight : 'bold',
-      textAlign: 'left',
+      textAlign: 'center',
       textAlignVertical: 'center',
       justifyContent: 'center',
     },

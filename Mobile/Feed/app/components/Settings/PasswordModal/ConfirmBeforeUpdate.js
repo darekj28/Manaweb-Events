@@ -1,12 +1,13 @@
 import React from 'react';
 import {Component} from 'react'
-import {Platform, Alert, Image, Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {TouchableWithoutFeedback, Platform, Alert, Image, Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Dimensions from 'Dimensions';
 import CurrentPassword from './CurrentPassword';
 import NewPassword from './NewPassword';
 import ConfirmPassword from './ConfirmPassword';
+import dismissKeyboard from 'react-native-dismiss-keyboard';
 
 export default class ConfirmBeforeUpdate extends React.Component {
 	constructor(props) {
@@ -40,6 +41,7 @@ export default class ConfirmBeforeUpdate extends React.Component {
 		return(
 			<Modal visible={this.props.display} animationType={"slide"} transparent={false} onRequestClose={() => {return}}>
 				{Platform.OS == 'ios' && <View style = {{paddingTop : 20}} />}
+				<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
 				<View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start'}}>
 					<View style={styles.top_bar}>
 						<View style={{flex: 1}}>
@@ -65,8 +67,7 @@ export default class ConfirmBeforeUpdate extends React.Component {
 										label = {"Confirm password"}/>
 					</View>
 				</View>
-				 
-				 
+				</TouchableWithoutFeedback>		 
 			</Modal>
 		)
 	}

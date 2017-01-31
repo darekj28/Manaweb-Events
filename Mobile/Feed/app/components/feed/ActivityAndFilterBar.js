@@ -1,6 +1,6 @@
 import React from 'react';
 import {Component} from 'react'
-import { AppRegistry,StyleSheet,Text,View, TextInput, Alert, Image, TouchableHighlight} from 'react-native';
+import { AppRegistry,StyleSheet,Text,View, TextInput, Alert, Image, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 var titleIcon = require('../res/logo4.png')
@@ -64,7 +64,7 @@ export default class LogoAndSearchBar extends Component {
                     </View>
                 </View>
                 <View style={{flex: 0, flexDirection: 'row', paddingRight : 4}}>
-                    <TouchableHighlight onPress={() => this.props.onFilterChange(0)}>
+                    <TouchableOpacity onPress={() => this.props.onFilterChange(0)}>
                         <View style = {styles.filter_wrapper}>
                             {!this.props.filter_enable[0] && <Icon name = "md-swap" size = {25} color = {red}/>}
                             {this.props.filter_enable[0] && <Icon name = "md-swap" size = {25} color = {green}/>}
@@ -72,9 +72,9 @@ export default class LogoAndSearchBar extends Component {
                                 {this.filterText.bind(this)(0)}
                             </Text>
                         </View>
-                    </TouchableHighlight>
+                    </TouchableOpacity>
 
-                    <TouchableHighlight onPress={() => this.props.onFilterChange(1)}>
+                    <TouchableOpacity onPress={() => this.props.onFilterChange(1)}>
                         <View style = {styles.filter_wrapper}>
                             {!this.props.filter_enable[1] && <Icon name = "ios-play" size = {25} color = {red}/>}
                             {this.props.filter_enable[1] && <Icon name = "ios-play" size = {25} color = {green}/>}
@@ -82,9 +82,9 @@ export default class LogoAndSearchBar extends Component {
                                 {this.filterText.bind(this)(1)}
                             </Text>
                         </View>
-                    </TouchableHighlight>
+                    </TouchableOpacity>
 
-                    <TouchableHighlight onPress={() => this.props.onFilterChange(2)}>
+                    <TouchableOpacity onPress={() => this.props.onFilterChange(2)}>
                         <View style = {styles.filter_wrapper}>
                             {!this.props.filter_enable[2] && <Icon name = "md-time" size = {25} color = {red}/>}
                             {this.props.filter_enable[2] && <Icon name = "md-time" size = {25} color = {green}/>}
@@ -92,7 +92,7 @@ export default class LogoAndSearchBar extends Component {
                                 {this.filterText.bind(this)(2)}
                             </Text>
                         </View>
-                    </TouchableHighlight>
+                    </TouchableOpacity>
                 </View>
 
             </View>

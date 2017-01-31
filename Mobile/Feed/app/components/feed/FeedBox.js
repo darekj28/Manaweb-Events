@@ -9,7 +9,7 @@ const PROFILE_HEIGHT = 50
 const PROFILE_WIDTH = 50
 const COMMENT_HEIGHT = 25
 const DOT_WIDTH = 30
-const DROP_DOWN_OPTIONS = ['Report Post']
+const DROP_DOWN_OPTIONS = ['Report post']
 
 var profileImages = {
     nissa:      require('../static/avatars/nissa.png'),
@@ -33,13 +33,13 @@ export default class FeedBox extends Component {
 
     _dropdown_renderRow(rowData, rowID, highlighted) {
         return (
-            <TouchableHighlight underlayColor='silver'>
+            <TouchableOpacity>
                 <View style={styles.dropdown_row}>
-                    <Text style={[styles.dropdown_row_text, highlighted && {color: 'black'}]}>
+                    <Text style={[styles.dropdown_row_text, highlighted && {color: '#90D7ED'}]}>
                         {DROP_DOWN_OPTIONS}
                     </Text>
                 </View>
-            </TouchableHighlight>
+            </TouchableOpacity>
         );
     }
 
@@ -115,7 +115,7 @@ export default class FeedBox extends Component {
                                     No replies yet
                                 </Text>
                             </View>}
-                            <View style={{flex : 0, paddingRight : 8}}>
+                            <View style={{flex : 0, paddingRight : 6}}>
                                 <ModalDropdown
                                     defaultIndex={0}
                                     defaultValue={DROP_DOWN_OPTIONS[0]}
@@ -127,7 +127,7 @@ export default class FeedBox extends Component {
                                     (sectionID, rowID, adjacentRowHighlighted) =>
                                     {/*This removes default gray line*/}}>
                                 
-                                    <Icon name = "ios-more" size = {25} color = "#90D7ED"/>
+                                    <Icon name = "ios-more" size = {30} color = "#90D7ED"/>
                                 </ModalDropdown>
                             </View>
                         </View>
@@ -188,14 +188,11 @@ const styles = StyleSheet.create({
         tintColor: '#90D7ED'
     },
     dropdown_box: {
-        borderColor: 'gray',
-        paddingTop: 2,
-        paddingBottom: 2,
-        paddingRight: 10,
-        paddingLeft: 3,
-        height: 35,
-        borderWidth: 2,
-        borderRadius: 4,
+        borderColor: '#696969',
+        padding : 3,
+        height: 28,
+        borderWidth: 1,
+        borderRadius: 5,
     },
     dropdown_row: {
         flex: 0,
@@ -203,8 +200,7 @@ const styles = StyleSheet.create({
     },
     dropdown_row_text: {
         marginHorizontal: 4,
-        fontSize: 16,
-        color: 'gray',
+        fontSize: 14,
         textAlignVertical: 'center',
     }
 });

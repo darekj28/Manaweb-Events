@@ -1,11 +1,12 @@
 import React from 'react';
 import {Component} from 'react'
-import {Item, Platform, Alert, Image, Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,
+import {TouchableWithoutFeedback, Item, Platform, Alert, Image, Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,
 	View,ListView,TouchableOpacity,TouchableHighlight, TextInput, ScrollView} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Dimensions from 'Dimensions';
-
+import ReportOriginalPost from './ReportOriginalPost';
+import dismissKeyboard from 'react-native-dismiss-keyboard';
 
 export default class ReportPostModal extends Component {
 	constructor(props) {
@@ -68,51 +69,55 @@ export default class ReportPostModal extends Component {
 		return(
 			<Modal visible={this.props.display} animationType={"slide"} transparent={false} onRequestClose={() => {return}}>
 				{Platform.OS == 'ios' && <View style = {{paddingTop : 20}} />}
-
-				<View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start'}}>
+				<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
+				<View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start', backgroundColor : '#fbfbfb'}}>
 					<View style={styles.top_bar}>
 						<View style={{flex: 0.2}}>
 							<TouchableOpacity onPress = {this.handleReturn.bind(this)}>
-								<Text style = {{color : '#90D7ED', fontSize: 20}}>
+								<Text style = {{color : '#90D7ED'}}>
 									Cancel
 								</Text>
 							</TouchableOpacity>
 						</View>
 						<View style={{flex: 0.6}}>
-							<Text style = {{textAlign : 'center', fontWeight : 'bold', fontSize: 20}}>
-								Report
+							<Text style = {{textAlign : 'center', fontWeight : 'bold'}}>
+								Report post
 							</Text>
 						</View>
 						<View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}/>
 					</View>
 
 					<View style={styles.list_container}>
-						<Text style = {{fontWeight: "bold"}}>
-							Original Post:
+						<Text style = {styles.report_caption}>
+							Post to be reported:
 						</Text>
-						<ScrollView>
-							<Text>
-								{this.props.post.postContent}
-							</Text>
-						</ScrollView>
+						<ReportOriginalPost post={this.props.post}/>
 					</View>
-
-					<Picker style = {{flex : 0}} selectedValue={this.state.reason}
-					onValueChange={this.handleReasonChange.bind(this)}
-					>
-							<Picker.Item  label= {"Inappropriate"} value = {"Inappropriate"} />
-							<Picker.Item  label= {"Spam"} value = {"Spam"} />
-							<Picker.Item  label= {"Other"} value = {"Other"} />
-					</Picker>
-
-
-					<View style = {{flex : 0.4, flexDirection : "row", justifyContent: "flex-start", padding: 5}}>
-						<TextInput
-						style = {{flex : 1, borderColor : "skyblue", borderWidth : 4, padding: 6, borderRadius : 4}}
-						onChangeText = {this.handleDescriptionChange.bind(this)}
-						placeholder = "Describe Why This Post Is Bad"
-						maxLength = {40}
-						/>
+					<View style={styles.list_container}>
+						<Text style = {styles.report_caption}>
+								Select offense:
+						</Text>
+						<Picker style = {{flex : 1}} selectedValue={this.state.reason}
+						onValueChange={this.handleReasonChange.bind(this)}>
+								<Picker.Item  label= {"Inappropriate"} value = {"Inappropriate"} />
+								<Picker.Item  label= {"Spam"} value = {"Spam"} />
+								<Picker.Item  label= {"Other"} value = {"Other"} />
+						</Picker>
+					</View>
+					<View style={styles.list_container}>
+						<Text style = {styles.report_caption}>
+							Additional comments:
+						</Text>
+						<View style = {{flex : 0.4, justifyContent: "flex-start", padding: 5, borderRadius : 5, borderColor : 'silver', borderWidth : 1}}>
+							<TextInput
+							style = {{flex : 1, padding: 5, fontSize : 16 }}
+							onChangeText = {this.handleDescriptionChange.bind(this)}
+							multiline = {true}
+                        	numberOfLines = {1}
+                        	underlineColorAndroid={"transparent"}
+							maxLength = {40}
+							/>
+						</View>
 					</View>
 					<View style = {{flex : 0.05}}/>
 
@@ -125,6 +130,7 @@ export default class ReportPostModal extends Component {
 					</View>
 					<View style = {{flex: 0.1}}></View>
 				</View>
+				</TouchableWithoutFeedback>
 			</Modal>
 		)
 	}
@@ -132,8 +138,9 @@ export default class ReportPostModal extends Component {
 
 const window = Dimensions.get('window');
 const styles = StyleSheet.create({
-	picker: {
-
+	report_caption : {
+		fontWeight : 'bold',
+		fontSize : 16
 	},
 	top_bar : {
 		flex : 0,
@@ -145,14 +152,14 @@ const styles = StyleSheet.create({
 		justifyContent: "space-around",
 		borderBottomColor : '#e1e1e1',
 		borderBottomWidth : 1,
-		alignItems : 'center'
+		alignItems : 'center',
+		backgroundColor : 'white'
 	},
 	list_container: {
-		flex : 0.15,
-		paddingTop : 8,
+		flex : 1,
+		padding : 8,
 		alignSelf : 'stretch',
 		backgroundColor : '#fbfbfb',
-		padding: 5
 	},
 	report_button : {
 		borderColor : "#90D7ED",
@@ -166,7 +173,7 @@ const styles = StyleSheet.create({
 	report_text: {
 		textAlign : 'center',
 		fontWeight : 'bold',
-		'color' : 'white',
+		color : 'white',
 		flex: 0,
 		paddingHorizontal: 10
 	}
