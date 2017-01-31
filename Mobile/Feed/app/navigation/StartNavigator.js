@@ -22,7 +22,6 @@ import FeedScreen from '../screens/FeedScreen'
 import NotificationScreen from '../screens/NotificationScreen'
 import Spinner from 'react-native-loading-spinner-overlay';
 import BottomTabBar from '../components/BottomTabBar';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 class StartNavigator extends Component {
 

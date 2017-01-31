@@ -115,7 +115,7 @@ export default class FeedBox extends Component {
                                     No replies yet
                                 </Text>
                             </View>}
-                            <View style={{flex : 0, paddingRight : 5}}>
+                            <View style={{flex : 0, paddingRight : 5, paddingTop : 3}}>
                                 {/*<ModalDropdown
                                     defaultIndex={0}
                                     defaultValue={DROP_DOWN_OPTIONS[0]}
@@ -127,7 +127,7 @@ export default class FeedBox extends Component {
                                     (sectionID, rowID, adjacentRowHighlighted) =>
                                     }>*/}
                                 <TouchableOpacity onPress={() => this.props.toggleReportModal(post)}>
-                                    <Icon name = "ios-alert-outline" size = {25} color = "#90D7ED"/>
+                                    <Icon name = "md-alert" size = {22} color = "#90D7ED"/>
                                 </TouchableOpacity>
                                 {/*</ModalDropdown>*/}
                             </View>
