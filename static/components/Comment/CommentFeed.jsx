@@ -40,12 +40,15 @@ export default class CommentFeed extends React.Component {
 	}
 	render() {
 		var rows = this.filter.bind(this)();
-		return (<ul id="CommentFeed">{rows}
+		if (rows.length > 0)
+			return (<ul id="CommentFeed">{rows}
 					<EditCommentModal comment={this.state.commentInModal} 
 										handleCommentEdit={this.props.handleCommentEdit} />
 					<DeleteCommentModal comment={this.state.commentInModal} 
 										handleCommentDelete={this.props.handleCommentDelete}/>
 					<ReportCommentModal comment={this.state.commentInModal} currentUser={this.props.currentUser}/>
 			</ul>);
+		else 
+			return <div/>
 	}
 }

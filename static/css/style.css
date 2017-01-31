@@ -303,7 +303,7 @@ button.kep-login-facebook:hover{
 }
 .CommentFeedPostOriginal {
   list-style-type:none;
-  border-bottom: 4px solid var(--border-gray);
+  border-bottom: 2px solid var(--border-gray);
 }
 .numberOfComments {
   color:var(--light);
