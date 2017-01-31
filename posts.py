@@ -720,6 +720,7 @@ class Posts:
 		user_info_table = user_manager.getUserInfoTable()
 		user_manager.closeConnection()
 		postDict = self.postListToDict(posts, user_info_table)
+		time_end = time.time()
 		return postDict
 
 	def getComments(self, feed_name, comment_id = None):

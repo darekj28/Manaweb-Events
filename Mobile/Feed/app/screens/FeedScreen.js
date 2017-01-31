@@ -142,7 +142,6 @@ class FeedScreen extends Component {
 			}
 			else {
 				this.setState({alert : false});
-
 				feed.unshift({
 							postContent: newPostContent,
 							avatar  : this.props.current_user['avatar_name'],
@@ -164,7 +163,7 @@ class FeedScreen extends Component {
 	handleServerPostSubmit (newPostContent) {
 		var url = "https://manaweb-events.herokuapp.com"
 		var test_url = "http://0.0.0.0:5000"
-		fetch(test_url + "/mobileMakePost", {method: "POST",
+		fetch(url + "/mobileMakePost", {method: "POST",
 					headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
@@ -233,6 +232,11 @@ class FeedScreen extends Component {
 		this.initializeUserInfo.bind(this)();
 		this.setState({feed : this.props.feed})
 	}
+
+	componentWillReceiveProps(nextProps){
+		this.setState({feed : nextProps.feed})
+	}
+
 	componentWillUnmount(){
 		clearTimeout(this.spamTimer)
 	    this.keyboardWillHideListener.remove();
