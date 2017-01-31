@@ -33,6 +33,7 @@ export default class FeedPost extends React.Component {
 		var post = this.props.post;
 		var isOP = this.props.isOP;
 		var isAdmin = this.props.isAdmin;
+		var reply = post.numberOfComments == 0 || post.numberOfComments > 1 ? "replies" : "reply";
 		return (
 			<li className="Post" id = {"post_" + post.comment_id}>
 				<Avatar source={post.avatar}/>
@@ -47,7 +48,8 @@ export default class FeedPost extends React.Component {
 							<span className="glyphicon glyphicon-comment pull-left PostBottomIcon AppGlyphicon" 
 									id={"viewComment_" + this.state.comment_id}>
 									</span>
-							<span className="numberOfComments pull-left AppGlyphicon"><h6>{post.numberOfComments}</h6></span>
+							{post.numberOfComments > 0 && <span className="numberOfComments pull-left AppGlyphicon"><h6>{post.numberOfComments} {reply}</h6></span>}
+							{post.numberOfComments == 0 && <span className="noComments pull-left"><h6>Be the first to comment!</h6></span>}
 							</Link>
 						</div>
 						{ (isAdmin || !isOP) && 

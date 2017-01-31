@@ -37,7 +37,7 @@ export default class MakePost extends React.Component {
 	}
 	render() {
 		return(
-			<div> 
+			<div id="MakePost"> 
 				<div id="TogglePost" className="important-text">Post a message...</div>
 				<div id="MessagePost">
 					<textarea id="PostInput" className="important-text form-control" 
