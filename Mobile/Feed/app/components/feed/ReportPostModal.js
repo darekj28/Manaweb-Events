@@ -12,7 +12,7 @@ export default class ReportPostModal extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			reason: "Spam",
+			reason: "Inappropriate",
 			description: "",
 		}
 	}
@@ -85,20 +85,21 @@ export default class ReportPostModal extends Component {
 						<Text style = {styles.report_caption}>
 							Post to be reported:
 						</Text>
-						<View style={styles.report_section}>
+						<ScrollView contentContainerStyle={styles.report_section}>
 							<ReportOriginalPost post={this.props.post}/>
-						</View>
+						</ScrollView>
 					</View>
 					<View style={styles.list_container}>
 						<Text style = {styles.report_caption}>
 								Select offense:
 						</Text>
 						<View style = {styles.report_section}>
-							<Picker style = {{flex : 1,justifyContent : 'flex-start'}} selectedValue={this.state.reason}
+							<Picker style = {{flex : 1, justifyContent : 'center'}} 
+								itemStyle={{color : '#90D7ED', fontSize : 18, fontWeight : 'bold'}} selectedValue={this.state.reason}
 							onValueChange={this.handleReasonChange.bind(this)}>
-									<Picker.Item  label= {"Inappropriate"} value = {"Inappropriate"} />
-									<Picker.Item  label= {"Spam"} value = {"Spam"} />
-									<Picker.Item  label= {"Other"} value = {"Other"} />
+								<Picker.Item label= {"Inappropriate"} value = {"Inappropriate"} />
+								<Picker.Item label= {"Spam"} value = {"Spam"} />
+								<Picker.Item label= {"Other"} value = {"Other"} />
 							</Picker>
 						</View>
 					</View>
@@ -113,7 +114,6 @@ export default class ReportPostModal extends Component {
 							multiline = {true}
                         	numberOfLines = {1}
                         	underlineColorAndroid={"transparent"}
-							maxLength = {40}
 							/>
 						</View>
 					</View>
@@ -199,6 +199,7 @@ const styles = StyleSheet.create({
 		padding: 5, 
 		borderRadius : 5, 
 		borderColor : 'silver', 
-		borderWidth : 1
+		borderWidth : 1,
+		overflow : "hidden"
 	}
 });

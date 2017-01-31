@@ -1,14 +1,14 @@
 import React from 'react';
 import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
-        TouchableWithoutFeedback, Alert, Image, Animated} from 'react-native';
-const PROFILE_HEIGHT = 50
-const PROFILE_WIDTH = 50
+        TouchableWithoutFeedback, ScrollView, Alert, Image, Animated} from 'react-native';
+const PROFILE_HEIGHT = 30
+const PROFILE_WIDTH = 30
 export default class ReportOriginalPost extends React.Component {
 	render() {
 		var post = this.props.post;
 		return (
 			<View style={{  flex:1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                <View style={{paddingLeft : 8, paddingTop : 8, paddingBottom :8, justifyContent: 'flex-start'}}>
+                <View style={{paddingLeft : 6, paddingTop : 6, paddingBottom :6, justifyContent: 'flex-start'}}>
                     {post.avatar =='nissa' && <Image  style={styles.profile_image} source={require('../static/avatars/nissa.png')} />}
                     {post.avatar == 'chandra' && <Image  style={styles.profile_image} source={require('../static/avatars/chandra.png')} />}
                     {post.avatar == 'elspeth' && <Image  style={styles.profile_image} source={require('../static/avatars/elspeth.png')} />}
@@ -22,7 +22,7 @@ export default class ReportOriginalPost extends React.Component {
                 </View>
                 <View style={{flex : 1,flexDirection : 'column', justifyContent: 'flex-start' }}>
                     <View style={{flexDirection: 'row', justifyContent : 'flex-start', flexWrap : 'wrap', 
-                                            paddingLeft : 8, paddingRight : 8, paddingTop : 8}}> 
+                                            paddingLeft : 6, paddingRight : 6, paddingTop : 6}}> 
                         <Text style = {styles.text_name}>
                             {post.name}
                         </Text>
@@ -30,14 +30,14 @@ export default class ReportOriginalPost extends React.Component {
                             @{post.userID}
                         </Text>
                     </View>
-                    <View style={{justifyContent: 'flex-start', padding : 8, paddingBottom : 25, paddingTop : 25 }}>
-                        <Text style = {styles.text_message}>
-                            {post.postContent}
+                    <View style={{justifyContent: 'flex-start', padding : 6, paddingLeft : 5}}>
+                        <Text style={styles.text_time}>
+                            at {post.timeString}
                         </Text>
                     </View>
-                    <View style={{justifyContent: 'flex-start', padding : 8, paddingLeft : 5}}>
-                        <Text style={styles.text_time}>
-                            {post.timeString}
+                    <View style={{justifyContent: 'flex-start', padding : 6, paddingBottom : 16, paddingTop : 16 }}>
+                        <Text style = {styles.text_message} numberOfLines={2}>
+                            {post.postContent}
                         </Text>
                     </View>
                 </View>
@@ -50,27 +50,27 @@ const styles = StyleSheet.create({
     text_name: {
         flex: 0,
         color: '#333333',
-        fontSize: 14,
+        fontSize: 12,
         fontWeight: 'bold',
         textAlignVertical: 'top',
     },
     text_userID: {
         flex: 0,
-        fontSize: 14,
+        fontSize: 12,
         textAlignVertical: 'top',
         color : '#696969',
         paddingLeft : 4
     },
     text_time: {
         flex: 0,
-        fontSize: 14,
+        fontSize: 12,
         textAlignVertical: 'top',
         color : '#696969',
         paddingLeft : 3
     },
     text_message: {
         flex: 0,
-        fontSize: 20,
+        fontSize: 14,
         textAlignVertical: 'top',
         color : '#333333'
     },
