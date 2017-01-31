@@ -66,8 +66,8 @@ const styles = StyleSheet.create({
     paddingRight : 10,
     flexDirection : "row",
     justifyContent: "space-around",
-    borderBottomColor : '#e1e1e1',
-    borderBottomWidth : 1,
+    borderBottomColor : 'silver',
+    borderBottomWidth : 2,
     alignItems : 'center'
   },
 });

@@ -21,7 +21,8 @@ export default class Notifications extends React.Component {
 
 		else 
 			return (
-				<ScrollView            
+			<View style={{flex : 1,backgroundColor : '#e5e5e5'}}>
+				<ScrollView contentContainerStyle={{backgroundColor : "#e5e5e5", paddingTop : 4}}           
 				automaticallyAdjustContentInsets={false}
 	            onScroll={() => {}}
 	            scrollEventThrottle={200}
@@ -33,6 +34,7 @@ export default class Notifications extends React.Component {
 							navigator = {this.props.navigator}/>);	
 					}, this)}
 				</ScrollView>
+			</View>
 				)
 	}
 }

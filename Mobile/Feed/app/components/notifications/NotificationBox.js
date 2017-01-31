@@ -126,8 +126,8 @@ export default class NotificationBox extends React.Component {
             outputRange: ["#90D7ED", "#90D7ED", "#90D7ED"]
         });
 	   	return(
-	   		<TouchableOpacity onPress={this._navigateToComment.bind(this)}>
-                <Animated.View style={{flex:1,justifyContent: 'flex-start',flexDirection : 'row', borderBottomColor,borderBottomWidth: 1,backgroundColor}}>
+	   		<TouchableOpacity style={{marginBottom : 4}} onPress={this._navigateToComment.bind(this)}>
+                <Animated.View style={{flex:1,justifyContent: 'flex-start',flexDirection : 'row', borderBottomColor,borderBottomWidth: 2,backgroundColor}}>
                     <View style={{flex: 0, justifyContent: 'flex-start'}}>
                         {note.avatar =='nissa' && <Image  style={styles.profile_image} source={profileImages.nissa} />}
                         {note.avatar == 'chandra' && <Image  style={styles.profile_image} source={profileImages.chandra} />}
