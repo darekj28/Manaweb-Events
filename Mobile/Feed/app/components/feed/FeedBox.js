@@ -115,8 +115,8 @@ export default class FeedBox extends Component {
                                     No replies yet
                                 </Text>
                             </View>}
-                            <View style={{flex : 0, paddingRight : 6}}>
-                                <ModalDropdown
+                            <View style={{flex : 0, paddingRight : 5}}>
+                                {/*<ModalDropdown
                                     defaultIndex={0}
                                     defaultValue={DROP_DOWN_OPTIONS[0]}
                                     dropdownStyle={styles.dropdown_box}
@@ -125,10 +125,11 @@ export default class FeedBox extends Component {
                                     renderRow={this._dropdown_renderRow.bind(this)}
                                     renderSeparator = {
                                     (sectionID, rowID, adjacentRowHighlighted) =>
-                                    {/*This removes default gray line*/}}>
-                                
-                                    <Icon name = "ios-more" size = {30} color = "#90D7ED"/>
-                                </ModalDropdown>
+                                    }>*/}
+                                <TouchableOpacity onPress={() => this.props.toggleReportModal(post)}>
+                                    <Icon name = "ios-alert-outline" size = {25} color = "#90D7ED"/>
+                                </TouchableOpacity>
+                                {/*</ModalDropdown>*/}
                             </View>
                         </View>
                     </View>
