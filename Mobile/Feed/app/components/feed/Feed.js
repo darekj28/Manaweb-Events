@@ -1,6 +1,6 @@
 import React from 'react';
 import {Component} from 'react'
-import {ScrollView, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {RefreshControl, ScrollView, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 
 import HomeStatusBar from '../HomeStatusBar';
 import _ from 'lodash'
@@ -85,7 +85,9 @@ export default class Feed extends Component {
 			this.setState({display_report_modal : false})
 		}
 	}
-
+	onRefresh() {
+		this.props.onRefresh();
+	}
 	render() {
 		var feed = this.filter()
 		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -97,6 +99,10 @@ export default class Feed extends Component {
 					toggleReportModal = {this.toggleReportModal.bind(this)} current_user = {this.props.current_user}/>
 				}
 				<ListView 
+					refreshControl={
+						<RefreshControl refreshing={this.props.refreshing}
+							onRefresh={this.onRefresh.bind(this)}/>
+					}
 					style={styles.list_container}
 					dataSource={dataSource}
 					renderRow={this.listViewRenderRow.bind(this)}

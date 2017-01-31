@@ -23,7 +23,8 @@ export default class Index extends React.Component {
       current_username: "",
       isLoading: true,
       feed: [],
-      notifications: []
+      notifications: [],
+      refreshing : false
     }
   }
 
@@ -167,7 +168,7 @@ export default class Index extends React.Component {
               timeString : obj['timeString']
             })
           }
-          this.setState({feed: feed, isLoading : false})
+          this.setState({feed: feed, isLoading : false, refreshing : false})
          }
       }
     }).done()
@@ -192,6 +193,9 @@ export default class Index extends React.Component {
   }
   resetNotificationCount() {
     this.setState({ numUnseenNotifications : 0 });
+  }
+  onRefresh() {
+    this.setState({ refresh : true }, this.getPosts.bind(this));
   }
   componentDidMount() {
     this.getPosts.bind(this)(); 
@@ -227,6 +231,8 @@ export default class Index extends React.Component {
         numUnseenNotifications={this.state.numUnseenNotifications}
         getPosts={this.getPosts.bind(this)}
         resetNotificationCount={this.resetNotificationCount.bind(this)}
+        refreshing={this.state.refreshing}
+        onRefresh={this.onRefresh.bind(this)}
         /> 
     }
 

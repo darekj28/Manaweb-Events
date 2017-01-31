@@ -93,7 +93,9 @@ class StartNavigator extends Component {
 				break;
 			case "Feed":
 				bar_color = "skyblue"
-				screen = (<FeedScreen feed={this.props.feed} scroll={this.state.scroll} stopScroll={this.stopScroll.bind(this)} getPosts={this.props.getPosts} {...globalNavigatorProps}/>)
+				screen = (<FeedScreen feed={this.props.feed} refreshing={this.props.refreshing} onRefresh={this.props.onRefresh} 
+								scroll={this.state.scroll} stopScroll={this.stopScroll.bind(this)} 
+								getPosts={this.props.getPosts} {...globalNavigatorProps}/>)
 				break;
 			case "Notifications":
 				screen = (<NotificationScreen notifications={this.props.notifications} {...globalNavigatorProps}/>)

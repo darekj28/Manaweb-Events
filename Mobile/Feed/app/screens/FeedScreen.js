@@ -285,7 +285,8 @@ class FeedScreen extends Component {
 						<Feed posts = {this.props.feed} searchText = {this.state.searchText} filters = {this.state.filters}
 						userIdToFilterPosts={this.state.userIdToFilterPosts} handleFilterUser={this.handleFilterUser.bind(this)}
 						current_user = {this.props.current_user} scroll={this.props.scroll} stopScroll={this.props.stopScroll}
-								navigator = {this.props.navigator} current_username = {this.props.current_user.userID}
+						refreshing={this.props.refreshing} onRefresh={this.props.onRefresh}	
+						navigator = {this.props.navigator} current_username = {this.props.current_user.userID}
 								/>
 				</View>
 
