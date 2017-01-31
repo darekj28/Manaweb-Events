@@ -60,7 +60,8 @@ def test_makePosts(feed_name, numPosts):
 	time_0 = time.time()
 	for i in range(1,numPosts):
 		this_time = makeRandomPost(feed_name)
-		print("run " + str(i) + " : " + str(this_time) + " seconds")
+		# print("run " + str(i) + " : " + str(this_time) + " seconds")
+		time.sleep(2)
 	time_1 = time.time()
 	total_time = time_1 - time_0
 	return total_time
@@ -75,9 +76,12 @@ def test_getPosts(feed_name):
 	print('get posts time : ' + str(total_time))
 
 feed_name = "SPEEDTEST"
-numPosts = 400
-result = test_makePosts(feed_name, numPosts)
-test_getPosts(feed_name)
-print("total time to make posts : " + str(result))
+# numPosts = 50
+# result = test_makePosts(feed_name, numPosts)
+# test_getPosts(feed_name)
+# result = test_makePosts(feed_name, numPosts * 2)
+# test_getPosts(feed_name)
+clearThread(feed_name)
+# print("total time to make posts : " + str(result))
 
 

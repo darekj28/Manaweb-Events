@@ -212,11 +212,16 @@ class Users:
 
 	def getUserInfoTable(self):
 		table_name = self.USER_TABLE
+		sql = "SELECT * FROM " + self.USER_TABLE
+		self.udb.execute(sql)
+		user_table = self.udb.fetchall()
 		output_table = {}
-		users_list = self.getUserList()
-		for user in users_list:
-			this_user_info = self.getInfo(user)
-			output_table[user] = this_user_info
+		for row in user_table:
+			user_dict = self.queryToDict(row)
+			output_table[user_dict['userID']] = user_dict
+		# for user in users_list:
+		# 	this_user_info = self.getInfo(user)
+		# 	output_table[user] = this_user_info
 		return output_table
 
 	def deleteUserByPhoneNumber(self, phone_number):

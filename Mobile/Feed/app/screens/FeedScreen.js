@@ -142,6 +142,7 @@ class FeedScreen extends Component {
 			}
 			else {
 				this.setState({alert : false});
+
 				feed.unshift({
 							postContent: newPostContent,
 							avatar  : this.props.current_user['avatar_name'],
@@ -153,6 +154,7 @@ class FeedScreen extends Component {
 							isChill : contains(this.state.post_actions, "Chill"),
 							numberOfComments : 0,
 						});
+				this.setState({newPostContent : "", canPost: false})
 				setTimeout(function (){
 					this.handleServerPostSubmit(newPostContent);
 					}.bind(this), 1000)
@@ -162,7 +164,7 @@ class FeedScreen extends Component {
 	handleServerPostSubmit (newPostContent) {
 		var url = "https://manaweb-events.herokuapp.com"
 		var test_url = "http://0.0.0.0:5000"
-		fetch(url + "/mobileMakePost", {method: "POST",
+		fetch(test_url + "/mobileMakePost", {method: "POST",
 					headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
@@ -181,7 +183,7 @@ class FeedScreen extends Component {
 			.then((responseData) => {
 
 				if (responseData['result'] == 'success') {
-					this.setState({newPostContent : "", canPost : false});
+					// this.setState({newPostContent : "", canPost : false});
 					this.props.getPosts();
 				}
 				else {
@@ -224,11 +226,12 @@ class FeedScreen extends Component {
 	}
 
 	initializeUserInfo(){
-			this.setState({current_user : this.props.current_user})
-			this.setState({current_username : this.props.current_user.userID})
+		this.setState({current_user : this.props.current_user})
+		this.setState({current_username : this.props.current_user.userID})
 	}
 	componentDidMount() {
-			this.initializeUserInfo.bind(this)();
+		this.initializeUserInfo.bind(this)();
+		this.setState({feed : this.props.feed})
 	}
 	componentWillUnmount(){
 		clearTimeout(this.spamTimer)
@@ -244,6 +247,7 @@ class FeedScreen extends Component {
 		let filterIcon2 = require('../components/res/icon2.png')
 		let filterIcon3 = require('../components/res/icon3.png')
 		let dropdownIcon = require('./res/down_arrow.png')
+
 		return (
 				<View style = {styles.container}>
 					 <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
@@ -282,7 +286,7 @@ class FeedScreen extends Component {
 									 </ActivityAndFilterBar>
 							 </View>
 					 </TouchableWithoutFeedback>
-						<Feed posts = {this.props.feed} searchText = {this.state.searchText} filters = {this.state.filters}
+						<Feed posts = {this.state.feed} searchText = {this.state.searchText} filters = {this.state.filters}
 						userIdToFilterPosts={this.state.userIdToFilterPosts} handleFilterUser={this.handleFilterUser.bind(this)}
 						current_user = {this.props.current_user} scroll={this.props.scroll} stopScroll={this.props.stopScroll}
 						refreshing={this.props.refreshing} onRefresh={this.props.onRefresh}	

@@ -96,10 +96,14 @@ class Posts:
 			numUnseenDict[item[0]] = item[2]
 		this_post = self.getPostById(feed_name, comment_id)
 		sql = "UPDATE " + table_name + " SET numUnseen = %s, timeStamp = %s, timeString = %s WHERE userID = %s"
+
+		# update the number of posts when a new one is made
+
 		for user in numUnseenDict.keys():
 			# only increment if this is not the op
 			if user != this_post['poster_id']:
 				self.db.execute(self.db.mogrify(sql, (numUnseenDict[user] + 1, this_post['timeStamp'], this_post['timeString'], user)))
+
 
 	def getNumUnseenPosts(self, feed_name, userID):
 		table_name = feed_name + self.SEEN_POSTS_SUFFIX
@@ -653,12 +657,13 @@ class Posts:
 		poster_id = poster_id.lower()
 		post_code = self.db.mogrify("INSERT INTO " + feed_name + " (body, poster_id, feed_name, comment_id, timeString, timeStamp, isTrade, isPlay, isChill, unique_id, numComments, following, ghost_following) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s, %s, %s)", (body, poster_id, feed_name, comment_id, timeString, timeStamp, isTrade, isPlay, isChill, unique_id, numComments, following, ghost_following))
 		self.db.execute(post_code)
-		self.post_db.commit()
 		action = "MAKE POST"
 		isComment = False
 		self.updateAdminTable(feed_name, body, poster_id, action, unique_id, timeString, timeStamp, isComment)
-		# add to posts seen table
+		time_0 = time.time()
 		self.updateSeenTableWithNewPost(feed_name, comment_id)
+		time_1 = time.time()
+		update_seen_table_time = time_1 - time_0
 		self.updateLastPostTable(feed_name, comment_id)
 
 	def makeComment(self, feed_name, comment_id, body, poster_id, unique_id = None):
