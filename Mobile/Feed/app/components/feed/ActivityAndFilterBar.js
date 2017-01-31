@@ -45,7 +45,7 @@ export default class LogoAndSearchBar extends Component {
         var green = '#5cb85c';
         var red = '#d9534f';
         return (
-            <View style={{flex:1, flexDirection: 'row', backgroundColor: this.props.color, alignItems:'center'}}>
+            <View style={{flex:1, flexDirection: 'row', backgroundColor: this.props.color, alignItems:'center', borderBottomWidth : 1, borderBottomColor : '#696969'}}>
                 <View style={{flex: 5, margin: 3}}>
                     {/*<Text style = {styles.activity_text}>
                         {this.props.activityText}
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     filter_wrapper: {
-        margin: 2,
+        margin: 1,
         marginLeft: 4,
         marginRight: 4,
         alignItems : 'center'
@@ -123,13 +123,14 @@ const styles = StyleSheet.create({
       width: FILTER_HEIGHT,
     },
     filter_text: {
-      color: 'white',
+      color: 'silver',
       fontSize: 10
     },
     search_input: {
         flex: 1,
         fontSize: 16,
         padding: 4,
+        paddingBottom : 7,
         textAlignVertical: 'center',
         height : 30
     },
@@ -139,7 +140,9 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginBottom: 5,
         marginLeft: 2,
-        borderRadius : 4,
+        borderColor : 'silver',
+        borderWidth : 1,
+        borderRadius : 5,
         backgroundColor : 'white',
         marginRight: 5,
         height : 30

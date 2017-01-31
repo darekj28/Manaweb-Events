@@ -33,7 +33,7 @@ const SEARCH_BAR_HEIGHT = 45
 // const SEARCH_BAR_COLOR = "#90D7ED"
 const SEARCH_BAR_COLOR = "skyblue"
 const ACTIVITY_BAR_HEIGHT = 40
-const ACTIVITY_BAR_COLOR = "#486B76"
+const ACTIVITY_BAR_COLOR = "white"
 const POST_MESSAGE_HEIGHT_SHORT = 50
 const POST_MESSAGE_HEIGHT_TALL = 150
 const ANIMATE_DURATION = 400
@@ -253,21 +253,6 @@ class FeedScreen extends Component {
 										</LogoAndSearchBar>
 							 </View>
 					 </TouchableWithoutFeedback>
-
-					 <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
-							 <View style = {{height: SEARCH_BAR_HEIGHT}}>
-									 <ActivityAndFilterBar
-											 color = {ACTIVITY_BAR_COLOR}
-											 activityText = {'Baltimore'}
-											 searchText={this.state.searchText}
-											 onChange={this.handleSearch.bind(this)}
-											 filter_enable = {this.state.filter_enable}
-											 filterText = {this.state.filters}
-											 onFilterChange = {this.handleFeedFilterPress.bind(this)}
-											 >
-									 </ActivityAndFilterBar>
-							 </View>
-					 </TouchableWithoutFeedback>
 						<Animated.View style = {{flexDirection:'row', height: this.state.post_message_height}}>
 								<PostMessageBox
 										onClick={(event) => this.postMessagePressed()}
@@ -283,6 +268,20 @@ class FeedScreen extends Component {
 										>
 								</PostMessageBox>
 						</Animated.View>
+						<TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
+							 <View style = {{height: SEARCH_BAR_HEIGHT}}>
+									 <ActivityAndFilterBar
+											 color = {ACTIVITY_BAR_COLOR}
+											 activityText = {'Baltimore'}
+											 searchText={this.state.searchText}
+											 onChange={this.handleSearch.bind(this)}
+											 filter_enable = {this.state.filter_enable}
+											 filterText = {this.state.filters}
+											 onFilterChange = {this.handleFeedFilterPress.bind(this)}
+											 >
+									 </ActivityAndFilterBar>
+							 </View>
+					 </TouchableWithoutFeedback>
 						<Feed posts = {this.props.feed} searchText = {this.state.searchText} filters = {this.state.filters}
 						userIdToFilterPosts={this.state.userIdToFilterPosts} handleFilterUser={this.handleFilterUser.bind(this)}
 						current_user = {this.props.current_user} scroll={this.props.scroll} stopScroll={this.props.stopScroll}

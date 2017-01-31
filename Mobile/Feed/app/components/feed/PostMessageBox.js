@@ -67,7 +67,8 @@ export default class PostMessageBox extends Component {
             return (
                 <TouchableWithoutFeedback onPress={this.onClick}>
                     <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#696969',
-                    borderBottomWidth: 1}}>
+                    borderBottomWidth: 1, borderTopColor: '#696969',
+                borderTopWidth: 1}}>
                         <Text style = {styles.text}>
                             {'Post a message...'}
                         </Text>
@@ -77,8 +78,9 @@ export default class PostMessageBox extends Component {
             );
         } else {
             return (
-                <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#000000',
-                borderBottomWidth: 1}}>
+                <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#696969',
+                borderBottomWidth: 1, borderTopColor: '#696969',
+                borderTopWidth: 1}}>
                 <View style={[styles.container, {flex: 1}]}>
                     <TextInput
                         style = {styles.text_input}
