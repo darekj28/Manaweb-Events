@@ -133,10 +133,10 @@ class StartNavigator extends Component {
 			 	</KeyboardAvoidingView>
 				);
 			else return (
-				<KeyboardAwareScrollView>
+				<View style={{flex : 1}}>
 					{top_bar}
 					{screen}
-				</KeyboardAwareScrollView>
+				</View>
 				);
 		}
 		else return (

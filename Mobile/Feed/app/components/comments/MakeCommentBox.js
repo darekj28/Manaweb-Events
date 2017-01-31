@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
+import { Platform, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
         TouchableWithoutFeedback, Alert, Image, Animated} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -22,8 +22,8 @@ export default class MakeCommentBox extends React.Component {
             <View style = {{flex: 1, flexDirection : 'row', borderTopColor : 'silver', borderTopWidth : 1, justifyContent : 'flex-start'}}>
     			<View style={{flex:1, justifyContent: 'flex-start',
                     borderColor: 'silver',borderWidth: 1, margin : 5, borderRadius: 3, height : 30}}>
-                    <TextInput
-                        style = {styles.text_input}
+                    {Platform.OS == 'ios' && <TextInput
+                        style = {styles.ios_text_input}
                         autoFocus = {false}
                         multiline = {true}
                         numberOfLines = {1}
@@ -31,7 +31,17 @@ export default class MakeCommentBox extends React.Component {
                         onChangeText={this.handlePostTextChange.bind(this)}
                         placeholder={"Write a comment..."}
                         value = {this.props.newPostContent}
-                    />
+                    />}
+                    {Platform.OS != 'ios' && <TextInput
+                        style = {styles.android_text_input}
+                        autoFocus = {false}
+                        multiline = {true}
+                        numberOfLines = {1}
+                        underlineColorAndroid={"transparent"}
+                        onChangeText={this.handlePostTextChange.bind(this)}
+                        placeholder={"Write a comment..."}
+                        value = {this.props.newPostContent}
+                    />}
 
                 </View>
                 <View style = {{flex: 0, justifyContent : 'flex-start'}}>
@@ -46,11 +56,20 @@ export default class MakeCommentBox extends React.Component {
 	}
 }
 const styles = StyleSheet.create({
-    text_input: {
+    ios_text_input: {
         flex : 1,
         textAlignVertical: 'center',
         fontSize : 15,
         paddingLeft : 4, 
         paddingRight : 4
+    },
+    android_text_input: {
+        flex : 1,
+        textAlignVertical: 'center',
+        fontSize : 15,
+        paddingLeft : 4, 
+        paddingRight : 4,
+        paddingTop : 7,
+        paddingBottom : 4
     },
 });
