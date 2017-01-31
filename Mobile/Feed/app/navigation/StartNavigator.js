@@ -178,7 +178,7 @@ class StartNavigator extends Component {
 						ref = "appNavigator"
 						renderScene = {this._renderScene.bind(this)}
 						configureScene={(route, routeStack) =>
-						Navigator.SceneConfigs.PushFromRight}
+						Navigator.SceneConfigs.FadeAndroid}
 						navigationBar = {
 							<BottomTabBar navigator={this.refs.appNavigator} 
 							current_username={this.props.current_username} 
