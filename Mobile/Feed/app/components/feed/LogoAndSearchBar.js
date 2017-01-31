@@ -1,11 +1,11 @@
 import React from 'react';
 import {Component} from 'react'
 import { AppRegistry,StyleSheet,Text,View, TextInput, Alert, Image} from 'react-native';
-
+import Icon from 'react-native-vector-icons/Ionicons';
 
 var titleIcon = require('../res/logo4.png')
 const LOGO_HEIGHT = 30
-const SEARCH_BAR_PROPORTION = 0.7
+const SEARCH_BAR_PROPORTION = 0.5
 
 export default class LogoAndSearchBar extends Component {
     constructor(props) {
@@ -21,7 +21,7 @@ export default class LogoAndSearchBar extends Component {
                 <View style={{flex: 1 - SEARCH_BAR_PROPORTION, margin: 5}}>
                     <Image  style={styles.logo} source={titleIcon} />
                 </View>
-                <View style={{flex: SEARCH_BAR_PROPORTION, flexDirection: 'row'}}>
+                <View style={{flex: SEARCH_BAR_PROPORTION, flexDirection: 'row', borderRadius : 5}}>
                     <View style = {styles.search_input_wrapper}>
                         <TextInput
                             style = {styles.search_input}
@@ -31,7 +31,7 @@ export default class LogoAndSearchBar extends Component {
                             multiline = {false}
                             numberOfLines = {1}
                             underlineColorAndroid={"transparent"}
-                            placeholder={'Search'}
+                            placeholder={'Search posts...'}
                         />
                     </View>
                 </View>
@@ -47,19 +47,19 @@ const styles = StyleSheet.create({
     },
     search_input: {
         flex: 1,
-        fontSize: 25,
-        padding: 2,
+        fontSize: 16,
+        padding: 4,
         textAlignVertical: 'center',
         height : 30
     },
     search_input_wrapper: {
-        flexDirection: 'column',
+        flexDirection: 'row',
         flex: 1.0,
         marginTop: 5,
         marginBottom: 5,
-        backgroundColor: 'white',
         padding: 0,
-        borderRadius: 5,
+        borderRadius : 4,
+        backgroundColor : 'white',
         marginRight: 5,
         height : 30
     }

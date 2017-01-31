@@ -114,12 +114,12 @@ export default class CommentScreen extends React.Component {
 	componentDidMount() {
 		this.getComments.bind(this)();
 		this.setState({current_user : this.props.current_user});
-		this.keyboardDidHideListener = Keyboard.addListener('keyboardWillHide', () => this.collapseMessageBox());
+		this.keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', () => this.collapseMessageBox());
 	}
 	componentWillUnmount(){
 		clearTimeout(this.spamTimer)
 		this.props.getPosts();
-		this.keyboardDidHideListener.remove();
+		this.keyboardWillHideListener.remove();
 	}
 	render() {
 		var op = this.props.original_post['name'] ? this.props.original_post['name'].split(' ')[0] : "";

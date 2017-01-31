@@ -178,13 +178,13 @@ export default class SettingsScreen extends Component {
 						{(this.state.hasChanges && !this.state.hasPrivateChanges) && 
 						<TouchableOpacity onPress = {this.handleSubmitPress.bind(this)}>
 							<Text style = {styles.enabled_update}>
-								Update
+								UPDATE
 							</Text>
 						</TouchableOpacity>}
 						{this.state.hasPrivateChanges && 
 						<TouchableOpacity onPress = {this.toggleConfirmPasswordModal.bind(this)}>
 							<Text style = {styles.enabled_update}>
-								Update
+								UPDATE
 							</Text>
 						</TouchableOpacity>}
 						{!this.state.hasChanges && 

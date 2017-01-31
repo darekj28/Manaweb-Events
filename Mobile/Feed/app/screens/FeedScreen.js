@@ -33,10 +33,10 @@ const SEARCH_BAR_HEIGHT = 45
 // const SEARCH_BAR_COLOR = "#90D7ED"
 const SEARCH_BAR_COLOR = "skyblue"
 const ACTIVITY_BAR_HEIGHT = 40
-const ACTIVITY_BAR_COLOR = "#2f4f4f"
+const ACTIVITY_BAR_COLOR = "#002d5b"
 const POST_MESSAGE_HEIGHT_SHORT = 50
 const POST_MESSAGE_HEIGHT_TALL = 150
-const ANIMATE_DURATION = 700
+const ANIMATE_DURATION = 400
 
 function contains(collection, item) {
 	if(collection.indexOf(item) !== -1) return true;
@@ -57,7 +57,7 @@ class FeedScreen extends Component {
 				filters : ['Trade', 'Play', 'Chill'],
 				filter_enable: [true, true, true],
 				post_actions : [],
-				alert: false,
+				alert: true,
 				search : '',
 				userIdToFilterPosts : '',
 				activity_index: 0,
@@ -85,6 +85,8 @@ class FeedScreen extends Component {
 	}
 	handlePostTyping (newPostContent) {
 			this.setState({newPostContent : newPostContent})
+			if (newPostContent && this.state.post_actions.length != 0) this.setState({ alert : false });
+			else this.setState({ alert : true });
 	}
 
 	handleFilterPress(index) {
@@ -94,7 +96,8 @@ class FeedScreen extends Component {
 			this.setState({post_actions : newFilters});
 
 			// make an alert
-			if (this.state.post_actions.length != 0) this.setState({alert : false});
+			if (this.state.newPostContent && this.state.post_actions.length != 0) this.setState({ alert : false });
+			else this.setState({ alert : true });
 			// scroll to top
 			// $('html, body').animate({scrollTop: 0}, 300);
 	}
@@ -229,20 +232,14 @@ class FeedScreen extends Component {
 	}
 	componentWillUnmount(){
 		clearTimeout(this.spamTimer)
-	    this.keyboardDidHideListener.remove();
+	    this.keyboardWillHideListener.remove();
 	}
 
 	componentWillMount () {
-    	this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => this.collapseMessageBox());
+    	this.keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', () => this.collapseMessageBox());
   	}
 
 	render() {
-		var alert;
-		if ((this.state.alert)) {
-			alert = <Text>
-							Bro! You must select something to do before you post man!
-							</Text>;
-		}
 		let filterIcon1 = require('../components/res/icon1.png')
 		let filterIcon2 = require('../components/res/icon2.png')
 		let filterIcon3 = require('../components/res/icon3.png')
@@ -280,6 +277,7 @@ class FeedScreen extends Component {
 										handlePostSubmit = {this.handlePostSubmit}
 										newPostContent = {this.state.newPostContent}
 										canPost={this.state.canPost}
+										alert={this.state.alert}
 										>
 								</PostMessageBox>
 						</Animated.View>

@@ -60,9 +60,7 @@ export default class FeedBox extends Component {
         const post = this.props.post
 
         var length = post.name.length + post.userID.length 
-        
-
-
+        var reply = post.numberOfComments == 1 ? "reply" : "replies";
         return (
             <TouchableOpacity onPress={this._navigateToComment.bind(this)}>
                 <View style={{flex:1, flexDirection: 'row', justifyContent: 'flex-start',
@@ -105,12 +103,18 @@ export default class FeedBox extends Component {
                         </Text>
 
                         <View style={{flex: 1, paddingLeft : 8, flexDirection:'row'}}>
-                            <View style={{flex : 1, flexDirection : 'row'}}>
+                            {post.numberOfComments > 0 && <View style={{flex : 1, flexDirection : 'row'}}>
                                 <Icon name = "ios-text" size = {25} color = "#90D7ED" />
-                                <Text style = {{color: '#90D7ED', fontSize : 12, marginTop : 5, marginLeft : 2}}>
-                                    {post.numberOfComments}
+                                <Text style = {{color: '#90D7ED', fontSize : 12, marginTop : 5, marginLeft : 3}}>
+                                    {post.numberOfComments} {reply}
                                 </Text>
-                            </View>
+                            </View>}
+                            {post.numberOfComments == 0 && <View style={{flex : 1, flexDirection : 'row'}}>
+                                <Icon name = "ios-text" size = {25} color = "silver" />
+                                <Text style = {{color: 'silver', fontSize : 12, marginTop : 5, marginLeft : 3}}>
+                                    No replies yet
+                                </Text>
+                            </View>}
                             <View style={{flex : 0, paddingRight : 8}}>
                                 <ModalDropdown
                                     defaultIndex={0}

@@ -66,10 +66,10 @@ export default class PostMessageBox extends Component {
         if (!this.props.post_message_expanded) {
             return (
                 <TouchableWithoutFeedback onPress={this.onClick}>
-                    <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#000000',
+                    <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#696969',
                     borderBottomWidth: 1}}>
                         <Text style = {styles.text}>
-                            {'Post a Message'}
+                            {'Post a message...'}
                         </Text>
                     </View>
 
@@ -87,40 +87,45 @@ export default class PostMessageBox extends Component {
                         numberOfLines = {1}
                         underlineColorAndroid={"transparent"}
                         onChangeText={this.handlePostTextChange}
-                        placeholder={'Post a Message'}
+                        placeholder={'Post a message...'}
                         value = {this.props.newPostContent}
                     />
                 </View>
                 <Animated.View style={[styles.container, {height: this.state.filter_bar_height}]}>
-                    <View style = {{flex: 0.85, flexDirection:'row'}}>
-                        <TouchableOpacity onPress={() => this.setFilter(0)}>
+                    <View style = {{flex: 1, flexDirection:'row'}}>
+                        <TouchableOpacity style={{flex : 1}} onPress={() => this.setFilter(0)}>
                             <View style={styles.filter_wrapper}>
                                 {!this.state.filter_enable[0] && <Icon name = "md-swap" size = {25} color = {red}/>}
                                 {this.state.filter_enable[0] && <Icon name = "md-swap" size = {25} color = {green}/>}
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => this.setFilter(1)}>
+                        <TouchableOpacity style={{flex : 1}} onPress={() => this.setFilter(1)}>
                             <View style={styles.filter_wrapper}>
                                 {!this.state.filter_enable[1] && <Icon name = "ios-play" size = {25} color = {red}/>}
                                 {this.state.filter_enable[1] && <Icon name = "ios-play" size = {25} color = {green}/>}
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => this.setFilter(2)}>
+                        <TouchableOpacity style={{flex : 1}} onPress={() => this.setFilter(2)}>
                             <View style={styles.filter_wrapper}>
                                 {!this.state.filter_enable[2] && <Icon name = "md-time" size = {25} color = {red}/>}
                                 {this.state.filter_enable[2] && <Icon name = "md-time" size = {25} color = {green}/>}
                             </View>
                         </TouchableOpacity>
                     </View>
-                    <View style = {{flex: 0.15}}>
+                    {this.props.alert && <View style = {{flex: 1, alignItems : 'center'}}>
+                        <Text style={{fontSize: 20, color : 'silver'}}>
+                            Post
+                        </Text>
+                    </View>}
+                    {!this.props.alert && <View style = {{flex: 1, alignItems : 'center'}}>
                         <TouchableOpacity onPress={this.handlePostSubmit.bind(this)}>
-                            <Text style={{fontSize: 15}}>
+                            <Text style={{fontSize: 20, fontWeight : 'bold', color : '#90D7ED'}}>
                                 Post
                             </Text>
                         </TouchableOpacity>
-                    </View>
+                    </View>}
                 </Animated.View>
             </View>
             );
@@ -136,16 +141,17 @@ const styles = StyleSheet.create({
       flex: 1,
       fontSize: 20,
       textAlignVertical: 'center',
-      marginLeft: 4
+      marginLeft: 4,
+      color : '#696969',
   },
   text_input: {
       flex: 1,
-      fontSize: 20,
+      fontSize: 18,
       textAlignVertical: 'center',
+      paddingLeft : 5,
+      paddingRight : 5
   },
   filter_wrapper: {
-        marginLeft: 16,
-        marginRight: 16,
         alignItems : 'center'
     }
 });
