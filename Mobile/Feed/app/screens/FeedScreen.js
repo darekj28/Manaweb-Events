@@ -33,7 +33,7 @@ const SEARCH_BAR_HEIGHT = 45
 // const SEARCH_BAR_COLOR = "#90D7ED"
 const SEARCH_BAR_COLOR = "skyblue"
 const ACTIVITY_BAR_HEIGHT = 40
-const ACTIVITY_BAR_COLOR = "#002d5b"
+const ACTIVITY_BAR_COLOR = "#486B76"
 const POST_MESSAGE_HEIGHT_SHORT = 50
 const POST_MESSAGE_HEIGHT_TALL = 150
 const ANIMATE_DURATION = 400
@@ -249,7 +249,7 @@ class FeedScreen extends Component {
 					 <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
 							 <View style = {{height: SEARCH_BAR_HEIGHT}}>
 									 <LogoAndSearchBar color = {SEARCH_BAR_COLOR} searchText={this.state.searchText}
-											onChange={this.handleSearch.bind(this)}>
+											onChange={this.handleSearch.bind(this)} activityText="Grand Prix San Jose">
 										</LogoAndSearchBar>
 							 </View>
 					 </TouchableWithoutFeedback>
@@ -259,6 +259,8 @@ class FeedScreen extends Component {
 									 <ActivityAndFilterBar
 											 color = {ACTIVITY_BAR_COLOR}
 											 activityText = {'Baltimore'}
+											 searchText={this.state.searchText}
+											 onChange={this.handleSearch.bind(this)}
 											 filter_enable = {this.state.filter_enable}
 											 filterText = {this.state.filters}
 											 onFilterChange = {this.handleFeedFilterPress.bind(this)}

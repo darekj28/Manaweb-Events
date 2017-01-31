@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 var titleIcon = require('../res/logo4.png')
 const LOGO_HEIGHT = 30
-const SEARCH_BAR_PROPORTION = 0.5
+const SEARCH_BAR_PROPORTION = 0.8
 
 export default class LogoAndSearchBar extends Component {
     constructor(props) {
@@ -22,7 +22,7 @@ export default class LogoAndSearchBar extends Component {
                     <Image  style={styles.logo} source={titleIcon} />
                 </View>
                 <View style={{flex: SEARCH_BAR_PROPORTION, flexDirection: 'row', borderRadius : 5}}>
-                    <View style = {styles.search_input_wrapper}>
+                    {/*<View style = {styles.search_input_wrapper}>
                         <TextInput
                             style = {styles.search_input}
                             value = {this.props.searchText}
@@ -33,7 +33,10 @@ export default class LogoAndSearchBar extends Component {
                             underlineColorAndroid={"transparent"}
                             placeholder={'Search posts...'}
                         />
-                    </View>
+                    </View>*/}
+                    <Text style = {styles.activity_text}>
+                        {this.props.activityText}
+                    </Text>
                 </View>
             </View>
         );
@@ -44,6 +47,7 @@ const styles = StyleSheet.create({
     logo: {
       width: LOGO_HEIGHT,
       height: LOGO_HEIGHT,
+      tintColor : 'white'
     },
     search_input: {
         flex: 1,
@@ -62,5 +66,13 @@ const styles = StyleSheet.create({
         backgroundColor : 'white',
         marginRight: 5,
         height : 30
-    }
+    },
+    activity_text: {
+      fontSize: 20,
+      color: 'white',
+      fontWeight : 'bold',
+      textAlign: 'left',
+      textAlignVertical: 'center',
+      justifyContent: 'center',
+    },
 });

@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 var titleIcon = require('../res/logo4.png')
 const FILTER_HEIGHT = 25
-const ACTIVITY_PROPORTION = 0.55
+const ACTIVITY_PROPORTION = 0.5
 
 const FILTER_NAMES = ['Trade', 'Play', 'Chill']
 
@@ -46,13 +46,24 @@ export default class LogoAndSearchBar extends Component {
         var red = '#d9534f';
         return (
             <View style={{flex:1, flexDirection: 'row', backgroundColor: this.props.color, alignItems:'center'}}>
-                <View style={{flex: ACTIVITY_PROPORTION, margin: 5}}>
-                    <Text style = {styles.activity_text}>
+                <View style={{flex: 5, margin: 3}}>
+                    {/*<Text style = {styles.activity_text}>
                         {this.props.activityText}
-                    </Text>
+                    </Text>*/}
+                    <View style = {styles.search_input_wrapper}>
+                        <TextInput
+                            style = {styles.search_input}
+                            value = {this.props.searchText}
+                            onChangeText={this.props.onChange}
+                            autoFocus = {false}
+                            multiline = {false}
+                            numberOfLines = {1}
+                            underlineColorAndroid={"transparent"}
+                            placeholder={'Search posts...'}
+                        />
+                    </View>
                 </View>
-
-                <View style={{flex: 0, flexDirection: 'row'}}>
+                <View style={{flex: 0, flexDirection: 'row', paddingRight : 4}}>
                     <TouchableHighlight onPress={() => this.props.onFilterChange(0)}>
                         <View style = {styles.filter_wrapper}>
                             {!this.props.filter_enable[0] && <Icon name = "md-swap" size = {25} color = {red}/>}
@@ -115,4 +126,22 @@ const styles = StyleSheet.create({
       color: 'white',
       fontSize: 10
     },
+    search_input: {
+        flex: 1,
+        fontSize: 16,
+        padding: 4,
+        textAlignVertical: 'center',
+        height : 30
+    },
+    search_input_wrapper: {
+        flexDirection: 'row',
+        flex: 1.0,
+        marginTop: 5,
+        marginBottom: 5,
+        marginLeft: 2,
+        borderRadius : 4,
+        backgroundColor : 'white',
+        marginRight: 5,
+        height : 30
+    }
 });
