@@ -6,12 +6,12 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {Text, ActivityIndicator, NetInfo, AsyncStorage, Platform, AppState, AppRegistry, StyleSheet, TabBarIOS, View} from 'react-native';
+import {TouchableWithoutFeedback, Text, ActivityIndicator, NetInfo, AsyncStorage, Platform, AppState, AppRegistry, StyleSheet, TabBarIOS, View} from 'react-native';
 import ViewContainer from './components/ViewContainer'
 import StartNavigator from './navigation/StartNavigator'
 import PushController from './PushController'
 import PushNotification from 'react-native-push-notification';
-
+import dismissKeyboard from 'react-native-dismiss-keyboard';
 
 export default class Index extends React.Component {
 
@@ -231,12 +231,13 @@ export default class Index extends React.Component {
     }
 
     return (
-
+      <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
         <View style = {styles.container}>
           
           {main_activity}
           {/* <PushController /> */}
         </View>
+      </TouchableWithoutFeedback>
       )
   }
 }

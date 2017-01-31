@@ -10,6 +10,7 @@ import CommentBox from '../components/comments/CommentBox';
 import MakeCommentBox from '../components/comments/MakeCommentBox';
 import OriginalPost from '../components/comments/OriginalPost';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import dismissKeyboard from 'react-native-dismiss-keyboard';
 
 const NAVIGATOR_BACK_ICON_HEIGHT = 30
 
