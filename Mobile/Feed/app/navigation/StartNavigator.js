@@ -22,6 +22,7 @@ import FeedScreen from '../screens/FeedScreen'
 import NotificationScreen from '../screens/NotificationScreen'
 import Spinner from 'react-native-loading-spinner-overlay';
 import BottomTabBar from '../components/BottomTabBar';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 class StartNavigator extends Component {
 
@@ -124,12 +125,20 @@ class StartNavigator extends Component {
 			spacing = 20;
 		}
 		else var top_bar = <View/>
-		if (route.href == "Comment")
-			return (<KeyboardAvoidingView style = {{flex: 1}} behavior="padding" keyboardVerticalOffset={spacing}>
+		if (route.href == "Comment") {
+			if (Platform.OS == 'ios')
+				return (<KeyboardAvoidingView style = {{flex: 1}} behavior="padding" keyboardVerticalOffset={spacing}>
+			 		{top_bar}
+			 		{screen}
+			 	</KeyboardAvoidingView>
+				);
+			else return (
+				<KeyboardAwareScrollView>
 					{top_bar}
 					{screen}
-				</KeyboardAvoidingView>
-			);
+				</KeyboardAwareScrollView>
+				);
+		}
 		else return (
 			<View style = {{flex: 1}} >
 					{top_bar}
