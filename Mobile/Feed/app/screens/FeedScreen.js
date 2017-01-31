@@ -34,7 +34,7 @@ const SEARCH_BAR_HEIGHT = 45
 const SEARCH_BAR_COLOR = "skyblue"
 const ACTIVITY_BAR_HEIGHT = 40
 const ACTIVITY_BAR_COLOR = "white"
-const POST_MESSAGE_HEIGHT_SHORT = 50
+const POST_MESSAGE_HEIGHT_SHORT = 30
 const POST_MESSAGE_HEIGHT_TALL = 150
 const ANIMATE_DURATION = 400
 
@@ -62,7 +62,7 @@ class FeedScreen extends Component {
 				userIdToFilterPosts : '',
 				activity_index: 0,
 				post_message_expanded: false,
-				post_message_height: new Animated.Value(50),
+				post_message_height: new Animated.Value(30),
 				current_username: "",
 				feed: [],
 				current_user: {'userID' : 'not initialized'},

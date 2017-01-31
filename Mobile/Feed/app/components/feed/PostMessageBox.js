@@ -65,16 +65,17 @@ export default class PostMessageBox extends Component {
         // var newPostContent = this.props.newPostContent;
         if (!this.props.post_message_expanded) {
             return (
-                <TouchableWithoutFeedback onPress={this.onClick}>
-                    <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#696969',
+                <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#696969',
                     borderBottomWidth: 1, borderTopColor: '#696969',
-                    borderTopWidth: 1, backgroundColor : 'white'}}>
+                    borderTopWidth: 1, backgroundColor : 'white', alignItems : 'center'}}>
+                    <TouchableOpacity style={{flex : 1}} onPress={this.onClick}>
                         <Text style = {styles.text}>
-                            {'Post a message...'}
+                            Post a message
                         </Text>
-                    </View>
+                    </TouchableOpacity>
+                </View>
 
-                </TouchableWithoutFeedback>
+                
             );
         } else {
             return (
@@ -89,7 +90,7 @@ export default class PostMessageBox extends Component {
                         numberOfLines = {1}
                         underlineColorAndroid={"transparent"}
                         onChangeText={this.handlePostTextChange}
-                        placeholder={'Post a message...'}
+                        placeholder={"What's happening?"}
                         value = {this.props.newPostContent}
                     />
                 </View>
@@ -142,14 +143,13 @@ const styles = StyleSheet.create({
   text: {
       flex: 1,
       fontSize: 20,
-      textAlignVertical: 'center',
       marginLeft: 4,
-      color : '#696969',
+      color : '#90D7ED',
+      textAlignVertical : 'center'
   },
   text_input: {
       flex: 1,
       fontSize: 18,
-      textAlignVertical: 'center',
       paddingLeft : 5,
       paddingRight : 5
   },

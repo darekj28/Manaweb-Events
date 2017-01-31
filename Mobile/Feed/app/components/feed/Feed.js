@@ -101,7 +101,8 @@ export default class Feed extends Component {
 				<ListView 
 					refreshControl={
 						<RefreshControl refreshing={this.props.refreshing}
-							onRefresh={this.onRefresh.bind(this)}/>
+							onRefresh={this.onRefresh.bind(this)}
+							tintColor="white"/>
 					}
 					style={styles.list_container}
 					dataSource={dataSource}
