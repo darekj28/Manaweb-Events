@@ -8,7 +8,6 @@ import Comments from '../components/comments/Comments';
 import CommentBox from '../components/comments/CommentBox';
 import MakeCommentBox from '../components/comments/MakeCommentBox';
 import OriginalPost from '../components/comments/OriginalPost';
-import dismissKeyboard from 'react-native-dismiss-keyboard';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 const NAVIGATOR_BACK_ICON_HEIGHT = 30
@@ -108,13 +107,12 @@ export default class CommentScreen extends React.Component {
 		return input_element
 	}
 	collapseMessageBox() {
-		dismissKeyboard();
 		this.setState({ post_message_expanded : false });
 	}
 	componentDidMount() {
 		this.getComments.bind(this)();
 		this.setState({current_user : this.props.current_user});
-		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => this.collapseMessageBox());
+		this.keyboardDidHideListener = Keyboard.addListener('keyboardWillHide', () => this.collapseMessageBox());
 	}
 	componentWillUnmount(){
 		clearTimeout(this.spamTimer)
@@ -129,13 +127,13 @@ export default class CommentScreen extends React.Component {
 				<View style={{flexDirection : 'row'}}>
 					<OriginalPost post={this.props.original_post}/>
 				</View>
-				<TouchableWithoutFeedback onPress={() => this.postMessagePressed.bind(this)()}>
+				<TouchableOpacity onPress={() => this.postMessagePressed.bind(this)()}>
 					<View style = {{flexDirection: 'row', justifyContent : 'center', borderTopColor: '#90d7ed', borderTopWidth: 1, borderBottomColor : '#90d7ed', borderBottomWidth : 1}}>
 						<Text style = {{padding: 3, fontSize: 14, color: '#90d7ed'}}>
 							Comment
 						</Text>
 					</View>
-				</TouchableWithoutFeedback>
+				</TouchableOpacity>
 				<View style={{flex : 1, flexDirection : 'row'}}>
 					<Comments comments={this.state.comments} comment_id={this.props.comment_id}/>
 				</View>
