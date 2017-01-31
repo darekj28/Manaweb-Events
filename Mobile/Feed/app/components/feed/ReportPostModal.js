@@ -1,6 +1,6 @@
 import React from 'react';
 import {Component} from 'react'
-import {TouchableWithoutFeedback, Item, Platform, Alert, Image, Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,
+import {KeyboardAvoidingView, TouchableWithoutFeedback, Item, Platform, Alert, Image, Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,
 	View,ListView,TouchableOpacity,TouchableHighlight, TextInput, ScrollView} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -64,13 +64,7 @@ export default class ReportPostModal extends Component {
 	}
 
 	render() {
-		if (this.props.post == null) {return null;}
-		else
-		return(
-			<Modal visible={this.props.display} animationType={"slide"} transparent={false} onRequestClose={() => {return}}>
-				{Platform.OS == 'ios' && <View style = {{paddingTop : 20}} />}
-				<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
-				<View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start', backgroundColor : '#fbfbfb'}}>
+		var content = <View style={{flex : 1, flexDirection:'column',justifyContent : 'flex-start', backgroundColor : '#fbfbfb'}}>
 					<View style={styles.top_bar}>
 						<View style={{flex: 0.2}}>
 							<TouchableOpacity onPress = {this.handleReturn.bind(this)}>
@@ -130,7 +124,23 @@ export default class ReportPostModal extends Component {
 					</View>
 					<View style = {{flex: 0.1}}></View>
 				</View>
-				</TouchableWithoutFeedback>
+		if (this.props.post == null) {return null;}
+		else
+		return(
+			<Modal visible={this.props.display} animationType={"slide"} transparent={false} onRequestClose={() => {return}}>
+				{Platform.OS == 'ios' && <View style = {{paddingTop : 20}} />}
+				{Platform.OS == "ios" && 
+				<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
+					<KeyboardAvoidingView style = {{flex: 1}} behavior="padding">
+						{content}
+					</KeyboardAvoidingView>
+				</TouchableWithoutFeedback>}
+				{Platform.OS != "ios" && 
+				<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
+					<View style={{flex : 1}}>
+						{content}
+					</View>
+				</TouchableWithoutFeedback>}
 			</Modal>
 		)
 	}
