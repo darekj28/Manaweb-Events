@@ -22,7 +22,7 @@ const SEARCH_BAR_HEIGHT = 45
 const SEARCH_BAR_COLOR = "skyblue"
 const ACTIVITY_BAR_HEIGHT = 40
 const ACTIVITY_BAR_COLOR = "white"
-const POST_MESSAGE_HEIGHT_SHORT = 30
+const POST_MESSAGE_HEIGHT_SHORT = 0
 const POST_MESSAGE_HEIGHT_TALL = 150
 const ANIMATE_DURATION = 400
 
@@ -50,7 +50,7 @@ class FeedScreen extends Component {
 				userIdToFilterPosts : '',
 				activity_index: 0,
 				post_message_expanded: false,
-				post_message_height: new Animated.Value(30),
+				post_message_height: new Animated.Value(0),
 				current_username: "",
 				feed: [],
 				current_user: {'userID' : 'not initialized'},
@@ -184,21 +184,21 @@ class FeedScreen extends Component {
 		this.props.handleLogout.bind(this)();
 	}
 	postMessagePressed() {
-			let initial = this.state.post_message_expanded ? POST_MESSAGE_HEIGHT_TALL : POST_MESSAGE_HEIGHT_SHORT
-			let final = this.state.post_message_expanded ? POST_MESSAGE_HEIGHT_SHORT : POST_MESSAGE_HEIGHT_TALL
-			this.setState({
-					post_message_expanded : !this.state.post_message_expanded  //Step 2
-			});
-			this.state.post_message_height.setValue(initial)
-			Animated.timing(          // Uses easing functions
-					this.state.post_message_height, {toValue: final, duration: ANIMATE_DURATION}
-			).start();
+		let initial = this.state.post_message_expanded ? POST_MESSAGE_HEIGHT_TALL : POST_MESSAGE_HEIGHT_SHORT
+		let final = this.state.post_message_expanded ? POST_MESSAGE_HEIGHT_SHORT : POST_MESSAGE_HEIGHT_TALL
+		this.setState({
+				post_message_expanded : !this.state.post_message_expanded  //Step 2
+		});
+		this.state.post_message_height.setValue(initial)
+		Animated.timing(          // Uses easing functions
+				this.state.post_message_height, {toValue: final, duration: ANIMATE_DURATION}
+		).start();
 	}
 	collapseMessageBox() {
 			dismissKeyboard();
 			if (this.state.post_message_expanded) {
 					// We only toggle the message box when it's in the expanded state to close it
-					this.postMessagePressed()
+					this.postMessagePressed.bind(this)()
 			}
 	}
 	initializeUserInfo(){
@@ -227,11 +227,13 @@ class FeedScreen extends Component {
 					 <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
 							 <View style = {{height: SEARCH_BAR_HEIGHT}}>
 									 <LogoAndSearchBar color = {SEARCH_BAR_COLOR} searchText={this.state.searchText}
-											onChange={this.handleSearch.bind(this)} activityText="Grand Prix San Jose">
+											onChange={this.handleSearch.bind(this)} 
+											expandMakePost={this.postMessagePressed}
+											activityText="Grand Prix San Jose">
 										</LogoAndSearchBar>
 							 </View>
 					 </TouchableWithoutFeedback>
-						<Animated.View style = {{flexDirection:'row', height: this.state.post_message_height}}>
+						<Animated.View style = {{flexDirection:'row', height: this.state.post_message_height, borderTopColor : '#696969', borderTopWidth : 1}}>
 								<PostMessageBox
 										onClick={(event) => this.postMessagePressed()}
 										animateDuration={ANIMATE_DURATION}

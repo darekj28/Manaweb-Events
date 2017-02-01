@@ -1,7 +1,8 @@
 import React from 'react';
 import {Component} from 'react'
-import { AppRegistry,StyleSheet,Text,View, TextInput, Alert, Image} from 'react-native';
+import { TouchableOpacity, AppRegistry,StyleSheet,Text,View, TextInput, Alert, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import FAIcon from 'react-native-vector-icons/FontAwesome';
 
 var titleIcon = require('../res/logo4.png')
 const LOGO_HEIGHT = 30
@@ -17,28 +18,20 @@ export default class LogoAndSearchBar extends Component {
     render() {
 
         return (
-            <View style={{flex:1, flexDirection: 'row', backgroundColor: this.props.color, alignItems:'center'}}>
-                <View style={{flex: 1 - SEARCH_BAR_PROPORTION, margin: 5}}>
+            <View style={{flex:1, flexDirection: 'row', backgroundColor: this.props.color, alignItems:'center', paddingLeft:5, paddingRight : 5}}>
+                <View style={{flex: 0.2, margin: 5}}>
                     <Image  style={styles.logo} source={titleIcon} />
                 </View>
-                <View style={{flex: SEARCH_BAR_PROPORTION, alignItems : 'center'}}>
-                    {/*<View style = {styles.search_input_wrapper}>
-                        <TextInput
-                            style = {styles.search_input}
-                            value = {this.props.searchText}
-                            onChangeText={this.props.onChange}
-                            autoFocus = {false}
-                            multiline = {false}
-                            numberOfLines = {1}
-                            underlineColorAndroid={"transparent"}
-                            placeholder={'Search posts...'}
-                        />
-                    </View>*/}
-                    <Text style = {styles.activity_text}>
+                <View style={{flex: 2, alignItems : 'center', overflow : 'hidden'}}>
+                    <Text style = {styles.activity_text} >
                         {this.props.activityText}
                     </Text>
                 </View>
-                <View style={{flex : 1 - SEARCH_BAR_PROPORTION }}/>
+                <View style={{flex: 0.2, flexDirection : 'row', justifyContent : 'flex-end', alignItems: 'center', flexDirection : 'row'}}>
+                    <TouchableOpacity onPress={()=> this.props.expandMakePost()}>
+                        <FAIcon name = "pencil-square-o" size = {25} color = "white"/>
+                    </TouchableOpacity>
+                </View>
             </View>
         );
     }
@@ -69,7 +62,7 @@ const styles = StyleSheet.create({
         height : 30
     },
     activity_text: {
-      fontSize: 20,
+      fontSize: 18,
       color: 'white',
       fontWeight : 'bold',
       textAlign: 'center',
