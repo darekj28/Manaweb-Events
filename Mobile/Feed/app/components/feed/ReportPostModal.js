@@ -200,6 +200,7 @@ const styles = StyleSheet.create({
 		padding: 5, 
 		borderRadius : 5, 
 		borderColor : 'silver', 
-		borderWidth : 1
+		borderWidth : 1,
+		overflow: 'hidden'
 	}
 });

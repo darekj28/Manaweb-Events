@@ -30,8 +30,6 @@ export default class SettingsScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			current_username 				: this.props.current_user.userID,
-			current_user 					: this.props.current_user,
 			first_name						: this.props.current_user.first_name,
 			last_name 						: this.props.current_user.last_name,
 			email 							: this.props.current_user.email,
@@ -71,7 +69,7 @@ export default class SettingsScreen extends Component {
 		var errorMessage = "There's a mistake in one of your fields.";
 		if (canSubmit) {
 			var obj = JSON.stringify({
-					username: this.state.current_username,
+					username: this.props.current_username,
 					first_name : this.state.first_name,
 					last_name : this.state.last_name,
 					email : this.state.email,
@@ -153,7 +151,7 @@ export default class SettingsScreen extends Component {
 			<NameInput value={this.state.first_name} current_user = {this.props.current_user}	addError={this.addError.bind(this)} removeError={this.removeError.bind(this)} handleChange={this.handleChange.bind(this)} label="First name" name="first_name"/>,
 			<NameInput value={this.state.last_name} current_user = {this.props.current_user}	addError={this.addError.bind(this)} removeError={this.removeError.bind(this)} handleChange={this.handleChange.bind(this)} label="Last name" name="last_name"/>,
 			<EmailInput value={this.state.email} 	current_user = {this.props.current_user}	addError={this.addError.bind(this)} removeError={this.removeError.bind(this)} handleChange={this.handleChange.bind(this)}/>, 
-			<PhoneInput value={this.state.phone_number} current_user = {this.props.current_user} addError={this.addError.bind(this)} removeError={this.removeError.bind(this)} handleChange={this.handleChange.bind(this)} prevPhone={this.state.current_user.phone_number}/>,
+			<PhoneInput value={this.state.phone_number} current_user = {this.props.current_user} addError={this.addError.bind(this)} removeError={this.removeError.bind(this)} handleChange={this.handleChange.bind(this)} prevPhone={this.props.current_user.phone_number}/>,
 			<AvatarInput avatar={this.state.avatar} current_user = {this.props.current_user}	toggleAvatarPicker={this.toggleAvatarPicker.bind(this)}/>,
 			<PasswordModalLink togglePasswordModal={this.togglePasswordModal.bind(this)}/>, 
 			<LogoutButton handleLogout={this.handleLogout.bind(this)}/>
@@ -164,9 +162,9 @@ export default class SettingsScreen extends Component {
 				<AvatarPicker handleChange={this.handleChange.bind(this)} display={this.state.display_avatar_picker}
 								avatar={this.state.avatar} toggleAvatarPicker={this.toggleAvatarPicker.bind(this)}/>
 				<PasswordModal display={this.state.display_password_change} togglePasswordModal={this.togglePasswordModal.bind(this)} 
-								username={this.state.current_username}/>
+								username={this.props.current_username}/>
 				<ConfirmBeforeUpdate display={this.state.display_password_confirm} toggleConfirmPasswordModal={this.toggleConfirmPasswordModal.bind(this)} 
-				username={this.state.current_username} submitNewSettings = {this.submitNewSettings.bind(this)}/>
+				username={this.props.current_username} submitNewSettings = {this.submitNewSettings.bind(this)}/>
 				<View style = {styles.top_bar}>
 					<View style={styles.left}>
 					</View>

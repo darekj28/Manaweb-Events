@@ -66,7 +66,6 @@ export default class Index extends React.Component {
       ).then((response) => response.json())
        .then((responseData) => {
         // handle number of notifications
-        console.log("push notifications ", responseData['num_notifications'])
         PushNotification.setApplicationIconBadgeNumber(responseData['num_notifications'])
         // maybe use current storage..not sure yet
         // console.log(responseData['push_notifications'])
@@ -138,40 +137,9 @@ export default class Index extends React.Component {
   }
 
   checkNotifications(){
-    // console.log("notificaiton")
     if (AppState.currentState === 'background' && this.props.current_username != "") {
-      this.getPushNotifications.bind(this)()
+      this.getPushNotifications.bind(this)();
     }
-  }
-
-  componentWillMount() {
-    const dispatchConnected = isConnected => this.props.dispatch(setIsConnected(isConnected));
-
-    NetInfo.isConnected.fetch().then((data) => {
-      if (Platform.OS == 'android'){
-        this.setState({
-        isConnected: data
-        })
-      }
-    }).done(() => {
-      NetInfo.isConnected.addEventListener('change', this.handleConnectivityChange.bind(this));
-    });
-
-
-    AsyncStorage.getItem("current_username").then((current_username) => {
-        this.setState({current_username : current_username})
-        this.initializeUserInformation.bind(this)()
-      }).then(() => {
-    }).done()
-
-    AppState.removeEventListener('change', this.handleAppStateChange.bind(this))  
-  }
-
-  componentWillUnmount(){
-    NetInfo.isConnected.removeEventListener(
-      'change',
-      this.handleConnectivityChange.bind(this)
-    )
   }
 
   handleConnectivityChange(change) {
@@ -250,6 +218,34 @@ export default class Index extends React.Component {
       console.log(error);
     });
   }
+  getNotificationCount() {
+    const url = "https://manaweb-events.herokuapp.com"
+    const test_url = "http://0.0.0.0:5000"
+      fetch(url + "/mobileGetNotifications", 
+        {method: "POST",
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username : this.state.current_username })
+        }
+      ).then((response) => response.json())
+      .then((responseData) => {
+        var numUnseenNotifications = 0;
+        if (responseData.notification_list.length > 0) {
+              for (var i = 0; i < responseData['notification_list'].length; i++) {
+                var obj = responseData['notification_list'][i]
+                  if (!obj['seen']){
+                    numUnseenNotifications++;
+                  }
+              }
+              this.setState({numUnseenNotifications : numUnseenNotifications})
+          }    
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
   getPosts(callback) {
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
@@ -297,7 +293,6 @@ export default class Index extends React.Component {
     {
       this.setState({current_username : current_username}, this.initializeUserInformation.bind(this))
     })
-    console.log("async login")
   }
 
   async asyncStorageLogout(){
@@ -308,7 +303,6 @@ export default class Index extends React.Component {
         this.setState({current_user : {}})        
       }
     })
-    console.log("async logout")
   }
   resetNotificationCount() {
     this.setState({ numUnseenNotifications : 0 });
@@ -316,10 +310,40 @@ export default class Index extends React.Component {
   onRefresh() {
     this.setState({ refresh : true }, this.getPosts.bind(this));
   }
+  componentWillMount() {
+    const dispatchConnected = isConnected => this.props.dispatch(setIsConnected(isConnected));
+
+    NetInfo.isConnected.fetch().then((data) => {
+      if (Platform.OS == 'android'){
+        this.setState({
+        isConnected: data
+        })
+      }
+    }).done(() => {
+      NetInfo.isConnected.addEventListener('change', this.handleConnectivityChange.bind(this));
+    });
+
+
+    AsyncStorage.getItem("current_username").then((current_username) => {
+        this.setState({current_username : current_username})
+        this.initializeUserInformation.bind(this)()
+      }).then(() => {
+    }).done()
+
+    AppState.removeEventListener('change', this.handleAppStateChange.bind(this))  
+  }
+
+  componentWillUnmount(){
+    NetInfo.isConnected.removeEventListener(
+      'change',
+      this.handleConnectivityChange.bind(this)
+    )
+    clearInterval(this.state.pollNotificationCount);
+  }
   componentDidMount() {
     this.getPosts.bind(this)(); 
     this.initializePushNotifications.bind(this)();
-    // this.refresh_interval = setInterval(this.refreshFeed.bind(this), this.refresh_time_interval)
+    this.setState({ pollNotificationCount : setInterval(this.getNotificationCount.bind(this), 10000) });
     AppState.addEventListener('change', this.handleAppStateChange.bind(this))
   }
 
