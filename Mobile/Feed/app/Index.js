@@ -382,13 +382,14 @@ export default class Index extends React.Component {
     }
 
     return (
-      <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
+      
         <View style = {styles.container}>
-          
+          <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
           {main_activity}
           {/* <PushController /> */}
+          </TouchableWithoutFeedback>
         </View>
-      </TouchableWithoutFeedback>
+      
       )
   }
 }
