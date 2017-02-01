@@ -30,13 +30,8 @@ export default class ReportOriginalPost extends React.Component {
                             @{post.userID}
                         </Text>
                     </View>
-                    <View style={{justifyContent: 'flex-start', padding : 6, paddingLeft : 5}}>
-                        <Text style={styles.text_time}>
-                            at {post.timeString}
-                        </Text>
-                    </View>
                     <View style={{justifyContent: 'flex-start', padding : 6, paddingBottom : 16, paddingTop : 16 }}>
-                        <Text style = {styles.text_message} numberOfLines={2}>
+                        <Text style = {styles.text_message} numberOfLines={3}>
                             {post.postContent}
                         </Text>
                     </View>

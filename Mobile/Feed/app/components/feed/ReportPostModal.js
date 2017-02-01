@@ -81,14 +81,14 @@ export default class ReportPostModal extends Component {
 						<View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}/>
 					</View>
 
-					<View style={styles.list_container}>
+					<ScrollView contentContainerStyle={styles.list_container}>
 						<Text style = {styles.report_caption}>
 							Post to be reported:
 						</Text>
 						<ScrollView contentContainerStyle={styles.report_section}>
 							<ReportOriginalPost post={this.props.post}/>
 						</ScrollView>
-					</View>
+					</ScrollView>
 					<View style={styles.list_container}>
 						<Text style = {styles.report_caption}>
 								Select offense:
@@ -174,7 +174,8 @@ const styles = StyleSheet.create({
 		padding : 8,
 		alignSelf : 'stretch',
 		backgroundColor : '#fbfbfb',
-		justifyContent : 'flex-start'
+		justifyContent : 'flex-start',
+		overflow : 'hidden'
 	},
 	report_button : {
 		borderColor : "#90D7ED",
@@ -199,7 +200,6 @@ const styles = StyleSheet.create({
 		padding: 5, 
 		borderRadius : 5, 
 		borderColor : 'silver', 
-		borderWidth : 1,
-		overflow : "hidden"
+		borderWidth : 1
 	}
 });
