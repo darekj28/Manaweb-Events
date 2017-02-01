@@ -24,6 +24,7 @@ export default class Index extends React.Component {
       isLoading: true,
       feed: [],
       notifications: [],
+      numUnseenNotifications : 0,
       refreshing : false
     }
   }
