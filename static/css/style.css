@@ -654,10 +654,10 @@ button.kep-login-facebook:hover{
     color: var(--light);
   }
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
-    color: var(--dark);
+    color: var(--light);
   }
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
-    color: var(--dark);
+    color: var(--light);
   }
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
