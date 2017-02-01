@@ -24,8 +24,7 @@ export default class Index extends React.Component {
       isLoading: true,
       feed: [],
       notifications: [],
-      numUnseenNotifications : 0,
-      refreshing : false
+      numUnseenNotifications : 0
     }
     // check for push notifications this often
     this.notification_interval;
@@ -211,7 +210,7 @@ export default class Index extends React.Component {
       
     }).done();
   }
-  getNotifications() {
+  getNotifications(callback) {
     const url = "https://manaweb-events.herokuapp.com"
     const test_url = "http://0.0.0.0:5000"
       fetch(url + "/mobileGetNotifications", 
@@ -243,15 +242,15 @@ export default class Index extends React.Component {
                     numUnseenNotifications++;
                   }
               }
-              this.setState({notifications: notifications})
-              this.setState({numUnseenNotifications : numUnseenNotifications})
+              this.setState({notifications: notifications, numUnseenNotifications : numUnseenNotifications})
+              if (callback) callback();
           }    
     })
     .catch((error) => {
       console.log(error);
     });
   }
-  getPosts() {
+  getPosts(callback) {
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
     fetch(url + "/mobileGetPosts", {method: "POST",
@@ -287,7 +286,8 @@ export default class Index extends React.Component {
               timeString : obj['timeString']
             })
           }
-          this.setState({feed: feed, isLoading : false, refreshing : false})
+          this.setState({feed: feed, isLoading : false});
+          if (callback) callback();
          }
       }
     }).done()
@@ -353,8 +353,6 @@ export default class Index extends React.Component {
         numUnseenNotifications={this.state.numUnseenNotifications}
         getPosts={this.getPosts.bind(this)}
         resetNotificationCount={this.resetNotificationCount.bind(this)}
-        refreshing={this.state.refreshing}
-        onRefresh={this.onRefresh.bind(this)}
         getNotifications={this.getNotifications.bind(this)}
         /> 
     }
