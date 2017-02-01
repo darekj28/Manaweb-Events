@@ -24,7 +24,7 @@ const ACTIVITY_BAR_HEIGHT = 40
 const ACTIVITY_BAR_COLOR = "white"
 const POST_MESSAGE_HEIGHT_SHORT = 0
 const POST_MESSAGE_HEIGHT_TALL = 150
-const ANIMATE_DURATION = 400
+const ANIMATE_DURATION = 300
 
 function contains(collection, item) {
 	if(collection.indexOf(item) !== -1) return true;
