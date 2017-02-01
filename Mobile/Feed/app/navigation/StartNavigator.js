@@ -97,7 +97,8 @@ class StartNavigator extends Component {
 								getPosts={this.props.getPosts} {...globalNavigatorProps}/>)
 				break;
 			case "Notifications":
-				screen = (<NotificationScreen notifications={this.props.notifications} {...globalNavigatorProps}/>)
+				screen = (<NotificationScreen getNotifications = {this.props.getNotifications} 
+							notifications={this.props.notifications} {...globalNavigatorProps}/>)
 				break;
 			case "FbCreate":
 				screen =  (<FbCreate fb_token = {route.fb_token} fb_id = {route.fb_id} {...globalNavigatorProps} />)

@@ -34,6 +34,7 @@ export default class NotificationScreen extends React.Component {
     });
   }
   componentDidMount() {
+    this.props.getNotifications()
     this.seeNotifications.bind(this)();
   }
   render() {
