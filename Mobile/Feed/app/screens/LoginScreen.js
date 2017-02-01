@@ -10,7 +10,7 @@ import {Component} from 'react'
 import {Image, TouchableWithoutFeedback, KeyboardAvoidingView, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import dismissKeyboard from 'react-native-dismiss-keyboard';
 class LoginScreen extends Component {
   constructor(props) {
     super(props)
@@ -110,7 +110,7 @@ class LoginScreen extends Component {
 
   render() {
     return (
-
+      <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
       <View style = {styles.container}>
           <View style = {styles.top_bar}>
               <TouchableOpacity style = {styles.back_button}
@@ -186,6 +186,7 @@ class LoginScreen extends Component {
               </TouchableOpacity>
              </View>
           </View>
+      </TouchableWithoutFeedback>
     )
   }
 }

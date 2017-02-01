@@ -75,7 +75,7 @@ class StartScreen extends Component {
               <View style = {styles.logo_box}>
                   <Image
                     style={styles.logo}
-                    source={require('../static/favicon-32x32.png')}
+                    source={require('../components/res/logo4.png')}
                   />
               </View>
               <View style = {styles.welcome_box}>
@@ -129,7 +129,8 @@ const styles = StyleSheet.create({
   },
  logo: {
     flex : 1,
-    resizeMode: "contain"
+    resizeMode: "contain",
+    tintColor : 'white'
   },
   welcome_box: {
     flex: 1,

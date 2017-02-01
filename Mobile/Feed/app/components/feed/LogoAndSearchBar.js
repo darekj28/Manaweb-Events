@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 
 var titleIcon = require('../res/logo4.png')
-const LOGO_HEIGHT = 30
+const LOGO_HEIGHT = 20
 const SEARCH_BAR_PROPORTION = 0.9
 
 export default class LogoAndSearchBar extends Component {
