@@ -1,11 +1,3 @@
-
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
-
 const FBSDK = require('react-native-fbsdk');
 const {
 	LoginManager,
@@ -20,9 +12,6 @@ import dismissKeyboard from 'react-native-dismiss-keyboard';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/Ionicons';
 import ActionBar from '../actionbar/ActionBar'; // downloaded from https://github.com/Osedea/react-native-action-bar
-// import Menu, {SubMenu, MenuItem} from 'rc-menu'; // rc-menu https://github.com/react-component/menu MIT liscence
-// import ReactDOM from 'react-dom';
-// import ModalPicker from 'react-native-modal-picker' // https://www.npmjs.com/package/react-native-modal-picker
 import ModalDropdown from 'react-native-modal-dropdown'; // https://github.com/sohobloo/react-native-modal-dropdown
 import PostMessageBox from '../components/feed/PostMessageBox'
 import FeedBox from '../components/feed/FeedBox'
@@ -30,7 +19,6 @@ import Feed from '../components/feed/Feed'
 import LogoAndSearchBar from '../components/feed/LogoAndSearchBar'
 import ActivityAndFilterBar from '../components/feed/ActivityAndFilterBar'
 const SEARCH_BAR_HEIGHT = 45
-// const SEARCH_BAR_COLOR = "#90D7ED"
 const SEARCH_BAR_COLOR = "skyblue"
 const ACTIVITY_BAR_HEIGHT = 40
 const ACTIVITY_BAR_COLOR = "white"
@@ -74,13 +62,11 @@ class FeedScreen extends Component {
 				canPost : true
 		}
 		this.spamTimer;
-		this.selectActivitiesAction = this.selectActivitiesAction.bind(this)
 		this.postMessagePressed = this.postMessagePressed.bind(this)
 		this.handlePostSubmit = this.handlePostSubmit.bind(this);
 		this.handlePostTyping = this.handlePostTyping.bind(this);
 		this.handleFilterPress = this.handleFilterPress.bind(this);
 		this.handleServerPostSubmit = this.handleServerPostSubmit.bind(this);
-		this._navigateToHome = this._navigateToHome.bind(this);
 		this.handleRightAction = this.handleRightAction.bind(this)
 	}
 	handlePostTyping (newPostContent) {
@@ -197,9 +183,6 @@ class FeedScreen extends Component {
 	handleRightAction() {
 		this.props.handleLogout.bind(this)();
 	}
-	selectActivitiesAction() {
-		this.setState({select_activity: !this.state.select_activity})
-	}
 	postMessagePressed() {
 			let initial = this.state.post_message_expanded ? POST_MESSAGE_HEIGHT_TALL : POST_MESSAGE_HEIGHT_SHORT
 			let final = this.state.post_message_expanded ? POST_MESSAGE_HEIGHT_SHORT : POST_MESSAGE_HEIGHT_TALL
@@ -218,12 +201,6 @@ class FeedScreen extends Component {
 					this.postMessagePressed()
 			}
 	}
-	_navigateToHome(){
-		this.props.navigator.push({
-		href: "Start"
-		})
-	}
-
 	initializeUserInfo(){
 		this.setState({current_user : this.props.current_user})
 		this.setState({current_username : this.props.current_user.userID})
@@ -232,11 +209,9 @@ class FeedScreen extends Component {
 		this.initializeUserInfo.bind(this)();
 		this.setState({feed : this.props.feed})
 	}
-
 	componentWillReceiveProps(nextProps){
 		this.setState({feed : nextProps.feed})
 	}
-
 	componentWillUnmount(){
 		clearTimeout(this.spamTimer)
 	    this.keyboardWillHideListener.remove();
@@ -247,11 +222,6 @@ class FeedScreen extends Component {
   	}
 
 	render() {
-		let filterIcon1 = require('../components/res/icon1.png')
-		let filterIcon2 = require('../components/res/icon2.png')
-		let filterIcon3 = require('../components/res/icon3.png')
-		let dropdownIcon = require('./res/down_arrow.png')
-
 		return (
 				<View style = {styles.container}>
 					 <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
@@ -290,48 +260,23 @@ class FeedScreen extends Component {
 									 </ActivityAndFilterBar>
 							 </View>
 					 </TouchableWithoutFeedback>
-						<Feed posts = {this.state.feed} searchText = {this.state.searchText} filters = {this.state.filters}
-						userIdToFilterPosts={this.state.userIdToFilterPosts} handleFilterUser={this.handleFilterUser.bind(this)}
-						current_user = {this.props.current_user} scroll={this.props.scroll} stopScroll={this.props.stopScroll}
-						refreshing={this.props.refreshing} onRefresh={this.props.onRefresh}	
-						navigator = {this.props.navigator} current_username = {this.props.current_user.userID}
+						<Feed posts = {this.state.feed} 
+						searchText = {this.state.searchText} 
+						filters = {this.state.filters}
+						userIdToFilterPosts={this.state.userIdToFilterPosts} 
+						handleFilterUser={this.handleFilterUser.bind(this)}
+						current_user = {this.props.current_user} 
+						scroll={this.props.scroll} 
+						stopScroll={this.props.stopScroll}
+						getPosts={this.props.getPosts}
+						navigator = {this.props.navigator} 
+						current_username = {this.props.current_user.userID}
 								/>
 				</View>
 
 		)
 	}
-
-	// Adjust the color of the rows so that the selected item has a different color
-	_dropdown_renderRow(rowData, rowID, highlighted) {
-		return (
-			<TouchableHighlight underlayColor='cornflowerblue'>
-				<View style={styles.dropdown_row}>
-					<Text style={[styles.dropdown_row_text, highlighted && {color: 'mediumaquamarine'}]}>
-						{rowData}
-					</Text>
-				</View>
-			</TouchableHighlight>
-		);
-	}
 }
-
-var messages = ['This is my first message',
-'This is my second message',
-'This is my third message',
-'This is my fourth message',
-'This is my fifth message',
-'This is my sixth message',
-'This is my seventh message',
-'This is my eigth message',
-'This is my ninth message',
-'This is my tenth message'
-]
-
-var createFeedRow = (message, i) =>
-		<FeedBox
-				key={i}
-				message={message}
-				image_ID = { i%3 }/>;
 
 const styles = StyleSheet.create({
 	container: {

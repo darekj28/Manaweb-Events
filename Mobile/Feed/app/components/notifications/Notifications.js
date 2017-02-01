@@ -1,5 +1,5 @@
 import React from 'react';
-import {Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,
+import {RefreshControl, Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,
 		TouchableOpacity,TouchableHighlight, TextInput,
           Alert, Image, Animated, TouchableWithoutFeedback, ScrollView} from 'react-native';
 import _ from 'lodash'
@@ -8,8 +8,16 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import NotificationBox from './NotificationBox'
 
 export default class Notifications extends React.Component {
-	constructor(props) {
-		super(props);
+	constructor() {
+		super();
+		this.state = { refreshing : false };
+	}
+	onRefresh() {
+		this.setState({ refreshing : true });
+		this.props.getNotifications(this.stopRefreshing.bind(this));
+	}
+	stopRefreshing() {
+		this.setState({ refreshing : false });
 	}
 	render() {
 		if (this.props.notifications.length == 0)
@@ -22,7 +30,13 @@ export default class Notifications extends React.Component {
 		else 
 			return (
 			<View style={{flex : 1,backgroundColor : '#e5e5e5'}}>
-				<ScrollView contentContainerStyle={{backgroundColor : "#e5e5e5", paddingTop : 4}}           
+				<ScrollView 
+				refreshControl={
+					<RefreshControl refreshing={this.state.refreshing}
+						onRefresh={this.onRefresh.bind(this)}
+						tintColor="white"/>
+				}
+				contentContainerStyle={{backgroundColor : "#e5e5e5", paddingTop : 4}}           
 				automaticallyAdjustContentInsets={false}
 	            onScroll={() => {}}
 	            scrollEventThrottle={200}
