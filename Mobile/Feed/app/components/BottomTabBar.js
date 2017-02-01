@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
+import { Platform, Keyboard, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
         TouchableWithoutFeedback, Alert, Image, Animated} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconBadge from 'react-native-icon-badge';
@@ -46,7 +46,14 @@ export default class BottomTabBar extends React.Component {
 			this.setState({selected : 'home'})
 		}
 	}
-
+	componentDidMount() {
+		this.keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', () => this.setState({ show : false }));
+		this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', () => this.setState({ show : true }));
+	}
+	componentWillUnmount() {
+		this.keyboardWillHideListener.remove();
+		this.keyboardWillShowListener.remove();
+	}
 	render() {
 
 		var selected = this.state.selected;
@@ -54,8 +61,9 @@ export default class BottomTabBar extends React.Component {
 		var settings = selected == 'settings' ? HIGHLIGHTED : DEFAULT;
 		var notifications = selected == 'notifications' ? HIGHLIGHTED : DEFAULT;
 
-		if (this.props.current_username)
-			return (
+		if (this.props.current_username) {
+			if (!this.state.show || (Platform.OS == 'ios'))
+				return (
 				<View style = {styles.container}>
 					<TouchableWithoutFeedback style={styles.tab} onPress={this.homePress.bind(this)}>
 						<View style={styles.tab_content}>
@@ -88,7 +96,9 @@ export default class BottomTabBar extends React.Component {
 						</View>
 					</TouchableWithoutFeedback>}
 				</View>
-				);
+				)
+			else return <View/>;
+		}
 		else return <View/>;
 	}
 }
