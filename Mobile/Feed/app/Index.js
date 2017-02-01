@@ -1,9 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React from 'react';
 import {Component} from 'react'
 import {TouchableWithoutFeedback, Text, ActivityIndicator, NetInfo, AsyncStorage, Platform, AppState, AppRegistry, StyleSheet, TabBarIOS, View} from 'react-native';
@@ -12,7 +6,26 @@ import StartNavigator from './navigation/StartNavigator'
 import PushController from './PushController'
 import PushNotification from 'react-native-push-notification';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
+import {
+  setCustomView,
+  setCustomTextInput,
+  setCustomText,
+  setCustomImage,
+  setCustomTouchableOpacity
+} from 'react-native-global-props';
 
+const customTextProps = {
+  style: {
+    fontFamily: Platform.OS === 'ios' ? 'HelveticaNeue-Light' : 'Roboto'
+  }
+};
+const customTextInputProps = {
+  style: {
+    fontFamily: Platform.OS === 'ios' ? 'HelveticaNeue-Light' : 'Roboto',
+  }
+};
+setCustomText(customTextProps);
+setCustomTextInput(customTextInputProps);
 export default class Index extends React.Component {
 
   constructor(props){
@@ -90,16 +103,6 @@ export default class Index extends React.Component {
                 }
               }
             }
-          //         notifications.unshift({
-          //           comment_id : obj['comment_id'],
-          //           timeString : obj['timeString'],
-          //           isOP : obj['isOP'],
-          //           numOtherPeople : obj['numOtherPeople'],
-          //           sender_name : obj['sender_name'],
-          //           op_name : obj['op_name'],
-          //           seen : obj['seen'],
-          //           avatar : obj['avatar']
-          
     })
     .catch((error) => {
       console.log(error);
