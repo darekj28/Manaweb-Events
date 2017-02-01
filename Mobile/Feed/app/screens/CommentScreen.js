@@ -1,5 +1,5 @@
 import React from 'react';
-import {Platform, Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,
+import {ActivityIndicator, InteractionManager, Platform, Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,
 		TouchableOpacity,TouchableHighlight, TextInput,
 		  Alert, Image, Animated, TouchableWithoutFeedback, ScrollView, Easing, Keyboard} from 'react-native';
 import _ from 'lodash'
@@ -17,6 +17,7 @@ export default class CommentScreen extends React.Component {
 	constructor() {
 		super();
 		this.state = {
+			renderPlaceholderOnly : true,
 			post_message_expanded: false,
 			comments : [],
 			original_post : {},
@@ -111,6 +112,9 @@ export default class CommentScreen extends React.Component {
 		this.setState({ post_message_expanded : false });
 	}
 	componentDidMount() {
+		InteractionManager.runAfterInteractions(() => {
+	      	this.setState({renderPlaceholderOnly: false});
+	    });
 		this.getComments.bind(this)();
 		this.setState({current_user : this.props.current_user});
 		this.keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', () => this.collapseMessageBox());
@@ -120,7 +124,17 @@ export default class CommentScreen extends React.Component {
 		this.props.getPosts();
 		this.keyboardWillHideListener.remove();
 	}
+	_renderPlaceholderView() {
+	    return (
+	      	<View style = {styles.container}>
+				<ActivityIndicator style={[styles.centering, styles.white]} color="#cccccc" size="large"/>
+			</View>
+	    );
+	}
 	render() {
+		if (this.state.renderPlaceholderOnly) {
+	      	return this._renderPlaceholderView();
+	    }
 		var op = this.props.original_post['name'] ? this.props.original_post['name'].split(' ')[0] : "";
 		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		var scrollable_section = [
@@ -187,4 +201,13 @@ const styles = StyleSheet.create({
 		alignItems : 'center',
 		backgroundColor : 'white'
 	},
+	centering: {
+		flex : 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		padding: 8,
+	},
+	white: {
+		backgroundColor: 'white',
+	}
 });
