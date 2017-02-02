@@ -28,9 +28,9 @@ export default class OriginalPost extends React.Component {
                         <Text style = {styles.text_name}>
                             {post.name}
                         </Text>
-                        <Text style = {styles.text_userID}>
+                        {post.userID != "$DELETED_USER" && <Text style = {styles.text_userID}>
                             @{post.userID}
-                        </Text>
+                        </Text>}
                     </View>
                     <View style={{justifyContent: 'flex-start', padding : 8, paddingBottom : 25, paddingTop : 25 }}>
                         <Text style = {styles.text_message}>

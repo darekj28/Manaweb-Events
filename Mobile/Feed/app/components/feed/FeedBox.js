@@ -86,9 +86,9 @@ export default class FeedBox extends Component {
                                         paddingLeft : 8, paddingBottom : 20, paddingTop : 8}}>
                                 <Text style = {styles.text_name} numberOfLines={1}>
                                     <Text onPress={this.handleFilterUser.bind(this)}>{post.name}</Text> 
-                                    <Text style={styles.text_userID}> @{post.userID} 
+                                    {post.userID != "$DELETED_USER" && <Text style={styles.text_userID}> @{post.userID} 
                                         <Text style={{flex : 1}}> &#8226; {post.time} </Text>
-                                    </Text>
+                                    </Text>}
                                 </Text>
                             </View>
                             <View style={{flex: 0, paddingTop : 8, paddingRight : 6, flexDirection: 'row'}}>

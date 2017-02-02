@@ -27,9 +27,9 @@ export default class ReportOriginalPost extends React.Component {
                         <Text style = {styles.text_name}>
                             {post.name}
                         </Text>
-                        <Text style = {styles.text_userID}>
+                        {post.userID != "$DELETED_USER" && <Text style = {styles.text_userID}>
                             @{post.userID}
-                        </Text>
+                        </Text>}
                     </View>
                     <View style={{justifyContent: 'flex-start', padding : 6, paddingBottom : 16, paddingTop : 16 }}>
                         <Text style = {styles.text_message} numberOfLines={2}>
