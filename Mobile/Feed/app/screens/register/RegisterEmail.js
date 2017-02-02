@@ -117,15 +117,19 @@ export default class RegisterEmail extends Component {
                 						value = {this.state.email}/>
 								</View>
 							</View>
-							<View style={{flex : 0.6}}/>
+							<View style={{flex : 0.6, width : 220, alignItems : 'center'}}>
+								<View style={{flex : 1, justifyContent : 'center'}}>
+									{error_message}
+								</View>
+							</View>
 						</View>
 						<View style = {{flex : 1, alignItems : 'center', borderColor : 'blue', borderWidth : 1}}>
 							<TouchableOpacity style = {{flex : 1, justifyContent : 'center'}} 
-										onPress = {this._skipEmail.bind(this)}>
-				              	<Text style = {styles.notnow}>
-				                	Not now?
-				             	</Text>
-				            </TouchableOpacity>
+											onPress = {this._skipEmail.bind(this)}>
+					       	  	<Text style = {styles.notnow}>
+					       	    	Not now?
+					       	 	</Text>
+					       	</TouchableOpacity>
 							<TouchableOpacity style={{flex : 1}} onPress = {this.handleEmailSubmit.bind(this)}>
 								<View style = {styles.button}>
 									<Text style={styles.button_text}>Next</Text>

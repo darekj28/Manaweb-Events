@@ -112,19 +112,18 @@ export default class RegisterConfirmCode extends Component {
 					<View style={{flex : 1, flexDirection : 'column', borderColor : 'red', borderWidth : 1}}>
 						<View style={{flex : 2, borderColor : 'yellow', borderWidth : 1}}>
 							<View style={{flex : 1.5, alignItems : 'center', justifyContent : 'center'}}>
-								<Text style={{fontSize : 18}}>Enter the code</Text>
+								<Text style={{fontSize : 18}}>Enter your code</Text>
 							</View>
-							<View style={{flex : 0.6}}/>
-							<View style={{flex : 1.6, borderColor : 'green', borderWidth : 1, justifyContent : 'center'}}>
-								<Text style={styles.label}>CONFIRMATION CODE</Text>
+							<View style={{flex : 1.6, justifyContent : 'center'}}>
 								<View style={styles.input_wrapper}>
 									<TextInput onChangeText = {this.handleEnteredCodeChange}
 										style = {styles.input} 
-										keyboardType = "number-pad"
+										keyboardType = "numeric"
 						                maxLength = {5}
                 						value = {this.state.enteredCode}/>
 								</View>
 							</View>
+							<View style={{flex : 0.6, borderColor : 'pink', borderWidth : 1}}/>
 						</View>
 						<View style = {{flex : 1, alignItems : 'center', borderColor : 'blue', borderWidth : 1}}>
 							<TouchableOpacity style = {{flex : 1, justifyContent : 'center'}} 
@@ -157,8 +156,8 @@ const styles = StyleSheet.create({
 		backgroundColor: "white",
 	},
 	label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
-	input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
-	input : {flex : 1, width : 100, fontSize : 24, justifyContent : 'flex-start'},
+	input_wrapper : {flex : 1, flexDirection : 'column', borderBottomColor : 'black', borderBottomWidth : 1, alignItems : 'center', justifyContent : 'center'},
+	input : {flex : 1, fontSize : 30, textAlign : 'center'},
 	button : {
 		flex : 1, 
 		backgroundColor : '#90d7ed', 

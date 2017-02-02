@@ -162,7 +162,7 @@ export default class RegisterPhoneNumber extends Component {
 								<View style={styles.input_wrapper}>
 									<TextInput onChangeText = {this.handlePhoneNumberChange}
 										style = {styles.input} 
-										keyboardType = "number-pad"
+										keyboardType = "phone-pad"
 						                dataDetectorTypes = "phoneNumber"
 						                maxLength = {14}
 						                value = {this.state.phone_number}/>
@@ -171,7 +171,7 @@ export default class RegisterPhoneNumber extends Component {
 							<View style={{flex: 0.3}}/>
 						</View>
 						<View style = {{flex : 1, alignItems : 'center', borderColor : 'blue', borderWidth : 1}}>
-							<View style={{flex : 1, justifyContent : 'center'}}>
+							<View style={{flex : 1, width : 180, justifyContent : 'center'}}>
 								{error_message}
 							</View>
 							<TouchableOpacity style={{flex : 1}} onPress = {this.handlePhoneNumberSubmit.bind(this)}>

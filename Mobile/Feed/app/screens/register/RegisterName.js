@@ -167,7 +167,7 @@ export default class RegisterName extends Component {
 							</View>
 						</View>
 						<View style = {{flex : 1, alignItems : 'center', borderColor : 'blue', borderWidth : 1}}>
-							<View style={{flex : 1, justifyContent : 'center'}}>
+							<View style={{flex : 1, width : 180, justifyContent : 'center'}}>
 								{error_message}
 							</View>
 							<TouchableOpacity style={{flex : 1}} onPress = {this.submitFullName.bind(this)}>
