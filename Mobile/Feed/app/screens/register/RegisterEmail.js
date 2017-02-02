@@ -1,10 +1,4 @@
 
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React from 'react';
 import {Component} from 'react'
 import {TouchableWithoutFeedback, Alert, Image, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
@@ -14,292 +8,158 @@ import HomeStatusBar from '../../components/HomeStatusBar';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
+import RegisterHeader from '../../components/register/RegisterHeader';
 
+export default class RegisterEmail extends Component {
+	constructor(props) {
+		super(props)
+		this.state = {
+			email : "",
+			validation_output: {'error' : ""}
+		}
+		this.handleEmailSubmit = this.handleEmailSubmit.bind(this);
+		this.handleEmailChange = this.handleEmailChange.bind(this);
+		this.validateEmail = this.validateEmail.bind(this);
+		this._navigateToRegisterUsername = this._navigateToRegisterUsername.bind(this);
+	}
 
+	handleEmailSubmit() {
+		this._navigateToRegisterUsername()
+		if (this.state.validation_output['result'] == 'success') {
+			this._navigateToRegisterUsername()
+		}
+		else {
+			Alert.alert(this.state.validation_output.error)
+		}
+	}
 
+	handleEmailChange(email) {
+		this.setState({email : email})
+		this.validateEmail(email);
+	}
 
-class RegisterEmail extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      email : "",
-      validation_output: {'error' : ""}
-    }
-    this.handleEmailSubmit = this.handleEmailSubmit.bind(this);
-    this.handleEmailChange = this.handleEmailChange.bind(this);
-    this.validateEmail = this.validateEmail.bind(this);
-    this._navigateToRegisterUsername = this._navigateToRegisterUsername.bind(this);
-  }
+	validateEmail(email) {
+		var url = "https://manaweb-events.herokuapp.com"
+		var test_url = "http://0.0.0.0:5000"
+		fetch(url + "/mobileEmailValidation", {method: "POST",
+		headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+				}, 
+			body: 
+			JSON.stringify(
+			 {
+				email : email
+			})
+		})
+		.then((response) => response.json())
+		.then((responseData) => {
+			this.setState({validation_output : responseData})
+		})
+		.done();
+	}
 
-  handleEmailSubmit() {
-    if (this.state.validation_output['result'] == 'success') {
-      this._navigateToRegisterUsername()
-    }
-    else {
-      Alert.alert(this.state.validation_output.error)
-    }
-  }
+	clearEmail() {
+		this.setState({email : ""})
+	}
 
-  handleEmailChange(email) {
-    this.setState({email : email})
-    this.validateEmail(email);
-  }
+	_navigateToRegisterUsername() {
+		this.props.navigator.push({
+		href: "RegisterUsername",
+		email : this.state.email,
+		phone_number : this.props.phone_number,
+		password : this.props.password,
+		first_name: this.props.first_name,
+		last_name: this.props.last_name
+		})
+	}
 
-  validateEmail(email) {
-    var url = "https://manaweb-events.herokuapp.com"
-    var test_url = "http://0.0.0.0:5000"
-    fetch(url + "/mobileEmailValidation", {method: "POST",
-    headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, 
-      body: 
-      JSON.stringify(
-       {
-        email : email
-      })
-    })
-    .then((response) => response.json())
-    .then((responseData) => {
-      this.setState({validation_output : responseData})
-    })
-    .done();
-  }
+	_skipEmail(){
+		this.props.navigator.push({
+		href: "RegisterUsername",
+		email : "",
+		phone_number : this.props.phone_number,
+		password : this.props.password,
+		first_name: this.props.first_name,
+		last_name: this.props.last_name
+		})
+	}
 
-  clearEmail() {
-    this.setState({email : ""})
-  }
-
-  _navigateToRegisterUsername() {
-    this.props.navigator.push({
-    href: "RegisterUsername",
-    email : this.state.email,
-    phone_number : this.props.phone_number,
-    password : this.props.password,
-    first_name: this.props.first_name,
-    last_name: this.props.last_name
-    })
-  }
-
-  _skipEmail(){
-    this.props.navigator.push({
-    href: "RegisterUsername",
-    email : "",
-    phone_number : this.props.phone_number,
-    password : this.props.password,
-    first_name: this.props.first_name,
-    last_name: this.props.last_name
-    })
-  }
-
-  getErrorMessage() {
-    var error_message = "";
-    if (this.state.validation_output.error != "" && this.state.validation_output.error != null) {
-      error_message = this.state.validation_output.error;
-      return (
-          <Text style = {styles.error_text}>
-            {error_message}
-            </Text>
-        )
-    }
-    else return;
-  }
-  render() {
-    var error_message = this.getErrorMessage.bind(this)();
-    return (
-      <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
-        <View style = {styles.container}>
-          <View style = {styles.top_bar}>
-              <TouchableOpacity style = {styles.back_button}
-                onPress = {() => this.props.navigator.pop()}>
-                <Icon name = "chevron-left" size = {20}/>
-              </TouchableOpacity>
-               <Image
-                style={styles.logo}
-                source={require('../../static/favicon-32x32.png')}
-              />
-              <View style = {styles.cog_box}>
-                <Icon name = "cog" size = {20} style = {styles.cog}/> 
-              </View>
-            </View>
-            <View style = {styles.small_padding}/>
-            <View style = {styles.instruction_box}> 
-              <Text style = {styles.instruction_text}>
-                Enter your email address
-              </Text>
-            </View>
-            <View style = {styles.input_row}>
-              <View style = {styles.input_box}> 
-                    <TextInput
-                onChangeText = {this.handleEmailChange}
-                style = {styles.input_text} placeholder = "Email"
-                value = {this.state.email}
-              />
-              { this.state.email != "" &&
-              <View style = {styles.clear_button}>
-                <Icon name = "close" size = {20} onPress = {this.clearEmail.bind(this)}/>
-              </View>
-              }
-              </View>
-            </View>
-
-          <View style = {styles.small_padding}/>
-          { //error_message != null &&
-            false && 
-              <View style = {styles.error_box}>
-                {error_message}
-            </View>
-          }
-          {// error_message == null &&
-            true &&
-            <View style = {styles.small_padding}/>
-          }
-            <View style = {styles.large_padding} />
-             <View style = {styles.bottom_bar}>
-              <TouchableOpacity style = {styles.recovery_button} onPress = {this._skipEmail.bind(this)}>
-                <Text style = {styles.recovery_text}>
-                    Not now?
-                </Text>
-                </TouchableOpacity>
-                <View style = {styles.bottom_bar_padding}/>
-                <TouchableOpacity style = {styles.login_submit_button} onPress = {this.handleEmailSubmit.bind(this)}>
-                <Text style = {styles.login_submit_text}>
-                  Next!
-                </Text>
-              </TouchableOpacity>
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
-    )
-  }
+	getErrorMessage() {
+		var error_message = "";
+		if (this.state.validation_output.error != "" && this.state.validation_output.error != null) {
+			error_message = this.state.validation_output.error;
+			return (
+					<Text style = {styles.error_text}>
+						{error_message}
+						</Text>
+				)
+		}
+		else return;
+	}
+	render() {
+		var error_message = this.getErrorMessage.bind(this)();
+		return (
+			<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
+				<View style={styles.container}>
+					<RegisterHeader navigator={this.props.navigator}/>
+					<View style={{flex : 1, flexDirection : 'column', borderColor : 'red', borderWidth : 1}}>
+						<View style={{flex : 2, borderColor : 'yellow', borderWidth : 1}}>
+							<View style={{flex : 1.5, alignItems : 'center', justifyContent : 'center'}}>
+								<Text style={{fontSize : 18}}>What's your email?</Text>
+							</View>
+							<View style={{flex : 0.6}}/>
+							<View style={{flex : 1, borderColor : 'green', borderWidth : 1, justifyContent : 'center'}}>
+								<Text style={styles.label}>EMAIL</Text>
+								<View style={styles.input_wrapper}>
+									<TextInput onChangeText = {this.handleEmailChange}
+										style = {styles.input} 
+                						value = {this.state.email}/>
+								</View>
+							</View>
+							<View style={{flex : 0.6}}/>
+						</View>
+						<View style = {{flex : 1, alignItems : 'center', borderColor : 'blue', borderWidth : 1}}>
+							<TouchableOpacity style = {{flex : 1, justifyContent : 'center'}} 
+										onPress = {this._skipEmail.bind(this)}>
+				              	<Text style = {styles.notnow}>
+				                	Not now?
+				             	</Text>
+				            </TouchableOpacity>
+							<TouchableOpacity style={{flex : 1}} onPress = {this.handleEmailSubmit.bind(this)}>
+								<View style = {styles.button}>
+									<Text style={styles.button_text}>Next</Text>
+								</View>
+							</TouchableOpacity>
+						</View>	
+						<View style = {{flex : 3}}/>							
+					</View>
+				</View>
+			</TouchableWithoutFeedback>
+		)
+	}
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection : "column",
-    justifyContent: 'space-between',
-    padding : 10,
-    paddingTop: 40,
-    backgroundColor: "white",
-  },
-
-
-  top_bar : {
-    flex : 0.05,
-    flexDirection : "row",
-    justifyContent: "space-around",
-    // backgroundColor: "coral",
-    alignItems: "center"
-  },
-
-  back_button :{
-    flex : 1,
-  },
-
-  back_button_text: {
-
-  },
-
-  logo: {
-    flex : 1,
-    resizeMode: "contain"
-  },
-
-  cog_box: {
-    flex:1,
-    flexDirection : "row",
-    justifyContent : "flex-end"
-  },
-  // cog : {
-  // },
-
-  instruction_box :{
-    flex : 0.075,
-  },
-
-  instruction_text : {
-    fontSize : 24
-  },
-
-  input_row: {
-    flexDirection: "row",
-    flex : 0.075,
-  },
-  input_box: {
-    flexDirection : "row",
-    flex: 0.075,
-    borderColor: "skyblue",
-    borderWidth : 1,
-    borderRadius : 5
-    // backgroundColor: "skyblue"
-  },
-
-  input_text :{
-    flex: 0.65,
-    padding: 5
-  },
-
-  clear_button : {
-    flex: 0.05,
-    justifyContent: "center"
-  },
-
-  large_padding : {
-    flex: 0.45,
-    backgroundColor : "white"
-  },
-
-    error_box : {
-    flex: 0.05,
-    flexDirection : "column",
-  },
-
-  error_text : {
-    color : "red",
-    fontSize : 20,
-    alignSelf: "center"
-  },
-
- 
-    bottom_bar : {
-    flex : 0.05,
-    // backgroundColor : "purple",
-    flexDirection: "row",
-    justifyContent : "flex-end",
-  },
-
-  recovery_text: {
-    borderColor : "skyblue",
-    borderWidth : 1,
-    borderRadius : 5,
-    padding: 8,
-    textAlign : "center"
-  },
- 
-  login_submit_text : {
-    borderColor : "skyblue",
-    borderWidth : 1,
-    borderRadius : 5,
-    padding: 8,
-    textAlign : "center"
-  },
-
-  small_padding : {
-    flex : 0.05,
-  },
-   recovery_button : {
-      flex: 0.30
-  },
-
-  bottom_bar_padding: {
-      flex: 0.45
-  },
-
-  login_submit_button: {
-      flex: 0.25
-  },
-
+	container: {
+		flex: 1,
+		justifyContent: 'flex-start',
+		alignItems : 'center',
+		backgroundColor: "white",
+	},
+	label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
+	input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
+	input : {flex : 1, width : 220, fontSize : 14, justifyContent : 'flex-start'},
+	button : {
+		flex : 1, 
+		backgroundColor : '#90d7ed', 
+		borderRadius:60, 
+		justifyContent : 'center', 
+		alignItems : 'center', 
+		width : 100, 
+		height : 40
+	},
+	button_text : {color : 'white', fontWeight : 'bold', fontSize : 14},
+	error_text : {color : 'red', fontWeight : 'bold', fontSize : 12},
+	notnow : {fontSize : 14, color : 'lightseagreen'},
 });
-
-module.exports = RegisterEmail

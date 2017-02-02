@@ -75,6 +75,7 @@ export default class RegisterName extends Component {
 
 
 	submitFullName() {
+		this._navigateToRegisterPhoneNumber();
 		if (this.state.first_name_validation_output['result'] == 'success' 
 			&& this.state.last_name_validation_output['result'] == 'success')
 			this._navigateToRegisterPhoneNumber();
@@ -151,7 +152,7 @@ export default class RegisterName extends Component {
 									<TextInput onChangeText = {this.handleFirstNameChange}
 										style = {styles.input} 
 										value = {this.state.first_name} 
-										maxLength = {15}/>
+										maxLength = {12}/>
 								</View>
 							</View>
 							<View style={{flex : 0.2}}/>
@@ -161,7 +162,7 @@ export default class RegisterName extends Component {
 									<TextInput onChangeText = {this.handleLastNameChange}
 										style = {styles.input}
 										value = {this.state.last_name} 
-										maxLength = {15}/>
+										maxLength = {12}/>
 								</View>
 							</View>
 						</View>
