@@ -24,7 +24,6 @@ export default class RegisterEmail extends Component {
 	}
 
 	handleEmailSubmit() {
-		this._navigateToRegisterUsername()
 		if (this.state.validation_output['result'] == 'success') {
 			this._navigateToRegisterUsername()
 		}
@@ -118,7 +117,7 @@ export default class RegisterEmail extends Component {
 								</View>
 							</View>
 							<View style={{flex : 0.6, width : 220, alignItems : 'center'}}>
-								<View style={{flex : 1, justifyContent : 'center'}}>
+								<View style={{flex : 1, alignItems:'center', justifyContent : 'center'}}>
 									{error_message}
 								</View>
 							</View>

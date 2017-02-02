@@ -46,7 +46,6 @@ export default class RegisterPassword extends Component {
 	}
 
 	handlePasswordSubmit() { 
-		this._navigateToRegisterEmail();
 		if (this.state.validation_output.result == 'success') {
 			this._navigateToRegisterEmail();
 		}
@@ -138,7 +137,7 @@ const styles = StyleSheet.create({
 	},
 	label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
 	input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
-	input : {flex : 1, width : 180, fontSize : 14, justifyContent : 'flex-start'},
+	input : {flex : 1, width : 210, fontSize : 16, justifyContent : 'flex-start'},
 	button : {
 		flex : 1, 
 		backgroundColor : '#90d7ed', 

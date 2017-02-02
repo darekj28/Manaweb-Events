@@ -75,7 +75,6 @@ export default class RegisterName extends Component {
 
 
 	submitFullName() {
-		this._navigateToRegisterPhoneNumber();
 		if (this.state.first_name_validation_output['result'] == 'success' 
 			&& this.state.last_name_validation_output['result'] == 'success')
 			this._navigateToRegisterPhoneNumber();
@@ -167,7 +166,7 @@ export default class RegisterName extends Component {
 							</View>
 						</View>
 						<View style = {{flex : 1, alignItems : 'center', borderColor : 'blue', borderWidth : 1}}>
-							<View style={{flex : 1, width : 180, justifyContent : 'center'}}>
+							<View style={{flex : 1, width : 180, alignItems: 'center', justifyContent : 'center'}}>
 								{error_message}
 							</View>
 							<TouchableOpacity style={{flex : 1}} onPress = {this.submitFullName.bind(this)}>
@@ -195,7 +194,7 @@ const styles = StyleSheet.create({
 	},
 	label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
 	input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
-	input : {flex : 1, width : 180, fontSize : 14, justifyContent : 'flex-start'},
+	input : {flex : 1, width : 180, fontSize : 22, justifyContent : 'flex-start'},
 	button : {
 		flex : 1, 
 		backgroundColor : '#90d7ed', 

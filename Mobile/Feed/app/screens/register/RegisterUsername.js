@@ -24,7 +24,6 @@ export default class RegisterUsername extends Component {
 	}
 
 	createAccount() {
-		this._navigateToWelcome.bind(this)();
 		var url = "https://manaweb-events.herokuapp.com"
 		var test_url = "http://0.0.0.0:5000"
 		fetch(url + "/mobileCreateProfile", {method: "POST",
@@ -116,11 +115,11 @@ export default class RegisterUsername extends Component {
 					<RegisterHeader navigator={this.props.navigator}/>
 					<View style={{flex : 1, flexDirection : 'column', borderColor : 'red', borderWidth : 1}}>
 						<View style={{flex : 2, borderColor : 'yellow', borderWidth : 1}}>
-							<View style={{flex : 1.5, alignItems : 'center', justifyContent : 'center'}}>
+							<View style={{flex : 1.4, alignItems : 'center', justifyContent : 'center'}}>
 								<Text style={{fontSize : 18}}>Pick a username</Text>
 							</View>
-							<View style={{flex : 0.3}}/>
-							<View style={{flex : 1.6, borderColor : 'green', borderWidth : 1, justifyContent : 'center'}}>
+							<View style={{flex : 0.6}}/>
+							<View style={{flex : 1, borderColor : 'green', borderWidth : 1, justifyContent : 'center'}}>
 								<Text style={styles.label}>USERNAME</Text>
 								<View style={styles.input_wrapper}>
 									<TextInput onChangeText = {this.handleUsernameChange}
@@ -129,17 +128,21 @@ export default class RegisterUsername extends Component {
 						                value = {this.state.username}/>
 								</View>
 							</View>
-							<View style={{flex: 0.3}}/>
-						</View>
-						<View style = {{flex : 1, alignItems : 'center', borderColor : 'blue', borderWidth : 1}}>
-							<View style={{flex : 1, justifyContent : 'center', width : 180}}>
+							<View style={{flex : 0.1}}/>
+							<View style={{flex: 0.6, alignItems : 'center', justifyContent : 'center'}}>
+								<View style={{flex : 1, alignItems: 'center', justifyContent : 'center', width : 180}}>
 								{error_message}
 							</View>
+							</View>
+						</View>
+						<View style = {{flex : 1, alignItems : 'center', borderColor : 'blue', borderWidth : 1}}>
+							<View style={{flex : 0.5}}/>
 							<TouchableOpacity style={{flex : 1}} onPress = {this.handleUsernameSubmit.bind(this)}>
 								<View style = {styles.button}>
 									<Text style={styles.button_text}>Finish</Text>
 								</View>
 							</TouchableOpacity>
+							<View style={{flex : 0.5}}/>
 						</View>	
 						<View style = {{flex : 3}}/>							
 					</View>
@@ -158,7 +161,7 @@ const styles = StyleSheet.create({
 	},
 	label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
 	input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
-	input : {flex : 1, width : 200, fontSize : 18, justifyContent : 'flex-start'},
+	input : {flex : 1, width : 200, fontSize : 22, justifyContent : 'flex-start'},
 	button : {
 		flex : 1, 
 		backgroundColor : '#90d7ed', 

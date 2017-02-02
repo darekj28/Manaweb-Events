@@ -47,7 +47,7 @@ export default class RegisterPhoneNumber extends Component {
 	}
 	// handle the submission of the phone number
 	handlePhoneNumberSubmit(){  
-		this._navigateToConfirmCode(); 
+		this._navigateToConfirmCode();  
 		if (this.state.validation_output['result'] == 'success'){
 		Alert.alert(
 			"We'll send a verification code to " + this.state.phone_number + ".",
@@ -156,8 +156,8 @@ export default class RegisterPhoneNumber extends Component {
 							<View style={{flex : 1.5, alignItems : 'center', justifyContent : 'center'}}>
 								<Text style={{fontSize : 18}}>What's your number?</Text>
 							</View>
-							<View style={{flex : 0.3}}/>
-							<View style={{flex : 1.6, borderColor : 'green', borderWidth : 1, justifyContent : 'center'}}>
+							<View style={{flex : 0.6}}/>
+							<View style={{flex : 1, borderColor : 'green', borderWidth : 1, justifyContent : 'center'}}>
 								<Text style={styles.label}>PHONE NUMBER</Text>
 								<View style={styles.input_wrapper}>
 									<TextInput onChangeText = {this.handlePhoneNumberChange}
@@ -168,17 +168,20 @@ export default class RegisterPhoneNumber extends Component {
 						                value = {this.state.phone_number}/>
 								</View>
 							</View>
-							<View style={{flex: 0.3}}/>
-						</View>
-						<View style = {{flex : 1, alignItems : 'center', borderColor : 'blue', borderWidth : 1}}>
-							<View style={{flex : 1, width : 180, justifyContent : 'center'}}>
-								{error_message}
+							<View style={{flex: 0.6}}>
+								<View style={{flex : 1, alignItems:'center', justifyContent : 'center'}}>
+									{error_message}
+								</View>
 							</View>
+						</View>
+						<View style = {{flex : 1, alignItems : 'center', justifyContent : 'center', borderColor : 'blue', borderWidth : 1}}>
+							<View style={{flex : 0.5}}/>
 							<TouchableOpacity style={{flex : 1}} onPress = {this.handlePhoneNumberSubmit.bind(this)}>
 								<View style = {styles.button}>
 									<Text style={styles.button_text}>Next</Text>
 								</View>
 							</TouchableOpacity>
+							<View style={{flex : 0.5}}/>
 						</View>	
 						<View style = {{flex : 3}}/>							
 					</View>
