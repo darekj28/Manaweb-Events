@@ -31,7 +31,7 @@ export default class ReportOriginalPost extends React.Component {
                         </Text>
                     </View>
                     <View style={{justifyContent: 'flex-start', padding : 6, paddingBottom : 16, paddingTop : 16 }}>
-                        <Text style = {styles.text_message} numberOfLines={3}>
+                        <Text style = {styles.text_message} numberOfLines={2}>
                             {post.postContent}
                         </Text>
                     </View>

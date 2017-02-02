@@ -94,7 +94,7 @@ export default class NotificationBox extends React.Component {
             this.animatedValue,
             {
                 toValue: 1,
-                duration: 2500,
+                duration: 2000,
                 easing: Easing.linear
             }
         ).start(() => this.animatedValue.setValue(0))
@@ -111,7 +111,7 @@ export default class NotificationBox extends React.Component {
         });
         const borderBottomColor = this.animatedValue.interpolate({
             inputRange: [0, 0.5, 1],
-            outputRange: ["silver", "white", "silver"]
+            outputRange: ["silver", "silver", "silver"]
         });
         const textColor = this.animatedValue.interpolate({ 
             inputRange: [0, 0.35, 0.5, 0.65, 1],

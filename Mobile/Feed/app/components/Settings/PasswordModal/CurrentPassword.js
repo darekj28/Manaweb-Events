@@ -42,12 +42,12 @@ export default class CurrentPassword extends React.Component {
 		.done();
 	}
 	render() {
-		if (this.props.label == null) var label  = "Current Password"
+		if (this.props.label == null) var label  = "Current"
 		else var label = this.props.label
 		return(
 			<View style = {styles.input_container}> 
 				<Text style = {styles.settings_label}>
-					{label}
+					{label.toUpperCase()}
 				</Text>
 				<View style={styles.settings_input_container}>
 				 	<TextInput
@@ -62,7 +62,7 @@ export default class CurrentPassword extends React.Component {
 }
 const styles = StyleSheet.create({
 	settings_label : {
-		fontSize : 16, 
+		fontSize : 14, 
 		fontWeight : 'bold', 
 		padding: 8,
 		paddingLeft : 32,

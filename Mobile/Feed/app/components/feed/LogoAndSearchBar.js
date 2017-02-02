@@ -18,7 +18,8 @@ export default class LogoAndSearchBar extends Component {
     render() {
 
         return (
-            <View style={{flex:1, flexDirection: 'row', backgroundColor: this.props.color, alignItems:'center', paddingLeft:5, paddingRight : 5}}>
+            <View style={{flex:1, flexDirection: 'row', backgroundColor: this.props.color, 
+                    alignItems:'center', justifyContent :'center', paddingLeft:5, paddingRight : 5}}>
                 <View style={{flex: 0.2, margin: 5}}>
                     <Image  style={styles.logo} source={titleIcon} />
                 </View>
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
         height : 30
     },
     activity_text: {
-      fontSize: 18,
+      fontSize: 22,
       color: 'white',
     },
 });
