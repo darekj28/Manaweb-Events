@@ -12,16 +12,17 @@ const DOT_WIDTH = 30
 const DROP_DOWN_OPTIONS = ['Report post']
 
 var profileImages = {
-    nissa:      require('../static/avatars/nissa.png'),
-    chandra:    require('../static/avatars/chandra.png'),
-    elspeth:    require('../static/avatars/elspeth.png'),
-    nicol:      require('../static/avatars/nicol.png'),
-    ugin:       require('../static/avatars/ugin.png'),
-    jace:       require('../static/avatars/jace.png'),
-    liliana:    require('../static/avatars/liliana.png'),
-    ajani:      require('../static/avatars/ajani.png'),
-    nahiri:     require('../static/avatars/nahiri.png'),
-    gideon:     require('../static/avatars/gideon.png'),
+    nissa:      require('../../static/avatars/nissa.png'),
+    chandra:    require('../../static/avatars/chandra.png'),
+    elspeth:    require('../../static/avatars/elspeth.png'),
+    nicol:      require('../../static/avatars/nicol.png'),
+    ugin:       require('../../static/avatars/ugin.png'),
+    jace:       require('../../static/avatars/jace.png'),
+    liliana:    require('../../static/avatars/liliana.png'),
+    ajani:      require('../../static/avatars/ajani.png'),
+    nahiri:     require('../../static/avatars/nahiri.png'),
+    gideon:     require('../../static/avatars/gideon.png'),
+    rip:        require('../../static/avatars/rip.png')
 };
 
 export default class FeedBox extends Component {
@@ -76,6 +77,7 @@ export default class FeedBox extends Component {
                         {post.avatar == 'ajani' && <Image  style={styles.profile_image} source={profileImages.ajani} />}
                         {post.avatar == 'nahiri' && <Image  style={styles.profile_image} source={profileImages.nahiri} />}
                         {post.avatar == 'gideon' && <Image  style={styles.profile_image} source={profileImages.gideon} />}
+                        {post.avatar == 'rip' && <Image  style={styles.profile_image} source={profileImages.rip} />}
                     </View>
 
                     <View style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-start'}}>

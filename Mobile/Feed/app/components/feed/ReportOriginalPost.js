@@ -9,16 +9,17 @@ export default class ReportOriginalPost extends React.Component {
 		return (
 			<View style={{  flex:1, flexDirection: 'row', justifyContent: 'flex-start'}}>
                 <View style={{paddingLeft : 6, paddingTop : 6, paddingBottom :6, justifyContent: 'flex-start'}}>
-                    {post.avatar =='nissa' && <Image  style={styles.profile_image} source={require('../static/avatars/nissa.png')} />}
-                    {post.avatar == 'chandra' && <Image  style={styles.profile_image} source={require('../static/avatars/chandra.png')} />}
-                    {post.avatar == 'elspeth' && <Image  style={styles.profile_image} source={require('../static/avatars/elspeth.png')} />}
-                    {post.avatar == 'nicol' && <Image  style={styles.profile_image} source={require('../static/avatars/nicol.png')} />}
-                    {post.avatar == 'ugin' && <Image  style={styles.profile_image} source={require('../static/avatars/ugin.png')} />}
-                    {post.avatar == 'jace' && <Image  style={styles.profile_image} source={require('../static/avatars/jace.png')} />}
-                    {post.avatar == 'liliana' && <Image  style={styles.profile_image} source={require('../static/avatars/liliana.png')} />}
-                    {post.avatar == 'ajani' && <Image  style={styles.profile_image} source={require('../static/avatars/ajani.png')} />}
-                    {post.avatar == 'nahiri' && <Image  style={styles.profile_image} source={require('../static/avatars/nahiri.png')} />}
-                    {post.avatar == 'gideon' && <Image  style={styles.profile_image} source={require('../static/avatars/gideon.png')} />}
+                    {post.avatar =='nissa' && <Image  style={styles.profile_image} source={require('../../static/avatars/nissa.png')} />}
+                    {post.avatar == 'chandra' && <Image  style={styles.profile_image} source={require('../../static/avatars/chandra.png')} />}
+                    {post.avatar == 'elspeth' && <Image  style={styles.profile_image} source={require('../../static/avatars/elspeth.png')} />}
+                    {post.avatar == 'nicol' && <Image  style={styles.profile_image} source={require('../../static/avatars/nicol.png')} />}
+                    {post.avatar == 'ugin' && <Image  style={styles.profile_image} source={require('../../static/avatars/ugin.png')} />}
+                    {post.avatar == 'jace' && <Image  style={styles.profile_image} source={require('../../static/avatars/jace.png')} />}
+                    {post.avatar == 'liliana' && <Image  style={styles.profile_image} source={require('../../static/avatars/liliana.png')} />}
+                    {post.avatar == 'ajani' && <Image  style={styles.profile_image} source={require('../../static/avatars/ajani.png')} />}
+                    {post.avatar == 'nahiri' && <Image  style={styles.profile_image} source={require('../../static/avatars/nahiri.png')} />}
+                    {post.avatar == 'gideon' && <Image  style={styles.profile_image} source={require('../../static/avatars/gideon.png')} />}
+                    {post.avatar == 'rip' && <Image  style={styles.profile_image} source={require('../../static/avatars/rip.png')} />}
                 </View>
                 <View style={{flex : 1,flexDirection : 'column', justifyContent: 'flex-start' }}>
                     <View style={{flexDirection: 'row', justifyContent : 'flex-start', flexWrap : 'wrap', 

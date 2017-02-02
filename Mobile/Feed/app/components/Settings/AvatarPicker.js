@@ -10,16 +10,17 @@ const avatar_list = ['nissa', 'chandra', 'elspeth', 'nicol', 'ugin', 'jace', 'li
 export default class AvatarPicker extends React.Component {
 	getAvatar(avatar) {
 		var avatar = avatar.toLowerCase()
-		if (avatar =='nissa') return    (<Image  style={styles.avatar_image} source={require('../static/avatars/nissa.png')} />)
-		if (avatar == 'chandra') return (<Image  style={styles.avatar_image} source={require('../static/avatars/chandra.png')} />)
-		if (avatar == 'elspeth') return (<Image  style={styles.avatar_image} source={require('../static/avatars/elspeth.png')} />)
-		if (avatar == 'nicol') return 	(<Image  style={styles.avatar_image} source={require('../static/avatars/nicol.png')} />)
-		if (avatar == 'ugin') return 	(<Image  style={styles.avatar_image} source={require('../static/avatars/ugin.png')} />)
-		if (avatar == 'jace') return  	(<Image  style={styles.avatar_image} source={require('../static/avatars/jace.png')} />)
-		if (avatar == 'liliana') return (<Image  style={styles.avatar_image} source={require('../static/avatars/liliana.png')} />)
-		if (avatar == 'ajani') return 	(<Image  style={styles.avatar_image} source={require('../static/avatars/ajani.png')} />)
-		if (avatar == 'nahiri') return 	(<Image  style={styles.avatar_image} source={require('../static/avatars/nahiri.png')} />)
-		if (avatar == 'gideon') return 	(<Image  style={styles.avatar_image} source={require('../static/avatars/gideon.png')} />)
+		if (avatar =='nissa') return    (<Image  style={styles.avatar_image} source={require('../../static/avatars/nissa.png')} />)
+		if (avatar == 'chandra') return (<Image  style={styles.avatar_image} source={require('../../static/avatars/chandra.png')} />)
+		if (avatar == 'elspeth') return (<Image  style={styles.avatar_image} source={require('../../static/avatars/elspeth.png')} />)
+		if (avatar == 'nicol') return 	(<Image  style={styles.avatar_image} source={require('../../static/avatars/nicol.png')} />)
+		if (avatar == 'ugin') return 	(<Image  style={styles.avatar_image} source={require('../../static/avatars/ugin.png')} />)
+		if (avatar == 'jace') return  	(<Image  style={styles.avatar_image} source={require('../../static/avatars/jace.png')} />)
+		if (avatar == 'liliana') return (<Image  style={styles.avatar_image} source={require('../../static/avatars/liliana.png')} />)
+		if (avatar == 'ajani') return 	(<Image  style={styles.avatar_image} source={require('../../static/avatars/ajani.png')} />)
+		if (avatar == 'nahiri') return 	(<Image  style={styles.avatar_image} source={require('../../static/avatars/nahiri.png')} />)
+		if (avatar == 'gideon') return 	(<Image  style={styles.avatar_image} source={require('../../static/avatars/gideon.png')} />)
+		if (avatar == 'rip') return 	(<Image  style={styles.avatar_image} source={require('../../static/avatars/rip.png')} />)
 		return;
 	}
 	getAvatarList() {

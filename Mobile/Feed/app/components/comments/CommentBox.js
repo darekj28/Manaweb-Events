@@ -10,16 +10,17 @@ export default class CommentBox extends React.Component {
 			<View style={{flex:1, flexDirection: 'row', justifyContent: 'flex-start',
                                 borderBottomColor: 'silver', borderBottomWidth: 1,backgroundColor : 'white'}}>
                 <View style={{flex: 0, paddingLeft : 8, paddingTop: 8, justifyContent: 'flex-start'}}>
-                    {comment.avatar =='nissa' && <Image  style={styles.profile_image} source={require('../static/avatars/nissa.png')} />}
-                    {comment.avatar == 'chandra' && <Image  style={styles.profile_image} source={require('../static/avatars/chandra.png')} />}
-                    {comment.avatar == 'elspeth' && <Image  style={styles.profile_image} source={require('../static/avatars/elspeth.png')} />}
-                    {comment.avatar == 'nicol' && <Image  style={styles.profile_image} source={require('../static/avatars/nicol.png')} />}
-                    {comment.avatar == 'ugin' && <Image  style={styles.profile_image} source={require('../static/avatars/ugin.png')} />}
-                    {comment.avatar == 'jace' && <Image  style={styles.profile_image} source={require('../static/avatars/jace.png')} />}
-                    {comment.avatar == 'liliana' && <Image  style={styles.profile_image} source={require('../static/avatars/liliana.png')} />}
-                    {comment.avatar == 'ajani' && <Image  style={styles.profile_image} source={require('../static/avatars/ajani.png')} />}
-                    {comment.avatar == 'nahiri' && <Image  style={styles.profile_image} source={require('../static/avatars/nahiri.png')} />}
-                    {comment.avatar == 'gideon' && <Image  style={styles.profile_image} source={require('../static/avatars/gideon.png')} />}
+                    {comment.avatar =='nissa' && <Image  style={styles.profile_image} source={require('../../static/avatars/nissa.png')} />}
+                    {comment.avatar == 'chandra' && <Image  style={styles.profile_image} source={require('../../static/avatars/chandra.png')} />}
+                    {comment.avatar == 'elspeth' && <Image  style={styles.profile_image} source={require('../../static/avatars/elspeth.png')} />}
+                    {comment.avatar == 'nicol' && <Image  style={styles.profile_image} source={require('../../static/avatars/nicol.png')} />}
+                    {comment.avatar == 'ugin' && <Image  style={styles.profile_image} source={require('../../static/avatars/ugin.png')} />}
+                    {comment.avatar == 'jace' && <Image  style={styles.profile_image} source={require('../../static/avatars/jace.png')} />}
+                    {comment.avatar == 'liliana' && <Image  style={styles.profile_image} source={require('../../static/avatars/liliana.png')} />}
+                    {comment.avatar == 'ajani' && <Image  style={styles.profile_image} source={require('../../static/avatars/ajani.png')} />}
+                    {comment.avatar == 'nahiri' && <Image  style={styles.profile_image} source={require('../../static/avatars/nahiri.png')} />}
+                    {comment.avatar == 'gideon' && <Image  style={styles.profile_image} source={require('../../static/avatars/gideon.png')} />}
+                    {comment.avatar == 'rip' && <Image  style={styles.profile_image} source= {require('../../static/avatars/rip.png')} />}
                 </View>
                 <View style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-start'}}>
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start'}}>
