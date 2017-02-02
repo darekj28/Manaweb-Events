@@ -14,7 +14,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 
 
-const FILTER_BAR_SHORT = 0
+const FILTER_BAR_SHORT = 35
 const FILTER_BAR_TALL = 35
 export default class PostMessageBox extends Component {
     constructor(props) {
@@ -64,24 +64,24 @@ export default class PostMessageBox extends Component {
         var red = '#d9534f';
         // var newPostContent = this.props.newPostContent;
         if (!this.props.post_message_expanded) {
-            return (
-                <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#696969',
-                    borderBottomWidth: 1, borderTopColor: '#696969',
-                    borderTopWidth: 1, backgroundColor : 'white', alignItems : 'center'}}>
-                    <TouchableOpacity style={{flex : 1}} onPress={this.onClick}>
-                        <Text style = {styles.text}>
-                            Post a message
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+            // return (
+            //     <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#696969',
+            //         borderBottomWidth: 1, borderTopColor: '#696969',
+            //         borderTopWidth: 1, backgroundColor : 'white', alignItems : 'center'}}>
+            //         <TouchableOpacity style={{flex : 1}} onPress={this.onClick}>
+            //             <Text style = {styles.text}>
+            //                 Post a message
+            //             </Text>
+            //         </TouchableOpacity>
+            //     </View>
 
                 
-            );
+            // );
+            return <View/>;
         } else {
             return (
                 <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#696969',
-                borderBottomWidth: 1, borderTopColor: '#696969',
-                borderTopWidth: 1, backgroundColor : 'white' }}>
+                borderBottomWidth: 1, backgroundColor : 'white' }}>
                 <View style={[styles.container, {flex: 1}]}>
                     <TextInput
                         style = {styles.text_input}

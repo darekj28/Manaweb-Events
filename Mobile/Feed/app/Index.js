@@ -1,9 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React from 'react';
 import {Component} from 'react'
 import {TouchableWithoutFeedback, Text, ActivityIndicator, NetInfo, AsyncStorage, Platform, AppState, AppRegistry, StyleSheet, TabBarIOS, View} from 'react-native';
@@ -12,7 +6,26 @@ import StartNavigator from './navigation/StartNavigator'
 import PushController from './PushController'
 import PushNotification from 'react-native-push-notification';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
+import {
+  setCustomView,
+  setCustomTextInput,
+  setCustomText,
+  setCustomImage,
+  setCustomTouchableOpacity
+} from 'react-native-global-props';
 
+const customTextProps = {
+  style: {
+    fontFamily: Platform.OS === 'ios' ? 'HelveticaNeue-Light' : 'Roboto'
+  }
+};
+const customTextInputProps = {
+  style: {
+    fontFamily: Platform.OS === 'ios' ? 'HelveticaNeue-Light' : 'Roboto',
+  }
+};
+setCustomText(customTextProps);
+setCustomTextInput(customTextInputProps);
 export default class Index extends React.Component {
 
   constructor(props){
@@ -24,37 +37,112 @@ export default class Index extends React.Component {
       isLoading: true,
       feed: [],
       notifications: [],
-      numUnseenNotifications : 0,
-      refreshing : false
+      numUnseenNotifications : 0
     }
+    // check for push notifications this often
+    this.notification_interval;
+    this.notification_time_interval = 5 * 1000;
   }
 
-  componentWillMount() {
-    const dispatchConnected = isConnected => this.props.dispatch(setIsConnected(isConnected));
+  getNotificationSyntax(note) {
+        var whose; var also; var notification;
+        if (note.isOP) { 
+            whose = "your";
+            also = "";
+        }
+        else {
+            whose = note.op_name + "'s";
+            also = " also";
+        }
+        if (note.numOtherPeople > 1)
+            notification = note.sender_name + " and " + 
+                note.numOtherPeople + " other people commented on " + whose + " post."
+        else if (note.numOtherPeople == 1)
+            notification = note.sender_name + 
+                " and 1 other person commented on " + whose + " post."
+        else 
+            notification = note.sender_name + also + " commented on " + whose + " post."
+        return notification;
+    }
 
-    NetInfo.isConnected.fetch().then((data) => {
-      if (Platform.OS == 'android'){
-        this.setState({
-        isConnected: data
+  getPushNotifications(){
+    const url = "https://manaweb-events.herokuapp.com"
+    const test_url = "http://0.0.0.0:5000"
+      fetch(url + "/mobileGetPushNotifications", 
+        {method: "POST",
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username : this.state.current_username })
+        }
+      ).then((response) => response.json())
+       .then((responseData) => {
+        // handle number of notifications
+        PushNotification.setApplicationIconBadgeNumber(responseData['num_notifications'])
+        // maybe use current storage..not sure yet
+        // console.log(responseData['push_notifications'])
+        if (responseData['push_notifications'].length > 0) {
+              for (var i = 0; i < responseData['push_notifications'].length; i++) {
+                console.log("notifcation sent")
+                var obj = responseData['push_notifications'][i]
+                var data = {
+                  comment_id : obj['comment_id']
+                }
+                if (Platform.OS ===  'ios'){
+                  PushNotification.localNotification({
+                    message : this.getNotificationSyntax(obj),
+                    userInfo : data,
+                  })
+                }
+                else if (Platform.OS === 'android'){
+                  PushNotification.localNotification({
+                    tag : data,
+                    message : this.getNotificationSyntax(obj),
+                  })
+                }
+              }
+            }
+    })
+    .catch((error) => {
+      console.log(error);
+    }).done();
+  }
+
+  initializePushNotifications(){
+    var that = this;
+    PushNotification.configure({
+    // (required) Called when a remote or local notification is opened or received
+    onNotification: function(notification) {
+        console.log(notification)
+        var comment_id = "";
+        if (Platform.OS === 'ios'){
+          comment_id = notification.data.comment_id
+        }
+
+        else if (Platform.OS === 'android'){
+          comment_id = notificaiton.tag.comment_id
+        }
+        
+        that.props.navigator.push({
+          href : "Comment",
+          current_username : that.state.current_username,
+          current_user : that.state.current_user,
+          comment_id : comment_id
         })
-      }
-    }).done(() => {
-      NetInfo.isConnected.addEventListener('change', this.handleConnectivityChange.bind(this));
+      },
     });
-
-
-    AsyncStorage.getItem("current_username").then((current_username) => {
-        this.setState({current_username : current_username})
-        this.initializeUserInformation.bind(this)()
-      }).then(() => {
-    }).done()
   }
 
-  componentWillUnmount(){
-    NetInfo.isConnected.removeEventListener(
-      'change',
-      this.handleConnectivityChange.bind(this)
-    )
+  handleAppStateChange(appState){
+      clearInterval(this.interval)
+      this.notification_interval = setInterval(this.checkNotifications.bind(this), this.notification_time_interval)
+  }
+
+  checkNotifications(){
+    if (AppState.currentState === 'background' && this.props.current_username != "") {
+      this.getPushNotifications.bind(this)();
+    }
   }
 
   handleConnectivityChange(change) {
@@ -93,7 +181,7 @@ export default class Index extends React.Component {
       
     }).done();
   }
-  getNotifications() {
+  getNotifications(callback) {
     const url = "https://manaweb-events.herokuapp.com"
     const test_url = "http://0.0.0.0:5000"
       fetch(url + "/mobileGetNotifications", 
@@ -125,7 +213,35 @@ export default class Index extends React.Component {
                     numUnseenNotifications++;
                   }
               }
-              this.setState({notifications: notifications})
+              this.setState({notifications: notifications, numUnseenNotifications : numUnseenNotifications})
+              if (callback) callback();
+          }    
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+  getNotificationCount() {
+    const url = "https://manaweb-events.herokuapp.com"
+    const test_url = "http://0.0.0.0:5000"
+      fetch(url + "/mobileGetNotifications", 
+        {method: "POST",
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username : this.state.current_username })
+        }
+      ).then((response) => response.json())
+      .then((responseData) => {
+        var numUnseenNotifications = 0;
+        if (responseData.notification_list.length > 0) {
+              for (var i = 0; i < responseData['notification_list'].length; i++) {
+                var obj = responseData['notification_list'][i]
+                  if (!obj['seen']){
+                    numUnseenNotifications++;
+                  }
+              }
               this.setState({numUnseenNotifications : numUnseenNotifications})
           }    
     })
@@ -133,7 +249,7 @@ export default class Index extends React.Component {
       console.log(error);
     });
   }
-  getPosts() {
+  getPosts(callback) {
     var url = "https://manaweb-events.herokuapp.com"
     var test_url = "http://0.0.0.0:5000"
     fetch(url + "/mobileGetPosts", {method: "POST",
@@ -169,7 +285,8 @@ export default class Index extends React.Component {
               timeString : obj['timeString']
             })
           }
-          this.setState({feed: feed, isLoading : false, refreshing : false})
+          this.setState({feed: feed, isLoading : false});
+          if (callback) callback();
          }
       }
     }).done()
@@ -179,7 +296,6 @@ export default class Index extends React.Component {
     {
       this.setState({current_username : current_username}, this.initializeUserInformation.bind(this))
     })
-    console.log("async login")
   }
 
   async asyncStorageLogout(){
@@ -190,7 +306,6 @@ export default class Index extends React.Component {
         this.setState({current_user : {}})        
       }
     })
-    console.log("async logout")
   }
   resetNotificationCount() {
     this.setState({ numUnseenNotifications : 0 });
@@ -198,8 +313,41 @@ export default class Index extends React.Component {
   onRefresh() {
     this.setState({ refresh : true }, this.getPosts.bind(this));
   }
+  componentWillMount() {
+    const dispatchConnected = isConnected => this.props.dispatch(setIsConnected(isConnected));
+
+    NetInfo.isConnected.fetch().then((data) => {
+      if (Platform.OS == 'android'){
+        this.setState({
+        isConnected: data
+        })
+      }
+    }).done(() => {
+      NetInfo.isConnected.addEventListener('change', this.handleConnectivityChange.bind(this));
+    });
+
+
+    AsyncStorage.getItem("current_username").then((current_username) => {
+        this.setState({current_username : current_username})
+        this.initializeUserInformation.bind(this)()
+      }).then(() => {
+    }).done()
+
+    AppState.removeEventListener('change', this.handleAppStateChange.bind(this))  
+  }
+
+  componentWillUnmount(){
+    NetInfo.isConnected.removeEventListener(
+      'change',
+      this.handleConnectivityChange.bind(this)
+    )
+    clearInterval(this.state.pollNotificationCount);
+  }
   componentDidMount() {
     this.getPosts.bind(this)(); 
+    this.initializePushNotifications.bind(this)();
+    this.setState({ pollNotificationCount : setInterval(this.getNotificationCount.bind(this), 10000) });
+    AppState.addEventListener('change', this.handleAppStateChange.bind(this))
   }
 
   render() {
@@ -232,19 +380,19 @@ export default class Index extends React.Component {
         numUnseenNotifications={this.state.numUnseenNotifications}
         getPosts={this.getPosts.bind(this)}
         resetNotificationCount={this.resetNotificationCount.bind(this)}
-        refreshing={this.state.refreshing}
-        onRefresh={this.onRefresh.bind(this)}
+        getNotifications={this.getNotifications.bind(this)}
         /> 
     }
 
     return (
-      <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
+      
         <View style = {styles.container}>
-          
+          <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
           {main_activity}
           {/* <PushController /> */}
+          </TouchableWithoutFeedback>
         </View>
-      </TouchableWithoutFeedback>
+      
       )
   }
 }

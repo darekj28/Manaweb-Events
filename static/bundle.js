@@ -10542,7 +10542,7 @@
 	
 				return React.createElement(
 					'div',
-					null,
+					{ id: 'MakePost' },
 					React.createElement(
 						'div',
 						{ id: 'TogglePost', className: 'important-text' },
@@ -10785,6 +10785,7 @@
 				var post = this.props.post;
 				var isOP = this.props.isOP;
 				var isAdmin = this.props.isAdmin;
+				var reply = post.numberOfComments == 0 || post.numberOfComments > 1 ? "replies" : "reply";
 				return React.createElement(
 					'li',
 					{ className: 'Post', id: "post_" + post.comment_id },
@@ -10815,13 +10816,24 @@
 									{ to: '/comment/' + this.state.comment_id },
 									React.createElement('span', { className: 'glyphicon glyphicon-comment pull-left PostBottomIcon AppGlyphicon',
 										id: "viewComment_" + this.state.comment_id }),
-									React.createElement(
+									post.numberOfComments > 0 && React.createElement(
 										'span',
 										{ className: 'numberOfComments pull-left AppGlyphicon' },
 										React.createElement(
 											'h6',
 											null,
-											post.numberOfComments
+											post.numberOfComments,
+											' ',
+											reply
+										)
+									),
+									post.numberOfComments == 0 && React.createElement(
+										'span',
+										{ className: 'noComments pull-left' },
+										React.createElement(
+											'h6',
+											null,
+											'Be the first to comment!'
 										)
 									)
 								)
@@ -13481,7 +13493,7 @@
 			key: "render",
 			value: function render() {
 				var rows = this.filter.bind(this)();
-				return React.createElement(
+				if (rows.length > 0) return React.createElement(
 					"ul",
 					{ id: "CommentFeed" },
 					rows,
@@ -13490,7 +13502,7 @@
 					React.createElement(_DeleteCommentModal2.default, { comment: this.state.commentInModal,
 						handleCommentDelete: this.props.handleCommentDelete }),
 					React.createElement(_ReportCommentModal2.default, { comment: this.state.commentInModal, currentUser: this.props.currentUser })
-				);
+				);else return React.createElement("div", null);
 			}
 		}]);
 	

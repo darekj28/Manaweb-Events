@@ -14,7 +14,8 @@ export default class Feed extends Component {
 		this.state = {
 			posts : [],
 			display_report_modal : false,
-			report_post: null
+			report_post: null,
+			refreshing : false
 		}
 		this.filter = this.filter.bind(this);
 	}
@@ -85,8 +86,12 @@ export default class Feed extends Component {
 			this.setState({display_report_modal : false})
 		}
 	}
+	stopRefresh() {
+		this.setState({ refreshing : false });
+	}
 	onRefresh() {
-		this.props.onRefresh();
+		this.setState({ refreshing : true });
+		this.props.getPosts(this.stopRefresh.bind(this));
 	}
 	render() {
 		var feed = this.filter()
@@ -100,7 +105,7 @@ export default class Feed extends Component {
 				}
 				<ListView 
 					refreshControl={
-						<RefreshControl refreshing={this.props.refreshing}
+						<RefreshControl refreshing={this.state.refreshing}
 							onRefresh={this.onRefresh.bind(this)}
 							tintColor="white"/>
 					}

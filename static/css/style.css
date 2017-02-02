@@ -299,11 +299,11 @@ button.kep-login-facebook:hover{
 }
 .CommentFeedPost {
   list-style-type: none;
-  border-bottom: 4px solid var(--border-gray);
+  border-bottom: 1px solid var(--border-gray);
 }
 .CommentFeedPostOriginal {
   list-style-type:none;
-  border-bottom: 2px solid var(--border-gray);
+  border-bottom: 1px solid var(--border-gray);
 }
 .numberOfComments {
   color:var(--light);
@@ -333,7 +333,7 @@ button.kep-login-facebook:hover{
 }
 .Post {
   list-style-type: none;
-  border-bottom: 4px solid var(--border-gray);
+  border-bottom: 1px solid var(--border-gray);
 }
 
 .form-control.FeedPostBody {
@@ -654,10 +654,10 @@ button.kep-login-facebook:hover{
     color: var(--light);
   }
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
-    color: var(--dark);
+    color: var(--light);
   }
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
-    color: var(--dark);
+    color: var(--light);
   }
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,

@@ -12,8 +12,6 @@ let test_url = "http://0.0.0.0:5000"
 export default class NotificationScreen extends React.Component {
   constructor(props) {
       super(props);
-      this.state = {current_username : '',
-                  notifications : []};
   }
 
   seeNotifications() {
@@ -34,6 +32,7 @@ export default class NotificationScreen extends React.Component {
     });
   }
   componentDidMount() {
+    this.props.getNotifications()
     this.seeNotifications.bind(this)();
   }
   render() {
@@ -49,8 +48,9 @@ export default class NotificationScreen extends React.Component {
             </View>
         </View>
         <Notifications current_user = {this.props.current_user}
-           current_username = {this.props.current_username}
-          notifications={this.props.notifications} navigator={this.props.navigator}/>
+            current_username = {this.props.current_username}
+            getNotifications = {this.props.getNotifications}
+            notifications={this.props.notifications} navigator={this.props.navigator}/>
     </View>
       )
   }

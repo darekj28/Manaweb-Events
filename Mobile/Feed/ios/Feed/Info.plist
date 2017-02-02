@@ -5,7 +5,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
     <key>CFBundleDisplayName</key>
-    <string>Feed</string>
+    <string>Manaweb</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -20,8 +20,28 @@
     <string>1.0</string>
     <key>CFBundleSignature</key>
     <string>????</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>fb1138002282937846</string>
+        </array>
+      </dict>
+    </array>
     <key>CFBundleVersion</key>
     <string>1</string>
+    <key>FacebookAppID</key>
+    <string>1138002282937846</string>
+    <key>FacebookDisplayName</key>
+    <string>manaweb</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>fbapi</string>
+      <string>fb-messenger-api</string>
+      <string>fbauth2</string>
+      <string>fbshareextension</string>
+    </array>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSAppTransportSecurity</key>
@@ -48,6 +68,8 @@
     </dict>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string/>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Manaweb photo use</string>
     <key>UIAppFonts</key>
     <array>
       <string>Entypo.ttf</string>
@@ -59,6 +81,11 @@
       <string>Octicons.ttf</string>
       <string>SimpleLineIcons.ttf</string>
       <string>Zocial.ttf</string>
+    </array>
+    <key>UIBackgroundModes</key>
+    <array>
+      <string>fetch</string>
+      <string>remote-notification</string>
     </array>
     <key>UILaunchStoryboardName</key>
     <string>LaunchScreen</string>
@@ -72,27 +99,5 @@
     </array>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
-    <key>CFBundleURLTypes</key>
-    <array>
-      <dict>
-        <key>CFBundleURLSchemes</key>
-        <array>
-          <string>fb1138002282937846</string>
-        </array>
-      </dict>
-    </array>
-    <key>FacebookAppID</key>
-    <string>1138002282937846</string>
-    <key>FacebookDisplayName</key>
-    <string>manaweb</string>
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-      <string>fbapi</string>
-      <string>fb-messenger-api</string>
-      <string>fbauth2</string>
-      <string>fbshareextension</string>
-    </array>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Manaweb photo use</string>
   </dict>
 </plist>

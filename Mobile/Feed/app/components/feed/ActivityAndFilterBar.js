@@ -47,9 +47,6 @@ export default class LogoAndSearchBar extends Component {
         return (
             <View style={{flex:1, flexDirection: 'row', backgroundColor: this.props.color, alignItems:'center', borderBottomWidth : 1, borderBottomColor : '#696969'}}>
                 <View style={{flex: 5, margin: 3}}>
-                    {/*<Text style = {styles.activity_text}>
-                        {this.props.activityText}
-                    </Text>*/}
                     <View style = {styles.search_input_wrapper}>
                         <TextInput
                             style = {styles.search_input}

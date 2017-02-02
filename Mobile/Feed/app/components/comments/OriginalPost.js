@@ -8,7 +8,7 @@ export default class OriginalPost extends React.Component {
 		var post = this.props.post;
 		return (
 			<View style={{  flex:1, flexDirection: 'row', justifyContent: 'flex-start',backgroundColor : 'white', 
-                borderBottomWidth :2, borderBottomColor : 'silver'}}>
+                borderBottomWidth :1, borderBottomColor : 'silver'}}>
                 <View style={{paddingLeft : 8, paddingTop : 8, paddingBottom :8, justifyContent: 'flex-start'}}>
                     {post.avatar =='nissa' && <Image  style={styles.profile_image} source={require('../static/avatars/nissa.png')} />}
                     {post.avatar == 'chandra' && <Image  style={styles.profile_image} source={require('../static/avatars/chandra.png')} />}
