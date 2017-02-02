@@ -100,10 +100,6 @@ class FeedScreen extends Component {
 							allFeedsWillBeOff = false
 					}
 			}
-			if (allFeedsWillBeOff) {
-					Alert.alert('Don\'t filter out all the feeds.')
-					return
-			}
 			newFilter[index] = !newFilter[index]
 			this.setState({filter_enable: newFilter})
 			var filters = ['Trade', 'Play', 'Chill']
@@ -242,7 +238,7 @@ class FeedScreen extends Component {
 									 <LogoAndSearchBar color = {SEARCH_BAR_COLOR} searchText={this.state.searchText}
 											onChange={this.handleSearch.bind(this)} 
 											expandMakePost={this.postMessagePressed}
-											activityText="Grand Prix San Jose">
+											activityText="Event">
 										</LogoAndSearchBar>
 							 </View>
 					 </TouchableWithoutFeedback>

@@ -25,7 +25,7 @@ export default class MakeCommentBox extends React.Component {
 		return (
             <View style = {{height: MAKE_COMMENT_BOX_HEIGHT + 2*PADDING, flexDirection : 'row', borderTopColor : 'silver', borderTopWidth : 1, justifyContent : 'flex-start'}}>
     			<View style={{flex:1, justifyContent: 'flex-start',
-                    borderColor: 'silver',borderWidth: 1, margin : 5, borderRadius: 14, height : MAKE_COMMENT_BOX_HEIGHT}}>
+                    borderColor: 'silver',borderWidth: 1, margin : 5, borderRadius: 5, height : MAKE_COMMENT_BOX_HEIGHT}}>
                     {Platform.OS == 'ios' && <TextInput
                         style = {styles.ios_text_input}
                         autoFocus = {false}
@@ -50,8 +50,8 @@ export default class MakeCommentBox extends React.Component {
                 </View>
                 <View style = {{flex: 0, justifyContent : 'flex-start'}}>
                     <TouchableOpacity onPress={this.handlePostSubmit.bind(this)}>
-                        <Text style={{fontSize: 15, color: color, margin : 5, padding : 5, paddingLeft : 0}}>
-                            Comment
+                        <Text style={{fontSize: 15, fontWeight : 'bold', color: color, margin : 5, padding : 5, paddingLeft : 0}}>
+                            Post
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -64,15 +64,15 @@ const styles = StyleSheet.create({
         flex : 1,
         textAlignVertical: 'center',
         fontSize : 15,
-        paddingLeft : 12,
-        paddingRight : 4
+        paddingLeft : 5,
+        paddingRight : 5
     },
     android_text_input: {
         flex : 1,
         textAlignVertical: 'center',
         fontSize : 15,
-        paddingLeft : 12,
-        paddingRight : 4,
+        paddingLeft : 5,
+        paddingRight : 5,
         paddingTop : 7,
         paddingBottom : 4
     },

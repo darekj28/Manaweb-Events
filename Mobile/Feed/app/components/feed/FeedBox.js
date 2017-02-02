@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     text_name: {
         flex: 0,
         color: '#90D7ED',
-        fontSize: 14,
+        fontSize: 13,
         fontWeight: 'bold',
         textAlignVertical: 'top'
     },
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
         borderRadius: 1,
     },
     text_message: {
-        fontSize: 14,
+        fontSize: 15,
         textAlignVertical: 'top',
         flex: 0.8,
         paddingBottom : 20,

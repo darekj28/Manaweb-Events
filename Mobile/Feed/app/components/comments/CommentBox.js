@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     text_name: {
         flex: 0,
         color: '#333333',
-        fontSize: 14,
+        fontSize: 13,
         fontWeight: 'bold',
         textAlignVertical: 'top',
     },

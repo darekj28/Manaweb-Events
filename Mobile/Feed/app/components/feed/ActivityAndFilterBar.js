@@ -120,13 +120,14 @@ const styles = StyleSheet.create({
       width: FILTER_HEIGHT,
     },
     filter_text: {
-      color: 'silver',
-      fontSize: 10
+      color: '#696969',
+      fontSize: 10,
+      fontWeight : 'bold'
     },
     search_input: {
         flex: 1,
-        fontSize: 16,
-        padding: 4,
+        fontSize: 14,
+        padding: 5,
         paddingBottom : 7,
         textAlignVertical: 'center',
         height : 30
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginBottom: 5,
         marginLeft: 2,
-        borderColor : 'silver',
+        borderColor : '#696969',
         borderWidth : 1,
         borderRadius : 5,
         backgroundColor : 'white',
