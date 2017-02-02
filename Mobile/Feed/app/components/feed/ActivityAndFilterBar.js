@@ -48,6 +48,8 @@ export default class LogoAndSearchBar extends Component {
             <View style={{flex:1, flexDirection: 'row', backgroundColor: this.props.color, alignItems:'center', borderBottomWidth : 1, borderBottomColor : '#696969'}}>
                 <View style={{flex: 5, margin: 3}}>
                     <View style = {styles.search_input_wrapper}>
+                        <Icon style={{position : 'absolute', left :5, top : 3}} name = "ios-search" 
+                                size = {20} color = "#696969"/>
                         <TextInput
                             style = {styles.search_input}
                             value = {this.props.searchText}
@@ -128,6 +130,7 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 14,
         padding: 5,
+        paddingLeft : 25,
         paddingBottom : 7,
         textAlignVertical: 'center',
         height : 30

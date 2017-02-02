@@ -133,6 +133,12 @@ export default class RegisterName extends Component {
 		}
 		else return null; 
 	}
+	tos() {
+		Alert.alert("Terms of Service");
+	}
+	pp() {
+		Alert.alert("Privacy Policy");
+	}
 
 	render() {
 		var error_message = this.getErrorMessage.bind(this)();
@@ -171,11 +177,16 @@ export default class RegisterName extends Component {
 							</View>
 							<TouchableOpacity style={{flex : 1}} onPress = {this.submitFullName.bind(this)}>
 								<View style = {styles.button}>
-									<Text style={styles.button_text}>Next</Text>
+									<Text style={styles.button_text}>Sign Up & Accept</Text>
 								</View>
 							</TouchableOpacity>
 						</View>	
-						<View style = {{flex : 3}}/>							
+						<View style={{flex : 0.1}}/>
+						<View style={{flex : 0.4, alignItems : 'center', width : 200}}>
+							<Text style={{flex : 1, fontSize : 11, alignItems: 'center', color : '#696969'}}>By tapping Sign Up & Accept, you agree to the <Text style={styles.tos} onPress={this.tos.bind(this)}>Terms Of Service</Text> and <Text style={styles.tos} onPress={this.pp.bind(this)}>Privacy Policy</Text>.
+							</Text>
+						</View>
+						<View style = {{flex : 2.5}}/>							
 					</View>
 				</View>
 			</TouchableWithoutFeedback>
@@ -194,16 +205,17 @@ const styles = StyleSheet.create({
 	},
 	label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
 	input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
-	input : {flex : 1, width : 180, fontSize : 20, justifyContent : 'flex-start'},
+	input : {flex : 1, width : 200, fontSize : 20, justifyContent : 'flex-start'},
 	button : {
 		flex : 1, 
 		backgroundColor : '#90d7ed', 
 		borderRadius:60, 
 		justifyContent : 'center', 
 		alignItems : 'center', 
-		width : 100, 
+		width : 200, 
 		height : 40
 	},
 	button_text : {color : 'white', fontWeight : 'bold', fontSize : 14},
-	error_text : {color : 'red', fontWeight : 'bold', fontSize : 12}
+	error_text : {color : 'red', fontWeight : 'bold', fontSize : 12},
+	tos : {color : 'lightseagreen', alignItems : 'center'},
 });

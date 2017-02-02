@@ -16,7 +16,7 @@ export default class RegisterHeader extends React.Component {
 					</TouchableOpacity>
 				</View>
 				<View style={{flex: 0.6}}>
-					<Image style={styles.image} source={require('../../static/favicon-32x32.png')}/>
+					
 				</View>
 				<View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}>
 				</View>
