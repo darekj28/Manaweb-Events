@@ -80,7 +80,7 @@ export default class PostMessageBox extends Component {
                         value = {this.props.newPostContent}
                     />
                 </View>
-                <Animated.View style={[styles.container, {alignItems : 'center', 
+                <Animated.View style={[styles.container, {alignItems : 'center',
                         justifyContent : 'center', borderTopWidth : 1, borderTopColor : 'silver'}]}>
                     <View style = {{flex: 1, flexDirection:'row', borderRightWidth : 1, borderRightColor : 'silver'}}>
                         <TouchableOpacity style={{flex : 1}} onPress={() => this.setFilter(0)}>
@@ -111,7 +111,7 @@ export default class PostMessageBox extends Component {
                     </View>}
                     {!this.props.alert &&
                         <TouchableOpacity style={{flex : 1}} onPress={this.handlePostSubmit.bind(this)}>
-                        <View style = {{flex: 1, backgroundColor: "#90D7ED", 
+                        <View style = {{flex: 1, backgroundColor: "#90D7ED",
                                 alignItems : 'center', justifyContent : 'center'}}>
                             <Text style={{fontSize: 16, fontWeight : 'bold', color : 'white'}}>
                                 Post
@@ -140,7 +140,8 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 18,
         paddingLeft : 5,
-        paddingRight : 5
+        paddingRight : 5,
+        textAlignVertical: 'top'
     },
     filter_wrapper: {
         alignItems : 'center',
