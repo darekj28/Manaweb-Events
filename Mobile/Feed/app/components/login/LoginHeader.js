@@ -15,6 +15,9 @@ export default class LoginHeader extends React.Component {
 					</TouchableOpacity>
 				</View>
 				<View style={{flex: 0.6}}>
+					<Text style = {styles.title}>
+						Log In
+					</Text>
 				</View>
 				<View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}>
 				</View>
@@ -32,4 +35,5 @@ const styles = StyleSheet.create({
 		alignItems : 'center',
 		backgroundColor : 'white'
 	},
+	title : {textAlign : 'center', fontSize : 18}
 })
