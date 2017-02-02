@@ -446,6 +446,14 @@ button.kep-login-facebook:hover{
   color:var(--success);
   cursor: pointer;
 }
+.make-post-unselected {
+  color : silver;
+  cursor : pointer;
+}
+.make-post-selected {
+  color : var(--light);
+  cursor : pointer;
+}
 .glyphicon {
   font-size: 20px;
 }

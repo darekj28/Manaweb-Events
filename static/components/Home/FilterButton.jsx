@@ -11,6 +11,7 @@ export default class FilterButton extends React.Component {
 	render() {
 		var icon;
 		var selected = this.state.isSelected ? "icon-success" : "icon-danger";
+		var make_post_selected = this.state.isSelected ? "make-post-selected" : "make-post-unselected";
 		switch(this.props.name) {
 			case 'Trade' : 
 				icon="glyphicon glyphicon-transfer";
@@ -26,9 +27,9 @@ export default class FilterButton extends React.Component {
 		}
 		if (!this.props.isSearch)
 			return(<div className="input-group-addon make-post-filter" onClick={this.handleClick.bind(this)}>
-					<span className={icon + " filterButton " + selected}>
+					<span className={icon + " filterButton " + make_post_selected}>
 					</span>
-					<div className={"make-post-filter-text " + selected}>{this.props.name}</div>
+					<div className={"make-post-filter-text " + make_post_selected}>{this.props.name}</div>
 				</div>)
 		else return(<div className="input-group-addon text-center" onClick={this.handleClick.bind(this)}>
 					<span className={icon + " " + selected} >

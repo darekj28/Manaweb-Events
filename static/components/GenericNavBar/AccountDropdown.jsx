@@ -19,8 +19,8 @@ export default class AccountDropdown extends React.Component {
                 <li className="divider"></li>
                 {this.props.currentUser.isAdmin && 
                   <li> <a href = "/adminTools"> Admin Tools </a> </li>}
-                <li><Link to="/settings">Settings</Link></li>
-				        <li><Link to="/" onClick={this.removeCurrentUser.bind(this)}>Logout</Link></li>
+                <li><Link to="/settings">Account Settings</Link></li>
+				        <li><Link to="/" onClick={this.removeCurrentUser.bind(this)}>Sign out</Link></li>
               </ul>
           </li>
 		);

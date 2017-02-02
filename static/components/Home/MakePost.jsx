@@ -22,18 +22,22 @@ export default class MakePost extends React.Component {
 		else {
 			if (this.postText.value.trim().length > 0) {
 				this.setState({ canPost : false });
-				this.props.onPostSubmit(this.postText.value);
+				this.props.onPostSubmit(this.postText.value, this.undoTimeout.bind(this));
 				this.setState({ timeout : setTimeout(function() { this.setState({ canPost : true }); }, 30000) });
 			}
 			else 
 				swal("Oops...", "You can't post an empty message!", "error");
 		}
 	}
+	undoTimeout() {
+		clearTimeout(this.state.timeout);
+		this.setState({ canPost : true });
+	}
 	handlePostChange() {
 		this.props.onPostChange(this.postText.value);
 	}
 	componentWillUnmount() {
-		clearTimeout(this.state.timeout);
+		this.undoTimeout.bind(this)();
 	}
 	render() {
 		return(

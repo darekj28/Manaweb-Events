@@ -89,10 +89,12 @@ export default class App extends React.Component {
 	
 	handleTypingPost(postText) {this.setState({post : postText});}
 
-	handlePostSubmit(postText) {
+	handlePostSubmit(postText, callback) {
 		var feed = this.state.feed;
-		if (this.state.actions.length == 0) 
+		if (this.state.actions.length == 0) { 
+			callback();
 			swal("Oops...", "You must select something to do!", "error");
+		}
 		else {
 			feed.unshift({ postContent: postText, 
 						avatar  : this.state.currentUser['avatar_url'], 
