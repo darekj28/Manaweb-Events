@@ -5,6 +5,8 @@ import android.util.Log;
 
 
 import com.facebook.react.ReactApplication;
+import com.ocetnik.timer.BackgroundTimerPackage;
+import com.pilloxa.backgroundjob.BackgroundJobPackage;
 import com.magus.fblogin.FacebookLoginPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -42,6 +44,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new BackgroundTimerPackage(),
+            new BackgroundJobPackage(),
             new FacebookLoginPackage(),
             new FBSDKPackage(mCallbackManager),
             new VectorIconsPackage(),

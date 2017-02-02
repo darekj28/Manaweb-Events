@@ -93,13 +93,14 @@ android {
 
     defaultConfig {
         applicationId "com.feed"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
+        
     signingConfigs {
         release {
             storeFile file(MYAPP_RELEASE_STORE_FILE)
@@ -144,10 +145,10 @@ repositories {
 }
 
 dependencies {
+    compile project(':react-native-background-timer')
     compile project(':react-native-push-notification')
     compile ('com.google.android.gms:play-services-gcm:8.1.0') {
-        force = true;
-    }
+        force = true;}
     compile project(':react-native-facebook-login')
     compile project(':react-native-fbsdk')
     compile project(':react-native-vector-icons')
@@ -155,6 +156,7 @@ dependencies {
     compile "com.android.support:appcompat-v7:23.0.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    compile project(':react-native-background-job')
 }
 
 // Run this once to be able to run the application with BUCK
