@@ -24,7 +24,6 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import BottomTabBar from '../components/BottomTabBar';
 
 export default class StartNavigator extends Component {
-
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -32,7 +31,6 @@ export default class StartNavigator extends Component {
 			scroll: false
 		}
 	}
-
 	_renderScene(route, navigator) {
 		var globalNavigatorProps = {
 			navigator: navigator,

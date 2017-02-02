@@ -1,27 +1,15 @@
 
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React from 'react';
 import {Component} from 'react'
 import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
         TouchableWithoutFeedback, Alert, Image, Animated} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-
-
-
-const FILTER_BAR_SHORT = 35
-const FILTER_BAR_TALL = 35
 export default class PostMessageBox extends Component {
     constructor(props) {
         super(props);
         this.state = {
             text: '',
-            filter_bar_height: new Animated.Value(FILTER_BAR_SHORT),
             filter_enable: [false, false, false]
         };
         this.onClick = this.onClick.bind(this)
@@ -31,13 +19,6 @@ export default class PostMessageBox extends Component {
     }
 
     onClick() {
-        let initial = this.props.post_message_expanded ? FILTER_BAR_TALL : FILTER_BAR_SHORT
-        let final = this.props.post_message_expanded ? FILTER_BAR_SHORT : FILTER_BAR_TALL
-        this.state.filter_bar_height.setValue(initial)
-        Animated.timing(
-            this.state.filter_bar_height, {toValue: final, duration: this.props.animateDuration}
-        ).start();
-
         this.props.onClick();
     }
 
