@@ -9,9 +9,6 @@ import {Component} from 'react'
 import {AppState, AppRegistry, StyleSheet, TabBarIOS, View} from 'react-native';
 import Index from './app/Index'
 
-
-
-
 class Feed extends Component {
 
   constructor(props){
@@ -20,8 +17,6 @@ class Feed extends Component {
       selectedTab : "tab1"
     }
   }
-
-
 
   render() {
     return (

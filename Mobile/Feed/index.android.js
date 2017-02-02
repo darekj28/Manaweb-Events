@@ -34,3 +34,4 @@ const styles = StyleSheet.create({
 });
 
 AppRegistry.registerComponent('Feed', () => Feed);
+
