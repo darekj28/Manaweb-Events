@@ -30,7 +30,7 @@ export default class LogoAndSearchBar extends Component {
                 </View>
                 <View style={{flex: 0.2, flexDirection : 'row', justifyContent : 'flex-end', alignItems: 'center', flexDirection : 'row'}}>
                     <TouchableOpacity onPress={()=> this.props.expandMakePost()}>
-                        <FAIcon name = "pencil-square-o" size = {22} color = "white"/>
+                        <FAIcon name = "pencil-square-o" size = {27} color = "white"/>
                     </TouchableOpacity>
                 </View>
             </View>

@@ -4,13 +4,14 @@ import {Alert, Image, Modal, Picker, AsyncStorage, AppRegistry,StyleSheet,Text,V
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Dimensions from 'Dimensions';
+import dismissKeyboard from 'react-native-dismiss-keyboard';
 
 export default class LoginHeader extends React.Component {
 	render() {
 		return (
 			<View style={styles.top_bar}>
 				<View style={{flex: 0.2}}>
-					<TouchableOpacity onPress = {() => this.props.navigator.pop()}>
+					<TouchableOpacity onPress = {() => {dismissKeyboard(); this.props.navigator.pop()}}>
 						<Icon name = "chevron-left" size = {20} color = '#90D7ED'/>
 					</TouchableOpacity>
 				</View>

@@ -129,7 +129,7 @@ class StartNavigator extends Component {
 		else var top_bar = <View/>
 		if (route.href == "Comment") {
 			if (Platform.OS == 'ios')
-				return (<KeyboardAvoidingView style = {{flex: 1}} behavior="padding" keyboardVerticalOffset={spacing}>
+				return (<KeyboardAvoidingView style = {{flex: 1}} behavior="padding">
 			 		{top_bar}
 			 		{screen}
 			 	</KeyboardAvoidingView>

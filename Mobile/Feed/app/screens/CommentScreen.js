@@ -161,7 +161,7 @@ export default class CommentScreen extends React.Component {
 			<View style = {styles.container}>
 				<View style={styles.top_bar}>
 					<View style={{flex: 0.2}}>
-						<TouchableOpacity onPress = {() => this.props.navigator.pop()}>
+						<TouchableOpacity onPress = {() => {dismissKeyboard(); this.props.navigator.pop()}}>
 							<Icon name = "chevron-left" size = {20} color = '#90D7ED'/>
 						</TouchableOpacity>
 					</View>

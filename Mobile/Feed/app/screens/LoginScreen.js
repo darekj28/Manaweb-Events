@@ -86,6 +86,7 @@ export default class LoginScreen extends Component {
 		this.setState({show_password : newToggle})
 	}
 	_navigateToFeed() {
+		dismissKeyboard();
 		this.props.navigator.push({
 		href: "Feed"
 		})
@@ -98,6 +99,7 @@ export default class LoginScreen extends Component {
 	}
 
 	_navigateToRecovery(){
+		dismissKeyboard();
 		this.props.navigator.push({
 		href: "Recovery"
 		})
