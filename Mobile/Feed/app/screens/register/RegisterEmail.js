@@ -102,14 +102,14 @@ export default class RegisterEmail extends Component {
 			<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
 				<View style={styles.container}>
 					<RegisterHeader navigator={this.props.navigator}/>
-					<View style={{flex : 1, flexDirection : 'column', borderColor : 'red', borderWidth : 1}}>
-						<View style={{flex : 2, borderColor : 'yellow', borderWidth : 1}}>
+					<View style={{flex : 1, flexDirection : 'column'}}>
+						<View style={{flex : 2}}>
 							<View style={{flex : 1.5, alignItems : 'center', justifyContent : 'center'}}>
 								<Text style={{fontSize : 18}}>What's your email?</Text>
 							</View>
 							<View style={{flex : 0.6}}/>
-							<View style={{flex : 1, borderColor : 'green', borderWidth : 1, justifyContent : 'center'}}>
-								<Text style={styles.label}>EMAIL</Text>
+							<View style={{flex : 1,justifyContent : 'center'}}>
+								<Text style={styles.label}>EMAIL ADDRESS</Text>
 								<View style={styles.input_wrapper}>
 									<TextInput onChangeText = {this.handleEmailChange}
 										style = {styles.input} 
@@ -122,7 +122,7 @@ export default class RegisterEmail extends Component {
 								</View>
 							</View>
 						</View>
-						<View style = {{flex : 1, alignItems : 'center', borderColor : 'blue', borderWidth : 1}}>
+						<View style = {{flex : 1, alignItems : 'center'}}>
 							<TouchableOpacity style = {{flex : 1, justifyContent : 'center'}} 
 											onPress = {this._skipEmail.bind(this)}>
 					       	  	<Text style = {styles.notnow}>

@@ -84,12 +84,12 @@ export default class RegisterPassword extends Component {
 			<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
 				<View style={styles.container}>
 					<RegisterHeader navigator={this.props.navigator}/>
-					<View style={{flex : 1, flexDirection : 'column', borderColor : 'red', borderWidth : 1}}>
-						<View style={{flex : 2, borderColor : 'yellow', borderWidth : 1}}>
+					<View style={{flex : 1, flexDirection : 'column'}}>
+						<View style={{flex : 2}}>
 							<View style={{flex : 1.5, alignItems : 'center', justifyContent : 'center'}}>
 								<Text style={{fontSize : 18}}>Choose a password</Text>
 							</View>
-							<View style={{flex : 1, borderColor : 'green', borderWidth : 1}}>
+							<View style={{flex : 1}}>
 								<Text style={styles.label}>PASSWORD</Text>
 								<View style={styles.input_wrapper}>
 									<TextInput onChangeText = {this.handlePasswordChange}
@@ -100,8 +100,8 @@ export default class RegisterPassword extends Component {
 								</View>
 							</View>
 							<View style={{flex : 0.2}}/>
-							<View style = {{flex : 1, borderColor : 'green', borderWidth : 1}}>
-								<Text style={styles.label}>CONFIRM YOUR PASSWORD</Text>
+							<View style = {{flex : 1}}>
+								<Text style={styles.label}>CONFIRM PASSWORD</Text>
 								<View style={styles.input_wrapper}>
 									<TextInput onChangeText = {this.handlePasswordConfirmChange}
 										style = {styles.input}
@@ -111,7 +111,7 @@ export default class RegisterPassword extends Component {
 								</View>
 							</View>
 						</View>
-						<View style = {{flex : 1, alignItems : 'center', borderColor : 'blue', borderWidth : 1}}>
+						<View style = {{flex : 1, alignItems : 'center'}}>
 							<View style={{flex : 0.5}}/>
 							<TouchableOpacity style={{flex : 1, justifyContent : 'center'}} onPress = {this.handlePasswordSubmit.bind(this)}>
 								<View style = {styles.button}>

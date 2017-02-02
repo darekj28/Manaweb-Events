@@ -31,7 +31,6 @@ export default class RegisterConfirmCode extends Component {
 	}
 
 	handleEnteredCodeSubmit() {
-		this._navigateToRegisterPassword();
 		if (this.props.confirmationPin != this.state.enteredCode) {
 			var result_dict = {
 				'result' : 'failure',
@@ -109,8 +108,8 @@ export default class RegisterConfirmCode extends Component {
 			<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
 				<View style={styles.container}>
 					<RegisterHeader navigator={this.props.navigator}/>
-					<View style={{flex : 1, flexDirection : 'column', borderColor : 'red', borderWidth : 1}}>
-						<View style={{flex : 2, borderColor : 'yellow', borderWidth : 1}}>
+					<View style={{flex : 1, flexDirection : 'column'}}>
+						<View style={{flex : 2}}>
 							<View style={{flex : 1.5, alignItems : 'center', justifyContent : 'center'}}>
 								<Text style={{fontSize : 18}}>Enter your code</Text>
 							</View>
@@ -123,9 +122,9 @@ export default class RegisterConfirmCode extends Component {
                 						value = {this.state.enteredCode}/>
 								</View>
 							</View>
-							<View style={{flex : 0.6, borderColor : 'pink', borderWidth : 1}}/>
+							<View style={{flex : 0.6}}/>
 						</View>
-						<View style = {{flex : 1, alignItems : 'center', borderColor : 'blue', borderWidth : 1}}>
+						<View style = {{flex : 1, alignItems : 'center'}}>
 							<TouchableOpacity style = {{flex : 1, justifyContent : 'center'}} 
 										onPress = {this.resendConfirmationPin.bind(this)}>
 				              	<Text style = {styles.resend}>

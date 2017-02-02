@@ -113,13 +113,13 @@ export default class RegisterUsername extends Component {
 			<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
 				<View style={styles.container}>
 					<RegisterHeader navigator={this.props.navigator}/>
-					<View style={{flex : 1, flexDirection : 'column', borderColor : 'red', borderWidth : 1}}>
-						<View style={{flex : 2, borderColor : 'yellow', borderWidth : 1}}>
+					<View style={{flex : 1, flexDirection : 'column'}}>
+						<View style={{flex : 2}}>
 							<View style={{flex : 1.4, alignItems : 'center', justifyContent : 'center'}}>
 								<Text style={{fontSize : 18}}>Pick a username</Text>
 							</View>
 							<View style={{flex : 0.6}}/>
-							<View style={{flex : 1, borderColor : 'green', borderWidth : 1, justifyContent : 'center'}}>
+							<View style={{flex : 1, justifyContent : 'center'}}>
 								<Text style={styles.label}>USERNAME</Text>
 								<View style={styles.input_wrapper}>
 									<TextInput onChangeText = {this.handleUsernameChange}
@@ -135,7 +135,7 @@ export default class RegisterUsername extends Component {
 							</View>
 							</View>
 						</View>
-						<View style = {{flex : 1, alignItems : 'center', borderColor : 'blue', borderWidth : 1}}>
+						<View style = {{flex : 1, alignItems : 'center'}}>
 							<View style={{flex : 0.5}}/>
 							<TouchableOpacity style={{flex : 1}} onPress = {this.handleUsernameSubmit.bind(this)}>
 								<View style = {styles.button}>

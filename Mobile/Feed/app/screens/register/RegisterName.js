@@ -140,12 +140,12 @@ export default class RegisterName extends Component {
 			<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
 				<View style={styles.container}>
 					<RegisterHeader navigator={this.props.navigator}/>
-					<View style={{flex : 1, flexDirection : 'column', borderColor : 'red', borderWidth : 1}}>
-						<View style={{flex : 2, borderColor : 'yellow', borderWidth : 1}}>
+					<View style={{flex : 1, flexDirection : 'column'}}>
+						<View style={{flex : 2}}>
 							<View style={{flex : 1.5, alignItems : 'center', justifyContent : 'center'}}>
 								<Text style={{fontSize : 18}}>What's your name?</Text>
 							</View>
-							<View style={{flex : 1, borderColor : 'green', borderWidth : 1}}>
+							<View style={{flex : 1}}>
 								<Text style={styles.label}>FIRST NAME</Text>
 								<View style={styles.input_wrapper}>
 									<TextInput onChangeText = {this.handleFirstNameChange}
@@ -155,7 +155,7 @@ export default class RegisterName extends Component {
 								</View>
 							</View>
 							<View style={{flex : 0.2}}/>
-							<View style = {{flex : 1, borderColor : 'green', borderWidth : 1}}>
+							<View style = {{flex : 1}}>
 								<Text style={styles.label}>LAST NAME</Text>
 								<View style={styles.input_wrapper}>
 									<TextInput onChangeText = {this.handleLastNameChange}
@@ -165,7 +165,7 @@ export default class RegisterName extends Component {
 								</View>
 							</View>
 						</View>
-						<View style = {{flex : 1, alignItems : 'center', borderColor : 'blue', borderWidth : 1}}>
+						<View style = {{flex : 1, alignItems : 'center'}}>
 							<View style={{flex : 1, width : 180, alignItems: 'center', justifyContent : 'center'}}>
 								{error_message}
 							</View>
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
 	},
 	label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
 	input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
-	input : {flex : 1, width : 180, fontSize : 22, justifyContent : 'flex-start'},
+	input : {flex : 1, width : 180, fontSize : 20, justifyContent : 'flex-start'},
 	button : {
 		flex : 1, 
 		backgroundColor : '#90d7ed', 

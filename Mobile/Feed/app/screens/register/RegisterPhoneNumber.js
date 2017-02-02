@@ -47,7 +47,6 @@ export default class RegisterPhoneNumber extends Component {
 	}
 	// handle the submission of the phone number
 	handlePhoneNumberSubmit(){  
-		this._navigateToConfirmCode();  
 		if (this.state.validation_output['result'] == 'success'){
 		Alert.alert(
 			"We'll send a verification code to " + this.state.phone_number + ".",
@@ -151,13 +150,13 @@ export default class RegisterPhoneNumber extends Component {
 			<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
 				<View style={styles.container}>
 					<RegisterHeader navigator={this.props.navigator}/>
-					<View style={{flex : 1, flexDirection : 'column', borderColor : 'red', borderWidth : 1}}>
-						<View style={{flex : 2, borderColor : 'yellow', borderWidth : 1}}>
+					<View style={{flex : 1, flexDirection : 'column'}}>
+						<View style={{flex : 2}}>
 							<View style={{flex : 1.5, alignItems : 'center', justifyContent : 'center'}}>
 								<Text style={{fontSize : 18}}>What's your number?</Text>
 							</View>
 							<View style={{flex : 0.6}}/>
-							<View style={{flex : 1, borderColor : 'green', borderWidth : 1, justifyContent : 'center'}}>
+							<View style={{flex : 1, justifyContent : 'center'}}>
 								<Text style={styles.label}>PHONE NUMBER</Text>
 								<View style={styles.input_wrapper}>
 									<TextInput onChangeText = {this.handlePhoneNumberChange}
@@ -174,7 +173,7 @@ export default class RegisterPhoneNumber extends Component {
 								</View>
 							</View>
 						</View>
-						<View style = {{flex : 1, alignItems : 'center', justifyContent : 'center', borderColor : 'blue', borderWidth : 1}}>
+						<View style = {{flex : 1, alignItems : 'center', justifyContent : 'center'}}>
 							<View style={{flex : 0.5}}/>
 							<TouchableOpacity style={{flex : 1}} onPress = {this.handlePhoneNumberSubmit.bind(this)}>
 								<View style = {styles.button}>
@@ -202,7 +201,7 @@ const styles = StyleSheet.create({
 	},
 	label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
 	input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
-	input : {flex : 1, width : 180, fontSize : 22, justifyContent : 'flex-start'},
+	input : {flex : 1, width : 180, fontSize : 20, justifyContent : 'flex-start'},
 	button : {
 		flex : 1, 
 		backgroundColor : '#90d7ed', 
