@@ -52,7 +52,7 @@ export default class MakePost extends React.Component {
 						return <FilterButton key={i} onClick={this.props.onClick} selected={false} name={action}/>;
 					}, this)}
 					<div className="input-group-addon" onClick={this.handlePostSubmit.bind(this)}>
-						<button className="btn post-button">Post</button>
+						<button className="btn post-button"><b>Post</b></button>
 					</div>	
 				</div>
 			</div>);

@@ -133,6 +133,7 @@ button.kep-login-facebook:hover{
 }
 .post-button {
   color : #fff;
+  border-radius : 20px;
   background-color : var(--light);
 }
 .post-button:hover {
@@ -223,19 +224,20 @@ button.kep-login-facebook:hover{
 .link:hover {
   color: var(--dark);
 }
-#UpdateSettingsSubmit {
+.settings-button {
   width : 280px;
   background-color : var(--light);
   color : #fff;
 }
-#UpdateSettingsSubmit:hover {
+.settings-button:hover {
   background-color: var(--dark);
   color : #fff;
 }
-#UpdateSettingsSubmit:focus {
+.settings-button:focus {
   background-color: var(--light);
   color : #fff;
 }
+
 
 .invalid {
   border-width: 1.5px;

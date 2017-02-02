@@ -20,7 +20,7 @@ export default class AccountDropdown extends React.Component {
                 {this.props.currentUser.isAdmin && 
                   <li> <a href = "/adminTools"> Admin Tools </a> </li>}
                 <li><Link to="/settings">Account Settings</Link></li>
-				        <li><Link to="/" onClick={this.removeCurrentUser.bind(this)}>Sign out</Link></li>
+				        <li><Link to="/" onClick={this.removeCurrentUser.bind(this)}>Sign Out</Link></li>
               </ul>
           </li>
 		);
