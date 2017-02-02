@@ -26,7 +26,8 @@ export default class MakeCommentBox extends React.Component {
             <View style = {{height: MAKE_COMMENT_BOX_HEIGHT + 2*PADDING, flexDirection : 'row', borderTopColor : 'silver', borderTopWidth : 1, justifyContent : 'flex-start'}}>
     			<View style={{flex:1, justifyContent: 'flex-start',
                     borderColor: 'silver',borderWidth: 1, margin : 5, borderRadius: 5, height : MAKE_COMMENT_BOX_HEIGHT}}>
-                    {Platform.OS == 'ios' && <TextInput
+                    {Platform.OS == 'ios' && 
+                    <TextInput
                         style = {styles.ios_text_input}
                         autoFocus = {false}
                         multiline = {false}
@@ -36,7 +37,8 @@ export default class MakeCommentBox extends React.Component {
                         placeholder={"Write a comment..."}
                         value = {this.props.newPostContent}
                     />}
-                    {Platform.OS != 'ios' && <TextInput
+                    {Platform.OS != 'ios' && 
+                    <TextInput
                         style = {styles.android_text_input}
                         autoFocus = {false}
                         multiline = {false}

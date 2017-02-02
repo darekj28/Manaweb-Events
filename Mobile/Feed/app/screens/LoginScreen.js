@@ -109,11 +109,10 @@ export default class LoginScreen extends Component {
 		return (
 		<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
 			<View style = {styles.container}>
-				<LoginHeader navigator={this.props.navigator}/>
+				<LoginHeader navigator={this.props.navigator} name="Log In"/>
 				<View style={{flex : 1, flexDirection : 'column'}}>
 					<View style={{flex : 2}}>
-						<View style={{flex : 1}}>
-						</View>
+						<View style={{flex : 1}}/>
 						<View style={{flex : 1}}>
 							<Text style={styles.label}>USERNAME OR EMAIL</Text>
 							<View style={styles.input_wrapper}>
@@ -166,11 +165,11 @@ const styles = StyleSheet.create({
 		justifyContent : 'center', 
 		alignItems : 'center', 
 		width : 150, 
-		height : 50
+		height : 40
 	},
 	button_text : {color : 'white', fontWeight : 'bold', fontSize : 14},
 	forgot_password : {fontSize : 12, color : 'lightseagreen'},
 	label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
-	input_wrapper : {flex : 1, borderBottomColor : '#696969', borderBottomWidth : 1},
+	input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
 	input : {flex : 1, width : 220, fontSize : 14, justifyContent : 'flex-start'},
 });

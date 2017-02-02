@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Dimensions from 'Dimensions';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 
-export default class LoginHeader extends React.Component {
+export default class RegisterHeader extends React.Component {
 	render() {
 		return (
 			<View style={styles.top_bar}>
@@ -16,9 +16,7 @@ export default class LoginHeader extends React.Component {
 					</TouchableOpacity>
 				</View>
 				<View style={{flex: 0.6}}>
-					<Text style = {styles.title}>
-						{this.props.name}
-					</Text>
+					<Image style={styles.image} source={require('../../static/favicon-32x32.png')}/>
 				</View>
 				<View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}>
 				</View>
@@ -36,5 +34,9 @@ const styles = StyleSheet.create({
 		alignItems : 'center',
 		backgroundColor : 'white'
 	},
-	title : {textAlign : 'center', fontSize : 18}
+	image : {
+		width : 20,
+		height : 20,
+		alignSelf: 'center'
+	}
 })
