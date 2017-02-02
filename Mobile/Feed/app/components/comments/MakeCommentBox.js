@@ -52,7 +52,7 @@ export default class MakeCommentBox extends React.Component {
                 </View>
                 <View style = {{flex: 0, justifyContent : 'flex-start'}}>
                     <TouchableOpacity onPress={this.handlePostSubmit.bind(this)}>
-                        <Text style={{fontSize: 15, fontWeight : 'bold', color: color, margin : 5, padding : 5, paddingLeft : 0}}>
+                        <Text style={{fontSize: 15, fontWeight : 'bold', color: color, margin : 5, padding : 5, paddingRight : 10}}>
                             Post
                         </Text>
                     </TouchableOpacity>

@@ -182,11 +182,9 @@ export default class RegisterName extends Component {
 							</TouchableOpacity>
 						</View>	
 						<View style={{flex : 0.1}}/>
-						<View style={{flex : 0.4, alignItems : 'center', width : 200}}>
-							<Text style={{flex : 1, fontSize : 11, alignItems: 'center', color : '#696969'}}>By tapping Sign Up & Accept, you agree to the <Text style={styles.tos} onPress={this.tos.bind(this)}>Terms Of Service</Text> and <Text style={styles.tos} onPress={this.pp.bind(this)}>Privacy Policy</Text>.
-							</Text>
-						</View>
-						<View style = {{flex : 2.5}}/>							
+						<View style = {{flex : 2.9, justifyContent : 'flex-start', alignItems : 'center', width : 200}}>
+							<Text style={{flex : 1, fontSize : 11, alignItems: 'center', color : '#696969'}}>By tapping Sign Up & Accept, you agree to the <Text style={styles.tos} onPress={this.tos.bind(this)}>Terms Of Service</Text> and <Text style={styles.tos} onPress={this.pp.bind(this)}>Privacy Policy</Text>.</Text>
+						</View>							
 					</View>
 				</View>
 			</TouchableWithoutFeedback>

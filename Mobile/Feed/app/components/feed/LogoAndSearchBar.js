@@ -19,7 +19,7 @@ export default class LogoAndSearchBar extends Component {
 
         return (
             <View style={{flex:1, flexDirection: 'row', backgroundColor: this.props.color, 
-                    alignItems:'center', justifyContent :'center', paddingLeft:5, paddingRight : 5}}>
+                    alignItems:'center', justifyContent :'center', paddingLeft:10, paddingRight : 10}}>
                 <View style={{flex: 0.2, margin: 5}}>
                     <Image  style={styles.logo} source={titleIcon} />
                 </View>

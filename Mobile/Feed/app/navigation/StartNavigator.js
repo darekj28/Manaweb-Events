@@ -23,7 +23,7 @@ import NotificationScreen from '../screens/NotificationScreen'
 import Spinner from 'react-native-loading-spinner-overlay';
 import BottomTabBar from '../components/BottomTabBar';
 
-class StartNavigator extends Component {
+export default class StartNavigator extends Component {
 
 	constructor(props) {
 		super(props)
@@ -40,7 +40,6 @@ class StartNavigator extends Component {
 			current_user : this.props.current_user,
 			asyncStorageLogin : this.props.asyncStorageLogin,
 			asyncStorageLogout : this.props.asyncStorageLogout,
-			// refreshUserInformation : this.props.refreshUserInformation,
 			initializeUserInformation : this.props.initializeUserInformation
 		}
 		var registerNavigatorProps = {
@@ -211,7 +210,3 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',
 	}
 });
-
-module.exports = StartNavigator;
-
-
