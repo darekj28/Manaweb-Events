@@ -1,7 +1,7 @@
 import React from 'react';
 import {ActivityIndicator, InteractionManager, Platform, Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,
 		TouchableOpacity,TouchableHighlight, TextInput,
-		  Alert, Image, Animated, TouchableWithoutFeedback, ScrollView, Easing, Keyboard} from 'react-native';
+		  Alert, Image, Animated, TouchableWithoutFeedback, ScrollView, Easing, Keyboard, BackAndroid} from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -27,7 +27,15 @@ export default class CommentScreen extends React.Component {
 			canPost : true
 		}
 		this.spamTimer
+		this.goBack = this.goBack.bind(this)
+		BackAndroid.addEventListener('hardwareBackPress', () => this.goBack());
 	}
+
+	goBack() {
+		this.props.navigator.pop();
+		return true; // There is somewhere else to go to?
+	}
+
 	handlePostTyping(newPostContent) {
 		this.setState({ newPostContent : newPostContent });
 	}

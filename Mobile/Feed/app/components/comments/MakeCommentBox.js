@@ -2,6 +2,7 @@ import React from 'react';
 import { Platform, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
         TouchableWithoutFeedback, Alert, Image, Animated} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import dismissKeyboard from 'react-native-dismiss-keyboard';
 
 const MAKE_COMMENT_BOX_HEIGHT = 30
 const PADDING = 5
@@ -16,6 +17,7 @@ export default class MakeCommentBox extends React.Component {
         }
         if (this.props.newPostContent.length > 0)
             this.props.handlePostSubmit(this.props.newPostContent);
+        dismissKeyboard()
     }
 
 	render() {
