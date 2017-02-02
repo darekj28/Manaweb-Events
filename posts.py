@@ -849,45 +849,58 @@ class Posts:
 		postList = list()
 		for post in posts:
 			thisPost = {}
-			thisPost['body'] = post[0]
-			thisPost['poster_id'] = post[1]
-			thisPost['feed_name'] = post[2]
-			thisPost['timeString'] = self.getTimeString(post[5])
-			thisPost['timeStamp'] = post[5]
-			thisPost['time'] = self.date_format(int(thisPost['timeStamp']))
-			thisPost['isTrade'] = post[6]
-			thisPost['isPlay'] = post[7]
-			thisPost['isChill'] = post[8]
-			thisPost['comment_id'] = post[3]
-			thisPost['isComment'] = False
-			thisUser = user_info_table[thisPost['poster_id']]
-			thisPost['first_name'] = thisUser['first_name']
-			thisPost['last_name'] = thisUser['last_name']
-			thisPost['avatar_url'] = thisUser['avatar_url']
-			thisPost['avatar'] = thisUser['avatar_name']
-			thisPost['unique_id'] = post[9]
-			thisPost['numComments'] = post[10]
-			postList.append(thisPost)	
+			# post[1] is the poster_id
+			if user_info_table.get(post[1]) != None:
+				thisPost['body'] = post[0]
+				thisPost['poster_id'] = post[1]
+				thisPost['feed_name'] = post[2]
+				thisPost['timeString'] = self.getTimeString(post[5])
+				thisPost['timeStamp'] = post[5]
+				thisPost['time'] = self.date_format(int(thisPost['timeStamp']))
+				thisPost['isTrade'] = post[6]
+				thisPost['isPlay'] = post[7]
+				thisPost['isChill'] = post[8]
+				thisPost['comment_id'] = post[3]
+				thisPost['isComment'] = False
+				thisUser = user_info_table[thisPost['poster_id']]
+				thisPost['first_name'] = thisUser['first_name']
+				thisPost['last_name'] = thisUser['last_name']
+				thisPost['avatar_url'] = thisUser['avatar_url']
+				thisPost['avatar'] = thisUser['avatar_name']
+				thisPost['unique_id'] = post[9]
+				thisPost['numComments'] = post[10]
+				thisPost['isDeleted'] = False	
+			else: 
+				# here we return a bogus post instead
+				# so we know to show 'user was deleted info'
+				thisPost['isDeleted'] = True
+			postList.append(thisPost)
 		return postList	
 
 	def commentListToDict(self, comments, user_info_table):
 		commentList = list()
 		for comment in comments:
 			thisComment = {}
-			thisComment['body'] = comment[0]
-			thisComment['poster_id'] = comment[1]
-			thisComment['feed_name'] = comment[2]
 			thisComment['timeString'] = self.getTimeString(comment[5])
 			thisComment['timeStamp'] = comment[5]
-			thisComment['comment_id'] = comment[3]
-			thisComment['unique_id'] = comment[6]
-			thisComment['isComment'] = True
-			thisUser = user_info_table[thisComment['poster_id']]
-			thisComment['first_name'] = thisUser['first_name']
-			thisComment['last_name'] = thisUser['last_name']
-			thisComment['avatar_url'] = thisUser['avatar_url']
-			thisComment['avatar'] = thisUser['avatar_name']
 			thisComment['time'] = self.date_format(int(thisComment['timeStamp']))
+			# post[1] is the poster_id
+			if user_info_table.get(post[1]) != None:	
+				thisComment['body'] = comment[0]
+				thisComment['poster_id'] = comment[1]
+				thisComment['feed_name'] = comment[2]
+				thisComment['comment_id'] = comment[3]
+				thisComment['unique_id'] = comment[6]
+				thisComment['isComment'] = True
+				thisUser = user_info_table[thisComment['poster_id']]
+				thisComment['first_name'] = thisUser['first_name']
+				thisComment['last_name'] = thisUser['last_name']
+				thisComment['avatar_url'] = thisUser['avatar_url']
+				thisComment['avatar'] = thisUser['avatar_name']
+				thisPost['isDeleted'] = False
+			else:
+				thisPost['isDeleted'] = True
+
 			commentList.append(thisComment)
 		return commentList	
 
@@ -974,17 +987,20 @@ class Posts:
 			alist[fillslot] = alist[positionOfMax]
 			alist[positionOfMax] = temp
 
-	def deleteUserPosts(self, userID):
-		feed_names = self.getFeedNames()
-		for feed_name in feed_names:
-			allPosts = self.getPosts(feed_name)
-			for post in allPosts:
-				thisPostComments = self.getComments(feed_name, post['comment_id'])
-				for comment in thisPostComments:
-					if comment['poster_id'] == userID:
-						self.deleteComment(feed_name, comment['unique_id'])
-				if post['poster_id'] == userID:
-					self.deletePost(feed_name, post['comment_id'])
+	# def deleteUserPosts(self, userID):
+	# 	feed_names = self.getFeedNames()
+	# 	for feed_name in feed_names:
+	# 		allPosts = self.getPosts(feed_name)
+	# 		for post in allPosts:
+	# 			thisPostComments = self.getComments(feed_name, post['comment_id'])
+	# 			for comment in thisPostComments:
+	# 				if comment['poster_id'] == userID:
+	# 					self.deleteComment(feed_name, comment['unique_id'])
+	# 			if post['poster_id'] == userID:
+	# 				self.deletePost(feed_name, post['comment_id'])
+
+	# def deleteUserAndPosts(self, userID):
+
 
 	def deleteNotifications(self):
 		user_manager = Users()
@@ -1007,4 +1023,5 @@ class Posts:
 	def deleteColumn(self, table_name, column_name):
 		sql = "ALTER TABLE " + table_name + " DROP COLUMN IF EXISTS " + column_name
 		self.db.execute(self.db.mogrify(sql))
+
 
