@@ -18,8 +18,9 @@ export default class LogoutButton extends React.Component {
 }
 const styles = StyleSheet.create({
 	settings_clickable : {
-	fontSize : 18,
+	fontSize : 16,
 	color: '#90D7ED',
-	padding : 16
+	padding : 16,
+	paddingBottom : 24
 	},
 });

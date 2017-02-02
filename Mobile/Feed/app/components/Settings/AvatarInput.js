@@ -12,7 +12,7 @@ export default class AvatarInput extends React.Component {
 		return(
 				<View style = {styles.input_container}> 
 					<Text style = {styles.settings_label}>
-						Avatar
+						AVATAR
 					</Text>
 					<View style={styles.settings_input_container}>
 						<TouchableOpacity onPress = {this.props.toggleAvatarPicker}>
@@ -27,7 +27,7 @@ export default class AvatarInput extends React.Component {
 }
 const styles = StyleSheet.create({
 	settings_label : {
-		fontSize : 16, 
+		fontSize : 14, 
 		fontWeight : 'bold', 
 		padding: 8,
 		paddingLeft : 32,

@@ -45,7 +45,7 @@ export default class NewPassword extends React.Component {
 		return(
 			<View style = {styles.input_container}> 
 				<Text style = {styles.settings_label}>
-					New password
+					NEW
 				</Text>
 				<View style={styles.settings_input_container}>
 				 	<TextInput
@@ -60,7 +60,7 @@ export default class NewPassword extends React.Component {
 }
 const styles = StyleSheet.create({
 	settings_label : {
-		fontSize : 16, 
+		fontSize : 14, 
 		fontWeight : 'bold', 
 		padding: 8,
 		paddingLeft : 32,

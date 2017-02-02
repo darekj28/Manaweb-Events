@@ -60,23 +60,9 @@ export default class PostMessageBox extends Component {
     }
 
     render() {
-        var green = '#5cb85c';
-        var red = '#d9534f';
-        // var newPostContent = this.props.newPostContent;
+        var green = '#90D7ED';
+        var red = 'silver';
         if (!this.props.post_message_expanded) {
-            // return (
-            //     <View style={{flex:1, justifyContent: 'flex-start', borderBottomColor: '#696969',
-            //         borderBottomWidth: 1, borderTopColor: '#696969',
-            //         borderTopWidth: 1, backgroundColor : 'white', alignItems : 'center'}}>
-            //         <TouchableOpacity style={{flex : 1}} onPress={this.onClick}>
-            //             <Text style = {styles.text}>
-            //                 Post a message
-            //             </Text>
-            //         </TouchableOpacity>
-            //     </View>
-
-                
-            // );
             return <View/>;
         } else {
             return (
@@ -94,8 +80,9 @@ export default class PostMessageBox extends Component {
                         value = {this.props.newPostContent}
                     />
                 </View>
-                <Animated.View style={[styles.container, {height: this.state.filter_bar_height}]}>
-                    <View style = {{flex: 1, flexDirection:'row'}}>
+                <Animated.View style={[styles.container, {alignItems : 'center', 
+                        justifyContent : 'center', borderTopWidth : 1, borderTopColor : 'silver'}]}>
+                    <View style = {{flex: 1, flexDirection:'row', borderRightWidth : 1, borderRightColor : 'silver'}}>
                         <TouchableOpacity style={{flex : 1}} onPress={() => this.setFilter(0)}>
                             <View style={styles.filter_wrapper}>
                                 {!this.state.filter_enable[0] && <Icon name = "md-swap" size = {25} color = {red}/>}
@@ -117,18 +104,20 @@ export default class PostMessageBox extends Component {
                             </View>
                         </TouchableOpacity>
                     </View>
-                    {this.props.alert && <View style = {{flex: 1, alignItems : 'center'}}>
-                        <Text style={{fontSize: 20, color : 'silver'}}>
+                    {this.props.alert && <View style = {{flex: 1, alignItems : 'center', justifyContent : 'center'}}>
+                        <Text style={{fontSize: 16, color : 'silver'}}>
                             Post
                         </Text>
                     </View>}
-                    {!this.props.alert && <View style = {{flex: 1, alignItems : 'center'}}>
-                        <TouchableOpacity onPress={this.handlePostSubmit.bind(this)}>
-                            <Text style={{fontSize: 20, fontWeight : 'bold', color : '#90D7ED'}}>
+                    {!this.props.alert &&
+                        <TouchableOpacity style={{flex : 1}} onPress={this.handlePostSubmit.bind(this)}>
+                        <View style = {{flex: 1, backgroundColor: "#90D7ED", 
+                                alignItems : 'center', justifyContent : 'center'}}>
+                            <Text style={{fontSize: 16, fontWeight : 'bold', color : 'white'}}>
                                 Post
                             </Text>
-                        </TouchableOpacity>
-                    </View>}
+                        </View>
+                        </TouchableOpacity>}
                 </Animated.View>
             </View>
             );
@@ -137,23 +126,24 @@ export default class PostMessageBox extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-      flexDirection:'row',
-  },
-  text: {
-      flex: 1,
-      fontSize: 20,
-      marginLeft: 4,
-      color : '#90D7ED',
-      textAlignVertical : 'center'
-  },
-  text_input: {
-      flex: 1,
-      fontSize: 18,
-      paddingLeft : 5,
-      paddingRight : 5
-  },
-  filter_wrapper: {
-        alignItems : 'center'
+    container: {
+        flexDirection:'row',
+    },
+    text: {
+        flex: 1,
+        fontSize: 20,
+        marginLeft: 4,
+        color : '#90D7ED',
+        textAlignVertical : 'center'
+    },
+    text_input: {
+        flex: 1,
+        fontSize: 18,
+        paddingLeft : 5,
+        paddingRight : 5
+    },
+    filter_wrapper: {
+        alignItems : 'center',
+        justifyContent : 'center'
     }
 });

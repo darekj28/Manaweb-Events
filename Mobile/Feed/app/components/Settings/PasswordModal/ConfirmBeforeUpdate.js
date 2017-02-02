@@ -52,8 +52,8 @@ export default class ConfirmBeforeUpdate extends React.Component {
 							</TouchableOpacity>
 						</View>
 						<View style={{flex: 3}}>
-							<Text style = {{textAlign : 'center', fontWeight : 'bold'}}>
-								Confirm Password
+							<Text style = {{textAlign : 'center', fontWeight : 'bold', fontSize : 14}}>
+								CONFIRM PASSWORD
 							</Text>
 						</View>
 						<View style={{flex: 1, justifyContent : 'flex-end', flexDirection : 'row'}}>

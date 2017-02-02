@@ -81,17 +81,17 @@ export default class ReportPostModal extends Component {
 						<View style={{flex: 0.2, justifyContent : 'flex-end', flexDirection : 'row'}}/>
 					</View>
 
-					<ScrollView contentContainerStyle={styles.list_container}>
-						<Text style = {styles.report_caption}>
-							Post to be reported:
-						</Text>
-						<ScrollView contentContainerStyle={styles.report_section}>
-							<ReportOriginalPost post={this.props.post}/>
-						</ScrollView>
-					</ScrollView>
 					<View style={styles.list_container}>
 						<Text style = {styles.report_caption}>
-								Select offense:
+							POST TO REPORT:
+						</Text>
+						<View style={styles.report_section}>
+							<ReportOriginalPost post={this.props.post}/>
+						</View>
+					</View>
+					<View style={styles.list_container}>
+						<Text style = {styles.report_caption}>
+							SELECT OFFENSE:
 						</Text>
 						<View style = {styles.report_section}>
 							<Picker style = {{flex : 1, justifyContent : 'center'}} 
@@ -105,7 +105,7 @@ export default class ReportPostModal extends Component {
 					</View>
 					<View style={styles.list_container}>
 						<Text style = {styles.report_caption}>
-							Additional comments:
+							ADDITIONAL COMMENTS:
 						</Text>
 						<View style = {styles.report_section}>
 							<TextInput
@@ -154,7 +154,10 @@ const window = Dimensions.get('window');
 const styles = StyleSheet.create({
 	report_caption : {
 		fontWeight : 'bold',
-		fontSize : 16
+		fontSize : 12,
+		color : '#696969',
+		marginLeft : 15,
+		marginBottom : 5
 	},
 	top_bar : {
 		flex : 0,
@@ -180,11 +183,14 @@ const styles = StyleSheet.create({
 	report_button : {
 		borderColor : "#90D7ED",
 		backgroundColor: '#90D7ED',
-		borderWidth : 2,
-		borderRadius : 5,
+		borderWidth : 1,
+		borderRadius : 40,
 		padding: 6,
+		width : 120,
 		flexDirection: 'row',
-		flex: 0
+		flex: 0,
+		justifyContent : 'center',
+		alignItems : 'center'
 	},
 	report_text: {
 		textAlign : 'center',
@@ -197,8 +203,10 @@ const styles = StyleSheet.create({
 		flex : 1,
 		justifyContent: "flex-start", 
 		backgroundColor : 'white', 
-		padding: 5, 
-		borderRadius : 5, 
+		padding: 5,
+		marginLeft : 15,
+		marginRight : 15, 
+		borderRadius : 15, 
 		borderColor : 'silver', 
 		borderWidth : 1,
 		overflow: 'hidden'
