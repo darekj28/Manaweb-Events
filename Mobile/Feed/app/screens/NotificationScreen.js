@@ -1,5 +1,5 @@
 import React from 'react';
-import {Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,
+import {ActivityIndicator, InteractionManager, Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,
 		TouchableOpacity,TouchableHighlight, TextInput,
           Alert, Image, Animated, TouchableWithoutFeedback, ScrollView} from 'react-native';
 import _ from 'lodash'
@@ -12,6 +12,7 @@ let test_url = "http://0.0.0.0:5000"
 export default class NotificationScreen extends React.Component {
   constructor(props) {
       super(props);
+      this.state = {renderPlaceholderOnly : true};
   }
 
   seeNotifications() {
@@ -32,10 +33,23 @@ export default class NotificationScreen extends React.Component {
     });
   }
   componentDidMount() {
+    InteractionManager.runAfterInteractions(() => {
+        this.setState({renderPlaceholderOnly: false});
+    });
     this.props.getNotifications()
     this.seeNotifications.bind(this)();
   }
+  _renderPlaceholderView() {
+      return (
+          <View style = {styles.container}>
+        <ActivityIndicator style={[styles.centering, styles.white]} color="#cccccc" size="large"/>
+      </View>
+      );
+  }
   render() {
+    if (this.state.renderPlaceholderOnly) {
+          return this._renderPlaceholderView();
+      }
     return (
     <View style = {styles.container}>
         <View style={styles.top_bar}>
@@ -70,4 +84,13 @@ const styles = StyleSheet.create({
     borderBottomWidth : 2,
     alignItems : 'center'
   },
+  centering: {
+    flex : 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 8,
+  },
+  white: {
+    backgroundColor: 'white',
+  }
 });

@@ -6,7 +6,7 @@ const {
 import Spinner from 'react-native-loading-spinner-overlay';
 import React from 'react';
 import {Component} from 'react'
-import {ActivityIndicator, Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
+import {InteractionManager, ActivityIndicator, Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
 			Alert, Image, Animated, TouchableWithoutFeedback, ScrollView, Keyboard} from 'react-native';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import _ from 'lodash'
@@ -42,24 +42,25 @@ class FeedScreen extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-				filters : ['Trade', 'Play', 'Chill'],
-				filter_enable: [true, true, true],
-				post_actions : [],
-				alert: true,
-				search : '',
-				userIdToFilterPosts : '',
-				activity_index: 0,
-				post_message_expanded: false,
-				post_message_height: new Animated.Value(0),
-				current_username: "",
-				feed: [],
-				current_user: {'userID' : 'not initialized'},
-				newPostContent: "",
-				searchText : "",
-				test: "",
-				loading: true,
-				display_make_post : false,
-				canPost : true
+			renderPlaceholderOnly : true,
+			filters : ['Trade', 'Play', 'Chill'],
+			filter_enable: [true, true, true],
+			post_actions : [],
+			alert: true,
+			search : '',
+			userIdToFilterPosts : '',
+			activity_index: 0,
+			post_message_expanded: false,
+			post_message_height: new Animated.Value(0),
+			current_username: "",
+			feed: [],
+			current_user: {'userID' : 'not initialized'},
+			newPostContent: "",
+			searchText : "",
+			test: "",
+			loading: true,
+			display_make_post : false,
+			canPost : true
 		}
 		this.spamTimer;
 		this.postMessagePressed = this.postMessagePressed.bind(this)
@@ -206,6 +207,9 @@ class FeedScreen extends Component {
 		this.setState({current_username : this.props.current_user.userID})
 	}
 	componentDidMount() {
+		InteractionManager.runAfterInteractions(() => {
+	      	this.setState({renderPlaceholderOnly: false});
+	    });
 		this.initializeUserInfo.bind(this)();
 		this.setState({feed : this.props.feed})
 	}
@@ -220,8 +224,17 @@ class FeedScreen extends Component {
 	componentWillMount () {
     	this.keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', () => this.collapseMessageBox());
   	}
-
+  	_renderPlaceholderView() {
+	    return (
+	      	<View style = {styles.container}>
+				<ActivityIndicator style={[styles.centering, styles.white]} color="#cccccc" size="large"/>
+			</View>
+	    );
+	}
 	render() {
+		if (this.state.renderPlaceholderOnly) {
+	      	return this._renderPlaceholderView();
+	    }
 		return (
 				<View style = {styles.container}>
 					 <TouchableWithoutFeedback onPress={() => this.collapseMessageBox()}>
@@ -343,6 +356,15 @@ const styles = StyleSheet.create({
 	text_input: {
 			flex: 1,
 			fontSize: 20
+	},
+	centering: {
+		flex : 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		padding: 8,
+	},
+	white: {
+		backgroundColor: 'white',
 	}
 });
 
