@@ -23,8 +23,9 @@ const styles = StyleSheet.create({
 	settings_clickable : {
 		fontSize : 14,
 		color: 'white',
+		fontWeight : 'bold'
 	},
 	button : {flex : 1, backgroundColor : '#90D7ED', alignItems: 'center', 
 					justifyContent : 'center', borderRadius:60, borderColor : '#90D7ED', borderWidth : 1, 
-					height : 30, width : 90}
+					height : 30, width : 100}
 });
