@@ -45,7 +45,7 @@ export default class MakeComment extends React.Component {
 							placeholder={this.props.placeholder} rows="2" ref={(input) => this.commentText = input} 
 							onChange={this.handleCommentChange.bind(this)}></textarea>
 					<div className="SubmitButton input-group-addon" onClick={this.handleCommentSubmit.bind(this)}>
-						<button className="btn post-button">Comment</button>
+						<button className="btn post-button"><b>Comment</b></button>
 					</div>
 				</div>
 			</div>);

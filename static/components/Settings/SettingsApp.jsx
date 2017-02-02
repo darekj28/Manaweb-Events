@@ -135,11 +135,66 @@ export default class SettingsApp extends React.Component {
 			swal("Oops...", "There's a mistake in your submission!", "error");
 		}
 	}
+	verifyOldPasswordForDelete(password) {
+		var obj = { password : password, currentUser : AppStore.getCurrentUser() };
+		$.ajax({
+			type: 'POST',
+			url: '/verifyOldPassword',
+			data : JSON.stringify(obj, null, '\t'),
+		    contentType: 'application/json;charset=UTF-8',
+		    success : function(res) {
+		    	if (!res['error']) {
+		    		this.deleteAccount.bind(this)();
+		    	}
+		    	else {
+		    		swal("Oops...", "Incorrect password.", "error");
+		    	}
+		    }.bind(this)
+		});
+	}
+	deleteAccount() {
+		var obj = { currentUser : AppStore.getCurrentUser() };
+		$.ajax({
+	    	type : 'POST',
+	    	url: "/deleteAccount",
+	    	data: JSON.stringify(obj, null, '\t'),
+	    	contentType: 'application/json;charset=UTF-8',
+	    	success : function(data) {
+	    		swal({title : "Success!", 
+				text: "Your account has been deleted.", 
+				type: "success",
+				confirmButtonColor: "#80CCEE",
+  				confirmButtonText: "OK",
+  				closeOnConfirm: false}, function() { AppStore.removeCurrentUser(); location.reload(); });
+	    	},
+	    	error : function(data) {
+	    		swal("Oops", "We couldn't connect to the server!", "error");
+	    	}
+	    });
 
+	}
+	clickDeleteAccount() {
+		swal({
+	      	title: "Are you sure you want to delete your account?", 
+		    text: "If you are sure, type in your password:", 
+		    type: "input",
+		    inputType: "password",
+		    showCancelButton: true,
+	      	closeOnConfirm: false,
+	      	confirmButtonText: "Delete account",
+	      	confirmButtonColor: "#f44336"}, 
+	    function(password) {
+	    	console.log("poop");
+	    	this.verifyOldPasswordForDelete.bind(this)(password);
+	    }.bind(this));
+	}
 	enableUpdate() {
-		$('#UpdateSettingsSubmit').on("click", function(e) {
+		$('.settings-button').on("focus", function(e) {
 			e.preventDefault();
 			$(this).blur();
+		});
+		$('.settings-button').on("click", function(e) {
+			e.preventDefault();
 		});
 	}
 	componentDidMount() {
@@ -174,8 +229,12 @@ export default class SettingsApp extends React.Component {
 						}, this)}
 						<div id="avatar_container" className="select_setting avatar_container centered-text"></div>
 						<div className="form-group">
-							<button className="btn btn-default" id="UpdateSettingsSubmit" 
-									onClick={this.handleSubmit.bind(this)}> Update! </button>
+							<button className="btn btn-default post-button settings-button" id="UpdateSettingsSubmit"
+									onClick={this.handleSubmit.bind(this)}><b>Update</b></button>
+						</div>
+						<div className="form-group">
+							<button className="btn btn-default post-button settings-button"
+									onClick={this.clickDeleteAccount.bind(this)}><b>Delete Account</b></button>
 						</div>
 					</form>
 				</div>
