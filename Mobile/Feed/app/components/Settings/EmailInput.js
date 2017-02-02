@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
 
 
 	settings_label : {
-		fontSize : 14, 
+		fontSize : 12, 
 		fontWeight : 'bold', 
 		padding: 8,
 		paddingLeft : 32,

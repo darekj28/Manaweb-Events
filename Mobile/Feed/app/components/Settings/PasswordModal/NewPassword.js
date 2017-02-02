@@ -50,7 +50,7 @@ export default class NewPassword extends React.Component {
 				<View style={styles.settings_input_container}>
 				 	<TextInput
 						onChangeText = {this.handleChange.bind(this)}
-						style = {styles.settings_input} placeholder = "Password"
+						style = {styles.settings_input} 
 						secureTextEntry = {true}
 						maxLength = {20}/>
 				</View>
@@ -60,7 +60,7 @@ export default class NewPassword extends React.Component {
 }
 const styles = StyleSheet.create({
 	settings_label : {
-		fontSize : 14, 
+		fontSize : 12, 
 		fontWeight : 'bold', 
 		padding: 8,
 		paddingLeft : 32,

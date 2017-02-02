@@ -8,19 +8,23 @@ import Dimensions from 'Dimensions';
 export default class LogoutButton extends React.Component {
 	render() {
 		return(
-			<TouchableOpacity onPress = {this.props.handleLogout} style = {{alignItems: 'center'}}>
-				<Text style = {styles.settings_clickable}>
-					Sign out
-				</Text>
+			<TouchableOpacity style={{flex : 1, alignItems : 'center', justifyContent : 'center', padding : 5, paddingBottom : 10 }} 
+					onPress = {this.props.handleLogout} >
+				<View style={styles.button}>
+					<Text style = {styles.settings_clickable}>
+						Sign out
+					</Text>
+				</View>
 		 	</TouchableOpacity>
 		)
 	}
 }
 const styles = StyleSheet.create({
 	settings_clickable : {
-	fontSize : 16,
-	color: '#90D7ED',
-	padding : 16,
-	paddingBottom : 24
+		fontSize : 14,
+		color: 'white',
 	},
+	button : {flex : 1, backgroundColor : '#90D7ED', alignItems: 'center', 
+					justifyContent : 'center', borderRadius:60, borderColor : '#90D7ED', borderWidth : 1, 
+					height : 30, width : 90}
 });

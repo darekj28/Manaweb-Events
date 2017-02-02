@@ -52,8 +52,8 @@ export default class ConfirmBeforeUpdate extends React.Component {
 							</TouchableOpacity>
 						</View>
 						<View style={{flex: 3}}>
-							<Text style = {{textAlign : 'center', fontWeight : 'bold', fontSize : 14}}>
-								CONFIRM PASSWORD
+							<Text style = {{textAlign : 'center', fontWeight : 'bold'}}>
+								Confirm Password
 							</Text>
 						</View>
 						<View style={{flex: 1, justifyContent : 'flex-end', flexDirection : 'row'}}>
@@ -96,7 +96,6 @@ const styles = StyleSheet.create({
 		fontWeight : 'bold'
 	},
 	disabled_update : {
-		fontWeight : 'bold',
 		color : 'silver'
 	}
 });

@@ -8,19 +8,22 @@ import Dimensions from 'Dimensions';
 export default class PasswordModalLink extends React.Component {
 	render() {
 		return(
-			<TouchableOpacity style = {{alignItems : 'center'}} onPress={this.props.togglePasswordModal}>
-				<Text style = {styles.settings_clickable}> 
-					Change your password
-				</Text>
+			<TouchableOpacity style = {{flex : 1, alignItems : 'center', justifyContent : 'center', padding : 5 }} onPress={this.props.togglePasswordModal}>
+				<View style={styles.button}>
+					<Text style = {styles.settings_clickable}> 
+						Change your password
+					</Text>
+				</View>
 			</TouchableOpacity>
 		)
 	}
 }
 const styles = StyleSheet.create({
 	settings_clickable : {
-	fontSize : 16,
-	color: '#90D7ED',
-	padding : 16,
-	paddingBottom : 0
+		fontSize : 14,
+		color: 'white',
 	},
+	button : {flex : 1, backgroundColor : '#90D7ED', alignItems: 'center', 
+					justifyContent : 'center', borderRadius:60, borderColor : '#90D7ED', borderWidth : 1, 
+					height : 30, width : 180}
 });
