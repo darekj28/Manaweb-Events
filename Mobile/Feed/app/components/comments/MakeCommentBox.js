@@ -19,7 +19,7 @@ export default class MakeCommentBox extends React.Component {
 	render() {
         var color = this.props.newPostContent.length > 0 ? '#90D7ED' : 'silver';
 		return (
-            <View style = {{flex: 1, flexDirection : 'row', borderTopColor : 'silver', borderTopWidth : 1, justifyContent : 'flex-start'}}>
+            <View style = {{height: 40, flexDirection : 'row', borderTopColor : 'silver', borderTopWidth : 1, justifyContent : 'flex-start'}}>
     			<View style={{flex:1, justifyContent: 'flex-start',
                     borderColor: 'silver',borderWidth: 1, margin : 5, borderRadius: 3, height : 30}}>
                     {Platform.OS == 'ios' && <TextInput
@@ -60,14 +60,14 @@ const styles = StyleSheet.create({
         flex : 1,
         textAlignVertical: 'center',
         fontSize : 15,
-        paddingLeft : 4, 
+        paddingLeft : 4,
         paddingRight : 4
     },
     android_text_input: {
         flex : 1,
         textAlignVertical: 'center',
         fontSize : 15,
-        paddingLeft : 4, 
+        paddingLeft : 4,
         paddingRight : 4,
         paddingTop : 7,
         paddingBottom : 4

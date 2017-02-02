@@ -2,6 +2,7 @@ import React from 'react';
 import {ActivityIndicator, InteractionManager, Platform, Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,
 		TouchableOpacity,TouchableHighlight, TextInput,
 		  Alert, Image, Animated, TouchableWithoutFeedback, ScrollView, Easing, Keyboard} from 'react-native';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IonIcon from 'react-native-vector-icons/Ionicons';
@@ -167,17 +168,18 @@ export default class CommentScreen extends React.Component {
                 	renderRow={this.listViewRenderRow.bind(this)}
                 	enableEmptySections = {true}
                 	removeClippedSubviews= {false}/>}
-                {!this.props.original_post.name && 
+                {!this.props.original_post.name &&
                 	<View style={styles.list_container}/>}
-                <View style={{flex: 0.1}}>
+                {/* <View style={{flex: 0.1}}> */}
 					<MakeCommentBox onClick={(event) => this.postMessagePressed.bind(this)()}
 						post_message_expanded = {this.state.post_message_expanded}
 						newPostContent = {this.state.newPostContent}
 						handlePostTyping = {this.handlePostTyping.bind(this)}
 						handlePostSubmit = {this.handleCommentSubmit.bind(this)}
-						op = {op} 
+						op = {op}
 						canPost={this.state.canPost}/>
-				</View>
+				{/* </View> */}
+				{/* <KeyboardSpacer/> */}
             </View>
 		)
 	}

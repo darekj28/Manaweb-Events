@@ -16,7 +16,7 @@ export default class BottomTabBar extends React.Component {
 		var currentRoute = this.props.navigator.getCurrentRoutes().pop().href;
 		if (this.state.selected != 'home')
 			this.navigate.bind(this)("Feed");
-		else if (currentRoute != "Feed") 
+		else if (currentRoute != "Feed")
 			this.props.navigator.pop();
 		else if (currentRoute == "Feed")
 			this.props.startScroll();
@@ -42,13 +42,13 @@ export default class BottomTabBar extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps){
-		if (!nextProps.current_username){ 
+		if (!nextProps.current_username){
 			this.setState({selected : 'home'})
 		}
 	}
-	componentDidMount() {
-		this.keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', () => this.setState({ show : false }));
-		this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', () => this.setState({ show : true }));
+	componentWillMount() {
+		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => (this.setState({ show : false })));
+		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => this.setState({ show : true }));
 	}
 	componentWillUnmount() {
 		this.keyboardWillHideListener.remove();
@@ -77,14 +77,14 @@ export default class BottomTabBar extends React.Component {
 							<Text style={[{color: settings}, styles.tab_text]}>Settings</Text>
 						</View>
 					</TouchableWithoutFeedback>
-					{this.props.numUnseenNotifications == 0 && 
+					{this.props.numUnseenNotifications == 0 &&
 					<TouchableWithoutFeedback style={styles.tab} onPress={this.notificationsPress.bind(this)}>
 						<View style={styles.tab_content}>
 							<Icon name = "md-mail" size={25} color={notifications}/>
 							<Text style={[{color: notifications}, styles.tab_text]}>Notifications</Text>
 						</View>
 					</TouchableWithoutFeedback>}
-					{this.props.numUnseenNotifications != 0 && 
+					{this.props.numUnseenNotifications != 0 &&
 					<TouchableWithoutFeedback style={styles.tab} onPress={this.notificationsPress.bind(this)}>
 						<View style={styles.tab_content}>
 							<IconBadge
@@ -105,25 +105,25 @@ export default class BottomTabBar extends React.Component {
 const styles = StyleSheet.create({
 	container : {
 		flex : 0.1,
-		flexDirection:'row', 
-		borderTopWidth : 1, 
+		flexDirection:'row',
+		borderTopWidth : 1,
 		borderTopColor : 'silver',
 		backgroundColor : 'white',
 		justifyContent: "space-around",
 		alignItems : 'center'
 	},
 	tab : {
-		flex: 1, 
+		flex: 1,
 		alignItems : 'center',
 		justifyContent : 'center'
 	},
 	tab_content : {
-		flex: 1, 
+		flex: 1,
 		alignItems : 'center',
 		justifyContent : 'center'
 	},
 	tab_text : {
-		fontSize : 12, 
+		fontSize : 12,
 		fontWeight: 'bold'
 	},
 	notification_badge : {
