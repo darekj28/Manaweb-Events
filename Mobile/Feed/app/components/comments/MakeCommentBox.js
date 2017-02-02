@@ -3,6 +3,8 @@ import { Platform, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,To
         TouchableWithoutFeedback, Alert, Image, Animated} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+const MAKE_COMMENT_BOX_HEIGHT = 30
+const PADDING = 5
 export default class MakeCommentBox extends React.Component {
     handlePostTextChange (text) {
         this.props.handlePostTyping(text);
@@ -19,9 +21,9 @@ export default class MakeCommentBox extends React.Component {
 	render() {
         var color = this.props.newPostContent.length > 0 ? '#90D7ED' : 'silver';
 		return (
-            <View style = {{height: 40, flexDirection : 'row', borderTopColor : 'silver', borderTopWidth : 1, justifyContent : 'flex-start'}}>
+            <View style = {{height: MAKE_COMMENT_BOX_HEIGHT + 2*PADDING, flexDirection : 'row', borderTopColor : 'silver', borderTopWidth : 1, justifyContent : 'flex-start'}}>
     			<View style={{flex:1, justifyContent: 'flex-start',
-                    borderColor: 'silver',borderWidth: 1, margin : 5, borderRadius: 3, height : 30}}>
+                    borderColor: 'silver',borderWidth: 1, margin : 5, borderRadius: 3, height : MAKE_COMMENT_BOX_HEIGHT}}>
                     {Platform.OS == 'ios' && <TextInput
                         style = {styles.ios_text_input}
                         autoFocus = {false}
