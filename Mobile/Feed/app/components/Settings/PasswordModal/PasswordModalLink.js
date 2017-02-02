@@ -18,7 +18,7 @@ export default class PasswordModalLink extends React.Component {
 }
 const styles = StyleSheet.create({
 	settings_clickable : {
-	fontSize : 16,
+	fontSize : 18,
 	color: '#90D7ED',
 	padding : 8
 	},

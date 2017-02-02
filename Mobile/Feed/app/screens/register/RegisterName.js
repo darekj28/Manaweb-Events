@@ -6,13 +6,13 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {Image, ScrollView, Alert, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {TouchableWithoutFeedback, Image, ScrollView, Alert, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity, TextInput} from 'react-native';
 
 import ViewContainer from '../../components/ViewContainer';
 import HomeStatusBar from '../../components/HomeStatusBar';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import dismissKeyboard from 'react-native-dismiss-keyboard';
 
 
 
@@ -143,6 +143,7 @@ export default class RegisterName extends Component {
   render() {
     var error_message = this.getErrorMessage.bind(this)();
     return (
+      <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
         <View style = {styles.container}>
           <View style = {styles.top_bar}>
               <TouchableOpacity style = {styles.back_button}
@@ -213,14 +214,15 @@ export default class RegisterName extends Component {
             <View style = {styles.large_padding} />
 
             <View style = {styles.bottom_bar}>
-              <TouchableHighlight style = {styles.next} onPress = {this._navigateToRegisterPhoneNumber.bind(this)}>
+              <TouchableOpacity style = {styles.next} onPress = {this._navigateToRegisterPhoneNumber.bind(this)}>
                 <Text style = {styles.next_text}>
                   Next!
                 </Text>
-              </TouchableHighlight>
+              </TouchableOpacity>
             </View>
 
           </View>
+          </TouchableWithoutFeedback>
       
     )
   }

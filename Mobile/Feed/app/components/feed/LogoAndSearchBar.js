@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 
 var titleIcon = require('../res/logo4.png')
-const LOGO_HEIGHT = 30
+const LOGO_HEIGHT = 20
 const SEARCH_BAR_PROPORTION = 0.9
 
 export default class LogoAndSearchBar extends Component {
@@ -29,7 +29,7 @@ export default class LogoAndSearchBar extends Component {
                 </View>
                 <View style={{flex: 0.2, flexDirection : 'row', justifyContent : 'flex-end', alignItems: 'center', flexDirection : 'row'}}>
                     <TouchableOpacity onPress={()=> this.props.expandMakePost()}>
-                        <FAIcon name = "pencil-square-o" size = {25} color = "white"/>
+                        <FAIcon name = "pencil-square-o" size = {22} color = "white"/>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -64,9 +64,5 @@ const styles = StyleSheet.create({
     activity_text: {
       fontSize: 18,
       color: 'white',
-      fontWeight : 'bold',
-      textAlign: 'center',
-      textAlignVertical: 'center',
-      justifyContent: 'center',
     },
 });

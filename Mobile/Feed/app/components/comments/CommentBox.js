@@ -8,7 +8,7 @@ export default class CommentBox extends React.Component {
 		var comment = this.props.comment;
 		return (
 			<View style={{flex:1, flexDirection: 'row', justifyContent: 'flex-start',
-                                borderBottomColor: 'silver', borderBottomWidth: 2,backgroundColor : 'white'}}>
+                                borderBottomColor: 'silver', borderBottomWidth: 1,backgroundColor : 'white'}}>
                 <View style={{flex: 0, paddingLeft : 8, paddingTop: 8, justifyContent: 'flex-start'}}>
                     {comment.avatar =='nissa' && <Image  style={styles.profile_image} source={require('../static/avatars/nissa.png')} />}
                     {comment.avatar == 'chandra' && <Image  style={styles.profile_image} source={require('../static/avatars/chandra.png')} />}

@@ -139,9 +139,6 @@ export default class SettingsScreen extends Component {
 		this.props.asyncStorageLogout().then((value) => {
 			LoginManager.logOut()
 			this.props.navigator.resetTo({href: 'Start'})
-			// this.props.navigator.push({
-			// 	href: "Start"
-			// })
 		});
 	}
 	render() {
@@ -176,13 +173,13 @@ export default class SettingsScreen extends Component {
 						{(this.state.hasChanges && !this.state.hasPrivateChanges) && 
 						<TouchableOpacity onPress = {this.handleSubmitPress.bind(this)}>
 							<Text style = {styles.enabled_update}>
-								UPDATE
+								Update
 							</Text>
 						</TouchableOpacity>}
 						{this.state.hasPrivateChanges && 
 						<TouchableOpacity onPress = {this.toggleConfirmPasswordModal.bind(this)}>
 							<Text style = {styles.enabled_update}>
-								UPDATE
+								Update
 							</Text>
 						</TouchableOpacity>}
 						{!this.state.hasChanges && 
