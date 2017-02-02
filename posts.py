@@ -28,6 +28,13 @@ class Posts:
 		self.SEEN_POSTS_SUFFIX = "_seen_posts"
 		self.COMMENT_ID_PREFIX = "c_"
 		self.LAST_POST_TABLE = "last_post_table"
+		self.DELETED_POST_MESSAGE = "The user has deleted this post"
+		self.DELETED_COMMENT_MESSAGE = "The user has deleted this comment"
+		self.DELETED_ACCOUNT_AVATAR = "rip"
+		self.DELETED_USER_ID = ""
+		self.DELETED_ACCOUNT_FIRST_NAME = "Deleted"
+		self.DELETED_ACCOUNT_LAST_NAME = "User"
+		self.DELETED_ACCOUNT_USERNAME = "$DELETED_USER"
 		urllib.parse.uses_netloc.append("postgres")
 		os.environ["DATABASE_URL"] = "postgres://spkgochzoicojm:y0MABz523D1H-zMqeZVvplCuC2@ec2-54-163-252-55.compute-1.amazonaws.com:5432/d15b0teu2kkhek"
 		url = urllib.parse.urlparse(os.environ["DATABASE_URL"])
@@ -827,7 +834,7 @@ class Posts:
 		self.db.execute(self.db.mogrify(sql, (unique_id,)))
 		self.post_db.commit()
 
-	# returns list of all users in a thread
+	# returns list of all users in a thread, all user id's are returned as strings
 	def getParticipatingUsers(self, feed_name, unique_id):
 		# this checks if the unique id goes with a comment or ID
 		thisItem = self.getPostById(feed_name, unique_id)
@@ -835,14 +842,21 @@ class Posts:
 			thisItem = self.getCommentById(unique_id)
 		comment_id = thisItem['comment_id']
 		user_list = list()
-		user_list.append(self.getPostById(feed_name, comment_id)['poster_id'])
+
+		# add the original poster
+		original_post = self.getPostById(feed_name, comment_id)
+		if original_post != None:
+			if original_post['poster_id'] != self.DELETED_ACCOUNT_USERNAME:
+				user_list.append(original_post['poster_id'])
+
 		c_feed_name = "c_" + feed_name
 		search_code = "SELECT poster_id FROM " + c_feed_name  + " WHERE comment_id = '" + comment_id + "'"
 		self.db.execute(self.db.mogrify(search_code))
 		user_query = self.db.fetchall()
 		for user_id in user_query:
 			if user_id[0] not in user_list:
-				user_list.append(user_id[0])
+				if user_id[0] != self.DELETED_ACCOUNT_USERNAME:
+					user_list.append(user_id[0])
 		return user_list
 
 	def postListToDict(self, posts, user_info_table):
@@ -850,30 +864,37 @@ class Posts:
 		for post in posts:
 			thisPost = {}
 			# post[1] is the poster_id
+			thisPost['unique_id'] = post[9]
+			thisPost['numComments'] = post[10]
+			thisPost['timeString'] = self.getTimeString(post[5])
+			thisPost['timeStamp'] = post[5]
+			thisPost['feed_name'] = post[2]
+			thisPost['comment_id'] = post[3]
+			thisPost['isComment'] = False
+			thisPost['time'] = self.date_format(int(thisPost['timeStamp']))
+			thisPost['isTrade'] = post[6]
+			thisPost['isPlay'] = post[7]
+			thisPost['isChill'] = post[8]
+
 			if user_info_table.get(post[1]) != None:
 				thisPost['body'] = post[0]
-				thisPost['poster_id'] = post[1]
-				thisPost['feed_name'] = post[2]
-				thisPost['timeString'] = self.getTimeString(post[5])
-				thisPost['timeStamp'] = post[5]
-				thisPost['time'] = self.date_format(int(thisPost['timeStamp']))
-				thisPost['isTrade'] = post[6]
-				thisPost['isPlay'] = post[7]
-				thisPost['isChill'] = post[8]
-				thisPost['comment_id'] = post[3]
-				thisPost['isComment'] = False
+				thisPost['poster_id'] = post[1]	
 				thisUser = user_info_table[thisPost['poster_id']]
 				thisPost['first_name'] = thisUser['first_name']
 				thisPost['last_name'] = thisUser['last_name']
 				thisPost['avatar_url'] = thisUser['avatar_url']
 				thisPost['avatar'] = thisUser['avatar_name']
-				thisPost['unique_id'] = post[9]
-				thisPost['numComments'] = post[10]
 				thisPost['isDeleted'] = False	
 			else: 
 				# here we return a bogus post instead
 				# so we know to show 'user was deleted info'
 				thisPost['isDeleted'] = True
+				thisPost['avatar'] = self.DELETED_ACCOUNT_AVATAR
+				thisPost['avatar_url'] = '/static/avatars/' + thisPost['avatar'] + '.png'	
+				thisPost['body'] = self.DELETED_POST_MESSAGE
+				thisPost['first_name'] = self.DELETED_ACCOUNT_FIRST_NAME
+				thisPost['last_name'] = self.DELETED_ACCOUNT_LAST_NAME
+				thisPost['poster_id'] = self.DELETED_ACCOUNT_USERNAME
 			postList.append(thisPost)
 		return postList	
 
@@ -884,22 +905,28 @@ class Posts:
 			thisComment['timeString'] = self.getTimeString(comment[5])
 			thisComment['timeStamp'] = comment[5]
 			thisComment['time'] = self.date_format(int(thisComment['timeStamp']))
+			thisComment['comment_id'] = comment[3]
+			thisComment['unique_id'] = comment[6]
+			thisComment['isComment'] = True
+			thisComment['feed_name'] = comment[2]
 			# post[1] is the poster_id
-			if user_info_table.get(post[1]) != None:	
+			if user_info_table.get(comment[1]) != None:	
 				thisComment['body'] = comment[0]
 				thisComment['poster_id'] = comment[1]
-				thisComment['feed_name'] = comment[2]
-				thisComment['comment_id'] = comment[3]
-				thisComment['unique_id'] = comment[6]
-				thisComment['isComment'] = True
 				thisUser = user_info_table[thisComment['poster_id']]
-				thisComment['first_name'] = thisUser['first_name']
-				thisComment['last_name'] = thisUser['last_name']
 				thisComment['avatar_url'] = thisUser['avatar_url']
 				thisComment['avatar'] = thisUser['avatar_name']
-				thisPost['isDeleted'] = False
+				thisComment['first_name'] = thisUser['first_name']
+				thisComment['last_name'] = thisUser['last_name']
+				thisComment['isDeleted'] = False
 			else:
-				thisPost['isDeleted'] = True
+				thisComment['body'] = self.DELETED_COMMENT_MESSAGE
+				thisComment['isDeleted'] = True
+				thisComment['avatar'] = self.DELETED_ACCOUNT_AVATAR
+				thisComment['avatar_url'] = '/static/avatars/' + thisComment['avatar'] + '.png'	
+				thisComment['first_name'] = self.DELETED_ACCOUNT_FIRST_NAME
+				thisComment['last_name'] = self.DELETED_ACCOUNT_LAST_NAME
+				thisComment['poster_id'] = self.DELETED_ACCOUNT_USERNAME
 
 			commentList.append(thisComment)
 		return commentList	
@@ -999,7 +1026,69 @@ class Posts:
 	# 			if post['poster_id'] == userID:
 	# 				self.deletePost(feed_name, post['comment_id'])
 
-	# def deleteUserAndPosts(self, userID):
+	def softDeletePost(self, feed_name, unique_id):
+		timeStamp = time.time()
+		timeString = self.getTimeString(timeStamp)
+		thisPost = self.getPostById(feed_name, unique_id)
+		action = "SOFT DELETE POST"
+		isComment = False
+		self.updateAdminTable(thisPost['feed_name'], thisPost['body'], thisPost['poster_id'], action , thisPost['unique_id'], timeString, timeStamp, isComment)
+		table_name = feed_name
+		body = self.DELETED_POST_MESSAGE
+		poster_id = self.DELETED_ACCOUNT_USERNAME
+		sql = "UPDATE " + table_name + " SET body = %s, poster_id = %s WHERE unique_id = %s" 
+		self.db.execute(self.db.mogrify(sql, (body, poster_id, unique_id)))
+
+	def softDeleteComment(self, feed_name, unique_id):
+		timeStamp = time.time()
+		timeString = self.getTimeString(timeStamp)
+		thisComment = self.getCommentById(feed_name, unique_id)
+		print(thisComment)
+		action = "SOFT DELETE COMMENT"
+		isComment = True
+		self.updateAdminTable(thisComment['feed_name'], thisComment['body'], thisComment['poster_id'], action , thisComment['unique_id'], timeString, timeStamp, isComment)
+		table_name = "c_" + feed_name
+		body = self.DELETED_COMMENT_MESSAGE
+		poster_id = self.DELETED_ACCOUNT_USERNAME
+		sql = "UPDATE " + table_name + " SET body = %s, poster_id = %s WHERE unique_id = %s" 
+		self.db.execute(self.db.mogrify(sql, (body, poster_id, unique_id)))	
+
+	def deleteUserAndPostsWipe(self, userID):
+		user_manager = Users()
+		this_user = user_manager.getInfo(userID)
+		user_manager.closeConnection()
+		if (this_user == None):
+			return 
+
+		feed_names = self.getFeedNames()
+		for feed_name in feed_names:
+			print("starting")
+			allComments = self.getComments(feed_name)
+			print("fetched comments complete")
+			allPosts = self.getPosts(feed_name)
+			print("fetched posts complete")
+			count = 0
+			print("starting to delete comments")
+			for comment in allComments:
+				if comment['poster_id'] == userID:
+					count = count + 1
+					self.softDeleteComment(feed_name, comment['unique_id']) 
+					
+					if (count % 20 == 0):
+						print(count)
+
+			print("finished deleting comments")
+			for post in allPosts:
+				if post['poster_id'] == userID:
+					count = count + 1
+					self.softDeletePost(feed_name, post['comment_id']) 
+					if (count % 20 == 0):
+						print(count)
+
+		user_manager = Users()
+		user_manager.deleteUser(userID)
+		user_manager.closeConnection()
+
 
 
 	def deleteNotifications(self):

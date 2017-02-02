@@ -271,6 +271,7 @@ export default class Index extends React.Component {
           for (var i = 0; i < responseData['post_list'].length; i++) {
             var obj = responseData['post_list'][i]
             feed.unshift({
+              isDeleted : obj['isDeleted'],
               postContent : obj['body'],
               avatar    : obj['avatar'],
               name    : obj['first_name'] + ' ' + obj['last_name'],

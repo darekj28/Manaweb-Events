@@ -29,6 +29,7 @@ class Users:
 		self.USER_ACTION_TABLE = "user_actions" 
 		self.TEST_USER_TABLE = "test_user_info"
 		self.RECOVERY_TABLE = "recovery_table"
+		self.DELETED_ACCOUNT_USERNAME = "$DELETED_USER"
 
 		# this is for when we load to heroku
 		# comment this out when testing locally
@@ -199,7 +200,7 @@ class Users:
 		self.user_db.commit()
 
 	def getInfo(self, userID):
-		if (userID == None or userID == ""):
+		if (userID == None or userID == "" or userID == self.DELETED_ACCOUNT_USERNAME):
 			return None
 		search_id = userID.lower()
 		table_name = self.USER_TABLE

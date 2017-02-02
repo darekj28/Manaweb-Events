@@ -32,9 +32,12 @@ security_manager = Security()
 # user_list = user_manager.getUserList()
 
 
+# time_0 = time.time()
+# post_manager.deleteUserAndPostsWipe('gabbys')
+# time_1 = time.time()
+# print("delete user and wipe time : " + str(time_1 - time_0))
 
-# post_manager.deleteUserPosts('brovogre')
-
+print(user_manager.getInfo('gabbys'))
 
 # user_manager.deleteUserByPhoneNumber('2018208509')
 # security_manager.createRecovery()
@@ -48,12 +51,6 @@ security_manager = Security()
 
 	# post_manager.deleteColumn(table_name, "pushNotificationSent")
 	# post_manager.addColumn(table_name, "pushNotificationSent", "BOOLEAN", True)
-
-time_0 = time.time()
-info_table = user_manager.getUserInfoTable()
-time_1 = time.time()
-print("user info table time : " + str(time_1 - time_0))
-print(info_table)
 
 
 
