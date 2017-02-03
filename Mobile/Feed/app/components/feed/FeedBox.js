@@ -4,7 +4,7 @@ import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHig
         TouchableWithoutFeedback, Alert, Image, Animated} from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import FAIcon from 'react-native-vector-icons/FontAwesome';
 const PROFILE_HEIGHT = 50
 const PROFILE_WIDTH = 50
 const COMMENT_HEIGHT = 25
@@ -92,11 +92,11 @@ export default class FeedBox extends Component {
                                 </Text>
                             </View>
                             <View style={{flex: 0, paddingTop : 8, paddingRight : 6, flexDirection: 'row'}}>
-                                { post.isTrade && <View style={styles.feed_filter_image}><Icon name = "md-swap" size = {16} color = "#696969"/></View>}
+                                { post.isTrade && <View style={styles.feed_filter_image}><FAIcon name = "handshake-o" size = {14} color = "#696969"/></View>}
                     
-                                { post.isPlay && <View style={styles.feed_filter_image}><Icon name = "ios-play" size = {16} color = "#696969"/></View>}
+                                { post.isPlay && <View style={styles.feed_filter_image}><FAIcon name = "play" size = {14} color = "#696969"/></View>}
                                 
-                                { post.isChill && <View style={styles.feed_filter_image}><Icon name = "md-time" size = {16} color = "#696969"/></View>}
+                                { post.isChill && <View style={styles.feed_filter_image}><FAIcon name = "snowflake-o" size = {14} color = "#696969"/></View>}
                             </View>
                         </View>
 

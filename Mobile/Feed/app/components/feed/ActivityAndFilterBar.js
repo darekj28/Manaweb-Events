@@ -2,7 +2,7 @@ import React from 'react';
 import {Component} from 'react'
 import { AppRegistry,StyleSheet,Text,View, TextInput, Alert, Image, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import FAIcon from 'react-native-vector-icons/FontAwesome';
 var titleIcon = require('../res/logo4.png')
 const FILTER_HEIGHT = 25
 const ACTIVITY_PROPORTION = 0.5
@@ -65,8 +65,8 @@ export default class LogoAndSearchBar extends Component {
                 <View style={{flex: 0, flexDirection: 'row', paddingRight : 4}}>
                     <TouchableOpacity onPress={() => this.props.onFilterChange(0)}>
                         <View style = {styles.filter_wrapper}>
-                            {!this.props.filter_enable[0] && <Icon name = "md-swap" size = {25} color = {red}/>}
-                            {this.props.filter_enable[0] && <Icon name = "md-swap" size = {25} color = {green}/>}
+                            {!this.props.filter_enable[0] && <FAIcon name = "handshake-o" size = {18} color = {red}/>}
+                            {this.props.filter_enable[0] && <FAIcon name = "handshake-o" size = {18} color = {green}/>}
                             <Text style = {styles.filter_text}>
                                 {this.filterText.bind(this)(0)}
                             </Text>
@@ -75,8 +75,8 @@ export default class LogoAndSearchBar extends Component {
 
                     <TouchableOpacity onPress={() => this.props.onFilterChange(1)}>
                         <View style = {styles.filter_wrapper}>
-                            {!this.props.filter_enable[1] && <Icon name = "ios-play" size = {25} color = {red}/>}
-                            {this.props.filter_enable[1] && <Icon name = "ios-play" size = {25} color = {green}/>}
+                            {!this.props.filter_enable[1] && <FAIcon name = "play" size = {18} color = {red}/>}
+                            {this.props.filter_enable[1] && <FAIcon name = "play" size = {18} color = {green}/>}
                             <Text style = {styles.filter_text}>
                                 {this.filterText.bind(this)(1)}
                             </Text>
@@ -85,8 +85,8 @@ export default class LogoAndSearchBar extends Component {
 
                     <TouchableOpacity onPress={() => this.props.onFilterChange(2)}>
                         <View style = {styles.filter_wrapper}>
-                            {!this.props.filter_enable[2] && <Icon name = "md-time" size = {25} color = {red}/>}
-                            {this.props.filter_enable[2] && <Icon name = "md-time" size = {25} color = {green}/>}
+                            {!this.props.filter_enable[2] && <FAIcon name = "snowflake-o" size = {18} color = {red}/>}
+                            {this.props.filter_enable[2] && <FAIcon name = "snowflake-o" size = {18} color = {green}/>}
                             <Text style = {styles.filter_text}>
                                 {this.filterText.bind(this)(2)}
                             </Text>

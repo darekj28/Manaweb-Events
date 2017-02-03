@@ -47,8 +47,8 @@ export default class BottomTabBar extends React.Component {
 		}
 	}
 	componentWillMount() {
-		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => (this.setState({ show : false })));
-		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => this.setState({ show : true }));
+		this.keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', () => (this.setState({ show : false })));
+		this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', () => this.setState({ show : true }));
 	}
 	componentWillUnmount() {
 		this.keyboardWillHideListener.remove();
