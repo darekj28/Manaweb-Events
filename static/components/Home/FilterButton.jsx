@@ -14,13 +14,13 @@ export default class FilterButton extends React.Component {
 		var make_post_selected = this.state.isSelected ? "make-post-selected" : "make-post-unselected";
 		switch(this.props.name) {
 			case 'Trade' : 
-				icon="glyphicon glyphicon-transfer";
+				icon="fa fa-handshake-o";
 				break;
 			case 'Play' :
-				icon="glyphicon glyphicon-play";
+				icon="fa fa-play";
 				break;
 			case 'Chill' :
-				icon="glyphicon glyphicon-time";
+				icon="fa fa-snowflake-o";
 				break;
 			default : 
 				alert('Invalid action.');

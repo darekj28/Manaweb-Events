@@ -94,8 +94,7 @@ button {
 }
 .make-post-filter-text {
   float:left;
-  padding-top : 4px;
-  padding-left : 4px;
+  padding-left : 2px;
 }
 .filterButton {
   margin-left : 90px;

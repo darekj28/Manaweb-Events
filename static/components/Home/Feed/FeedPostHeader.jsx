@@ -8,14 +8,14 @@ export default class FeedPostHeader extends React.Component {
 			<div className="FeedPostHeader">
 				{this.props.post.isChill && 
 				<div className="postType pull-right">
-					<span className="HeaderGlyphicon glyphicon glyphicon-time"></span>
+					<span className="HeaderGlyphicon fa fa-snowflake-o"></span>
 				</div>}
 				{this.props.post.isTrade && <div className="postType pull-right">
-					<span className="HeaderGlyphicon glyphicon glyphicon-transfer"></span>
+					<span className="HeaderGlyphicon fa fa-handshake-o"></span>
 				</div> }
 				{this.props.post.isPlay && 
 				<div className="postType pull-right">
-					<span className="HeaderGlyphicon glyphicon glyphicon-play"></span>
+					<span className="HeaderGlyphicon fa fa-play"></span>
 				</div> } 				
 				<div className="headerpart name" onClick={this.handleFilterUser.bind(this)}><b>{this.props.post.name}</b></div>
 				{this.props.post.userID != "$DELETED_USER" && <div className="headerpart username text-muted">@{this.props.post.userID}</div>}
