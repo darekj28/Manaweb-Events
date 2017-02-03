@@ -14594,6 +14594,8 @@
 		}, {
 			key: 'deleteAccount',
 			value: function deleteAccount() {
+				swal({ title: "Hold on...",
+					showConfirmButton: false });
 				var obj = { username: _AppStore2.default.getCurrentUser().userID };
 				$.ajax({
 					type: 'POST',
@@ -15419,7 +15421,7 @@
 		}, {
 			key: "handleSubmit",
 			value: function handleSubmit() {
-				if (this.props.code !== this.state.code) this.props.goNextStep();else swal("Invalid confirmation code.", "Please try again.", "error");
+				if (this.props.code === this.state.code) this.props.goNextStep();else swal("Invalid confirmation code.", "Please try again.", "error");
 			}
 		}, {
 			key: "render",
@@ -15649,7 +15651,8 @@
 				error: '',
 				input: "",
 				confirmationCode: _AppStore2.default.getCurrentUser().confirmationPin,
-				this_user: _AppStore2.default.getCurrentUser()
+				this_user: _AppStore2.default.getCurrentUser(),
+				show_welcome: false
 			};
 			return _this;
 		}
@@ -15728,8 +15731,27 @@
 				$.post('/getNotificationCount', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
 					_AppActions2.default.addNotificationCount(data.count);
 					swal.close();
-					_reactRouter.browserHistory.push('/');
+					this.showWelcome.bind(this)();
 				}.bind(this));
+			}
+		}, {
+			key: 'showWelcome',
+			value: function showWelcome() {
+				var current_user = _AppStore2.default.getCurrentUser();
+				var avatar_name = current_user.avatar_name;
+				var container = document.getElementById('avatar_container');
+				container.style.backgroundImage = 'url(static/avatars/' + avatar_name + '.png)';
+				var welcome_container = document.getElementById('welcome-container');
+				welcome_container.style.display = '';
+				var recovery_container = document.getElementById('recovery-container');
+				recovery_container.style.display = 'none';
+				var avatar_name_space = document.getElementById('avatar_name_space');
+				avatar_name_space.innerHTML = avatar_name.charAt(0).toUpperCase() + avatar_name.slice(1);
+			}
+		}, {
+			key: 'navigateToMain',
+			value: function navigateToMain() {
+				_reactRouter.browserHistory.push('/');
 			}
 		}, {
 			key: 'resendConfirmation',
@@ -15753,46 +15775,73 @@
 		}, {
 			key: 'render',
 			value: function render() {
+	
 				return React.createElement(
 					'div',
 					{ className: 'container app-container' },
 					React.createElement(
 						'div',
-						{ className: 'recovery-title' },
-						'Confirm your account'
-					),
-					this.state.this_user.email && React.createElement(
-						'div',
-						{ className: 'recovery' },
-						'A confirmation code was sent to ',
+						{ id: 'recovery-container' },
 						React.createElement(
-							'span',
-							{ className: 'special' },
-							this.state.this_user.email
+							'div',
+							{ className: 'recovery-title' },
+							'Confirm your account'
 						),
-						'. Please enter it below.'
-					),
-					!this.state.this_user.email && this.state.this_user.phone_number && React.createElement(
-						'div',
-						{ className: 'recovery' },
-						'A confirmation code was sent to ',
+						this.state.this_user.email && React.createElement(
+							'div',
+							{ className: 'recovery' },
+							'A confirmation code was sent to ',
+							React.createElement(
+								'span',
+								{ className: 'special' },
+								this.state.this_user.email
+							),
+							'. Please enter it below.'
+						),
+						!this.state.this_user.email && this.state.this_user.phone_number && React.createElement(
+							'div',
+							{ className: 'recovery' },
+							'A confirmation code was sent to ',
+							React.createElement(
+								'span',
+								{ className: 'special' },
+								this.state.this_user.phone_number
+							),
+							'. Please enter it below.'
+						),
+						React.createElement('input', { className: 'form-control recovery-input', onKeyPress: this.handleEnter.bind(this), onChange: this.handleChange.bind(this) }),
 						React.createElement(
-							'span',
-							{ className: 'special' },
-							this.state.this_user.phone_number
+							'button',
+							{ className: 'btn post-button recovery-button', onClick: this.handleSubmit.bind(this) },
+							' Confirm '
 						),
-						'. Please enter it below.'
+						this.state.error && React.createElement(
+							'button',
+							{ className: 'btn post-button recovery-button', onClick: this.resendConfirmation.bind(this) },
+							' Resend confirmation code '
+						)
 					),
-					React.createElement('input', { className: 'form-control recovery-input', onKeyPress: this.handleEnter.bind(this), onChange: this.handleChange.bind(this) }),
 					React.createElement(
-						'button',
-						{ className: 'btn post-button recovery-button', onClick: this.handleSubmit.bind(this) },
-						' Confirm '
-					),
-					this.state.error && React.createElement(
-						'button',
-						{ className: 'btn post-button recovery-button', onClick: this.resendConfirmation.bind(this) },
-						' Resend confirmation code '
+						'div',
+						{ id: 'welcome-container', style: { display: "none" } },
+						React.createElement(
+							'div',
+							{ className: 'recovery-title' },
+							' Congratulations! '
+						),
+						React.createElement('div', { id: 'avatar_container', className: 'select_setting avatar_container centered-text' }),
+						React.createElement(
+							'div',
+							{ className: 'recovery' },
+							'  You\'ve been randomly selected to have  ',
+							React.createElement('span', { className: 'special', id: 'avatar_name_space' }),
+							' as your avatar. You can change your avatar anytime in settings '
+						),
+						React.createElement(
+							'button',
+							{ className: 'btn post-button recovery-button', onClick: this.navigateToMain.bind(this) },
+							'Click here to continue'
+						)
 					)
 				);
 			}

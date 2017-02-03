@@ -55,7 +55,6 @@ def createProfile():
 		isAdmin = False, phone_number = phone_number, birthMonth = birthMonth, birthDay = birthDay, birthYear = birthYear) 
 
 	user_manager.closeConnection()
-
 	post_manager = Posts()
 	post_manager.addUserToLastSeenTables(userID)
 	post_manager.closeConnection()

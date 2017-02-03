@@ -15,7 +15,8 @@ export default class Confirm extends React.Component {
 			error : '',
 			input: "",
 			confirmationCode : AppStore.getCurrentUser().confirmationPin,
-			this_user: AppStore.getCurrentUser()
+			this_user: AppStore.getCurrentUser(),
+			show_welcome : false
 		};
 	}
 
@@ -85,9 +86,27 @@ export default class Confirm extends React.Component {
             function(data) {
                 AppActions.addNotificationCount(data.count);
                 swal.close();
-                browserHistory.push('/');
+                this.showWelcome.bind(this)()
             }.bind(this));
     }
+
+    showWelcome(){
+		var current_user = AppStore.getCurrentUser()
+		var avatar_name = current_user.avatar_name
+		var container = document.getElementById('avatar_container');
+		container.style.backgroundImage = 'url(static/avatars/' + avatar_name + '.png)';
+		var welcome_container = document.getElementById('welcome-container')
+		welcome_container.style.display = ''
+		var recovery_container = document.getElementById('recovery-container')
+		recovery_container.style.display = 'none'
+		var avatar_name_space = document.getElementById('avatar_name_space')
+		avatar_name_space.innerHTML = avatar_name.charAt(0).toUpperCase() + avatar_name.slice(1);
+    }
+
+    navigateToMain() {
+    	browserHistory.push('/')
+    }
+
 	resendConfirmation() {
 		this.setState({error : ""});
 		swal("A new confirmation code has been sent to you.", "Try again.");
@@ -108,8 +127,10 @@ export default class Confirm extends React.Component {
 	}
 
 	render() {
-		return (
+
+		return ( 
 				<div className="container app-container">
+					<div id = "recovery-container">
 					<div className="recovery-title">Confirm your account</div>
 					{this.state.this_user.email && 
 						<div className="recovery">A confirmation code was sent to <span className="special">{this.state.this_user.email}</span>. Please enter it below.</div>}
@@ -119,7 +140,17 @@ export default class Confirm extends React.Component {
                		<button className="btn post-button recovery-button" onClick={this.handleSubmit.bind(this)}> Confirm </button>
 		            {this.state.error &&
 		            	<button className="btn post-button recovery-button" onClick={this.resendConfirmation.bind(this)}> Resend confirmation code </button>}
-            	</div>
+		            </div>
+		           	<div id = "welcome-container" style = {{display : "none"}}>
+		            <div className = "recovery-title"> Congratulations! </div>
+						<div id="avatar_container"  className="select_setting avatar_container centered-text"></div>
+						<div className="recovery">  You've been randomly selected to have  <span className="special" id = "avatar_name_space"/> as your avatar. 
+						You can change your avatar anytime in settings </div>
+						<button className="btn post-button recovery-button" onClick={this.navigateToMain.bind(this)}> 
+						 Click here to continue
+						</button>
+					</div>
+            	</div> 
 		);
 	}	
 }
