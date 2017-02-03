@@ -36,7 +36,7 @@
 body {
   font-family : "HelveticaNeue-Light", FontAwesome;
   font-size : 18px;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   background-color : #ffffff;
   color : var(--main-color);
   overflow-x : hidden;
@@ -52,6 +52,9 @@ button.kep-login-facebook:hover{
 }
 input {
   letter-spacing: 0.5px;
+}
+textarea {
+  letter-spacing : 0.5px;
 }
 button {
   letter-spacing: 0.5px;
