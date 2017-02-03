@@ -16,12 +16,14 @@ import {
 
 const customTextProps = {
   style: {
-    fontFamily: Platform.OS === 'ios' ? 'HelveticaNeue-Light' : 'Roboto'
+    fontFamily: Platform.OS === 'ios' ? 'HelveticaNeue-Light' : 'Roboto',
+    letterSpacing : 0.5
   }
 };
 const customTextInputProps = {
   style: {
     fontFamily: Platform.OS === 'ios' ? 'HelveticaNeue-Light' : 'Roboto',
+    letterSpacing : 0.5
   },
   underlineColorAndroid: "transparent"
 };

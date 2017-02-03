@@ -92,11 +92,11 @@ export default class FeedBox extends Component {
                                 </Text>
                             </View>
                             <View style={{flex: 0, paddingTop : 8, paddingRight : 6, flexDirection: 'row'}}>
-                                { post.isPlay && <View style={styles.feed_filter_image}><FAIcon name = "play" size = {14} color = "#696969"/></View>}
+                                { post.isPlay && <View style={styles.feed_filter_image}><FAIcon name = "play" size = {15} color = "#696969"/></View>}
                                 
-                                { post.isTrade && <View style={styles.feed_filter_image}><FAIcon name = "handshake-o" size = {14} color = "#696969"/></View>}
+                                { post.isTrade && <View style={styles.feed_filter_image}><FAIcon name = "handshake-o" size = {15} color = "#696969"/></View>}
                                 
-                                { post.isChill && <View style={styles.feed_filter_image}><FAIcon name = "snowflake-o" size = {14} color = "#696969"/></View>}
+                                { post.isChill && <View style={styles.feed_filter_image}><FAIcon name = "snowflake-o" size = {15} color = "#696969"/></View>}
                             </View>
                         </View>
 

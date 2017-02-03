@@ -111,8 +111,8 @@ const styles = StyleSheet.create({
     },
     filter_wrapper: {
         margin: 1,
-        marginLeft: 4,
-        marginRight: 4,
+        marginLeft: 10,
+        marginRight: 10,
         alignItems : 'center'
     },
     filter_image: {
