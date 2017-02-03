@@ -18,7 +18,7 @@ export default class FeedPostHeader extends React.Component {
 					<span className="HeaderGlyphicon glyphicon glyphicon-play"></span>
 				</div> } 				
 				<div className="headerpart name" onClick={this.handleFilterUser.bind(this)}><b>{this.props.post.name}</b></div>
-				<div className="headerpart username text-muted">@{this.props.post.userID}</div>
+				{this.props.post.userID != "$DELETED_USER" && <div className="headerpart username text-muted">@{this.props.post.userID}</div>}
 				<div className="headerpart time text-muted">&#8226; {this.props.post.time}</div>
 			</div>
 			)
