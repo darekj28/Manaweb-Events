@@ -117,22 +117,11 @@ export default class FeedBox extends Component {
                                     No replies yet
                                 </Text>
                             </View>}
-                            <View style={{flex : 0, paddingRight : 5, paddingTop : 3}}>
-                                {/*<ModalDropdown
-                                    defaultIndex={0}
-                                    defaultValue={DROP_DOWN_OPTIONS[0]}
-                                    dropdownStyle={styles.dropdown_box}
-                                    options={DROP_DOWN_OPTIONS}
-                                    onSelect={(idx, value) => {this.props.toggleReportModal(this.props.post)}}
-                                    renderRow={this._dropdown_renderRow.bind(this)}
-                                    renderSeparator = {
-                                    (sectionID, rowID, adjacentRowHighlighted) =>
-                                    }>*/}
+                            {post.userID != "$DELETED_USER" && <View style={{flex : 0, paddingRight : 5, paddingTop : 3}}>
                                 <TouchableOpacity onPress={() => this.props.toggleReportModal(post)}>
                                     <Icon name = "md-alert" size = {22} color = "#90D7ED"/>
                                 </TouchableOpacity>
-                                {/*</ModalDropdown>*/}
-                            </View>
+                            </View>}
                         </View>
                     </View>
                 </View>
@@ -178,7 +167,7 @@ const styles = StyleSheet.create({
     profile_image: {
         width: PROFILE_WIDTH,
         height: PROFILE_HEIGHT,
-        borderRadius: 4,
+        borderRadius: 25,
         marginTop: 8,
         marginLeft: 8
     },

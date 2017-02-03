@@ -73,6 +73,6 @@ const styles = StyleSheet.create({
     profile_image: {
         width: PROFILE_WIDTH,
         height: PROFILE_HEIGHT,
-        borderRadius: 4
+        borderRadius: 25
     }
 });

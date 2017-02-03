@@ -1,14 +1,14 @@
 import React from 'react';
 import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
         TouchableWithoutFeedback, ScrollView, Alert, Image, Animated} from 'react-native';
-const PROFILE_HEIGHT = 30
-const PROFILE_WIDTH = 30
+const PROFILE_HEIGHT = 50
+const PROFILE_WIDTH = 50
 export default class ReportOriginalPost extends React.Component {
 	render() {
 		var post = this.props.post;
 		return (
 			<View style={{  flex:1, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                <View style={{paddingLeft : 6, paddingTop : 6, paddingBottom :6, justifyContent: 'flex-start'}}>
+                <View style={{paddingLeft : 3, paddingTop : 3, paddingBottom :3, justifyContent: 'flex-start'}}>
                     {post.avatar =='nissa' && <Image  style={styles.profile_image} source={require('../../static/avatars/nissa.png')} />}
                     {post.avatar == 'chandra' && <Image  style={styles.profile_image} source={require('../../static/avatars/chandra.png')} />}
                     {post.avatar == 'elspeth' && <Image  style={styles.profile_image} source={require('../../static/avatars/elspeth.png')} />}
@@ -77,6 +77,6 @@ const styles = StyleSheet.create({
     profile_image: {
         width: PROFILE_WIDTH,
         height: PROFILE_HEIGHT,
-        borderRadius: 4
+        borderRadius: 25
     }
 });
