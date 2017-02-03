@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
 		justifyContent : 'center', 
 		alignItems : 'center', 
 		width : 150, 
-		height : 40
+		height : 35
 	},
 	button_text : {color : 'white', fontWeight : 'bold', fontSize : 14},
 	forgot_password : {fontSize : 12, color : 'lightseagreen'},

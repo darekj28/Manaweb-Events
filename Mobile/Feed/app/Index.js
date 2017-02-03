@@ -22,7 +22,8 @@ const customTextProps = {
 const customTextInputProps = {
   style: {
     fontFamily: Platform.OS === 'ios' ? 'HelveticaNeue-Light' : 'Roboto',
-  }
+  },
+  underlineColorAndroid: "transparent"
 };
 setCustomText(customTextProps);
 setCustomTextInput(customTextInputProps);
