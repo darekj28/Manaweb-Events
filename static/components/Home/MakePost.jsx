@@ -10,6 +10,9 @@ export default class MakePost extends React.Component {
 		$('.post-button').click(function() {
 			$(this).blur();
 		});
+		$('.post-button').focus(function() {
+			$(this).blur();
+		});
 		$('#MessagePost').hide();
 		$('#TogglePost').click(function() {
 			$('#MessagePost').slideToggle(function() {

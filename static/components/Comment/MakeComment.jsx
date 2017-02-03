@@ -10,6 +10,9 @@ export default class MakeComment extends React.Component {
 		$('.post-button').click(function() {
 			$(this).blur();
 		});
+		$('.post-button').focus(function() {
+			$(this).blur();
+		});
 		$('#CommentPost').hide();
 		$('#ToggleComment').click(function() {
 			$('#CommentPost').slideToggle(function() {
