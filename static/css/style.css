@@ -133,16 +133,22 @@ button.kep-login-facebook:hover{
 }
 .post-button {
   color : #fff;
+  outline : none;
   border-radius : 20px;
   background-color : var(--light);
 }
 .post-button:hover {
   color : #fff;
+  outline : none;
   background-color : var(--dark);
 }
 .post-button:focus {
   color : #fff;
+  outline : none!important;
   background-color : var(--light);
+}
+button:focus {
+  outline : none!important;
 }
 #Or {
   padding-top : 8px;

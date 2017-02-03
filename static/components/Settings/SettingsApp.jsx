@@ -154,6 +154,8 @@ export default class SettingsApp extends React.Component {
 		});
 	}
 	deleteAccount() {
+		swal({title : "See you later!", text: "Please hold on as we delete your account.", 
+						showConfirmButton : false});
 		var obj = { username : AppStore.getCurrentUser().userID };
 		$.ajax({
 	    	type : 'POST',
