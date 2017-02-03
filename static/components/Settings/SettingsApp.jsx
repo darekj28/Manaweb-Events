@@ -6,7 +6,8 @@ import NoSearchNavBar from '../GenericNavBar/NoSearchNavBar.jsx';
 import AppActions from '../../actions/AppActions.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 var text_fields = [	"old_password", "password", "first_name", "last_name", "email", "phone_number" ];
-var select_fields = [ "month_of_birth", "day_of_birth", "year_of_birth", "avatar" ];
+var select_fields = [ "avatar" ];
+var birthday_fields = [ "month_of_birth", "day_of_birth", "year_of_birth" ];
 var required_text_fields = ["first_name", "last_name", "old_password"];
 export default class SettingsApp extends React.Component {
 	constructor(props) {
@@ -210,8 +211,8 @@ export default class SettingsApp extends React.Component {
 				<NoSearchNavBar currentUser={this.state.currentUser} name={name}/>
 				<div className="container app-container">
 					<form class="form-horizontal">
-						<div className="page-header">
-							<h2> Account Settings </h2>
+						<div className="page-header my-page-header">
+							<h2> ACCOUNT SETTINGS </h2>
 						</div>
 						{text_fields.map(function(field) {
 							return <div className="form-group">
@@ -221,6 +222,16 @@ export default class SettingsApp extends React.Component {
 													handleBlur={this.handleTextBlur.bind(this)}/>
 									</div>;
 						}, this)}
+						<div className="form-group">
+							<SettingsInputLabel field="Birthday"/>
+						{birthday_fields.map(function(field) {
+							return	<div>
+										<SettingsSelectInput field={field} value={this.state[field]}
+															handleSelect={this.handleChange.bind(this)} 
+															handleBlur={this.handleSelectBlur.bind(this)}/>
+									</div>
+						}, this)}
+						</div>
 						{select_fields.map(function(field) {
 							return <div className="form-group">
 										<SettingsInputLabel field={field}/>

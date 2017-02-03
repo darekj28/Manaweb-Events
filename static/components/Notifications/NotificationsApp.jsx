@@ -34,8 +34,7 @@ export default class NotificationsApp extends React.Component {
 				<div className="container app-container">
 
 					{this.state.currentUser['first_name'] != undefined && 
-						<h2>Your Notifications</h2>}
-					<hr/>
+						<div className="page-header my-page-header"><h2>YOUR NOTIFICATIONS</h2></div>}
 					<div className="feed row">
 						<NotificationsFeed notifications={this.state.notifications}/>		
 					</div>

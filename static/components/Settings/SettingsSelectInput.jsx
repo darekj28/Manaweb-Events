@@ -36,15 +36,19 @@ export default class SettingsSelectInput extends React.Component {
 	render() {
 		var options;
 		var field = this.props.field;
+		var setting_border = "";
 		switch (field) {
 			case "month_of_birth" : 
 				options = months;
+				setting_border = "month-setting";
 				break;
 			case "day_of_birth" : 
 				options = days;
+				setting_border = "day-setting";
 				break;
 			case "year_of_birth" : 
 				options = years;
+				setting_border = "year-setting";
 				break;
 			case "avatar" :
 				options = avatar_list;
@@ -52,7 +56,7 @@ export default class SettingsSelectInput extends React.Component {
 		}
 		return (
 				<div>
-					<select className={"select_setting form-control " + this.state.valid} id={field} name={field}
+					<select className={setting_border + " select_setting form-control " + this.state.valid} id={field} name={field}
 									title={idToName(field)}
 									onChange={this.handleSelect.bind(this)} onBlur={this.handleBlur.bind(this)}> 
 						<option value="" disabled selected>{idToTimeLabel(field)}</option>

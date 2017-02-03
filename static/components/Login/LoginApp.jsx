@@ -16,7 +16,7 @@ export default class LoginApp extends React.Component {
 						<div className="pull-left">Insert own image</div>
 					</div>
 					<div className="register-form-container col-xs-6">
-						<div className="page-header"><h2>Create an account</h2></div>
+						<div className="page-header my-page-header"><h2>CREATE AN ACCOUNT</h2></div>
 						<RegisterForm/>
 						<FacebookConnect/>
 						<div className="terms-of-service">

@@ -36,6 +36,7 @@
 body {
   font-family : "HelveticaNeue-Light", FontAwesome;
   font-size : 18px;
+  letter-spacing: 1px;
   background-color : #ffffff;
   color : var(--main-color);
   overflow-x : hidden;
@@ -49,6 +50,12 @@ button.kep-login-facebook{
 button.kep-login-facebook:hover{
   background-color : #365899;
 }
+input {
+  letter-spacing: 0.5px;
+}
+button {
+  letter-spacing: 0.5px;
+}
 .inner-addon { 
     position: relative; 
 }
@@ -59,7 +66,7 @@ button.kep-login-facebook:hover{
   font-size : 14px;
   pointer-events: none;
   z-index : 20000;
-  opacity : 0.5;
+  opacity : 0.8;
 }
 .login-icon {
   top : -4px;
@@ -257,6 +264,12 @@ button:focus {
 .link:hover {
   color: var(--dark);
 }
+.settings-label {
+  font-size : 14px;
+  letter-spacing: 1px;
+  color : '#dbdbdb';
+  font-weight : "bolder";
+}
 .settings-button {
   width : 280px;
   background-color : var(--light);
@@ -270,7 +283,9 @@ button:focus {
   background-color: var(--light);
   color : #fff;
 }
-
+.my-page-header {
+  letter-spacing : 2px;
+}
 
 .invalid {
   border-width: 1.5px;
@@ -533,6 +548,7 @@ button:focus {
 }
 #EventName {
   display : inline-block;
+  letter-spacing: 3px;
 }
 .SearchNavBarGlyphicon:hover {  
   cursor : pointer;
@@ -641,6 +657,18 @@ button:focus {
 }
 .navbar-default .navbar-link:hover {
   color: #ffffff;
+}
+.month-setting {
+  border-radius : 4px 4px 0px 0px;
+  -webkit-appearance: none;
+}
+.day-setting {
+  border-radius : 0px;
+  -webkit-appearance: none;
+}
+.year-setting {
+  border-radius: 0px 0px 4px 4px;
+  -webkit-appearance: none;
 }
 @media (max-width: 767px) {
   body {
