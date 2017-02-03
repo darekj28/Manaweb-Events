@@ -135,7 +135,11 @@ export default class Index extends React.Component {
   }
 
   handleAppStateChange(appState){
-      clearInterval(this.interval)
+      // this checks if any changes were made to user account while they were away
+      this.initializeUserInformation.bind(this)()
+
+      // here we 
+      clearInterval(this.notification_interval)
       this.notification_interval = setInterval(this.checkNotifications.bind(this), this.notification_time_interval)
   }
 

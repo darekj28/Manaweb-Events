@@ -580,6 +580,16 @@ def createFeed():
 	post_manager.closeConnection()
 	return redirect(url_for('adminTools'))
 
+@browser_api.route('/softDeleteAccount', methods = ['POST'])
+def softDeleteAccount():
+	username = request.json['username']
+	post_manager = Posts()
+	post_manager.softDeleteUserAndPosts(username)
+	post_manager.closeConnection()
+	output = {}
+	output['result'] = 'success'
+	return jsonify(output)
+
 def getUserInfo(user_id):
 	user_manager = Users()
 	this_user = user_manager.getInfo(user_id)

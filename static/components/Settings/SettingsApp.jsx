@@ -3,6 +3,7 @@ import SettingsTextInput from './SettingsTextInput.jsx';
 import SettingsSelectInput from './SettingsSelectInput.jsx';
 import SettingsInputLabel from './SettingsInputLabel.jsx';
 import NoSearchNavBar from '../GenericNavBar/NoSearchNavBar.jsx';
+import AppActions from '../../actions/AppActions.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 
 var text_fields = [	"old_password", "password", "first_name", "last_name", "email", "phone_number" ];
@@ -153,10 +154,10 @@ export default class SettingsApp extends React.Component {
 		});
 	}
 	deleteAccount() {
-		var obj = { currentUser : AppStore.getCurrentUser() };
+		var obj = { username : AppStore.getCurrentUser().userID };
 		$.ajax({
 	    	type : 'POST',
-	    	url: "/deleteAccount",
+	    	url: "/softDeleteAccount",
 	    	data: JSON.stringify(obj, null, '\t'),
 	    	contentType: 'application/json;charset=UTF-8',
 	    	success : function(data) {
@@ -165,7 +166,7 @@ export default class SettingsApp extends React.Component {
 				type: "success",
 				confirmButtonColor: "#80CCEE",
   				confirmButtonText: "OK",
-  				closeOnConfirm: false}, function() { AppStore.removeCurrentUser(); location.reload(); });
+  				closeOnConfirm: false}, function() { AppActions.removeCurrentUser(); location.reload(); });
 	    	},
 	    	error : function(data) {
 	    		swal("Oops", "We couldn't connect to the server!", "error");
@@ -184,7 +185,6 @@ export default class SettingsApp extends React.Component {
 	      	confirmButtonText: "Delete account",
 	      	confirmButtonColor: "#f44336"}, 
 	    function(password) {
-	    	console.log("poop");
 	    	this.verifyOldPasswordForDelete.bind(this)(password);
 	    }.bind(this));
 	}

@@ -10305,7 +10305,7 @@
 	            React.createElement(
 	              Link,
 	              { to: '/', onClick: this.removeCurrentUser.bind(this) },
-	              'Sign out'
+	              'Sign Out'
 	            )
 	          )
 	        )
@@ -10509,6 +10509,9 @@
 				$('.post-button').click(function () {
 					$(this).blur();
 				});
+				$('.post-button').focus(function () {
+					$(this).blur();
+				});
 				$('#MessagePost').hide();
 				$('#TogglePost').click(function () {
 					$('#MessagePost').slideToggle(function () {
@@ -10576,7 +10579,11 @@
 							React.createElement(
 								'button',
 								{ className: 'btn post-button' },
-								'Post'
+								React.createElement(
+									'b',
+									null,
+									'Post'
+								)
 							)
 						)
 					)
@@ -11014,7 +11021,7 @@
 							this.props.post.name
 						)
 					),
-					React.createElement(
+					this.props.post.userID != "$DELETED_USER" && React.createElement(
 						"div",
 						{ className: "headerpart username text-muted" },
 						"@",
@@ -13343,7 +13350,7 @@
 							this.props.comment.name
 						)
 					),
-					this.props.comment.name != undefined && React.createElement(
+					this.props.comment.name != undefined && this.props.comment.userID != "$DELETED_USER" && React.createElement(
 						"div",
 						{ className: "headerpart pull-left username text-muted" },
 						"@",
@@ -13909,6 +13916,9 @@
 				$('.post-button').click(function () {
 					$(this).blur();
 				});
+				$('.post-button').focus(function () {
+					$(this).blur();
+				});
 				$('#CommentPost').hide();
 				$('#ToggleComment').click(function () {
 					$('#CommentPost').slideToggle(function () {
@@ -13969,7 +13979,11 @@
 							React.createElement(
 								'button',
 								{ className: 'btn post-button' },
-								'Comment'
+								React.createElement(
+									'b',
+									null,
+									'Comment'
+								)
 							)
 						)
 					)
@@ -14394,6 +14408,10 @@
 	
 	var _NoSearchNavBar2 = _interopRequireDefault(_NoSearchNavBar);
 	
+	var _AppActions = __webpack_require__(/*! ../../actions/AppActions.jsx */ 48);
+	
+	var _AppActions2 = _interopRequireDefault(_AppActions);
+	
 	var _AppStore = __webpack_require__(/*! ../../stores/AppStore.jsx */ 1);
 	
 	var _AppStore2 = _interopRequireDefault(_AppStore);
@@ -14556,11 +14574,71 @@
 				}
 			}
 		}, {
+			key: 'verifyOldPasswordForDelete',
+			value: function verifyOldPasswordForDelete(password) {
+				var obj = { password: password, currentUser: _AppStore2.default.getCurrentUser() };
+				$.ajax({
+					type: 'POST',
+					url: '/verifyOldPassword',
+					data: JSON.stringify(obj, null, '\t'),
+					contentType: 'application/json;charset=UTF-8',
+					success: function (res) {
+						if (!res['error']) {
+							this.deleteAccount.bind(this)();
+						} else {
+							swal("Oops...", "Incorrect password.", "error");
+						}
+					}.bind(this)
+				});
+			}
+		}, {
+			key: 'deleteAccount',
+			value: function deleteAccount() {
+				var obj = { username: _AppStore2.default.getCurrentUser().userID };
+				$.ajax({
+					type: 'POST',
+					url: "/softDeleteAccount",
+					data: JSON.stringify(obj, null, '\t'),
+					contentType: 'application/json;charset=UTF-8',
+					success: function success(data) {
+						swal({ title: "Success!",
+							text: "Your account has been deleted.",
+							type: "success",
+							confirmButtonColor: "#80CCEE",
+							confirmButtonText: "OK",
+							closeOnConfirm: false }, function () {
+							_AppActions2.default.removeCurrentUser();location.reload();
+						});
+					},
+					error: function error(data) {
+						swal("Oops", "We couldn't connect to the server!", "error");
+					}
+				});
+			}
+		}, {
+			key: 'clickDeleteAccount',
+			value: function clickDeleteAccount() {
+				swal({
+					title: "Are you sure you want to delete your account?",
+					text: "If you are sure, type in your password:",
+					type: "input",
+					inputType: "password",
+					showCancelButton: true,
+					closeOnConfirm: false,
+					confirmButtonText: "Delete account",
+					confirmButtonColor: "#f44336" }, function (password) {
+					this.verifyOldPasswordForDelete.bind(this)(password);
+				}.bind(this));
+			}
+		}, {
 			key: 'enableUpdate',
 			value: function enableUpdate() {
-				$('#UpdateSettingsSubmit').on("click", function (e) {
+				$('.settings-button').on("focus", function (e) {
 					e.preventDefault();
 					$(this).blur();
+				});
+				$('.settings-button').on("click", function (e) {
+					e.preventDefault();
 				});
 			}
 		}, {
@@ -14618,9 +14696,27 @@
 								{ className: 'form-group' },
 								React.createElement(
 									'button',
-									{ className: 'btn btn-default', id: 'UpdateSettingsSubmit',
+									{ className: 'btn btn-default post-button settings-button', id: 'UpdateSettingsSubmit',
 										onClick: this.handleSubmit.bind(this) },
-									' Update! '
+									React.createElement(
+										'b',
+										null,
+										'Update'
+									)
+								)
+							),
+							React.createElement(
+								'div',
+								{ className: 'form-group' },
+								React.createElement(
+									'button',
+									{ className: 'btn btn-default post-button settings-button',
+										onClick: this.clickDeleteAccount.bind(this) },
+									React.createElement(
+										'b',
+										null,
+										'Delete Account'
+									)
 								)
 							)
 						)

@@ -1053,7 +1053,7 @@ class Posts:
 		sql = "UPDATE " + table_name + " SET body = %s, poster_id = %s WHERE unique_id = %s" 
 		self.db.execute(self.db.mogrify(sql, (body, poster_id, unique_id)))	
 
-	def deleteUserAndPostsWipe(self, userID):
+	def softDeleteUserAndPosts(self, userID):
 		user_manager = Users()
 		this_user = user_manager.getInfo(userID)
 		user_manager.closeConnection()
@@ -1062,34 +1062,19 @@ class Posts:
 
 		feed_names = self.getFeedNames()
 		for feed_name in feed_names:
-			print("starting")
 			allComments = self.getComments(feed_name)
-			print("fetched comments complete")
 			allPosts = self.getPosts(feed_name)
-			print("fetched posts complete")
-			count = 0
-			print("starting to delete comments")
 			for comment in allComments:
 				if comment['poster_id'] == userID:
-					count = count + 1
 					self.softDeleteComment(feed_name, comment['unique_id']) 
-					
-					if (count % 20 == 0):
-						print(count)
 
-			print("finished deleting comments")
 			for post in allPosts:
 				if post['poster_id'] == userID:
-					count = count + 1
 					self.softDeletePost(feed_name, post['comment_id']) 
-					if (count % 20 == 0):
-						print(count)
 
 		user_manager = Users()
 		user_manager.deleteUser(userID)
 		user_manager.closeConnection()
-
-
 
 	def deleteNotifications(self):
 		user_manager = Users()
