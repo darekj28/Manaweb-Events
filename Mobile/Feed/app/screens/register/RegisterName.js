@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
 		justifyContent : 'center', 
 		alignItems : 'center', 
 		width : 200, 
-		height : 40
+		height : 35,
 	},
 	button_text : {color : 'white', fontWeight : 'bold', fontSize : 14},
 	error_text : {color : 'red', fontWeight : 'bold', fontSize : 12},
