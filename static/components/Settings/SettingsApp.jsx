@@ -5,7 +5,6 @@ import SettingsInputLabel from './SettingsInputLabel.jsx';
 import NoSearchNavBar from '../GenericNavBar/NoSearchNavBar.jsx';
 import AppActions from '../../actions/AppActions.jsx';
 import AppStore from '../../stores/AppStore.jsx';
-
 var text_fields = [	"old_password", "password", "first_name", "last_name", "email", "phone_number" ];
 var select_fields = [ "month_of_birth", "day_of_birth", "year_of_birth", "avatar" ];
 var required_text_fields = ["first_name", "last_name", "old_password"];
@@ -28,7 +27,8 @@ export default class SettingsApp extends React.Component {
 			valid_select_fields	: [],
 			invalid_text_fields : [],
 			invalid_select_fields : [],
-			submittable			: false
+			submittable			: false,
+			showAvatar			: false
 		};
 	}
 	autopopulateSettings() {
@@ -229,7 +229,15 @@ export default class SettingsApp extends React.Component {
 															handleBlur={this.handleSelectBlur.bind(this)}/>
 									</div>
 						}, this)}
-						<div id="avatar_container" className="select_setting avatar_container centered-text"></div>
+						<div className="form-group preview setting" onClick={() => {this.setState({ showAvatar : !this.state.showAvatar})}}>
+							{!this.state.showAvatar && <div className="text-center">Show Avatar</div>}
+							{this.state.showAvatar && <div className="text-center">Hide Avatar</div>}
+						</div>
+						<div className="form-group setting">
+							<div className="text-center">
+								{this.state.showAvatar && <img className="settings-avatar" src={"static/avatars/" + this.state.avatar + ".png"}/>}
+							</div>
+						</div>
 						<div className="form-group">
 							<button className="btn btn-default post-button settings-button" id="UpdateSettingsSubmit"
 									onClick={this.handleSubmit.bind(this)}><b>Update</b></button>

@@ -52,7 +52,7 @@ export default class FeedPost extends React.Component {
 							{post.numberOfComments == 0 && <span className="noComments pull-left"><h6>Be the first to comment!</h6></span>}
 							</Link>
 						</div>
-						{ (isAdmin || !isOP) && 
+						{ ((isAdmin || !isOP) && post.userID != "$DELETED_USER") && 
 						<div className="dropdown pull-right" id={"dropdown_" + post.comment_id} onClick={this.scrollToDropdown.bind(this)}>
 							<a href="#" className="dropdown-toggle" data-toggle="dropdown">
 				                <span className="glyphicon glyphicon-option-horizontal 

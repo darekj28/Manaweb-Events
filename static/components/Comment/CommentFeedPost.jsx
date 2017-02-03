@@ -33,7 +33,7 @@ export default class CommentFeedPost extends React.Component {
 					<div className="row"><CommentFeedPostBody content={comment.commentContent} 
 									isOriginalPost={this.props.isOriginalPost}/></div>
 					<div className="PostFooter row">
-						{(!this.props.isOriginalPost) && 
+						{(!this.props.isOriginalPost && comment.userID != "$DELETED_USER") && 
 						<div className="dropdown" id={"commentdropdown_" + comment.unique_id}>
 							<a href="#" className="dropdown-toggle pull-right" 
 										data-toggle="dropdown" onClick={this.scrollToDropdown.bind(this)}>

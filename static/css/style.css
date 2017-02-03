@@ -12,6 +12,27 @@
   font-family: 'OpenSans-Light';
   src: url('OpenSans-Light.ttf');
 }
+.container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+@media (min-width: 768px) {
+  .container {
+    max-width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    max-width: 770px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    max-width: 970px;
+  }
+}
 body {
   font-family : "HelveticaNeue-Light", FontAwesome;
   font-size : 18px;
@@ -42,6 +63,12 @@ button.kep-login-facebook:hover{
 }
 .login-icon {
   top : -4px;
+}
+.preview {
+  font-size : 12px;
+  font-weight : 'bold';
+  color : var(--light);
+  cursor : pointer;
 }
 .left-addon .input-icon  { left:  0px;}
 .right-addon .input-icon { right: 0px;}
@@ -402,6 +429,13 @@ button:focus {
 .Avatar {
   height: 64px;
   width: 64px;
+  border-radius : 40px;
+}
+.settings-avatar {
+  height : 128px;
+  width : 128px;
+  border-radius : 80px;
+  border : 1px solid #696969;
 }
 .AvatarSpace {
   width: 60px;
