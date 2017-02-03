@@ -63,16 +63,6 @@ export default class LogoAndSearchBar extends Component {
                     </View>
                 </View>
                 <View style={{flex: 0, flexDirection: 'row', paddingRight : 4}}>
-                    <TouchableOpacity onPress={() => this.props.onFilterChange(0)}>
-                        <View style = {styles.filter_wrapper}>
-                            {!this.props.filter_enable[0] && <FAIcon name = "handshake-o" size = {18} color = {red}/>}
-                            {this.props.filter_enable[0] && <FAIcon name = "handshake-o" size = {18} color = {green}/>}
-                            <Text style = {styles.filter_text}>
-                                {this.filterText.bind(this)(0)}
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-
                     <TouchableOpacity onPress={() => this.props.onFilterChange(1)}>
                         <View style = {styles.filter_wrapper}>
                             {!this.props.filter_enable[1] && <FAIcon name = "play" size = {18} color = {red}/>}
@@ -82,7 +72,15 @@ export default class LogoAndSearchBar extends Component {
                             </Text>
                         </View>
                     </TouchableOpacity>
-
+                    <TouchableOpacity onPress={() => this.props.onFilterChange(0)}>
+                        <View style = {styles.filter_wrapper}>
+                            {!this.props.filter_enable[0] && <FAIcon name = "handshake-o" size = {18} color = {red}/>}
+                            {this.props.filter_enable[0] && <FAIcon name = "handshake-o" size = {18} color = {green}/>}
+                            <Text style = {styles.filter_text}>
+                                {this.filterText.bind(this)(0)}
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.props.onFilterChange(2)}>
                         <View style = {styles.filter_wrapper}>
                             {!this.props.filter_enable[2] && <FAIcon name = "snowflake-o" size = {18} color = {red}/>}

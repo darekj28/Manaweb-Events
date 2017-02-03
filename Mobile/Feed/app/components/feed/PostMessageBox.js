@@ -4,7 +4,7 @@ import {Component} from 'react'
 import { AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
         TouchableWithoutFeedback, Alert, Image, Animated} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import FAIcon from 'react-native-vector-icons/FontAwesome';
 export default class PostMessageBox extends Component {
     constructor(props) {
         super(props);
@@ -41,8 +41,8 @@ export default class PostMessageBox extends Component {
     }
 
     render() {
-        var green = '#90D7ED';
-        var red = 'silver';
+        var selected = '#90D7ED';
+        var unselected = 'silver';
         if (!this.props.post_message_expanded) {
             return <View/>;
         } else {
@@ -64,24 +64,22 @@ export default class PostMessageBox extends Component {
                 <Animated.View style={[styles.container, {alignItems : 'center',
                         justifyContent : 'center', borderTopWidth : 1, borderTopColor : 'silver'}]}>
                     <View style = {{flex: 1, flexDirection:'row', borderRightWidth : 1, borderRightColor : 'silver'}}>
-                        <TouchableOpacity style={{flex : 1}} onPress={() => this.setFilter(0)}>
-                            <View style={styles.filter_wrapper}>
-                                {!this.state.filter_enable[0] && <Icon name = "md-swap" size = {25} color = {red}/>}
-                                {this.state.filter_enable[0] && <Icon name = "md-swap" size = {25} color = {green}/>}
-                            </View>
-                        </TouchableOpacity>
-
                         <TouchableOpacity style={{flex : 1}} onPress={() => this.setFilter(1)}>
                             <View style={styles.filter_wrapper}>
-                                {!this.state.filter_enable[1] && <Icon name = "ios-play" size = {25} color = {red}/>}
-                                {this.state.filter_enable[1] && <Icon name = "ios-play" size = {25} color = {green}/>}
+                                {!this.state.filter_enable[1] && <FAIcon name = "play" size = {18} color = {unselected}/>}
+                                {this.state.filter_enable[1] &&  <FAIcon name = "play" size = {18} color = {selected}/>}
                             </View>
                         </TouchableOpacity>
-
+                        <TouchableOpacity style={{flex : 1}} onPress={() => this.setFilter(0)}>
+                            <View style={styles.filter_wrapper}>
+                                {!this.state.filter_enable[0] && <FAIcon name = "handshake-o" size = {18} color = {unselected}/>}
+                                {this.state.filter_enable[0] &&  <FAIcon name = "handshake-o" size = {18} color = {selected}/>}
+                            </View>
+                        </TouchableOpacity>
                         <TouchableOpacity style={{flex : 1}} onPress={() => this.setFilter(2)}>
                             <View style={styles.filter_wrapper}>
-                                {!this.state.filter_enable[2] && <Icon name = "md-time" size = {25} color = {red}/>}
-                                {this.state.filter_enable[2] && <Icon name = "md-time" size = {25} color = {green}/>}
+                                {!this.state.filter_enable[2] && <FAIcon name = "snowflake-o" size = {18} color = {unselected}/>}
+                                {this.state.filter_enable[2] &&  <FAIcon name = "snowflake-o" size = {18} color = {selected}/>}
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -126,6 +124,7 @@ const styles = StyleSheet.create({
     },
     filter_wrapper: {
         alignItems : 'center',
-        justifyContent : 'center'
+        justifyContent : 'center',
+        padding : 5
     }
 });
