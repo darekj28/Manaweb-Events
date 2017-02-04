@@ -142,7 +142,7 @@ def mobileEmailConfirmation():
 	return jsonify({'result' : 'success', 'confirmationPin' : confirmationPin})
 
 @mobile_api.route('/mobileResendEmailConfirmation', methods = ['POST'])
-def mobileEmailConfirmation():
+def mobileResendEmailConfirmation():
 	email = request.json['email']
 	confirmationPin = request.json['confirmationPin']
 	output = email.sendConfirmationEmail(email, confirmationPin)
