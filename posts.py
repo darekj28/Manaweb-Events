@@ -377,6 +377,8 @@ class Posts:
 		self.post_db.commit()
 
 	def getShortListNotifications(self,userID):
+		if userID == None or userID == "":
+			return list()
 		self.createShortList(userID)
 		table_name = self.USER_NOTIFICATION_PREFIX + userID
 		sql = "SELECT * FROM " + table_name
@@ -1059,7 +1061,6 @@ class Posts:
 		user_manager.closeConnection()
 		if (this_user == None):
 			return 
-
 		feed_names = self.getFeedNames()
 		for feed_name in feed_names:
 			allComments = self.getComments(feed_name)
@@ -1067,14 +1068,19 @@ class Posts:
 			for comment in allComments:
 				if comment['poster_id'] == userID:
 					self.softDeleteComment(feed_name, comment['unique_id']) 
-
 			for post in allPosts:
 				if post['poster_id'] == userID:
 					self.softDeletePost(feed_name, post['comment_id']) 
-
+					
+		self.deleteUserNotifications(userID)
 		user_manager = Users()
 		user_manager.deleteUser(userID)
 		user_manager.closeConnection()
+
+	def deleteUserNotifications(self, userID):
+		self.createShortList(userID)
+		sql  = "DELETE FROM " + self.USER_NOTIFICATION_PREFIX + userID
+		self.db.execute(sql)
 
 	def deleteNotifications(self):
 		user_manager = Users()
@@ -1082,9 +1088,7 @@ class Posts:
 		user_manager.closeConnection()
 		# delete from short lists
 		for user in user_list:
-			self.createShortList(user)
-			sql  = "DELETE FROM " + self.USER_NOTIFICATION_PREFIX + user
-			self.db.execute(sql)
+			self.deleteNotifications(userID)
 
 	def addColumn(self, table_name, column_name, column_type, default_value = None):
 		sql = "ALTER TABLE " + table_name + " ADD " + column_name + " " +  column_type

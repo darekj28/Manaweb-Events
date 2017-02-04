@@ -26,7 +26,7 @@ export default class RegisterUsername extends Component {
 	createAccount() {
 		var url = "https://manaweb-events.herokuapp.com"
 		var test_url = "http://0.0.0.0:5000"
-		fetch(url + "/mobileCreateProfile", {method: "POST",
+		fetch(test_url + "/mobileCreateProfile", {method: "POST",
 		headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
