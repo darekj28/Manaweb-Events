@@ -1,7 +1,7 @@
 import React from 'react';
 import {Component} from 'react'
 import {TouchableWithoutFeedback, Image, ScrollView, Alert, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
-
+import {Dimensions} from 'react-native';
 import ViewContainer from '../../components/ViewContainer';
 import HomeStatusBar from '../../components/HomeStatusBar';
 import _ from 'lodash'
@@ -44,7 +44,7 @@ export default class RegisterConfirmCode extends Component {
 			this._navigateToRegisterPassword();
 		}
 	}
-	
+
 	resendConfirmationPin(){
 		var url = "https://manaweb-events.herokuapp.com"
 		var test_url = "http://0.0.0.0:5000"
@@ -52,8 +52,8 @@ export default class RegisterConfirmCode extends Component {
 		headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
-				}, 
-			body: 
+				},
+			body:
 			JSON.stringify(
 			 {
 				phone_number : this.props.phone_number,
@@ -99,11 +99,11 @@ export default class RegisterConfirmCode extends Component {
 	}
 
 	render() {
-
+		var {height, width} = Dimensions.get('window');
 		var error_message = this.getErrorMessage.bind(this)()
 		return (
 			<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
-				<View style={styles.container}>
+				<View style={[styles.container, {height: height}]}>
 					<RegisterHeader navigator={this.props.navigator}/>
 					<View style={{flex : 1, flexDirection : 'column'}}>
 						<View style={{flex : 2}}>
@@ -113,7 +113,7 @@ export default class RegisterConfirmCode extends Component {
 							<View style={{flex : 1.6, justifyContent : 'center'}}>
 								<View style={styles.input_wrapper}>
 									<TextInput onChangeText = {this.handleEnteredCodeChange}
-										style = {styles.input} 
+										style = {styles.input}
 										keyboardType = "numeric"
 						                maxLength = {5}
                 						value = {this.state.enteredCode}/>
@@ -122,7 +122,7 @@ export default class RegisterConfirmCode extends Component {
 							<View style={{flex : 0.6}}/>
 						</View>
 						<View style = {{flex : 1, alignItems : 'center'}}>
-							<TouchableOpacity style = {{flex : 1, justifyContent : 'center'}} 
+							<TouchableOpacity style = {{flex : 1, justifyContent : 'center'}}
 										onPress = {this.resendConfirmationPin.bind(this)}>
 				              	<Text style = {styles.resend}>
 				                	Resend Code
@@ -133,8 +133,8 @@ export default class RegisterConfirmCode extends Component {
 									<Text style={styles.button_text}>Next</Text>
 								</View>
 							</TouchableOpacity>
-						</View>	
-						<View style = {{flex : 3}}/>							
+						</View>
+						<View style = {{flex : 3}}/>
 					</View>
 				</View>
 			</TouchableWithoutFeedback>
@@ -155,12 +155,12 @@ const styles = StyleSheet.create({
 	input_wrapper : {flex : 1, flexDirection : 'column', borderBottomColor : 'black', borderBottomWidth : 1, alignItems : 'center', justifyContent : 'center'},
 	input : {flex : 1, fontSize : 30, textAlign : 'center'},
 	button : {
-		flex : 1, 
-		backgroundColor : '#90d7ed', 
-		borderRadius:60, 
-		justifyContent : 'center', 
-		alignItems : 'center', 
-		width : 100, 
+		flex : 1,
+		backgroundColor : '#90d7ed',
+		borderRadius:60,
+		justifyContent : 'center',
+		alignItems : 'center',
+		width : 100,
 		height : 35
 	},
 	button_text : {color : 'white', fontWeight : 'bold', fontSize : 14},
