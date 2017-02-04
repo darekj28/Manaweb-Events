@@ -2,7 +2,7 @@
 import React from 'react';
 import {Component} from 'react'
 import {TouchableWithoutFeedback, Image, ScrollView, Alert, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity, TextInput} from 'react-native';
-
+import {Dimensions} from 'react-native';
 import ViewContainer from '../../components/ViewContainer';
 import HomeStatusBar from '../../components/HomeStatusBar';
 import _ from 'lodash'
@@ -36,8 +36,8 @@ export default class RegisterName extends Component {
 		headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
-				}, 
-			body: 
+				},
+			body:
 			JSON.stringify(
 			 {
 				name: first_name
@@ -59,8 +59,8 @@ export default class RegisterName extends Component {
 		headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
-				}, 
-			body: 
+				},
+			body:
 			JSON.stringify(
 			 {
 				name: last_name
@@ -75,7 +75,7 @@ export default class RegisterName extends Component {
 
 
 	submitFullName() {
-		if (this.state.first_name_validation_output['result'] == 'success' 
+		if (this.state.first_name_validation_output['result'] == 'success'
 			&& this.state.last_name_validation_output['result'] == 'success')
 			this._navigateToRegisterPhoneNumber();
 		else Alert.alert("You must enter a valid name.")
@@ -96,7 +96,7 @@ export default class RegisterName extends Component {
 	}
 
 	handleLastNameChange(last_name) {
-		this.setState({last_name: last_name}) 
+		this.setState({last_name: last_name})
 		this.validateLastName(last_name);
 	}
 
@@ -111,15 +111,15 @@ export default class RegisterName extends Component {
 	getErrorMessage() {
 		var error_message = "";
 		var first_name_error = this.state.first_name_validation_output.error != "" && this.state.first_name_validation_output.error != null
-		var last_name_error = this.state.last_name_validation_output.error != "" && this.state.last_name_validation_output.error != null  
+		var last_name_error = this.state.last_name_validation_output.error != "" && this.state.last_name_validation_output.error != null
 		if (first_name_error && !last_name_error) {
 			error_message = this.state.first_name_validation_output.error
-		} 
+		}
 
 		if (last_name_error) {
 			error_message = this.state.last_name_validation_output.error
-		} 
-		
+		}
+
 		if (this.state.first_name == "" && this.state.last_name == "") {
 			error_message = ""
 			// error_message = "Names must not be blank!"
@@ -131,7 +131,7 @@ export default class RegisterName extends Component {
 				</Text>
 			)
 		}
-		else return null; 
+		else return null;
 	}
 	tos() {
 		Alert.alert("Terms of Service");
@@ -141,10 +141,11 @@ export default class RegisterName extends Component {
 	}
 
 	render() {
+		var {height, width} = Dimensions.get('window');
 		var error_message = this.getErrorMessage.bind(this)();
 		return (
 			<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
-				<View style={styles.container}>
+				<View style={[styles.container, {height: height}]}>
 					<RegisterHeader navigator={this.props.navigator}/>
 					<View style={{flex : 1, flexDirection : 'column'}}>
 						<View style={{flex : 2}}>
@@ -155,8 +156,8 @@ export default class RegisterName extends Component {
 								<Text style={styles.label}>FIRST NAME</Text>
 								<View style={styles.input_wrapper}>
 									<TextInput onChangeText = {this.handleFirstNameChange}
-										style = {styles.input} 
-										value = {this.state.first_name} 
+										style = {styles.input}
+										value = {this.state.first_name}
 										maxLength = {12}/>
 								</View>
 							</View>
@@ -166,7 +167,7 @@ export default class RegisterName extends Component {
 								<View style={styles.input_wrapper}>
 									<TextInput onChangeText = {this.handleLastNameChange}
 										style = {styles.input}
-										value = {this.state.last_name} 
+										value = {this.state.last_name}
 										maxLength = {12}/>
 								</View>
 							</View>
@@ -180,17 +181,16 @@ export default class RegisterName extends Component {
 									<Text style={styles.button_text}>Sign Up & Accept</Text>
 								</View>
 							</TouchableOpacity>
-						</View>	
+						</View>
 						<View style={{flex : 0.1}}/>
 						<View style = {{flex : 2.9, justifyContent : 'flex-start', alignItems : 'center', width : 200}}>
 							<Text style={{flex : 1, fontSize : 11, alignItems: 'center', color : '#696969'}}>By tapping Sign Up & Accept, you agree to the <Text style={styles.tos} onPress={this.tos.bind(this)}>Terms Of Service</Text> and <Text style={styles.tos} onPress={this.pp.bind(this)}>Privacy Policy</Text>.</Text>
-						</View>							
+						</View>
 					</View>
 				</View>
 			</TouchableWithoutFeedback>
-		)
+		);
 	}
-
 
 }
 
@@ -205,12 +205,12 @@ const styles = StyleSheet.create({
 	input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
 	input : {flex : 1, width : 200, fontSize : 20, justifyContent : 'flex-start'},
 	button : {
-		flex : 1, 
-		backgroundColor : '#90d7ed', 
-		borderRadius:60, 
-		justifyContent : 'center', 
-		alignItems : 'center', 
-		width : 200, 
+		flex : 1,
+		backgroundColor : '#90d7ed',
+		borderRadius:60,
+		justifyContent : 'center',
+		alignItems : 'center',
+		width : 200,
 		height : 35,
 	},
 	button_text : {color : 'white', fontWeight : 'bold', fontSize : 14},
