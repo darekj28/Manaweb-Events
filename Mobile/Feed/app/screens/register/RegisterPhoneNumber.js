@@ -128,6 +128,14 @@ export default class RegisterPhoneNumber extends Component {
 		})
 	}
 
+	_navigateToAlternateRegister() {
+		this.props.navigator.push({
+			href: "AlternateRegisterEmail", 
+			first_name : this.props.first_name,
+			last_name : this.props.last_name,
+		})
+	}
+
 	getErrorMessage() {
 		var error_message = "";
 		if (this.state.validation_output.error != "" && this.state.validation_output.error != null) {
@@ -182,7 +190,16 @@ export default class RegisterPhoneNumber extends Component {
 							</TouchableOpacity>
 							<View style={{flex : 0.5}}/>
 						</View>	
-						<View style = {{flex : 3}}/>							
+						<View style = {{flex : 0.5, alignItems : 'center', justifyContent : 'center'}}>
+							<View style={{flex : 0.5}}/>
+							<TouchableOpacity style={{flex : 1}} onPress = {this._navigateToAlternateRegister.bind(this)}>
+								<View style = {styles.button}>
+									<Text style={styles.button_text}>Prefer E-mail?</Text>
+								</View>
+							</TouchableOpacity>
+							<View style={{flex : 0.5}}/>
+						</View>	
+						<View style = {{flex : 2.5}}/>							
 					</View>
 				</View>
 			</TouchableWithoutFeedback>

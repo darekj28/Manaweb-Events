@@ -20,7 +20,9 @@ def mobileFacebookCreateAccount():
 	last_name = request.json['last_name'].title()
 	userID = request.json['username']
 	password = "FB_DEFAULT_PASSWORD"
-	email = request.json['email']
+	email = request.json.get('email')
+	if (email == None):
+		email = ""
 	fb_id = request.json['fb_id']
 	phone_number = ""
 	birthYear = ""
@@ -59,7 +61,9 @@ def mobileCreateProfile():
 	last_name = request.json['last_name'].title()
 	userID = request.json['username']
 	password = request.json['password']
-	email = request.json['email']
+	email = request.json.get('email')
+	if (email == None):
+		email = ""
 	phone_number = request.json['phone_number']
 	# birthDay = request.json['birth_day']
 	# birthMonth = request.json['birth_month']
@@ -136,6 +140,15 @@ def mobileEmailConfirmation():
 	email = request.json['email']
 	confirmationPin = email_confirm.sendConfirmationEmail(email)
 	return jsonify({'result' : 'success', 'confirmationPin' : confirmationPin})
+
+@mobile_api.route('/mobileResendEmailConfirmation', methods = ['POST'])
+def mobileEmailConfirmation():
+	email = request.json['email']
+	confirmationPin = request.json['confirmationPin']
+	output = email.sendConfirmationEmail(email, confirmationPin)
+	if output.get('error') != None :
+		return jsonify({ 'error' : 'email_exception' })
+	return jsonify({'confirmationPin' : output.get('pin')})
 
 @mobile_api.route('/mobileNameValidation', methods = ['POST'])
 def mobileNameValidation():

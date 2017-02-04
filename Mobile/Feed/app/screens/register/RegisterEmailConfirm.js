@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {Component} from 'react'
 import {TouchableWithoutFeedback, Image, ScrollView, Alert, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
@@ -11,17 +12,15 @@ import RegisterHeader from '../../components/register/RegisterHeader';
 
 
 
-export default class RegisterConfirmCode extends Component {
+export default class RegisterEmailConfirm extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
 			validation_output: {'error' : ""},
 			enteredCode : ""
 		}
-
 		this.handleEnteredCodeChange = this.handleEnteredCodeChange.bind(this);
 		this.handleEnteredCodeSubmit = this.handleEnteredCodeSubmit.bind(this);
-		this._navigateToRegisterPassword = this._navigateToRegisterPassword.bind(this);
 	}
 
 
@@ -30,6 +29,8 @@ export default class RegisterConfirmCode extends Component {
 	}
 
 	handleEnteredCodeSubmit() {
+		console.log(this.props.confirmationPin)
+		console.log(this.state.enteredCode)
 		if (this.props.confirmationPin != this.state.enteredCode) {
 			var result_dict = {
 				'result' : 'failure',
@@ -41,14 +42,14 @@ export default class RegisterConfirmCode extends Component {
 		}
 
 		else {
-			this._navigateToRegisterPassword();
+			this._navigateToRegisterPassword.bind(this)();
 		}
 	}
 	
 	resendConfirmationPin(){
 		var url = "https://manaweb-events.herokuapp.com"
 		var test_url = "http://0.0.0.0:5000"
-		fetch(url + "/mobileResendTextConfirmation", {method: "POST",
+		fetch(url + "/mobileResendEmailConfirmation", {method: "POST",
 		headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
@@ -56,7 +57,7 @@ export default class RegisterConfirmCode extends Component {
 			body: 
 			JSON.stringify(
 			 {
-				phone_number : this.props.phone_number,
+				phone_number : this.props.email,
 				confirmationPin : this.props.confirmationPin
 			})
 		})
@@ -67,6 +68,7 @@ export default class RegisterConfirmCode extends Component {
 			}
 			else {
 				Alert.alert("Code sent.");
+				this.setState({confirmationPin : responseData['confirmationPin']})
 			}
 		})
 		.done();
@@ -81,7 +83,7 @@ export default class RegisterConfirmCode extends Component {
 		href: "RegisterPassword",
 			first_name : this.props.first_name,
 			last_name: this.props.last_name,
-			phone_number : this.props.phone_number
+			email : this.props.email
 		})
 	}
 

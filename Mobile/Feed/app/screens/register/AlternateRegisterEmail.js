@@ -10,7 +10,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import RegisterHeader from '../../components/register/RegisterHeader';
 
-export default class RegisterEmail extends Component {
+export default class AlternateRegisterEmail extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -20,16 +20,44 @@ export default class RegisterEmail extends Component {
 		this.handleEmailSubmit = this.handleEmailSubmit.bind(this);
 		this.handleEmailChange = this.handleEmailChange.bind(this);
 		this.validateEmail = this.validateEmail.bind(this);
-		this._navigateToRegisterUsername = this._navigateToRegisterUsername.bind(this);
 	}
 
 	handleEmailSubmit() {
 		if (this.state.validation_output['result'] == 'success') {
-			this._navigateToRegisterUsername()
+			this.sendConfirmationPin.bind(this)()
 		}
 		else {
 			Alert.alert(this.state.validation_output.error)
 		}
+	}
+
+	sendConfirmationPin(){
+		var url = "https://manaweb-events.herokuapp.com"
+		var test_url = "http://0.0.0.0:5000"
+		fetch(url + "/mobileEmailConfirmation", {method: "POST",
+		headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+				}, 
+			body: 
+			JSON.stringify(
+			 {
+				email : this.state.email
+			})
+		})
+		.then((response) => response.json())
+		.then((responseData) => {
+			if (responseData.error){
+				Alert.alert("Invalid Email")
+			}
+			else {
+				console.log(responseData['confirmationPin'])
+				this.setState({confirmationPin : responseData['confirmationPin']})
+				this._navigateToEmailConfirm();  
+			}
+			
+		})
+		.done();
 	}
 
 	handleEmailChange(email) {
@@ -62,25 +90,14 @@ export default class RegisterEmail extends Component {
 		this.setState({email : ""})
 	}
 
-	_navigateToRegisterUsername() {
+	_navigateToEmailConfirm() {
 		this.props.navigator.push({
-		href: "RegisterUsername",
+		href: "RegisterEmailConfirm",
 		email : this.state.email,
-		phone_number : this.props.phone_number,
 		password : this.props.password,
 		first_name: this.props.first_name,
-		last_name: this.props.last_name
-		})
-	}
-
-	_skipEmail(){
-		this.props.navigator.push({
-		href: "RegisterUsername",
-		email : "",
-		phone_number : this.props.phone_number,
-		password : this.props.password,
-		first_name: this.props.first_name,
-		last_name: this.props.last_name
+		last_name: this.props.last_name,
+		confirmationPin : this.state.confirmationPin
 		})
 	}
 
@@ -96,20 +113,6 @@ export default class RegisterEmail extends Component {
 		}
 		else return;
 	}
-
-
-	componentWillMount() {
-		if (this.props.email != "" || this.props.email != null) {
-			this.props.navigator.push({
-				href: "RegisterUsername",
-				email : this.state.email,
-				password : this.props.password,
-				first_name: this.props.first_name,
-				last_name: this.props.last_name
-			})
-		}
-	}
-
 	render() {
 		var error_message = this.getErrorMessage.bind(this)();
 		return (
@@ -137,18 +140,12 @@ export default class RegisterEmail extends Component {
 							</View>
 						</View>
 						<View style = {{flex : 1, alignItems : 'center'}}>
-							<TouchableOpacity style = {{flex : 1, justifyContent : 'center'}} 
-											onPress = {this._skipEmail.bind(this)}>
-					       	  	<Text style = {styles.notnow}>
-					       	    	Not now?
-					       	 	</Text>
-					       	</TouchableOpacity>
 							<TouchableOpacity style={{flex : 1}} onPress = {this.handleEmailSubmit.bind(this)}>
 								<View style = {styles.button}>
 									<Text style={styles.button_text}>Next</Text>
 								</View>
 							</TouchableOpacity>
-						</View>	
+						</View>
 						<View style = {{flex : 3}}/>							
 					</View>
 				</View>

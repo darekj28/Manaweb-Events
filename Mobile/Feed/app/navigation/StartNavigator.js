@@ -8,6 +8,8 @@ import RegisterEmail from '../screens/register/RegisterEmail'
 import RegisterUsername from '../screens/register/RegisterUsername'
 import RegisterConfirmCode from '../screens/register/RegisterConfirmCode'
 import RegisterPassword from '../screens/register/RegisterPassword'
+import AlternateRegisterEmail from '../screens/register/AlternateRegisterEmail'
+import RegisterEmailConfirm from '../screens/register/RegisterEmailConfirm'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MenuScreen from '../screens/MenuScreen'
 import LoginScreen from '../screens/LoginScreen'
@@ -22,6 +24,7 @@ import FeedScreen from '../screens/FeedScreen'
 import NotificationScreen from '../screens/NotificationScreen'
 import Spinner from 'react-native-loading-spinner-overlay';
 import BottomTabBar from '../components/BottomTabBar';
+
 
 export default class StartNavigator extends Component {
 	constructor(props) {
@@ -53,6 +56,12 @@ export default class StartNavigator extends Component {
 		
 
 		switch(route.href){
+			case "AlternateRegisterEmail":
+				screen = (<AlternateRegisterEmail {...globalNavigatorProps} {...registerNavigatorProps}/>)
+				break;
+			case "RegisterEmailConfirm":
+				screen = (<RegisterEmailConfirm {...globalNavigatorProps} {...registerNavigatorProps}/>)
+				break;	
 			case "Login":
 				screen =  (<LoginScreen {...globalNavigatorProps}/>);
 				break;
