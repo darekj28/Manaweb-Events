@@ -10367,13 +10367,13 @@
 				var make_post_selected = this.state.isSelected ? "make-post-selected" : "make-post-unselected";
 				switch (this.props.name) {
 					case 'Trade':
-						icon = "glyphicon glyphicon-transfer";
+						icon = "fa fa-handshake-o";
 						break;
 					case 'Play':
-						icon = "glyphicon glyphicon-play";
+						icon = "fa fa-play";
 						break;
 					case 'Chill':
-						icon = "glyphicon glyphicon-time";
+						icon = "fa fa-snowflake-o";
 						break;
 					default:
 						alert('Invalid action.');
@@ -10855,7 +10855,7 @@
 									)
 								)
 							),
-							(isAdmin || !isOP) && React.createElement(
+							(isAdmin || !isOP) && post.userID != "$DELETED_USER" && React.createElement(
 								'div',
 								{ className: 'dropdown pull-right', id: "dropdown_" + post.comment_id, onClick: this.scrollToDropdown.bind(this) },
 								React.createElement(
@@ -10944,7 +10944,7 @@
 				return this.props.source != undefined && React.createElement(
 					"a",
 					{ href: "#", className: "pull-left AvatarSpace" },
-					React.createElement("img", { className: "Avatar img-rounded", src: this.props.source })
+					React.createElement("img", { className: "Avatar", src: this.props.source })
 				);
 			}
 		}]);
@@ -11000,17 +11000,17 @@
 					this.props.post.isChill && React.createElement(
 						"div",
 						{ className: "postType pull-right" },
-						React.createElement("span", { className: "HeaderGlyphicon glyphicon glyphicon-time" })
+						React.createElement("span", { className: "HeaderGlyphicon fa fa-snowflake-o" })
 					),
 					this.props.post.isTrade && React.createElement(
 						"div",
 						{ className: "postType pull-right" },
-						React.createElement("span", { className: "HeaderGlyphicon glyphicon glyphicon-transfer" })
+						React.createElement("span", { className: "HeaderGlyphicon fa fa-handshake-o" })
 					),
 					this.props.post.isPlay && React.createElement(
 						"div",
 						{ className: "postType pull-right" },
-						React.createElement("span", { className: "HeaderGlyphicon glyphicon glyphicon-play" })
+						React.createElement("span", { className: "HeaderGlyphicon fa fa-play" })
 					),
 					React.createElement(
 						"div",
@@ -11493,14 +11493,14 @@
 					React.createElement(_LoginNavBar2.default, null),
 					React.createElement(
 						'div',
-						{ className: 'container app-container register-container col-xs-12' },
+						{ className: 'container app-container register-container' },
 						React.createElement(
 							'div',
 							{ className: 'login-page-filler col-xs-6' },
 							React.createElement(
 								'div',
-								{ className: 'pull-right' },
-								React.createElement('img', { id: 'Logo', src: 'static/img/gatewatch.jpg' })
+								{ className: 'pull-left' },
+								'Insert own image'
 							)
 						),
 						React.createElement(
@@ -11508,11 +11508,11 @@
 							{ className: 'register-form-container col-xs-6' },
 							React.createElement(
 								'div',
-								{ className: 'page-header' },
+								{ className: 'page-header my-page-header' },
 								React.createElement(
 									'h2',
 									null,
-									'Create an account'
+									'CREATE AN ACCOUNT'
 								)
 							),
 							React.createElement(_RegisterForm2.default, null),
@@ -12524,16 +12524,8 @@
 				if (this.props.field == "old_password") label = "Current password";
 				return React.createElement(
 					"div",
-					null,
-					React.createElement(
-						"h4",
-						null,
-						React.createElement(
-							"b",
-							null,
-							label
-						)
-					)
+					{ className: "settings-label" },
+					label
 				);
 			}
 		}]);
@@ -13246,7 +13238,7 @@
 						React.createElement(
 							"div",
 							{ className: "PostFooter row" },
-							!this.props.isOriginalPost && React.createElement(
+							!this.props.isOriginalPost && comment.userID != "$DELETED_USER" && React.createElement(
 								"div",
 								{ className: "dropdown", id: "commentdropdown_" + comment.unique_id },
 								React.createElement(
@@ -14086,11 +14078,14 @@
 						'div',
 						{ className: 'container app-container' },
 						this.state.currentUser['first_name'] != undefined && React.createElement(
-							'h2',
-							null,
-							'Your Notifications'
+							'div',
+							{ className: 'page-header my-page-header' },
+							React.createElement(
+								'h2',
+								null,
+								'YOUR NOTIFICATIONS'
+							)
 						),
-						React.createElement('hr', null),
 						React.createElement(
 							'div',
 							{ className: 'feed row' },
@@ -14426,9 +14421,9 @@
 	
 	var React = __webpack_require__(/*! react */ 2);
 	
-	
 	var text_fields = ["old_password", "password", "first_name", "last_name", "email", "phone_number"];
-	var select_fields = ["month_of_birth", "day_of_birth", "year_of_birth", "avatar"];
+	var select_fields = ["avatar"];
+	var birthday_fields = ["month_of_birth", "day_of_birth", "year_of_birth"];
 	var required_text_fields = ["first_name", "last_name", "old_password"];
 	
 	var SettingsApp = function (_React$Component) {
@@ -14455,7 +14450,8 @@
 				valid_select_fields: [],
 				invalid_text_fields: [],
 				invalid_select_fields: [],
-				submittable: false
+				submittable: false,
+				showAvatar: false
 			};
 			return _this;
 		}
@@ -14652,6 +14648,8 @@
 		}, {
 			key: 'render',
 			value: function render() {
+				var _this2 = this;
+	
 				var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
 				return React.createElement(
 					'div',
@@ -14665,11 +14663,11 @@
 							{ 'class': 'form-horizontal' },
 							React.createElement(
 								'div',
-								{ className: 'page-header' },
+								{ className: 'page-header my-page-header' },
 								React.createElement(
 									'h2',
 									null,
-									' Account Settings '
+									' ACCOUNT SETTINGS '
 								)
 							),
 							text_fields.map(function (field) {
@@ -14682,6 +14680,20 @@
 										handleBlur: this.handleTextBlur.bind(this) })
 								);
 							}, this),
+							React.createElement(
+								'div',
+								{ className: 'form-group' },
+								React.createElement(_SettingsInputLabel2.default, { field: 'Birthday' }),
+								birthday_fields.map(function (field) {
+									return React.createElement(
+										'div',
+										null,
+										React.createElement(_SettingsSelectInput2.default, { field: field, value: this.state[field],
+											handleSelect: this.handleChange.bind(this),
+											handleBlur: this.handleSelectBlur.bind(this) })
+									);
+								}, this)
+							),
 							select_fields.map(function (field) {
 								return React.createElement(
 									'div',
@@ -14692,7 +14704,31 @@
 										handleBlur: this.handleSelectBlur.bind(this) })
 								);
 							}, this),
-							React.createElement('div', { id: 'avatar_container', className: 'select_setting avatar_container centered-text' }),
+							React.createElement(
+								'div',
+								{ className: 'form-group preview setting', onClick: function onClick() {
+										_this2.setState({ showAvatar: !_this2.state.showAvatar });
+									} },
+								!this.state.showAvatar && React.createElement(
+									'div',
+									{ className: 'text-center' },
+									'Show Avatar'
+								),
+								this.state.showAvatar && React.createElement(
+									'div',
+									{ className: 'text-center' },
+									'Hide Avatar'
+								)
+							),
+							React.createElement(
+								'div',
+								{ className: 'form-group setting' },
+								React.createElement(
+									'div',
+									{ className: 'text-center' },
+									this.state.showAvatar && React.createElement('img', { className: 'settings-avatar', src: "static/avatars/" + this.state.avatar + ".png" })
+								)
+							),
 							React.createElement(
 								'div',
 								{ className: 'form-group' },
@@ -14940,19 +14976,9 @@
 				this.props.handleBlur(this.props.field, isValid);
 			}
 		}, {
-			key: "handleAvatarDisplay",
-			value: function handleAvatarDisplay() {
-				var av = $('#avatar').val();
-				if (av) {
-					var container = document.getElementById('avatar_container');
-					container.style.backgroundImage = 'url(static/avatars/' + av + '.png)';
-				}
-			}
-		}, {
 			key: "componentWillReceiveProps",
 			value: function componentWillReceiveProps(nextProps) {
 				$('select[name=' + nextProps.field + ']').val(nextProps.value);
-				if (this.props.field == "avatar") this.handleAvatarDisplay.bind(this)();
 				if (!this.state.hasMounted) {
 					if (nextProps.value) {
 						this.setState({ valid: "valid", hasMounted: true });
@@ -14965,15 +14991,19 @@
 			value: function render() {
 				var options;
 				var field = this.props.field;
+				var setting_border = "";
 				switch (field) {
 					case "month_of_birth":
 						options = months;
+						setting_border = "month-setting";
 						break;
 					case "day_of_birth":
 						options = days;
+						setting_border = "day-setting";
 						break;
 					case "year_of_birth":
 						options = years;
+						setting_border = "year-setting";
 						break;
 					case "avatar":
 						options = avatar_list;
@@ -14984,7 +15014,7 @@
 					null,
 					React.createElement(
 						"select",
-						{ className: "select_setting form-control " + this.state.valid, id: field, name: field,
+						{ className: setting_border + " select_setting form-control " + this.state.valid, id: field, name: field,
 							title: idToName(field),
 							onChange: this.handleSelect.bind(this), onBlur: this.handleBlur.bind(this) },
 						React.createElement(

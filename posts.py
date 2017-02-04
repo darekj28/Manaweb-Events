@@ -1071,7 +1071,7 @@ class Posts:
 			for post in allPosts:
 				if post['poster_id'] == userID:
 					self.softDeletePost(feed_name, post['comment_id']) 
-					
+
 		self.deleteUserNotifications(userID)
 		user_manager = Users()
 		user_manager.deleteUser(userID)
@@ -1079,7 +1079,8 @@ class Posts:
 
 	def deleteUserNotifications(self, userID):
 		self.createShortList(userID)
-		sql  = "DELETE FROM " + self.USER_NOTIFICATION_PREFIX + userID
+		table_name = self.USER_NOTIFICATION_PREFIX + userID
+		sql  = "DELETE FROM " + table_name
 		self.db.execute(sql)
 
 	def deleteNotifications(self):

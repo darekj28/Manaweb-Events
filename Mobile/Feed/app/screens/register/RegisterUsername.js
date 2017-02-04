@@ -26,7 +26,7 @@ export default class RegisterUsername extends Component {
 	createAccount() {
 		var url = "https://manaweb-events.herokuapp.com"
 		var test_url = "http://0.0.0.0:5000"
-		fetch(test_url + "/mobileCreateProfile", {method: "POST",
+		fetch(url + "/mobileCreateProfile", {method: "POST",
 		headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
@@ -46,8 +46,8 @@ export default class RegisterUsername extends Component {
 		.then((response) => response.json())
 		.then((responseData) => {
 				if (responseData['result'] == 'success') {
-						this.props.asyncStorageLogin(this.state.username).done()  
-													
+					this.props.asyncStorageLogin(this.state.username).done()
+					this._navigateToWelcome.bind(this)()
 				}
 		}).done();
 	}

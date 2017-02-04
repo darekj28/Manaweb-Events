@@ -64,7 +64,9 @@ def mobileCreateProfile():
 	email = request.json.get('email')
 	if (email == None):
 		email = ""
-	phone_number = request.json['phone_number']
+	phone_number = request.json.get('phone_number')
+	if phone_number == None:
+		phone_number = ""
 	# birthDay = request.json['birth_day']
 	# birthMonth = request.json['birth_month']
 	# birthYear = request.json['birth_year']
