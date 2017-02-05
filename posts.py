@@ -532,7 +532,29 @@ class Posts:
 		addIndexCode = 'CREATE INDEX IF NOT EXISTS id ON ' + self.REPORT_TABLE + ' (id)'
 		self.db.execute(addIndexCode)
 
-	# def getReportList(self):
+	def getReportList(self):
+		sql = "SELECT * FROM " + self.REPORT_TABLE
+		self.db.execute(self.db.mogrify(sql))
+		query = self.db.fetchall()
+		report_list = list()
+		for item in query:
+			dict_item = self.reportQueryToDict(item)
+			report_list.append(item)
+		return report_list
+
+	def reportQueryToDict(self, query_item):
+		report_dict = {}
+		report_dict['feed_name'] = query_item[0]
+		report_dict['id'] = query_item[1]
+		report_dict['reason'] = query_item[2]
+		report_dict['isComment'] = query_item[3]
+		report_dict['description'] = query_item[4]
+		report_dict['timeString'] = query_item[5]
+		report_dict['timeStamp'] = query_item[6]
+		report_dict['reporting_user'] = query_item[7]
+		report_dict['reported_user'] = query_item[8]
+		return report_dict
+
 
 	def reportPost(self, feed_name, comment_id, reason, description, reporting_user, reported_user):
 		body = self.getPostById(feed_name, comment_id)['body']
@@ -572,6 +594,8 @@ class Posts:
 		output = self.postListToDict(this_post, user_info_table)
 		user_manager.closeConnection()
 		if len(output) == 0:
+			return None
+		elif output[0]['poster_id'] == self.DELETED_ACCOUNT_USERNAME:
 			return None
 		else:
 			return output[0]
@@ -901,7 +925,10 @@ class Posts:
 				thisPost['first_name'] = self.DELETED_ACCOUNT_FIRST_NAME
 				thisPost['last_name'] = self.DELETED_ACCOUNT_LAST_NAME
 				thisPost['poster_id'] = self.DELETED_ACCOUNT_USERNAME
-			postList.append(thisPost)
+
+			# here we made the call just to not show deleted posts (nor it's comments)	
+			if user_info_table.get(post[1]) != None:
+				postList.append(thisPost)	
 		return postList	
 
 	def commentListToDict(self, comments, user_info_table):

@@ -37,7 +37,7 @@ security_manager = Security()
 # time_1 = time.time()
 # print("delete user and wipe time : " + str(time_1 - time_0))
 
-print(user_manager.getInfo('gabbys'))
+print(post_manager.getReportList())
 
 # user_manager.deleteUserByPhoneNumber('2018208509')
 # security_manager.createRecovery()
