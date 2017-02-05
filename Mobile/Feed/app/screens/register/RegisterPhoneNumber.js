@@ -182,22 +182,16 @@ export default class RegisterPhoneNumber extends Component {
 							</View>
 						</View>
 						<View style = {{flex : 1, alignItems : 'center', justifyContent : 'center'}}>
-							<View style={{flex : 0.5}}/>
 							<TouchableOpacity style={{flex : 1}} onPress = {this.handlePhoneNumberSubmit.bind(this)}>
 								<View style = {styles.button}>
 									<Text style={styles.button_text}>Next</Text>
 								</View>
 							</TouchableOpacity>
-							<View style={{flex : 0.5}}/>
-						</View>	
-						<View style = {{flex : 0.5, alignItems : 'center', justifyContent : 'center'}}>
-							<View style={{flex : 0.5}}/>
-							<TouchableOpacity style={{flex : 1}} onPress = {this._navigateToAlternateRegister.bind(this)}>
-								<View style = {styles.button}>
-									<Text style={styles.button_text}>Prefer E-mail?</Text>
-								</View>
-							</TouchableOpacity>
-							<View style={{flex : 0.5}}/>
+							<View style={{flex : 1, alignItems : 'center', justifyContent : 'center'}}>
+								<TouchableOpacity style={{flex : 1, alignItems : 'center', justifyContent : 'center'}} onPress = {this._navigateToAlternateRegister.bind(this)}>
+									<Text style={styles.notnow}>Prefer email instead?</Text>
+								</TouchableOpacity>
+							</View>
 						</View>	
 						<View style = {{flex : 2.5}}/>							
 					</View>
@@ -229,5 +223,6 @@ const styles = StyleSheet.create({
 		height : 35
 	},
 	button_text : {color : 'white', fontWeight : 'bold', fontSize : 14},
-	error_text : {color : 'red', fontWeight : 'bold', fontSize : 12}
+	error_text : {color : 'red', fontWeight : 'bold', fontSize : 12},
+	notnow : {fontSize : 14, color : 'lightseagreen'},
 });
