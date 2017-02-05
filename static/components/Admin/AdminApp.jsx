@@ -11,7 +11,7 @@ export default class AdminApp extends React.Component {
 		this.state = {
 			currentUser 		: AppStore.getCurrentUser()	,
 			user_list			: []						,
-			view 				: "User"					,
+			view 				: "Report"					,
 			report_list 		: []						,
 		};
 	}
@@ -27,12 +27,12 @@ export default class AdminApp extends React.Component {
 	}
 
 	initializeReportList(){
-		$.post('/getUserList', function(data){
-			var user_list = [];
-			data.user_list.map(function(obj) {
-				user_list.unshift(obj);
+		$.post('/getReporstList', function(data){
+			var report_list = [];
+			data.report_list.map(function(obj) {
+				report_list.unshift(obj);
 			});	
-			this.setState({user_list : user_list})
+			this.setState({report_list : report_list})
 		}.bind(this));
 	}
 
@@ -49,6 +49,11 @@ export default class AdminApp extends React.Component {
 				<div className="container app-container">
 					{ this.state.view == "User" &&
 						<AdminUserList user_list = {this.state.user_list}/>
+					}
+
+					{
+						this.state.view == "Report" &&
+						<AdminReportList report_list = {this.state.report_list}/>
 					}
 
 				</div>
