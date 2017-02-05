@@ -377,6 +377,8 @@ class Posts:
 		self.post_db.commit()
 
 	def getShortListNotifications(self,userID):
+		if userID == None or userID == "":
+			return list()
 		self.createShortList(userID)
 		table_name = self.USER_NOTIFICATION_PREFIX + userID
 		sql = "SELECT * FROM " + table_name
@@ -423,26 +425,28 @@ class Posts:
 		for note in query:
 			sender = user_manager.getInfo(note[3])
 			op = user_manager.getInfo(note[11])
-			if (op is None): 
-				op = {"first_name" : "None"}
-			this_note = {'feed_name' 		: note[0],
-						 'comment_id'		: note[1],
-						 'receiver_id'		: note[2],
-						 'sender_id'		: note[3],
-						 # 'action'			: note[4]
-						 'seen'				: note[5],
-						 'notification_id' 	: note[6],
-						 'timeStamp'		: note[7],
-						 'timeString'		: self.getTimeString(note[7]),
-						 #'numUnseenActions' : note[9]
-						 'sender_name'		: sender['first_name'],
-						 'op_name'			: op['first_name'],
-						 'numOtherPeople'	: note[12],
-						 'isOP'				: note[13],
-						 'avatar'			: sender['avatar_name'],
-						 'pushNotificationSent' : note[14]
-						 }
-			n_list.append(this_note)
+			# unless the sender and op still exist, we don't send
+			if (sender != None):
+				if (op is None): 
+					op = {"first_name" : "[DELETED]"}
+				this_note = {'feed_name' 		: note[0],
+							 'comment_id'		: note[1],
+							 'receiver_id'		: note[2],
+							 'sender_id'		: note[3],
+							 # 'action'			: note[4]
+							 'seen'				: note[5],
+							 'notification_id' 	: note[6],
+							 'timeStamp'		: note[7],
+							 'timeString'		: self.getTimeString(note[7]),
+							 #'numUnseenActions' : note[9]
+							 'sender_name'		: sender['first_name'],
+							 'op_name'			: op['first_name'],
+							 'numOtherPeople'	: note[12],
+							 'isOP'				: note[13],
+							 'avatar'			: sender['avatar_name'],
+							 'pushNotificationSent' : note[14]
+							 }
+				n_list.append(this_note)
 		user_manager.closeConnection()
 		return n_list
 
@@ -528,6 +532,30 @@ class Posts:
 		addIndexCode = 'CREATE INDEX IF NOT EXISTS id ON ' + self.REPORT_TABLE + ' (id)'
 		self.db.execute(addIndexCode)
 
+	def getReportList(self):
+		sql = "SELECT * FROM " + self.REPORT_TABLE
+		self.db.execute(self.db.mogrify(sql))
+		query = self.db.fetchall()
+		report_list = list()
+		for item in query:
+			dict_item = self.reportQueryToDict(item)
+			report_list.append(item)
+		return report_list
+
+	def reportQueryToDict(self, query_item):
+		report_dict = {}
+		report_dict['feed_name'] = query_item[0]
+		report_dict['id'] = query_item[1]
+		report_dict['reason'] = query_item[2]
+		report_dict['isComment'] = query_item[3]
+		report_dict['description'] = query_item[4]
+		report_dict['timeString'] = query_item[5]
+		report_dict['timeStamp'] = query_item[6]
+		report_dict['reporting_user'] = query_item[7]
+		report_dict['reported_user'] = query_item[8]
+		return report_dict
+
+
 	def reportPost(self, feed_name, comment_id, reason, description, reporting_user, reported_user):
 		body = self.getPostById(feed_name, comment_id)['body']
 		timeStamp = time.time()
@@ -566,6 +594,8 @@ class Posts:
 		output = self.postListToDict(this_post, user_info_table)
 		user_manager.closeConnection()
 		if len(output) == 0:
+			return None
+		elif output[0]['poster_id'] == self.DELETED_ACCOUNT_USERNAME:
 			return None
 		else:
 			return output[0]
@@ -895,7 +925,10 @@ class Posts:
 				thisPost['first_name'] = self.DELETED_ACCOUNT_FIRST_NAME
 				thisPost['last_name'] = self.DELETED_ACCOUNT_LAST_NAME
 				thisPost['poster_id'] = self.DELETED_ACCOUNT_USERNAME
-			postList.append(thisPost)
+
+			# here we made the call just to not show deleted posts (nor it's comments)	
+			if user_info_table.get(post[1]) != None:
+				postList.append(thisPost)	
 		return postList	
 
 	def commentListToDict(self, comments, user_info_table):
@@ -1059,7 +1092,6 @@ class Posts:
 		user_manager.closeConnection()
 		if (this_user == None):
 			return 
-
 		feed_names = self.getFeedNames()
 		for feed_name in feed_names:
 			allComments = self.getComments(feed_name)
@@ -1067,14 +1099,21 @@ class Posts:
 			for comment in allComments:
 				if comment['poster_id'] == userID:
 					self.softDeleteComment(feed_name, comment['unique_id']) 
-
 			for post in allPosts:
 				if post['poster_id'] == userID:
 					self.softDeletePost(feed_name, post['comment_id']) 
 
+
+		self.deleteUserNotifications(userID)
 		user_manager = Users()
 		user_manager.deleteUser(userID)
 		user_manager.closeConnection()
+
+	def deleteUserNotifications(self, userID):
+		self.createShortList(userID)
+		table_name = self.USER_NOTIFICATION_PREFIX + userID
+		sql  = "DELETE FROM " + table_name
+		self.db.execute(sql)
 
 	def deleteNotifications(self):
 		user_manager = Users()
@@ -1082,9 +1121,7 @@ class Posts:
 		user_manager.closeConnection()
 		# delete from short lists
 		for user in user_list:
-			self.createShortList(user)
-			sql  = "DELETE FROM " + self.USER_NOTIFICATION_PREFIX + user
-			self.db.execute(sql)
+			self.deleteNotifications(userID)
 
 	def addColumn(self, table_name, column_name, column_type, default_value = None):
 		sql = "ALTER TABLE " + table_name + " ADD " + column_name + " " +  column_type

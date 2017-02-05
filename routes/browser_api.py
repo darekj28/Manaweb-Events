@@ -413,7 +413,7 @@ def editPost():
 @browser_api.route('/getCurrentUserInfo', methods = ['POST'])
 def getCurrentUserInfo():
 	thisUserID = request.form.get("userID")
-	# thisUserID = session.get('userID')
+	print(thisUserID)
 	thisUser = getUserInfo(thisUserID)
 	return jsonify({'thisUser' : thisUser})
 
@@ -435,7 +435,7 @@ def setFeedFilter():
 		user_manager.updateInfo(userID, 'tradeFilter', tradeFilter)	
 		user_manager.updateInfo(userID, 'playFilter', playFilter)	
 		user_manager.updateInfo(userID, 'chillFilter', chillFilter)
-		user_manager.closeConnnection()	
+		user_manager.closeConnection()	
 		return redirect(url_for("index"))
 
 	else:
@@ -461,7 +461,6 @@ def makePost():
 	else:
 		return "<h2> Invalid request on sendPost, only post method please </h2>"
 
-
 @browser_api.route('/generateUniqueId' , methods = ['POST'])
 def generateUniqueId():
 	timeStamp = time.time() 
@@ -472,24 +471,16 @@ def generateUniqueId():
 
 @browser_api.route("/makeComment", methods = ['POST'])
 def makeComment():
-	if request.method == 'POST':
-
-		feed_name = DEFAULT_FEED
-
-		comment_id = request.json['comment_id']
-		commentContent = request.json['commentContent']
-		# unique_id = request.json['unique_id']
-		unique_id = None
-		
-		post_manager = Posts()
-		userID = request.json['currentUser']['userID']
-		post_manager.makeComment(feed_name, comment_id, commentContent, userID, unique_id = unique_id)
-		post_manager.closeConnection()	
-
-		return redirect(url_for("index"))
-	else:
-		return "<h2> Invalid request on sendMessage, only post method please </h2>"
-
+	feed_name = DEFAULT_FEED
+	comment_id = request.json['comment_id']
+	commentContent = request.json['commentContent']
+	# unique_id = request.json['unique_id']
+	unique_id = None
+	post_manager = Posts()
+	userID = request.json['currentUser']['userID']
+	post_manager.makeComment(feed_name, comment_id, commentContent, userID, unique_id = unique_id)
+	post_manager.closeConnection()	
+	return jsonify({'result' : 'success'})
 
 @browser_api.route('/deletePost', methods = ['POST'])
 def deletePost():
@@ -500,7 +491,6 @@ def deletePost():
 		post_manager = Posts()
 		post_manager.deletePost(feed_name, unique_id)
 		post_manager.closeConnection()
-
 	return redirect(url_for('index'))
 
 
@@ -587,6 +577,26 @@ def softDeleteAccount():
 	post_manager.closeConnection()
 	output = {}
 	output['result'] = 'success'
+	return jsonify(output)
+
+@browser_api.route('/getUserList', methods = ['POST'])
+def getUserList():
+	user_manager = Users()
+	user_list = user_manager.getUserList()
+	user_manager.closeConnection()
+	output = {}
+	output['result'] = 'success'
+	output['user_list'] = user_list
+	return jsonify(output)
+
+@browser_api.route('/getReportList', methods = ['POST'])
+def getRepostList():
+	post_manager = Posts()
+	report_list = post_manager.get()
+	post_manager.closeConnection()
+	output = {}
+	output['result'] = 'success'
+	output['report_list'] = report_list
 	return jsonify(output)
 
 def getUserInfo(user_id):

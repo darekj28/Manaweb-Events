@@ -148,7 +148,7 @@ export default class AlternateRegisterEmail extends Component {
 							</TouchableOpacity>
 							<View style={{flex : 0.5}}/>
 						</View>
-						<View style = {{flex : 3}}/>							
+						<View style = {{flex : 2}}/>							
 					</View>
 				</View>
 			</TouchableWithoutFeedback>

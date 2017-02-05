@@ -46,8 +46,8 @@ export default class RegisterUsername extends Component {
 		.then((response) => response.json())
 		.then((responseData) => {
 				if (responseData['result'] == 'success') {
-						this.props.asyncStorageLogin(this.state.username).done()  
-													
+					this.props.asyncStorageLogin(this.state.username).done()
+					this._navigateToWelcome.bind(this)()
 				}
 		}).done();
 	}

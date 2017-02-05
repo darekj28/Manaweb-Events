@@ -2,7 +2,7 @@
 import React from 'react';
 import {Component} from 'react'
 import {TouchableWithoutFeedback, Image, ScrollView, Alert, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
-
+import {Dimensions} from 'react-native';
 import ViewContainer from '../../components/ViewContainer';
 import HomeStatusBar from '../../components/HomeStatusBar';
 import _ from 'lodash'
@@ -32,8 +32,8 @@ export default class RegisterPhoneNumber extends Component {
 		headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
-				}, 
-			body: 
+				},
+			body:
 			JSON.stringify(
 			 {
 				phone_number : phone_number
@@ -46,7 +46,7 @@ export default class RegisterPhoneNumber extends Component {
 		.done();
 	}
 	// handle the submission of the phone number
-	handlePhoneNumberSubmit(){  
+	handlePhoneNumberSubmit(){
 		if (this.state.validation_output['result'] == 'success'){
 		Alert.alert(
 			"We'll send a verification code to " + this.state.phone_number + ".",
@@ -54,7 +54,7 @@ export default class RegisterPhoneNumber extends Component {
 			[
 				{text: 'Cancel', style: 'cancel'},
 				{text: 'OK', onPress: () => this.sendConfirmationPin()}
-			]) 
+			])
 		}
 	}
 
@@ -65,8 +65,8 @@ export default class RegisterPhoneNumber extends Component {
 		headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
-				}, 
-			body: 
+				},
+			body:
 			JSON.stringify(
 			 {
 				phone_number : this.state.phone_number
@@ -79,9 +79,9 @@ export default class RegisterPhoneNumber extends Component {
 			}
 			else {
 				this.setState({confirmationPin : responseData['confirmationPin']})
-				this._navigateToConfirmCode();  
+				this._navigateToConfirmCode();
 			}
-			
+
 		})
 		.done();
 	}
@@ -110,7 +110,7 @@ export default class RegisterPhoneNumber extends Component {
 			if (length > 6) {
 				new_phone_number = "(" + raw_phone_number.substring(0,3) + ") " + raw_phone_number.substring(3, 6) + "-" + raw_phone_number.substring(6, length)
 			}
-			this.setState({phone_number : new_phone_number});  
+			this.setState({phone_number : new_phone_number});
 			this.validatePhoneNumber(phone_number);
 	}
 
@@ -130,7 +130,7 @@ export default class RegisterPhoneNumber extends Component {
 
 	_navigateToAlternateRegister() {
 		this.props.navigator.push({
-			href: "AlternateRegisterEmail", 
+			href: "AlternateRegisterEmail",
 			first_name : this.props.first_name,
 			last_name : this.props.last_name,
 		})
@@ -153,10 +153,11 @@ export default class RegisterPhoneNumber extends Component {
 
 
 	render() {
+		var {height, width} = Dimensions.get('window');
 		var error_message = this.getErrorMessage.bind(this)();
 		return (
 			<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
-				<View style={styles.container}>
+				<View style={[styles.container, {height: height}]}>
 					<RegisterHeader navigator={this.props.navigator}/>
 					<View style={{flex : 1, flexDirection : 'column'}}>
 						<View style={{flex : 2}}>
@@ -168,7 +169,7 @@ export default class RegisterPhoneNumber extends Component {
 								<Text style={styles.label}>PHONE NUMBER</Text>
 								<View style={styles.input_wrapper}>
 									<TextInput onChangeText = {this.handlePhoneNumberChange}
-										style = {styles.input} 
+										style = {styles.input}
 										keyboardType = "phone-pad"
 						                dataDetectorTypes = "phoneNumber"
 						                maxLength = {14}
@@ -193,7 +194,7 @@ export default class RegisterPhoneNumber extends Component {
 								</TouchableOpacity>
 							</View>
 						</View>	
-						<View style = {{flex : 2.5}}/>							
+						<View style = {{flex : 2.5}}/>
 					</View>
 				</View>
 			</TouchableWithoutFeedback>
@@ -214,12 +215,12 @@ const styles = StyleSheet.create({
 	input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
 	input : {flex : 1, width : 180, fontSize : 20, justifyContent : 'flex-start'},
 	button : {
-		flex : 1, 
-		backgroundColor : '#90d7ed', 
-		borderRadius:60, 
-		justifyContent : 'center', 
-		alignItems : 'center', 
-		width : 100, 
+		flex : 1,
+		backgroundColor : '#90d7ed',
+		borderRadius:60,
+		justifyContent : 'center',
+		alignItems : 'center',
+		width : 100,
 		height : 35
 	},
 	button_text : {color : 'white', fontWeight : 'bold', fontSize : 14},
