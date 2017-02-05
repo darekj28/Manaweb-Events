@@ -139,14 +139,16 @@ export default class AlternateRegisterEmail extends Component {
 								</View>
 							</View>
 						</View>
-						<View style = {{flex : 0.4, alignItems : 'center'}}>
+						<View style = {{flex : 1, alignItems : 'center'}}>
+							<View style={{flex : 0.5}}/>
 							<TouchableOpacity style={{flex : 1}} onPress = {this.handleEmailSubmit.bind(this)}>
 								<View style = {styles.button}>
 									<Text style={styles.button_text}>Next</Text>
 								</View>
 							</TouchableOpacity>
+							<View style={{flex : 0.5}}/>
 						</View>
-						<View style = {{flex : 2.6}}/>							
+						<View style = {{flex : 2}}/>							
 					</View>
 				</View>
 			</TouchableWithoutFeedback>
