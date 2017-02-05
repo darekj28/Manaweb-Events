@@ -413,7 +413,7 @@ def editPost():
 @browser_api.route('/getCurrentUserInfo', methods = ['POST'])
 def getCurrentUserInfo():
 	thisUserID = request.form.get("userID")
-	# thisUserID = session.get('userID')
+	print(thisUserID)
 	thisUser = getUserInfo(thisUserID)
 	return jsonify({'thisUser' : thisUser})
 
@@ -587,6 +587,26 @@ def softDeleteAccount():
 	post_manager.closeConnection()
 	output = {}
 	output['result'] = 'success'
+	return jsonify(output)
+
+@browser_api.route('/getUserList', methods = ['POST'])
+def getUserList():
+	user_manager = Users()
+	user_list = user_manager.getUserList()
+	user_manager.closeConnection()
+	output = {}
+	output['result'] = 'success'
+	output['user_list'] = user_list
+	return jsonify(output)
+
+@browser_api.route('/getReportList', methods = ['POST'])
+def getRepostList():
+	user_manager = Users()
+	user_list = user_manager.getUserList()
+	user_manager.closeConnection()
+	output = {}
+	output['result'] = 'success'
+	output['user_list'] = user_list
 	return jsonify(output)
 
 def getUserInfo(user_id):

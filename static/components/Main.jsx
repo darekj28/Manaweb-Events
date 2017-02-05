@@ -13,6 +13,7 @@ import NotificationsApp from './Notifications/NotificationsApp.jsx';
 import SettingsApp from './Settings/SettingsApp.jsx';
 import Recovery from './Recovery/RecoveryApp.jsx';
 import Confirm from './Login/Confirm.jsx';
+import AdminApp from './Admin/AdminApp.jsx';
 
 
 class Main extends React.Component {
@@ -47,6 +48,13 @@ const checkConfirmed = (nextState, replace) => {
 	}
 }
 
+const checkAdmin = (nextState, replace) => {
+	var thisUser = AppStore.getCurrentUser();
+	if (!thisUser.isAdmin) {
+		replace(`/`);
+	}
+}
+
 ReactDOM.render(
 	<Router history={browserHistory}>
 	<Route path="/" component={Main} >
@@ -56,5 +64,6 @@ ReactDOM.render(
 	  	<Route path="settings" component={SettingsApp} onEnter={checkLogin}/>
 	  	<Route path="recovery" component={Recovery}/>
 	  	<Route path ="confirm" component = {Confirm} onEnter = {checkConfirmed}/>
+	  	<Route path ="admin" component = {AdminApp} onEnter = {checkAdmin} />
     </Route></Router>, document.getElementById('app'));
 

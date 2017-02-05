@@ -425,26 +425,28 @@ class Posts:
 		for note in query:
 			sender = user_manager.getInfo(note[3])
 			op = user_manager.getInfo(note[11])
-			if (op is None): 
-				op = {"first_name" : "None"}
-			this_note = {'feed_name' 		: note[0],
-						 'comment_id'		: note[1],
-						 'receiver_id'		: note[2],
-						 'sender_id'		: note[3],
-						 # 'action'			: note[4]
-						 'seen'				: note[5],
-						 'notification_id' 	: note[6],
-						 'timeStamp'		: note[7],
-						 'timeString'		: self.getTimeString(note[7]),
-						 #'numUnseenActions' : note[9]
-						 'sender_name'		: sender['first_name'],
-						 'op_name'			: op['first_name'],
-						 'numOtherPeople'	: note[12],
-						 'isOP'				: note[13],
-						 'avatar'			: sender['avatar_name'],
-						 'pushNotificationSent' : note[14]
-						 }
-			n_list.append(this_note)
+			# unless the sender and op still exist, we don't send
+			if (sender != None):
+				if (op is None): 
+					op = {"first_name" : "[DELETED]"}
+				this_note = {'feed_name' 		: note[0],
+							 'comment_id'		: note[1],
+							 'receiver_id'		: note[2],
+							 'sender_id'		: note[3],
+							 # 'action'			: note[4]
+							 'seen'				: note[5],
+							 'notification_id' 	: note[6],
+							 'timeStamp'		: note[7],
+							 'timeString'		: self.getTimeString(note[7]),
+							 #'numUnseenActions' : note[9]
+							 'sender_name'		: sender['first_name'],
+							 'op_name'			: op['first_name'],
+							 'numOtherPeople'	: note[12],
+							 'isOP'				: note[13],
+							 'avatar'			: sender['avatar_name'],
+							 'pushNotificationSent' : note[14]
+							 }
+				n_list.append(this_note)
 		user_manager.closeConnection()
 		return n_list
 
@@ -529,6 +531,8 @@ class Posts:
 		self.db.execute(createTableCode)
 		addIndexCode = 'CREATE INDEX IF NOT EXISTS id ON ' + self.REPORT_TABLE + ' (id)'
 		self.db.execute(addIndexCode)
+
+	# def getReportList(self):
 
 	def reportPost(self, feed_name, comment_id, reason, description, reporting_user, reported_user):
 		body = self.getPostById(feed_name, comment_id)['body']
@@ -1071,6 +1075,7 @@ class Posts:
 			for post in allPosts:
 				if post['poster_id'] == userID:
 					self.softDeletePost(feed_name, post['comment_id']) 
+
 
 		self.deleteUserNotifications(userID)
 		user_manager = Users()

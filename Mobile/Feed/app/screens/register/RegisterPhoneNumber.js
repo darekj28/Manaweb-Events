@@ -190,14 +190,14 @@ export default class RegisterPhoneNumber extends Component {
 								</View>
 							</TouchableOpacity>
 							<View style={{flex : 0.5}}/>
-						</View>
-						<View style = {{flex : 0.5, alignItems : 'center', justifyContent : 'center'}}>
+						
 							<View style={{flex : 0.5}}/>
-							<TouchableOpacity style={{flex : 1}} onPress = {this._navigateToAlternateRegister.bind(this)}>
-								<View style = {styles.button}>
-									<Text style={styles.button_text}>Prefer E-mail?</Text>
-								</View>
-							</TouchableOpacity>
+							<TouchableOpacity style = {{flex : 1, justifyContent : 'center'}}
+										onPress = {this._navigateToAlternateRegister.bind(this)}>
+				              	<Text style = {styles.resend}>
+				                	Prefer E-mail?
+				             	</Text>
+				            </TouchableOpacity>
 							<View style={{flex : 0.5}}/>
 						</View>
 						<View style = {{flex : 2.5}}/>
@@ -230,5 +230,6 @@ const styles = StyleSheet.create({
 		height : 35
 	},
 	button_text : {color : 'white', fontWeight : 'bold', fontSize : 14},
-	error_text : {color : 'red', fontWeight : 'bold', fontSize : 12}
+	error_text : {color : 'red', fontWeight : 'bold', fontSize : 12},
+	resend : {fontSize : 14, color : 'lightseagreen'},
 });
