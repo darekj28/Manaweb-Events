@@ -15970,7 +15970,7 @@
 		}, {
 			key: 'initializeReportList',
 			value: function initializeReportList() {
-				$.post('/getReporstList', function (data) {
+				$.post('/getReportList', function (data) {
 					var report_list = [];
 					data.report_list.map(function (obj) {
 						report_list.unshift(obj);
@@ -16424,8 +16424,8 @@
 			key: 'generateReportList',
 			value: function generateReportList() {
 				var report_list = [];
-				this.props.report_list.map(function (obj) {
-					var element = React.createElement(_AdminReportBox2.default, { report: obj
+				this.props.report_list.map(function (obj, i) {
+					var element = React.createElement(_AdminReportBox2.default, { index: i, report: obj
 					});
 					report_list.push(element);
 				}.bind(this));
@@ -16444,7 +16444,43 @@
 				return React.createElement(
 					'div',
 					{ id: 'AdminReportList' },
-					report_list
+					React.createElement(
+						'table',
+						{ 'class': 'table' },
+						React.createElement(
+							'thead',
+							null,
+							React.createElement(
+								'tr',
+								null,
+								React.createElement(
+									'th',
+									null,
+									'#'
+								),
+								React.createElement(
+									'th',
+									null,
+									'Reporting User'
+								),
+								React.createElement(
+									'th',
+									null,
+									'Reported User'
+								),
+								React.createElement(
+									'th',
+									null,
+									' Description '
+								)
+							)
+						),
+						React.createElement(
+							'tbody',
+							null,
+							report_list
+						)
+					)
 				);
 			}
 		}]);
@@ -16507,13 +16543,32 @@
 		}, {
 			key: 'render',
 			value: function render() {
+				var report = this.props.report;
+				console.log(report);
 				return React.createElement(
-					'div',
-					{ id: 'AdminReportBox' },
+					'tr',
+					null,
 					React.createElement(
-						'span',
-						{ id: 'reported_user' },
-						this.props.report.reported_user
+						'th',
+						{ scope: 'row' },
+						' ',
+						this.props.index,
+						' '
+					),
+					React.createElement(
+						'td',
+						null,
+						report.reported_user
+					),
+					React.createElement(
+						'td',
+						null,
+						report.reporting_user
+					),
+					React.createElement(
+						'td',
+						null,
+						report.body
 					)
 				);
 			}

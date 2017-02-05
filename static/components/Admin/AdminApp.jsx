@@ -27,7 +27,7 @@ export default class AdminApp extends React.Component {
 	}
 
 	initializeReportList(){
-		$.post('/getReporstList', function(data){
+		$.post('/getReportList', function(data){
 			var report_list = [];
 			data.report_list.map(function(obj) {
 				report_list.unshift(obj);

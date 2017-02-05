@@ -592,7 +592,7 @@ def getUserList():
 @browser_api.route('/getReportList', methods = ['POST'])
 def getRepostList():
 	post_manager = Posts()
-	report_list = post_manager.get()
+	report_list = post_manager.getReportList()
 	post_manager.closeConnection()
 	output = {}
 	output['result'] = 'success'

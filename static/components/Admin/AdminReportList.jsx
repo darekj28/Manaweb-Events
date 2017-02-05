@@ -13,8 +13,8 @@ export default class AdminReportList extends React.Component {
 
 	generateReportList(){
 		var report_list = []
-		this.props.report_list.map(function(obj) {
-			var element = <AdminReportBox report = {obj}
+		this.props.report_list.map(function(obj, i) {
+			var element = <AdminReportBox index = {i} report = {obj}
 							/>
 			report_list.push(element)
 		}.bind(this))
@@ -22,7 +22,6 @@ export default class AdminReportList extends React.Component {
 	}
 
 	componentDidMount() {
-		
 	}
 
 	// see the reports 
@@ -31,7 +30,19 @@ export default class AdminReportList extends React.Component {
 		var report_list = this.generateReportList.bind(this)()
 		return(
 			<div id="AdminReportList">
-				{report_list}
+			<table class="table">
+			  <thead>
+			    <tr>
+			      <th>#</th>
+			      <th>Reporting User</th>
+			      <th>Reported User</th>
+			      <th> Description </th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			   		{report_list}
+			  </tbody>
+			</table>
 			</div>
 			);
 	}

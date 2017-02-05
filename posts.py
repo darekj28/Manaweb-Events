@@ -539,20 +539,21 @@ class Posts:
 		report_list = list()
 		for item in query:
 			dict_item = self.reportQueryToDict(item)
-			report_list.append(item)
+			report_list.append(dict_item)
 		return report_list
 
 	def reportQueryToDict(self, query_item):
 		report_dict = {}
 		report_dict['feed_name'] = query_item[0]
 		report_dict['id'] = query_item[1]
-		report_dict['reason'] = query_item[2]
-		report_dict['isComment'] = query_item[3]
-		report_dict['description'] = query_item[4]
-		report_dict['timeString'] = query_item[5]
-		report_dict['timeStamp'] = query_item[6]
-		report_dict['reporting_user'] = query_item[7]
-		report_dict['reported_user'] = query_item[8]
+		report_dict['body'] = query_item[2]
+		report_dict['reason'] = query_item[3]
+		report_dict['isComment'] = query_item[4]
+		report_dict['description'] = query_item[5]
+		report_dict['timeString'] = query_item[6]
+		report_dict['timeStamp'] = query_item[7]
+		report_dict['reporting_user'] = query_item[8]
+		report_dict['reported_user'] = query_item[9]
 		return report_dict
 
 
