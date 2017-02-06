@@ -372,6 +372,7 @@ def mobileGetPushNotifications():
 		return jsonify({ 'result' : False })
 	post_manager = Posts()
 	while True : 
+		time.sleep(1)
 		num_notifications = post_manager.getNotificationCount(username)
 		if int(clientNumUnseen) != num_notifications:
 			push_notifications = post_manager.getPushNotifications(username)
