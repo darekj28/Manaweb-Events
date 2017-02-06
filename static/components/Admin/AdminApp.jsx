@@ -41,12 +41,25 @@ export default class AdminApp extends React.Component {
 		this.initializeReportList.bind(this)()
 	}
 
+	chooseUserView(){
+		this.setState({view : "User"})
+	}
+	chooseReportView(){
+		this.setState({view : "Report"})
+	}
+
 	render() {
 		return(
 			<div id="AdminApp">
 				<NoSearchNavBar currentUser={this.state.currentUser} name={name}/>
 
-				<div className="container app-container">
+
+					<div className="container app-container">
+					<ul className="list-inline">
+						  <li> <p onClick = {this.chooseUserView.bind(this)}> User List  </p> </li>
+						  <li> <p onClick = {this.chooseReportView.bind(this)}> Report List </p> </li>
+					 </ul>
+
 					{ this.state.view == "User" &&
 						<AdminUserList user_list = {this.state.user_list}/>
 					}

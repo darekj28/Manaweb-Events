@@ -17,12 +17,11 @@ export default class AdminReportBox extends React.Component {
 
 	render() {
 		var report = this.props.report
-		console.log(report)
 		return(
 			<tr>
 		      <th scope="row"> {this.props.index} </th>
-		      <td>{report.reported_user}</td>
 		      <td>{report.reporting_user}</td>
+		      <td>{report.reported_user}</td>
 		      <td>{report.body}</td>
 		    </tr>
 			);

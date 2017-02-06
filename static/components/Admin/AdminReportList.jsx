@@ -6,11 +6,9 @@ import AdminReportBox from './AdminReportBox.jsx'
 export default class AdminReportList extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			
+		this.state = {		
 		};
 	}
-
 	generateReportList(){
 		var report_list = []
 		this.props.report_list.map(function(obj, i) {
@@ -22,6 +20,9 @@ export default class AdminReportList extends React.Component {
 	}
 
 	componentDidMount() {
+		$(document).ready(function() {
+		    $('#repost_table').DataTable();
+		} );
 	}
 
 	// see the reports 
@@ -30,7 +31,8 @@ export default class AdminReportList extends React.Component {
 		var report_list = this.generateReportList.bind(this)()
 		return(
 			<div id="AdminReportList">
-			<table class="table">
+			<div className = "table-responsive">
+			<table id = "report_table" className="table table-striped table-bordered" cellspacing="0" width="100%">
 			  <thead>
 			    <tr>
 			      <th>#</th>
@@ -43,6 +45,7 @@ export default class AdminReportList extends React.Component {
 			   		{report_list}
 			  </tbody>
 			</table>
+			</div>
 			</div>
 			);
 	}

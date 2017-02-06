@@ -15985,6 +15985,16 @@
 				this.initializeReportList.bind(this)();
 			}
 		}, {
+			key: 'chooseUserView',
+			value: function chooseUserView() {
+				this.setState({ view: "User" });
+			}
+		}, {
+			key: 'chooseReportView',
+			value: function chooseReportView() {
+				this.setState({ view: "Report" });
+			}
+		}, {
 			key: 'render',
 			value: function render() {
 				return React.createElement(
@@ -15994,6 +16004,32 @@
 					React.createElement(
 						'div',
 						{ className: 'container app-container' },
+						React.createElement(
+							'ul',
+							{ className: 'list-inline' },
+							React.createElement(
+								'li',
+								null,
+								' ',
+								React.createElement(
+									'p',
+									{ onClick: this.chooseUserView.bind(this) },
+									' User List  '
+								),
+								' '
+							),
+							React.createElement(
+								'li',
+								null,
+								' ',
+								React.createElement(
+									'p',
+									{ onClick: this.chooseReportView.bind(this) },
+									' Report List '
+								),
+								' '
+							)
+						),
 						this.state.view == "User" && React.createElement(_AdminUserList2.default, { user_list: this.state.user_list }),
 						this.state.view == "Report" && React.createElement(_AdminReportList2.default, { report_list: this.state.report_list })
 					)
@@ -16433,7 +16469,11 @@
 			}
 		}, {
 			key: 'componentDidMount',
-			value: function componentDidMount() {}
+			value: function componentDidMount() {
+				$(document).ready(function () {
+					$('#repost_table').DataTable();
+				});
+			}
 	
 			// see the reports 
 	
@@ -16445,40 +16485,44 @@
 					'div',
 					{ id: 'AdminReportList' },
 					React.createElement(
-						'table',
-						{ 'class': 'table' },
+						'div',
+						{ className: 'table-responsive' },
 						React.createElement(
-							'thead',
-							null,
+							'table',
+							{ id: 'report_table', className: 'table table-striped table-bordered', cellspacing: '0', width: '100%' },
 							React.createElement(
-								'tr',
+								'thead',
 								null,
 								React.createElement(
-									'th',
+									'tr',
 									null,
-									'#'
-								),
-								React.createElement(
-									'th',
-									null,
-									'Reporting User'
-								),
-								React.createElement(
-									'th',
-									null,
-									'Reported User'
-								),
-								React.createElement(
-									'th',
-									null,
-									' Description '
+									React.createElement(
+										'th',
+										null,
+										'#'
+									),
+									React.createElement(
+										'th',
+										null,
+										'Reporting User'
+									),
+									React.createElement(
+										'th',
+										null,
+										'Reported User'
+									),
+									React.createElement(
+										'th',
+										null,
+										' Description '
+									)
 								)
+							),
+							React.createElement(
+								'tbody',
+								null,
+								report_list
 							)
-						),
-						React.createElement(
-							'tbody',
-							null,
-							report_list
 						)
 					)
 				);
@@ -16544,7 +16588,6 @@
 			key: 'render',
 			value: function render() {
 				var report = this.props.report;
-				console.log(report);
 				return React.createElement(
 					'tr',
 					null,
@@ -16558,12 +16601,12 @@
 					React.createElement(
 						'td',
 						null,
-						report.reported_user
+						report.reporting_user
 					),
 					React.createElement(
 						'td',
 						null,
-						report.reporting_user
+						report.reported_user
 					),
 					React.createElement(
 						'td',
