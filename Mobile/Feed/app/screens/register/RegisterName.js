@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
 	},
 	label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
 	input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
-	input : {flex : 1, width : 200, fontSize : 20, justifyContent : 'flex-start'},
+	input : {flex : 1, width : 200, fontSize : 20, justifyContent : 'flex-start', paddingBottom: 0},
 	button : {
 		flex : 1,
 		backgroundColor : '#90d7ed',

@@ -2,6 +2,7 @@
 import React from 'react';
 import {Component} from 'react'
 import {Alert, Image, TouchableWithoutFeedback, KeyboardAvoidingView, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {Dimensions} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
@@ -30,8 +31,8 @@ export default class LoginScreen extends Component {
 		headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
-				}, 
-			body: 
+				},
+			body:
 			JSON.stringify(
 			 {
 				login_id : this.state.login_id,
@@ -56,8 +57,8 @@ export default class LoginScreen extends Component {
 		headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
-				}, 
-			body: 
+				},
+			body:
 			JSON.stringify(
 			 {
 				login_id : this.state.login_id,
@@ -77,7 +78,7 @@ export default class LoginScreen extends Component {
 					Alert.alert("Invalid Credentials")
 					this.setState({ validation_output : responseData})
 				}
-				
+
 		})
 		.done();
 	}
@@ -106,9 +107,10 @@ export default class LoginScreen extends Component {
 	}
 
 	render() {
+		var {height, width} = Dimensions.get('window');
 		return (
 		<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
-			<View style = {styles.container}>
+			<View style={[styles.container, {height: height}]}>
 				<LoginHeader navigator={this.props.navigator} name="Log In"/>
 				<View style={{flex : 1, flexDirection : 'column'}}>
 					<View style={{flex : 2}}>
@@ -126,7 +128,7 @@ export default class LoginScreen extends Component {
 							<View style={styles.input_wrapper}>
 								<TextInput onChangeText = {this.handlePasswordChange}
 									style = {styles.input}
-									secureTextEntry = {true} 
+									secureTextEntry = {true}
 									/>
 							</View>
 						</View>
@@ -142,8 +144,8 @@ export default class LoginScreen extends Component {
 								<Text style={styles.button_text}>Log In</Text>
 							</View>
 						</TouchableOpacity>
-					</View>	
-					<View style = {{flex : 3}}/>							
+					</View>
+					<View style = {{flex : 3}}/>
 				</View>
 			</View>
 		</TouchableWithoutFeedback>
@@ -159,17 +161,17 @@ const styles = StyleSheet.create({
 		backgroundColor: "white",
 	},
 	button : {
-		flex : 1, 
-		backgroundColor : '#90d7ed', 
-		borderRadius:60, 
-		justifyContent : 'center', 
-		alignItems : 'center', 
-		width : 150, 
+		flex : 1,
+		backgroundColor : '#90d7ed',
+		borderRadius:60,
+		justifyContent : 'center',
+		alignItems : 'center',
+		width : 150,
 		height : 35
 	},
 	button_text : {color : 'white', fontWeight : 'bold', fontSize : 14},
 	forgot_password : {fontSize : 12, color : 'lightseagreen'},
 	label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
 	input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
-	input : {flex : 1, width : 220, fontSize : 14, justifyContent : 'flex-start'},
+	input : {flex : 1, width : 220, fontSize : 14, justifyContent : 'flex-start', paddingBottom: 0},
 });

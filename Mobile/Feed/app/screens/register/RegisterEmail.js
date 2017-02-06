@@ -2,7 +2,7 @@
 import React from 'react';
 import {Component} from 'react'
 import {TouchableWithoutFeedback, Alert, Image, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
-
+import {Dimensions} from 'react-native';
 import ViewContainer from '../../components/ViewContainer';
 import HomeStatusBar from '../../components/HomeStatusBar';
 import _ from 'lodash'
@@ -44,8 +44,8 @@ export default class RegisterEmail extends Component {
 		headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
-				}, 
-			body: 
+				},
+			body:
 			JSON.stringify(
 			 {
 				email : email
@@ -111,10 +111,11 @@ export default class RegisterEmail extends Component {
 	}
 
 	render() {
+		var {height, width} = Dimensions.get('window');
 		var error_message = this.getErrorMessage.bind(this)();
 		return (
 			<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
-				<View style={styles.container}>
+				<View style={[styles.container, {height: height}]}>
 					<RegisterHeader navigator={this.props.navigator}/>
 					<View style={{flex : 1, flexDirection : 'column'}}>
 						<View style={{flex : 2}}>
@@ -126,7 +127,7 @@ export default class RegisterEmail extends Component {
 								<Text style={styles.label}>EMAIL ADDRESS</Text>
 								<View style={styles.input_wrapper}>
 									<TextInput onChangeText = {this.handleEmailChange}
-										style = {styles.input} 
+										style = {styles.input}
                 						value = {this.state.email}/>
 								</View>
 							</View>
@@ -137,7 +138,7 @@ export default class RegisterEmail extends Component {
 							</View>
 						</View>
 						<View style = {{flex : 1, alignItems : 'center'}}>
-							<TouchableOpacity style = {{flex : 1, justifyContent : 'center'}} 
+							<TouchableOpacity style = {{flex : 1, justifyContent : 'center'}}
 											onPress = {this._skipEmail.bind(this)}>
 					       	  	<Text style = {styles.notnow}>
 					       	    	Not now?
@@ -148,8 +149,8 @@ export default class RegisterEmail extends Component {
 									<Text style={styles.button_text}>Next</Text>
 								</View>
 							</TouchableOpacity>
-						</View>	
-						<View style = {{flex : 3}}/>							
+						</View>
+						<View style = {{flex : 3}}/>
 					</View>
 				</View>
 			</TouchableWithoutFeedback>
@@ -166,14 +167,14 @@ const styles = StyleSheet.create({
 	},
 	label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
 	input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
-	input : {flex : 1, width : 220, fontSize : 14, justifyContent : 'flex-start'},
+	input : {flex : 1, width : 220, fontSize : 14, justifyContent : 'flex-start', paddingBottom: 0},
 	button : {
-		flex : 1, 
-		backgroundColor : '#90d7ed', 
-		borderRadius:60, 
-		justifyContent : 'center', 
-		alignItems : 'center', 
-		width : 100, 
+		flex : 1,
+		backgroundColor : '#90d7ed',
+		borderRadius:60,
+		justifyContent : 'center',
+		alignItems : 'center',
+		width : 100,
 		height : 35
 	},
 	button_text : {color : 'white', fontWeight : 'bold', fontSize : 14},

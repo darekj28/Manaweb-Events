@@ -2,7 +2,7 @@
 import React from 'react';
 import {Component} from 'react'
 import {TouchableWithoutFeedback, Alert, Image, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
-
+import {Dimensions} from 'react-native';
 import ViewContainer from '../../components/ViewContainer';
 import HomeStatusBar from '../../components/HomeStatusBar';
 import _ from 'lodash'
@@ -38,8 +38,8 @@ export default class AlternateRegisterEmail extends Component {
 		headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
-				}, 
-			body: 
+				},
+			body:
 			JSON.stringify(
 			 {
 				email : this.state.email
@@ -53,9 +53,9 @@ export default class AlternateRegisterEmail extends Component {
 			else {
 				console.log(responseData['confirmationPin'])
 				this.setState({confirmationPin : responseData['confirmationPin']})
-				this._navigateToEmailConfirm();  
+				this._navigateToEmailConfirm();
 			}
-			
+
 		})
 		.done();
 	}
@@ -72,8 +72,8 @@ export default class AlternateRegisterEmail extends Component {
 		headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
-				}, 
-			body: 
+				},
+			body:
 			JSON.stringify(
 			 {
 				email : email
@@ -114,10 +114,11 @@ export default class AlternateRegisterEmail extends Component {
 		else return;
 	}
 	render() {
+		var {height, width} = Dimensions.get('window');
 		var error_message = this.getErrorMessage.bind(this)();
 		return (
 			<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
-				<View style={styles.container}>
+				<View style={[styles.container, {height: height}]}>
 					<RegisterHeader navigator={this.props.navigator}/>
 					<View style={{flex : 1, flexDirection : 'column'}}>
 						<View style={{flex : 2}}>
@@ -129,7 +130,7 @@ export default class AlternateRegisterEmail extends Component {
 								<Text style={styles.label}>EMAIL ADDRESS</Text>
 								<View style={styles.input_wrapper}>
 									<TextInput onChangeText = {this.handleEmailChange}
-										style = {styles.input} 
+										style = {styles.input}
                 						value = {this.state.email}/>
 								</View>
 							</View>
@@ -148,7 +149,7 @@ export default class AlternateRegisterEmail extends Component {
 							</TouchableOpacity>
 							<View style={{flex : 0.5}}/>
 						</View>
-						<View style = {{flex : 2}}/>							
+						<View style = {{flex : 2}}/>
 					</View>
 				</View>
 			</TouchableWithoutFeedback>
@@ -165,14 +166,14 @@ const styles = StyleSheet.create({
 	},
 	label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
 	input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
-	input : {flex : 1, width : 220, fontSize : 14, justifyContent : 'flex-start'},
+	input : {flex : 1, width : 220, fontSize : 14, justifyContent : 'flex-start', paddingBottom: 0},
 	button : {
-		flex : 1, 
-		backgroundColor : '#90d7ed', 
-		borderRadius:60, 
-		justifyContent : 'center', 
-		alignItems : 'center', 
-		width : 100, 
+		flex : 1,
+		backgroundColor : '#90d7ed',
+		borderRadius:60,
+		justifyContent : 'center',
+		alignItems : 'center',
+		width : 100,
 		height : 35
 	},
 	button_text : {color : 'white', fontWeight : 'bold', fontSize : 14},

@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
 	},
 	label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
 	input_wrapper : {flex : 1, flexDirection : 'column', borderBottomColor : 'black', borderBottomWidth : 1, alignItems : 'center', justifyContent : 'center'},
-	input : {flex : 1, fontSize : 30, textAlign : 'center'},
+	input : {flex : 1, fontSize : 20, textAlign : 'center', paddingBottom: 0},
 	button : {
 		flex : 1,
 		backgroundColor : '#90d7ed',
