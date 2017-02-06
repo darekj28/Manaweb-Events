@@ -295,23 +295,36 @@ def getNotifications():
 @browser_api.route('/getNotificationCount', methods=['POST'])
 def getNotificationCount():
 	userID = request.form.get("currentUser[userID]")
+	clientNumUnseen = request.form.get('numUnseen')
 	post_manager = Posts()
-	count = post_manager.getNotificationCount(userID)
-	post_manager.closeConnection()
-	return jsonify({ 'count' : count })
+	while True:
+		time.sleep(1)
+		count = post_manager.getNotificationCount(userID)
+		if clientNumUnseen != None and clientNumUnseen != "":
+			if count != int(clientNumUnseen):
+				post_manager.closeConnection()
+				return jsonify({ 'count' : count })
+		else:
+			return jsonify({ 'count' : count })
 
 @browser_api.route('/getNumUnseenPosts', methods = ['POST'])
 def getNumUnseenPosts():
 	userID = request.form.get("currentUser[userID]")
+	clientNumUnseenPosts = request.form.get('numUnseenPosts')
 	if userID != None:
 		feed_name = request.form['feed_name']
-		# userID = session['userID']
 		post_manager = Posts()
-		numUnseenPosts = post_manager.getNumUnseenPosts(feed_name, userID)
-		post_manager.closeConnection()
-		return jsonify({'numUnseenPosts': numUnseenPosts})
+		while True:
+			time.sleep(1)
+			numUnseenPosts = post_manager.getNumUnseenPosts(feed_name, userID)
+			if clientNumUnseenPosts != None and clientNumUnseenPosts != "":	
+				if numUnseenPosts != int(clientNumUnseenPosts) :
+					post_manager.closeConnection()
+					return jsonify({'numUnseenPosts': numUnseenPosts})
+			else:
+				return jsonify({ 'numUnseenPosts' : 0 })
 	else:
-		return jsonify({'numUnseenPosts': -1})
+		return jsonify({'numUnseenPosts': 0})
 
 @browser_api.route('/seeNotifications', methods=['POST'])
 def seeNotifications():

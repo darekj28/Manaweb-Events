@@ -170,7 +170,6 @@ export default class App extends React.Component {
 			clearTimeout(this.state.timer);
 		}
 		else {
-			console.log('logged in');
 			this.refreshFeed.bind(this)();
 			this.refreshNumUnseenPosts.bind(this)();
 		}
