@@ -59,10 +59,13 @@ export default class App extends React.Component {
 		this.setState({ numShownPosts : (this.state.numShownPosts + 50) }, this.refreshFeed.bind(this));;
 	}
 	refreshNumUnseenPosts() {
-		$.post('/getNumUnseenPosts', {feed_name: feed_name, currentUser : this.state.currentUser},
+		$.post('/getNumUnseenPosts', 
+			{feed_name: feed_name, currentUser : this.state.currentUser, numUnseenPosts : this.state.numUnseenPosts},
 			function(data){
-				this.setState({numUnseenPosts :  data['numUnseenPosts']});
-			}.bind(this));
+				this.setState({numUnseenPosts :  data['numUnseenPosts'], 
+								timer : setTimeout(this.refreshNumUnseenPosts.bind(this), 10000) });
+			}.bind(this)
+		);
 	}
 	
 	handleFilterClick(filter, isSearch) {
@@ -152,24 +155,25 @@ export default class App extends React.Component {
 	}
 	componentDidMount() {
 		AppStore.addUserChangeListener(this._onChange.bind(this));
-		if (this.state.currentUser['userID'] != null) {
+		if (this.state.currentUser['userID']) {
 			this.refreshFeed.bind(this)();
-			if (!this.state.timer) {
-				this.setState({ timer : setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
-			}
+			this.refreshNumUnseenPosts.bind(this)();
 		}
 	}
 	componentWillUnmount() {
-		clearInterval(this.state.timer);
+		clearTimeout(this.state.timer);
 		AppStore.removeUserChangeListener(this._onChange.bind(this));
 	}
 	_onChange() {
 		this.setState({ currentUser : AppStore.getCurrentUser() });
-		if (!this.state.currentUser)
-			clearInterval(this.state.timer);
-		this.refreshFeed.bind(this)();
-		if (!this.state.timer)
-			this.setState({ timer : setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
+		if (!this.state.currentUser) {
+			clearTimeout(this.state.timer);
+		}
+		else {
+			console.log('logged in');
+			this.refreshFeed.bind(this)();
+			this.refreshNumUnseenPosts.bind(this)();
+		}
 	}
 	render() {
 		if (this.state.currentUser['userID'] != null) {

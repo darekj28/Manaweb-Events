@@ -2,7 +2,32 @@ var React = require('react');
 var Link = require('react-router').Link;
 import AppStore from '../../stores/AppStore.jsx';
 import AppActions from '../../actions/AppActions.jsx';
-
+function getNotificationFirst(note) {
+    var also; var notification;
+    if (note.isOP) { 
+        also = "";
+    }
+    else {
+        also = " also";
+    }
+    if (note.numOtherPeople > 1)
+        notification = note.sender_name + " and " + note.numOtherPeople + " other people commented on "
+    else if (note.numOtherPeople == 1)
+        notification = note.sender_name + " and 1 other person commented on "
+    else 
+        notification = note.sender_name + also + " commented on "
+    return notification;
+}
+function getNotificationSecond(note) {
+    var whose;
+    if (note.isOP) { 
+        whose = "your";
+    }
+    else {
+        whose = note.op_name + "'s";
+    }
+    return whose + " post";
+}
 export default class NotificationsDropdown extends React.Component {
     constructor(props) {
         super(props);
@@ -16,46 +41,18 @@ export default class NotificationsDropdown extends React.Component {
         $.post('/seeNotifications', {currentUser : AppStore.getCurrentUser()});
     }
     getNotificationCount() {
-        $.post('/getNotificationCount', {currentUser : AppStore.getCurrentUser()},
+        $.post('/getNotificationCount', {currentUser : AppStore.getCurrentUser(), numUnseen : this.state.numUnseen},
             function(data) {
-                if (data.count > 0) { 
-                    AppActions.addNotificationCount(data.count);
-                }
+                AppActions.addNotificationCount(data.count);
+                this.setState({ timer : setTimeout(this.getNotificationCount.bind(this), 10000) })
             }.bind(this));
-    }
-    getNotificationFirst(note) {
-        var also; var notification;
-        if (note.isOP) { 
-            also = "";
-        }
-        else {
-            also = " also";
-        }
-        if (note.numOtherPeople > 1)
-            notification = note.sender_name + " and " + note.numOtherPeople + " other people commented on "
-        else if (note.numOtherPeople == 1)
-            notification = note.sender_name + " and 1 other person commented on "
-        else 
-            notification = note.sender_name + also + " commented on "
-        return notification;
-    }
-    getNotificationSecond(note) {
-        var whose;
-        if (note.isOP) { 
-            whose = "your";
-        }
-        else {
-            whose = note.op_name + "'s";
-        }
-        return whose + " post";
     }
     componentDidMount() {
         AppStore.addNoteChangeListener(this._onChange.bind(this));
-        if (!this.state.timer)
-            this.setState({ timer : setInterval(this.getNotificationCount.bind(this), 10000) });
+        this.getNotificationCount.bind(this)();
     }
     componentWillUnmount() {
-        clearInterval(this.state.timer);
+        clearTimeout(this.state.timer);
         AppStore.removeNoteChangeListener(this._onChange.bind(this));
     }
     _onChange() {
@@ -74,8 +71,8 @@ export default class NotificationsDropdown extends React.Component {
                     {this.state.notifications.map(function(note, i) {
                         return (<li key={i}>
                                     <Link to={"/comment/" + note.comment_id}> 
-                                        {this.getNotificationFirst(note)}
-                                        <span className="special">{this.getNotificationSecond(note)}</span>. 
+                                        {getNotificationFirst(note)}
+                                        <span className="special">{getNotificationSecond(note)}</span>. 
                                         <small>{" " + note.timeString}</small>
                                     </Link>
                                 </li>);
