@@ -30,7 +30,6 @@ const customTextInputProps = {
 setCustomText(customTextProps);
 setCustomTextInput(customTextInputProps);
 export default class Index extends React.Component {
-
 	constructor(props){
 		super(props)
 		this.state = {
@@ -42,31 +41,28 @@ export default class Index extends React.Component {
 			notifications: [],
 			numUnseenNotifications : 0
 		}
-		// check for push notifications this often
-		this.notification_interval;
-		this.notification_time_interval = 5 * 1000;
 	}
 
 	getNotificationSyntax(note) {
-				var whose; var also; var notification;
-				if (note.isOP) { 
-						whose = "your";
-						also = "";
-				}
-				else {
-						whose = note.op_name + "'s";
-						also = " also";
-				}
-				if (note.numOtherPeople > 1)
-						notification = note.sender_name + " and " + 
-								note.numOtherPeople + " other people commented on " + whose + " post."
-				else if (note.numOtherPeople == 1)
-						notification = note.sender_name + 
-								" and 1 other person commented on " + whose + " post."
-				else 
-						notification = note.sender_name + also + " commented on " + whose + " post."
-				return notification;
+		var whose; var also; var notification;
+		if (note.isOP) { 
+				whose = "your";
+				also = "";
 		}
+		else {
+				whose = note.op_name + "'s";
+				also = " also";
+		}
+		if (note.numOtherPeople > 1)
+				notification = note.sender_name + " and " + 
+						note.numOtherPeople + " other people commented on " + whose + " post."
+		else if (note.numOtherPeople == 1)
+				notification = note.sender_name + 
+						" and 1 other person commented on " + whose + " post."
+		else 
+				notification = note.sender_name + also + " commented on " + whose + " post."
+		return notification;
+	}
 
 	getPushNotifications(){
 		const url = "https://manaweb-events.herokuapp.com"
@@ -77,35 +73,32 @@ export default class Index extends React.Component {
 								'Accept': 'application/json',
 								'Content-Type': 'application/json'
 						},
-						body: JSON.stringify({ username : this.state.current_username })
+						body: JSON.stringify({ username : this.state.current_username, numUnseenNotifications : this.state.numUnseenNotifications })
 				}
 			).then((response) => response.json())
 			 .then((responseData) => {
-				// handle number of notifications
 				PushNotification.setApplicationIconBadgeNumber(responseData['num_notifications'])
-				// maybe use current storage..not sure yet
-				// console.log(responseData['push_notifications'])
 				if (responseData['push_notifications'].length > 0) {
-							for (var i = 0; i < responseData['push_notifications'].length; i++) {
-								console.log("notifcation sent")
-								var obj = responseData['push_notifications'][i]
-								var data = {
-									comment_id : obj['comment_id']
-								}
-								if (Platform.OS ===  'ios'){
-									PushNotification.localNotification({
-										message : this.getNotificationSyntax(obj),
-										userInfo : data,
-									})
-								}
-								else if (Platform.OS === 'android'){
-									PushNotification.localNotification({
-										tag : data,
-										message : this.getNotificationSyntax(obj),
-									})
-								}
-							}
+					for (var i = 0; i < responseData['push_notifications'].length; i++) {
+						var obj = responseData['push_notifications'][i]
+						var data = {
+							comment_id : obj['comment_id']
 						}
+						if (Platform.OS ===  'ios'){
+							PushNotification.localNotification({
+								message : this.getNotificationSyntax(obj),
+								userInfo : data,
+							})
+						}
+						else if (Platform.OS === 'android'){
+							PushNotification.localNotification({
+								tag : data,
+								message : this.getNotificationSyntax(obj),
+							})
+						}
+					}
+				}
+				this.setState({ pollExternalNotificationCount : setTimeout(this.checkNotifications.bind(this), 10000) });
 		})
 		.catch((error) => {
 			console.log(error);
@@ -138,12 +131,9 @@ export default class Index extends React.Component {
 	}
 
 	handleAppStateChange(appState){
-			// this checks if any changes were made to user account while they were away
-			this.initializeUserInformation.bind(this)()
-
-			// here we 
-			clearInterval(this.notification_interval)
-			this.notification_interval = setInterval(this.checkNotifications.bind(this), this.notification_time_interval)
+		// this checks if any changes were made to user account while they were away
+		this.initializeUserInformation.bind(this)()
+		this.checkNotifications.bind(this)();
 	}
 
 	checkNotifications(){
@@ -339,6 +329,7 @@ export default class Index extends React.Component {
 			this.handleConnectivityChange.bind(this)
 		)
 		clearTimeout(this.state.pollNotificationCount);
+		clearTimeout(this.state.pollExternalNotificationCount);
 	}
 	componentDidMount() {
 		this.getPosts.bind(this)(); 
