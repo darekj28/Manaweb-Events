@@ -63,7 +63,7 @@ export default class App extends React.Component {
 			{feed_name: feed_name, currentUser : this.state.currentUser, numUnseenPosts : this.state.numUnseenPosts},
 			function(data){
 				this.setState({numUnseenPosts :  data['numUnseenPosts'], 
-								timer : setTimeout(this.refreshNumUnseenPosts.bind(this), 10000) });
+								timer : setTimeout(this.refreshNumUnseenPosts.bind(this), 1000) });
 			}.bind(this)
 		);
 	}

@@ -24,13 +24,16 @@ export default class MakeComment extends React.Component {
 		if (!this.state.canPost) swal("Yo!", "Please wait 10 seconds between comments.", "warning");
 		else {
 			if (this.commentText.value.trim().length > 0) {
-				this.setState({ canPost : false });
+				this.setState({ canPost : false, timeout : setTimeout(this.allowPost.bind(this), 10000) });
 				this.props.onCommentSubmit(this.commentText.value);
-				this.setState({ timeout : setTimeout(function() { this.setState({ canPost : true }); }, 10000) });
 			}
 			else 
 				swal("Oops...", "You can't post an empty message!", "error");
 		}
+	}
+	allowPost() {
+		clearTimeout(this.state.timeout);
+		this.setState({ canPost : true });
 	}
 	handleCommentChange() {
 		this.props.onCommentChange(this.commentText.value);

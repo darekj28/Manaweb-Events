@@ -108,7 +108,7 @@ export default class NotificationBox extends React.Component {
 		var note = this.props.note;
         const backgroundColor = this.animatedValue.interpolate({
             inputRange: [0, 0.5, 1],
-            outputRange: ["white", "#A6DFF0", "white"]
+            outputRange: ["white", "#8FD8D4", "white"]
         });
         const borderBottomColor = this.animatedValue.interpolate({
             inputRange: [0, 0.5, 1],
@@ -116,11 +116,11 @@ export default class NotificationBox extends React.Component {
         });
         const textColor = this.animatedValue.interpolate({ 
             inputRange: [0, 0.35, 0.5, 0.65, 1],
-            outputRange: ["#333333", "white", "white", "white", "#333333"]
+            outputRange: ["#333333", "#333333", "#333333", "#333333", "#333333"]
         });
         const timeColor = this.animatedValue.interpolate({ 
             inputRange: [0, 0.5, 1],
-            outputRange: ["silver", "white", "silver"]
+            outputRange: ["silver", "silver", "silver"]
         });
         const clickableColor = this.animatedValue.interpolate({ 
             inputRange: [0, 0.5, 1],

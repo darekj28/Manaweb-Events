@@ -98,7 +98,7 @@ export default class Index extends React.Component {
 						}
 					}
 				}
-				this.setState({ pollExternalNotificationCount : setTimeout(this.checkNotifications.bind(this), 10000) });
+				this.setState({ pollExternalNotificationCount : setTimeout(this.checkNotifications.bind(this), 1000) });
 		})
 		.catch((error) => {
 			console.log(error);
@@ -150,7 +150,7 @@ export default class Index extends React.Component {
 	initializeUserInformation(){
 		var url = "https://manaweb-events.herokuapp.com"
 		var test_url = "http://0.0.0.0:5000"
-		fetch(url + "/mobileGetCurrentUserInfo", {method: "POST",
+		fetch(test_url + "/mobileGetCurrentUserInfo", {method: "POST",
 		headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
@@ -181,7 +181,7 @@ export default class Index extends React.Component {
 	getNotifications(callback) {
 		const url = "https://manaweb-events.herokuapp.com"
 		const test_url = "http://0.0.0.0:5000"
-			fetch(url + "/mobileGetNotifications", 
+			fetch(test_url + "/mobileGetNotifications", 
 				{method: "POST",
 							headers: {
 								'Accept': 'application/json',
@@ -229,7 +229,7 @@ export default class Index extends React.Component {
 			).then((response) => response.json())
 			.then((responseData) => {
 				this.setState({numUnseenNotifications : responseData.count, 
-					pollNotificationCount : setTimeout(this.getNotificationCount.bind(this), 10000) });   
+					pollNotificationCount : setTimeout(this.getNotificationCount.bind(this), 1000) });   
 		})
 		.catch((error) => {
 			console.log(error);
@@ -332,9 +332,9 @@ export default class Index extends React.Component {
 		clearTimeout(this.state.pollExternalNotificationCount);
 	}
 	componentDidMount() {
+		this.getNotificationCount.bind(this)();
 		this.getPosts.bind(this)(); 
 		this.initializePushNotifications.bind(this)();
-		this.getNotificationCount.bind(this)();
 		AppState.addEventListener('change', this.handleAppStateChange.bind(this))
 	}
 
