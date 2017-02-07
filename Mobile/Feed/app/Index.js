@@ -27,6 +27,8 @@ const customTextInputProps = {
 	},
 	underlineColorAndroid: "transparent"
 };
+const url = "https://manaweb-events.herokuapp.com"
+const test_url = "http://0.0.0.0:5000"
 setCustomText(customTextProps);
 setCustomTextInput(customTextInputProps);
 export default class Index extends React.Component {
@@ -65,8 +67,6 @@ export default class Index extends React.Component {
 	}
 
 	getPushNotifications(){
-		const url = "https://manaweb-events.herokuapp.com"
-		const test_url = "http://0.0.0.0:5000"
 			fetch(url + "/mobileGetPushNotifications", 
 				{method: "POST",
 							headers: {
@@ -148,9 +148,7 @@ export default class Index extends React.Component {
 		})
 	}
 	initializeUserInformation(){
-		var url = "https://manaweb-events.herokuapp.com"
-		var test_url = "http://0.0.0.0:5000"
-		fetch(test_url + "/mobileGetCurrentUserInfo", {method: "POST",
+		fetch(url + "/mobileGetCurrentUserInfo", {method: "POST",
 		headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
@@ -179,9 +177,7 @@ export default class Index extends React.Component {
 		}).done();
 	}
 	getNotifications(callback) {
-		const url = "https://manaweb-events.herokuapp.com"
-		const test_url = "http://0.0.0.0:5000"
-			fetch(test_url + "/mobileGetNotifications", 
+			fetch(url + "/mobileGetNotifications", 
 				{method: "POST",
 							headers: {
 								'Accept': 'application/json',
@@ -216,8 +212,6 @@ export default class Index extends React.Component {
 		});
 	}
 	getNotificationCount() {
-		const url = "https://manaweb-events.herokuapp.com"
-		const test_url = "http://0.0.0.0:5000"
 			fetch(url + "/mobileGetNotificationCount", 
 				{method: "POST",
 							headers: {
@@ -236,8 +230,6 @@ export default class Index extends React.Component {
 		});
 	}
 	getPosts(callback) {
-		var url = "https://manaweb-events.herokuapp.com"
-		var test_url = "http://0.0.0.0:5000"
 		fetch(url + "/mobileGetPosts", {method: "POST",
 					headers: {
 					'Accept': 'application/json',
