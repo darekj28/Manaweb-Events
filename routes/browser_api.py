@@ -28,7 +28,8 @@ def confirmAccount():
 	user_manager = Users()
 	user_manager.updateInfo(userID, 'confirmed', True)
 	user_manager.closeConnection()
-	return jsonify({'result' : 'success'})
+	encoded = jwt.encode({'userID': userID, 'isAdmin':False}, secret_key, algorithm='HS256')
+	return jsonify({'result' : 'success', 'jwt' : encoded.decode('utf-8')})
 
 @browser_api.route('/createProfile', methods = ['POST'])
 def createProfile():

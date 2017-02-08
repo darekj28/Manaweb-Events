@@ -52,13 +52,13 @@ export default class Confirm extends React.Component {
 			data : JSON.stringify(obj, null, '\t'),
 			contentType : 'application/json;charset=UTF-8',
 			success: function(data){   
-		     	this.getCurrentUserInfo.bind(this)();
+		     	this.getCurrentUserInfo.bind(this)(data.jwt);
 		    }.bind(this)
 		});
 	}
-	getCurrentUserInfo() {
-		$.post('/getCurrentUserInfo', {userID : this.state.this_user.userID}, function(data) {
-			AppActions.addCurrentUser(data.thisUser);
+	getCurrentUserInfo(jwt) {
+		$.post('/getCurrentUserInfo', {userID : this.state.this_user.userID, jwt : jwt}, function(data) {
+			AppActions.addCurrentUser(data.thisUser, jwt);
 			this.getNotifications.bind(this)();
 		}.bind(this));
 	}

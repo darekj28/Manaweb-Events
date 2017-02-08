@@ -175,7 +175,7 @@ export default class App extends React.Component {
 		}
 	}
 	render() {
-		if (this.state.currentUser['userID'] != null) {
+		if (this.state.currentUser['userID'] && this.state.currentUser['confirmed']) {
 			var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
 			return (<div>
 					<SearchNavBar searchText={this.state.search} 
