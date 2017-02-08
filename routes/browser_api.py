@@ -432,8 +432,6 @@ def getCurrentUserInfo():
 	thisUserID = request.form.get("userID")
 	thisUser = getUserInfo(thisUserID)
 	encoded = jwt.encode({'userID': thisUserID}, secret_key, algorithm='HS256')
-	decoded = jwt.decode(encoded, secret_key, algorithms=['HS256'])
-	print(decoded['userID'])
 	return jsonify({'thisUser' : thisUser, 'jwt' : encoded.decode('utf-8')})
 
 @browser_api.route("/setFeedFilter", methods = ['POST'])
@@ -624,6 +622,8 @@ def getUserInfo(user_id):
 	user_manager.closeConnection()
 	return this_user
 
-
-
+def validateJWT(jwt_str, userID):
+	encoded = jwt_str.encode('utf-8')
+	decoded = jwt.decode(encoded, secret_key, algorithms=['HS256'])
+	return decoded['userID'] == userID
 
