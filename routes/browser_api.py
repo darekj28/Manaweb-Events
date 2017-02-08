@@ -66,7 +66,7 @@ def createProfile():
 	post_manager.closeConnection()
 	res = {}
 	res['result'] = "success"
-	encoded = jwt.encode({'userID': userID}, secret_key, algorithm='HS256')
+	encoded = jwt.encode({'userID': userID, 'isAdmin':False}, secret_key, algorithm='HS256')
 	res['jwt'] = encoded.decode('utf-8')
 	return jsonify(res)
 
@@ -208,7 +208,7 @@ def facebookCreateAccount():
 		gender = gender, fb_id = fb_id) 
 
 	user_manager.closeConnection()
-	encoded = jwt.encode({'userID': userID}, secret_key, algorithm='HS256')
+	encoded = jwt.encode({'userID': userID, 'isAdmin' : False}, secret_key, algorithm='HS256')
 	return jsonify({'result' : 'success', 'username': userID, 'jwt' : encoded.decode('utf-8')})
 
 @browser_api.route('/verifyAndLogin', methods=['POST'])
@@ -224,7 +224,8 @@ def verifyAndLogin() :
 		isSuccess = True
 		security_manager.recordInvalidLoginAttempt(login_id, userID, isSuccess)
 		security_manager.closeConnection()
-		encoded = jwt.encode({'userID': login_id}, secret_key, algorithm='HS256')
+		thisUser = getUserInfo(login_id)
+		encoded = jwt.encode({'userID': login_id, 'isAdmin': thisUser['isAdmin']}, secret_key, algorithm='HS256')
 		return jsonify({ 'error' : False, 'jwt' : encoded.decode('utf-8') })
 	elif res['username'] != None: 
 		isSuccess = False
@@ -434,8 +435,12 @@ def editPost():
 @browser_api.route('/getCurrentUserInfo', methods = ['POST'])
 def getCurrentUserInfo():
 	thisUserID = request.form.get("userID")
-	thisUser = getUserInfo(thisUserID)
-	return jsonify({'thisUser' : thisUser})
+	jwt = request.form.get("jwt")
+	if validateJWT(jwt, thisUserID) :
+		thisUser = getUserInfo(thisUserID)
+		return jsonify({'thisUser' : thisUser})
+	else:
+		return jsonify({'thisUser' : ""})
 
 @browser_api.route("/setFeedFilter", methods = ['POST'])
 def setFeedFilter():
@@ -629,4 +634,10 @@ def validateJWT(jwt_str, userID):
 	encoded = jwt_str.encode('utf-8')
 	decoded = jwt.decode(encoded, secret_key, algorithms=['HS256'])
 	return decoded['userID'] == userID
+
+def validateJWTAdmin(jwt_str):
+	encoded = jwt_str.encode('utf-8')
+	decoded = jwt.decode(encoded, secret_key, algorithms=['HS256'])
+	return decoded['isAdmin']
+
 

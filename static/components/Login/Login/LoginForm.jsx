@@ -63,7 +63,7 @@ export default class LoginForm extends React.Component {
 		});
 	}
 	getCurrentUserInfo(jwt) {
-		$.post('/getCurrentUserInfo', {userID : this.state.login_user}, function(data) {
+		$.post('/getCurrentUserInfo', {userID : this.state.login_user, jwt : jwt}, function(data) {
 			AppActions.addCurrentUser(data.thisUser, jwt);
 			if (!data.thisUser.confirmed) 
 				browserHistory.push('/confirm');

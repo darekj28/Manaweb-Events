@@ -123,7 +123,7 @@ export default class RegisterForm extends React.Component {
 		});
 	}
 	getCurrentUserInfo(jwt) {
-		$.post('/getCurrentUserInfo', {userID : this.state.username}, function(data) {
+		$.post('/getCurrentUserInfo', {userID : this.state.username, jwt : jwt}, function(data) {
 			AppActions.addCurrentUser(data.thisUser, jwt);
 			swal.close();
 			browserHistory.push('/confirm');

@@ -84,7 +84,7 @@ export default class FacebookConnect extends React.Component {
 		});
 	}
 	getCurrentUserInfo(jwt) {
-		$.post('/getCurrentUserInfo', {userID : this.state.fb_username}, function(data) {
+		$.post('/getCurrentUserInfo', {userID : this.state.fb_username, jwt : jwt}, function(data) {
 			AppActions.addCurrentUser(data.thisUser, jwt);
 			this.getNotifications.bind(this)();
 		}.bind(this));
@@ -117,10 +117,10 @@ export default class FacebookConnect extends React.Component {
     }
 	createAccount() {
 		var obj = {
-			first_name 			: this.state.fb_first_name			,
-			last_name			: this.state.fb_last_name			,
-			username 			: this.state.fb_username 				,
-			email				: this.state.fb_email				,
+			first_name 			: this.state.fb_first_name	,
+			last_name			: this.state.fb_last_name	,
+			username 			: this.state.fb_username 	,
+			email				: this.state.fb_email		,
 			fb_id 				: this.state.fb_id
 		};
 		$.ajax({
