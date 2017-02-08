@@ -44,7 +44,7 @@ export default class FacebookConnect extends React.Component {
 			        }
 			        else {
 			        	// send the user to the home page
-			        	var thisFbUser = data.fbUser
+			        	var thisFbUser = data.fbUser;
 			        	var obj = {username : data.fbUser.userID, ip: AppStore.getIp()}
 			        	$.ajax({
 			        		type: "POST",
@@ -85,7 +85,7 @@ export default class FacebookConnect extends React.Component {
 	}
 	getCurrentUserInfo() {
 		$.post('/getCurrentUserInfo', {userID : this.state.fb_username}, function(data) {
-			AppActions.addCurrentUser(data.thisUser);
+			AppActions.addCurrentUser(data.thisUser, data.jwt);
 			this.getNotifications.bind(this)();
 		}.bind(this));
 	}

@@ -7,18 +7,18 @@ var ee = require('event-emitter');
 var _currentUser = (localStorage.CurrentUser) ? JSON.parse(localStorage.CurrentUser) : "";
 var _notifications = (localStorage.Notifications) ? JSON.parse(localStorage.Notifications) : [];
 var _notification_count = (localStorage.NotificationCount) ? JSON.parse(localStorage.NotificationCount) : "";
-// if (localStorage.Ip != null) var _ip = (localStorage.Ip) ? JSON.parse(localStorage.Ip) : "";
-// else var _ip = ""
 var _ip = ""
 
 
-function _loadCurrentUser(data) {
+function _loadCurrentUser(data, jwt) {
   	_currentUser = data;
   	localStorage.CurrentUser = JSON.stringify(_currentUser);
+  	localStorage.jwt = jwt;
 }	
 function _removeCurrentUser() {
   	_currentUser = "";
   	localStorage.CurrentUser = JSON.stringify(_currentUser);
+  	localStorage.jwt = "";
 }
 function _addNotifications(data) {
 	_notifications = data;
@@ -79,7 +79,7 @@ class AppStore extends React.Component {
 		var action = payload.action;
 		switch(action.actionType) {
 		    case AppConstants.ADD_CURRENTUSER:
-			    _loadCurrentUser(action.data);
+			    _loadCurrentUser(action.data, action.jwt);
 			    this.emitUserChange.bind(this)();
 			    break;
 		    case AppConstants.REMOVE_CURRENTUSER:

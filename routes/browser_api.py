@@ -8,6 +8,8 @@ import email_confirm
 import random
 from passlib.hash import argon2
 import sms
+import jwt
+from base64 import b64encode
 # from py2neo import authenticate, Graph, Node
 # authenticate("localhost:7474", "neo4j", "powerplay")
 # graph = Graph()
@@ -15,6 +17,10 @@ import sms
 browser_api = Blueprint('browser_api', __name__)
 DEFAULT_FEED = "BALT"
 avatars = ["ajani", "chandra", "elspeth", "gideon", "jace", "liliana", "nahiri", "nicol", "nissa", "ugin"]
+
+# this was generated with os.urandom(24) but we can change this occasionally for more security
+secret_key = b64encode(b'L=\xbf=_\xa5P \xc5+\x9b3\xa4\xfdZ\x8fN\xc6\xd5\xb7/\x0f\xbe\x1b')
+secret_key = secret_key.decode('utf-8')
 
 @browser_api.route('/confirmAccount', methods = ['POST'])
 def confirmAccount():
@@ -424,9 +430,11 @@ def editPost():
 @browser_api.route('/getCurrentUserInfo', methods = ['POST'])
 def getCurrentUserInfo():
 	thisUserID = request.form.get("userID")
-	print(thisUserID)
 	thisUser = getUserInfo(thisUserID)
-	return jsonify({'thisUser' : thisUser})
+	encoded = jwt.encode({'userID': thisUserID}, secret_key, algorithm='HS256')
+	decoded = jwt.decode(encoded, secret_key, algorithms=['HS256'])
+	print(decoded['userID'])
+	return jsonify({'thisUser' : thisUser, 'jwt' : encoded.decode('utf-8')})
 
 @browser_api.route("/setFeedFilter", methods = ['POST'])
 def setFeedFilter():
