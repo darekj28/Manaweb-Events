@@ -17,7 +17,7 @@ const {
 
 import React from 'react';
 import {Component} from 'react'
-import {AsyncStorage, Image, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput, Button} from 'react-native';
+import {Platform, AsyncStorage, Image, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput, Button} from 'react-native';
 import ViewContainer from './ViewContainer';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -129,9 +129,9 @@ componentDidMount() {
     var _this = this;
     return (
         <View style = {{flexDirection:'row'}}>
-            <Image
+            {Platform.OS != 'ios' && <Image
                 style = {[styles.image_style, {width: this.props.height, height: this.props.height}]}
-                source={require('../static/fbLogo3.png')} />
+                source={require('../static/fbLogo3.png')} />}
             <FBLogin style={[styles.fb_button, {height: this.props.height}]}
             ref={(fbLogin) => { this.fbLogin = fbLogin }}
             permissions={["public_profile" , "email"]}
