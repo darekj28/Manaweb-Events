@@ -17,7 +17,7 @@ const {
 
 import React from 'react';
 import {Component} from 'react'
-import {AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput, Button} from 'react-native';
+import {AsyncStorage, Image, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput, Button} from 'react-native';
 import ViewContainer from './ViewContainer';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -57,7 +57,7 @@ async loadCurrentUser(fb_id){
       // login is good and there already is an account for this user
       if (responseData['result'] == 'success') {
         this.props.asyncStorageLogin(responseData['current_user']['userID']).then(() => {
-          AsyncStorage.setItem("fb_token", this.state.fb_token).done()        
+          AsyncStorage.setItem("fb_token", this.state.fb_token).done()
         }).done()
         this._navigateToFeed();
       }
@@ -128,18 +128,24 @@ componentDidMount() {
   render() {
     var _this = this;
     return (
-        <FBLogin style={styles.fb_button}
-        ref={(fbLogin) => { this.fbLogin = fbLogin }}
-        permissions={["public_profile" , "email"]}
-        loginBehavior={FBLoginManager.LoginBehaviors.Native}
-        onLogin={this.onLogin.bind(this)}
-        onLogout={this.onLogout.bind(this)}
-        onLoginFound={this.onLoginFound.bind(this)}
-        onLoginNotFound={this.onLoginNotFound.bind(this)}
-        onError={this.onError.bind(this)}
-        onCancel={this.onCancel.bind(this)}
-        onPermissionsMissing={this.onPermissionsMissing.bind(this)}
-      />
+        <View style = {{flexDirection:'row'}}>
+            <Image
+                style = {[styles.image_style, {width: this.props.height, height: this.props.height}]}
+                source={require('../static/fbLogo3.png')} />
+            <FBLogin style={[styles.fb_button, {height: this.props.height}]}
+            ref={(fbLogin) => { this.fbLogin = fbLogin }}
+            permissions={["public_profile" , "email"]}
+            loginBehavior={FBLoginManager.LoginBehaviors.Native}
+            onLogin={this.onLogin.bind(this)}
+            onLogout={this.onLogout.bind(this)}
+            onLoginFound={this.onLoginFound.bind(this)}
+            onLoginNotFound={this.onLoginNotFound.bind(this)}
+            onError={this.onError.bind(this)}
+            onCancel={this.onCancel.bind(this)}
+            onPermissionsMissing={this.onPermissionsMissing.bind(this)}>
+            </FBLogin>
+        </View>
+
     )
   }
 
@@ -147,13 +153,17 @@ componentDidMount() {
 }
 
 const styles = StyleSheet.create({
-  fb_button : {
-    alignItems : "center",
-    borderRadius: 5,
-    marginLeft : 3,
-    flex: 0
-  },
-
+    fb_button : {
+        alignItems : "center",
+        borderTopRightRadius : 5,
+        borderBottomRightRadius : 5,
+        flex: 0,
+    },
+    image_style: {
+        tintColor: '#3b5998',
+        borderTopLeftRadius: 5,
+        borderBottomLeftRadius: 5
+    }
 });
 
 module.exports = FacebookLogin

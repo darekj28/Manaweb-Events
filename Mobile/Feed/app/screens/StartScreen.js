@@ -26,7 +26,7 @@ class StartScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      email : "", 
+      email : "",
       current_username: ""
     }
     this.handleLogout = this.handleLogout.bind(this);
@@ -79,7 +79,7 @@ class StartScreen extends Component {
                   />
               </View>
               <View style = {styles.welcome_box}>
-              <Text style = {styles.welcome_text}> 
+              <Text style = {styles.welcome_text}>
                 Welcome to Manaweb!
               </Text>
               <Text style = {styles.description_text}>
@@ -99,7 +99,11 @@ class StartScreen extends Component {
                 </Text>
               </TouchableOpacity>
               <View style={styles.login_button}>
-                <FacebookLogin navigator = {this.props.navigator} asyncStorageLogin = {this.props.asyncStorageLogin}/>
+                <FacebookLogin
+                    navigator = {this.props.navigator}
+                    asyncStorageLogin = {this.props.asyncStorageLogin}
+                    height = {40}
+                />
               </View>
               </View>
               <View style = {styles.bottom_padding} />
@@ -114,7 +118,7 @@ class StartScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  
+
   container: {
     flex: 1,
     flexDirection : "column",
@@ -124,7 +128,7 @@ const styles = StyleSheet.create({
     backgroundColor: "skyblue",
     alignItems: 'center'
   },
-    logo_box: { 
+    logo_box: {
     flex: 0.2
   },
  logo: {
