@@ -66,6 +66,8 @@ def createProfile():
 	post_manager.closeConnection()
 	res = {}
 	res['result'] = "success"
+	encoded = jwt.encode({'userID': userID}, secret_key, algorithm='HS256')
+	res['jwt'] = encoded.decode('utf-8')
 	return jsonify(res)
 
 @browser_api.route('/getPreviousSettings', methods=['POST'])
@@ -206,7 +208,8 @@ def facebookCreateAccount():
 		gender = gender, fb_id = fb_id) 
 
 	user_manager.closeConnection()
-	return jsonify({'result' : 'success', 'username': userID})
+	encoded = jwt.encode({'userID': userID}, secret_key, algorithm='HS256')
+	return jsonify({'result' : 'success', 'username': userID, 'jwt' : encoded.decode('utf-8')})
 
 @browser_api.route('/verifyAndLogin', methods=['POST'])
 def verifyAndLogin() :
@@ -221,7 +224,8 @@ def verifyAndLogin() :
 		isSuccess = True
 		security_manager.recordInvalidLoginAttempt(login_id, userID, isSuccess)
 		security_manager.closeConnection()
-		return jsonify({ 'error' : False })
+		encoded = jwt.encode({'userID': login_id}, secret_key, algorithm='HS256')
+		return jsonify({ 'error' : False, 'jwt' : encoded.decode('utf-8') })
 	elif res['username'] != None: 
 		isSuccess = False
 		userID = res['username']
@@ -431,8 +435,7 @@ def editPost():
 def getCurrentUserInfo():
 	thisUserID = request.form.get("userID")
 	thisUser = getUserInfo(thisUserID)
-	encoded = jwt.encode({'userID': thisUserID}, secret_key, algorithm='HS256')
-	return jsonify({'thisUser' : thisUser, 'jwt' : encoded.decode('utf-8')})
+	return jsonify({'thisUser' : thisUser})
 
 @browser_api.route("/setFeedFilter", methods = ['POST'])
 def setFeedFilter():

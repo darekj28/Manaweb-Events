@@ -53,7 +53,7 @@ export default class LoginForm extends React.Component {
 			contentType : 'application/json;charset=UTF-8',
 			success : function(res) {
 				if (!res['error']) {
-					this.getCurrentUserInfo.bind(this)();
+					this.getCurrentUserInfo.bind(this)(res['jwt']);
 				}
 				else {
 					this.setState({ error : res['error'] });
@@ -62,9 +62,9 @@ export default class LoginForm extends React.Component {
 			}.bind(this)
 		});
 	}
-	getCurrentUserInfo() {
+	getCurrentUserInfo(jwt) {
 		$.post('/getCurrentUserInfo', {userID : this.state.login_user}, function(data) {
-			AppActions.addCurrentUser(data.thisUser, data.jwt);
+			AppActions.addCurrentUser(data.thisUser, jwt);
 			if (!data.thisUser.confirmed) 
 				browserHistory.push('/confirm');
 			else {

@@ -83,9 +83,9 @@ export default class FacebookConnect extends React.Component {
 		    }.bind(this)
 		});
 	}
-	getCurrentUserInfo() {
+	getCurrentUserInfo(jwt) {
 		$.post('/getCurrentUserInfo', {userID : this.state.fb_username}, function(data) {
-			AppActions.addCurrentUser(data.thisUser, data.jwt);
+			AppActions.addCurrentUser(data.thisUser, jwt);
 			this.getNotifications.bind(this)();
 		}.bind(this));
 	}
@@ -129,7 +129,7 @@ export default class FacebookConnect extends React.Component {
 			data : JSON.stringify(obj, null, '\t'),
 			contentType : 'application/json;charset=UTF-8',
 			success: function (data){
-				this.getCurrentUserInfo.bind(this)();
+				this.getCurrentUserInfo.bind(this)(data.jwt);
 			}.bind(this)
 		});
 	}

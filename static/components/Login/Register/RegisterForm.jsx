@@ -114,7 +114,7 @@ export default class RegisterForm extends React.Component {
 			contentType : 'application/json;charset=UTF-8',
 			success : function(res) {
 				if(res['result'] == "success") {
-					this.getCurrentUserInfo.bind(this)();
+					this.getCurrentUserInfo.bind(this)(res['jwt']);
 				}
 				else if (res['result'] == "phone_exception") {
 					swal("Oops...", "The number you gave us is not valid.", "error");
@@ -122,9 +122,9 @@ export default class RegisterForm extends React.Component {
 			}.bind(this)
 		});
 	}
-	getCurrentUserInfo() {
+	getCurrentUserInfo(jwt) {
 		$.post('/getCurrentUserInfo', {userID : this.state.username}, function(data) {
-			AppActions.addCurrentUser(data.thisUser, data.jwt);
+			AppActions.addCurrentUser(data.thisUser, jwt);
 			swal.close();
 			browserHistory.push('/confirm');
 		}.bind(this));
