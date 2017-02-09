@@ -150,7 +150,10 @@ export default class Index extends React.Component {
 	initializeUserInformation(){
 		if (this.state.current_username) {
 			AsyncStorage.getItem("jwt", (error, result) => {
-				if (result) {
+				if (!result) {
+					this.asyncStorageLogout.bind(this)();
+				}
+				else {
 					fetch(url + "/mobileGetCurrentUserInfo", {method: "POST",
 					headers: {'Accept': 'application/json',
 								'Content-Type': 'application/json',
