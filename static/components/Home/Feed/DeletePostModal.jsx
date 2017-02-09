@@ -1,7 +1,8 @@
 var React = require('react');
 export default class DeletePostModal extends React.Component {
 	handlePostDelete() {
-		var obj = {unique_id : this.props.post.unique_id};
+		var obj = {unique_id : this.props.post.unique_id,
+					jwt: localStorage.jwt};
 		$.ajax({
 			type : 'POST',
 			url  : '/deletePost',

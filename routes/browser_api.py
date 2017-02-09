@@ -425,10 +425,14 @@ def editPost():
 	unique_id = request.json['unique_id']
 	field_name = request.json['field_name']
 	field_data = request.json['field_data']
-	post_manager = Posts()
-	post_manager.editPost(feed_name, unique_id, field_name, field_data)
-	post_manager.closeConnection()
-	return redirect(url_for('index'))
+	jwt = request.json['jwt']
+	if validateJWTAdmin(jwt):
+		post_manager = Posts()
+		post_manager.editPost(feed_name, unique_id, field_name, field_data)
+		post_manager.closeConnection()
+		return redirect(url_for('index'))
+	else:
+		return jsonify({ 'result' : 'failure' })
 	
 # get current user info
 @browser_api.route('/getCurrentUserInfo', methods = ['POST'])
@@ -511,7 +515,8 @@ def deletePost():
 	# feed_name = request.form.get('feed_name')
 	feed_name = DEFAULT_FEED
 	unique_id = request.json.get('unique_id')
-	if unique_id != None:
+	jwt = request.json.get('jwt')
+	if unique_id != None and validateJWTAdmin(jwt):
 		post_manager = Posts()
 		post_manager.deletePost(feed_name, unique_id)
 		post_manager.closeConnection()

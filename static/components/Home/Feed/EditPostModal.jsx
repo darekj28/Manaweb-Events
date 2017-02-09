@@ -10,7 +10,8 @@ export default class EditPostModal extends React.Component {
 	handlePostEditSubmit() {
 		var obj = {unique_id : this.props.post.unique_id,
 						field_name : "body", 
-						field_data : this.state.postContent};
+						field_data : this.state.postContent,
+						jwt : localStorage.jwt};
 		
 		$.ajax({
 			type : 'POST',
