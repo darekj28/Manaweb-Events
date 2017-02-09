@@ -176,11 +176,9 @@ def isFacebookUser():
 @browser_api.route('/recordFacebookLogin', methods =['POST'])
 def recordFacebookLogin():
 	username = request.json['username']
-	ip = request.json['ip']
-	# security_manager = Security()
-	# security_manager.recordLoginAttempt(username, True, ip, True)
-	# security_manager.closeConnection()
-	return jsonify({'result': 'success'})
+	thisUser = getUserInfo(username)
+	encoded = jwt.encode({'userID': username, 'isAdmin': thisUser['isAdmin']}, secret_key, algorithm='HS256')
+	return jsonify({'result': 'success', 'jwt' : encoded.decode('utf-8')})
 
 @browser_api.route('/facebookCreateAccount', methods = ['POST'])
 def facebookCreateAccount():
@@ -437,7 +435,7 @@ def editPost():
 def getCurrentUserInfo():
 	thisUserID = request.form.get("userID")
 	jwt = request.form.get("jwt")
-	if validateJWT(jwt, thisUserID) :
+	if validateJWT(jwt, thisUserID) or validateJWTAdmin(jwt) :
 		thisUser = getUserInfo(thisUserID)
 		return jsonify({'thisUser' : thisUser})
 	else:
@@ -598,12 +596,16 @@ def createFeed():
 @browser_api.route('/softDeleteAccount', methods = ['POST'])
 def softDeleteAccount():
 	username = request.json['username']
-	post_manager = Posts()
-	post_manager.softDeleteUserAndPosts(username)
-	post_manager.closeConnection()
-	output = {}
-	output['result'] = 'success'
-	return jsonify(output)
+	jwt = request.json['jwt']
+	if validateJWT(jwt, username) or validateJWTAdmin(jwt):
+		post_manager = Posts()
+		post_manager.softDeleteUserAndPosts(username)
+		post_manager.closeConnection()
+		output = {}
+		output['result'] = 'success'
+		return jsonify(output)
+	else :
+		return jsonify({ "result" : "failure" })
 
 @browser_api.route('/getUserList', methods = ['POST'])
 def getUserList():

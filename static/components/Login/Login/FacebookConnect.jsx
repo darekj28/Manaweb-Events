@@ -40,20 +40,17 @@ export default class FacebookConnect extends React.Component {
 						this.setState({fb_last_name: response['last_name']})
 						this.setState({fb_email: response['email']})
 						this.setState({fb_id : response['id']})
-						this.setState({fb_clicked: false})
 			        }
 			        else {
-			        	// send the user to the home page
-			        	var thisFbUser = data.fbUser;
-			        	var obj = {username : data.fbUser.userID, ip: AppStore.getIp()}
+			        	this.setState({fb_username : data.fbUser.userID})
+			        	var obj = {username : data.fbUser.userID}
 			        	$.ajax({
 			        		type: "POST",
 							url : '/recordFacebookLogin',
 							data : JSON.stringify(obj, null, '\t'),
 							contentType : 'application/json;charset=UTF-8',
 							success: function(data) {
-								AppActions.addCurrentUser(thisFbUser);
-			        			this.getNotifications.bind(this)()
+								this.getCurrentUserInfo.bind(this)(data.jwt);
 							}.bind(this)
 			      		});
 			        }

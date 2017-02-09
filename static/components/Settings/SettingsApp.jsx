@@ -157,7 +157,7 @@ export default class SettingsApp extends React.Component {
 	deleteAccount() {
 		swal({title : "Hold on...", 
 						showConfirmButton : false});
-		var obj = { username : AppStore.getCurrentUser().userID };
+		var obj = { username : AppStore.getCurrentUser().userID, jwt : localStorage.jwt };
 		$.ajax({
 	    	type : 'POST',
 	    	url: "/softDeleteAccount",
@@ -172,7 +172,7 @@ export default class SettingsApp extends React.Component {
   				closeOnConfirm: false}, function() { AppActions.removeCurrentUser(); location.reload(); });
 	    	},
 	    	error : function(data) {
-	    		swal("Oops", "We couldn't connect to the server!", "error");
+	    		swal("Oops", "We couldn't delete this account!", "error");
 	    	}
 	    });
 
