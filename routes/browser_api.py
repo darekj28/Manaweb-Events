@@ -309,12 +309,16 @@ def getNotificationCount():
 	if clientNumUnseen == None or clientNumUnseen == "":
 		return jsonify({ 'count' : 0 })
 	post_manager = Posts()
+	timeout = time.time() + 27
 	while True:
+		if time.time() > timeout : 
+			break
 		time.sleep(1)
 		count = post_manager.getNotificationCount(userID)
 		if count != int(clientNumUnseen):
 			post_manager.closeConnection()
 			return jsonify({ 'count' : count })
+	return jsonify({'count' : 0})
 
 @browser_api.route('/getNumUnseenPosts', methods = ['POST'])
 def getNumUnseenPosts():
@@ -325,12 +329,16 @@ def getNumUnseenPosts():
 	if userID != None:
 		feed_name = request.form['feed_name']
 		post_manager = Posts()
+		timeout = time.time() + 27
 		while True:
+			if time.time() > timeout : 
+				break
 			time.sleep(1)
 			numUnseenPosts = post_manager.getNumUnseenPosts(feed_name, userID)
 			if numUnseenPosts != int(clientNumUnseenPosts):
 				post_manager.closeConnection()
 				return jsonify({'numUnseenPosts': numUnseenPosts})
+		return jsonify({'numUnseenPosts' : 0})
 	else:
 		return jsonify({'numUnseenPosts': 0})
 
