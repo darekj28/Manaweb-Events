@@ -67,18 +67,17 @@ export default class LoginScreen extends Component {
 		})
 		.then((response) => response.json())
 		.then((responseData) => {
-				if (responseData['result'] == 'success') {
-						this.props.asyncStorageLogin(responseData['current_user']['userID']).then((value) => {
-							this.setState({username: responseData['username']})
-							this.setState({validation_output: responseData})
-							this._navigateToFeed()
-						})
-				}
-				else {
-					Alert.alert("Invalid Credentials")
-					this.setState({ validation_output : responseData})
-				}
-
+			if (responseData['jwt']) {
+				this.props.asyncStorageLogin(this.state.login_id, responseData['jwt']).then(() => {
+					this.setState({username: this.state.login_id}, this._navigateToFeed.bind(this))
+				})
+			}
+			else {
+				Alert.alert(responseData['error']);
+			}
+		})
+		.catch((error) => {
+			Alert.alert(error);
 		})
 		.done();
 	}

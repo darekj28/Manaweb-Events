@@ -148,33 +148,34 @@ export default class Index extends React.Component {
 		})
 	}
 	initializeUserInformation(){
-		fetch(url + "/mobileGetCurrentUserInfo", {method: "POST",
-		headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json',
-				},
-			body:
-			JSON.stringify(
-			 {
-				username: this.state.current_username
-			})
-		})
-		.then((response) => response.json())
-		.then((responseData) => {
-			if (responseData.thisUser == null) {
-				// if (this.state.current_username != "") {
-				 this.asyncStorageLogout.bind(this)()
-				// }
-			}
-
-			else 
-				// if (this.state.current_user.userID != responseData.thisUser.userID) 
-					{
-					var thisUser = responseData.thisUser;
-					this.setState({current_user : thisUser}, this.getNotifications.bind(this))
-			}
-			
-		}).done();
+		if (this.state.current_username) {
+			AsyncStorage.getItem("jwt", (error, result) => {
+				if (result) {
+					fetch(url + "/mobileGetCurrentUserInfo", {method: "POST",
+					headers: {'Accept': 'application/json',
+								'Content-Type': 'application/json',
+							},
+						body:JSON.stringify({
+							username: this.state.current_username,
+							jwt : result
+						})
+					})
+					.then((response) => response.json())
+					.then((responseData) => {
+						if (responseData.result != 'success') {
+							this.asyncStorageLogout.bind(this)();
+						}
+						else {
+							this.setState({current_user : responseData.thisUser}, this.getNotifications.bind(this));
+						}
+					})
+					.catch((error) => {
+						Alert.alert(error);
+					})
+					.done();
+				}
+			});
+		}
 	}
 	getNotifications(callback) {
 			fetch(url + "/mobileGetNotifications", 
@@ -270,14 +271,17 @@ export default class Index extends React.Component {
 			}
 		}).done()
 	}
-	async asyncStorageLogin(current_username) {
-		AsyncStorage.setItem("current_username", current_username).then(() => 
-		{
-			this.setState({current_username : current_username}, this.initializeUserInformation.bind(this))
-		})
+	async asyncStorageLogin(current_username, jwt) {
+		AsyncStorage.setItem("jwt", jwt).then(() => {
+			AsyncStorage.setItem("current_username", current_username).then(() => 
+			{
+				this.setState({current_username : current_username}, this.initializeUserInformation.bind(this))
+			});
+		});
 	}
 
 	async asyncStorageLogout(){
+		AsyncStorage.removeItem("jwt").done();
 		AsyncStorage.setItem("current_username", "").then(() => 
 		{
 			if (this.state.current_username != ""){

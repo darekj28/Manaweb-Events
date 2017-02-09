@@ -66,15 +66,18 @@ class FbCreate extends Component {
     .then((response) => response.json())
     .then((responseData) => {
         if (responseData['result'] == 'success') {
-            console.log(responseData.current_user)
-            this.props.asyncStorageLogin(responseData.current_user.userID).then(() => {
+            this.props.asyncStorageLogin(responseData.current_user.userID, responseData['jwt']).then(() => {
               AsyncStorage.setItem("fb_token", this.props.fb_token).done()
             }).done()
             this._navigateToWelcome.bind(this)()
         }
     })
+    .catch((error) => {
+      Alert.alert(error);
+    })
     .done();
   }
+
 
   handleUsernameSubmit() {
     if (this.state.validation_output['result'] == 'success') {

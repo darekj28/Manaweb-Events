@@ -7,12 +7,16 @@ import email_confirm
 import sms
 import validation
 import random
-
+import jwt
+from base64 import b64encode
 # from tasks import asyncGetPosts
 # from tasks import test
 mobile_api = Blueprint('mobile_api', __name__)
 DEFAULT_FEED = "BALT"
 avatars = ["ajani", "chandra", "elspeth", "gideon", "jace", "liliana", "nahiri", "nicol", "nissa", "ugin"]
+
+secret_key = b64encode(b'L=\xbf=_\xa5P \xc5+\x9b3\xa4\xfdZ\x8fN\xc6\xd5\xb7/\x0f\xbe\x1b')
+secret_key = secret_key.decode('utf-8')
 
 @mobile_api.route('/mobileFacebookCreateAccount', methods = ['POST'])
 def mobileFacebookCreateAccount():
@@ -43,8 +47,6 @@ def mobileFacebookCreateAccount():
 		email = ""
 		email_taken = True
 
-
-
 	user_manager.addUser(userID, first_name = first_name, last_name = last_name, password = password, email = email,  isActive = isActive,
 		avatar_url = avatar_url, avatar_name = avatar_name, confirmed=confirmed, confirmationPin = confirmationPin, tradeFilter = None, playFilter = None, chillFilter = None,
 		isAdmin = False, phone_number = phone_number, birthMonth = birthMonth, birthDay = birthDay, birthYear = birthYear,
@@ -53,7 +55,8 @@ def mobileFacebookCreateAccount():
 	user_manager.closeConnection()
 	session['logged_in'] = True
 	session['userID'] = userID
-	return jsonify({'result' : 'success', 'current_user': current_user, 'email_taken' : email_taken})
+	encoded = jwt.encode({'userID': userID, 'isAdmin':False}, secret_key, algorithm='HS256')
+	return jsonify({'result' : 'success', 'current_user': current_user, 'email_taken' : email_taken, 'jwt' : encoded.decode('utf-8')})
 
 @mobile_api.route('/mobileCreateProfile', methods = ['POST'])
 def mobileCreateProfile():
@@ -91,7 +94,8 @@ def mobileCreateProfile():
 	post_manager = Posts()
 	post_manager.addUserToLastSeenTables(userID)
 	post_manager.closeConnection()
-	return jsonify({'result' : 'success', 'current_user' : current_user})
+	encoded = jwt.encode({'userID': userID, 'isAdmin':False}, secret_key, algorithm='HS256')
+	return jsonify({'result' : 'success', 'current_user' : current_user, 'jwt' : encoded.decode('utf-8')})
 
 @mobile_api.route('/mobileLogin', methods =['POST'])
 def mobileLogin():
@@ -103,6 +107,8 @@ def mobileLogin():
 	userID = validator_output['username']
 	if validator_output['result'] == 'success':
 		isSuccess = True
+		encoded = jwt.encode({'userID': userID, 'isAdmin':False}, secret_key, algorithm='HS256')
+		validator_output['jwt'] = encoded.decode('utf-8')
 		security_manager.recordInvalidLoginAttempt(login_id, userID, isSuccess)
 	elif userID != None:
 		isSuccess = False
@@ -186,10 +192,14 @@ def mobileUsernameValidation():
 @mobile_api.route('/mobileGetCurrentUserInfo', methods = ['POST'])
 def mobileGetCurrentUserInfo():
 	thisUserID = request.json['username']
-	user_manager = Users()
-	thisUser = user_manager.getInfo(thisUserID)
-	user_manager.closeConnection()
-	return jsonify({'result' : 'success', 'thisUser' : thisUser})
+	jwt = request.json['jwt']
+	if validateJWT(jwt, thisUserID) or validateJWTAdmin(jwt) :
+		user_manager = Users()
+		thisUser = user_manager.getInfo(thisUserID)
+		user_manager.closeConnection()
+		return jsonify({'result' : 'success', 'thisUser' : thisUser})
+	else:
+		return jsonify({'result' : 'failure'})
 
 @mobile_api.route('/mobileGetUserInfoFromFacebookId', methods = ['POST'])
 def mobileGetUserInfoFromFacebookId():
@@ -263,8 +273,6 @@ def mobileMakeComment():
 	userID = request.json['username']
 	if userID != None and userID != "":
 		post_manager.makeComment(feed_name, comment_id, commentContent, userID, unique_id = unique_id)
-	else:
-		print(userID)
 	post_manager.closeConnection()	
 	return jsonify({ 'result' : 'success'})
 
@@ -413,3 +421,14 @@ def mobileReportComment():
 	output = {}
 	output['result'] = 'success'
 	return jsonify(output)
+
+def validateJWT(jwt_str, userID):
+	encoded = jwt_str.encode('utf-8')
+	decoded = jwt.decode(encoded, secret_key, algorithms=['HS256'])
+	return decoded['userID'].lower() == userID.lower()
+
+def validateJWTAdmin(jwt_str):
+	encoded = jwt_str.encode('utf-8')
+	decoded = jwt.decode(encoded, secret_key, algorithms=['HS256'])
+	return decoded['isAdmin']
+
