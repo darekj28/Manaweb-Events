@@ -38,7 +38,10 @@ export default class AdminReportList extends React.Component {
 			      <th>#</th>
 			      <th>Reporting User</th>
 			      <th>Reported User</th>
+			      <th> Body </th>
+			      <th> Reason </th>
 			      <th> Description </th>
+			      <th> Time </th>
 			    </tr>
 			  </thead>
 			  <tbody>

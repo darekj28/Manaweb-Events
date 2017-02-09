@@ -23,6 +23,9 @@ export default class AdminReportBox extends React.Component {
 		      <td>{report.reporting_user}</td>
 		      <td>{report.reported_user}</td>
 		      <td>{report.body}</td>
+		      <td>{report.reason}</td>
+		      <td>{report.description}</td>
+		      <td>{report.time}</td>
 		    </tr>
 			);
 	}

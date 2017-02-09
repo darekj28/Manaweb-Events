@@ -16514,7 +16514,22 @@
 									React.createElement(
 										'th',
 										null,
+										' Body '
+									),
+									React.createElement(
+										'th',
+										null,
+										' Reason '
+									),
+									React.createElement(
+										'th',
+										null,
 										' Description '
+									),
+									React.createElement(
+										'th',
+										null,
+										' Time '
 									)
 								)
 							),
@@ -16612,6 +16627,21 @@
 						'td',
 						null,
 						report.body
+					),
+					React.createElement(
+						'td',
+						null,
+						report.reason
+					),
+					React.createElement(
+						'td',
+						null,
+						report.description
+					),
+					React.createElement(
+						'td',
+						null,
+						report.time
 					)
 				);
 			}
