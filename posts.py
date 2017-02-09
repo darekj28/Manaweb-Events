@@ -554,6 +554,7 @@ class Posts:
 		report_dict['timeStamp'] = query_item[7]
 		report_dict['reporting_user'] = query_item[8]
 		report_dict['reported_user'] = query_item[9]
+		report_dict['time'] = self.date_format(int(report_dict['timeStamp']))
 		return report_dict
 
 

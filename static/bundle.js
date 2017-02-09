@@ -201,17 +201,17 @@
 	var _currentUser = localStorage.CurrentUser ? JSON.parse(localStorage.CurrentUser) : "";
 	var _notifications = localStorage.Notifications ? JSON.parse(localStorage.Notifications) : [];
 	var _notification_count = localStorage.NotificationCount ? JSON.parse(localStorage.NotificationCount) : "";
-	// if (localStorage.Ip != null) var _ip = (localStorage.Ip) ? JSON.parse(localStorage.Ip) : "";
-	// else var _ip = ""
 	var _ip = "";
 	
-	function _loadCurrentUser(data) {
+	function _loadCurrentUser(data, jwt) {
 		_currentUser = data;
 		localStorage.CurrentUser = JSON.stringify(_currentUser);
+		localStorage.jwt = jwt;
 	}
 	function _removeCurrentUser() {
 		_currentUser = "";
 		localStorage.CurrentUser = JSON.stringify(_currentUser);
+		localStorage.jwt = "";
 	}
 	function _addNotifications(data) {
 		_notifications = data;
@@ -301,7 +301,7 @@
 				var action = payload.action;
 				switch (action.actionType) {
 					case AppConstants.ADD_CURRENTUSER:
-						_loadCurrentUser(action.data);
+						_loadCurrentUser(action.data, action.jwt);
 						this.emitUserChange.bind(this)();
 						break;
 					case AppConstants.REMOVE_CURRENTUSER:
@@ -4350,10 +4350,11 @@
 	var AppConstants = __webpack_require__(/*! ../constants/AppConstants.jsx */ 32);
 	
 	var AppActions = {
-	    addCurrentUser: function addCurrentUser(data) {
+	    addCurrentUser: function addCurrentUser(data, jwt) {
 	        AppDispatcher.handleViewAction({
 	            actionType: AppConstants.ADD_CURRENTUSER,
-	            data: data
+	            data: data,
+	            jwt: jwt
 	        });
 	    },
 	    removeCurrentUser: function removeCurrentUser() {
@@ -4511,8 +4512,9 @@
 		}, {
 			key: 'refreshNumUnseenPosts',
 			value: function refreshNumUnseenPosts() {
-				$.post('/getNumUnseenPosts', { feed_name: feed_name, currentUser: this.state.currentUser }, function (data) {
-					this.setState({ numUnseenPosts: data['numUnseenPosts'] });
+				$.post('/getNumUnseenPosts', { feed_name: feed_name, currentUser: this.state.currentUser, numUnseenPosts: this.state.numUnseenPosts }, function (data) {
+					this.setState({ numUnseenPosts: data['numUnseenPosts'],
+						timer: setTimeout(this.refreshNumUnseenPosts.bind(this), 1000) });
 				}.bind(this));
 			}
 		}, {
@@ -4613,31 +4615,32 @@
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				_AppStore2.default.addUserChangeListener(this._onChange.bind(this));
-				if (this.state.currentUser['userID'] != null) {
+				if (this.state.currentUser['userID']) {
 					this.refreshFeed.bind(this)();
-					if (!this.state.timer) {
-						this.setState({ timer: setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
-					}
+					this.refreshNumUnseenPosts.bind(this)();
 				}
 			}
 		}, {
 			key: 'componentWillUnmount',
 			value: function componentWillUnmount() {
-				clearInterval(this.state.timer);
+				clearTimeout(this.state.timer);
 				_AppStore2.default.removeUserChangeListener(this._onChange.bind(this));
 			}
 		}, {
 			key: '_onChange',
 			value: function _onChange() {
 				this.setState({ currentUser: _AppStore2.default.getCurrentUser() });
-				if (!this.state.currentUser) clearInterval(this.state.timer);
-				this.refreshFeed.bind(this)();
-				if (!this.state.timer) this.setState({ timer: setInterval(this.refreshNumUnseenPosts.bind(this), 10000) });
+				if (!this.state.currentUser) {
+					clearTimeout(this.state.timer);
+				} else {
+					this.refreshFeed.bind(this)();
+					this.refreshNumUnseenPosts.bind(this)();
+				}
 			}
 		}, {
 			key: 'render',
 			value: function render() {
-				if (this.state.currentUser['userID'] != null) {
+				if (this.state.currentUser['userID'] && this.state.currentUser['confirmed']) {
 					var name = this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'];
 					return React.createElement(
 						'div',
@@ -4908,6 +4911,26 @@
 	var React = __webpack_require__(/*! react */ 2);
 	var Link = __webpack_require__(/*! react-router */ 52).Link;
 	
+	function getNotificationFirst(note) {
+	    var also;var notification;
+	    if (note.isOP) {
+	        also = "";
+	    } else {
+	        also = " also";
+	    }
+	    if (note.numOtherPeople > 1) notification = note.sender_name + " and " + note.numOtherPeople + " other people commented on ";else if (note.numOtherPeople == 1) notification = note.sender_name + " and 1 other person commented on ";else notification = note.sender_name + also + " commented on ";
+	    return notification;
+	}
+	function getNotificationSecond(note) {
+	    var whose;
+	    if (note.isOP) {
+	        whose = "your";
+	    } else {
+	        whose = note.op_name + "'s";
+	    }
+	    return whose + " post";
+	}
+	
 	var NotificationsDropdown = function (_React$Component) {
 	    _inherits(NotificationsDropdown, _React$Component);
 	
@@ -4932,45 +4955,21 @@
 	    }, {
 	        key: 'getNotificationCount',
 	        value: function getNotificationCount() {
-	            $.post('/getNotificationCount', { currentUser: _AppStore2.default.getCurrentUser() }, function (data) {
-	                if (data.count > 0) {
-	                    _AppActions2.default.addNotificationCount(data.count);
-	                }
+	            $.post('/getNotificationCount', { currentUser: _AppStore2.default.getCurrentUser(), numUnseen: _AppStore2.default.getNotificationCount() }, function (data) {
+	                _AppActions2.default.addNotificationCount(data.count);
+	                this.setState({ timer: setTimeout(this.getNotificationCount.bind(this), 1000) });
 	            }.bind(this));
-	        }
-	    }, {
-	        key: 'getNotificationFirst',
-	        value: function getNotificationFirst(note) {
-	            var also;var notification;
-	            if (note.isOP) {
-	                also = "";
-	            } else {
-	                also = " also";
-	            }
-	            if (note.numOtherPeople > 1) notification = note.sender_name + " and " + note.numOtherPeople + " other people commented on ";else if (note.numOtherPeople == 1) notification = note.sender_name + " and 1 other person commented on ";else notification = note.sender_name + also + " commented on ";
-	            return notification;
-	        }
-	    }, {
-	        key: 'getNotificationSecond',
-	        value: function getNotificationSecond(note) {
-	            var whose;
-	            if (note.isOP) {
-	                whose = "your";
-	            } else {
-	                whose = note.op_name + "'s";
-	            }
-	            return whose + " post";
 	        }
 	    }, {
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
 	            _AppStore2.default.addNoteChangeListener(this._onChange.bind(this));
-	            if (!this.state.timer) this.setState({ timer: setInterval(this.getNotificationCount.bind(this), 10000) });
+	            this.getNotificationCount.bind(this)();
 	        }
 	    }, {
 	        key: 'componentWillUnmount',
 	        value: function componentWillUnmount() {
-	            clearInterval(this.state.timer);
+	            clearTimeout(this.state.timer);
 	            _AppStore2.default.removeNoteChangeListener(this._onChange.bind(this));
 	        }
 	    }, {
@@ -5006,11 +5005,11 @@
 	                            React.createElement(
 	                                Link,
 	                                { to: "/comment/" + note.comment_id },
-	                                this.getNotificationFirst(note),
+	                                getNotificationFirst(note),
 	                                React.createElement(
 	                                    'span',
 	                                    { className: 'special' },
-	                                    this.getNotificationSecond(note)
+	                                    getNotificationSecond(note)
 	                                ),
 	                                '.',
 	                                React.createElement(
@@ -10536,11 +10535,10 @@
 			value: function handlePostSubmit() {
 				if (!this.state.canPost) swal("Yo!", "Please wait 30 seconds between posts.", "warning");else {
 					if (this.postText.value.trim().length > 0) {
-						this.setState({ canPost: false });
-						this.props.onPostSubmit(this.postText.value, this.undoTimeout.bind(this));
-						this.setState({ timeout: setTimeout(function () {
+						this.setState({ canPost: false, timeout: setTimeout(function () {
 								this.setState({ canPost: true });
 							}, 30000) });
+						this.props.onPostSubmit(this.postText.value, this.undoTimeout.bind(this));
 					} else swal("Oops...", "You can't post an empty message!", "error");
 				}
 			}
@@ -11147,7 +11145,8 @@
 			value: function handlePostEditSubmit() {
 				var obj = { unique_id: this.props.post.unique_id,
 					field_name: "body",
-					field_data: this.state.postContent };
+					field_data: this.state.postContent,
+					jwt: localStorage.jwt };
 	
 				$.ajax({
 					type: 'POST',
@@ -11255,7 +11254,8 @@
 		_createClass(DeletePostModal, [{
 			key: 'handlePostDelete',
 			value: function handlePostDelete() {
-				var obj = { unique_id: this.props.post.unique_id };
+				var obj = { unique_id: this.props.post.unique_id,
+					jwt: localStorage.jwt };
 				$.ajax({
 					type: 'POST',
 					url: '/deletePost',
@@ -11524,7 +11524,7 @@
 								React.createElement(
 									'h2',
 									null,
-									'CREATE AN ACCOUNT'
+									'Create An Account'
 								)
 							),
 							React.createElement(_RegisterForm2.default, null),
@@ -11658,19 +11658,16 @@
 								this.setState({ fb_last_name: response['last_name'] });
 								this.setState({ fb_email: response['email'] });
 								this.setState({ fb_id: response['id'] });
-								this.setState({ fb_clicked: false });
 							} else {
-								// send the user to the home page
-								var thisFbUser = data.fbUser;
-								var obj = { username: data.fbUser.userID, ip: _AppStore2.default.getIp() };
+								this.setState({ fb_username: data.fbUser.userID });
+								var obj = { username: data.fbUser.userID };
 								$.ajax({
 									type: "POST",
 									url: '/recordFacebookLogin',
 									data: JSON.stringify(obj, null, '\t'),
 									contentType: 'application/json;charset=UTF-8',
 									success: function (data) {
-										_AppActions2.default.addCurrentUser(thisFbUser);
-										this.getNotifications.bind(this)();
+										this.getCurrentUserInfo.bind(this)(data.jwt);
 									}.bind(this)
 								});
 							}
@@ -11704,9 +11701,9 @@
 			}
 		}, {
 			key: 'getCurrentUserInfo',
-			value: function getCurrentUserInfo() {
-				$.post('/getCurrentUserInfo', { userID: this.state.fb_username }, function (data) {
-					_AppActions2.default.addCurrentUser(data.thisUser);
+			value: function getCurrentUserInfo(jwt) {
+				$.post('/getCurrentUserInfo', { userID: this.state.fb_username, jwt: jwt }, function (data) {
+					_AppActions2.default.addCurrentUser(data.thisUser, jwt);
 					this.getNotifications.bind(this)();
 				}.bind(this));
 			}
@@ -11753,7 +11750,7 @@
 					data: JSON.stringify(obj, null, '\t'),
 					contentType: 'application/json;charset=UTF-8',
 					success: function (data) {
-						this.getCurrentUserInfo.bind(this)();
+						this.getCurrentUserInfo.bind(this)(data.jwt);
 					}.bind(this)
 				});
 			}
@@ -12092,7 +12089,7 @@
 					contentType: 'application/json;charset=UTF-8',
 					success: function (res) {
 						if (res['result'] == "success") {
-							this.getCurrentUserInfo.bind(this)();
+							this.getCurrentUserInfo.bind(this)(res['jwt']);
 						} else if (res['result'] == "phone_exception") {
 							swal("Oops...", "The number you gave us is not valid.", "error");
 						}
@@ -12101,9 +12098,9 @@
 			}
 		}, {
 			key: 'getCurrentUserInfo',
-			value: function getCurrentUserInfo() {
-				$.post('/getCurrentUserInfo', { userID: this.state.username }, function (data) {
-					_AppActions2.default.addCurrentUser(data.thisUser);
+			value: function getCurrentUserInfo(jwt) {
+				$.post('/getCurrentUserInfo', { userID: this.state.username, jwt: jwt }, function (data) {
+					_AppActions2.default.addCurrentUser(data.thisUser, jwt);
 					swal.close();
 					_reactRouter.browserHistory.push('/confirm');
 				}.bind(this));
@@ -12378,7 +12375,7 @@
 					contentType: 'application/json;charset=UTF-8',
 					success: function (res) {
 						if (!res['error']) {
-							this.getCurrentUserInfo.bind(this)();
+							this.getCurrentUserInfo.bind(this)(res['jwt']);
 						} else {
 							this.setState({ error: res['error'] });
 							this.enableLogin.bind(this)();
@@ -12388,9 +12385,9 @@
 			}
 		}, {
 			key: 'getCurrentUserInfo',
-			value: function getCurrentUserInfo() {
-				$.post('/getCurrentUserInfo', { userID: this.state.login_user }, function (data) {
-					_AppActions2.default.addCurrentUser(data.thisUser);
+			value: function getCurrentUserInfo(jwt) {
+				$.post('/getCurrentUserInfo', { userID: this.state.login_user, jwt: jwt }, function (data) {
+					_AppActions2.default.addCurrentUser(data.thisUser, jwt);
 					if (!data.thisUser.confirmed) _reactRouter.browserHistory.push('/confirm');else {
 						this.getNotifications.bind(this)();
 					}
@@ -13935,13 +13932,16 @@
 			value: function handleCommentSubmit() {
 				if (!this.state.canPost) swal("Yo!", "Please wait 10 seconds between comments.", "warning");else {
 					if (this.commentText.value.trim().length > 0) {
-						this.setState({ canPost: false });
+						this.setState({ canPost: false, timeout: setTimeout(this.allowPost.bind(this), 10000) });
 						this.props.onCommentSubmit(this.commentText.value);
-						this.setState({ timeout: setTimeout(function () {
-								this.setState({ canPost: true });
-							}, 10000) });
 					} else swal("Oops...", "You can't post an empty message!", "error");
 				}
+			}
+		}, {
+			key: 'allowPost',
+			value: function allowPost() {
+				clearTimeout(this.state.timeout);
+				this.setState({ canPost: true });
 			}
 		}, {
 			key: 'handleCommentChange',
@@ -14604,7 +14604,7 @@
 			value: function deleteAccount() {
 				swal({ title: "Hold on...",
 					showConfirmButton: false });
-				var obj = { username: _AppStore2.default.getCurrentUser().userID };
+				var obj = { username: _AppStore2.default.getCurrentUser().userID, jwt: localStorage.jwt };
 				$.ajax({
 					type: 'POST',
 					url: "/softDeleteAccount",
@@ -14621,7 +14621,7 @@
 						});
 					},
 					error: function error(data) {
-						swal("Oops", "We couldn't connect to the server!", "error");
+						swal("Oops", "We couldn't delete this account!", "error");
 					}
 				});
 			}
@@ -15735,15 +15735,15 @@
 					data: JSON.stringify(obj, null, '\t'),
 					contentType: 'application/json;charset=UTF-8',
 					success: function (data) {
-						this.getCurrentUserInfo.bind(this)();
+						this.getCurrentUserInfo.bind(this)(data.jwt);
 					}.bind(this)
 				});
 			}
 		}, {
 			key: 'getCurrentUserInfo',
-			value: function getCurrentUserInfo() {
-				$.post('/getCurrentUserInfo', { userID: this.state.this_user.userID }, function (data) {
-					_AppActions2.default.addCurrentUser(data.thisUser);
+			value: function getCurrentUserInfo(jwt) {
+				$.post('/getCurrentUserInfo', { userID: this.state.this_user.userID, jwt: jwt }, function (data) {
+					_AppActions2.default.addCurrentUser(data.thisUser, jwt);
 					this.getNotifications.bind(this)();
 				}.bind(this));
 			}
