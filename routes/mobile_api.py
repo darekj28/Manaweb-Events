@@ -68,15 +68,15 @@ def mobileCreateProfile():
 	if (email == None):
 		email = ""
 	phone_number = request.json.get('phone_number')
-	if phone_number == None:
+	if len(phone_number) < 10:
 		phone_number = ""
 	# birthDay = request.json['birth_day']
 	# birthMonth = request.json['birth_month']
 	# birthYear = request.json['birth_year']
 	# gender = request.json.get('gender')
-	birthYear = "1994"
-	birthDay = "1"
-	birthMonth = "1"
+	birthYear = ""
+	birthDay = ""
+	birthMonth = ""
 	gender = "Other"
 	avatar_name = random.choice(avatars).lower()
 	avatar_url = '/static/avatars/' + avatar_name + '.png'
