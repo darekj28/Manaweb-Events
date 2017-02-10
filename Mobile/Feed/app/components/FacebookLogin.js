@@ -41,7 +41,7 @@ class FacebookLogin extends Component {
 async loadCurrentUser(fb_id){
       let url = "https://manaweb-events.herokuapp.com"
       let test_url = "http://0.0.0.0:5000"
-      let response = await fetch(url + "/mobileGetUserInfoFromFacebookId", {method: "POST",
+      let response = await fetch(url + "/mobileGetUsernameFromFacebookId", {method: "POST",
             headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ async loadCurrentUser(fb_id){
       let responseData = await response.json();
       // login is good and there already is an account for this user
       if (responseData['result'] == 'success') {
-        this.props.asyncStorageLogin(responseData['current_user']['userID']).then(() => {
+        this.props.asyncStorageLogin(responseData['current_username'], responseData['jwt']).then(() => {
           AsyncStorage.setItem("fb_token", this.state.fb_token).done()
         }).done()
         this._navigateToFeed();

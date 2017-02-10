@@ -107,7 +107,7 @@ def mobileLogin():
 	userID = validator_output['username']
 	if validator_output['result'] == 'success':
 		isSuccess = True
-		encoded = jwt.encode({'userID': userID, 'isAdmin':False}, secret_key, algorithm='HS256')
+		encoded = jwt.encode({'userID': userID, 'isAdmin':getUserInfo(userID)['isAdmin']}, secret_key, algorithm='HS256')
 		validator_output['jwt'] = encoded.decode('utf-8')
 		security_manager.recordInvalidLoginAttempt(login_id, userID, isSuccess)
 	elif userID != None:
@@ -201,19 +201,22 @@ def mobileGetCurrentUserInfo():
 	else:
 		return jsonify({'result' : 'failure'})
 
-@mobile_api.route('/mobileGetUserInfoFromFacebookId', methods = ['POST'])
+@mobile_api.route('/mobileGetUsernameFromFacebookId', methods = ['POST'])
 def mobileGetUserInfoFromFacebookId():
 	fb_id = request.json['fb_id']
 	user_manager = Users()
 	thisUser = user_manager.getUserInfoFromFacebookId(fb_id)
 	user_manager.closeConnection()
 	output = {}
-	output['current_user'] = thisUser
+	userID = thisUser['userID']
+	encoded = jwt.encode({'userID': userID, 'isAdmin':getUserInfo(userID)['isAdmin']}, 
+				secret_key, algorithm='HS256')
+	output['jwt'] = encoded.decode('utf-8')
 	if thisUser == None:
 		output['result'] = 'failure'
 	else:
 		output['result'] = 'success'
-		output['current_username'] = thisUser['userID']
+		output['current_username'] = userID
 	return jsonify(output)
 
 @mobile_api.route('/mobileGetPosts', methods = ['POST'])
@@ -439,6 +442,12 @@ def mobileReportComment():
 	output = {}
 	output['result'] = 'success'
 	return jsonify(output)
+
+def getUserInfo(user_id):
+	user_manager = Users()
+	this_user = user_manager.getInfo(user_id)
+	user_manager.closeConnection()
+	return this_user
 
 def validateJWT(jwt_str, userID):
 	encoded = jwt_str.encode('utf-8')
