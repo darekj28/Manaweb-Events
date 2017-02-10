@@ -49,6 +49,9 @@ export default class RegisterPassword extends Component {
 		if (this.state.validation_output.result == 'success') {
 			this._navigateToRegisterEmail();
 		}
+		else if (this.state.password != this.state.password_confirm){
+			Alert.alert("Passwords do not match")
+		}
 		else {
 			Alert.alert(this.state.validation_output.explanation)
 		}
