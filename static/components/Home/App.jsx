@@ -1,4 +1,5 @@
 var React = require('react');
+var Pusher = require('pusher-js');
 import SearchNavBar from './SearchNavBar.jsx';
 import EventName from './EventName.jsx';
 import MakePost from './MakePost.jsx';
@@ -169,6 +170,8 @@ export default class App extends React.Component {
 					isTrade : message.isTrade,
 					isPlay  : message.isPlay, 
 					isChill : message.isChill,
+					comment_id : message.comment_id,
+					unique_id : message.unique_id,
 					numberOfComments : 0,
 				});
 				this.setState({ feed : feed });

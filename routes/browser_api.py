@@ -10,7 +10,7 @@ from passlib.hash import argon2
 import sms
 import jwt
 from base64 import b64encode
-from pusher import Pusher
+
 # from py2neo import authenticate, Graph, Node
 # authenticate("localhost:7474", "neo4j", "powerplay")
 # graph = Graph()
@@ -19,11 +19,6 @@ browser_api = Blueprint('browser_api', __name__)
 DEFAULT_FEED = "BALT"
 avatars = ["ajani", "chandra", "elspeth", "gideon", "jace", "liliana", "nahiri", "nicol", "nissa", "ugin"]
 
-pusher = Pusher(
-	app_id = "301308",
-	key = "1e44533e001e6236ca17",
-	secret = "fcf9fa5c15f637484bb4"
-)
 # this was generated with os.urandom(24) but we can change this occasionally for more security
 secret_key = b64encode(b'L=\xbf=_\xa5P \xc5+\x9b3\xa4\xfdZ\x8fN\xc6\xd5\xb7/\x0f\xbe\x1b')
 secret_key = secret_key.decode('utf-8')
@@ -308,45 +303,45 @@ def getNotifications():
 	post_manager.closeConnection()
 	return jsonify({ 'notification_list' : notification_list })	
 
-@browser_api.route('/getNotificationCount', methods=['POST'])
-def getNotificationCount():
-	userID = request.form.get("currentUser[userID]")
-	clientNumUnseen = request.form.get('numUnseen')
-	if clientNumUnseen == None or clientNumUnseen == "":
-		return jsonify({ 'count' : 0 })
-	post_manager = Posts()
-	timeout = time.time() + 27
-	while True:
-		if time.time() > timeout : 
-			break
-		time.sleep(1)
-		count = post_manager.getNotificationCount(userID)
-		if count != int(clientNumUnseen):
-			post_manager.closeConnection()
-			return jsonify({ 'count' : count })
-	return jsonify({'count' : 0})
+# @browser_api.route('/getNotificationCount', methods=['POST'])
+# def getNotificationCount():
+# 	userID = request.form.get("currentUser[userID]")
+# 	clientNumUnseen = request.form.get('numUnseen')
+# 	if clientNumUnseen == None or clientNumUnseen == "":
+# 		return jsonify({ 'count' : 0 })
+# 	post_manager = Posts()
+# 	timeout = time.time() + 27
+# 	while True:
+# 		if time.time() > timeout : 
+# 			break
+# 		time.sleep(1)
+# 		count = post_manager.getNotificationCount(userID)
+# 		if count != int(clientNumUnseen):
+# 			post_manager.closeConnection()
+# 			return jsonify({ 'count' : count })
+# 	return jsonify({'count' : 0})
 
-@browser_api.route('/getNumUnseenPosts', methods = ['POST'])
-def getNumUnseenPosts():
-	userID = request.form.get("currentUser[userID]")
-	clientNumUnseenPosts = request.form.get('numUnseenPosts')
-	if clientNumUnseenPosts == None or clientNumUnseenPosts == "":	
-		return jsonify({ 'numUnseenPosts' : 0 })
-	if userID != None:
-		feed_name = request.form['feed_name']
-		post_manager = Posts()
-		timeout = time.time() + 27
-		while True:
-			if time.time() > timeout : 
-				break
-			time.sleep(1)
-			numUnseenPosts = post_manager.getNumUnseenPosts(feed_name, userID)
-			if numUnseenPosts != int(clientNumUnseenPosts):
-				post_manager.closeConnection()
-				return jsonify({'numUnseenPosts': numUnseenPosts})
-		return jsonify({'numUnseenPosts' : 0})
-	else:
-		return jsonify({'numUnseenPosts': 0})
+# @browser_api.route('/getNumUnseenPosts', methods = ['POST'])
+# def getNumUnseenPosts():
+# 	userID = request.form.get("currentUser[userID]")
+# 	clientNumUnseenPosts = request.form.get('numUnseenPosts')
+# 	if clientNumUnseenPosts == None or clientNumUnseenPosts == "":	
+# 		return jsonify({ 'numUnseenPosts' : 0 })
+# 	if userID != None:
+# 		feed_name = request.form['feed_name']
+# 		post_manager = Posts()
+# 		timeout = time.time() + 27
+# 		while True:
+# 			if time.time() > timeout : 
+# 				break
+# 			time.sleep(1)
+# 			numUnseenPosts = post_manager.getNumUnseenPosts(feed_name, userID)
+# 			if numUnseenPosts != int(clientNumUnseenPosts):
+# 				post_manager.closeConnection()
+# 				return jsonify({'numUnseenPosts': numUnseenPosts})
+# 		return jsonify({'numUnseenPosts' : 0})
+# 	else:
+# 		return jsonify({'numUnseenPosts': 0})
 
 @browser_api.route('/seeNotifications', methods=['POST'])
 def seeNotifications():
@@ -497,17 +492,6 @@ def makePost():
 	post_manager.postInThread(feed_name, body = postContent, poster_id = poster_id, 
 			isTrade = isTrade, isPlay = isPlay, isChill = isChill, comment_id = comment_id)
 	post_manager.closeConnection()
-	pusher.trigger('posts','new_post', {
-		'avatar' : request.json['currentUser']['avatar_url'],
-		'name' : request.json['currentUser']['first_name'] + ' ' + request.json['currentUser']['last_name'],
-		'postContent' : postContent,
-		'isTrade' : isTrade,
-		'isPlay' : isPlay,
-		'isChill' : isChill,
-		'comment_id' : None,
-		'feed_name' : feed_name,
-		'userID' : poster_id,
-	})
 	return redirect(url_for("index"))
 
 

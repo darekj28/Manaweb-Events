@@ -13,6 +13,13 @@ from users import Users
 import time
 import psycopg2
 import urllib
+from pusher import Pusher
+
+pusher = Pusher(
+	app_id = "301308",
+	key = "1e44533e001e6236ca17",
+	secret = "fcf9fa5c15f637484bb4"
+)
 
 class Posts:
 	def __init__(self):
@@ -301,6 +308,8 @@ class Posts:
 			self.addToShortList(feed_name, comment_id, receiver_id, sender_id, notification_id, timeString, timeStamp, isOP, numOtherPeople, sender_name, op_name)
 		else :
 			self.updateShortList(comment_id, receiver_id, sender_id, timeString, timeStamp, numOtherPeople, sender_name)
+		print('new_notification_for_' + receiver_id)
+		pusher.trigger('notifications','new_notification_for_' + receiver_id, {'data' : ""})
 	
 	def insertNotificationIntoMain(self, feed_name, notification_id, timeString, timeStamp, comment_id, receiver_id, sender_id) :
 		self.createNotificationTable()
@@ -704,6 +713,21 @@ class Posts:
 		time_1 = time.time()
 		update_seen_table_time = time_1 - time_0
 		self.updateLastPostTable(feed_name, comment_id)
+		user_manager = Users()
+		currentUser = user_manager.getInfo(poster_id)
+		user_manager.closeConnection()
+		pusher.trigger('posts','new_post', {
+			'avatar' : currentUser['avatar_url'],
+			'name' : currentUser['first_name'] + ' ' + currentUser['last_name'],
+			'postContent' : body,
+			'isTrade' : isTrade,
+			'isPlay' : isPlay,
+			'isChill' : isChill,
+			'comment_id' : comment_id,
+			'unique_id' : unique_id,
+			'feed_name' : feed_name,
+			'userID' : poster_id,
+		})
 
 	def makeComment(self, feed_name, comment_id, body, poster_id, unique_id = None):
 		timeStamp = time.time()

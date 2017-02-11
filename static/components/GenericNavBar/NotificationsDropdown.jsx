@@ -1,5 +1,6 @@
 var React = require('react');
 var Link = require('react-router').Link;
+var Pusher = require('pusher-js');
 import AppStore from '../../stores/AppStore.jsx';
 import AppActions from '../../actions/AppActions.jsx';
 function getNotificationFirst(note) {
@@ -40,16 +41,42 @@ export default class NotificationsDropdown extends React.Component {
         AppActions.deleteNotificationCount();
         $.post('/seeNotifications', {currentUser : AppStore.getCurrentUser()});
     }
-    getNotificationCount() {
-        $.post('/getNotificationCount', {currentUser : AppStore.getCurrentUser(), numUnseen : AppStore.getNotificationCount()},
+    // getNotificationCount() {
+    //     $.post('/getNotificationCount', {currentUser : AppStore.getCurrentUser(), numUnseen : AppStore.getNotificationCount()},
+    //         function(data) {
+    //             AppActions.addNotificationCount(data.count);
+    //             this.setState({ timer : setTimeout(this.getNotificationCount.bind(this), 1000) })
+    //         }.bind(this));
+    // }
+    getNotifications() {
+        $.post('/getNotifications', {currentUser : AppStore.getCurrentUser()},
             function(data) {
-                AppActions.addNotificationCount(data.count);
-                this.setState({ timer : setTimeout(this.getNotificationCount.bind(this), 1000) })
+                var notifications = [];
+                data.notification_list.map(function(obj) {
+                    notifications.unshift({
+                        comment_id : obj['comment_id'],
+                        timeString : obj['timeString'],
+                        isOP : obj['isOP'],
+                        numOtherPeople : obj['numOtherPeople'],
+                        sender_name : obj['sender_name'],
+                        op_name : obj['op_name'],
+                        avatar : obj['avatar']
+                    });
+                });
+                AppActions.addNotifications(notifications);
             }.bind(this));
     }
     componentDidMount() {
         AppStore.addNoteChangeListener(this._onChange.bind(this));
-        this.getNotificationCount.bind(this)();
+        // this.getNotificationCount.bind(this)();
+        this.notificationService.bind('new_notification_for_' + AppStore.getCurrentUser()['userID'], function(message) {
+            AppActions.addNotificationCount(this.state.numUnseen + 1);
+            this.getNotifications.bind(this)();
+        }, this);
+    }
+    componentWillMount() {
+        this.pusher = new Pusher('1e44533e001e6236ca17');
+        this.notificationService = this.pusher.subscribe('notifications');
     }
     componentWillUnmount() {
         clearTimeout(this.state.timer);
