@@ -24,7 +24,11 @@ export default class MakePost extends React.Component {
 		if (!this.state.canPost) swal("Yo!", "Please wait 30 seconds between posts.", "warning");
 		else {
 			if (this.postText.value.trim().length > 0) {
-				this.setState({ canPost : false, timeout : setTimeout(function() { this.setState({ canPost : true }); }, 30000) });
+				this.setState({ canPost : false, 
+								timeout : setTimeout(function() { 
+									this.setState({ canPost : true }); 
+								}.bind(this), 
+							30000) });
 				this.props.onPostSubmit(this.postText.value, this.undoTimeout.bind(this));
 			}
 			else 
