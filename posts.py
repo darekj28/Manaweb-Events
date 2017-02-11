@@ -308,7 +308,6 @@ class Posts:
 			self.addToShortList(feed_name, comment_id, receiver_id, sender_id, notification_id, timeString, timeStamp, isOP, numOtherPeople, sender_name, op_name)
 		else :
 			self.updateShortList(comment_id, receiver_id, sender_id, timeString, timeStamp, numOtherPeople, sender_name)
-		print('new_notification_for_' + receiver_id)
 		pusher.trigger('notifications','new_notification_for_' + receiver_id, {'data' : ""})
 	
 	def insertNotificationIntoMain(self, feed_name, notification_id, timeString, timeStamp, comment_id, receiver_id, sender_id) :

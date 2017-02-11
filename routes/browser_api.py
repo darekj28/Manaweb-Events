@@ -95,16 +95,16 @@ def getPreviousSettings():
 def updateSettings():
 	user_manager = Users()
 	userID = request.json['currentUser']['userID']
-	user_manager.updateInfo(userID, 'first_name'				, 	request.json['first_name'])
-	user_manager.updateInfo(userID, 'last_name'					, 	request.json['last_name'])
-	user_manager.updateInfo(userID, 'email'						, 	request.json['email'])
-	user_manager.updateInfo(userID, 'password'					, 	request.json['password'])
-	user_manager.updateInfo(userID, 'birthMonth'				, 	request.json['month_of_birth'])
-	user_manager.updateInfo(userID, 'birthDay'					, 	request.json['day_of_birth'])
-	user_manager.updateInfo(userID, 'birthYear'					, 	request.json['year_of_birth'])
-	user_manager.updateInfo(userID, 'phone_number'				, 	request.json['phone_number'])
-	user_manager.updateInfo(userID, 'avatar_name'				, 	request.json['avatar'])
-	user_manager.updateInfo(userID, 'avatar_url'				, 	'/static/avatars/' + request.json['avatar'] + '.png')
+	user_manager.updateInfo(userID, 'first_name'	, 	request.json['first_name'])
+	user_manager.updateInfo(userID, 'last_name'		, 	request.json['last_name'])
+	user_manager.updateInfo(userID, 'email'			, 	request.json['email'])
+	user_manager.updateInfo(userID, 'password'		, 	request.json['password'])
+	user_manager.updateInfo(userID, 'birthMonth'	, 	request.json['month_of_birth'])
+	user_manager.updateInfo(userID, 'birthDay'		, 	request.json['day_of_birth'])
+	user_manager.updateInfo(userID, 'birthYear'		, 	request.json['year_of_birth'])
+	user_manager.updateInfo(userID, 'phone_number'	, 	request.json['phone_number'])
+	user_manager.updateInfo(userID, 'avatar_name'	, 	request.json['avatar'])
+	user_manager.updateInfo(userID, 'avatar_url'	, 	'/static/avatars/' + request.json['avatar'] + '.png')
 	user_manager.closeConnection()
 	return jsonify({'result' : 'success'})
 
@@ -303,23 +303,13 @@ def getNotifications():
 	post_manager.closeConnection()
 	return jsonify({ 'notification_list' : notification_list })	
 
-# @browser_api.route('/getNotificationCount', methods=['POST'])
-# def getNotificationCount():
-# 	userID = request.form.get("currentUser[userID]")
-# 	clientNumUnseen = request.form.get('numUnseen')
-# 	if clientNumUnseen == None or clientNumUnseen == "":
-# 		return jsonify({ 'count' : 0 })
-# 	post_manager = Posts()
-# 	timeout = time.time() + 27
-# 	while True:
-# 		if time.time() > timeout : 
-# 			break
-# 		time.sleep(1)
-# 		count = post_manager.getNotificationCount(userID)
-# 		if count != int(clientNumUnseen):
-# 			post_manager.closeConnection()
-# 			return jsonify({ 'count' : count })
-# 	return jsonify({'count' : 0})
+@browser_api.route('/getNotificationCount', methods=['POST'])
+def getNotificationCount():
+	userID = request.form.get("currentUser[userID]")
+	post_manager = Posts()
+	count = post_manager.getNotificationCount(userID)
+	post_manager.closeConnection()
+	return jsonify({ 'count' : count })
 
 # @browser_api.route('/getNumUnseenPosts', methods = ['POST'])
 # def getNumUnseenPosts():
