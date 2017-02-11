@@ -14,8 +14,8 @@ export default class LoginNavBar extends React.Component {
 			<nav className="navbar navbar-default" role="navigation">
 				  <div className="container navbar-container">
 			       		<div className="navbar-header">
-		                 	<div className="navbar-brand navbar-brand-logo">
-		                        <span className="glyphicon glyphicon-home login-home"></span>
+		                 	<div className="navbar-brand navbar-brand-logo login-home">
+		                        <span className="glyphicon glyphicon-home"></span>
 		                  	</div>
 		                  	<button type="button" id="LoginToggle" className="SearchNavBarGlyphicon btn navbar-toggle" 
 		                  		data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
