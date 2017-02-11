@@ -36,21 +36,38 @@ class WelcomeScreen extends Component {
 			href: "Feed",
 		})
 	}
+
+	_getAvatar(avatar) {
+		if (avatar) return avatar.charAt(0).toUpperCase() + avatar.slice(1)
+	    else return ""
+	}
+
 	render() {
 		avatar_image = this.getAvatarImage.bind(this)(this.props.current_user.avatar_name)
 		return (
 			<View style = {styles.container}>
-				<Text> 
-					Welcome! Your randomly selected avatar is {this.props.current_user.avatar_name}
-					{//this.props.current_user.avatar_name
-					}
-				</Text>
-				<TouchableOpacity onPress = {this._navigateToMenu.bind(this)}>
-					<Text>
-						Click here to continue to the main feed
+				<View style = {{flex: 1, alignItems: 'center'}}>
+					<Text style = {{paddingTop: 10, fontWeight: 'bold'}}>
+						Welcome!
 					</Text>
-				</TouchableOpacity>
-				{avatar_image}
+					<Text>
+						Your randomly selected avatar is {this._getAvatar.bind(this)(this.props.current_user.avatar_name)}
+					</Text>
+					<Text>
+						You can change it in Settings.
+					</Text>
+				</View>
+				<View style = {{flex: 0}}>
+					{avatar_image}
+				</View>
+				<View style = {{flex : 1, alignItems : 'center'}}>
+					<TouchableOpacity style={{flex : 1, justifyContent : 'center'}} onPress = {this._navigateToMenu.bind(this)}>
+						<View style = {styles.button}>
+							<Text style={styles.button_text}>Begin!</Text>
+						</View>
+					</TouchableOpacity>
+				</View>
+				<View style = {{flex : 3}}></View>
 			</View>
 		)
 	}
@@ -59,9 +76,9 @@ class WelcomeScreen extends Component {
 let winSize = Dimensions.get('window')
 const styles = StyleSheet.create({
 	container : {
-		padding : 30,
+		flex: 1,
 		flexDirection : "column",
-		justifyContent: "center",
+		justifyContent: "flex-start",
 		alignItems: "center"
 	},
 	avatar_image : {
@@ -69,6 +86,16 @@ const styles = StyleSheet.create({
     height : winSize.height * 0.4,
     resizeMode : "contain"
   },
+  button : {
+	  flex : 1,
+	  backgroundColor : '#90d7ed',
+	  borderRadius:60,
+	  justifyContent : 'center',
+	  alignItems : 'center',
+	  width : 100,
+	  height : 35
+  },
+  button_text : {color : 'white', fontWeight : 'bold', fontSize : 14},
 })
 
 module.exports = WelcomeScreen

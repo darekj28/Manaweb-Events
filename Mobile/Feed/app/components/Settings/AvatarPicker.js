@@ -5,7 +5,7 @@ import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Dimensions from 'Dimensions';
 
-const avatar_list = ['nissa', 'chandra', 'elspeth', 'nicol', 'ugin', 'jace', 'liliana', 'ajani', 'nahiri', 'gideon']
+const avatar_list = ['nissa', 'chandra', 'elspeth', 'nicol', 'ugin', 'jace', 'liliana', 'ajani', 'nahiri', 'gideon', 'rip']
 
 export default class AvatarPicker extends React.Component {
 	getAvatar(avatar) {
@@ -63,7 +63,7 @@ export default class AvatarPicker extends React.Component {
 						</View>
 						<Picker selectedValue={this.props.avatar} onValueChange={this.handleChange.bind(this)}>
 							{this.getAvatarList()}
-						</Picker> 
+						</Picker>
 					</View>
 				</View>
 			</Modal>
