@@ -58,15 +58,15 @@ export default class App extends React.Component {
 	extendFeed() {
 		this.setState({ numShownPosts : (this.state.numShownPosts + 50) }, this.refreshFeed.bind(this));;
 	}
-	refreshNumUnseenPosts() {
-		$.post('/getNumUnseenPosts', 
-			{feed_name: feed_name, currentUser : this.state.currentUser, numUnseenPosts : this.state.numUnseenPosts},
-			function(data){
-				this.setState({numUnseenPosts :  data['numUnseenPosts'], 
-								timer : setTimeout(this.refreshNumUnseenPosts.bind(this), 1000) });
-			}.bind(this)
-		);
-	}
+	// refreshNumUnseenPosts() {
+	// 	$.post('/getNumUnseenPosts', 
+	// 		{feed_name: feed_name, currentUser : this.state.currentUser, numUnseenPosts : this.state.numUnseenPosts},
+	// 		function(data){
+	// 			this.setState({numUnseenPosts :  data['numUnseenPosts'], 
+	// 							timer : setTimeout(this.refreshNumUnseenPosts.bind(this), 1000) });
+	// 		}.bind(this)
+	// 	);
+	// }
 	
 	handleFilterClick(filter, isSearch) {
 		if (isSearch) {
@@ -118,7 +118,6 @@ export default class App extends React.Component {
 					};
 			this.setState({feed : feed, post: ''});
 			$('html, body').animate({scrollTop: 0}, 300);
-
 			$.ajax({
 				type : 'POST',
 				url  : '/makePost',
@@ -157,8 +156,28 @@ export default class App extends React.Component {
 		AppStore.addUserChangeListener(this._onChange.bind(this));
 		if (this.state.currentUser['userID']) {
 			this.refreshFeed.bind(this)();
-			this.refreshNumUnseenPosts.bind(this)();
+			// this.refreshNumUnseenPosts.bind(this)();
 		}
+		this.postService.bind('new_post', function(message) {
+			if (message.userID != this.state.currentUser['userID']) {
+				var feed = this.state.feed;
+				feed.unshift({ postContent: message.postContent, 
+					avatar  : message.avatar, 
+					name    : message.name,
+					userID  : message.userID, 
+					time	: "just now", 
+					isTrade : message.isTrade,
+					isPlay  : message.isPlay, 
+					isChill : message.isChill,
+					numberOfComments : 0,
+				});
+				this.setState({ feed : feed });
+			}
+		}, this);
+	}
+	componentWillMount() {
+		this.pusher = new Pusher('1e44533e001e6236ca17');
+ 		this.postService = this.pusher.subscribe('posts');
 	}
 	componentWillUnmount() {
 		clearTimeout(this.state.timer);
@@ -171,7 +190,7 @@ export default class App extends React.Component {
 		}
 		else {
 			this.refreshFeed.bind(this)();
-			this.refreshNumUnseenPosts.bind(this)();
+			// this.refreshNumUnseenPosts.bind(this)();
 		}
 	}
 	render() {

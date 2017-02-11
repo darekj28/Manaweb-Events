@@ -21,6 +21,7 @@ import re
 from users import Users
 from posts import Posts
 from app_factory import create_app
+from pusher import Pusher
 
 app = create_app()
 
@@ -28,6 +29,12 @@ from routes.mobile_api import mobile_api
 from routes.browser_api import browser_api
 app.register_blueprint(mobile_api)
 app.register_blueprint(browser_api)
+
+pusher = Pusher(
+	app_id = "301308",
+	key = "1e44533e001e6236ca17",
+	secret = "fcf9fa5c15f637484bb4"
+)
 
 @app.after_request
 def add_header(response):

@@ -10,6 +10,7 @@ from passlib.hash import argon2
 import sms
 import jwt
 from base64 import b64encode
+from pusher import Pusher
 # from py2neo import authenticate, Graph, Node
 # authenticate("localhost:7474", "neo4j", "powerplay")
 # graph = Graph()
@@ -18,6 +19,11 @@ browser_api = Blueprint('browser_api', __name__)
 DEFAULT_FEED = "BALT"
 avatars = ["ajani", "chandra", "elspeth", "gideon", "jace", "liliana", "nahiri", "nicol", "nissa", "ugin"]
 
+pusher = Pusher(
+	app_id = "301308",
+	key = "1e44533e001e6236ca17",
+	secret = "fcf9fa5c15f637484bb4"
+)
 # this was generated with os.urandom(24) but we can change this occasionally for more security
 secret_key = b64encode(b'L=\xbf=_\xa5P \xc5+\x9b3\xa4\xfdZ\x8fN\xc6\xd5\xb7/\x0f\xbe\x1b')
 secret_key = secret_key.decode('utf-8')
@@ -479,23 +485,31 @@ def setFeedFilter():
 
 @browser_api.route("/makePost", methods = ['POST'])
 def makePost():
-	if request.method == 'POST':
-		postContent = request.json['postContent']
-		isTrade		= request.json['isTrade']
-		isPlay 		= request.json['isPlay']
-		isChill		= request.json['isChill']
-		# comment_id  = request.json['comment_id']
-		comment_id = None
-		feed_name = DEFAULT_FEED		
-		post_manager = Posts()
-		poster_id = request.json['currentUser']['userID']
-		post_manager.postInThread(feed_name, body = postContent, poster_id = poster_id, 
-				isTrade = isTrade, isPlay = isPlay, isChill = isChill, comment_id = comment_id)
-		
-		post_manager.closeConnection()
-		return redirect(url_for("index"))
-	else:
-		return "<h2> Invalid request on sendPost, only post method please </h2>"
+	postContent = request.json['postContent']
+	isTrade		= request.json['isTrade']
+	isPlay 		= request.json['isPlay']
+	isChill		= request.json['isChill']
+	# comment_id  = request.json['comment_id']
+	comment_id = None
+	feed_name = DEFAULT_FEED		
+	post_manager = Posts()
+	poster_id = request.json['currentUser']['userID']
+	post_manager.postInThread(feed_name, body = postContent, poster_id = poster_id, 
+			isTrade = isTrade, isPlay = isPlay, isChill = isChill, comment_id = comment_id)
+	post_manager.closeConnection()
+	pusher.trigger('posts','new_post', {
+		'avatar' : request.json['currentUser']['avatar_url'],
+		'name' : request.json['currentUser']['first_name'] + ' ' + request.json['currentUser']['last_name'],
+		'postContent' : postContent,
+		'isTrade' : isTrade,
+		'isPlay' : isPlay,
+		'isChill' : isChill,
+		'comment_id' : None,
+		'feed_name' : feed_name,
+		'userID' : poster_id,
+	})
+	return redirect(url_for("index"))
+
 
 @browser_api.route('/generateUniqueId' , methods = ['POST'])
 def generateUniqueId():
