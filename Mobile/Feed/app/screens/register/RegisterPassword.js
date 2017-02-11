@@ -1,6 +1,7 @@
 import React from 'react';
 import {Component} from 'react'
 import {TouchableWithoutFeedback, Alert, Image, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {Dimensions} from 'react-native';
 import ViewContainer from '../../components/ViewContainer';
 import HomeStatusBar from '../../components/HomeStatusBar';
 import _ from 'lodash'
@@ -30,8 +31,8 @@ export default class RegisterPassword extends Component {
 		headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
-				}, 
-			body: 
+				},
+			body:
 			JSON.stringify(
 			 {
 				password: password,
@@ -45,7 +46,7 @@ export default class RegisterPassword extends Component {
 		.done();
 	}
 
-	handlePasswordSubmit() { 
+	handlePasswordSubmit() {
 		if (this.state.validation_output.result == 'success') {
 			this._navigateToRegisterEmail();
 		}
@@ -83,9 +84,10 @@ export default class RegisterPassword extends Component {
 	}
 
 	render() {
+		var {height, width} = Dimensions.get('window');
 		return (
 			<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
-				<View style={styles.container}>
+				<View style={[styles.container, {height: height}]}>
 					<RegisterHeader navigator={this.props.navigator}/>
 					<View style={{flex : 1, flexDirection : 'column'}}>
 						<View style={{flex : 2}}>
@@ -96,7 +98,7 @@ export default class RegisterPassword extends Component {
 								<Text style={styles.label}>PASSWORD</Text>
 								<View style={styles.input_wrapper}>
 									<TextInput onChangeText = {this.handlePasswordChange}
-										style = {styles.input} 
+										style = {styles.input}
 										maxLength = {20}
 										value = {this.state.password}
 										secureTextEntry = {true}/>
@@ -122,8 +124,8 @@ export default class RegisterPassword extends Component {
 								</View>
 							</TouchableOpacity>
 							<View style={{flex : 0.5}}/>
-						</View>	
-						<View style = {{flex : 3}}/>							
+						</View>
+						<View style = {{flex : 3}}/>
 					</View>
 				</View>
 			</TouchableWithoutFeedback>
@@ -140,14 +142,14 @@ const styles = StyleSheet.create({
 	},
 	label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
 	input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
-	input : {flex : 1, width : 210, fontSize : 16, justifyContent : 'flex-start'},
+	input : {flex : 1, width : 200, fontSize : 20, justifyContent : 'flex-start', paddingBottom: 0},
 	button : {
-		flex : 1, 
-		backgroundColor : '#90d7ed', 
-		borderRadius:60, 
-		justifyContent : 'center', 
-		alignItems : 'center', 
-		width : 100, 
+		flex : 1,
+		backgroundColor : '#90d7ed',
+		borderRadius:60,
+		justifyContent : 'center',
+		alignItems : 'center',
+		width : 100,
 		height : 35
 	},
 	button_text : {color : 'white', fontWeight : 'bold', fontSize : 14}
