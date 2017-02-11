@@ -122,17 +122,17 @@ export default class RegisterConfirmCode extends Component {
 							<View style={{flex : 0.6}}/>
 						</View>
 						<View style = {{flex : 1, alignItems : 'center'}}>
+							<TouchableOpacity style={{flex : 1}} onPress = {this.handleEnteredCodeSubmit.bind(this)}>
+								<View style = {styles.button}>
+									<Text style={styles.button_text}>Next</Text>
+								</View>
+							</TouchableOpacity>
 							<TouchableOpacity style = {{flex : 1, justifyContent : 'center'}}
 										onPress = {this.resendConfirmationPin.bind(this)}>
 				              	<Text style = {styles.resend}>
 				                	Resend Code
 				             	</Text>
 				            </TouchableOpacity>
-							<TouchableOpacity style={{flex : 1}} onPress = {this.handleEnteredCodeSubmit.bind(this)}>
-								<View style = {styles.button}>
-									<Text style={styles.button_text}>Next</Text>
-								</View>
-							</TouchableOpacity>
 						</View>
 						<View style = {{flex : 3}}/>
 					</View>
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
 	},
 	label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
 	input_wrapper : {flex : 1, flexDirection : 'column', borderBottomColor : 'black', borderBottomWidth : 1, alignItems : 'center', justifyContent : 'center'},
-	input : {flex : 1, fontSize : 20, textAlign : 'center', paddingBottom: 0},
+	input : {flex : 1, width : 120, fontSize : 20, textAlign: 'center', paddingBottom: 0},
 	button : {
 		flex : 1,
 		backgroundColor : '#90d7ed',
