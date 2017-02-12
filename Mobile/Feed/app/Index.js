@@ -149,6 +149,7 @@ export default class Index extends React.Component {
 	initializeUserInformation(){
 		if (this.state.current_username) {
 			AsyncStorage.getItem("jwt", (error, result) => {
+				console.log(result);
 				if (!result) {
 					this.asyncStorageLogout.bind(this)();
 				}
@@ -168,6 +169,7 @@ export default class Index extends React.Component {
 							this.asyncStorageLogout.bind(this)();
 						}
 						else {
+							console.log(responseData.thisUser)
 							this.setState({current_user : responseData.thisUser}, this.getNotifications.bind(this));
 						}
 					})
@@ -277,6 +279,7 @@ export default class Index extends React.Component {
 		AsyncStorage.setItem("jwt", jwt).then(() => {
 			AsyncStorage.setItem("current_username", current_username).then(() => 
 			{
+				console.log("logged in" + current_username);
 				this.setState({current_username : current_username}, this.initializeUserInformation.bind(this))
 			});
 		});

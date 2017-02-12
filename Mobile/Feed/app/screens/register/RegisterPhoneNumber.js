@@ -224,6 +224,6 @@ const styles = StyleSheet.create({
 		height : 35
 	},
 	button_text : {color : 'white', fontWeight : 'bold', fontSize : 14},
-	error_text : {color : 'red', fontWeight : 'bold', fontSize : 12},
+	error_text : {color : 'red', fontWeight : 'bold', width : 180, fontSize : 12},
 	notnow : {fontSize : 14, color : 'lightseagreen'},
 });

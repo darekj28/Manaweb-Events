@@ -290,6 +290,8 @@ class Users:
 	# input : any string with 10 digits 
 	# output: (123) 456-7890
 	def formatPhoneNumberWithDashes(self, input_phone_number):
+		if input_phone_number == None:
+			return ""
 		raw_phone_number = self.formatRawPhoneNumber(input_phone_number)
 		formatted_phone_number = "(" + raw_phone_number[0:3] + ") " + raw_phone_number[3:6] + "-" + raw_phone_number[6:10]
 		return formatted_phone_number

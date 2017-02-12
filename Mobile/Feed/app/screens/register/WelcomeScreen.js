@@ -51,7 +51,7 @@ class WelcomeScreen extends Component {
 						Welcome!
 					</Text>
 					<Text>
-						Your randomly selected avatar is {this._getAvatar.bind(this)(this.props.current_user.avatar_name)}
+						Your avatar is {this._getAvatar.bind(this)(this.props.current_user.avatar_name)}
 					</Text>
 					<Text>
 						You can change it in Settings.

@@ -26,7 +26,7 @@ export default class RegisterUsername extends Component {
 	createAccount() {
 		var url = "https://manaweb-events.herokuapp.com"
 		var test_url = "http://0.0.0.0:5000"
-		fetch(url + "/mobileCreateProfile", {method: "POST",
+		fetch(test_url + "/mobileCreateProfile", {method: "POST",
 		headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
@@ -45,10 +45,10 @@ export default class RegisterUsername extends Component {
 		})
 		.then((response) => response.json())
 		.then((responseData) => {
-				if (responseData['result'] == 'success') {
-					this.props.asyncStorageLogin(this.state.username, responseData['jwt']).done()
-					this._navigateToWelcome.bind(this)()
-				}
+			if (responseData['result'] == 'success') {
+				this.props.asyncStorageLogin(this.state.username, responseData['jwt']).done()
+				this._navigateToWelcome.bind(this)()
+			}
 		})
 		.catch((error) => {
 			alert(error);
@@ -141,12 +141,12 @@ export default class RegisterUsername extends Component {
 							</View>
 						</View>
 						<View style = {{flex : 1, alignItems : 'center'}}>
-							<View style={{flex : 0.5}}/>
 							<TouchableOpacity style={{flex : 1}} onPress = {this.handleUsernameSubmit.bind(this)}>
 								<View style = {styles.button}>
 									<Text style={styles.button_text}>Finish</Text>
 								</View>
 							</TouchableOpacity>
+							<View style={{flex : 0.5}}/>
 							<View style={{flex : 0.5}}/>
 						</View>
 						<View style = {{flex : 3}}/>

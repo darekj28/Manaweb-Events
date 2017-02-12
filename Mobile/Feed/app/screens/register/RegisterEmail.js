@@ -99,7 +99,7 @@ export default class RegisterEmail extends Component {
 
 
 	componentWillMount() {
-		if (this.props.email != "" || this.props.email != null) {
+		if (this.props.email) {
 			this.props.navigator.push({
 				href: "RegisterUsername",
 				email : this.state.email,
@@ -138,17 +138,17 @@ export default class RegisterEmail extends Component {
 							</View>
 						</View>
 						<View style = {{flex : 1, alignItems : 'center'}}>
+							<TouchableOpacity style={{flex : 1}} onPress = {this.handleEmailSubmit.bind(this)}>
+								<View style = {styles.button}>
+									<Text style={styles.button_text}>Next</Text>
+								</View>
+							</TouchableOpacity>
 							<TouchableOpacity style = {{flex : 1, justifyContent : 'center'}}
 											onPress = {this._skipEmail.bind(this)}>
 					       	  	<Text style = {styles.notnow}>
 					       	    	Not now?
 					       	 	</Text>
 					       	</TouchableOpacity>
-							<TouchableOpacity style={{flex : 1}} onPress = {this.handleEmailSubmit.bind(this)}>
-								<View style = {styles.button}>
-									<Text style={styles.button_text}>Next</Text>
-								</View>
-							</TouchableOpacity>
 						</View>
 						<View style = {{flex : 3}}/>
 					</View>

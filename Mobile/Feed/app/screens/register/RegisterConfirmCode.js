@@ -30,7 +30,7 @@ export default class RegisterConfirmCode extends Component {
 	}
 
 	handleEnteredCodeSubmit() {
-		if (this.props.confirmationPin != this.state.enteredCode) {
+		if (this.props.confirmationPin == this.state.enteredCode) {
 			var result_dict = {
 				'result' : 'failure',
 				'error' : "incorrect confirmation code"

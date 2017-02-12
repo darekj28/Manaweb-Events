@@ -65,10 +65,10 @@ def mobileCreateProfile():
 	userID = request.json['username']
 	password = request.json['password']
 	email = request.json.get('email')
-	if (email == None):
+	if email == None:
 		email = ""
 	phone_number = request.json.get('phone_number')
-	if len(phone_number) < 10:
+	if phone_number == None:
 		phone_number = ""
 	# birthDay = request.json['birth_day']
 	# birthMonth = request.json['birth_month']
