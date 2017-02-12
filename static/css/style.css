@@ -36,7 +36,7 @@
 body {
   font-family : "HelveticaNeue-Light", FontAwesome;
   font-size : 18px;
-  letter-spacing: 0.1px;
+  letter-spacing: 0px;
   background-color : #ffffff;
   color : var(--main-color);
   overflow-x : hidden;
@@ -51,13 +51,13 @@ button.kep-login-facebook:hover{
   background-color : #365899;
 }
 input {
-  letter-spacing: 0.5px;
+  letter-spacing: 0px;
 }
 textarea {
-  letter-spacing : 0.5px;
+  letter-spacing : 0px;
 }
 button {
-  letter-spacing: 0.5px;
+  letter-spacing: 0px;
 }
 .inner-addon { 
     position: relative; 
@@ -268,7 +268,7 @@ button:focus {
 }
 .settings-label {
   font-size : 14px;
-  letter-spacing: 1px;
+  letter-spacing: 0px;
   color : '#dbdbdb';
   font-weight : "bolder";
 }
@@ -286,7 +286,7 @@ button:focus {
   color : #fff;
 }
 .my-page-header {
-  letter-spacing : 2px;
+  letter-spacing : 0px;
 }
 
 .invalid {
@@ -553,7 +553,7 @@ button:focus {
 }
 #EventName {
   display : inline-block;
-  letter-spacing: 3px;
+  letter-spacing: 0px;
 }
 .SearchNavBarGlyphicon:hover {  
   cursor : pointer;

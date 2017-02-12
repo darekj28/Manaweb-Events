@@ -117,12 +117,12 @@ export default class CommentApp extends React.Component {
 	}
 	componentWillReceiveProps(nextProps) {
 		this.setState({ comment_id : nextProps.params.comment_id });
-		this.refreshFeed.bind(this)(nextProps.params.comment_id);
 		this.getPostById.bind(this)(nextProps.params.comment_id);
+		this.refreshFeed.bind(this)(nextProps.params.comment_id);
 	}
 	componentDidMount() {
-		this.refreshFeed.bind(this)(this.state.comment_id);
 		this.getPostById.bind(this)(this.state.comment_id);
+		this.refreshFeed.bind(this)(this.state.comment_id);
 		$('#MakeComment').hide();
 		$('#OriginalPost').hide();
 	}
