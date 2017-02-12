@@ -4,9 +4,10 @@ import {RefreshControl, Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleShe
           Alert, Image, Animated, TouchableWithoutFeedback, ScrollView} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 import NotificationBox from './NotificationBox'
 
+const url = "https://manaweb-events.herokuapp.com"
+const test_url = "http://0.0.0.0:5000"
 export default class Notifications extends React.Component {
 	constructor() {
 		super();

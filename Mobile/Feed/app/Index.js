@@ -75,7 +75,7 @@ export default class Index extends React.Component {
 						body: JSON.stringify({ username : this.state.current_username, numUnseenNotifications : this.state.numUnseenNotifications })
 				}
 			).then((response) => response.json())
-			 .then((responseData) => {
+			.then((responseData) => {
 				PushNotification.setApplicationIconBadgeNumber(responseData['num_notifications'])
 				if (responseData['push_notifications'].length > 0) {
 					for (var i = 0; i < responseData['push_notifications'].length; i++) {
@@ -107,16 +107,15 @@ export default class Index extends React.Component {
 	initializePushNotifications(){
 		var that = this;
 		PushNotification.configure({
-		// (required) Called when a remote or local notification is opened or received
-		onNotification: function(notification) {
-				console.log(notification)
+			// (required) Called when a remote or local notification is opened or received
+			onNotification: function(notification) {
 				var comment_id = "";
 				if (Platform.OS === 'ios'){
 					comment_id = notification.data.comment_id
 				}
 
 				else if (Platform.OS === 'android'){
-					comment_id = notificaiton.tag.comment_id
+					comment_id = notification.tag.comment_id
 				}
 				
 				that.props.navigator.push({

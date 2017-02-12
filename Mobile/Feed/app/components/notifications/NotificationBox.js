@@ -100,7 +100,7 @@ export default class NotificationBox extends React.Component {
             }
         ).start(() => this.animatedValue.setValue(0))
     }
-    componentDidMount() {
+    componentWillMount() {
         if (!this.props.note.seen)
             this.animate();
     }
@@ -108,7 +108,7 @@ export default class NotificationBox extends React.Component {
 		var note = this.props.note;
         const backgroundColor = this.animatedValue.interpolate({
             inputRange: [0, 0.5, 1],
-            outputRange: ["white", "#8FD8D4", "white"]
+            outputRange: ["white", "#C7EBE9", "white"]
         });
         const borderBottomColor = this.animatedValue.interpolate({
             inputRange: [0, 0.5, 1],
