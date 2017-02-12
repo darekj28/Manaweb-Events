@@ -3,14 +3,16 @@ import { Platform, Keyboard, AppRegistry,StyleSheet,Text,View,ListView,Touchable
         TouchableWithoutFeedback, Alert, Image, Animated} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconBadge from 'react-native-icon-badge';
-
+// import Pusher from 'pusher-js/react-native';
 const HIGHLIGHTED = '#90D7ED';
 const DEFAULT = 'silver';
+const url = "https://manaweb-events.herokuapp.com"
+const test_url = "http://0.0.0.0:5000"
 
 export default class BottomTabBar extends React.Component {
 	constructor() {
 		super();
-		this.state = { selected : 'home' };
+		this.state = { selected : 'home', numUnseen : 0 };
 	}
 	homePress() {
 		var currentRoute = this.props.navigator.getCurrentRoutes().pop().href;
@@ -31,8 +33,8 @@ export default class BottomTabBar extends React.Component {
 	notificationsPress() {
 		if (this.state.selected != 'notifications') {
 			this.navigate.bind(this)("Notifications");
-			this.props.resetNotificationCount();
 		}
+		this.resetNotificationCount.bind(this)();
 		this.setState({ selected : 'notifications' });
 	}
 	navigate(href) {
@@ -40,15 +42,57 @@ export default class BottomTabBar extends React.Component {
 	        href: href
 	    })
 	}
-
+	seeNotifications() {
+	    fetch(url + "/mobileSeeNotifications", 
+	        {method: "POST",
+	              headers: {
+	                'Accept': 'application/json',
+	                'Content-Type': 'application/json'
+	            },
+	            body: JSON.stringify({ username : this.props.current_username })
+	        }
+	      )
+	      .catch((error) => {
+	      console.log(error);
+	    });
+	}
+	getNotificationCount() {
+		fetch(url + "/mobileGetNotificationCount", 
+				{method: "POST",
+							headers: {
+								'Accept': 'application/json',
+								'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({ username : this.props.current_username })
+				}
+			).then((response) => response.json())
+			.then((responseData) => {
+				this.setState({numUnseen : responseData.count });   
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+	}
+	resetNotificationCount() {
+		this.setState({ numUnseen : 0 });
+		this.seeNotifications.bind(this)();
+	}
 	componentWillReceiveProps(nextProps){
 		if (!nextProps.current_username){
 			this.setState({selected : 'home'})
 		}
 	}
+	componentDidMount() {
+		this.getNotificationCount.bind(this)();
+		// this.notificationService.bind('new_notification_for_' + this.props.current_username, function(message) {
+  //           this.setState({ numUnseen : this.state.numUnseen + 1 });
+  //       }, this);
+	}
 	componentWillMount() {
 		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => (this.setState({ show : false })));
 		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => this.setState({ show : true }));
+        // this.pusher = new Pusher('1e44533e001e6236ca17');
+        // this.notificationService = this.pusher.subscribe('notifications');
 	}
 	componentWillUnmount() {
 		this.keyboardDidHideListener.remove();
@@ -77,14 +121,14 @@ export default class BottomTabBar extends React.Component {
 							<Text style={[{color: settings}, styles.tab_text]}>Settings</Text>
 						</View>
 					</TouchableWithoutFeedback>
-					{this.props.numUnseenNotifications == 0 &&
+					{this.state.numUnseen == 0 &&
 					<TouchableWithoutFeedback style={styles.tab} onPress={this.notificationsPress.bind(this)}>
 						<View style={styles.tab_content}>
 							<Icon name = "md-mail" size={25} color={notifications}/>
 							<Text style={[{color: notifications}, styles.tab_text]}>Notifications</Text>
 						</View>
 					</TouchableWithoutFeedback>}
-					{this.props.numUnseenNotifications != 0 &&
+					{this.state.numUnseen > 0 &&
 					<TouchableWithoutFeedback style={styles.tab} onPress={this.notificationsPress.bind(this)}>
 						<View style={styles.tab_content}>
 							<IconBadge
