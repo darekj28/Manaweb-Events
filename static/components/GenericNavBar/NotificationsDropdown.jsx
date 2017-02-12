@@ -79,6 +79,7 @@ export default class NotificationsDropdown extends React.Component {
         this.notificationService = this.pusher.subscribe('notifications');
     }
     componentWillUnmount() {
+        this.pusher.disconnect();
         clearTimeout(this.state.timer);
         AppStore.removeNoteChangeListener(this._onChange.bind(this));
     }

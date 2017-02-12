@@ -80,6 +80,7 @@ export default class BottomTabBar extends React.Component {
         this.notificationService = this.pusher.subscribe('notifications');
 	}
 	componentWillUnmount() {
+		this.pusher.disconnect();
 		this.keyboardDidHideListener.remove();
 		this.keyboardDidShowListener.remove();
 	}

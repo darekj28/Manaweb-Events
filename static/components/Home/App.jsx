@@ -183,6 +183,7 @@ export default class App extends React.Component {
  		this.postService = this.pusher.subscribe('posts');
 	}
 	componentWillUnmount() {
+		this.pusher.disconnect();
 		clearTimeout(this.state.timer);
 		AppStore.removeUserChangeListener(this._onChange.bind(this));
 	}
