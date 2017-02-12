@@ -40,8 +40,7 @@ export default class Index extends React.Component {
 			current_username: "",
 			isLoading: true,
 			feed: [],
-			notifications: [],
-			numUnseenNotifications : 0
+			notifications: []
 		}
 	}
 
@@ -215,24 +214,24 @@ export default class Index extends React.Component {
 			console.log(error);
 		});
 	}
-	getNotificationCount() {
-			fetch(url + "/mobileGetNotificationCount", 
-				{method: "POST",
-							headers: {
-								'Accept': 'application/json',
-								'Content-Type': 'application/json'
-						},
-						body: JSON.stringify({ username : this.state.current_username, numUnseenNotifications : this.state.numUnseenNotifications })
-				}
-			).then((response) => response.json())
-			.then((responseData) => {
-				this.setState({numUnseenNotifications : responseData.count, 
-					pollNotificationCount : setTimeout(this.getNotificationCount.bind(this), 1000) });   
-		})
-		.catch((error) => {
-			console.log(error);
-		});
-	}
+	// getNotificationCount() {
+	// 		fetch(url + "/mobileGetNotificationCount", 
+	// 			{method: "POST",
+	// 						headers: {
+	// 							'Accept': 'application/json',
+	// 							'Content-Type': 'application/json'
+	// 					},
+	// 					body: JSON.stringify({ username : this.state.current_username, numUnseenNotifications : this.state.numUnseenNotifications })
+	// 			}
+	// 		).then((response) => response.json())
+	// 		.then((responseData) => {
+	// 			this.setState({numUnseenNotifications : responseData.count, 
+	// 				pollNotificationCount : setTimeout(this.getNotificationCount.bind(this), 1000) });   
+	// 	})
+	// 	.catch((error) => {
+	// 		console.log(error);
+	// 	});
+	// }
 	getPosts(callback) {
 		fetch(url + "/mobileGetPosts", {method: "POST",
 					headers: {
@@ -293,9 +292,6 @@ export default class Index extends React.Component {
 			}
 		})
 	}
-	resetNotificationCount() {
-		this.setState({ numUnseenNotifications : 0 });
-	}
 	onRefresh() {
 		this.setState({ refresh : true }, this.getPosts.bind(this));
 	}
@@ -327,11 +323,11 @@ export default class Index extends React.Component {
 			'change',
 			this.handleConnectivityChange.bind(this)
 		)
-		clearTimeout(this.state.pollNotificationCount);
+		// clearTimeout(this.state.pollNotificationCount);
 		clearTimeout(this.state.pollExternalNotificationCount);
 	}
 	componentDidMount() {
-		this.getNotificationCount.bind(this)();
+		// this.getNotificationCount.bind(this)();
 		this.getPosts.bind(this)(); 
 		this.initializePushNotifications.bind(this)();
 		AppState.addEventListener('change', this.handleAppStateChange.bind(this))
@@ -364,9 +360,7 @@ export default class Index extends React.Component {
 				initializeUserInformation = {this.initializeUserInformation.bind(this)}
 				feed={this.state.feed}
 				notifications={this.state.notifications}
-				numUnseenNotifications={this.state.numUnseenNotifications}
 				getPosts={this.getPosts.bind(this)}
-				resetNotificationCount={this.resetNotificationCount.bind(this)}
 				getNotifications={this.getNotifications.bind(this)}
 				/> 
 		}

@@ -15,29 +15,11 @@ export default class NotificationScreen extends React.Component {
       this.state = {renderPlaceholderOnly : true};
   }
 
-  seeNotifications() {
-    fetch(url + "/mobileSeeNotifications", 
-        {method: "POST",
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username : this.props.current_username })
-        }
-      ).then((value) =>{
-        // console.log("notifications seen")
-        // nothing needed to do here
-      })
-      .catch((error) => {
-      console.log(error);
-    });
-  }
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
         this.setState({renderPlaceholderOnly: false});
     });
     this.props.getNotifications()
-    this.seeNotifications.bind(this)();
   }
   _renderPlaceholderView() {
       return (

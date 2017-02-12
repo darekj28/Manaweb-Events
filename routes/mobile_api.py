@@ -291,21 +291,10 @@ def mobileGetNotifications():
 @mobile_api.route('/mobileGetNotificationCount', methods=['POST'])
 def mobileGetNotificationCount():
 	userID = request.json['username']
-	clientNumUnseen = request.json['numUnseenNotifications']
-	if clientNumUnseen == None or clientNumUnseen == "":
-		return jsonify({ 'count' : 0 })
 	post_manager = Posts()
-	timeout = time.time() + 27
-	while True : 
-		if time.time() > timeout : 
-			break
-		time.sleep(1)
-		count = post_manager.getNotificationCount(userID)
-		if count != int(clientNumUnseen):
-			post_manager.closeConnection()
-			return jsonify({ 'count' : count })
-	return jsonify({ 'count' : 0 })
-			
+	count = post_manager.getNotificationCount(userID)
+	post_manager.closeConnection()
+	return jsonify({ 'count' : count })		
 
 @mobile_api.route('/mobileSeeNotifications', methods=["POST"])
 def mobileSeeNotifications():
