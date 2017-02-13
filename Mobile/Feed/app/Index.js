@@ -148,7 +148,6 @@ export default class Index extends React.Component {
 	initializeUserInformation(){
 		if (this.state.current_username) {
 			AsyncStorage.getItem("jwt", (error, result) => {
-				console.log(result);
 				if (!result) {
 					this.asyncStorageLogout.bind(this)();
 				}
@@ -168,7 +167,6 @@ export default class Index extends React.Component {
 							this.asyncStorageLogout.bind(this)();
 						}
 						else {
-							console.log(responseData.thisUser)
 							this.setState({current_user : responseData.thisUser}, this.getNotifications.bind(this));
 						}
 					})
@@ -278,7 +276,6 @@ export default class Index extends React.Component {
 		AsyncStorage.setItem("jwt", jwt).then(() => {
 			AsyncStorage.setItem("current_username", current_username).then(() => 
 			{
-				console.log("logged in" + current_username);
 				this.setState({current_username : current_username}, this.initializeUserInformation.bind(this))
 			});
 		});
@@ -301,7 +298,7 @@ export default class Index extends React.Component {
 		const dispatchConnected = isConnected => this.props.dispatch(setIsConnected(isConnected));
 
 		NetInfo.isConnected.fetch().then((data) => {
-			if (Platform.OS == 'android'){
+			if (Platform.OS == 'android' || Platform.OS == "ios"){
 				this.setState({
 				isConnected: data
 				})
@@ -385,14 +382,14 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor : "#F5FCFF"
 	},
-		centering: {
+	centering: {
 		flex : 1,
 		alignItems: 'center',
 		justifyContent: 'center',
 		padding: 8,
 	},
 	white: {
-		backgroundColor: 'white',
+		backgroundColor: 'skyblue',
 	}
 });
 
