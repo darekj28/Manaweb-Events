@@ -102,7 +102,7 @@ export default class RegisterEmail extends Component {
 		if (this.props.email) {
 			this.props.navigator.push({
 				href: "RegisterUsername",
-				email : this.state.email,
+				email : this.props.email,
 				password : this.props.password,
 				first_name: this.props.first_name,
 				last_name: this.props.last_name

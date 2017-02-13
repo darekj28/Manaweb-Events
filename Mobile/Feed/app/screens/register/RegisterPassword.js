@@ -77,6 +77,7 @@ export default class RegisterPassword extends Component {
 		href: "RegisterEmail",
 		password : this.state.password,
 		password_confirm: this.state.password_confirm,
+		email : this.props.email,
 		phone_number : this.props.phone_number,
 		first_name: this.props.first_name,
 		last_name: this.props.last_name
