@@ -3,7 +3,7 @@ import { Platform, Keyboard, AppRegistry,StyleSheet,Text,View,ListView,Touchable
         TouchableWithoutFeedback, Alert, Image, Animated} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconBadge from 'react-native-icon-badge';
-import Pusher from 'pusher-js/react-native';
+// import Pusher from 'pusher-js/react-native';
 const HIGHLIGHTED = '#90D7ED';
 const DEFAULT = 'silver';
 const url = "https://manaweb-events.herokuapp.com"
@@ -69,18 +69,18 @@ export default class BottomTabBar extends React.Component {
 	}
 	componentDidMount() {
 		this.getNotificationCount.bind(this)();
-		this.notificationService.bind('new_notification_for_' + this.props.current_username, function(message) {
-            this.setState({ numUnseen : this.state.numUnseen + 1 });
-        }, this);
+		// this.notificationService.bind('new_notification_for_' + this.props.current_username, function(message) {
+  //           this.setState({ numUnseen : this.state.numUnseen + 1 });
+  //       }, this);
 	}
 	componentWillMount() {
 		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => (this.setState({ show : false })));
 		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => this.setState({ show : true }));
-        this.pusher = new Pusher('1e44533e001e6236ca17');
-        this.notificationService = this.pusher.subscribe('notifications');
+        // this.pusher = new Pusher('1e44533e001e6236ca17');
+        // this.notificationService = this.pusher.subscribe('notifications');
 	}
 	componentWillUnmount() {
-		this.pusher.disconnect();
+		// this.pusher.disconnect();
 		this.keyboardDidHideListener.remove();
 		this.keyboardDidShowListener.remove();
 	}

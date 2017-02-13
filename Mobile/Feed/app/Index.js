@@ -1,6 +1,6 @@
 import React from 'react';
 import {Component} from 'react'
-import {TouchableWithoutFeedback, Text, ActivityIndicator, NetInfo, AsyncStorage, Platform, AppState, AppRegistry, StyleSheet, TabBarIOS, View} from 'react-native';
+import {Alert, TouchableWithoutFeedback, Text, ActivityIndicator, NetInfo, AsyncStorage, Platform, AppState, AppRegistry, StyleSheet, TabBarIOS, View} from 'react-native';
 import ViewContainer from './components/ViewContainer'
 import StartNavigator from './navigation/StartNavigator'
 import PushController from './PushController'
