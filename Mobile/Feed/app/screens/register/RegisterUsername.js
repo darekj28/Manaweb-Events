@@ -26,37 +26,52 @@ export default class RegisterUsername extends Component {
 	createAccount() {
 		var url = "https://manaweb-events.herokuapp.com"
 		var test_url = "http://0.0.0.0:5000"
-		fetch(url + "/mobileCreateProfile", {method: "POST",
+		fetch(url + "/getKey", {method: "POST",
 		headers: {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json',
 				},
-			body:
+				body:
 			JSON.stringify(
 			 {
-				password : this.props.password,
-				email : this.props.email,
-				username: this.state.username,
-				first_name: this.props.first_name ,
-				last_name: this.props.last_name,
-				password: this.props.password,
-				phone_number : this.props.phone_number,
-				secret : "qZuJR+/mCWwxr91ZCFlbgLCFpFN0bJK+"
+				test : 'test'
 			})
 		})
 		.then((response) => response.json())
 		.then((responseData) => {
-			if (responseData['result'] == 'success') {
-				this.props.asyncStorageLogin(this.state.username, responseData['jwt']).done()
-				this._navigateToWelcome.bind(this)()
-			}
-		})
-		.catch((error) => {
-			alert(error);
+			fetch(url + "/mobileCreateProfile", {method: "POST",
+			headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'application/json',
+					},
+				body:
+				JSON.stringify(
+				 {
+					password : this.props.password,
+					email : this.props.email,
+					username: this.state.username,
+					first_name: this.props.first_name ,
+					last_name: this.props.last_name,
+					password: this.props.password,
+					phone_number : this.props.phone_number,
+					secret : responseData.temp_key
+				})
+			})
+			.then((response) => response.json())
+			.then((responseData) => {
+				if (responseData['result'] == 'success') {
+					this.props.asyncStorageLogin(this.state.username, responseData['jwt']).done()
+					this._navigateToWelcome.bind(this)()
+				}
+			})
+			.catch((error) => {
+				alert(error);
+			})
+			.done();
 		})
 		.done();
 	}
-
+	getTempKey
 	handleUsernameSubmit() {
 		if (this.state.validation_output['result'] == 'success') {
 			this.createAccount()

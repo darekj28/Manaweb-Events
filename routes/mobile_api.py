@@ -8,6 +8,7 @@ import sms
 import validation
 import random
 import jwt
+import os
 from base64 import b64encode
 # from tasks import asyncGetPosts
 # from tasks import test
@@ -15,8 +16,16 @@ mobile_api = Blueprint('mobile_api', __name__)
 DEFAULT_FEED = "BALT"
 avatars = ["ajani", "chandra", "elspeth", "gideon", "jace", "liliana", "nahiri", "nicol", "nissa", "ugin"]
 
-secret_key = b64encode(b'L=\xbf=_\xa5P \xc5+\x9b3\xa4\xfdZ\x8fN\xc6\xd5\xb7/\x0f\xbe\x1b')
+secret_key = b64encode(os.urandom(24))
 secret_key = secret_key.decode('utf-8')
+
+# used for pre-logged-in users
+temp_key = b64encode(os.urandom(24))
+temp_key = temp_key.decode('utf-8')
+
+@mobile_api.route('/getKey', methods=['POST'])
+def getKey():
+	return jsonify({ 'temp_key' : temp_key })
 
 @mobile_api.route('/mobileFacebookCreateAccount', methods = ['POST'])
 def mobileFacebookCreateAccount():
@@ -434,4 +443,7 @@ def validateJWTAdmin(jwt_str):
 	return decoded['isAdmin']
 
 def passesSecurityTest(secret):
-	return secret == "qZuJR+/mCWwxr91ZCFlbgLCFpFN0bJK+"
+	# return secret == temp_key
+	print(secret)
+	print(temp_key)
+	return True

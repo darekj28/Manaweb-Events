@@ -99,27 +99,35 @@ export default class RegisterForm extends React.Component {
 	}
 
 	handleSubmit(email_or_phone) {
-		var obj = {
-			first_name 			: this.state.first_name		,
-			last_name			: this.state.last_name		,
-			username 			: this.state.username 		,
-			password			: this.state.password		,
-			email_or_phone		: email_or_phone,
-			secret				: "qZuJR+/mCWwxr91ZCFlbgLCFpFN0bJK+"
-		};
-		obj[email_or_phone] = this.state.email_or_phone;
 		$.ajax({
 			type: "POST",
-			url : '/createProfile',
-			data : JSON.stringify(obj, null, '\t'),
+			url : '/getKey',
+			data : JSON.stringify({test : "test"}, null, '\t'),
 			contentType : 'application/json;charset=UTF-8',
-			success : function(res) {
-				if(res['result'] == "success") {
-					this.getCurrentUserInfo.bind(this)(res['jwt']);
-				}
-				else if (res['result'] == "phone_exception") {
-					swal("Oops...", "The number you gave us is not valid.", "error");
-				}
+			success: function (data){
+				var obj = {
+					first_name 			: this.state.first_name		,
+					last_name			: this.state.last_name		,
+					username 			: this.state.username 		,
+					password			: this.state.password		,
+					email_or_phone		: email_or_phone,
+					secret				: data.temp_key
+				};
+				obj[email_or_phone] = this.state.email_or_phone;
+				$.ajax({
+					type: "POST",
+					url : '/createProfile',
+					data : JSON.stringify(obj, null, '\t'),
+					contentType : 'application/json;charset=UTF-8',
+					success : function(res) {
+						if(res['result'] == "success") {
+							this.getCurrentUserInfo.bind(this)(res['jwt']);
+						}
+						else if (res['result'] == "phone_exception") {
+							swal("Oops...", "The number you gave us is not valid.", "error");
+						}
+					}.bind(this)
+				});
 			}.bind(this)
 		});
 	}
