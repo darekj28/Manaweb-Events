@@ -100,7 +100,7 @@ export default class NotificationBox extends React.Component {
             }
         ).start(() => this.animatedValue.setValue(0))
     }
-    componentWillMount() {
+    componentDidMount() {
         if (!this.props.note.seen)
             this.animate();
     }
@@ -128,7 +128,8 @@ export default class NotificationBox extends React.Component {
         });
 	   	return(
 	   		<TouchableOpacity style={{marginBottom : 4}} onPress={this._navigateToComment.bind(this)}>
-                <Animated.View style={{flex:1,justifyContent: 'flex-start',flexDirection : 'row', borderBottomColor,borderBottomWidth: 2,backgroundColor}}>
+                <Animated.View style={{flex:1,justifyContent: 'flex-start',flexDirection : 'row', 
+                    borderBottomColor,borderBottomWidth: 2,backgroundColor}}>
                     <View style={{flex: 0, justifyContent: 'flex-start'}}>
                         {note.avatar =='nissa' && <Image  style={styles.profile_image} source={profileImages.nissa} />}
                         {note.avatar == 'chandra' && <Image  style={styles.profile_image} source={profileImages.chandra} />}

@@ -80,22 +80,44 @@ export default class BottomTabBar extends React.Component {
 			console.log(error);
 		});
 	}
+	getPostById(comment_id) {
+        fetch(url + "/mobileGetPostById",
+            {method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ comment_id : comment_id })
+            }
+        ).then((response) => response.json())
+        .then((responseData) => {
+            var original_post = {
+                postContent : responseData.post['body'],
+                avatar      : responseData.post['avatar'],
+                name        : responseData.post['first_name'] + ' ' + responseData.post['last_name'],
+                userID      : responseData.post['poster_id'],
+                time        : responseData.post['time'],
+                comment_id  : responseData.post['comment_id'],
+                unique_id   : responseData.post['unique_id'],
+                timeString  : responseData.post['timeString'] 
+            };
+            this.props.navigator.push({
+                href: "Comment",
+                original_post : original_post,
+                comment_id : comment_id,
+            })
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
 	initializePushNotifications(){
 		PushNotification.configure({
 			onNotification: function(notification) {
-				var comment_id = "";
-				if (Platform.OS === 'ios'){
-					comment_id = notification.data.comment_id
-				}
-
-				else if (Platform.OS === 'android'){
-					comment_id = notification.tag.comment_id
-				}
-				// add original post
-				this.props.navigator.push({
-					href : "Comment",
-					comment_id : comment_id
-				})
+				var comment_id;
+				if (Platform.OS == 'ios') comment_id = notification.userInfo.comment_id;
+				else if (Platform.OS == 'android') comment_id = notification.tag.comment_id;
+				this.getPostById.bind(this)(comment_id);
 			}.bind(this)
 		});
 	}
