@@ -371,26 +371,7 @@ def mobileMarkPushNotificationsAsSent():
 @mobile_api.route('/mobileGetPushNotifications', methods = ['POST'])
 def mobileGetPushNotifications():
 	username = request.json['username']
-	clientNumUnseen = request.json['numUnseenNotifications']
-	if clientNumUnseen == None or clientNumUnseen == "":
-		return jsonify({ 'result' : False })
 	post_manager = Posts()
-	timeout = time.time() + 27
-	while True : 
-		if time.time() > timeout : 
-			break
-		time.sleep(1)
-		num_notifications = post_manager.getNotificationCount(username)
-		if int(clientNumUnseen) != num_notifications:
-			push_notifications = post_manager.getPushNotifications(username)
-			post_manager.markPushNotificationsAsSent(username)
-			post_manager.closeConnection()
-			output = {}
-			output['push_notifications'] = push_notifications
-			output['result'] = 'success'
-			output['num_notifications'] = num_notifications
-			return jsonify(output)
-	# after 25 sec
 	num_notifications = post_manager.getNotificationCount(username)
 	push_notifications = post_manager.getPushNotifications(username)
 	post_manager.markPushNotificationsAsSent(username)

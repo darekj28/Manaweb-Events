@@ -44,101 +44,100 @@ export default class Index extends React.Component {
 		}
 	}
 
-	getNotificationSyntax(note) {
-		var whose; var also; var notification;
-		if (note.isOP) { 
-				whose = "your";
-				also = "";
-		}
-		else {
-				whose = note.op_name + "'s";
-				also = " also";
-		}
-		if (note.numOtherPeople > 1)
-				notification = note.sender_name + " and " + 
-						note.numOtherPeople + " other people commented on " + whose + " post."
-		else if (note.numOtherPeople == 1)
-				notification = note.sender_name + 
-						" and 1 other person commented on " + whose + " post."
-		else 
-				notification = note.sender_name + also + " commented on " + whose + " post."
-		return notification;
-	}
+	// getNotificationSyntax(note) {
+	// 	var whose; var also; var notification;
+	// 	if (note.isOP) { 
+	// 			whose = "your";
+	// 			also = "";
+	// 	}
+	// 	else {
+	// 			whose = note.op_name + "'s";
+	// 			also = " also";
+	// 	}
+	// 	if (note.numOtherPeople > 1)
+	// 			notification = note.sender_name + " and " + 
+	// 					note.numOtherPeople + " other people commented on " + whose + " post."
+	// 	else if (note.numOtherPeople == 1)
+	// 			notification = note.sender_name + 
+	// 					" and 1 other person commented on " + whose + " post."
+	// 	else 
+	// 			notification = note.sender_name + also + " commented on " + whose + " post."
+	// 	return notification;
+	// }
 
-	getPushNotifications(){
-			fetch(url + "/mobileGetPushNotifications", 
-				{method: "POST",
-							headers: {
-								'Accept': 'application/json',
-								'Content-Type': 'application/json'
-						},
-						body: JSON.stringify({ username : this.state.current_username, numUnseenNotifications : this.state.numUnseenNotifications })
-				}
-			).then((response) => response.json())
-			.then((responseData) => {
-				PushNotification.setApplicationIconBadgeNumber(responseData['num_notifications'])
-				if (responseData['push_notifications'].length > 0) {
-					for (var i = 0; i < responseData['push_notifications'].length; i++) {
-						var obj = responseData['push_notifications'][i]
-						var data = {
-							comment_id : obj['comment_id']
-						}
-						if (Platform.OS ===  'ios'){
-							PushNotification.localNotification({
-								message : this.getNotificationSyntax(obj),
-								userInfo : data,
-							})
-						}
-						else if (Platform.OS === 'android'){
-							PushNotification.localNotification({
-								tag : data,
-								message : this.getNotificationSyntax(obj),
-							})
-						}
-					}
-				}
-				this.setState({ pollExternalNotificationCount : setTimeout(this.checkNotifications.bind(this), 1000) });
-		})
-		.catch((error) => {
-			console.log(error);
-		}).done();
-	}
+	// getPushNotifications(){
+	// 		fetch(url + "/mobileGetPushNotifications", 
+	// 			{method: "POST",
+	// 						headers: {
+	// 							'Accept': 'application/json',
+	// 							'Content-Type': 'application/json'
+	// 					},
+	// 					body: JSON.stringify({ username : this.state.current_username, numUnseenNotifications : this.state.numUnseenNotifications })
+	// 			}
+	// 		).then((response) => response.json())
+	// 		.then((responseData) => {
+	// 			PushNotification.setApplicationIconBadgeNumber(responseData['num_notifications'])
+	// 			if (responseData['push_notifications'].length > 0) {
+	// 				for (var i = 0; i < responseData['push_notifications'].length; i++) {
+	// 					var obj = responseData['push_notifications'][i]
+	// 					var data = {
+	// 						comment_id : obj['comment_id']
+	// 					}
+	// 					if (Platform.OS ===  'ios'){
+	// 						PushNotification.localNotification({
+	// 							message : this.getNotificationSyntax(obj),
+	// 							userInfo : data,
+	// 						})
+	// 					}
+	// 					else if (Platform.OS === 'android'){
+	// 						PushNotification.localNotification({
+	// 							tag : data,
+	// 							message : this.getNotificationSyntax(obj),
+	// 						})
+	// 					}
+	// 				}
+	// 			}
+	// 	})
+	// 	.catch((error) => {
+	// 		console.log(error);
+	// 	}).done();
+	// }
 
-	initializePushNotifications(){
-		var that = this;
-		PushNotification.configure({
-			// (required) Called when a remote or local notification is opened or received
-			onNotification: function(notification) {
-				var comment_id = "";
-				if (Platform.OS === 'ios'){
-					comment_id = notification.data.comment_id
-				}
+	// initializePushNotifications(){
+	// 	var that = this;
+	// 	PushNotification.configure({
+	// 		// (required) Called when a remote or local notification is opened or received
+	// 		onNotification: function(notification) {
+	// 			var comment_id = "";
+	// 			if (Platform.OS === 'ios'){
+	// 				comment_id = notification.data.comment_id
+	// 			}
 
-				else if (Platform.OS === 'android'){
-					comment_id = notification.tag.comment_id
-				}
+	// 			else if (Platform.OS === 'android'){
+	// 				comment_id = notification.tag.comment_id
+	// 			}
 				
-				that.props.navigator.push({
-					href : "Comment",
-					current_username : that.state.current_username,
-					current_user : that.state.current_user,
-					comment_id : comment_id
-				})
-			},
-		});
-	}
+	// 			that.props.navigator.push({
+	// 				href : "Comment",
+	// 				current_username : that.state.current_username,
+	// 				current_user : that.state.current_user,
+	// 				comment_id : comment_id
+	// 			})
+	// 		},
+	// 	});
+	// }
 
 	handleAppStateChange(appState){
 		// this checks if any changes were made to user account while they were away
 		this.initializeUserInformation.bind(this)()
-		this.checkNotifications.bind(this)();
+		// this.checkNotifications.bind(this)();
 	}
 
-	checkNotifications(){
-		if (AppState.currentState === 'background' && this.props.current_username != "") {
-			this.getPushNotifications.bind(this)();
-		}
-	}
+	// checkNotifications(){
+	// 	if (AppState.currentState === 'background' && this.props.current_username != "") {
+	// 		this.getPushNotifications.bind(this)();
+	// 	}
+	// }
 
 	handleConnectivityChange(change) {
 			this.setState({
@@ -179,35 +178,35 @@ export default class Index extends React.Component {
 		}
 	}
 	getNotifications(callback) {
-			fetch(url + "/mobileGetNotifications", 
-				{method: "POST",
-							headers: {
-								'Accept': 'application/json',
-								'Content-Type': 'application/json'
-						},
-						body: JSON.stringify({ username : this.state.current_username })
-				}
-			).then((response) => response.json())
-			.then((responseData) => {
-				if (responseData.notification_list.length > 0) {
-							var notifications = []
-							for (var i = 0; i < responseData['notification_list'].length; i++) {
-								var obj = responseData['notification_list'][i]
-									notifications.unshift({
-										comment_id : obj['comment_id'],
-										timeString : obj['timeString'],
-										isOP : obj['isOP'],
-										numOtherPeople : obj['numOtherPeople'],
-										sender_name : obj['sender_name'],
-										op_name : obj['op_name'],
-										seen : obj['seen'],
-										avatar : obj['avatar']
-								})
+		fetch(url + "/mobileGetNotifications", 
+			{method: "POST",
+						headers: {
+							'Accept': 'application/json',
+							'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ username : this.state.current_username })
+			}
+		).then((response) => response.json())
+		.then((responseData) => {
+			if (responseData.notification_list.length > 0) {
+						var notifications = []
+						for (var i = 0; i < responseData['notification_list'].length; i++) {
+							var obj = responseData['notification_list'][i]
+								notifications.unshift({
+									comment_id : obj['comment_id'],
+									timeString : obj['timeString'],
+									isOP : obj['isOP'],
+									numOtherPeople : obj['numOtherPeople'],
+									sender_name : obj['sender_name'],
+									op_name : obj['op_name'],
+									seen : obj['seen'],
+									avatar : obj['avatar']
+							})
 	
-							}
-							this.setState({notifications: notifications})
-							if (callback) callback();
-					}    
+						}
+						this.setState({notifications: notifications})
+						if (callback) callback();
+				}    
 		})
 		.catch((error) => {
 			console.log(error);
@@ -309,9 +308,9 @@ export default class Index extends React.Component {
 
 
 		AsyncStorage.getItem("current_username").then((current_username) => {
-				this.setState({current_username : current_username})
-				this.initializeUserInformation.bind(this)()
-			}).then(() => {
+			this.setState({current_username : current_username})
+			this.initializeUserInformation.bind(this)()
+		}).then(() => {
 		}).done()
 
 		AppState.removeEventListener('change', this.handleAppStateChange.bind(this))  
@@ -323,12 +322,12 @@ export default class Index extends React.Component {
 			this.handleConnectivityChange.bind(this)
 		)
 		// clearTimeout(this.state.pollNotificationCount);
-		clearTimeout(this.state.pollExternalNotificationCount);
+		// clearTimeout(this.state.pollExternalNotificationCount);
 	}
 	componentDidMount() {
 		// this.getNotificationCount.bind(this)();
 		this.getPosts.bind(this)(); 
-		this.initializePushNotifications.bind(this)();
+		// this.initializePushNotifications.bind(this)();
 		AppState.addEventListener('change', this.handleAppStateChange.bind(this))
 	}
 
@@ -351,16 +350,16 @@ export default class Index extends React.Component {
 
 		else if (this.state.isConnected == true){
 			var main_activity = <StartNavigator 
-				asyncStorageLogin = {this.asyncStorageLogin.bind(this)}
-				asyncStorageLogout = {this.asyncStorageLogout.bind(this)}
-				current_username = {this.state.current_username}
-				current_user = {this_user}
-				isLoading = {this.state.isLoading}
-				initializeUserInformation = {this.initializeUserInformation.bind(this)}
-				feed={this.state.feed}
-				notifications={this.state.notifications}
-				getPosts={this.getPosts.bind(this)}
-				getNotifications={this.getNotifications.bind(this)}
+						asyncStorageLogin = {this.asyncStorageLogin.bind(this)}
+						asyncStorageLogout = {this.asyncStorageLogout.bind(this)}
+						current_username = {this.state.current_username}
+						current_user = {this_user}
+						isLoading = {this.state.isLoading}
+						initializeUserInformation = {this.initializeUserInformation.bind(this)}
+						feed={this.state.feed}
+						notifications={this.state.notifications}
+						getPosts={this.getPosts.bind(this)}
+						getNotifications={this.getNotifications.bind(this)}
 				/> 
 		}
 

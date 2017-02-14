@@ -1,14 +1,35 @@
 import React from 'react';
-import { Platform, Keyboard, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
+import { Platform, Keyboard, AppState, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput,
         TouchableWithoutFeedback, Alert, Image, Animated} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IconBadge from 'react-native-icon-badge';
 import Pusher from 'pusher-js/react-native';
+import PushNotification from 'react-native-push-notification';
 const HIGHLIGHTED = '#90D7ED';
 const DEFAULT = 'silver';
 const url = "https://manaweb-events.herokuapp.com"
 const test_url = "http://0.0.0.0:5000"
 
+function getNotificationSyntax(note) {
+	var whose; var also; var notification;
+	if (note.isOP) { 
+		whose = "your";
+		also = "";
+	}
+	else {
+		whose = note.op_name + "'s";
+		also = " also";
+	}
+	if (note.numOtherPeople > 1)
+		notification = note.sender_name + " and " + 
+				note.numOtherPeople + " other people commented on " + whose + " post."
+	else if (note.numOtherPeople == 1)
+		notification = note.sender_name + 
+				" and 1 other person commented on " + whose + " post."
+	else 
+		notification = note.sender_name + also + " commented on " + whose + " post."
+	return notification;
+}
 export default class BottomTabBar extends React.Component {
 	constructor() {
 		super();
@@ -53,11 +74,67 @@ export default class BottomTabBar extends React.Component {
 				}
 			).then((response) => response.json())
 			.then((responseData) => {
-				this.setState({numUnseen : responseData.count });   
+				this.setState({ numUnseen : responseData.count });   
 		})
 		.catch((error) => {
 			console.log(error);
 		});
+	}
+	initializePushNotifications(){
+		PushNotification.configure({
+			onNotification: function(notification) {
+				var comment_id = "";
+				if (Platform.OS === 'ios'){
+					comment_id = notification.data.comment_id
+				}
+
+				else if (Platform.OS === 'android'){
+					comment_id = notification.tag.comment_id
+				}
+				// add original post
+				this.props.navigator.push({
+					href : "Comment",
+					comment_id : comment_id
+				})
+			}.bind(this)
+		});
+	}
+	getPushNotifications(){
+		fetch(url + "/mobileGetPushNotifications", 
+			{method: "POST",
+						headers: {
+							'Accept': 'application/json',
+							'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ username : this.state.current_username })
+			}
+		).then((response) => response.json())
+		.then((responseData) => {
+			PushNotification.setApplicationIconBadgeNumber(responseData['num_notifications'])
+			if (responseData['push_notifications'].length > 0) {
+				for (var i = 0; i < responseData['push_notifications'].length; i++) {
+					var obj = responseData['push_notifications'][i]
+					var data = {
+						comment_id : obj['comment_id']
+					}
+					if (Platform.OS ===  'ios'){
+						PushNotification.localNotification({
+							message : getNotificationSyntax(obj),
+							userInfo : data,
+						})
+					}
+					else if (Platform.OS === 'android'){
+						PushNotification.localNotification({
+							tag : data,
+							message : getNotificationSyntax(obj),
+						})
+					}
+				}
+			}
+		})
+		.catch((error) => {
+			console.log(error);
+		}).done();
 	}
 	resetNotificationCount() {
 		this.setState({ numUnseen : 0 });
@@ -71,11 +148,16 @@ export default class BottomTabBar extends React.Component {
 		this.getNotificationCount.bind(this)();
 		this.notificationService.bind('new_notification_for_' + this.props.current_username, function(message) {
             this.setState({ numUnseen : this.state.numUnseen + 1 });
+            if (AppState.currentState == "background") {
+            	this.getPushNotifications.bind(this)();
+            }
         }, this);
 	}
 	componentWillMount() {
-		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => (this.setState({ show : false })));
+		this.initializePushNotifications.bind(this)();
+		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => this.setState({ show : false }));
 		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => this.setState({ show : true }));
+        Pusher.logToConsole = true;
         this.pusher = new Pusher('1e44533e001e6236ca17');
         this.notificationService = this.pusher.subscribe('notifications');
 	}
@@ -85,7 +167,6 @@ export default class BottomTabBar extends React.Component {
 		this.keyboardDidShowListener.remove();
 	}
 	render() {
-
 		var selected = this.state.selected;
 		var home = selected == 'home' ? HIGHLIGHTED : DEFAULT;
 		var settings = selected == 'settings' ? HIGHLIGHTED : DEFAULT;
