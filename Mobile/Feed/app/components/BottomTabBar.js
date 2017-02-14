@@ -106,7 +106,7 @@ export default class BottomTabBar extends React.Component {
 							'Accept': 'application/json',
 							'Content-Type': 'application/json'
 					},
-					body: JSON.stringify({ username : this.state.current_username })
+					body: JSON.stringify({ username : this.props.current_username })
 			}
 		).then((response) => response.json())
 		.then((responseData) => {
