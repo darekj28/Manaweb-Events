@@ -141,17 +141,21 @@ export default class BottomTabBar extends React.Component {
 	}
 	componentWillReceiveProps(nextProps){
 		if (!nextProps.current_username){
-			this.setState({selected : 'home'})
+			this.setState({selected : 'home', initialized : false });
+			if (this.pusher) this.pusher.disconnect();
+		}
+		else if (nextProps.current_username && !this.state.initialized) {
+			this.notificationService.bind('new_notification_for_' + nextProps.current_username.toLowerCase(), function(message) {
+	            this.setState({ numUnseen : this.state.numUnseen + 1 });
+	            if (AppState.currentState == "background") {
+	            	this.getPushNotifications.bind(this)();
+	            }
+	        }, this);
+	        this.setState({ initialized : true });
 		}
 	}
 	componentDidMount() {
 		this.getNotificationCount.bind(this)();
-		this.notificationService.bind('new_notification_for_' + this.props.current_username, function(message) {
-            this.setState({ numUnseen : this.state.numUnseen + 1 });
-            if (AppState.currentState == "background") {
-            	this.getPushNotifications.bind(this)();
-            }
-        }, this);
 	}
 	componentWillMount() {
 		this.initializePushNotifications.bind(this)();
@@ -162,7 +166,6 @@ export default class BottomTabBar extends React.Component {
         this.notificationService = this.pusher.subscribe('notifications');
 	}
 	componentWillUnmount() {
-		this.pusher.disconnect();
 		this.keyboardDidHideListener.remove();
 		this.keyboardDidShowListener.remove();
 	}
