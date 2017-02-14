@@ -58,7 +58,8 @@ class FbCreate extends Component {
         username: this.state.username,
         first_name: this.state.first_name ,
         last_name: this.state.last_name,
-        fb_id: this.props.fb_id
+        fb_id: this.props.fb_id,
+        secret : "qZuJR+/mCWwxr91ZCFlbgLCFpFN0bJK+"
         // password: this.props.password,
         // phone_number : this.props.phone_number
       })
