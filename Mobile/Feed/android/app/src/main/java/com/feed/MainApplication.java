@@ -5,6 +5,7 @@ import android.util.Log;
 
 
 import com.facebook.react.ReactApplication;
+import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import com.magus.fblogin.FacebookLoginPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -42,6 +43,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNativeOneSignalPackage(),
             new FacebookLoginPackage(),
             new FBSDKPackage(mCallbackManager),
             new VectorIconsPackage(),
