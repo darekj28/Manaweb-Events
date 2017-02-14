@@ -99,14 +99,14 @@ export default class BottomTabBar extends React.Component {
 			}.bind(this)
 		});
 	}
-	getPushNotifications(){
+	getPushNotifications(current_username){
 		fetch(url + "/mobileGetPushNotifications", 
 			{method: "POST",
 						headers: {
 							'Accept': 'application/json',
 							'Content-Type': 'application/json'
 					},
-					body: JSON.stringify({ username : this.props.current_username })
+					body: JSON.stringify({ username : current_username })
 			}
 		).then((response) => response.json())
 		.then((responseData) => {
@@ -148,7 +148,7 @@ export default class BottomTabBar extends React.Component {
 			this.notificationService.bind('new_notification_for_' + nextProps.current_username.toLowerCase(), function(message) {
 	            this.setState({ numUnseen : this.state.numUnseen + 1 });
 	            if (AppState.currentState == "background") {
-	            	this.getPushNotifications.bind(this)();
+	            	this.getPushNotifications.bind(this)(nextProps.current_username);
 	            }
 	        }, this);
 	        this.setState({ initialized : true });
