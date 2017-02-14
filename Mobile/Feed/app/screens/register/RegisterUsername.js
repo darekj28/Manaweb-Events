@@ -40,7 +40,8 @@ export default class RegisterUsername extends Component {
 				first_name: this.props.first_name ,
 				last_name: this.props.last_name,
 				password: this.props.password,
-				phone_number : this.props.phone_number
+				phone_number : this.props.phone_number,
+				secret : "qZuJR+/mCWwxr91ZCFlbgLCFpFN0bJK+"
 			})
 		})
 		.then((response) => response.json())

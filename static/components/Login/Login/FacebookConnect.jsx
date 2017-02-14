@@ -118,7 +118,8 @@ export default class FacebookConnect extends React.Component {
 			last_name			: this.state.fb_last_name	,
 			username 			: this.state.fb_username 	,
 			email				: this.state.fb_email		,
-			fb_id 				: this.state.fb_id
+			fb_id 				: this.state.fb_id,
+			secret				: "qZuJR+/mCWwxr91ZCFlbgLCFpFN0bJK+"
 		};
 		$.ajax({
 			type: "POST",

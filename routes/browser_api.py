@@ -34,6 +34,8 @@ def confirmAccount():
 
 @browser_api.route('/createProfile', methods = ['POST'])
 def createProfile():
+	if not passesSecurityTest(request.json['secret']) : 
+		return
 	if request.json['email_or_phone'] == "email" :
 		email = request.json['email']
 		phone_number = ""
@@ -183,6 +185,8 @@ def recordFacebookLogin():
 
 @browser_api.route('/facebookCreateAccount', methods = ['POST'])
 def facebookCreateAccount():
+	if not passesSecurityTest(request.json['secret']) : 
+		return
 	first_name = request.json['first_name'].title()
 	last_name = request.json['last_name'].title()
 	userID = request.json['username']
@@ -644,4 +648,6 @@ def validateJWTAdmin(jwt_str):
 	decoded = jwt.decode(encoded, secret_key, algorithms=['HS256'])
 	return decoded['isAdmin']
 
+def passesSecurityTest(secret):
+	return secret == "qZuJR+/mCWwxr91ZCFlbgLCFpFN0bJK+"
 

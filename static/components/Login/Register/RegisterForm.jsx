@@ -104,7 +104,8 @@ export default class RegisterForm extends React.Component {
 			last_name			: this.state.last_name		,
 			username 			: this.state.username 		,
 			password			: this.state.password		,
-			email_or_phone		: email_or_phone
+			email_or_phone		: email_or_phone,
+			secret				: "qZuJR+/mCWwxr91ZCFlbgLCFpFN0bJK+"
 		};
 		obj[email_or_phone] = this.state.email_or_phone;
 		$.ajax({

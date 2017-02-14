@@ -20,6 +20,8 @@ secret_key = secret_key.decode('utf-8')
 
 @mobile_api.route('/mobileFacebookCreateAccount', methods = ['POST'])
 def mobileFacebookCreateAccount():
+	if not passesSecurityTest(request.json['secret']) : 
+		return
 	first_name = request.json['first_name'].title()
 	last_name = request.json['last_name'].title()
 	userID = request.json['username']
@@ -60,6 +62,8 @@ def mobileFacebookCreateAccount():
 
 @mobile_api.route('/mobileCreateProfile', methods = ['POST'])
 def mobileCreateProfile():
+	if not passesSecurityTest(request.json['secret']) : 
+		return
 	first_name = request.json['first_name'].title()
 	last_name = request.json['last_name'].title()
 	userID = request.json['username']
@@ -429,3 +433,5 @@ def validateJWTAdmin(jwt_str):
 	decoded = jwt.decode(encoded, secret_key, algorithms=['HS256'])
 	return decoded['isAdmin']
 
+def passesSecurityTest(secret):
+	return secret == "qZuJR+/mCWwxr91ZCFlbgLCFpFN0bJK+"

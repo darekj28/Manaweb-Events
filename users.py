@@ -164,26 +164,26 @@ class Users:
 				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action)))
 
 		# otherwise simply update information
-		else: 
-			for prop in self.properties:
-				if prop == 'password':
-					hash_password = argon2.using(rounds=4).hash(password)
-					self.updateInfo(userID, prop, hash_password)
-				elif prop != 'userID' and prop != 'password':
-					self.updateInfo(userID, prop, input_properties[prop])
+		# else: 
+		# 	for prop in self.properties:
+		# 		if prop == 'password':
+		# 			hash_password = argon2.using(rounds=4).hash(password)
+		# 			self.updateInfo(userID, prop, hash_password)
+		# 		elif prop != 'userID' and prop != 'password':
+		# 			self.updateInfo(userID, prop, input_properties[prop])
 
 
-			self.updateInfo(userID, 'password', hash_password)
-			self.updateInfo(userID, 'timeString', timeString)
-			self.updateInfo(userID, 'timeStamp', timeStamp)
+		# 	self.updateInfo(userID, 'password', hash_password)
+		# 	self.updateInfo(userID, 'timeString', timeString)
+		# 	self.updateInfo(userID, 'timeStamp', timeStamp)
 
-			action = "ACCOUNT SETTINGS CHANGED"
-			update_code = self.udb.mogrify("INSERT INTO " + "user_actions" + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
-				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action) \
-				  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
-				(userID.lower(), first_name, last_name, hash_password, email, isActive, avatar_url,
-				 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action))
-			self.udb.execute(update_code)
+		# 	action = "ACCOUNT SETTINGS CHANGED"
+		# 	update_code = self.udb.mogrify("INSERT INTO " + "user_actions" + " (userID, first_name, last_name, password, email, isActive, avatar_url,\
+		# 		 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action) \
+		# 		  VALUES (%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
+		# 		(userID.lower(), first_name, last_name, hash_password, email, isActive, avatar_url,
+		# 		 avatar_name, confirmationPin, playFilter, tradeFilter, chillFilter, isAdmin, phone_number, birthMonth, birthDay, birthYear, gender, confirmed, timeString, timeStamp, action))
+		# 	self.udb.execute(update_code)
 
 		self.user_db.commit()
 		
