@@ -44,18 +44,23 @@ function getPrimer(field) {
 	return primer;
 }
 var static_user_list;
+var static_report_list;
 export default class AdminApp extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			currentUser 		: AppStore.getCurrentUser(),
-			user_list			: [],
-			view 				: "user",
-			report_list 		: [],
-			user_fields			: [],
-			searchQuery			: "",
-			activeSortField     : "",
-			activeSortDirection	: ""
+			currentUser 				: AppStore.getCurrentUser(),
+			view 						: "report",
+			user_list					: [],
+			user_fields					: [],
+			userSearchQuery				: "",
+			userActiveSortField     	: "",
+			userActiveSortDirection		: "",
+			report_list 				: [],
+			report_fields 				: [],
+			reportSearchQuery			: "",
+			reportActiveSortField   	: "",
+			reportActiveSortDirection	: "",
 		};
 	}
 	initializeUserList() {
@@ -83,38 +88,79 @@ export default class AdminApp extends React.Component {
 	initializeReportList(){
 		$.post('/getReportList', function(data){
 			var report_list = [];
+			var fields = [];
 			data.report_list.map(function(obj) {
-				report_list.unshift(obj);
+				report_list.unshift({
+					comment_id	: obj.id,
+					post 		: obj.body,
+					reason 		: obj.reason,
+					reporter 	: obj.reporting_user,
+					recipient 	: obj.reported_user,
+					description : obj.description,
+					timeString 	: obj.timeString,
+					isComment 	: obj.isComment
+				});
 			});
-			this.setState({report_list : report_list})
+			for (var property in report_list[0])
+				fields.push(property);
+			static_report_list = deepCopy(report_list);
+			this.setState({report_list : report_list, report_fields : fields})
 		}.bind(this));
 	}
 	handleSelect(view) {
 		this.setState({ view : view });
 	}
-	handleSearch(query) {
-		this.setState({ searchQuery : query }, this.sortAndSearch.bind(this));
+	handleUserSearch(query) {
+		this.setState({ userSearchQuery : query }, 
+			this.userSortAndSearch.bind(this));
 	}
-	handleSort(field) {
+	handleUserSort(field) {
 		var activeSortDirection = true;
-		if (this.state.activeSortField == field) 
-			activeSortDirection = !this.state.activeSortDirection;
-		this.setState({ activeSortField : field, activeSortDirection : activeSortDirection }, this.sortAndSearch.bind(this));
+		if (this.state.userActiveSortField == field) 
+			activeSortDirection = !this.state.userActiveSortDirection;
+		this.setState({ userActiveSortField : field, userActiveSortDirection : activeSortDirection }, 
+			this.userSortAndSearch.bind(this));
 	}
-	reset() {
-		this.setState({ activeSortField : "", activeSortDirection : "", searchQuery : "", user_list : static_user_list });
+	userReset() {
+		this.setState({ userActiveSortField : "", userActiveSortDirection : "", userSearchQuery : "", user_list : static_user_list });
 	}
-	sortAndSearch() {
+	userSortAndSearch() {
 		var matchingUsers = [];
 		var list = deepCopy(static_user_list);
-		list.sort(sort_by(this.state.activeSortField, 
-							!this.state.activeSortDirection, 
-							getPrimer(this.state.activeSortField)));
+		list.sort(sort_by(this.state.userActiveSortField, 
+							!this.state.userActiveSortDirection, 
+							getPrimer(this.state.userActiveSortField)));
 		list.map(function(user) {
-			if (queryInObject(this.state.searchQuery, user))
+			if (queryInObject(this.state.userSearchQuery, user))
 				matchingUsers.push(user);
 		}.bind(this));
 		this.setState({ user_list : matchingUsers });
+	}
+	handleReportSearch(query) {
+		this.setState({ reportSearchQuery : query }, 
+			this.reportSortAndSearch.bind(this));
+	}
+	handleReportSort(field) {
+		var activeSortDirection = true;
+		if (this.state.reportActiveSortField == field) 
+			activeSortDirection = !this.state.reportActiveSortDirection;
+		this.setState({ reportActiveSortField : field, reportActiveSortDirection : activeSortDirection }, 
+			this.reportSortAndSearch.bind(this));
+	}
+	reportReset() {
+		this.setState({ reportActiveSortField : "", reportActiveSortDirection : "", reportSearchQuery : "", report_list : static_report_list });
+	}
+	reportSortAndSearch() {
+		var matchingReports = [];
+		var list = deepCopy(static_report_list);
+		list.sort(sort_by(this.state.reportActiveSortField, 
+							!this.state.reportActiveSortDirection, 
+							getPrimer(this.state.reportActiveSortField)));
+		list.map(function(report) {
+			if (queryInObject(this.state.reportSearchQuery, report))
+				matchingReports.push(report);
+		}.bind(this));
+		this.setState({ report_list : matchingReports });
 	}
 	componentDidMount() {
 		this.initializeUserList.bind(this)()
@@ -125,21 +171,26 @@ export default class AdminApp extends React.Component {
 		return(
 			<div id="AdminApp">
 				<NoSearchNavBar currentUser={this.state.currentUser} name={name}/>
-				<div className="container app-container">
+				<div className="container admin-container app-container">
 					<PageHeader>Admin Portal</PageHeader>
 					<Nav bsStyle="tabs" activeKey={this.state.view} onSelect={this.handleSelect.bind(this)}>
-						<NavItem eventKey="user">Users</NavItem>
 						<NavItem eventKey="report">Reports</NavItem>
+						<NavItem eventKey="user">Users</NavItem>
 					</Nav>
 					{this.state.view == "user" &&
 						<AdminUserList user_list = {this.state.user_list} fields={this.state.user_fields} 
-							searchQuery={this.state.searchQuery} handleSearch={this.handleSearch.bind(this)}
-							handleSort={this.handleSort.bind(this)}
-							activeSortField={this.state.activeSortField}
-							activeSortDirection={this.state.activeSortDirection}
-							reset={this.reset.bind(this)}/>}
+							searchQuery={this.state.userSearchQuery} handleSearch={this.handleUserSearch.bind(this)}
+							handleSort={this.handleUserSort.bind(this)}
+							activeSortField={this.state.userActiveSortField}
+							activeSortDirection={this.state.userActiveSortDirection}
+							reset={this.userReset.bind(this)}/>}
 					{this.state.view == "report" &&
-						<AdminReportList report_list = {this.state.report_list}/>}
+						<AdminReportList report_list = {this.state.report_list} fields={this.state.report_fields} 
+							searchQuery={this.state.reportSearchQuery} handleSearch={this.handleReportSearch.bind(this)}
+							handleSort={this.handleReportSort.bind(this)}
+							activeSortField={this.state.reportActiveSortField}
+							activeSortDirection={this.state.reportActiveSortDirection}
+							reset={this.reportReset.bind(this)}/>}
 				</div>
 			</div>
 			);

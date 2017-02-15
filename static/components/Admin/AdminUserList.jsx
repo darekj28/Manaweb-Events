@@ -2,7 +2,7 @@ var React = require('react');
 import {Button, Table} from 'react-bootstrap';
 import AppStore from '../../stores/AppStore.jsx';
 function createHeader(field) {
-	if (field == "userID") return "Username";
+	if (field == "userID") return "User ID";
 	else if (field == "first_name") return "First Name";
 	else if (field == "last_name") return "Last Name";
 	else if (field == "email") return "Email Address";
@@ -80,9 +80,9 @@ export default class AdminUserList extends React.Component {
 	render() {
 		var icon = this.props.activeSortDirection ? "fa fa-sort-asc" : "fa fa-sort-desc";
 		return(
-			<div className="admin-container">
+			<div className="admin-tab-container">
 				<Button className="admin-user-reset" bsStyle="info" onClick={this.props.reset}>Reset</Button>
-				<input className="form-control pull-right admin-user-search" placeholder="Search" 
+				<input className="form-control pull-right admin-user-search" placeholder="Search" value={this.props.searchQuery}
 							onChange={this.handleSearch.bind(this)}></input>
 				<Table striped condensed hover>
 					<thead>
@@ -106,7 +106,7 @@ export default class AdminUserList extends React.Component {
 							return <tr className="admin-user-table-row" 
 										onClick={() => {this.clickDeleteAccount.bind(this)(user['userID'])}}>
 								{vals.map(function(val) {
-								return <td>{val}</td>
+								return <td className="">{val}</td>
 								})}</tr>
 						}.bind(this))}
 					</tbody>

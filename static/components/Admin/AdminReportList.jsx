@@ -1,55 +1,65 @@
 var React = require('react');
-import AppActions from '../../actions/AppActions.jsx';
-import AppStore from '../../stores/AppStore.jsx';
-import AdminReportBox from './AdminReportBox.jsx'
-
+var browserHistory = require('react-router').browserHistory;
+import {Button, Table} from 'react-bootstrap';
+function createHeader(field) {
+	if (field == "post") return "Reported Post";
+	else if (field == "reason") return "Violation";
+	else if (field == "reporter") return "Reporter ID";
+	else if (field == "recipient") return "Recipient ID";
+	else if (field == "description") return "Additional Comments";
+	else if (field == "timeString") return "Date Reported";
+	else if (field == "isComment") return "Type";
+}
 export default class AdminReportList extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {		
-		};
 	}
-	generateReportList(){
-		var report_list = []
-		this.props.report_list.map(function(obj, i) {
-			var element = <AdminReportBox index = {i} report = {obj}
-							/>
-			report_list.push(element)
-		}.bind(this))
-		return report_list
+	handleSearch(e) {
+		this.props.handleSearch(e.target.value);
 	}
-
-	componentDidMount() {
-		// $(document).ready(function() {
-		//     $('#repost_table').DataTable();
-		// } );
+	handleSort(e) {
+		this.props.handleSort(e.target.id);
 	}
-
-	// see the reports 
-
+	goToComment(comment_id) {
+		browserHistory.push('/comment/' + comment_id);
+	}
 	render() {
-		var report_list = this.generateReportList.bind(this)()
+		var icon = this.props.activeSortDirection ? "fa fa-sort-asc" : "fa fa-sort-desc";
 		return(
-			<div id="AdminReportList">
-			<div className = "table-responsive">
-			<table id = "report_table" className="table table-striped table-bordered" cellspacing="0" width="100%">
-			  <thead>
-			    <tr>
-			      <th>#</th>
-			      <th>Reporting User</th>
-			      <th>Reported User</th>
-			      <th> Body </th>
-			      <th> Reason </th>
-			      <th> Description </th>
-			      <th> Time </th>
-			    </tr>
-			  </thead>
-			  <tbody>
-			   		{report_list}
-			  </tbody>
-			</table>
+			<div className="admin-tab-container">
+				<Button className="admin-user-reset" bsStyle="info" onClick={this.props.reset}>Reset</Button>
+				<input className="form-control pull-right admin-user-search" placeholder="Search" value={this.props.searchQuery}
+							onChange={this.handleSearch.bind(this)}></input>
+				<Table striped condensed hover>
+					<thead>
+						<tr>
+							{this.props.fields.map(function(field) {
+								if (field == "comment_id") return;
+								if (field == this.props.activeSortField)
+									return <th className="admin-user-sort-header admin-user-active-sort-header"
+												onClick={this.handleSort.bind(this)} id={field}>
+											{createHeader(field)}<span className={"pull-right " + icon}></span></th>
+								else return <th className="admin-user-sort-header" 
+											onClick={this.handleSort.bind(this)} id={field}>{createHeader(field)}</th>
+							}.bind(this))}
+						</tr>
+					</thead>
+					<tbody>
+						{this.props.report_list.map(function(report) {
+							var vals = [];
+							for (var property in report) {
+								if (property != "comment_id")
+									vals.push(report[property])
+							}
+							return <tr className="admin-report-table-row" onClick={() => {this.goToComment(report['comment_id'])}}>
+								{vals.map(function(val) {
+								return <td className="admin-table-data">{val}</td>
+								})}</tr>
+						}.bind(this))}
+					</tbody>
+				</Table>
 			</div>
-			</div>
-			);
+		);
 	}
 }
+

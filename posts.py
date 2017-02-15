@@ -66,6 +66,9 @@ class Posts:
 		year = time.strftime("%Y", time.localtime(timeStamp))
 		return clock.lstrip("0") + " - " + day + " " + month + " " + year 
 
+	def getTimeStringRecord(self, timeStamp):
+		return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(timeStamp))
+
 	# generates a random id
 	def id_generator(self, size=6, chars=string.ascii_uppercase + string.digits):
 		return ''.join(random.choice(chars) for _ in range(size))
@@ -556,9 +559,12 @@ class Posts:
 		report_dict['id'] = query_item[1]
 		report_dict['body'] = query_item[2]
 		report_dict['reason'] = query_item[3]
-		report_dict['isComment'] = query_item[4]
+		if (query_item[4]):
+			report_dict['isComment'] = "Comment"
+		else:
+			report_dict['isComment'] = "Post"
 		report_dict['description'] = query_item[5]
-		report_dict['timeString'] = query_item[6]
+		report_dict['timeString'] = self.getTimeStringRecord(query_item[7])
 		report_dict['timeStamp'] = query_item[7]
 		report_dict['reporting_user'] = query_item[8]
 		report_dict['reported_user'] = query_item[9]
