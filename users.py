@@ -240,7 +240,7 @@ class Users:
 
 	# returns a list of all users
 	def getUserList(self):
-		sql = "SELECT userID, first_name, last_name, email, phone_number, fb_id, timeString FROM " + self.USER_TABLE
+		sql = "SELECT confirmed, userID, first_name, last_name, email, phone_number, fb_id, timeString FROM " + self.USER_TABLE
 		self.udb.execute(sql)
 		query = self.udb.fetchall()
 		user_list = list()
@@ -251,11 +251,17 @@ class Users:
 				user_list.append(user)
 		return user_list
 	def adminUserInfoToDict(self, query):
-		arr = ['userID', 'first_name', 'last_name', 'email', 'phone_number', 'fb_id', 'timeString']
+		arr = ['confirmed', 'userID', 'first_name', 'last_name', 'email', 'phone_number', 'fb_id', 'timeString']
 		user = {}
 		i = 0
 		for field in arr:
-			user[field] = query[i]
+			if field == 'confirmed':
+				if query[0]:
+					user['confirmed'] = "Yes"
+				else:
+					user['confirmed'] = "No"
+			else :
+				user[field] = query[i]
 			i = i + 1
 		return user
 

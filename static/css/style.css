@@ -755,10 +755,25 @@ button:focus {
 }
 
 .admin-user-table-row:hover {
-  background-color : #FF6666!important;
+  background-color : #ff6666!important;
+  color: white!important;
 }
 .admin-user-search {
-  max-width : 33%;
+  max-width : 25%;
   margin-top : 10px;
   margin-bottom : 10px;
+}
+.admin-user-reset {
+  margin-top : 10px;
+  margin-bottom : 10px;
+}
+.admin-user-sort-header {
+  cursor : pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -ms-user-select: none;
+}
+.admin-user-active-sort-header {
+  color : var(--light);
 }

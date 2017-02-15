@@ -19,17 +19,42 @@ function queryInObject(query, obj) {
 function deepCopy(i) {
 	return JSON.parse(JSON.stringify(i));
 }
+function sort_by(field, reverse, primer){
+   	var key = primer ? 
+       	function(x) {return primer(x[field])} : 
+       	function(x) {return x[field]};
+
+    if (field == "timeString") reverse = !reverse;
+   	reverse = !reverse ? 1 : -1;
+
+   	return function (a, b) {
+       	return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+    } 
+}
+function getPrimer(field) {
+	var primer = function(a) {
+		return a.toLowerCase();
+	};
+	if (field == "fb_id") 
+		primer = function(number){
+			if (!number) return "";
+			return parseInt(number);
+		}
+	return primer;
+}
 var static_user_list;
 export default class AdminApp extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			currentUser 		: AppStore.getCurrentUser()	,
-			user_list			: []						,
-			view 				: "user"					,
-			report_list 		: []						,
-			user_fields			: []						,
-			searchQuery			: ""
+			currentUser 		: AppStore.getCurrentUser(),
+			user_list			: [],
+			view 				: "user",
+			report_list 		: [],
+			user_fields			: [],
+			searchQuery			: "",
+			activeSortField     : "",
+			activeSortDirection	: ""
 		};
 	}
 	initializeUserList() {
@@ -44,7 +69,8 @@ export default class AdminApp extends React.Component {
 					email		: obj.email,
 					phone_number: obj.phone_number,
 					fb_id		: obj.fb_id,
-					timeString  : obj.timeString
+					timeString  : obj.timeString,
+					confirmed   : obj.confirmed
 				});
 			});
 			for (var property in user_list[0])
@@ -66,11 +92,24 @@ export default class AdminApp extends React.Component {
 		this.setState({ view : view });
 	}
 	handleSearch(query) {
-		this.setState({ searchQuery : query }, this.filter.bind(this));
+		this.setState({ searchQuery : query }, this.sortAndSearch.bind(this));
 	}
-	filter() {
+	handleSort(field) {
+		var activeSortDirection = true;
+		if (this.state.activeSortField == field) 
+			activeSortDirection = !this.state.activeSortDirection;
+		this.setState({ activeSortField : field, activeSortDirection : activeSortDirection }, this.sortAndSearch.bind(this));
+	}
+	reset() {
+		this.setState({ activeSortField : "", activeSortDirection : "", searchQuery : "", user_list : static_user_list });
+	}
+	sortAndSearch() {
 		var matchingUsers = [];
-		static_user_list.map(function(user) {
+		var list = deepCopy(static_user_list);
+		list.sort(sort_by(this.state.activeSortField, 
+							!this.state.activeSortDirection, 
+							getPrimer(this.state.activeSortField)));
+		list.map(function(user) {
 			if (queryInObject(this.state.searchQuery, user))
 				matchingUsers.push(user);
 		}.bind(this));
@@ -86,14 +125,18 @@ export default class AdminApp extends React.Component {
 			<div id="AdminApp">
 				<NoSearchNavBar currentUser={this.state.currentUser} name={name}/>
 				<div className="container app-container">
-					<PageHeader>Admin Tools</PageHeader>
+					<PageHeader>Admin Portal</PageHeader>
 					<Nav bsStyle="tabs" activeKey={this.state.view} onSelect={this.handleSelect.bind(this)}>
 						<NavItem eventKey="user">Users</NavItem>
 						<NavItem eventKey="report">Reports</NavItem>
 					</Nav>
 					{this.state.view == "user" &&
 						<AdminUserList user_list = {this.state.user_list} fields={this.state.user_fields} 
-							searchQuery={this.state.searchQuery} handleSearch={this.handleSearch.bind(this)}/>}
+							searchQuery={this.state.searchQuery} handleSearch={this.handleSearch.bind(this)}
+							handleSort={this.handleSort.bind(this)}
+							activeSortField={this.state.activeSortField}
+							activeSortDirection={this.state.activeSortDirection}
+							reset={this.reset.bind(this)}/>}
 					{this.state.view == "report" &&
 						<AdminReportList report_list = {this.state.report_list}/>}
 				</div>

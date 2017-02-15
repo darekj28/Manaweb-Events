@@ -1,5 +1,5 @@
 var React = require('react');
-import {Table} from 'react-bootstrap';
+import {Button, Table} from 'react-bootstrap';
 import AppStore from '../../stores/AppStore.jsx';
 function createHeader(field) {
 	if (field == "userID") return "Username";
@@ -9,6 +9,7 @@ function createHeader(field) {
 	else if (field == "phone_number") return "Phone Number";
 	else if (field == "fb_id") return "Facebook ID";
 	else if (field == "timeString") return "Date Created";
+	else if (field == "confirmed") return "Confirmed?";
 }
 export default class AdminUserList extends React.Component {
 	constructor(props) {
@@ -70,16 +71,27 @@ export default class AdminUserList extends React.Component {
 	handleSearch(e) {
 		this.props.handleSearch(e.target.value);
 	}
+	handleSort(e) {
+		this.props.handleSort(e.target.id);
+	}
 	render() {
+		var icon = this.props.activeSortDirection ? "fa fa-sort-asc" : "fa fa-sort-desc";
 		return(
 			<div className="admin-container">
-				<input className="form-control pull-right admin-user-search" placeholder="Search" onChange={this.handleSearch.bind(this)}></input>
+				<Button className="admin-user-reset" bsStyle="info" onClick={this.props.reset}>Reset</Button>
+				<input className="form-control pull-right admin-user-search" placeholder="Search" 
+							onChange={this.handleSearch.bind(this)}></input>
 				<Table striped condensed hover>
 					<thead>
 						<tr>
 							{this.props.fields.map(function(field) {
-								return <th>{createHeader(field)}</th>
-							})}
+								if (field == this.props.activeSortField)
+									return <th className="admin-user-sort-header admin-user-active-sort-header"
+												onClick={this.handleSort.bind(this)} id={field}>
+											{createHeader(field)}<span className={"pull-right " + icon}></span></th>
+								else return <th className="admin-user-sort-header" 
+											onClick={this.handleSort.bind(this)} id={field}>{createHeader(field)}</th>
+							}.bind(this))}
 						</tr>
 					</thead>
 					<tbody>
@@ -88,7 +100,8 @@ export default class AdminUserList extends React.Component {
 							for (var property in user) {
 								vals.push(user[property])
 							}
-							return <tr className="admin-user-table-row" onClick={() => {this.clickDeleteAccount.bind(this)(user['userID'])}}>
+							return <tr className="admin-user-table-row" 
+										onClick={() => {this.clickDeleteAccount.bind(this)(user['userID'])}}>
 								{vals.map(function(val) {
 								return <td>{val}</td>
 								})}</tr>

@@ -18,7 +18,7 @@ export default class AccountDropdown extends React.Component {
                   <a className="unclickable-name">{this.props.name}</a></li>}
                 <li className="divider"></li>
                 {this.props.currentUser.isAdmin && 
-                  <li> <a href = "/admin"> Admin Tools </a> </li>}
+                <li><Link to="/admin">Admin Portal</Link></li>}
                 <li><Link to="/settings">Account Settings</Link></li>
 				        <li><Link to="/" onClick={this.removeCurrentUser.bind(this)}>Sign Out</Link></li>
               </ul>
