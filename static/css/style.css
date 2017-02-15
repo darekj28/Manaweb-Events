@@ -222,6 +222,9 @@ button:focus {
   padding-top : 90px;
   padding-bottom : 65px;
 }
+.admin-container {
+  font-size : 12px;
+}
 .badge-notify{
    background-color : var(--error);
    position:relative;
@@ -681,6 +684,7 @@ button:focus {
 @media (max-width: 767px) {
   body {
     font-size : 14px;
+    overflow-x : scroll;
   }
   .login-icon {
     top : 0px;
@@ -750,3 +754,11 @@ button:focus {
   }
 }
 
+.admin-user-table-row:hover {
+  background-color : #FF6666!important;
+}
+.admin-user-search {
+  max-width : 33%;
+  margin-top : 10px;
+  margin-bottom : 10px;
+}

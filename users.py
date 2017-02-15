@@ -240,15 +240,24 @@ class Users:
 
 	# returns a list of all users
 	def getUserList(self):
-		sql = "SELECT userID FROM " + self.USER_TABLE
+		sql = "SELECT userID, first_name, last_name, email, phone_number, fb_id, timeString FROM " + self.USER_TABLE
 		self.udb.execute(sql)
 		query = self.udb.fetchall()
 		user_list = list()
 		for user in query:
 			userID = user[0]
 			if userID != "" and userID != None:
-				user_list.append(userID)
+				user = self.adminUserInfoToDict(user)
+				user_list.append(user)
 		return user_list
+	def adminUserInfoToDict(self, query):
+		arr = ['userID', 'first_name', 'last_name', 'email', 'phone_number', 'fb_id', 'timeString']
+		user = {}
+		i = 0
+		for field in arr:
+			user[field] = query[i]
+			i = i + 1
+		return user
 
 	def queryToDict(self, query):
 		user_info = {}

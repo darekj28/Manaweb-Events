@@ -1,52 +1,102 @@
 var React = require('react');
-import AppActions from '../../actions/AppActions.jsx';
+import {Table} from 'react-bootstrap';
 import AppStore from '../../stores/AppStore.jsx';
-import AdminUserBox from './AdminUserBox.jsx'
-import AdminModal from './AdminModal'
-
-export default class AdminApp extends React.Component {
+function createHeader(field) {
+	if (field == "userID") return "Username";
+	else if (field == "first_name") return "First Name";
+	else if (field == "last_name") return "Last Name";
+	else if (field == "email") return "Email Address";
+	else if (field == "phone_number") return "Phone Number";
+	else if (field == "fb_id") return "Facebook ID";
+	else if (field == "timeString") return "Date Created";
+}
+export default class AdminUserList extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			selected_username		: ""
-		};
 	}
-
-	componentDidMount() {
-		this.generateUserList.bind(this)()
+	deleteAccount(userIdToDelete) {
+		swal({title : "Hold on...", 
+						showConfirmButton : false});
+		var obj = { username : userIdToDelete, jwt : localStorage.jwt  };
+		$.ajax({
+	    	type : 'POST',
+	    	url: "/softDeleteAccount",
+	    	data: JSON.stringify(obj, null, '\t'),
+	    	contentType: 'application/json;charset=UTF-8',
+	    	success : function(data) {
+	    		swal({title : "Success!", 
+				text: "This account has been deleted.", 
+				type: "success",
+				confirmButtonColor: "#80CCEE",
+  				confirmButtonText: "OK",
+  				closeOnConfirm: false}, function() { location.reload(); });
+	    	},
+	    	error : function(data) {
+	    		swal("Oops", "We couldn't connect to the server!", "error");
+	    	}
+	    });
 	}
-
-	generateUserList(){
-		var user_list = []
-		this.props.user_list.map(function(obj) {
-			var element = <AdminUserBox userID = {obj}
-							selectUser = {this.selectUser.bind(this)}
-							/>
-			user_list.push(element)
-		}.bind(this))
-		return user_list
+	clickDeleteAccount(userIdToDelete) {
+		swal({
+	      	title: "Are you sure you want to delete this account (" + userIdToDelete + ")?", 
+		    text: "If you are sure, type in your password:", 
+		    type: "input",
+		    inputType: "password",
+		    showCancelButton: true,
+	      	closeOnConfirm: false,
+	      	confirmButtonText: "Delete account",
+	      	confirmButtonColor: "#f44336"}, 
+	    function(password) {
+	    	this.verifyOldPasswordForDelete.bind(this)(password, userIdToDelete);
+	    }.bind(this));
 	}
-
-	selectUser(userID) {
-		if (this.state.selected_username == userID) {
-			this.setState({selected_username : ""})
-		}
-		else {
-			this.setState({selected_username : userID})			
-		}
+	verifyOldPasswordForDelete(password, userIdToDelete) {
+		var obj = { password : password, currentUser : AppStore.getCurrentUser() };
+		$.ajax({
+			type: 'POST',
+			url: '/verifyOldPassword',
+			data : JSON.stringify(obj, null, '\t'),
+		    contentType: 'application/json;charset=UTF-8',
+		    success : function(res) {
+		    	if (!res['error']) {
+		    		this.deleteAccount.bind(this)(userIdToDelete);
+		    	}
+		    	else {
+		    		swal("Oops...", "Incorrect password.", "error");
+		    	}
+		    }.bind(this)
+		});
 	}
-
+	handleSearch(e) {
+		this.props.handleSearch(e.target.value);
+	}
 	render() {
-		var user_list = this.generateUserList.bind(this)()
 		return(
-			<div id="AdminUserList">
-				<div className = "col-sm-3" id = "UserListTitle">
-					{user_list}
-				</div>
-				{this.state.selected_username &&
-					<AdminModal userID = {this.state.selected_username}/>
-				}
+			<div className="admin-container">
+				<input className="form-control pull-right admin-user-search" placeholder="Search" onChange={this.handleSearch.bind(this)}></input>
+				<Table striped condensed hover>
+					<thead>
+						<tr>
+							{this.props.fields.map(function(field) {
+								return <th>{createHeader(field)}</th>
+							})}
+						</tr>
+					</thead>
+					<tbody>
+						{this.props.user_list.map(function(user) {
+							var vals = [];
+							for (var property in user) {
+								vals.push(user[property])
+							}
+							return <tr className="admin-user-table-row" onClick={() => {this.clickDeleteAccount.bind(this)(user['userID'])}}>
+								{vals.map(function(val) {
+								return <td>{val}</td>
+								})}</tr>
+						}.bind(this))}
+					</tbody>
+				</Table>
 			</div>
-			);
+		);
 	}
 }
+

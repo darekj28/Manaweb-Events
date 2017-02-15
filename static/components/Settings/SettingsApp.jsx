@@ -3,6 +3,7 @@ import SettingsTextInput from './SettingsTextInput.jsx';
 import SettingsSelectInput from './SettingsSelectInput.jsx';
 import SettingsInputLabel from './SettingsInputLabel.jsx';
 import NoSearchNavBar from '../GenericNavBar/NoSearchNavBar.jsx';
+import {PageHeader} from 'react-bootstrap';
 import AppActions from '../../actions/AppActions.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 var text_fields = [	"old_password", "password", "first_name", "last_name", "email", "phone_number" ];
@@ -211,9 +212,7 @@ export default class SettingsApp extends React.Component {
 				<NoSearchNavBar currentUser={this.state.currentUser} name={name}/>
 				<div className="container app-container">
 					<form class="form-horizontal">
-						<div className="page-header my-page-header">
-							<h2> ACCOUNT SETTINGS </h2>
-						</div>
+						<PageHeader>Account Settings</PageHeader>
 						{text_fields.map(function(field) {
 							return <div className="form-group">
 										<SettingsInputLabel field={field} />

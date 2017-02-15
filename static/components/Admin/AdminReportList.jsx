@@ -20,9 +20,9 @@ export default class AdminReportList extends React.Component {
 	}
 
 	componentDidMount() {
-		$(document).ready(function() {
-		    $('#repost_table').DataTable();
-		} );
+		// $(document).ready(function() {
+		//     $('#repost_table').DataTable();
+		// } );
 	}
 
 	// see the reports 

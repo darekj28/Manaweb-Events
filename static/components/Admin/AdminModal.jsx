@@ -3,7 +3,7 @@ import AppActions from '../../actions/AppActions.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 
 
-export default class AdminApp extends React.Component {
+export default class AdminModal extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -12,12 +12,11 @@ export default class AdminApp extends React.Component {
 	}
 
 	getCurrentUserInfo(userID) {
-		$.post('/getCurrentUserInfo', {userID : userID}, 
+		$.post('/getCurrentUserInfo', {userID : userID, jwt : localStorage.jwt }, 
 			function(data) {
 			this.setState({
 				selected_user : data.thisUser
-			})	
-			console.log(data.thisUser)
+			})
 		}.bind(this));
 	}
 
@@ -28,7 +27,6 @@ export default class AdminApp extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		console.log(nextProps.userID)
 		if (nextProps.userID != this.props.userID){
 			this.getCurrentUserInfo.bind(this)(nextProps.userID)
 		}
@@ -37,7 +35,7 @@ export default class AdminApp extends React.Component {
 	deleteAccount() {
 		swal({title : "Hold on...", 
 						showConfirmButton : false});
-		var obj = { username : this.props.userID };
+		var obj = { username : this.props.userID, jwt : localStorage.jwt  };
 		$.ajax({
 	    	type : 'POST',
 	    	url: "/softDeleteAccount",

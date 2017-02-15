@@ -3,6 +3,7 @@ import NoSearchNavBar from "../GenericNavBar/NoSearchNavBar.jsx";
 import NotificationsFeed from './NotificationsFeed.jsx';
 import AppStore from '../../stores/AppStore.jsx';
 import AppActions from '../../actions/AppActions.jsx';
+import {PageHeader} from 'react-bootstrap';
 
 export default class NotificationsApp extends React.Component {
 	constructor(props) {
@@ -34,7 +35,7 @@ export default class NotificationsApp extends React.Component {
 				<div className="container app-container">
 
 					{this.state.currentUser['first_name'] != undefined && 
-						<div className="page-header my-page-header"><h2>YOUR NOTIFICATIONS</h2></div>}
+						<PageHeader>Notifications</PageHeader>}
 					<div className="feed row">
 						<NotificationsFeed notifications={this.state.notifications}/>		
 					</div>
