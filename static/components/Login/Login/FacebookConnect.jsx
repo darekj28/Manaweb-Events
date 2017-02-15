@@ -113,29 +113,21 @@ export default class FacebookConnect extends React.Component {
             }.bind(this));
     }
 	createAccount() {
+		var obj = {
+			first_name 			: this.state.fb_first_name	,
+			last_name			: this.state.fb_last_name	,
+			username 			: this.state.fb_username 	,
+			email				: this.state.fb_email		,
+			fb_id 				: this.state.fb_id,
+			secret				: "qZuJR+/mCWwxr91ZCFlbgLCFpFN0bJK+"
+		};
 		$.ajax({
 			type: "POST",
-			url : '/getKey',
-			data : JSON.stringify({test : "test"}, null, '\t'),
+			url : '/facebookCreateAccount',
+			data : JSON.stringify(obj, null, '\t'),
 			contentType : 'application/json;charset=UTF-8',
 			success: function (data){
-				var obj = {
-					first_name 			: this.state.fb_first_name	,
-					last_name			: this.state.fb_last_name	,
-					username 			: this.state.fb_username 	,
-					email				: this.state.fb_email		,
-					fb_id 				: this.state.fb_id,
-					secret				: data.temp_key
-				};
-				$.ajax({
-					type: "POST",
-					url : '/facebookCreateAccount',
-					data : JSON.stringify(obj, null, '\t'),
-					contentType : 'application/json;charset=UTF-8',
-					success: function (data){
-						this.getCurrentUserInfo.bind(this)(data.jwt);
-					}.bind(this)
-				});
+				this.getCurrentUserInfo.bind(this)(data.jwt);
 			}.bind(this)
 		});
 	}

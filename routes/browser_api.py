@@ -9,7 +9,6 @@ import random
 from passlib.hash import argon2
 import sms
 import jwt
-import os
 from base64 import b64encode
 
 # from py2neo import authenticate, Graph, Node
@@ -20,16 +19,9 @@ browser_api = Blueprint('browser_api', __name__)
 DEFAULT_FEED = "BALT"
 avatars = ["ajani", "chandra", "elspeth", "gideon", "jace", "liliana", "nahiri", "nicol", "nissa", "ugin"]
 
-secret_key = b64encode(os.urandom(24))
+# this was generated with os.urandom(24) but we can change this occasionally for more security
+secret_key = b64encode(b'L=\xbf=_\xa5P \xc5+\x9b3\xa4\xfdZ\x8fN\xc6\xd5\xb7/\x0f\xbe\x1b')
 secret_key = secret_key.decode('utf-8')
-
-# used for pre-logged-in users
-temp_key = b64encode(os.urandom(24))
-temp_key = temp_key.decode('utf-8')
-
-@browser_api.route('/getKey', methods=['POST'])
-def getKey():
-	return jsonify({ 'temp_key' : temp_key })
 
 @browser_api.route('/confirmAccount', methods = ['POST'])
 def confirmAccount():
@@ -657,7 +649,5 @@ def validateJWTAdmin(jwt_str):
 	return decoded['isAdmin']
 
 def passesSecurityTest(secret):
-	# return secret == temp_key
-	print(secret)
-	print(temp_key)
-	return True
+	return secret == "qZuJR+/mCWwxr91ZCFlbgLCFpFN0bJK+"
+
