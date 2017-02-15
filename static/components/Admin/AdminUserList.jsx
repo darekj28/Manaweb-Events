@@ -38,18 +38,21 @@ export default class AdminUserList extends React.Component {
 	    });
 	}
 	clickDeleteAccount(userIdToDelete) {
-		swal({
-	      	title: "Are you sure you want to delete this account (" + userIdToDelete + ")?", 
-		    text: "If you are sure, type in your password:", 
-		    type: "input",
-		    inputType: "password",
-		    showCancelButton: true,
-	      	closeOnConfirm: false,
-	      	confirmButtonText: "Delete account",
-	      	confirmButtonColor: "#f44336"}, 
-	    function(password) {
-	    	this.verifyOldPasswordForDelete.bind(this)(password, userIdToDelete);
-	    }.bind(this));
+		if (userIdToDelete != AppStore.getCurrentUser()['userID'])
+			swal({
+		      	title: "Are you sure you want to delete this account (" + userIdToDelete + ")?", 
+			    text: "If you are sure, type in your password:", 
+			    type: "input",
+			    inputType: "password",
+			    showCancelButton: true,
+		      	closeOnConfirm: false,
+		      	confirmButtonText: "Delete account",
+		      	confirmButtonColor: "#f44336"}, 
+		    function(password) {
+		    	this.verifyOldPasswordForDelete.bind(this)(password, userIdToDelete);
+		    }.bind(this));
+		else 
+			swal("Sorry!", "You can delete your own account in Account Settings.", "warning");
 	}
 	verifyOldPasswordForDelete(password, userIdToDelete) {
 		var obj = { password : password, currentUser : AppStore.getCurrentUser() };

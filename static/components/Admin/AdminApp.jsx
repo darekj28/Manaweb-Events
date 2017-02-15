@@ -33,6 +33,7 @@ function sort_by(field, reverse, primer){
 }
 function getPrimer(field) {
 	var primer = function(a) {
+		if (!a) return "";
 		return a.toLowerCase();
 	};
 	if (field == "fb_id") 
