@@ -50,7 +50,7 @@ export default class AdminApp extends React.Component {
 		super(props);
 		this.state = {
 			currentUser 				: AppStore.getCurrentUser(),
-			view 						: "report",
+			view 						: "user",
 			user_list					: [],
 			user_fields					: [],
 			userSearchQuery				: "",

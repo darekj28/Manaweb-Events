@@ -57299,7 +57299,7 @@
 	
 			_this.state = {
 				currentUser: _AppStore2.default.getCurrentUser(),
-				view: "report",
+				view: "user",
 				user_list: [],
 				user_fields: [],
 				userSearchQuery: "",
