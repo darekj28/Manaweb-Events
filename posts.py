@@ -164,6 +164,8 @@ class Posts:
 
 	def recalculateLastPostTable(self, feed_name):
 		allPosts = self.getPosts(feed_name)
+		if (len(allPosts) < 1):
+			return
 		self.sortDescending(allPosts)
 		lastPostId = allPosts[0]['comment_id']
 		self.updateLastPostTable(feed_name, lastPostId)
@@ -861,12 +863,14 @@ class Posts:
 		self.updateAdminTable(thisComment['feed_name'], thisComment['body'], thisComment['poster_id'], action , thisComment['unique_id'], timeString, timeStamp, isComment)
 
 	def deletePost(self, feed_name, unique_id):
+
 		timeStamp = time.time()
 		timeString = self.getTimeString(timeStamp)
 		thisPost = self.getPostById(feed_name, unique_id)
 		action = "DELETE POST"
 		isComment = False
-		self.updateAdminTable(thisPost['feed_name'], thisPost['body'], thisPost['poster_id'], action , thisPost['unique_id'], timeString, timeStamp, isComment)
+		if thisPost != None:
+			self.updateAdminTable(thisPost['feed_name'], thisPost['body'], thisPost['poster_id'], action , thisPost['unique_id'], timeString, timeStamp, isComment)
 		table_name = feed_name
 		sql = "DELETE FROM " + table_name + " WHERE unique_id = %s"
 		self.db.execute(self.db.mogrify(sql, (unique_id,)))
@@ -1166,5 +1170,11 @@ class Posts:
 	def deleteColumn(self, table_name, column_name):
 		sql = "ALTER TABLE " + table_name + " DROP COLUMN IF EXISTS " + column_name
 		self.db.execute(self.db.mogrify(sql))
+	
+	def deleteAllPosts(self, feed_name):
+		post_list = self.getPosts(feed_name)
+		for post in post_list:
+			print(post['body'])
+			self.deletePost(feed_name, post['comment_id'])
 
 

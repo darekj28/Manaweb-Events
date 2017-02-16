@@ -36,8 +36,8 @@ security_manager = Security()
 # post_manager.deleteUserAndPostsWipe('gabbys')
 # time_1 = time.time()
 # print("delete user and wipe time : " + str(time_1 - time_0))
-
-print(post_manager.getReportList())
+feed_name = "BALT"
+post_manager.deleteAllPosts(feed_name)
 
 # user_manager.deleteUserByPhoneNumber('2018208509')
 # security_manager.createRecovery()
