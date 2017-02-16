@@ -105,6 +105,7 @@
 	
 	
 	swal.setDefaults({ animation: false });
+	localStorage.admin = "user";
 	
 	var Main = function (_React$Component) {
 		_inherits(Main, _React$Component);
@@ -57299,7 +57300,7 @@
 	
 			_this.state = {
 				currentUser: _AppStore2.default.getCurrentUser(),
-				view: "user",
+				view: localStorage.admin,
 				user_list: [],
 				user_fields: [],
 				userSearchQuery: "",
@@ -57368,6 +57369,7 @@
 			key: 'handleSelect',
 			value: function handleSelect(view) {
 				this.setState({ view: view });
+				localStorage.admin = view;
 			}
 		}, {
 			key: 'handleUserSearch',
@@ -57452,13 +57454,13 @@
 							{ bsStyle: 'tabs', activeKey: this.state.view, onSelect: this.handleSelect.bind(this) },
 							React.createElement(
 								_reactBootstrap.NavItem,
-								{ eventKey: 'report' },
-								'Reports'
+								{ eventKey: 'user' },
+								'Users'
 							),
 							React.createElement(
 								_reactBootstrap.NavItem,
-								{ eventKey: 'user' },
-								'Users'
+								{ eventKey: 'report' },
+								'Reports'
 							)
 						),
 						this.state.view == "user" && React.createElement(_AdminUserList2.default, { user_list: this.state.user_list, fields: this.state.user_fields,
