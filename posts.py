@@ -568,7 +568,7 @@ class Posts:
 		report_dict['timeStamp'] = query_item[7]
 		report_dict['reporting_user'] = query_item[8]
 		report_dict['reported_user'] = query_item[9]
-		report_dict['comment_id'] = query_item[10]
+		# report_dict['comment_id'] = query_item[10]
 		report_dict['time'] = self.date_format(int(report_dict['timeStamp']))
 		return report_dict
 
@@ -577,17 +577,19 @@ class Posts:
 		body = self.getPostById(feed_name, comment_id)['body']
 		timeStamp = time.time()
 		timeString = self.getTimeString(timeStamp)
-		self.db.execute(self.db.mogrify("INSERT INTO " + self.REPORT_TABLE + "(feed_name, comment_id, body, reason, isComment, description, timeStamp, timeString, reporting_user, reported_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (feed_name, comment_id, body, reason, False, description, timeStamp, timeString, reporting_user, reported_user)))
+		self.db.execute(self.db.mogrify("INSERT INTO " + self.REPORT_TABLE + "(feed_name, id, body, reason, isComment, description, timeStamp, timeString, reporting_user, reported_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (feed_name, comment_id, body, reason, False, description, timeStamp, timeString, reporting_user, reported_user)))
 		self.post_db.commit()
 		action = "REPORTED POST"
 		isComment = False
 		self.updateAdminTable(feed_name, body, reported_user, action, comment_id, timeString, timeStamp, isComment)
 
-	def reportComment(self, feed_name, comment_id, unique_id, reason, description, reporting_user, reported_user):
+	# def reportComment(self, feed_name, comment_id, unique_id, reason, description, reporting_user, reported_user):
+	def reportComment(self, feed_name, unique_id, reason, description, reporting_user, reported_user):
 		body = self.getCommentById(feed_name, unique_id)['body']
 		timeStamp = time.time()
 		timeString = self.getTimeString(timeStamp)
-		self.db.execute(self.db.mogrify("INSERT INTO " + self.REPORT_TABLE + "(feed_name, comment_id, unique_id, body, reason, isComment, description, timeStamp, timeString, reporting_user, reported_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (feed_name, comment_id, unique_id, body, reason, True, description, timeStamp, timeString, reporting_user, reported_user)))
+		# self.db.execute(self.db.mogrify("INSERT INTO " + self.REPORT_TABLE + "(feed_name, comment_id, unique_id, body, reason, isComment, description, timeStamp, timeString, reporting_user, reported_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (feed_name, comment_id, unique_id, body, reason, True, description, timeStamp, timeString, reporting_user, reported_user)))
+		self.db.execute(self.db.mogrify("INSERT INTO " + self.REPORT_TABLE + "(feed_name, id, body, reason, isComment, description, timeStamp, timeString, reporting_user, reported_user) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (feed_name, unique_id, body, reason, True, description, timeStamp, timeString, reporting_user, reported_user)))
 		self.post_db.commit()	
 		action = "REPORTED COMMENT"
 		isComment = True

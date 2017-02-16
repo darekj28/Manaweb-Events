@@ -44,9 +44,9 @@ export default class ReportPostModal extends React.Component {
 							<h4 className="modal-title">Report for:</h4>
 						</div>
 						<div className="modal-body" id="ReportPostModalBody">
-							<button type="button" className="btn btn-default modal-button" data-dismiss="modal" 
+							<button type="button" className="btn post-button report-button" data-dismiss="modal" 
 									onClick={this.reportForSpam.bind(this)}>Spam</button>
-							<button type="button" className="btn btn-default modal-button" data-dismiss="modal"
+							<button type="button" className="btn post-button report-button" data-dismiss="modal"
 									onClick={this.reportForInappropriate.bind(this)}>Inappropriate</button>
 						</div>
 					</div>

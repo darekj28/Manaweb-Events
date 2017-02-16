@@ -66,7 +66,7 @@ export default class AdminUserList extends React.Component {
 		    		this.deleteAccount.bind(this)(userIdToDelete);
 		    	}
 		    	else {
-		    		swal("Oops...", "Incorrect password.", "error");
+		    		swal.showInputError("Incorrect password!");
 		    	}
 		    }.bind(this)
 		});

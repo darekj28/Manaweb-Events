@@ -9,8 +9,34 @@ export default class CommentFeedPost extends React.Component {
 		$('#EditCommentModal').modal('show');
 	}
 	handleCommentDelete() {
-		this.props.refreshCommentDisplayedInModal(this.props.comment);
-		$('#DeleteCommentModal').modal('show'); 
+		var callback = function() {
+			swal({title : "Success!", 
+						text: "The comment has been deleted.", 
+						type: "success",
+						confirmButtonColor: "#80CCEE",
+		  				confirmButtonText: "OK"
+					});
+		}
+		swal({
+	      	title: "Are you sure you want to delete this comment?", 
+		    showCancelButton: true,
+	      	closeOnConfirm: false,
+	      	confirmButtonText: "Yes, I'm sure!",
+	      	confirmButtonColor: "#d9534f"}, 
+	    	function() {
+	    	var obj = {feed_name : "BALT", 
+					comment_id : this.props.comment.comment_id,
+					unique_id : this.props.comment.unique_id}
+			$.ajax({
+				type : 'POST',
+				url  : '/deleteComment',
+				data : JSON.stringify(obj, null, '\t'),
+				contentType: 'application/json;charset=UTF-8',
+				success: function(data) {
+					this.props.handleCommentDelete(this.props.comment, callback);
+				}.bind(this)
+			});
+	    }.bind(this));
 	}
 	handleCommentReport() {
 		this.props.refreshCommentDisplayedInModal(this.props.comment);

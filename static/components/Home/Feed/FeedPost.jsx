@@ -14,8 +14,33 @@ export default class FeedPost extends React.Component {
 		$('#EditPostModal').modal('show');
 	}
 	handlePostDelete() {
-		this.props.refreshPostDisplayedInModal(this.props.post);
-		$('#DeletePostModal').modal('show'); 
+		var callback = function() {
+			swal({title : "Success!", 
+						text: "The post has been deleted.", 
+						type: "success",
+						confirmButtonColor: "#80CCEE",
+		  				confirmButtonText: "OK"
+					});
+		}
+		swal({
+	      	title: "Are you sure you want to delete this post?", 
+		    showCancelButton: true,
+	      	closeOnConfirm: false,
+	      	confirmButtonText: "Yes, I'm sure!",
+	      	confirmButtonColor: "#d9534f"}, 
+	    	function() {
+	    	var obj = {unique_id : this.props.post.unique_id,
+					jwt: localStorage.jwt};
+			$.ajax({
+				type : 'POST',
+				url  : '/deletePost',
+				data : JSON.stringify(obj, null, '\t'),
+				contentType: 'application/json;charset=UTF-8',
+				success: function(data) {
+					this.props.handlePostDelete(this.props.post, callback);
+				}.bind(this)
+			});
+	    }.bind(this));
 	}
 	handlePostReport() {
 		this.props.refreshPostDisplayedInModal(this.props.post);

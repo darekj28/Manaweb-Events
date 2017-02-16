@@ -1,7 +1,6 @@
 var React = require('react');
 import CommentFeedPost from "./CommentFeedPost.jsx";
 import EditCommentModal from "./EditCommentModal.jsx";
-import DeleteCommentModal from "./DeleteCommentModal.jsx";
 import ReportCommentModal from "./ReportCommentModal.jsx";
 
 export default class CommentFeed extends React.Component {
@@ -34,7 +33,8 @@ export default class CommentFeed extends React.Component {
 				rows.push(<CommentFeedPost key={i} comment={comment} 
 						isOP={this.props.currentUser['userID']==comment.userID}
 						isAdmin={this.props.currentUser['isAdmin']} isOriginalPost={false} 
-						refreshCommentDisplayedInModal={this.refreshCommentDisplayedInModal.bind(this)}/>);
+						refreshCommentDisplayedInModal={this.refreshCommentDisplayedInModal.bind(this)}
+						handleCommentDelete={this.props.handleCommentDelete}/>);
 		}, this);
 		return rows;
 	}
@@ -44,8 +44,6 @@ export default class CommentFeed extends React.Component {
 			return (<ul id="CommentFeed">{rows}
 					<EditCommentModal comment={this.state.commentInModal} 
 										handleCommentEdit={this.props.handleCommentEdit} />
-					<DeleteCommentModal comment={this.state.commentInModal} 
-										handleCommentDelete={this.props.handleCommentDelete}/>
 					<ReportCommentModal comment={this.state.commentInModal} currentUser={this.props.currentUser}/>
 			</ul>);
 		else 

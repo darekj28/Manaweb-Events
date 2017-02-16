@@ -15,6 +15,7 @@ import Recovery from './Recovery/RecoveryApp.jsx';
 import Confirm from './Login/Confirm.jsx';
 import AdminApp from './Admin/AdminApp.jsx';
 
+swal.setDefaults({ animation : false });
 
 class Main extends React.Component {
 	render() {

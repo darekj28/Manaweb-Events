@@ -102,8 +102,14 @@ export default class CommentApp extends React.Component {
 			}
 		}
 		this.setState({ feed : feed });
+		swal({title : "Success!", 
+			text: "The comment has been edited.", 
+			type: "success",
+			confirmButtonColor: "#80CCEE",
+				confirmButtonText: "OK"
+		});
 	}
-	handleCommentDelete(post) {
+	handleCommentDelete(post, callback) {
 		var feed = this.state.feed;
 		var index;
 		for (var i = 0; i < feed.length; i++) {
@@ -113,7 +119,7 @@ export default class CommentApp extends React.Component {
 			}
 		}
 		feed.splice(index, 1);
-		this.setState({ feed : feed });
+		this.setState({ feed : feed }, callback);
 	}
 	componentWillReceiveProps(nextProps) {
 		this.setState({ comment_id : nextProps.params.comment_id });

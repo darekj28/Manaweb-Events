@@ -59,29 +59,21 @@ input {
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
-textarea {
-  letter-spacing : 0px;
-  -webkit-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
-}
 button {
   letter-spacing: 0px;
   -webkit-transition: all 0.2s ease-in-out;
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
+button:focus {
+  outline : none!important;
+}
 span {
-  -webkit-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.1s ease-in-out;
+  -o-transition: all 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out;
 }
 a {
-  -webkit-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
-}
-div {
   -webkit-transition: all 0.2s ease-in-out;
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
@@ -210,8 +202,8 @@ div {
   outline : none!important;
   background-color : var(--light);
 }
-button:focus {
-  outline : none!important;
+.report-button {
+  margin-right : 10px;
 }
 #Or {
   padding-top : 8px;
@@ -561,20 +553,6 @@ button:focus {
 }
 .AppGlyphicon {
   color:var(--light);
-}
-.modal-button {
-  width : 200px;
-  border-radius : 0px;
-  background-color : var(--light);
-  color : #fff;
-}
-.modal-button:hover {
-  background-color: var(--dark);
-  color : #fff;
-}
-.modal-button:focus {
-  background-color: var(--light);
-  color : #fff;
 }
 .app.row {
   padding-left:10px;

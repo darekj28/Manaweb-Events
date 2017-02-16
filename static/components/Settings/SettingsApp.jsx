@@ -150,7 +150,7 @@ export default class SettingsApp extends React.Component {
 		    		this.deleteAccount.bind(this)();
 		    	}
 		    	else {
-		    		swal("Oops...", "Incorrect password.", "error");
+		    		swal.showInputError("Incorrect password!");
 		    	}
 		    }.bind(this)
 		});

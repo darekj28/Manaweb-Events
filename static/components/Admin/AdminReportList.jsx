@@ -34,7 +34,7 @@ export default class AdminReportList extends React.Component {
 					<thead>
 						<tr>
 							{this.props.fields.map(function(field) {
-								if (field == "comment_id" && property != "unique_id") return;
+								if (field == "comment_id" || field == "unique_id") return;
 								if (field == this.props.activeSortField)
 									return <th className="admin-user-sort-header admin-user-active-sort-header"
 												onClick={this.handleSort.bind(this)} id={field}>

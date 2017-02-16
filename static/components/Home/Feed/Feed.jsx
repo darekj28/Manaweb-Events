@@ -1,7 +1,6 @@
 var React = require('react');
 import FeedPost from "./FeedPost.jsx";
 import EditPostModal from "./EditPostModal.jsx";
-import DeletePostModal from "./DeletePostModal.jsx";
 import ReportPostModal from "./ReportPostModal.jsx";
 
 export default class Feed extends React.Component {
@@ -52,6 +51,7 @@ export default class Feed extends React.Component {
 						isOP={this.props.currentUser['userID'] == post.userID}
 						isAdmin={this.props.currentUser['isAdmin']} 
 						refreshPostDisplayedInModal={this.refreshPostDisplayedInModal.bind(this)}
+						handlePostDelete={this.props.handlePostDelete}
 						handleFilterUser={this.props.handleFilterUser}/>);
 		}, this);
 		return rows;
@@ -63,8 +63,6 @@ export default class Feed extends React.Component {
 					<ul id="Feed" > {rows} </ul>
 					<EditPostModal post={this.state.postInModal} 
 									handlePostEdit={this.props.handlePostEdit}/>
-					<DeletePostModal post={this.state.postInModal} 
-									handlePostDelete={this.props.handlePostDelete}/>
 					<ReportPostModal post={this.state.postInModal} currentUser={this.props.currentUser}/>
 				</div>
 			);

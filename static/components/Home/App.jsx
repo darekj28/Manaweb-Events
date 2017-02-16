@@ -140,8 +140,14 @@ export default class App extends React.Component {
 			}
 		}
 		this.setState({ feed : feed });
+		swal({title : "Success!", 
+			text: "The post has been edited.", 
+			type: "success",
+			confirmButtonColor: "#80CCEE",
+				confirmButtonText: "OK"
+		});
 	}
-	handlePostDelete(post) {
+	handlePostDelete(post, callback) {
 		var feed = this.state.feed;
 		var index;
 		for (var i = 0; i < feed.length; i++) {
@@ -151,7 +157,7 @@ export default class App extends React.Component {
 			}
 		}
 		feed.splice(index, 1);
-		this.setState({ feed : feed });
+		this.setState({ feed : feed }, callback);
 	}
 	componentDidMount() {
 		AppStore.addUserChangeListener(this._onChange.bind(this));
