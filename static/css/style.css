@@ -787,9 +787,8 @@ a {
   background-color : #ff6666!important;
   color: white!important;
 }
-.admin-report-table-row:hover {
-  background-color : var(--light)!important;
-  color: white!important;
+.admin-table-icon:hover {
+  color: var(--light);
 }
 .admin-user-search {
   max-width : 25%;
@@ -812,4 +811,6 @@ a {
 }
 .admin-table-data {
   max-width : 300px;
+  text-overflow: ellipsis;
+  overflow : hidden;
 }

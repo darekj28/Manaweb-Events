@@ -20,8 +20,81 @@ export default class AdminReportList extends React.Component {
 	handleSort(e) {
 		this.props.handleSort(e.target.id);
 	}
-	goToComment(comment_id) {
+	goToPost(comment_id) {	
 		browserHistory.push('/comment/' + comment_id);
+	}
+	deletePost(comment_id, recipient) {
+		swal({
+	      	title: "Are you sure you want to delete " + recipient + "'s post?", 
+		    showCancelButton: true,
+	      	closeOnConfirm: false,
+	      	confirmButtonText: "Yes, I'm sure!",
+	      	confirmButtonColor: "#80CCEE"}, 
+	    	function() {
+	    	var obj = {unique_id : comment_id,
+					jwt: localStorage.jwt};
+			$.ajax({
+				type : 'POST',
+				url  : '/deletePost',
+				data : JSON.stringify(obj, null, '\t'),
+				contentType: 'application/json;charset=UTF-8',
+				success: function(data) {
+					swal({title : "Success!", 
+						text: "The post has been deleted.", 
+						type: "success",
+						confirmButtonColor: "#80CCEE",
+		  				confirmButtonText: "OK"
+					});
+				}.bind(this),
+				error : function() {
+					swal({title : "Sorry!", 
+						text: "This post was already deleted.", 
+						type: "error",
+						confirmButtonColor: "#80CCEE",
+		  				confirmButtonText: "OK"
+					});
+				}
+			});
+	    }.bind(this));
+	}
+	deleteComment(comment_id, unique_id, recipient) {
+		if (!unique_id) {
+			alert("Comments don't have sufficient fields in the report table!");
+			return;
+		}
+		swal({
+	      	title: "Are you sure you want to delete " + recipient + "'s comment?", 
+		    showCancelButton: true,
+	      	closeOnConfirm: false,
+	      	confirmButtonText: "Yes, I'm sure!",
+	      	confirmButtonColor: "#80CCEE"}, 
+	    	function() {
+	    	var obj = {feed_name : "BALT", 
+					comment_id : comment_id,
+					unique_id : unique_id}
+			$.ajax({
+				type : 'POST',
+				url  : '/deleteComment',
+				data : JSON.stringify(obj, null, '\t'),
+				contentType: 'application/json;charset=UTF-8',
+				success: function(data) {
+					swal({title : "Success!", 
+						text: "The comment has been deleted.", 
+						type: "success",
+						confirmButtonColor: "#80CCEE",
+		  				confirmButtonText: "OK"
+					});
+				}.bind(this),
+				error : function() {
+					swal({title : "Sorry!", 
+						text: "This comment was already deleted.", 
+						type: "error",
+						confirmButtonColor: "#80CCEE",
+		  				confirmButtonText: "OK"
+					});
+				}
+			});
+	    }.bind(this));
 	}
 	render() {
 		var icon = this.props.activeSortDirection ? "fa fa-sort-asc" : "fa fa-sort-desc";
@@ -51,10 +124,22 @@ export default class AdminReportList extends React.Component {
 								if (property != "comment_id" && property != "unique_id")
 									vals.push(report[property])
 							}
-							return <tr className="admin-report-table-row" onClick={() => {this.goToComment(report['comment_id'])}}>
-								{vals.map(function(val) {
-								return <td className="admin-table-data">{val}</td>
-								})}</tr>
+							if (report['isComment'] == 'Post')
+								return <tr>
+									{vals.map(function(val) {
+									return <td className="admin-table-data">{val}</td>
+									})}
+									<td className="admin-table-icon" onClick={() => {this.goToPost(report['comment_id'])}}><span className="fa fa-share"></span></td>
+									<td className="admin-table-icon" onClick={() => {this.deletePost.bind(this)(report['comment_id'], report['recipient'])}}><span className="fa fa-trash-o"></span></td>
+									</tr>
+							else if (report['isComment'] == 'Comment')
+								return <tr>
+									{vals.map(function(val) {
+									return <td className="admin-table-data">{val}</td>
+									})}
+									<td className="admin-table-icon"><span className="fa fa-share"></span></td>
+									<td className="admin-table-icon" onClick={() => {this.deleteComment.bind(this)(report['comment_id'], report['unique_id'], report['recipient'])}}><span className="fa fa-trash-o"></span></td>
+									</tr>
 						}.bind(this))}
 					</tbody>
 				</Table>

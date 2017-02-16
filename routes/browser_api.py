@@ -518,7 +518,10 @@ def deletePost():
 	jwt = request.json.get('jwt')
 	if unique_id != None and validateJWTAdmin(jwt):
 		post_manager = Posts()
-		post_manager.deletePost(feed_name, unique_id)
+		try : 
+			post_manager.deletePost(feed_name, unique_id)
+		except TypeError: 
+			raise
 		post_manager.closeConnection()
 	return redirect(url_for('index'))
 

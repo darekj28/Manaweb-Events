@@ -882,8 +882,6 @@ class Posts:
 		timeStamp = time.time()
 		timeString = self.getTimeString(timeStamp)
 		thisComment = self.getCommentById(feed_name, unique_id)
-		if thisComment == None:
-			return
 		action = "DELETE COMMENT"
 		isComment = True
 		self.updateAdminTable(thisComment['feed_name'], thisComment['body'], thisComment['poster_id'], action , thisComment['unique_id'], timeString, timeStamp, isComment)
