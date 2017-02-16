@@ -1,7 +1,8 @@
 var React = require('react');
 export default class ReportCommentModal extends React.Component {
 	reportForSpam() {
-		var obj = {unique_id : this.props.comment.unique_id,
+		var obj = { comment_id : this.props.comment.comment_id,
+					unique_id : this.props.comment.unique_id,
 					reported_user : this.props.comment.userID,
 					reason : "Spam",
 					currentUser : this.props.currentUser
@@ -17,7 +18,8 @@ export default class ReportCommentModal extends React.Component {
 		});
 	}
 	reportForInappropriate() {
-		var obj = {unique_id : this.props.comment.unique_id,
+		var obj = { comment_id : this.props.comment.comment_id,
+					unique_id : this.props.comment.unique_id,
 					reported_user : this.props.comment.userID,
 					reason : "Inappropriate",
 					currentUser : this.props.currentUser
