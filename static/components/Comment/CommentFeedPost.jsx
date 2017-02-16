@@ -22,7 +22,7 @@ export default class CommentFeedPost extends React.Component {
 		    showCancelButton: true,
 	      	closeOnConfirm: false,
 	      	confirmButtonText: "Yes, I'm sure!",
-	      	confirmButtonColor: "#d9534f"}, 
+	      	confirmButtonColor: "#80CCEE"}, 
 	    	function() {
 	    	var obj = {feed_name : "BALT", 
 					comment_id : this.props.comment.comment_id,
@@ -69,10 +69,10 @@ export default class CommentFeedPost extends React.Component {
 				            <ul className="CommentDropdown pull-right dropdown-menu">
 				              	{(isOP || isAdmin) && 
 				              		<li><a id="hce" onClick={this.handleCommentEdit.bind(this)}>Edit comment</a></li> }
-				              	{(isOP || isAdmin) && 
-				              		<li><a id="hcd" onClick={this.handleCommentDelete.bind(this)}>Delete comment</a></li> }
 				              	{(!isOP || isAdmin) && 
 				              		<li><a id="hcr" onClick={this.handleCommentReport.bind(this)}>Report comment</a></li> }
+				              	{(isOP || isAdmin) && 
+				              		<li><a id="hcd" onClick={this.handleCommentDelete.bind(this)}>Delete comment</a></li> }
 				            </ul>
 			        	</div>}
 			        	{this.props.isOriginalPost && 

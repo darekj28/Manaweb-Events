@@ -27,7 +27,7 @@ export default class FeedPost extends React.Component {
 		    showCancelButton: true,
 	      	closeOnConfirm: false,
 	      	confirmButtonText: "Yes, I'm sure!",
-	      	confirmButtonColor: "#d9534f"}, 
+	      	confirmButtonColor: "#80CCEE"}, 
 	    	function() {
 	    	var obj = {unique_id : this.props.post.unique_id,
 					jwt: localStorage.jwt};
@@ -85,8 +85,8 @@ export default class FeedPost extends React.Component {
 				            </a>
 				            <ul className="PostDropdown pull-right dropdown-menu">
 				              	{(isAdmin) && <li><a id="hpe" onClick={this.handlePostEdit.bind(this)}>Edit post</a></li> }
-			              		{(isAdmin) && <li><a id="hpd" onClick={this.handlePostDelete.bind(this)}>Delete post</a></li> }
 			              		{(!isOP || isAdmin) && <li><a id="hpr" onClick={this.handlePostReport.bind(this)}>Report post</a></li> }
+			              		{(isAdmin) && <li><a id="hpd" onClick={this.handlePostDelete.bind(this)}>Delete post</a></li> }
 				            </ul>
 				        </div>}	
 					</div>

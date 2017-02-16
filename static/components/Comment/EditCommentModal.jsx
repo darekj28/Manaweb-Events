@@ -32,7 +32,7 @@ export default class EditCommentModal extends React.Component {
 							<button type="button" className="close" data-dismiss="modal" aria-label="close">
 								<span aria-hidden="true">&times;</span>
 							</button>
-							<h4 className="modal-title">Edit Comment</h4>
+							<div className="modal-title">Edit Comment</div>
 						</div>
 						<div className="modal-body" id="EditCommentModalBody">
 							<textarea className="form-control edit-post" id="FeedCommentBody" 

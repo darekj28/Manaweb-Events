@@ -761,7 +761,28 @@ a {
     background-color: var(--light);
   }
 }
+.modal {
+  text-align: center;
+}
 
+@media screen and (min-width: 768px) { 
+  .modal:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: " ";
+    height: 100%;
+  }
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+.modal-title {
+  font-size : 20px;
+  font-weight : bold;
+}
 .admin-user-table-row:hover {
   background-color : #ff6666!important;
   color: white!important;

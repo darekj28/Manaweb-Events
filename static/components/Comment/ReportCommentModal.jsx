@@ -45,7 +45,7 @@ export default class ReportCommentModal extends React.Component {
 							<button type="button" className="close" data-dismiss="modal" aria-label="close">
 								<span aria-hidden="true">&times;</span>
 							</button>
-							<h4 className="modal-title">Report for :</h4>
+							<div className="modal-title">Report Comment</div>
 						</div>
 						<div className="modal-body" id="ReportCommentModalBody">
 							<button type="button" className="btn post-button report-button" data-dismiss="modal" 

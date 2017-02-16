@@ -41,7 +41,7 @@ export default class ReportPostModal extends React.Component {
 							<button type="button" className="close" data-dismiss="modal" aria-label="close">
 								<span aria-hidden="true">&times;</span>
 							</button>
-							<h4 className="modal-title">Report for:</h4>
+							<div className="modal-title">Report Post</div>
 						</div>
 						<div className="modal-body" id="ReportPostModalBody">
 							<button type="button" className="btn post-button report-button" data-dismiss="modal" 
