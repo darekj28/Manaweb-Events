@@ -115,6 +115,8 @@ export default class AdminReportList extends React.Component {
 								else return <th className="admin-user-sort-header" 
 											onClick={this.handleSort.bind(this)} id={field}>{createHeader(field)}</th>
 							}.bind(this))}
+							<th/>
+							<th/>
 						</tr>
 					</thead>
 					<tbody>
