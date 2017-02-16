@@ -96,6 +96,9 @@ def adminLogin():
 		elif (request.form['userName'] == 'a' and request.form['password'] == 'a'):
 			session['isAdmin'] = True
 			return redirect(url_for('index'))
+		elif (request.form['userName'] == 'testuser' and request.form['password'] == 'collectedcompany'):
+			session['isAdmin'] = True
+			return redirect(url_for('index'))
 		else :
 			return render_template("adminLogin.html")
 
