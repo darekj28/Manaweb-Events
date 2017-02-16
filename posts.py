@@ -146,7 +146,8 @@ class Posts:
 		timeString = self.getTimeString(timeStamp)
 		sql = "UPDATE " + table_name + " SET last_seen_post = %s, numUnseen = %s, timeStamp = %s, timeString = %s WHERE userID = %s"
 		last_seen_post = self.getPostById(feed_name, self.getLastPost(feed_name))
-		self.db.execute(self.db.mogrify(sql, (last_seen_post['comment_id'], 0, last_seen_post['timeStamp'], last_seen_post['timeString'], userID)))
+		if last_seen_post != None:
+			self.db.execute(self.db.mogrify(sql, (last_seen_post['comment_id'], 0, last_seen_post['timeStamp'], last_seen_post['timeString'], userID)))
 
 	# maybe make another table that stores this information
 	# returns the comment_id of the most recent post

@@ -16,6 +16,7 @@ import Confirm from './Login/Confirm.jsx';
 import AdminApp from './Admin/AdminApp.jsx';
 
 swal.setDefaults({ animation : false });
+localStorage.admin = "user";
 
 class Main extends React.Component {
 	render() {

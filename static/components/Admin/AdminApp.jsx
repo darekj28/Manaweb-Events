@@ -50,7 +50,7 @@ export default class AdminApp extends React.Component {
 		super(props);
 		this.state = {
 			currentUser 				: AppStore.getCurrentUser(),
-			view 						: "user",
+			view 						: localStorage.admin,
 			user_list					: [],
 			user_fields					: [],
 			userSearchQuery				: "",
@@ -111,6 +111,7 @@ export default class AdminApp extends React.Component {
 	}
 	handleSelect(view) {
 		this.setState({ view : view });
+		localStorage.admin = view;
 	}
 	handleUserSearch(query) {
 		this.setState({ userSearchQuery : query }, 
@@ -176,8 +177,8 @@ export default class AdminApp extends React.Component {
 				<div className="container admin-container app-container">
 					<PageHeader>Admin Portal</PageHeader>
 					<Nav bsStyle="tabs" activeKey={this.state.view} onSelect={this.handleSelect.bind(this)}>
-						<NavItem eventKey="report">Reports</NavItem>
 						<NavItem eventKey="user">Users</NavItem>
+						<NavItem eventKey="report">Reports</NavItem>
 					</Nav>
 					{this.state.view == "user" &&
 						<AdminUserList user_list = {this.state.user_list} fields={this.state.user_fields} 
