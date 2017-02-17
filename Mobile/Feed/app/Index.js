@@ -156,10 +156,10 @@ export default class Index extends React.Component {
 							timeString : obj['timeString']
 						})
 					}
-					this.setState({feed: feed, isLoading : false});
-					if (callback) callback();
+					this.setState({feed: feed});
 			}
 			this.setState({ isLoading : false });
+			if (callback) callback();
 		}
 		}).done()
 	}

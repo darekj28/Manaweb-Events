@@ -176,7 +176,7 @@ class FeedScreen extends Component {
 	}
 	handleTitlePress() {
 		Alert.alert('Manaweb is pressed');
-	};
+	}
 	handleRightAction() {
 		this.props.handleLogout.bind(this)();
 	}
