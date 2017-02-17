@@ -174,6 +174,11 @@ class Security:
 
 
 	def recoverAccount(self, recovery_input):
+		if recovery_input == "":
+			output = {}
+			output['result'] = 'failure'
+			output['error'] = 'Sorry. You must enter something!'
+			return output
 		# if email
 		# recoverAccountWithEmail(recovery_input)
 		# first check if it is an email
