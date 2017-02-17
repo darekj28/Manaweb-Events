@@ -25,6 +25,7 @@
     "react-native-modal-dropdown": "^0.4.0",
     "react-native-modal-picker": "0.0.16",
     "react-native-onesignal": "^3.0.3",
+    "react-native-radio-buttons": "^0.14.0",
     "react-native-router-flux": "^3.37.0",
     "react-native-vector-icons": "^3.0.0"
   },
