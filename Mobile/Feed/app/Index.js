@@ -114,8 +114,8 @@ export default class Index extends React.Component {
 	
 						}
 						this.setState({notifications: notifications})
-						if (callback) callback();
-				}    
+				}
+				if (callback) callback();    
 		})
 		.catch((error) => {
 			console.log(error);

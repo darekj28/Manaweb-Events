@@ -83,7 +83,7 @@ export default class NotificationBox extends React.Component {
             })
         })
         .catch((error) => {
-            console.log(error);
+            Alert.alert("This post was deleted.")
         });
     }
     _navigateToComment() {
