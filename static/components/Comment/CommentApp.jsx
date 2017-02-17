@@ -69,28 +69,33 @@ export default class CommentApp extends React.Component {
 	}
 	handleTypingComment(commentText) { this.setState({comment : commentText}); }
 	handleCommentSubmit(commentText) {
-		var feed = this.state.feed;
-		feed.push({ commentContent: commentText, 
-					avatar  : this.state.currentUser['avatar_url'], 
-					name    : this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
-					userID  : this.state.currentUser['userID'], 
-					time	: "just now", 
-					comment_id : this.state.comment_id
-				});
-
 		var obj = {commentContent : commentText, 
 					comment_id : this.state.comment_id,
 					currentUser : this.state.currentUser
 				};
-
 		$.ajax({
 			type : 'POST',
 			url  : '/makeComment',
 			data : JSON.stringify(obj, null, '\t'),
-		    contentType: 'application/json;charset=UTF-8'
+		    contentType: 'application/json;charset=UTF-8',
+		    success: function(data) {
+		    	if (data['result'] == 'failure') 
+		    		swal("Sorry! We couldn't post your comment.");
+		    	else {
+		    		var feed = this.state.feed;
+					feed.push({ commentContent: commentText, 
+								avatar  : this.state.currentUser['avatar_url'], 
+								name    : this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
+								userID  : this.state.currentUser['userID'], 
+								time	: "just now", 
+								comment_id : this.state.comment_id,
+								unique_id : data['unique_id']
+							});
+					this.setState({feed : feed, comment: ''});
+					$("html, body").animate({ scrollTop: $('#CommentFeed').prop('scrollHeight') }, 300);
+		    	}
+		    }.bind(this)
 		});
-		this.setState({feed : feed, comment: ''});
-		$("html, body").animate({ scrollTop: $('#CommentFeed').prop('scrollHeight') }, 300);
 	}
 	handleCommentEdit(post, editedContent) {
 		var feed = this.state.feed;
@@ -102,12 +107,6 @@ export default class CommentApp extends React.Component {
 			}
 		}
 		this.setState({ feed : feed });
-		swal({title : "Success!", 
-			text: "The comment has been edited.", 
-			type: "success",
-			confirmButtonColor: "#80CCEE",
-				confirmButtonText: "OK"
-		});
 	}
 	handleCommentDelete(post, callback) {
 		var feed = this.state.feed;

@@ -750,6 +750,8 @@ class Posts:
 		poster_id = poster_id.lower()
 		# update number of comments
 		this_post = self.getPostById(feed_name,comment_id)
+		if this_post == None:
+			return False
 		updatedNumComments = this_post['numComments'] + 1
 		update_code = "UPDATE " + feed_name  + " SET " + "numComments" + " = %s WHERE unique_id = '" + comment_id + "'"
 		self.db.execute(self.db.mogrify(update_code, (updatedNumComments,)))
@@ -770,6 +772,7 @@ class Posts:
 		for userID in participating_users:
 			if userID != poster_id:
 				self.sendNotification(feed_name, comment_id, userID, poster_id, this_post)
+		return unique_id
 
 	# sorts a list of messages
 	# the first message will be the earliest message in time
@@ -847,7 +850,11 @@ class Posts:
 		thisPost = self.getPostById(feed_name, unique_id)
 		action = "EDIT POST"
 		isComment = False
-		self.updateAdminTable(thisPost['feed_name'], thisPost['body'], thisPost['poster_id'], action, thisPost['unique_id'], timeString, timeStamp, isComment)
+		if thisPost != None:
+			self.updateAdminTable(thisPost['feed_name'], thisPost['body'], thisPost['poster_id'], action, thisPost['unique_id'], timeString, timeStamp, isComment)
+			return True
+		else:
+			return False
 
 	# edits comments 
 	# field_name should be a string
@@ -861,7 +868,11 @@ class Posts:
 		thisComment= self.getCommentById(feed_name, unique_id)
 		action = "EDIT COMMENT"
 		isComment = True
-		self.updateAdminTable(thisComment['feed_name'], thisComment['body'], thisComment['poster_id'], action , thisComment['unique_id'], timeString, timeStamp, isComment)
+		if thisComment != None:
+			self.updateAdminTable(thisComment['feed_name'], thisComment['body'], thisComment['poster_id'], action , thisComment['unique_id'], timeString, timeStamp, isComment)
+			return True
+		else:
+			return False
 
 	def deletePost(self, feed_name, unique_id):
 
@@ -872,6 +883,8 @@ class Posts:
 		isComment = False
 		if thisPost != None:
 			self.updateAdminTable(thisPost['feed_name'], thisPost['body'], thisPost['poster_id'], action , thisPost['unique_id'], timeString, timeStamp, isComment)
+		else :
+			return False
 		table_name = feed_name
 		sql = "DELETE FROM " + table_name + " WHERE unique_id = %s"
 		self.db.execute(self.db.mogrify(sql, (unique_id,)))
@@ -880,6 +893,7 @@ class Posts:
 		self.db.execute(self.db.mogrify(sql, (unique_id,)))
 		self.post_db.commit()
 		self.recalculateLastPostTable(feed_name)
+		return True
 		# this should be uncommented if we people deleting comments or posts becomes a common occurence
 		# self.recalculateUnseenPosts(feed_name)
 
@@ -889,7 +903,10 @@ class Posts:
 		thisComment = self.getCommentById(feed_name, unique_id)
 		action = "DELETE COMMENT"
 		isComment = True
-		self.updateAdminTable(thisComment['feed_name'], thisComment['body'], thisComment['poster_id'], action , thisComment['unique_id'], timeString, timeStamp, isComment)
+		if thisComment != None:
+			self.updateAdminTable(thisComment['feed_name'], thisComment['body'], thisComment['poster_id'], action , thisComment['unique_id'], timeString, timeStamp, isComment)
+		else : 
+			return False
 		# update number of comments
 		this_post = self.getPostById(feed_name,thisComment['comment_id'])
 		updatedNumComments = this_post['numComments'] - 1
@@ -900,6 +917,7 @@ class Posts:
 		sql = "DELETE FROM " + table_name + " WHERE unique_id = %s"
 		self.db.execute(self.db.mogrify(sql, (unique_id,)))
 		self.post_db.commit()
+		return True
 
 	# returns list of all users in a thread, all user id's are returned as strings
 	def getParticipatingUsers(self, feed_name, unique_id):

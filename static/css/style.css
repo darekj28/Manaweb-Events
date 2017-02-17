@@ -33,7 +33,7 @@
     max-width: 1000px;
   }
   .admin-container {
-    max-width: 1200px!important;
+    max-width: 1080px!important;
   }
 }
 body {
@@ -77,6 +77,9 @@ a {
   -webkit-transition: all 0.2s ease-in-out;
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
+}
+textarea{
+  overflow-y: hidden;
 }
 .inner-addon { 
     position: relative; 
@@ -334,6 +337,7 @@ a {
 }
 .unclickable-name:hover {
   background-color: white!important;
+  color: var(--main-color)!important;
 }
 #NoNewNotifications {
   list-style-type: none;
@@ -764,7 +768,27 @@ a {
 .modal {
   text-align: center;
 }
-
+.modal-icon-report {
+  margin-right : 12px;
+}
+.modal-icon-edit {
+  margin-right : 10px;
+}
+.modal-icon-delete {
+  margin-left : 0.5px;
+  margin-right : 12px;
+}
+.modal-icon-admin {
+  margin-right : 10px;
+}
+.modal-icon-settings {
+  margin-left: 1px;
+  margin-right : 12px;
+}
+.modal-icon-logout {
+  margin-left: 1px;
+  margin-right : 10px;
+}
 @media screen and (min-width: 768px) { 
   .modal:before {
     display: inline-block;

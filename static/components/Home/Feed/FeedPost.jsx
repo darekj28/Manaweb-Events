@@ -1,6 +1,7 @@
 var React = require('react');
 var Link = require('react-router').Link;
 import Avatar from "./Avatar.jsx";
+import AppStore from '../../../stores/AppStore.jsx';
 import FeedPostHeader from "./FeedPostHeader.jsx";
 import FeedPostBody from "./FeedPostBody.jsx";
 
@@ -29,7 +30,9 @@ export default class FeedPost extends React.Component {
 	      	confirmButtonText: "Yes, I'm sure!",
 	      	confirmButtonColor: "#80CCEE"}, 
 	    	function() {
-	    	var obj = {unique_id : this.props.post.unique_id,
+	    	var obj = {
+	    			userID : AppStore.getCurrentUser()['userID'],
+	    			unique_id : this.props.post.unique_id,
 					jwt: localStorage.jwt};
 			$.ajax({
 				type : 'POST',
@@ -37,7 +40,15 @@ export default class FeedPost extends React.Component {
 				data : JSON.stringify(obj, null, '\t'),
 				contentType: 'application/json;charset=UTF-8',
 				success: function(data) {
-					this.props.handlePostDelete(this.props.post, callback);
+					if (data['result'] == 'success')
+						this.props.handlePostDelete(this.props.post, callback);
+					else
+						swal({title : "Sorry!", 
+							text: "This post was already deleted.", 
+							type: "error",
+							confirmButtonColor: "#80CCEE",
+								confirmButtonText: "OK"
+						});
 				}.bind(this)
 			});
 	    }.bind(this));
@@ -77,18 +88,17 @@ export default class FeedPost extends React.Component {
 							{post.numberOfComments == 0 && <span className="noComments pull-left"><h6>Be the first to comment!</h6></span>}
 							</Link>
 						</div>
-						{ ((isAdmin || !isOP) && post.userID != "$DELETED_USER") && 
 						<div className="dropdown pull-right" id={"dropdown_" + post.comment_id} onClick={this.scrollToDropdown.bind(this)}>
 							<a href="#" className="dropdown-toggle" data-toggle="dropdown">
 				                <span className="glyphicon glyphicon-option-horizontal 
 				                				pull-right PostBottomIcon AppGlyphicon"></span>
 				            </a>
 				            <ul className="PostDropdown pull-right dropdown-menu">
-				              	{(isAdmin) && <li><a id="hpe" onClick={this.handlePostEdit.bind(this)}>Edit post</a></li> }
-			              		{(!isOP || isAdmin) && <li><a id="hpr" onClick={this.handlePostReport.bind(this)}>Report post</a></li> }
-			              		{(isAdmin) && <li><a id="hpd" onClick={this.handlePostDelete.bind(this)}>Delete post</a></li> }
+				            	<li><a id="hpr" onClick={this.handlePostReport.bind(this)}><span className="fa fa-exclamation-circle modal-icon-report"/>Report post</a></li>
+				              	{(isOP || isAdmin) && <li><a id="hpe" onClick={this.handlePostEdit.bind(this)}><span className="fa fa-pencil-square-o modal-icon-edit"/>Edit post</a></li> }
+			              		{(isOP || isAdmin) && <li><a id="hpd" onClick={this.handlePostDelete.bind(this)}><span className="fa fa-trash-o modal-icon-delete"/>Delete post</a></li> }
 				            </ul>
-				        </div>}	
+				        </div>
 					</div>
 				</div>
 			</li>

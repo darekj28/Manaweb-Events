@@ -33,7 +33,15 @@ export default class CommentFeedPost extends React.Component {
 				data : JSON.stringify(obj, null, '\t'),
 				contentType: 'application/json;charset=UTF-8',
 				success: function(data) {
-					this.props.handleCommentDelete(this.props.comment, callback);
+					if (data['result'] == 'success')
+						this.props.handleCommentDelete(this.props.comment, callback);
+					else
+						swal({title : "Sorry!", 
+							text: "This comment was already deleted.", 
+							type: "error",
+							confirmButtonColor: "#80CCEE",
+							confirmButtonText: "OK"
+						});
 				}.bind(this)
 			});
 	    }.bind(this));
@@ -59,20 +67,17 @@ export default class CommentFeedPost extends React.Component {
 					<div className="row"><CommentFeedPostBody content={comment.commentContent} 
 									isOriginalPost={this.props.isOriginalPost}/></div>
 					<div className="PostFooter row">
-						{(!this.props.isOriginalPost && comment.userID != "$DELETED_USER") && 
-						<div className="dropdown" id={"commentdropdown_" + comment.unique_id}>
+						{!this.props.isOriginalPost && <div className="dropdown" id={"commentdropdown_" + comment.unique_id}>
 							<a href="#" className="dropdown-toggle pull-right" 
 										data-toggle="dropdown" onClick={this.scrollToDropdown.bind(this)}>
 				                <span className="glyphicon glyphicon-option-horizontal 
 				                				pull-right CommentBottomIcon AppGlyphicon"></span>
 				            </a>
+				            
 				            <ul className="CommentDropdown pull-right dropdown-menu">
-				              	{(isOP || isAdmin) && 
-				              		<li><a id="hce" onClick={this.handleCommentEdit.bind(this)}>Edit comment</a></li> }
-				              	{(!isOP || isAdmin) && 
-				              		<li><a id="hcr" onClick={this.handleCommentReport.bind(this)}>Report comment</a></li> }
-				              	{(isOP || isAdmin) && 
-				              		<li><a id="hcd" onClick={this.handleCommentDelete.bind(this)}>Delete comment</a></li> }
+				            	<li><a id="hcr" onClick={this.handleCommentReport.bind(this)}><span className="fa fa-exclamation-circle modal-icon-report"/>Report comment</a></li>
+				              	{(isOP || isAdmin) && <li><a id="hce" onClick={this.handleCommentEdit.bind(this)}><span className="fa fa-pencil-square-o modal-icon-edit"/>Edit comment</a></li> }
+				              	{(isOP || isAdmin) && <li><a id="hcd" onClick={this.handleCommentDelete.bind(this)}><span className="fa fa-trash-o modal-icon-delete"/>Delete comment</a></li> }
 				            </ul>
 			        	</div>}
 			        	{this.props.isOriginalPost && 

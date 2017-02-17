@@ -140,12 +140,6 @@ export default class App extends React.Component {
 			}
 		}
 		this.setState({ feed : feed });
-		swal({title : "Success!", 
-			text: "The post has been edited.", 
-			type: "success",
-			confirmButtonColor: "#80CCEE",
-				confirmButtonText: "OK"
-		});
 	}
 	handlePostDelete(post, callback) {
 		var feed = this.state.feed;

@@ -1,6 +1,9 @@
 var React = require('react');
 var browserHistory = require('react-router').browserHistory;
 import {Button, Table} from 'react-bootstrap';
+import EditPostModal from '../Home/Feed/EditPostModal.jsx';
+import EditCommentModal from '../Comment/EditCommentModal.jsx';
+import AppStore from '../../stores/AppStore.jsx';
 function createHeader(field) {
 	if (field == "post") return "Reported Post";
 	else if (field == "reason") return "Violation";
@@ -13,6 +16,10 @@ function createHeader(field) {
 export default class AdminReportList extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			postInModal : {},
+			commentInModal : {}
+		}
 	}
 	handleSearch(e) {
 		this.props.handleSearch(e.target.value);
@@ -20,8 +27,22 @@ export default class AdminReportList extends React.Component {
 	handleSort(e) {
 		this.props.handleSort(e.target.id);
 	}
-	goToPost(comment_id) {	
+	goToPost(comment_id, PRANK) {	
+		if (PRANK) {
+			swal("Comments don't have sufficient fields in the report table!");
+			return;
+		}
 		browserHistory.push('/comment/' + comment_id);
+	}
+	editPost(content, unique_id) {
+		var obj = {postContent : content, unique_id : unique_id};
+		this.setState({postInModal : obj});
+		$('#EditPostModal').modal('show');
+	}
+	editComment(content, unique_id) {
+		var obj = {commentContent : content, unique_id : unique_id};
+		this.setState({commentInModal : obj});
+		$('#EditCommentModal').modal('show');
 	}
 	deletePost(comment_id, recipient) {
 		swal({
@@ -32,6 +53,7 @@ export default class AdminReportList extends React.Component {
 	      	confirmButtonColor: "#80CCEE"}, 
 	    	function() {
 	    	var obj = {unique_id : comment_id,
+	    			userID : AppStore.getCurrentUser()['userID'],
 					jwt: localStorage.jwt};
 			$.ajax({
 				type : 'POST',
@@ -39,12 +61,20 @@ export default class AdminReportList extends React.Component {
 				data : JSON.stringify(obj, null, '\t'),
 				contentType: 'application/json;charset=UTF-8',
 				success: function(data) {
-					swal({title : "Success!", 
-						text: "The post has been deleted.", 
-						type: "success",
-						confirmButtonColor: "#80CCEE",
-		  				confirmButtonText: "OK"
-					});
+					if (data['result'] == 'success')
+						swal({title : "Success!", 
+							text: "The post has been deleted.", 
+							type: "success",
+							confirmButtonColor: "#80CCEE",
+			  				confirmButtonText: "OK"
+						});
+					else
+						swal({title : "Sorry!", 
+							text: "This post was already deleted.", 
+							type: "error",
+							confirmButtonColor: "#80CCEE",
+			  				confirmButtonText: "OK"
+						});
 				}.bind(this),
 				error : function() {
 					swal({title : "Sorry!", 
@@ -59,7 +89,7 @@ export default class AdminReportList extends React.Component {
 	}
 	deleteComment(comment_id, unique_id, recipient) {
 		if (!unique_id) {
-			alert("Comments don't have sufficient fields in the report table!");
+			swal("Comments don't have sufficient fields in the report table!");
 			return;
 		}
 		swal({
@@ -78,12 +108,20 @@ export default class AdminReportList extends React.Component {
 				data : JSON.stringify(obj, null, '\t'),
 				contentType: 'application/json;charset=UTF-8',
 				success: function(data) {
-					swal({title : "Success!", 
-						text: "The comment has been deleted.", 
-						type: "success",
-						confirmButtonColor: "#80CCEE",
-		  				confirmButtonText: "OK"
-					});
+					if (data['result'] == 'success')
+						swal({title : "Success!", 
+							text: "The comment has been deleted.", 
+							type: "success",
+							confirmButtonColor: "#80CCEE",
+			  				confirmButtonText: "OK"
+						});
+					else
+						swal({title : "Sorry!", 
+							text: "This comment was already deleted.", 
+							type: "error",
+							confirmButtonColor: "#80CCEE",
+			  				confirmButtonText: "OK"
+						});
 				}.bind(this),
 				error : function() {
 					swal({title : "Sorry!", 
@@ -117,6 +155,7 @@ export default class AdminReportList extends React.Component {
 							}.bind(this))}
 							<th/>
 							<th/>
+							<th/>
 						</tr>
 					</thead>
 					<tbody>
@@ -132,6 +171,7 @@ export default class AdminReportList extends React.Component {
 									return <td className="admin-table-data">{val}</td>
 									})}
 									<td className="admin-table-icon" onClick={() => {this.goToPost(report['comment_id'])}}><span className="fa fa-share"></span></td>
+									<td className="admin-table-icon" onClick={() => {this.editPost.bind(this)(report['post'], report['comment_id'])}}><span className="fa fa-edit"></span></td>
 									<td className="admin-table-icon" onClick={() => {this.deletePost.bind(this)(report['comment_id'], report['recipient'])}}><span className="fa fa-trash-o"></span></td>
 									</tr>
 							else if (report['isComment'] == 'Comment')
@@ -139,12 +179,15 @@ export default class AdminReportList extends React.Component {
 									{vals.map(function(val) {
 									return <td className="admin-table-data">{val}</td>
 									})}
-									<td className="admin-table-icon"><span className="fa fa-share"></span></td>
+									<td className="admin-table-icon" onClick={() => {this.goToPost(report['comment_id'], 'PRANK')}}><span className="fa fa-share"></span></td>
+									<td className="admin-table-icon" onClick={() => {this.editComment.bind(this)(report['post'], report['comment_id'])}}><span className="fa fa-edit"></span></td>
 									<td className="admin-table-icon" onClick={() => {this.deleteComment.bind(this)(report['comment_id'], report['unique_id'], report['recipient'])}}><span className="fa fa-trash-o"></span></td>
 									</tr>
 						}.bind(this))}
 					</tbody>
 				</Table>
+				<EditPostModal post={this.state.postInModal}/>
+				<EditCommentModal comment={this.state.commentInModal}/>
 			</div>
 		);
 	}

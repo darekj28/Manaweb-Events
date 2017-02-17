@@ -418,22 +418,29 @@ def editComment():
 	field_name = request.json['field_name']
 	field_data = request.json['field_data']
 	post_manager = Posts()
-	post_manager.editComment(feed_name, unique_id, field_name, field_data)
+	success = post_manager.editComment(feed_name, unique_id, field_name, field_data)
 	post_manager.closeConnection()
-	return redirect(url_for('index'))
+	if success :
+		return jsonify({ 'result' : 'success' })
+	else :
+		return jsonify({ 'result' : 'failure' })
 	
 @browser_api.route('/editPost', methods = ['POST'])
 def editPost():
 	feed_name = DEFAULT_FEED
+	userID = request.json['userID']
 	unique_id = request.json['unique_id']
 	field_name = request.json['field_name']
 	field_data = request.json['field_data']
 	jwt = request.json['jwt']
-	if validateJWTAdmin(jwt):
+	if validateJWT(jwt, userID) or validateJWTAdmin(jwt):
 		post_manager = Posts()
-		post_manager.editPost(feed_name, unique_id, field_name, field_data)
+		success = post_manager.editPost(feed_name, unique_id, field_name, field_data)
 		post_manager.closeConnection()
-		return redirect(url_for('index'))
+		if success :
+			return jsonify({ 'result' : 'success' })
+		else :
+			return jsonify({ 'result' : 'failure' })
 	else:
 		return jsonify({ 'result' : 'failure' })
 	
@@ -506,24 +513,30 @@ def makeComment():
 	unique_id = None
 	post_manager = Posts()
 	userID = request.json['currentUser']['userID']
-	post_manager.makeComment(feed_name, comment_id, commentContent, userID, unique_id = unique_id)
+	unique_id = post_manager.makeComment(feed_name, comment_id, commentContent, userID, unique_id = unique_id)
 	post_manager.closeConnection()	
-	return jsonify({'result' : 'success'})
+	if not unique_id:
+		return jsonify({'result' : 'failure'})
+	else:
+		return jsonify({'result' : 'success', 'unique_id' : unique_id})
 
 @browser_api.route('/deletePost', methods = ['POST'])
 def deletePost():
 	# feed_name = request.form.get('feed_name')
 	feed_name = DEFAULT_FEED
 	unique_id = request.json.get('unique_id')
+	userID = request.json.get('userID')
 	jwt = request.json.get('jwt')
-	if unique_id != None and validateJWTAdmin(jwt):
+	if validateJWT(jwt, userID) or validateJWTAdmin(jwt):
 		post_manager = Posts()
-		try : 
-			post_manager.deletePost(feed_name, unique_id)
-		except TypeError: 
-			raise
+		success = post_manager.deletePost(feed_name, unique_id)
 		post_manager.closeConnection()
-	return redirect(url_for('index'))
+		if success :
+			return jsonify({ 'result' : 'success' })
+		else :
+			return jsonify({ 'result' : 'failure' })
+	else :
+		return jsonify({ 'result' : 'failure' })
 
 
 @browser_api.route('/deleteComment', methods = ['POST'])
@@ -532,9 +545,12 @@ def deleteComment():
 	# feed_name = request.form.get('feed_name')
 	unique_id = request.json.get('unique_id')
 	post_manager = Posts()
-	post_manager.deleteComment(feed_name, unique_id)
+	success = post_manager.deleteComment(feed_name, unique_id)
 	post_manager.closeConnection()
-	return redirect(url_for('index'))
+	if success :
+		return jsonify({ 'result' : 'success' })
+	else :
+		return jsonify({ 'result' : 'failure' })
 
 @browser_api.route('/reportPost', methods = ['POST'])
 def reportPost():

@@ -1,4 +1,6 @@
 var React = require('react');
+import AppStore from '../../../stores/AppStore.jsx';
+
 export default class EditPostModal extends React.Component {
 	constructor(props) {
 		super(props);
@@ -9,6 +11,7 @@ export default class EditPostModal extends React.Component {
 	}
 	handlePostEditSubmit() {
 		var obj = {unique_id : this.props.post.unique_id,
+					userID : AppStore.getCurrentUser()['userID'],
 						field_name : "body", 
 						field_data : this.state.postContent,
 						jwt : localStorage.jwt};
@@ -17,9 +20,34 @@ export default class EditPostModal extends React.Component {
 			type : 'POST',
 			url  : '/editPost',
 			data : JSON.stringify(obj, null, '\t'),
-			contentType: 'application/json;charset=UTF-8'
+			contentType: 'application/json;charset=UTF-8',
+			success : function(data) {
+				if (data['result'] == 'success')
+					swal({title : "Success!", 
+						text: "The post has been edited.", 
+						type: "success",
+						confirmButtonColor: "#80CCEE",
+							confirmButtonText: "OK"
+					});
+				else 
+					swal({title : "Sorry!", 
+						text: "This post was deleted.", 
+						type: "error",
+						confirmButtonColor: "#80CCEE",
+							confirmButtonText: "OK"
+					});
+			},
+			error : function(data) {
+				swal({title : "Sorry!", 
+					text: "This post was deleted.", 
+					type: "error",
+					confirmButtonColor: "#80CCEE",
+						confirmButtonText: "OK"
+				});
+			}
 		});
-		this.props.handlePostEdit(this.props.post, this.state.postContent);
+		if (this.props.handlePostEdit)
+			this.props.handlePostEdit(this.props.post, this.state.postContent);
 	}
 	componentWillReceiveProps(nextProps) {
 		this.setState({ postContent : nextProps.post.postContent });

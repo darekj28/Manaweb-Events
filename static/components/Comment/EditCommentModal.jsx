@@ -16,9 +16,34 @@ export default class EditCommentModal extends React.Component {
 			type : 'POST',
 			url  : '/editComment',
 			data : JSON.stringify(obj, null, '\t'),
-			contentType: 'application/json;charset=UTF-8'
+			contentType: 'application/json;charset=UTF-8',
+			success : function(data) {
+				if (data['result'] == 'success')
+					swal({title : "Success!", 
+							text: "The comment has been edited.", 
+							type: "success",
+							confirmButtonColor: "#80CCEE",
+								confirmButtonText: "OK"
+						});
+				else 
+					swal({title : "Sorry!", 
+						text: "This comment was deleted.", 
+						type: "error",
+						confirmButtonColor: "#80CCEE",
+							confirmButtonText: "OK"
+					});
+			},
+			error : function(data) {
+				swal({title : "Sorry!", 
+					text: "This comment was deleted.", 
+					type: "error",
+					confirmButtonColor: "#80CCEE",
+						confirmButtonText: "OK"
+				});
+			}
 		});
-		this.props.handleCommentEdit(this.props.comment, this.state.commentContent);
+		if (this.props.handleCommentEdit)
+			this.props.handleCommentEdit(this.props.comment, this.state.commentContent);
 	}
 	componentWillReceiveProps(nextProps) {
 		this.setState({ commentContent : nextProps.comment.commentContent });
