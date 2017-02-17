@@ -3,19 +3,28 @@ import { Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,Li
 		TouchableOpacity,TouchableHighlight, TextInput,
           Alert, Image, Animated, TouchableWithoutFeedback, ScrollView} from 'react-native';
 import _ from 'lodash'
+import {Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import RegisterHeader from '../components/register/RegisterHeader';
+import dismissKeyboard from 'react-native-dismiss-keyboard';
+import SegmentedControls from 'react-native-radio-buttons'
 
 export default class RecoveryScreen extends React.Component {
 	constructor(){
 		super();
 		this.state = {
 			input : "",
-      input_response: {},
-      valid_input_submitted: "",
-      email_confirmation_pin : "",
-      text_confirmation_pin: "",
-      confirmation_pin_input: "",
-      username: ""
+      		input_response: {},
+      		valid_input_submitted: "",
+      		email_confirmation_pin : "",
+      		text_confirmation_pin: "",
+      		confirmation_pin_input: "",
+      		username: "",
+			input_placeholder: "Username, email or phone number",
+			description: "Enter your username, email, or phone number",
+			button_text: "Next",
+			confirmation_page: false,
+			selectedOption: "Option 1"
 		};
 	}
 	handleInputChange(input) {
@@ -24,59 +33,6 @@ export default class RecoveryScreen extends React.Component {
 
   handleConfirmationInputChange(confirmation_pin_input){
     this.setState({confirmation_pin_input : confirmation_pin_input})
-  }
-
-  genrateTopBar(){
-    return (
-      <View style = {styles.top_bar}>
-              <TouchableOpacity style = {styles.back_button}
-                onPress = {() => this.props.navigator.pop()}>
-                <Icon name = "chevron-left" size = {20}/>
-              </TouchableOpacity>
-               <Image
-                style={styles.logo}
-                source={require('../static/favicon-32x32.png')}
-              />
-              <View style = {styles.cog_box}>
-                <Icon name = "cog" size = {20} style = {styles.cog}/> 
-              </View>
-            </View>
-      )
-  }
-
-  generateInputEntry(){
-    return (
-          <View style = {styles.input_row}>
-              <View style = {styles.input_box}> 
-                <TextInput
-                  onChangeText = {this.handleInputChange.bind(this)}
-                  style = {styles.input_text} placeholder = "Username, email or phone number"
-                  maxLength = {20} value = {this.state.input} />
-              { this.state.input != "" &&
-              <View style = {styles.clear_button}>
-                <Icon name = "close" size = {20} onPress = {this.clearInput.bind(this)}/>
-              </View> }
-              </View>
-            </View>
-      )
-  }
-
-
-  generateConfirmationPinEntry(){
-    return (
-      <View style = {styles.input_row}>
-              <View style = {styles.input_box}> 
-                <TextInput
-                  onChangeText = {this.handleConfirmationInputChange.bind(this)}
-                  style = {styles.input_text} placeholder = "Enter your confirmation pin"
-                  maxLength = {20} value = {this.state.confirmation_pin_input} />
-              { this.state.confirmation_pin_input != "" &&
-              <View style = {styles.clear_button}>
-                <Icon name = "close" size = {20} onPress = {this.clearPinEntry.bind(this)}/>
-              </View> }
-              </View>
-            </View>
-      )
   }
 
   clearInput(){
@@ -89,7 +45,11 @@ export default class RecoveryScreen extends React.Component {
 
   handleSubmit(){
     if (this.state.email_confirmation_pin == "" && this.state.text_confirmation_pin == "") {
-      this.handleInputSubmit.bind(this)()
+		this.setState({input_placeholder: "Confirmation pin"})
+		this.setState({description: "Enter your confirmation pin"})
+		this.setState({confirmation_page: true})
+		this.clearInput()
+      	this.handleInputSubmit.bind(this)()
     }
     else {
       this.checkConfirmationPin.bind(this)()
@@ -97,7 +57,7 @@ export default class RecoveryScreen extends React.Component {
   }
 
   checkConfirmationPin() {
-    if (this.state.confirmation_pin_input == this.state.email_confirmation_pin || 
+    if (this.state.confirmation_pin_input == this.state.email_confirmation_pin ||
       this.state.confirmation_pin_input == this.state.text_confirmation_pin)
     {
       alert("Nice man! You got it right!")
@@ -131,8 +91,8 @@ export default class RecoveryScreen extends React.Component {
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-        }, 
-      body: 
+        },
+      body:
       JSON.stringify(
        {
         recovery_input : this.state.input
@@ -140,52 +100,50 @@ export default class RecoveryScreen extends React.Component {
     })
     .then((response) => response.json())
     .then((responseData) => {
-      this.setState({input_response : responseData})
-      if (responseData.result == 'success') {
-        this.setState({username : responseData.username})
-        var email = responseData.email
-        var phone_number = responseData.phone_number
+		this.setState({input_response : responseData})
+      	if (responseData.result == 'success') {
+        	this.setState({username : responseData.username})
+        	var email = responseData.email
+        	var phone_number = responseData.phone_number
 
-        var hasEmail = (email != null && email != "")
-        var hasPhoneNumber = (phone_number != null && phone_number.length > 13)
+        	var hasEmail = (email != null && email != "")
+        	var hasPhoneNumber = (phone_number != null && phone_number.length > 13)
 
-        var alert_text = ""
-        // if (hasEmail && hasPhoneNumber) alert_text = "A confirmation pin will be sent to " + email + " and " + phone_number
-        // else if (hasEmail) alert_text = "A confirmation pin will be sent to  " + email
-        // else if (hasPhoneNumber) alert_text = "A confirmation pin will be sent to  " + phone_number
-        if (hasEmail && hasPhoneNumber)
-          Alert.alert(
-            "Choose your confirmation method",
-            "SMS fees may apply",
-              [
-                {text: "This is not me!", style: 'cancel'},
-                {text: 'Send a text to ' + phone_number, onPress: () => this.sendTextConfirmation.bind(this)()},
-                {text: 'Send an email to ' + email, onPress: () => this.sendEmailConfirmation.bind(this)()}
-              ])
-        else if (hasEmail)
-          Alert.alert(
-            "Choose your confirmation method",
-            "SMS fees may apply",
-              [
-                {text: "This is not me!", style: 'cancel'},
-                {text: 'Send an email to ' + email, onPress: () => this.sendEmailConfirmation.bind(this)()}
-              ])
-          }
-        else if (hasPhoneNumber)
-          Alert.alert(
-            "Choose your confirmation method",
-            "SMS fees may apply",
-              [
-                {text: "This is not me!", style: 'cancel'},
-                {text: 'Send a text to ' + phone_number, onPress: () => this.sendTextConfirmation.bind(this)()}
-              ])
-
-      else {
-        alert("Invalid input, try again")
-         }
-      // this.setState({validation_output : responseData})
-    })
-    .done();
+        	var alert_text = ""
+	        // if (hasEmail && hasPhoneNumber) alert_text = "A confirmation pin will be sent to " + email + " and " + phone_number
+	        // else if (hasEmail) alert_text = "A confirmation pin will be sent to  " + email
+	        // else if (hasPhoneNumber) alert_text = "A confirmation pin will be sent to  " + phone_number
+	        if (hasEmail && hasPhoneNumber) {
+				Alert.alert(
+	              "Choose your confirmation method",
+	              "SMS fees may apply",
+	                [
+	                  {text: "This is not me!", style: 'cancel'},
+	                  {text: 'Send a text to ' + phone_number, onPress: () => this.sendTextConfirmation.bind(this)()},
+	                  {text: 'Send an email to ' + email, onPress: () => this.sendEmailConfirmation.bind(this)()}
+	                ])
+			} else if (hasEmail) {
+				Alert.alert(
+	              "Choose your confirmation method",
+	              "SMS fees may apply",
+	                [
+	                  {text: "This is not me!", style: 'cancel'},
+	                  {text: 'Send an email to ' + email, onPress: () => this.sendEmailConfirmation.bind(this)()}
+	                ])
+			} else if (hasPhoneNumber) {
+				Alert.alert(
+	              "Choose your confirmation method",
+	              "SMS fees may apply",
+	                [
+	                  {text: "This is not me!", style: 'cancel'},
+	                  {text: 'Send a text to ' + phone_number, onPress: () => this.sendTextConfirmation.bind(this)()}
+	                ])
+			}
+		} else {
+	        alert("Invalid input, try again")
+		}
+	      // this.setState({validation_output : responseData})
+	}).done();
   }
 
 
@@ -196,8 +154,8 @@ export default class RecoveryScreen extends React.Component {
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-        }, 
-      body: 
+        },
+      body:
       JSON.stringify(
        {
         email : this.state.input_response.email
@@ -217,8 +175,8 @@ export default class RecoveryScreen extends React.Component {
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-        }, 
-      body: 
+        },
+      body:
       JSON.stringify(
        {
         phone_number : this.state.input_response.phone_number
@@ -231,184 +189,68 @@ export default class RecoveryScreen extends React.Component {
     .done();
   }
 
-  generateInstructionText() {
-    var email = this.state.input_response.email
-    var phone_number = this.state.input_response.phone_number
-    var hasEmail = (email != null && email != "")
-    var hasPhoneNumber = (phone_number != null && email != "")
-    var alert_text = ""
-    if (this.state.email_confirmation_pin != "") alert_text = email
-    if (this.state.text_confirmation_pin != "") alert_text = phone_number
-
-    if (this.state.email_confirmation_pin == "" && this.state.text_confirmation_pin == "")
-         var instructions = <View style = {styles.instruction_box}> 
-                              <Text style = {styles.instruction_text}>
-                                Enter your username, email or phone number
-                              </Text>
-                          </View>
-
-    else var instructions =   <View style=  {styles.instruction_box}>                  
-                <Text style = {{fontSize : 24}}> 
-                  Your username is {this.state.username}. Enter the confirmation pin sent to {alert_text}
-                </Text> 
-            </View>
-    return instructions
-  }
-
-
-	render() {
-    var top_bar = this.genrateTopBar.bind(this)()
-    var instruction_box = this.generateInstructionText.bind(this)()
-    
-    if (this.state.email_confirmation_pin == "" && this.state.text_confirmation_pin == "") {
-      var input_entry = this.generateInputEntry.bind(this)()
-      }
-    else {
-     var input_entry = this.generateConfirmationPinEntry.bind(this)() 
-   }
-
-
-
-
+ 	render() {
+		var {height, width} = Dimensions.get('window');
 		return (
-        <View style = {styles.container}>
-            {top_bar}
-            
-           
-            {instruction_box}
-
-          <View style = {styles.small_padding}/>
-          {/* <View style = {styles.small_padding} /> */}
-          {input_entry}
-
-          <View style = {{flex: 0.025}}/>
-            <View style = {styles.large_padding} />
-             <View style = {styles.bottom_bar}>
-              <TouchableOpacity style = {styles.next} onPress = {this.handleSubmit.bind(this)}>
-                <Text style = {styles.next_text}>
-                  Next!
-                </Text>
-              </TouchableOpacity>
-             </View>
-          </View>
-			)
+			<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
+				<View style={[styles.container, {height: height}]}>
+					<RegisterHeader navigator={this.props.navigator}/>
+					<View style={{flex : 1, flexDirection : 'column'}}>
+						<View style={{flex : 2}}>
+							<View style={{flex : 1.0, alignItems : 'center', justifyContent : 'center'}}>
+								<Text style={{fontSize : 18}}>{this.state.description}</Text>
+								{this.state.confirmationPin &&
+									<Text style={{fontSize : 18}}>SMS fee may apply</Text>
+								}
+							</View>
+							<View style={{flex : 0.6}}/>
+							<View style={{flex : 1, justifyContent : 'center'}}>
+								<View style={styles.input_wrapper}>
+									<TextInput
+                  						onChangeText = {this.handleInputChange.bind(this)}
+                  						style = {styles.input_text}
+										placeholder = {this.state.input_placeholder}
+                  						maxLength = {40}
+										value = {this.state.input} />
+								</View>
+							</View>
+							<View style={{flex : 0.1}}/>
+						</View>
+						<View style = {{flex : 1, alignItems : 'center'}}>
+							<TouchableOpacity style={{flex : 1}} onPress = {this.handleSubmit.bind(this)}>
+								<View style = {styles.button}>
+									<Text style={styles.button_text}>{this.state.button_text}</Text>
+								</View>
+							</TouchableOpacity>
+							<View style={{flex : 0.5}}/>
+							<View style={{flex : 0.5}}/>
+						</View>
+						<View style = {{flex : 3}}/>
+					</View>
+				</View>
+			</TouchableWithoutFeedback>
+		)
 	}
 }
 
 const styles = StyleSheet.create({
-   container: {
-    flex: 1,
-    flexDirection : "column",
-    justifyContent: 'space-between',
-    padding : 10,
-    paddingTop: 40,
-    backgroundColor: "white",
-  },
-
-
-  top_bar : {
-    flex : 0.05,
-    flexDirection : "row",
-    justifyContent: "space-around",
-    // backgroundColor: "coral",
-    alignItems: "center"
-  },
-
-  back_button :{
-    flex : 1,
-  },
-
-  back_button_text: {
-
-  },
-
-  logo: {
-    flex : 1,
-    resizeMode: "contain"
-  },
-
-  cog_box: {
-    flex:1,
-    flexDirection : "row",
-    justifyContent : "flex-end"
-  },
-  // cog : {
-  // },
-
-  instruction_box :{
-    flex : 0.075,
-  },
-
-  instruction_text : {
-    fontSize : 24
-  },
-
-  input_row: {
-    flexDirection: "row",
-    flex : 0.075,
-  },
-  input_box: {
-    flexDirection : "row",
-    flex: 0.075,
-    borderColor: "skyblue",
-    borderWidth : 1,
-    borderRadius : 5
-    // backgroundColor: "skyblue"
-  },
-
-  input_text :{
-    flex: 0.65,
-    padding: 5
-  },
-
-  clear_button : {
-    flex: 0.05,
-    justifyContent: "center"
-  },
-
-  large_padding : {
-    flex: 0.325,
-    backgroundColor : "white"
-  },
-
-  error_box : {
-    flex: 0.05,
-    flexDirection : "column",
-  },
-
-  error_text : {
-    color : "red",
-    fontSize : 20,
-    alignSelf: "center"
-  },
-
- 
-  bottom_bar : {
-    flex : 0.05,
-    // backgroundColor : "purple",
-    flexDirection: "row",
-    justifyContent : "flex-end",
-  },
-
-  recovery_text: {
-    flex: 0.75
-  },
- 
-  next_text : {
-    borderColor : "skyblue",
-    borderWidth : 1,
-    borderRadius : 5,
-    padding: 8,
-    textAlign : "center"
-  },
-
-  small_padding : {
-    flex : 0.05,
-  },
-
-  input_padding : {
-    flex : 0.075
-  }
+	container: {
+ 	   flex: 1,
+ 	   justifyContent: 'flex-start',
+ 	   alignItems : 'center',
+ 	   backgroundColor: "white",
+    },
+    label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
+    input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
+    input : {flex : 1, width : 120, fontSize : 20, justifyContent : 'flex-start', paddingBottom: 0},
+    button : {
+ 	   flex : 1,
+ 	   backgroundColor : '#90d7ed',
+ 	   borderRadius:60,
+ 	   justifyContent : 'center',
+ 	   alignItems : 'center',
+ 	   width : 100,
+ 	   height : 35
+    },
+    button_text : {color : 'white', fontWeight : 'bold', fontSize : 14},
 });
-
-
