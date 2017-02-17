@@ -158,8 +158,9 @@ export default class Index extends React.Component {
 					}
 					this.setState({feed: feed, isLoading : false});
 					if (callback) callback();
-				 }
 			}
+			this.setState({ isLoading : false });
+		}
 		}).done()
 	}
 	async asyncStorageLogin(current_username, jwt) {
