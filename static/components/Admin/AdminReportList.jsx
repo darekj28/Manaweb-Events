@@ -27,11 +27,7 @@ export default class AdminReportList extends React.Component {
 	handleSort(e) {
 		this.props.handleSort(e.target.id);
 	}
-	goToPost(comment_id, PRANK) {	
-		if (PRANK) {
-			swal("Comments don't have sufficient fields in the report table!");
-			return;
-		}
+	goToPost(comment_id) {	
 		browserHistory.push('/comment/' + comment_id);
 	}
 	editPost(content, unique_id) {
@@ -179,8 +175,8 @@ export default class AdminReportList extends React.Component {
 									{vals.map(function(val) {
 									return <td className="admin-table-data">{val}</td>
 									})}
-									<td className="admin-table-icon" onClick={() => {this.goToPost(report['comment_id'], 'PRANK')}}><span className="fa fa-share"></span></td>
-									<td className="admin-table-icon" onClick={() => {this.editComment.bind(this)(report['post'], report['comment_id'])}}><span className="fa fa-edit"></span></td>
+									<td className="admin-table-icon" onClick={() => {this.goToPost(report['comment_id'])}}><span className="fa fa-share"></span></td>
+									<td className="admin-table-icon" onClick={() => {this.editComment.bind(this)(report['post'], report['unique_id'])}}><span className="fa fa-edit"></span></td>
 									<td className="admin-table-icon" onClick={() => {this.deleteComment.bind(this)(report['comment_id'], report['unique_id'], report['recipient'])}}><span className="fa fa-trash-o"></span></td>
 									</tr>
 						}.bind(this))}

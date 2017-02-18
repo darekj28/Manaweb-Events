@@ -91,9 +91,8 @@ export default class AdminApp extends React.Component {
 			var fields = [];
 			data.report_list.map(function(obj) {
 				report_list.unshift({
-					// comment_id	: obj.comment_id,
-					// unique_id	: obj.unique_id,
-					comment_id  : obj.unique_id,
+					comment_id	: obj.comment_id,
+					unique_id	: obj.unique_id,
 					post 		: obj.body,
 					reason 		: obj.reason,
 					reporter 	: obj.reporting_user,

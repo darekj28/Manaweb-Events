@@ -554,16 +554,13 @@ def deleteComment():
 
 @browser_api.route('/reportPost', methods = ['POST'])
 def reportPost():
-	# feed_name = request.json['feed_name']
 	feed_name = DEFAULT_FEED
 	unique_id = request.json['unique_id']
 	reason = request.json["reason"]
 	description = reason
 	reporting_user = request.json['currentUser']['userID']
-	# reporting_user = session['userID']
 	reported_user = request.json['reported_user']
 
-	
 	post_manager = Posts()
 	post_manager.reportPost(feed_name, unique_id, reason, description, reporting_user, reported_user)
 	post_manager.closeConnection()
@@ -573,20 +570,16 @@ def reportPost():
 
 @browser_api.route('/reportComment', methods = ['POST'])
 def reportComment():
-	# feed_name = request.json['feed_name']
 	feed_name = DEFAULT_FEED
-	# comment_id = request.json['comment_id']
+	comment_id = request.json['comment_id']
 	unique_id = request.json['unique_id']
 	reason = request.json["reason"]
 	description = reason
 	reporting_user = request.json['currentUser']['userID']
-	# reporting_user = session['userID']
 	reported_user = request.json['reported_user']
 
-
 	post_manager = Posts()
-	post_manager.reportComment(feed_name, unique_id, reason, description, reporting_user, reported_user)
-	# post_manager.reportComment(feed_name, comment_id, unique_id, reason, description, reporting_user, reported_user)
+	post_manager.reportComment(feed_name, comment_id, unique_id, reason, description, reporting_user, reported_user)
 	post_manager.closeConnection()
 
 	return redirect(url_for("index"))
