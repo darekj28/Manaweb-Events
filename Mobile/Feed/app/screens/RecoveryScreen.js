@@ -45,10 +45,6 @@ export default class RecoveryScreen extends React.Component {
 
   handleSubmit(){
     if (this.state.email_confirmation_pin == "" && this.state.text_confirmation_pin == "") {
-		this.setState({input_placeholder: "Confirmation pin"})
-		this.setState({description: "Enter your confirmation pin"})
-		this.setState({confirmation_page: true})
-		this.clearInput()
       	this.handleInputSubmit.bind(this)()
     }
     else {
@@ -103,6 +99,10 @@ export default class RecoveryScreen extends React.Component {
 		this.setState({input_response : responseData})
       	if (responseData.result == 'success') {
         	this.setState({username : responseData.username})
+			this.setState({input_placeholder: "Confirmation pin"})
+			this.setState({description: "Enter your confirmation pin"})
+			this.setState({confirmation_page: true})
+			this.clearInput()
         	var email = responseData.email
         	var phone_number = responseData.phone_number
 
