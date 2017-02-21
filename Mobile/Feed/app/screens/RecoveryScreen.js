@@ -24,7 +24,7 @@ export default class RecoveryScreen extends React.Component {
 			description: "Enter your username, email, or phone number",
 			button_text: "Next",
 			confirmation_page: false,
-			selectedOption: "Option 1"
+			selectedOption: ""
 		};
 	}
 	handleInputChange(input) {
@@ -100,7 +100,7 @@ export default class RecoveryScreen extends React.Component {
       	if (responseData.result == 'success') {
         	this.setState({username : responseData.username})
 			this.setState({input_placeholder: "Confirmation pin"})
-			this.setState({description: "Enter your confirmation pin"})
+			this.setState({description: "Select the confirmation method"})
 			this.setState({confirmation_page: true})
 			this.clearInput()
         	var email = responseData.email
@@ -189,6 +189,27 @@ export default class RecoveryScreen extends React.Component {
     .done();
   }
 
+  	customRadioButton(isSelected, text, hasRightBar) {
+		if (isSelected) {
+			return (
+				<View style = {{flex: 1, backgroundColor: '#90d7ed'}}>
+					<Text style = {{padding: 5, color: 'white'}}>
+						{text}
+					</Text>
+				</View>
+			)
+		} else {
+			var barColor = hasRightBar ? '#90d7ed' : 'transparent'
+			return (
+				<View style = {{flex: 1, borderRightWidth: 2, borderColor: barColor}}>
+					<Text style = {{padding: 5, backgroundColor: 'transparent', color: '#90d7ed'}}>
+						{text}
+					</Text>
+				</View>
+			)
+		}
+	}
+
  	render() {
 		var {height, width} = Dimensions.get('window');
 		return (
@@ -199,11 +220,37 @@ export default class RecoveryScreen extends React.Component {
 						<View style={{flex : 2}}>
 							<View style={{flex : 1.0, alignItems : 'center', justifyContent : 'center'}}>
 								<Text style={{fontSize : 18}}>{this.state.description}</Text>
-								{this.state.confirmationPin &&
-									<Text style={{fontSize : 18}}>SMS fee may apply</Text>
+								{this.state.confirmation_page &&
+									<View style={{flex: 1, borderColor: '#90d7ed', borderWidth: 2, borderRadius: 5, flexDirection: 'row'}}>
+										{this.state.input_response.email != "" &&
+											<TouchableOpacity onPress = {() => this.setState({selectedOption: "email"})}>
+												{this.customRadioButton.bind(this)(
+													this.state.selectedOption == "email",
+													this.state.input_response.email, true)}
+											</TouchableOpacity>
+										}
+										{this.state.input_response.phone_number != "" &&
+											<TouchableOpacity onPress = {() => this.setState({selectedOption: "phone"})}>
+												{this.customRadioButton.bind(this)(
+													this.state.selectedOption == "phone",
+													this.state.input_response.phone_number, false)}
+											</TouchableOpacity>
+										}
+									</View>
+								}
+								{this.state.confirmation_page && this.state.input_response.phone_number != "" &&
+									<Text style={{fontSize : 12}}>SMS fee may apply</Text>
 								}
 							</View>
-							<View style={{flex : 0.6}}/>
+							{this.state.selectedOption != "" &&
+							<View style = {{flex: 0.5}}>
+							<TouchableOpacity style={{flex : 1}} onPress = {() => Alert.alert("pressed")}>
+								<View style = {styles.button}>
+									<Text style={styles.button_text}>Send</Text>
+								</View>
+							</TouchableOpacity>
+							</View>
+							}
 							<View style={{flex : 1, justifyContent : 'center'}}>
 								<View style={styles.input_wrapper}>
 									<TextInput
@@ -214,7 +261,7 @@ export default class RecoveryScreen extends React.Component {
 										value = {this.state.input} />
 								</View>
 							</View>
-							<View style={{flex : 0.1}}/>
+							<View style={{flex : 0.05}}/>
 						</View>
 						<View style = {{flex : 1, alignItems : 'center'}}>
 							<TouchableOpacity style={{flex : 1}} onPress = {this.handleSubmit.bind(this)}>
@@ -242,7 +289,7 @@ const styles = StyleSheet.create({
     },
     label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
     input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
-    input : {flex : 1, width : 120, fontSize : 20, justifyContent : 'flex-start', paddingBottom: 0},
+    input_text : {flex : 1, width : 200, fontSize : 16, justifyContent : 'flex-start', paddingBottom: 0},
     button : {
  	   flex : 1,
  	   backgroundColor : '#90d7ed',
