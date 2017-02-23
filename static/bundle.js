@@ -4602,12 +4602,6 @@
 					}
 				}
 				this.setState({ feed: feed });
-				swal({ title: "Success!",
-					text: "The post has been edited.",
-					type: "success",
-					confirmButtonColor: "#80CCEE",
-					confirmButtonText: "OK"
-				});
 			}
 		}, {
 			key: 'handlePostDelete',
@@ -5103,7 +5097,7 @@
 	                            React.createElement(
 	                                'center',
 	                                null,
-	                                'See All'
+	                                'See All Notifications'
 	                            )
 	                        )
 	                    )
@@ -14492,7 +14486,9 @@
 	            React.createElement(
 	              'a',
 	              { className: 'unclickable-name' },
-	              this.props.name
+	              'Welcome, ',
+	              this.props.name,
+	              '.'
 	            )
 	          ),
 	          React.createElement('li', { className: 'divider' }),
@@ -14502,6 +14498,7 @@
 	            React.createElement(
 	              Link,
 	              { to: '/admin' },
+	              React.createElement('span', { className: 'fa fa-university modal-icon-admin' }),
 	              'Admin Portal'
 	            )
 	          ),
@@ -14511,6 +14508,7 @@
 	            React.createElement(
 	              Link,
 	              { to: '/settings' },
+	              React.createElement('span', { className: 'fa fa-cog modal-icon-settings' }),
 	              'Account Settings'
 	            )
 	          ),
@@ -14520,6 +14518,7 @@
 	            React.createElement(
 	              Link,
 	              { to: '/', onClick: this.removeCurrentUser.bind(this) },
+	              React.createElement('span', { className: 'fa fa-sign-out modal-icon-logout' }),
 	              'Sign Out'
 	            )
 	          )
@@ -14780,7 +14779,7 @@
 						'div',
 						{ id: 'MessagePost' },
 						React.createElement('textarea', { id: 'PostInput', className: 'important-text form-control',
-							value: this.props.postText, rows: '4',
+							value: this.props.postText, rows: '1',
 							placeholder: this.props.placeholder, ref: function ref(input) {
 								return _this2.postText = input;
 							},
@@ -14945,6 +14944,10 @@
 	
 	var _Avatar2 = _interopRequireDefault(_Avatar);
 	
+	var _AppStore = __webpack_require__(/*! ../../../stores/AppStore.jsx */ 1);
+	
+	var _AppStore2 = _interopRequireDefault(_AppStore);
+	
 	var _FeedPostHeader = __webpack_require__(/*! ./FeedPostHeader.jsx */ 115);
 	
 	var _FeedPostHeader2 = _interopRequireDefault(_FeedPostHeader);
@@ -14999,7 +15002,9 @@
 					closeOnConfirm: false,
 					confirmButtonText: "Yes, I'm sure!",
 					confirmButtonColor: "#80CCEE" }, function () {
-					var obj = { unique_id: this.props.post.unique_id,
+					var obj = {
+						userID: _AppStore2.default.getCurrentUser()['userID'],
+						unique_id: this.props.post.unique_id,
 						jwt: localStorage.jwt };
 					$.ajax({
 						type: 'POST',
@@ -15007,7 +15012,12 @@
 						data: JSON.stringify(obj, null, '\t'),
 						contentType: 'application/json;charset=UTF-8',
 						success: function (data) {
-							this.props.handlePostDelete(this.props.post, callback);
+							if (data['result'] == 'success') this.props.handlePostDelete(this.props.post, callback);else swal({ title: "Sorry!",
+								text: "This post was already deleted.",
+								type: "error",
+								confirmButtonColor: "#80CCEE",
+								confirmButtonText: "OK"
+							});
 						}.bind(this)
 					});
 				}.bind(this));
@@ -15089,7 +15099,7 @@
 									)
 								)
 							),
-							(isAdmin || !isOP) && post.userID != "$DELETED_USER" && React.createElement(
+							React.createElement(
 								'div',
 								{ className: 'dropdown pull-right', id: "dropdown_" + post.comment_id, onClick: this.scrollToDropdown.bind(this) },
 								React.createElement(
@@ -15100,30 +15110,33 @@
 								React.createElement(
 									'ul',
 									{ className: 'PostDropdown pull-right dropdown-menu' },
-									isAdmin && React.createElement(
-										'li',
-										null,
-										React.createElement(
-											'a',
-											{ id: 'hpe', onClick: this.handlePostEdit.bind(this) },
-											'Edit post'
-										)
-									),
-									(!isOP || isAdmin) && React.createElement(
+									React.createElement(
 										'li',
 										null,
 										React.createElement(
 											'a',
 											{ id: 'hpr', onClick: this.handlePostReport.bind(this) },
+											React.createElement('span', { className: 'fa fa-exclamation-circle modal-icon-report' }),
 											'Report post'
 										)
 									),
-									isAdmin && React.createElement(
+									(isOP || isAdmin) && React.createElement(
+										'li',
+										null,
+										React.createElement(
+											'a',
+											{ id: 'hpe', onClick: this.handlePostEdit.bind(this) },
+											React.createElement('span', { className: 'fa fa-pencil-square-o modal-icon-edit' }),
+											'Edit post'
+										)
+									),
+									(isOP || isAdmin) && React.createElement(
 										'li',
 										null,
 										React.createElement(
 											'a',
 											{ id: 'hpd', onClick: this.handlePostDelete.bind(this) },
+											React.createElement('span', { className: 'fa fa-trash-o modal-icon-delete' }),
 											'Delete post'
 										)
 									)
@@ -15339,6 +15352,12 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
+	var _AppStore = __webpack_require__(/*! ../../../stores/AppStore.jsx */ 1);
+	
+	var _AppStore2 = _interopRequireDefault(_AppStore);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -15368,6 +15387,7 @@
 			key: 'handlePostEditSubmit',
 			value: function handlePostEditSubmit() {
 				var obj = { unique_id: this.props.post.unique_id,
+					userID: _AppStore2.default.getCurrentUser()['userID'],
 					field_name: "body",
 					field_data: this.state.postContent,
 					jwt: localStorage.jwt };
@@ -15376,9 +15396,30 @@
 					type: 'POST',
 					url: '/editPost',
 					data: JSON.stringify(obj, null, '\t'),
-					contentType: 'application/json;charset=UTF-8'
+					contentType: 'application/json;charset=UTF-8',
+					success: function success(data) {
+						if (data['result'] == 'success') swal({ title: "Success!",
+							text: "The post has been edited.",
+							type: "success",
+							confirmButtonColor: "#80CCEE",
+							confirmButtonText: "OK"
+						});else swal({ title: "Sorry!",
+							text: "This post was deleted.",
+							type: "error",
+							confirmButtonColor: "#80CCEE",
+							confirmButtonText: "OK"
+						});
+					},
+					error: function error(data) {
+						swal({ title: "Sorry!",
+							text: "This post was deleted.",
+							type: "error",
+							confirmButtonColor: "#80CCEE",
+							confirmButtonText: "OK"
+						});
+					}
 				});
-				this.props.handlePostEdit(this.props.post, this.state.postContent);
+				if (this.props.handlePostEdit) this.props.handlePostEdit(this.props.post, this.state.postContent);
 			}
 		}, {
 			key: 'componentWillReceiveProps',
@@ -17021,28 +17062,31 @@
 		}, {
 			key: "handleCommentSubmit",
 			value: function handleCommentSubmit(commentText) {
-				var feed = this.state.feed;
-				feed.push({ commentContent: commentText,
-					avatar: this.state.currentUser['avatar_url'],
-					name: this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
-					userID: this.state.currentUser['userID'],
-					time: "just now",
-					comment_id: this.state.comment_id
-				});
-	
 				var obj = { commentContent: commentText,
 					comment_id: this.state.comment_id,
 					currentUser: this.state.currentUser
 				};
-	
 				$.ajax({
 					type: 'POST',
 					url: '/makeComment',
 					data: JSON.stringify(obj, null, '\t'),
-					contentType: 'application/json;charset=UTF-8'
+					contentType: 'application/json;charset=UTF-8',
+					success: function (data) {
+						if (data['result'] == 'failure') swal("Sorry! We couldn't post your comment.");else {
+							var feed = this.state.feed;
+							feed.push({ commentContent: commentText,
+								avatar: this.state.currentUser['avatar_url'],
+								name: this.state.currentUser['first_name'] + " " + this.state.currentUser['last_name'],
+								userID: this.state.currentUser['userID'],
+								time: "just now",
+								comment_id: this.state.comment_id,
+								unique_id: data['unique_id']
+							});
+							this.setState({ feed: feed, comment: '' });
+							$("html, body").animate({ scrollTop: $('#CommentFeed').prop('scrollHeight') }, 300);
+						}
+					}.bind(this)
 				});
-				this.setState({ feed: feed, comment: '' });
-				$("html, body").animate({ scrollTop: $('#CommentFeed').prop('scrollHeight') }, 300);
 			}
 		}, {
 			key: "handleCommentEdit",
@@ -17056,12 +17100,6 @@
 					}
 				}
 				this.setState({ feed: feed });
-				swal({ title: "Success!",
-					text: "The comment has been edited.",
-					type: "success",
-					confirmButtonColor: "#80CCEE",
-					confirmButtonText: "OK"
-				});
 			}
 		}, {
 			key: "handleCommentDelete",
@@ -17358,7 +17396,12 @@
 						data: JSON.stringify(obj, null, '\t'),
 						contentType: 'application/json;charset=UTF-8',
 						success: function (data) {
-							this.props.handleCommentDelete(this.props.comment, callback);
+							if (data['result'] == 'success') this.props.handleCommentDelete(this.props.comment, callback);else swal({ title: "Sorry!",
+								text: "This comment was already deleted.",
+								type: "error",
+								confirmButtonColor: "#80CCEE",
+								confirmButtonText: "OK"
+							});
 						}.bind(this)
 					});
 				}.bind(this));
@@ -17403,7 +17446,7 @@
 						React.createElement(
 							"div",
 							{ className: "PostFooter row" },
-							!this.props.isOriginalPost && comment.userID != "$DELETED_USER" && React.createElement(
+							!this.props.isOriginalPost && React.createElement(
 								"div",
 								{ className: "dropdown", id: "commentdropdown_" + comment.unique_id },
 								React.createElement(
@@ -17415,21 +17458,13 @@
 								React.createElement(
 									"ul",
 									{ className: "CommentDropdown pull-right dropdown-menu" },
-									(isOP || isAdmin) && React.createElement(
-										"li",
-										null,
-										React.createElement(
-											"a",
-											{ id: "hce", onClick: this.handleCommentEdit.bind(this) },
-											"Edit comment"
-										)
-									),
-									(!isOP || isAdmin) && React.createElement(
+									React.createElement(
 										"li",
 										null,
 										React.createElement(
 											"a",
 											{ id: "hcr", onClick: this.handleCommentReport.bind(this) },
+											React.createElement("span", { className: "fa fa-exclamation-circle modal-icon-report" }),
 											"Report comment"
 										)
 									),
@@ -17438,7 +17473,18 @@
 										null,
 										React.createElement(
 											"a",
+											{ id: "hce", onClick: this.handleCommentEdit.bind(this) },
+											React.createElement("span", { className: "fa fa-pencil-square-o modal-icon-edit" }),
+											"Edit comment"
+										)
+									),
+									(isOP || isAdmin) && React.createElement(
+										"li",
+										null,
+										React.createElement(
+											"a",
 											{ id: "hcd", onClick: this.handleCommentDelete.bind(this) },
+											React.createElement("span", { className: "fa fa-trash-o modal-icon-delete" }),
 											"Delete comment"
 										)
 									)
@@ -17731,9 +17777,30 @@
 					type: 'POST',
 					url: '/editComment',
 					data: JSON.stringify(obj, null, '\t'),
-					contentType: 'application/json;charset=UTF-8'
+					contentType: 'application/json;charset=UTF-8',
+					success: function success(data) {
+						if (data['result'] == 'success') swal({ title: "Success!",
+							text: "The comment has been edited.",
+							type: "success",
+							confirmButtonColor: "#80CCEE",
+							confirmButtonText: "OK"
+						});else swal({ title: "Sorry!",
+							text: "This comment was deleted.",
+							type: "error",
+							confirmButtonColor: "#80CCEE",
+							confirmButtonText: "OK"
+						});
+					},
+					error: function error(data) {
+						swal({ title: "Sorry!",
+							text: "This comment was deleted.",
+							type: "error",
+							confirmButtonColor: "#80CCEE",
+							confirmButtonText: "OK"
+						});
+					}
 				});
-				this.props.handleCommentEdit(this.props.comment, this.state.commentContent);
+				if (this.props.handleCommentEdit) this.props.handleCommentEdit(this.props.comment, this.state.commentContent);
 			}
 		}, {
 			key: 'componentWillReceiveProps',
@@ -17834,7 +17901,7 @@
 			key: 'reportForSpam',
 			value: function reportForSpam() {
 				var obj = {
-					// comment_id : this.props.comment.comment_id,
+					comment_id: this.props.comment.comment_id,
 					unique_id: this.props.comment.unique_id,
 					reported_user: this.props.comment.userID,
 					reason: "Spam",
@@ -17854,7 +17921,7 @@
 			key: 'reportForInappropriate',
 			value: function reportForInappropriate() {
 				var obj = {
-					// comment_id : this.props.comment.comment_id,
+					comment_id: this.props.comment.comment_id,
 					unique_id: this.props.comment.unique_id,
 					reported_user: this.props.comment.userID,
 					reason: "Inappropriate",
@@ -18026,7 +18093,7 @@
 						{ id: 'CommentPost' },
 						React.createElement('textarea', { id: 'CommentInput', className: 'form-control important-text',
 							value: this.props.commentText,
-							placeholder: this.props.placeholder, rows: '2', ref: function ref(input) {
+							placeholder: this.props.placeholder, rows: '1', ref: function ref(input) {
 								return _this2.commentText = input;
 							},
 							onChange: this.handleCommentChange.bind(this) }),
@@ -57347,9 +57414,8 @@
 					var fields = [];
 					data.report_list.map(function (obj) {
 						report_list.unshift({
-							// comment_id	: obj.comment_id,
-							// unique_id	: obj.unique_id,
-							comment_id: obj.unique_id,
+							comment_id: obj.comment_id,
+							unique_id: obj.unique_id,
 							post: obj.body,
 							reason: obj.reason,
 							reporter: obj.reporting_user,
@@ -57690,6 +57756,20 @@
 	
 	var _reactBootstrap = __webpack_require__(/*! react-bootstrap */ 143);
 	
+	var _EditPostModal = __webpack_require__(/*! ../Home/Feed/EditPostModal.jsx */ 117);
+	
+	var _EditPostModal2 = _interopRequireDefault(_EditPostModal);
+	
+	var _EditCommentModal = __webpack_require__(/*! ../Comment/EditCommentModal.jsx */ 136);
+	
+	var _EditCommentModal2 = _interopRequireDefault(_EditCommentModal);
+	
+	var _AppStore = __webpack_require__(/*! ../../stores/AppStore.jsx */ 1);
+	
+	var _AppStore2 = _interopRequireDefault(_AppStore);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -57709,7 +57789,13 @@
 		function AdminReportList(props) {
 			_classCallCheck(this, AdminReportList);
 	
-			return _possibleConstructorReturn(this, (AdminReportList.__proto__ || Object.getPrototypeOf(AdminReportList)).call(this, props));
+			var _this = _possibleConstructorReturn(this, (AdminReportList.__proto__ || Object.getPrototypeOf(AdminReportList)).call(this, props));
+	
+			_this.state = {
+				postInModal: {},
+				commentInModal: {}
+			};
+			return _this;
 		}
 	
 		_createClass(AdminReportList, [{
@@ -57728,6 +57814,20 @@
 				browserHistory.push('/comment/' + comment_id);
 			}
 		}, {
+			key: 'editPost',
+			value: function editPost(content, unique_id) {
+				var obj = { postContent: content, unique_id: unique_id };
+				this.setState({ postInModal: obj });
+				$('#EditPostModal').modal('show');
+			}
+		}, {
+			key: 'editComment',
+			value: function editComment(content, unique_id) {
+				var obj = { commentContent: content, unique_id: unique_id };
+				this.setState({ commentInModal: obj });
+				$('#EditCommentModal').modal('show');
+			}
+		}, {
 			key: 'deletePost',
 			value: function deletePost(comment_id, recipient) {
 				swal({
@@ -57737,6 +57837,7 @@
 					confirmButtonText: "Yes, I'm sure!",
 					confirmButtonColor: "#80CCEE" }, function () {
 					var obj = { unique_id: comment_id,
+						userID: _AppStore2.default.getCurrentUser()['userID'],
 						jwt: localStorage.jwt };
 					$.ajax({
 						type: 'POST',
@@ -57744,9 +57845,14 @@
 						data: JSON.stringify(obj, null, '\t'),
 						contentType: 'application/json;charset=UTF-8',
 						success: function (data) {
-							swal({ title: "Success!",
+							if (data['result'] == 'success') swal({ title: "Success!",
 								text: "The post has been deleted.",
 								type: "success",
+								confirmButtonColor: "#80CCEE",
+								confirmButtonText: "OK"
+							});else swal({ title: "Sorry!",
+								text: "This post was already deleted.",
+								type: "error",
 								confirmButtonColor: "#80CCEE",
 								confirmButtonText: "OK"
 							});
@@ -57766,7 +57872,7 @@
 			key: 'deleteComment',
 			value: function deleteComment(comment_id, unique_id, recipient) {
 				if (!unique_id) {
-					alert("Comments don't have sufficient fields in the report table!");
+					swal("Comments don't have sufficient fields in the report table!");
 					return;
 				}
 				swal({
@@ -57784,9 +57890,14 @@
 						data: JSON.stringify(obj, null, '\t'),
 						contentType: 'application/json;charset=UTF-8',
 						success: function (data) {
-							swal({ title: "Success!",
+							if (data['result'] == 'success') swal({ title: "Success!",
 								text: "The comment has been deleted.",
 								type: "success",
+								confirmButtonColor: "#80CCEE",
+								confirmButtonText: "OK"
+							});else swal({ title: "Sorry!",
+								text: "This comment was already deleted.",
+								type: "error",
 								confirmButtonColor: "#80CCEE",
 								confirmButtonText: "OK"
 							});
@@ -57841,6 +57952,7 @@
 									);
 								}.bind(this)),
 								React.createElement('th', null),
+								React.createElement('th', null),
 								React.createElement('th', null)
 							)
 						),
@@ -57874,6 +57986,13 @@
 									React.createElement(
 										'td',
 										{ className: 'admin-table-icon', onClick: function onClick() {
+												_this2.editPost.bind(_this2)(report['post'], report['comment_id']);
+											} },
+										React.createElement('span', { className: 'fa fa-edit' })
+									),
+									React.createElement(
+										'td',
+										{ className: 'admin-table-icon', onClick: function onClick() {
 												_this2.deletePost.bind(_this2)(report['comment_id'], report['recipient']);
 											} },
 										React.createElement('span', { className: 'fa fa-trash-o' })
@@ -57890,8 +58009,17 @@
 									}),
 									React.createElement(
 										'td',
-										{ className: 'admin-table-icon' },
+										{ className: 'admin-table-icon', onClick: function onClick() {
+												_this2.goToPost(report['comment_id']);
+											} },
 										React.createElement('span', { className: 'fa fa-share' })
+									),
+									React.createElement(
+										'td',
+										{ className: 'admin-table-icon', onClick: function onClick() {
+												_this2.editComment.bind(_this2)(report['post'], report['unique_id']);
+											} },
+										React.createElement('span', { className: 'fa fa-edit' })
 									),
 									React.createElement(
 										'td',
@@ -57903,7 +58031,9 @@
 								);
 							}.bind(this))
 						)
-					)
+					),
+					React.createElement(_EditPostModal2.default, { post: this.state.postInModal }),
+					React.createElement(_EditCommentModal2.default, { comment: this.state.commentInModal })
 				);
 			}
 		}]);
