@@ -9,6 +9,7 @@ import RegisterHeader from '../components/register/RegisterHeader';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 import SegmentedControls from 'react-native-radio-buttons'
 
+const RADIO_BUTTON_COLOR = '#50a7cd'
 export default class RecoveryScreen extends React.Component {
 	constructor(){
 		super();
@@ -23,7 +24,8 @@ export default class RecoveryScreen extends React.Component {
 			input_placeholder: "Username, email or phone number",
 			description: "Enter your username, email, or phone number",
 			button_text: "Next",
-			confirmation_page: false,
+			confirmation_method: false, // if true, display the radio button
+			confirmation_input: false, // if true, display the text input
 			selectedOption: ""
 		};
 	}
@@ -101,7 +103,7 @@ export default class RecoveryScreen extends React.Component {
         	this.setState({username : responseData.username})
 			this.setState({input_placeholder: "Confirmation pin"})
 			this.setState({description: "Select the confirmation method"})
-			this.setState({confirmation_page: true})
+			this.setState({confirmation_method: true})
 			this.clearInput()
         	var email = responseData.email
         	var phone_number = responseData.phone_number
@@ -192,17 +194,17 @@ export default class RecoveryScreen extends React.Component {
   	customRadioButton(isSelected, text, hasRightBar) {
 		if (isSelected) {
 			return (
-				<View style = {{flex: 1, backgroundColor: '#90d7ed'}}>
-					<Text style = {{padding: 5, color: 'white'}}>
+				<View style = {{justifyContent: 'center', flex: 1, backgroundColor: RADIO_BUTTON_COLOR}}>
+					<Text style = {{padding: 5, color: 'white', textAlignVertical: 'center'}}>
 						{text}
 					</Text>
 				</View>
 			)
 		} else {
-			var barColor = hasRightBar ? '#90d7ed' : 'transparent'
+			var barColor = hasRightBar ? RADIO_BUTTON_COLOR : 'transparent'
 			return (
-				<View style = {{flex: 1, borderRightWidth: 2, borderColor: barColor}}>
-					<Text style = {{padding: 5, backgroundColor: 'transparent', color: '#90d7ed'}}>
+				<View style = {{justifyContent: 'center', flex: 1, borderRightWidth: 2, borderColor: barColor}}>
+					<Text style = {{padding: 5, backgroundColor: 'transparent', color: RADIO_BUTTON_COLOR, textAlignVertical: 'center'}}>
 						{text}
 					</Text>
 				</View>
@@ -220,10 +222,11 @@ export default class RecoveryScreen extends React.Component {
 						<View style={{flex : 2}}>
 							<View style={{flex : 1.0, alignItems : 'center', justifyContent : 'center'}}>
 								<Text style={{fontSize : 18}}>{this.state.description}</Text>
-								{this.state.confirmation_page &&
-									<View style={{flex: 1, borderColor: '#90d7ed', borderWidth: 2, borderRadius: 5, flexDirection: 'row'}}>
+								{this.state.confirmation_method &&
+									<View style={{flex: 1, alignItems : 'center', borderColor: RADIO_BUTTON_COLOR, borderWidth: 2, borderRadius: 5, flexDirection: 'row'}}>
 										{this.state.input_response.email != "" &&
-											<TouchableOpacity onPress = {() => this.setState({selectedOption: "email"})}>
+											<TouchableOpacity style = {{justifyContent : 'center'}}
+												onPress = {() => this.setState({selectedOption: "email"})}>
 												{this.customRadioButton.bind(this)(
 													this.state.selectedOption == "email",
 													this.state.input_response.email, true)}
@@ -238,40 +241,47 @@ export default class RecoveryScreen extends React.Component {
 										}
 									</View>
 								}
-								{this.state.confirmation_page && this.state.input_response.phone_number != "" &&
+								{this.state.confirmation_method && this.state.input_response.phone_number != "" &&
 									<Text style={{fontSize : 12}}>SMS fee may apply</Text>
 								}
 							</View>
+
+							<View style = {{flex: 0.5, alignItems: 'center'}}>
 							{this.state.selectedOption != "" &&
-							<View style = {{flex: 0.5}}>
-							<TouchableOpacity style={{flex : 1}} onPress = {() => Alert.alert("pressed")}>
-								<View style = {styles.button}>
-									<Text style={styles.button_text}>Send</Text>
-								</View>
-							</TouchableOpacity>
-							</View>
+								<TouchableOpacity style={{flex : 1}} onPress = {() => this.setState({confirmation_input: true})}>
+									<View style = {styles.button}>
+										<Text style={styles.button_text}>Send</Text>
+									</View>
+								</TouchableOpacity>
 							}
+							</View>
 							<View style={{flex : 1, justifyContent : 'center'}}>
-								<View style={styles.input_wrapper}>
-									<TextInput
-                  						onChangeText = {this.handleInputChange.bind(this)}
-                  						style = {styles.input_text}
-										placeholder = {this.state.input_placeholder}
-                  						maxLength = {40}
-										value = {this.state.input} />
-								</View>
+							{(!this.state.confirmation_method
+								|| (this.state.confirmation_method && this.state.confirmation_input)) &&
+
+									<View style={styles.input_wrapper}>
+										<TextInput
+	                  						onChangeText = {this.handleInputChange.bind(this)}
+	                  						style = {styles.input_text}
+											placeholder = {this.state.input_placeholder}
+	                  						maxLength = {40}
+											value = {this.state.input} />
+									</View>
+							}
 							</View>
 							<View style={{flex : 0.05}}/>
 						</View>
-						<View style = {{flex : 1, alignItems : 'center'}}>
-							<TouchableOpacity style={{flex : 1}} onPress = {this.handleSubmit.bind(this)}>
-								<View style = {styles.button}>
-									<Text style={styles.button_text}>{this.state.button_text}</Text>
-								</View>
-							</TouchableOpacity>
-							<View style={{flex : 0.5}}/>
-							<View style={{flex : 0.5}}/>
-						</View>
+						{!this.state.confirmation_method &&
+							<View style = {{flex : 1, alignItems : 'center'}}>
+								<TouchableOpacity style={{flex : 1}} onPress = {this.handleSubmit.bind(this)}>
+									<View style = {styles.button}>
+										<Text style={styles.button_text}>{this.state.button_text}</Text>
+									</View>
+								</TouchableOpacity>
+								<View style={{flex : 0.5}}/>
+								<View style={{flex : 0.5}}/>
+							</View>
+						}
 						<View style = {{flex : 3}}/>
 					</View>
 				</View>
@@ -289,7 +299,7 @@ const styles = StyleSheet.create({
     },
     label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
     input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
-    input_text : {flex : 1, width : 200, fontSize : 16, justifyContent : 'flex-start', paddingBottom: 0},
+    input_text : {flex : 1, width : 300, fontSize : 16, justifyContent : 'center', paddingBottom: 0},
     button : {
  	   flex : 1,
  	   backgroundColor : '#90d7ed',
