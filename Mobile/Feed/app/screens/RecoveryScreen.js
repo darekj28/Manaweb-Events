@@ -12,6 +12,8 @@ import SegmentedControls from 'react-native-radio-buttons'
 const RADIO_BUTTON_COLOR = '#50a7cd'
 const OPTION_EMAIL = 'email'
 const OPTION_PHONE = 'phone'
+const INPUT_PLACEHOLDER = "Username, email or phone number"
+const PIN_LENGTH = 5
 export default class RecoveryScreen extends React.Component {
 	constructor(){
 		super();
@@ -23,7 +25,6 @@ export default class RecoveryScreen extends React.Component {
       		text_confirmation_pin: "",
       		confirmation_pin_input: "",
       		username: "",
-			input_placeholder: "Username, email or phone number",
 			description: "Enter your username, email, or phone number",
 			button_text: "Next",
 			confirmation_method: false, // if true, display the radio button
@@ -44,7 +45,6 @@ export default class RecoveryScreen extends React.Component {
 	      		text_confirmation_pin: "",
 	      		confirmation_pin_input: "",
 	      		username: "",
-				input_placeholder: "Username, email or phone number",
 				description: "Enter your username, email, or phone number",
 				button_text: "Next",
 				confirmation_method: false, // if true, display the radio button
@@ -63,6 +63,9 @@ export default class RecoveryScreen extends React.Component {
 
   	handleConfirmationInputChange(confirmation_pin_input){
     	this.setState({confirmation_pin_input : confirmation_pin_input})
+		if (confirmation_pin_input.length == PIN_LENGTH) {
+			this.checkConfirmationPin.bind(this)(confirmation_pin_input)
+		}
   	}
 
   	clearInput(){
@@ -71,15 +74,6 @@ export default class RecoveryScreen extends React.Component {
 
   	clearPinEntry(){
     	this.setState({confirmation_pin_input: ""})
-  	}
-
-  	handleSubmit(){
-    	if (this.state.email_confirmation_pin == "" && this.state.text_confirmation_pin == "") {
-      		this.handleInputSubmit.bind(this)()
-    	}
-    	else {
-      		this.checkConfirmationPin.bind(this)()
-    	}
   	}
 
 	handleSend() {
@@ -93,32 +87,31 @@ export default class RecoveryScreen extends React.Component {
 		}
 	}
 
-  	checkConfirmationPin() {
-    	if (this.state.confirmation_pin_input == this.state.email_confirmation_pin ||
-      		this.state.confirmation_pin_input == this.state.text_confirmation_pin)
+  	checkConfirmationPin(pin) {
+    	if (pin == this.state.email_confirmation_pin ||
+      		pin == this.state.text_confirmation_pin)
     	{
-      		alert("Nice man! You got it right!")
+      		alert("Correct Pin!")
       		this.loginUser.bind(this)(this.state.username)
       		this._navigateToUpdatePassowrd.bind(this)()
     	}
     	else {
-      		alert("Incorrect Pin, try again")
+      		alert("Incorrect Pin, try again. ")
+			this.setState({confirmation_pin_input: ''})
     	}
   	}
 
-  loginUser(username) {
-    AsyncStorage.setItem("current_username", this.state.username).then((value) => {
+  	loginUser(username) {
+    	AsyncStorage.setItem("current_username", this.state.username).then((value) => {
+      	}).done()
+  	}
 
-      }).done()
-  }
-
-  _navigateToUpdatePassowrd() {
-    this.props.navigator.push({
-      href : "RecoverPassword",
-      username : this.state.username
-    })
-
-  }
+  	_navigateToUpdatePassowrd() {
+    	this.props.navigator.push({
+      		href : "RecoverPassword",
+      		username : this.state.username
+    	})
+  	}
 
   handleInputSubmit(){
     var url = "https://manaweb-events.herokuapp.com"
@@ -139,7 +132,6 @@ export default class RecoveryScreen extends React.Component {
 		this.setState({input_response : responseData})
       	if (responseData.result == 'success') {
         	this.setState({username : responseData.username})
-			this.setState({input_placeholder: "Confirmation pin"})
 			this.setState({description: "Select the confirmation method"})
 			this.setState({confirmation_method: true})
 			this.clearInput()
@@ -299,14 +291,24 @@ export default class RecoveryScreen extends React.Component {
 							}
 							</View>
 							<View style={{flex : 1, justifyContent : 'center'}}>
-							{(!this.state.confirmation_method
-								|| (this.state.confirmation_method && this.state.confirmation_input)) &&
+							{(this.state.confirmation_method && this.state.confirmation_input) &&
+									<View style={styles.input_wrapper}>
+										<TextInput
+											onChangeText = {this.handleConfirmationInputChange.bind(this)}
+	                  						style = {styles.input_text}
+											placeholder = {'Confirmation pin'}
+	                  						maxLength = {PIN_LENGTH}
+											keyboardType = {'numeric'}
+											value = {this.state.confirmation_pin_input} />
+									</View>
+							}
+							{!this.state.confirmation_method &&
 
 									<View style={styles.input_wrapper}>
 										<TextInput
 	                  						onChangeText = {this.handleInputChange.bind(this)}
 	                  						style = {styles.input_text}
-											placeholder = {this.state.input_placeholder}
+											placeholder = {INPUT_PLACEHOLDER}
 	                  						maxLength = {40}
 											value = {this.state.input} />
 									</View>
@@ -316,7 +318,7 @@ export default class RecoveryScreen extends React.Component {
 						</View>
 						{!this.state.confirmation_method &&
 							<View style = {{flex : 1, alignItems : 'center'}}>
-								<TouchableOpacity style={{flex : 1}} onPress = {this.handleSubmit.bind(this)}>
+								<TouchableOpacity style={{flex : 1}} onPress = {this.handleInputSubmit.bind(this)}>
 									<View style = {styles.button}>
 										<Text style={styles.button_text}>{this.state.button_text}</Text>
 									</View>
