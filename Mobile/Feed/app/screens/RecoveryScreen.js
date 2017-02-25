@@ -1,7 +1,7 @@
 import React from 'react';
 import { Picker, RCTAnimation, AsyncStorage, AppRegistry,StyleSheet,Text,View,ListView,
 		TouchableOpacity,TouchableHighlight, TextInput,
-          Alert, Image, Animated, TouchableWithoutFeedback, ScrollView} from 'react-native';
+          Alert, Image, Animated, TouchableWithoutFeedback, ScrollView, BackAndroid} from 'react-native';
 import _ from 'lodash'
 import {Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -28,18 +28,42 @@ export default class RecoveryScreen extends React.Component {
 			confirmation_input: false, // if true, display the text input
 			selectedOption: ""
 		};
+		this.goBack = this.goBack.bind(this)
+		BackAndroid.addEventListener('hardwareBackPress', () => this.goBack());
 	}
+
+	goBack() {
+		if (this.state.confirmation_method) {
+			this.setState({
+				input : "",
+	      		input_response: {},
+	      		valid_input_submitted: "",
+	      		email_confirmation_pin : "",
+	      		text_confirmation_pin: "",
+	      		confirmation_pin_input: "",
+	      		username: "",
+				input_placeholder: "Username, email or phone number",
+				description: "Enter your username, email, or phone number",
+				button_text: "Next",
+				confirmation_method: false, // if true, display the radio button
+				confirmation_input: false, // if true, display the text input
+				selectedOption: ""
+			});
+		}
+		return true; // There is somewhere else to go to?
+	}
+
 	handleInputChange(input) {
 		this.setState({ input : input });
 	}
 
-  handleConfirmationInputChange(confirmation_pin_input){
-    this.setState({confirmation_pin_input : confirmation_pin_input})
-  }
+  	handleConfirmationInputChange(confirmation_pin_input){
+    	this.setState({confirmation_pin_input : confirmation_pin_input})
+  	}
 
-  clearInput(){
-    this.setState({input: ""})
-  }
+  	clearInput(){
+    	this.setState({input: ""})
+  	}
 
   clearPinEntry(){
     this.setState({confirmation_pin_input: ""})
