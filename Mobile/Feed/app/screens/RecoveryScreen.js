@@ -10,6 +10,8 @@ import dismissKeyboard from 'react-native-dismiss-keyboard';
 import SegmentedControls from 'react-native-radio-buttons'
 
 const RADIO_BUTTON_COLOR = '#50a7cd'
+const OPTION_EMAIL = 'email'
+const OPTION_PHONE = 'phone'
 export default class RecoveryScreen extends React.Component {
 	constructor(){
 		super();
@@ -49,6 +51,8 @@ export default class RecoveryScreen extends React.Component {
 				confirmation_input: false, // if true, display the text input
 				selectedOption: ""
 			});
+		} else {
+			this.props.navigator.pop()
 		}
 		return true; // There is somewhere else to go to?
 	}
@@ -65,32 +69,42 @@ export default class RecoveryScreen extends React.Component {
     	this.setState({input: ""})
   	}
 
-  clearPinEntry(){
-    this.setState({confirmation_pin_input: ""})
-  }
+  	clearPinEntry(){
+    	this.setState({confirmation_pin_input: ""})
+  	}
 
-  handleSubmit(){
-    if (this.state.email_confirmation_pin == "" && this.state.text_confirmation_pin == "") {
-      	this.handleInputSubmit.bind(this)()
-    }
-    else {
-      this.checkConfirmationPin.bind(this)()
-    }
-  }
+  	handleSubmit(){
+    	if (this.state.email_confirmation_pin == "" && this.state.text_confirmation_pin == "") {
+      		this.handleInputSubmit.bind(this)()
+    	}
+    	else {
+      		this.checkConfirmationPin.bind(this)()
+    	}
+  	}
 
-  checkConfirmationPin() {
-    if (this.state.confirmation_pin_input == this.state.email_confirmation_pin ||
-      this.state.confirmation_pin_input == this.state.text_confirmation_pin)
-    {
-      alert("Nice man! You got it right!")
-      this.loginUser.bind(this)(this.state.username)
-      this._navigateToUpdatePassowrd.bind(this)()
+	handleSend() {
+		this.setState({confirmation_input: true})
+		if (this.state.selectedOption == OPTION_EMAIL) {
+			this.sendEmailConfirmation.bind(this)()
+			alert('An email has been sent')
+		} else if (this.state.selectedOption == OPTION_PHONE) {
+			this.sendTextConfirmation.bind(this)()
+			alert('A text has been sent')
+		}
+	}
 
-    }
-    else {
-      alert("Incorrect Pin, try again")
-    }
-  }
+  	checkConfirmationPin() {
+    	if (this.state.confirmation_pin_input == this.state.email_confirmation_pin ||
+      		this.state.confirmation_pin_input == this.state.text_confirmation_pin)
+    	{
+      		alert("Nice man! You got it right!")
+      		this.loginUser.bind(this)(this.state.username)
+      		this._navigateToUpdatePassowrd.bind(this)()
+    	}
+    	else {
+      		alert("Incorrect Pin, try again")
+    	}
+  	}
 
   loginUser(username) {
     AsyncStorage.setItem("current_username", this.state.username).then((value) => {
@@ -129,44 +143,44 @@ export default class RecoveryScreen extends React.Component {
 			this.setState({description: "Select the confirmation method"})
 			this.setState({confirmation_method: true})
 			this.clearInput()
-        	var email = responseData.email
-        	var phone_number = responseData.phone_number
-
-        	var hasEmail = (email != null && email != "")
-        	var hasPhoneNumber = (phone_number != null && phone_number.length > 13)
-
-        	var alert_text = ""
+        	// var email = responseData.email
+        	// var phone_number = responseData.phone_number
+			//
+        	// var hasEmail = (email != null && email != "")
+        	// var hasPhoneNumber = (phone_number != null && phone_number.length > 13)
+			//
+        	// var alert_text = ""
 	        // if (hasEmail && hasPhoneNumber) alert_text = "A confirmation pin will be sent to " + email + " and " + phone_number
 	        // else if (hasEmail) alert_text = "A confirmation pin will be sent to  " + email
 	        // else if (hasPhoneNumber) alert_text = "A confirmation pin will be sent to  " + phone_number
-	        if (hasEmail && hasPhoneNumber) {
-				Alert.alert(
-	              "Choose your confirmation method",
-	              "SMS fees may apply",
-	                [
-	                  {text: "This is not me!", style: 'cancel'},
-	                  {text: 'Send a text to ' + phone_number, onPress: () => this.sendTextConfirmation.bind(this)()},
-	                  {text: 'Send an email to ' + email, onPress: () => this.sendEmailConfirmation.bind(this)()}
-	                ])
-			} else if (hasEmail) {
-				Alert.alert(
-	              "Choose your confirmation method",
-	              "SMS fees may apply",
-	                [
-	                  {text: "This is not me!", style: 'cancel'},
-	                  {text: 'Send an email to ' + email, onPress: () => this.sendEmailConfirmation.bind(this)()}
-	                ])
-			} else if (hasPhoneNumber) {
-				Alert.alert(
-	              "Choose your confirmation method",
-	              "SMS fees may apply",
-	                [
-	                  {text: "This is not me!", style: 'cancel'},
-	                  {text: 'Send a text to ' + phone_number, onPress: () => this.sendTextConfirmation.bind(this)()}
-	                ])
-			}
+	        // if (hasEmail && hasPhoneNumber) {
+			// 	Alert.alert(
+	        //       "Choose your confirmation method",
+	        //       "SMS fees may apply",
+	        //         [
+	        //           {text: "This is not me!", style: 'cancel'},
+	        //           {text: 'Send a text to ' + phone_number, onPress: () => this.sendTextConfirmation.bind(this)()},
+	        //           {text: 'Send an email to ' + email, onPress: () => this.sendEmailConfirmation.bind(this)()}
+	        //         ])
+			// } else if (hasEmail) {
+			// 	Alert.alert(
+	        //       "Choose your confirmation method",
+	        //       "SMS fees may apply",
+	        //         [
+	        //           {text: "This is not me!", style: 'cancel'},
+	        //           {text: 'Send an email to ' + email, onPress: () => this.sendEmailConfirmation.bind(this)()}
+	        //         ])
+			// } else if (hasPhoneNumber) {
+			// 	Alert.alert(
+	        //       "Choose your confirmation method",
+	        //       "SMS fees may apply",
+	        //         [
+	        //           {text: "This is not me!", style: 'cancel'},
+	        //           {text: 'Send a text to ' + phone_number, onPress: () => this.sendTextConfirmation.bind(this)()}
+	        //         ])
+			// }
 		} else {
-	        alert("Invalid input, try again")
+	        alert("No matching user for this input")
 		}
 	      // this.setState({validation_output : responseData})
 	}).done();
@@ -238,6 +252,8 @@ export default class RecoveryScreen extends React.Component {
 
  	render() {
 		var {height, width} = Dimensions.get('window');
+		var hasPhone = this.state.confirmation_method && this.state.input_response.phone_number.length > 13
+		var hasEmail = this.state.confirmation_method && this.state.input_response.email != ""
 		return (
 			<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
 				<View style={[styles.container, {height: height}]}>
@@ -248,31 +264,34 @@ export default class RecoveryScreen extends React.Component {
 								<Text style={{fontSize : 18}}>{this.state.description}</Text>
 								{this.state.confirmation_method &&
 									<View style={{flex: 1, alignItems : 'center', borderColor: RADIO_BUTTON_COLOR, borderWidth: 2, borderRadius: 5, flexDirection: 'row'}}>
-										{this.state.input_response.email != "" &&
+										{hasEmail &&
 											<TouchableOpacity style = {{justifyContent : 'center'}}
-												onPress = {() => this.setState({selectedOption: "email"})}>
-												{this.customRadioButton.bind(this)(
-													this.state.selectedOption == "email",
-													this.state.input_response.email, true)}
+												onPress = {() => this.setState({selectedOption: OPTION_EMAIL})}>
+												{
+													// draw right bar if there is phone}
+													this.customRadioButton.bind(this)(
+													this.state.selectedOption == OPTION_EMAIL,
+													this.state.input_response.email, hasPhone)}
 											</TouchableOpacity>
 										}
-										{this.state.input_response.phone_number != "" &&
-											<TouchableOpacity onPress = {() => this.setState({selectedOption: "phone"})}>
+										{hasPhone &&
+											<TouchableOpacity onPress = {() => this.setState({selectedOption: OPTION_PHONE})}>
 												{this.customRadioButton.bind(this)(
-													this.state.selectedOption == "phone",
+													this.state.selectedOption == OPTION_PHONE,
 													this.state.input_response.phone_number, false)}
 											</TouchableOpacity>
 										}
 									</View>
 								}
-								{this.state.confirmation_method && this.state.input_response.phone_number != "" &&
+								{this.state.confirmation_method && hasPhone &&
 									<Text style={{fontSize : 12}}>SMS fee may apply</Text>
 								}
 							</View>
 
 							<View style = {{flex: 0.5, alignItems: 'center'}}>
 							{this.state.selectedOption != "" &&
-								<TouchableOpacity style={{flex : 1}} onPress = {() => this.setState({confirmation_input: true})}>
+								<TouchableOpacity style={{flex : 1}} onPress = {
+									this.handleSend.bind(this)}>
 									<View style = {styles.button}>
 										<Text style={styles.button_text}>Send</Text>
 									</View>
@@ -323,7 +342,7 @@ const styles = StyleSheet.create({
     },
     label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
     input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
-    input_text : {flex : 1, width : 300, fontSize : 16, justifyContent : 'center', paddingBottom: 0},
+    input_text : {flex : 1, width : 300, fontSize : 14, textAlignVertical: 'bottom', paddingBottom: 0},
     button : {
  	   flex : 1,
  	   backgroundColor : '#90d7ed',
