@@ -7,10 +7,12 @@
 
 import React from 'react';
 import {Component} from 'react'
-import {Alert, Image, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput} from 'react-native';
+import {Alert, Image, AppRegistry,StyleSheet,Text,View,ListView,TouchableOpacity,TouchableHighlight, TextInput, TouchableWithoutFeedback} from 'react-native';
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import {Dimensions} from 'react-native';
+import dismissKeyboard from 'react-native-dismiss-keyboard';
+import RegisterHeader from '../components/register/RegisterHeader';
 
 
 
@@ -34,8 +36,8 @@ class RegisterPassword extends Component {
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-        }, 
-      body: 
+        },
+      body:
       JSON.stringify(
        {
         password: password,
@@ -49,7 +51,7 @@ class RegisterPassword extends Component {
     .done();
   }
 
-  handlePasswordSubmit() { 
+  handlePasswordSubmit() {
     if (this.state.validation_output.result == 'success') {
         this.updatePassword.bind(this)()
     }
@@ -65,8 +67,8 @@ class RegisterPassword extends Component {
     headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-        }, 
-      body: 
+        },
+      body:
       JSON.stringify(
        {
         username: this.props.current_username,
@@ -95,10 +97,6 @@ class RegisterPassword extends Component {
     this.validatePassword.bind(this)(this.state.password, password_confirm)
   }
 
-  clearPassword() {
-    this.setState({password : ""})
-  }
-
   clearPasswordConfirm() {
     this.setState({password_confirm : ""})
   }
@@ -111,196 +109,78 @@ class RegisterPassword extends Component {
   }
 
   render() {
-    return (
-      <View style = {styles.container}>
-          <View style = {styles.top_bar}>
-              <TouchableOpacity style = {styles.back_button}
-                onPress = {() => this.props.navigator.pop()}>
-                <Icon name = "chevron-left" size = {20}/>
-              </TouchableOpacity>
-               <Image
-                style={styles.logo}
-                source={require('../static/favicon-32x32.png')}
-              />
-              <View style = {styles.cog_box}>
-                <Icon name = "cog" size = {20} style = {styles.cog}/> 
+      var {height, width} = Dimensions.get('window');
+      return (
+          <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
+              <View style={[styles.container, {height: height}]}>
+                  <RegisterHeader navigator={this.props.navigator}/>
+                  <View style={{flex : 1, flexDirection : 'column'}}>
+                      <View style={{flex : 2}}>
+                          <View style={{flex : 1.4, alignItems : 'center', justifyContent : 'center'}}>
+                              <Text style={{fontSize : 18}}>Choose a password</Text>
+                          </View>
+                          <View style={{flex : 0.6}}/>
+                          <View style={{flex : 1, justifyContent : 'center'}}>
+                              <Text style={styles.label}>Password</Text>
+                              <View style={styles.input_wrapper}>
+                                  <TextInput onChangeText = {this.handlePasswordChange}
+                                      style = {styles.input}
+                                      maxLength = {20}
+                                      value = {this.state.password}
+                                      secureTextEntry = {true}
+                                      placeholder= "Password"
+                                  />
+                              </View>
+                              <View style={styles.input_wrapper}>
+                                  <TextInput onChangeText = {this.handlePasswordChange}
+                                      style = {styles.input}
+                                      maxLength = {20}
+                                      value = {this.state.password}
+                                      secureTextEntry = {true}
+                                      placeholder= "Confirm password"
+                                  />
+                              </View>
+                          </View>
+                          <View style={{flex : 0.1}}/>
+                      </View>
+                      <View style = {{flex : 1, alignItems : 'center'}}>
+                          <TouchableOpacity style={{flex : 1}} onPress = {this.handlePasswordSubmit.bind(this)}>
+                              <View style = {styles.button}>
+                                  <Text style={styles.button_text}>Update Password</Text>
+                              </View>
+                          </TouchableOpacity>
+                          <View style={{flex : 0.5}}/>
+                          <View style={{flex : 0.5}}/>
+                      </View>
+                      <View style = {{flex : 3}}/>
+                  </View>
               </View>
-            </View>
-            <View style = {styles.small_padding}/>
-            <View style = {styles.instruction_box}> 
-              <Text style = {styles.instruction_text}>
-                Choose a password
-              </Text>
-            </View>
+          </TouchableWithoutFeedback>
 
-          {/* <View style = {styles.small_padding} /> */}
-
-
-            <View style = {styles.input_row}>
-              <View style = {styles.input_box}> 
-                <TextInput
-                  onChangeText = {this.handlePasswordChange.bind(this)}
-                  style = {styles.input_text} placeholder = "Password"
-                  maxLength = {20}
-                  value = {this.state.password}
-                  secureTextEntry = {true}
-                />
-
-              { this.state.password != "" &&
-              <View style = {styles.clear_button}>
-                <Icon name = "close" size = {20} onPress = {this.clearPassword.bind(this)}/>
-              </View> }
-              </View>
-            </View>
-
-            <View style = {{flex: 0.025}}/>
-
-          <View style = {styles.input_row}>
-            <View style = {styles.input_box}> 
-              
-              <TextInput
-                onChangeText = {this.handlePasswordConfirmChange.bind(this)}
-                style = {styles.input_text} placeholder = "Confirm Password"
-                maxLength = {20}
-                value = {this.state.password_confirm}
-                secureTextEntry = {true}
-                />
-              
-              { this.state.password_confirm != "" &&
-              <View style = {styles.clear_button}>
-                <Icon name = "close" size = {20} onPress = {this.clearPasswordConfirm.bind(this)}/>
-              </View> }
-
-            </View>
-          </View>
-
-
-
-            <View style = {styles.large_padding} />
-             <View style = {styles.bottom_bar}>
-              <TouchableHighlight style = {styles.next} onPress = {this.handlePasswordSubmit.bind(this)}>
-                <Text style = {styles.next_text}>
-                  Update Password!
-                </Text>
-              </TouchableHighlight>
-             </View>
-          </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection : "column",
-    justifyContent: 'space-between',
-    padding : 10,
-    paddingTop: 40,
-    backgroundColor: "white",
-  },
-
-
-  top_bar : {
-    flex : 0.05,
-    flexDirection : "row",
-    justifyContent: "space-around",
-    // backgroundColor: "coral",
-    alignItems: "center"
-  },
-
-  back_button :{
-    flex : 1,
-  },
-
-  back_button_text: {
-
-  },
-
-  logo: {
-    flex : 1,
-    resizeMode: "contain"
-  },
-
-  cog_box: {
-    flex:1,
-    flexDirection : "row",
-    justifyContent : "flex-end"
-  },
-  // cog : {
-  // },
-
-  instruction_box :{
-    flex : 0.075,
-  },
-
-  instruction_text : {
-    fontSize : 24
-  },
-
-  input_row: {
-    flexDirection: "row",
-    flex : 0.075,
-  },
-  input_box: {
-    flexDirection : "row",
-    flex: 0.075,
-    borderColor: "skyblue",
-    borderWidth : 1,
-    borderRadius : 5
-    // backgroundColor: "skyblue"
-  },
-
-  input_text :{
-    flex: 0.65,
-    padding: 5
-  },
-
-  clear_button : {
-    flex: 0.05,
-    justifyContent: "center"
-  },
-
-  large_padding : {
-    flex: 0.325,
-    backgroundColor : "white"
-  },
-
-  error_box : {
-    flex: 0.05,
-    flexDirection : "column",
-  },
-
-  error_text : {
-    color : "red",
-    fontSize : 20,
-    alignSelf: "center"
-  },
-
- 
-  bottom_bar : {
-    flex : 0.05,
-    // backgroundColor : "purple",
-    flexDirection: "row",
-    justifyContent : "flex-end",
-  },
-
-  recovery_text: {
-    flex: 0.75
-  },
- 
-  next_text : {
-    borderColor : "skyblue",
-    borderWidth : 1,
-    borderRadius : 5,
-    padding: 8,
-    textAlign : "center"
-  },
-
-  small_padding : {
-    flex : 0.05,
-  },
-
-
+    container: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems : 'center',
+        backgroundColor: "white",
+    },
+    label : {flex : 0, fontSize : 12, fontWeight : 'bold', color : '#696969'},
+    input_wrapper : {flex : 1, borderBottomColor : 'silver', borderBottomWidth : 1},
+    input : {flex : 1, width : 200, fontSize : 20, justifyContent : 'flex-start', paddingBottom: 0},
+    button : {
+        flex : 1,
+        backgroundColor : '#90d7ed',
+        borderRadius:60,
+        justifyContent : 'center',
+        alignItems : 'center',
+        width : 100,
+        height : 35
+    },
+    button_text : {color : 'white', fontWeight : 'bold', fontSize : 14},
 });
 
 module.exports = RegisterPassword

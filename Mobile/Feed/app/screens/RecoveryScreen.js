@@ -135,42 +135,6 @@ export default class RecoveryScreen extends React.Component {
 			this.setState({description: "Select the confirmation method"})
 			this.setState({confirmation_method: true})
 			this.clearInput()
-        	// var email = responseData.email
-        	// var phone_number = responseData.phone_number
-			//
-        	// var hasEmail = (email != null && email != "")
-        	// var hasPhoneNumber = (phone_number != null && phone_number.length > 13)
-			//
-        	// var alert_text = ""
-	        // if (hasEmail && hasPhoneNumber) alert_text = "A confirmation pin will be sent to " + email + " and " + phone_number
-	        // else if (hasEmail) alert_text = "A confirmation pin will be sent to  " + email
-	        // else if (hasPhoneNumber) alert_text = "A confirmation pin will be sent to  " + phone_number
-	        // if (hasEmail && hasPhoneNumber) {
-			// 	Alert.alert(
-	        //       "Choose your confirmation method",
-	        //       "SMS fees may apply",
-	        //         [
-	        //           {text: "This is not me!", style: 'cancel'},
-	        //           {text: 'Send a text to ' + phone_number, onPress: () => this.sendTextConfirmation.bind(this)()},
-	        //           {text: 'Send an email to ' + email, onPress: () => this.sendEmailConfirmation.bind(this)()}
-	        //         ])
-			// } else if (hasEmail) {
-			// 	Alert.alert(
-	        //       "Choose your confirmation method",
-	        //       "SMS fees may apply",
-	        //         [
-	        //           {text: "This is not me!", style: 'cancel'},
-	        //           {text: 'Send an email to ' + email, onPress: () => this.sendEmailConfirmation.bind(this)()}
-	        //         ])
-			// } else if (hasPhoneNumber) {
-			// 	Alert.alert(
-	        //       "Choose your confirmation method",
-	        //       "SMS fees may apply",
-	        //         [
-	        //           {text: "This is not me!", style: 'cancel'},
-	        //           {text: 'Send a text to ' + phone_number, onPress: () => this.sendTextConfirmation.bind(this)()}
-	        //         ])
-			// }
 		} else {
 	        alert("No matching user for this input")
 		}
@@ -246,6 +210,7 @@ export default class RecoveryScreen extends React.Component {
 		var {height, width} = Dimensions.get('window');
 		var hasPhone = this.state.confirmation_method && this.state.input_response.phone_number.length > 13
 		var hasEmail = this.state.confirmation_method && this.state.input_response.email != ""
+		var smsFeeTxt = this.state.confirmation_method && hasPhone ? "SMS fee may apply" : ""
 		return (
 			<TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
 				<View style={[styles.container, {height: height}]}>
@@ -275,9 +240,7 @@ export default class RecoveryScreen extends React.Component {
 										}
 									</View>
 								}
-								{this.state.confirmation_method && hasPhone &&
-									<Text style={{fontSize : 12}}>SMS fee may apply</Text>
-								}
+								<Text style={{fontSize : 12}}>{smsFeeTxt}</Text>
 							</View>
 
 							<View style = {{flex: 0.5, alignItems: 'center'}}>
