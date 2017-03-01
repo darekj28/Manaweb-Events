@@ -1195,4 +1195,15 @@ class Posts:
 			print(post['body'])
 			self.deletePost(feed_name, post['comment_id'])
 
+	def getTableNames(self):
+		sql = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_CATALOG='d15b0teu2kkhek'"
+		self.db.execute(sql)
+		query = self.db.fetchall()
+		actual_tables = list()
+		for item in query:
+			if item[0][0:3] != "pg_" and item[0][0:4] != "sql_":
+				actual_tables.append(item[0])
+
+		return actual_tables
+
 
