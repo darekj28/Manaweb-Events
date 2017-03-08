@@ -86,7 +86,8 @@ export default class Confirm extends React.Component {
             function(data) {
                 AppActions.addNotificationCount(data.count);
                 swal.close();
-                this.showWelcome.bind(this)()
+                this.navigateToMain.bind(this)();
+                // this.showWelcome.bind(this)()
             }.bind(this));
     }
 
@@ -141,7 +142,7 @@ export default class Confirm extends React.Component {
 		            {this.state.error &&
 		            	<button className="btn post-button recovery-button" onClick={this.resendConfirmation.bind(this)}> Resend confirmation code </button>}
 		            </div>
-		           	<div id = "welcome-container" style = {{display : "none"}}>
+		           	{/*<div id = "welcome-container" style = {{display : "none"}}>
 		            <div className = "recovery-title"> Congratulations! </div>
 						<div id="avatar_container"  className="select_setting avatar_container centered-text"></div>
 						<div className="recovery">  You've been randomly selected to have  <span className="special" id = "avatar_name_space"/> as your avatar. 
@@ -149,7 +150,7 @@ export default class Confirm extends React.Component {
 						<button className="btn post-button recovery-button" onClick={this.navigateToMain.bind(this)}> 
 						 Click here to continue
 						</button>
-					</div>
+					</div>*/}
             	</div> 
 		);
 	}	

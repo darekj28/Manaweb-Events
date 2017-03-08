@@ -13,10 +13,12 @@ export default class LoginApp extends React.Component {
 				<LoginNavBar/>
 				<div className="container app-container register-container">
 					<div className="login-page-filler col-xs-6">
-						<div className="pull-left">Insert own image</div>
+						<img src="static/img/gatewatch_copy.jpg" className="login-page-image"/>
 					</div>
 					<div className="register-form-container col-xs-6">
-						<div className="page-header my-page-header"><h2>Create An Account</h2></div>
+						<div className="page-header my-page-header">
+							<div><h2>Welcome to Manaweb!<br/><small>The world of Magic awaits you...</small></h2></div>
+						</div>
 						<RegisterForm/>
 						<FacebookConnect/>
 						<div className="terms-of-service">

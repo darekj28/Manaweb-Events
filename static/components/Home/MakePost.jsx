@@ -51,7 +51,7 @@ export default class MakePost extends React.Component {
 				<div id="TogglePost" className="important-text">Post a message...</div>
 				<div id="MessagePost">
 					<textarea id="PostInput" className="important-text form-control" 
-							value={this.props.postText} rows="1"
+							value={this.props.postText} rows="4"
 							placeholder={this.props.placeholder} ref={(input) => this.postText = input} 
 							onSubmit={this.handlePostSubmit} onChange={this.handlePostChange.bind(this)}></textarea>
 					{this.props.actions.map(function(action, i) {

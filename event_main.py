@@ -39,68 +39,68 @@ def add_header(response):
 	response.headers['Cache-Control'] = 'public, max-age=0'
 	return response
 
-@app.before_request
-def before_request():
-	if request.method == 'GET':	
-		if (request.endpoint == 'clearAdmin'):
-			clearAdmin()	
-		if (session.get('isAdmin') == None):
-			if (request.endpoint != 'adminLogin'):
-				return render_template('adminLogin.html')
+# @app.before_request
+# def before_request():
+# 	if request.method == 'GET':	
+# 		if (request.endpoint == 'clearAdmin'):
+# 			clearAdmin()	
+# 		if (session.get('isAdmin') == None):
+# 			if (request.endpoint != 'adminLogin'):
+# 				return render_template('adminLogin.html')
 
 
-		if (request.endpoint == 'reset'):
-			return render_template('reset.html')
+# 		if (request.endpoint == 'reset'):
+# 			return render_template('reset.html')
 		
-		# checks if it is a request for something in the static folder
-		elif (request.endpoint != None):
-			isStatic = False
-			urlString = request.endpoint.split('/')[0]
-			if (urlString != 'static'):
-				if ('logged_in' not in session):
-					if request.endpoint != 'create_profile.createProfile':
-						return render_template('index.html')
-				if (not session.get('logged_in')):
-					if request.endpoint != 'create_profile.createProfile':
-						return render_template('index.html')
+# 		# checks if it is a request for something in the static folder
+# 		elif (request.endpoint != None):
+# 			isStatic = False
+# 			urlString = request.endpoint.split('/')[0]
+# 			if (urlString != 'static'):
+# 				if ('logged_in' not in session):
+# 					if request.endpoint != 'create_profile.createProfile':
+# 						return render_template('index.html')
+# 				if (not session.get('logged_in')):
+# 					if request.endpoint != 'create_profile.createProfile':
+# 						return render_template('index.html')
 
-				# first make sure someone is logged in
-				if (session.get('userID') != None):
-					user_manager = Users()
-					thisUser = user_manager.getInfo(session['userID'])
-					user_manager.closeConnection()
-					if (thisUser != None) :
-						# then check if their account was deactivated
-						if (request.endpoint != 'reactivateAccount'):
-							if (thisUser.get('active') == False):
-								return redirect(url_for('reactivateAccount'))
+# 				# first make sure someone is logged in
+# 				if (session.get('userID') != None):
+# 					user_manager = Users()
+# 					thisUser = user_manager.getInfo(session['userID'])
+# 					user_manager.closeConnection()
+# 					if (thisUser != None) :
+# 						# then check if their account was deactivated
+# 						if (request.endpoint != 'reactivateAccount'):
+# 							if (thisUser.get('active') == False):
+# 								return redirect(url_for('reactivateAccount'))
 
-						# now check if their account has been confirmed
-						if thisUser['confirmed'] == False:
-							if request.endpoint.split('/')[0] == 'logout':
-								return logout()
-							if request.endpoint.split('/')[0] != 'confirmation':
-								return render_template('index.html')
-
-
+# 						# now check if their account has been confirmed
+# 						if thisUser['confirmed'] == False:
+# 							if request.endpoint.split('/')[0] == 'logout':
+# 								return logout()
+# 							if request.endpoint.split('/')[0] != 'confirmation':
+# 								return render_template('index.html')
 
 
-@app.route('/adminLogin', methods = ['GET', 'POST'])
-def adminLogin():
-	if request.method == 'GET':
-		return render_template('adminLogin.html')
-	elif request.method == 'POST':
-		if (request.form['userName'] == 'admin' and request.form['password'] == 'powerplay'):
-			session['isAdmin'] = True
-			return redirect(url_for('index'))
-		elif (request.form['userName'] == 'a' and request.form['password'] == 'a'):
-			session['isAdmin'] = True
-			return redirect(url_for('index'))
-		elif (request.form['userName'] == 'testuser' and request.form['password'] == 'collectedcompany'):
-			session['isAdmin'] = True
-			return redirect(url_for('index'))
-		else :
-			return render_template("adminLogin.html")
+
+
+# @app.route('/adminLogin', methods = ['GET', 'POST'])
+# def adminLogin():
+# 	if request.method == 'GET':
+# 		return render_template('index.html')
+# 	elif request.method == 'POST':
+# 		if (request.form['userName'] == 'admin' and request.form['password'] == 'powerplay'):
+# 			session['isAdmin'] = True
+# 			return redirect(url_for('index'))
+# 		elif (request.form['userName'] == 'a' and request.form['password'] == 'a'):
+# 			session['isAdmin'] = True
+# 			return redirect(url_for('index'))
+# 		elif (request.form['userName'] == 'testuser' and request.form['password'] == 'collectedcompany'):
+# 			session['isAdmin'] = True
+# 			return redirect(url_for('index'))
+# 		else :
+# 			return render_template("index.html")
 
 @app.route("/", methods = ['GET'])
 def index():
