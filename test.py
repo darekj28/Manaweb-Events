@@ -28,30 +28,11 @@ post_manager = Posts()
 security_manager = Security()
 # user_manager.deleteUser('drd')
 
-# fb_users = user_manager.getFacebookUsers()
-# user_list = user_manager.getUserList()
-
-
-# time_0 = time.time()
-# post_manager.deleteUserAndPostsWipe('gabbys')
-# time_1 = time.time()
-# print("delete user and wipe time : " + str(time_1 - time_0))
-feed_name = "BALT"
-post_manager.deleteAllPosts(feed_name)
-
-# user_manager.deleteUserByPhoneNumber('2018208509')
-# security_manager.createRecovery()
-# post_manager.deleteNotifications()
-# print(user_manager.getInfoFromEmail('Darekj@bro.bro'))
-
-# post_manager.recalculateLastPostTable(feed_name)
-# post_manager.recalculateUnseenPosts(feed_name)
-# post_manager.deleteUserPosts("mongomongomongo")
-# user_manager.deleteUser("bro1234")
-
-	# post_manager.deleteColumn(table_name, "pushNotificationSent")
-	# post_manager.addColumn(table_name, "pushNotificationSent", "BOOLEAN", True)
-
+table_names = post_manager.getTableNames()
+print(table_names)
+print(len(table_names))
+for table in table_names:
+	post_manager.deleteTable(table)
 
 
 user_manager.closeConnection()
