@@ -12,7 +12,7 @@ certifi==2016.9.26
 cffi==1.9.1
 click==6.6
 cryptography==1.7.2
-Django==1.10.1
+Django==1.11.29
 enum-compat==0.0.2
 eventlet==0.20.1
 Flask==0.11.1

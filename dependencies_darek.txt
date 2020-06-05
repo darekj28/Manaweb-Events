@@ -8,7 +8,7 @@ bs4==0.0.1
 celery==4.0.2
 certifi==2016.9.26
 click==6.6
-Django==1.10.1
+Django==1.11.29
 ez-setup==0.9
 Flask==0.11.1
 Flask-WTF==0.12
